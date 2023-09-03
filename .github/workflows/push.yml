@@ -1,0 +1,41 @@
+name: Checking for commits
+run-name: ${{ github.actor }} is Triggering Push Commit Checks 🚀
+on: 
+  push:    
+    branches-ignore :
+      - develop-build
+jobs:
+  Git-Fetch-State:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: ls
+  Yarn-Install:
+        runs-on: self-hosted
+        needs: Git-Fetch-State
+        steps:
+            - run: yarn install
+  Lint-Test:
+    runs-on: self-hosted
+    needs: Yarn-Install
+    steps:
+      - run: ls
+      - run: yarn lint
+  Unit-Test:
+    runs-on: self-hosted
+    needs: Lint-Test
+    steps:
+      - run: ls
+      - run: yarn test
+  Sonar-Test:
+    runs-on: self-hosted
+    needs: Unit-Test
+    steps:
+      - run: ls
+      - run: sonar-scanner -Dsonar.projectKey=thundr-mobile -Dsonar.sources=src -Dsonar.host.url=https://sonarqube.thundr.ph -Dsonar.token=${{secrets.SONAR_TOKEN}}
+concurrency:
+  group: default
+  cancel-in-progress: true
+
+  

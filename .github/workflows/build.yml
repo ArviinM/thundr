@@ -1,0 +1,77 @@
+name: Building the React Native App
+run-name: ${{ github.actor }} is Triggering Develop Build 🚀
+on: 
+  push:
+    branches:
+    - develop-build
+jobs:
+  Git-Fetch-State:
+    runs-on: self-hosted
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "${{ github.event.head_commit.message }}"
+  React-Native-Prepare-Build:
+        runs-on: self-hosted
+        needs: Git-Fetch-State
+        steps:
+            - run: yarn install
+  Android-Prepare-Build:
+    runs-on: self-hosted
+    needs: React-Native-Prepare-Build
+    defaults:
+        run:            
+            working-directory: ./android
+    steps:
+      - run: ls  
+      - run: ./gradlew clean
+  Android-Build:
+    runs-on: self-hosted
+    needs: Android-Prepare-Build
+    defaults:
+        run:            
+            working-directory: ./android
+    steps:
+      - run: ls
+      - run: ./gradlew assembleRelease
+  Android-Upload:
+    runs-on: self-hosted
+    needs:  Android-Build
+    defaults:
+        run:            
+            working-directory: ./android/app/build/outputs/apk/release
+    steps:
+      - run: ls
+      - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"      
+      - run: ls
+      - run: gdrive files upload "thundr-dev-${{  github.run_number }}.apk" --parent '14_08_0jFklYRwUN6DOyxH1mj2tfomTa1'
+  iOS-Prepare-Build:
+    runs-on: self-hosted
+    needs: React-Native-Prepare-Build
+    defaults:
+        run:            
+            working-directory: ./ios
+    steps:
+      - run: ls
+      - run: pod install
+  iOS-Build:
+        runs-on: self-hosted
+        needs: iOS-Prepare-Build
+        steps:
+        - run: ls
+        - run: npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ios
+        - run: xcodebuild archive -scheme "heretest" -workspace "ios/heretest.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
+  iOS-Upload:
+        runs-on: self-hosted
+        needs: iOS-Build
+        defaults:
+            run:            
+                working-directory: ./ios
+        steps:
+            - run: ls
+concurrency:
+  group: default
+  cancel-in-progress: true
+
+                      
+  
