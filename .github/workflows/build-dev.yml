@@ -1,4 +1,4 @@
-name: Building the React Native App
+name: Build the App on Dev Environment
 run-name: ${{ github.actor }} is Triggering Develop Build 🚀
 on: 
   push:
