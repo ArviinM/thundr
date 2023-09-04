@@ -42,8 +42,7 @@ jobs:
             working-directory: ./android/app/build/outputs/apk/release
     steps:
       - run: ls
-      - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"      
-      - run: ls
+      - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"   
       - run: gdrive files upload "thundr-dev-${{  github.run_number }}.apk" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'
   iOS-Prepare-Build:
     runs-on: macos
