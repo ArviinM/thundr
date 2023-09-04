@@ -59,7 +59,7 @@ jobs:
         steps:
         - run: ls
         - run: npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ios
-        - run: xcodebuild archive -scheme "heretest" -workspace "ios/heretest.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
+        - run: xcodebuild archive -scheme "Thundr" -workspace "ios/Thundr.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
   iOS-Upload:
         runs-on: macos
         needs: iOS-Build
