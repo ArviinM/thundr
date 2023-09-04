@@ -16,6 +16,7 @@ jobs:
         needs: Git-Fetch-State
         steps:
             - run: yarn install
+            - run: ls
   Android-Prepare-Build:
     runs-on: self-hosted
     needs: Yarn-Install
