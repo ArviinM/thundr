@@ -27,7 +27,7 @@ jobs:
       - run: ls        
       - run: echo "MYAPP_RELEASE_STORE_FILE=${{secrets.KEYSTORE_PATH}}" >> gradle.properties
       - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_KEY_ALIAS=thundrph${{secrets.KEY_ALIAS}}" >> gradle.properties
+      - run: echo "MYAPP_RELEASE_KEY_ALIAS=${{secrets.KEY_ALIAS}}" >> gradle.properties
       - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
       - run: ./gradlew clean
   Android-Build:
