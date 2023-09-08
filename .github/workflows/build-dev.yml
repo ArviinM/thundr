@@ -24,7 +24,11 @@ jobs:
         run:            
             working-directory: ./android
     steps:
-      - run: ls  
+      - run: ls        
+      - run: echo "MYAPP_RELEASE_STORE_FILE=${{secrets.KEYSTORE_PATH}}" >> gradle.properties
+      - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >> gradle.properties
+      - run: echo "MYAPP_RELEASE_KEY_ALIAS=thundrph${{secrets.KEY_ALIAS}}" >> gradle.properties
+      - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
       - run: ./gradlew clean
   Android-Build:
     runs-on: self-hosted
@@ -34,10 +38,6 @@ jobs:
             working-directory: ./android
     steps:
       - run: ls
-      - run: echo "MYAPP_RELEASE_STORE_FILE=${{secrets.KEYSTORE_PATH}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_KEY_ALIAS=thundrph${{secrets.KEY_ALIAS}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
       - run: ./gradlew assembleRelease
   Android-Upload:
     runs-on: self-hosted
