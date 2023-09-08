@@ -6,9 +6,13 @@
       "@types",
       "./node_modules/@types"
     ],
-    "baseUrl": "..",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@hooks": ["./src/hooks"],
+      "@atoms/*": ["./src/components/atoms/*"],
+      "@molecules/*": ["./src/components/molecules/*"],
+      "@organisms/*": ["./src/components/organisms/*"],
       "types/*": ["./@types/*"]
     }
   }

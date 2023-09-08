@@ -13,12 +13,12 @@ const Brand = ({ height, width, mode }: Props) => {
 
   return (
     <View testID={'brand-img-wrapper'} style={{ height, width }}>
-      <Image
+      {/* <Image
         testID={'brand-img'}
         style={Layout.fullSize}
         source={Images.logo}
         resizeMode={mode}
-      />
+      /> */}
     </View>
   );
 };

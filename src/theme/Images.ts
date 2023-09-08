@@ -17,5 +17,13 @@ export default function ({}: ThemeVariables) {
       send: require('./assets/images/send.png'),
       translate: require('./assets/images/translate.png'),
     },
+    key_features: [
+      require('./assets/images/key_features/1x/1.png'),
+      require('./assets/images/key_features/1x/2.png'),
+      require('./assets/images/key_features/1x/3.png'),
+      require('./assets/images/key_features/1x/4.png'),
+      require('./assets/images/key_features/1x/5.png'),
+      require('./assets/images/key_features/1x/6.png'),
+    ]
   };
 }

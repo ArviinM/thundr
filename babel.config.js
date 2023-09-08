@@ -6,10 +6,14 @@ module.exports = {
       'module-resolver',
       {
         root: ['./src'],
-        extensions: ['.js', '.json'],
+        extensions: ['.js', '.json', '.tsx', '.ts'],
         alias: {
           '@': './src',
-          types: './@types',
+          '@hooks': './src/hooks',
+          '@atoms': './src/components/atoms',
+          '@molecules': './src/components/molecules',
+          '@organisms': './src/components/organisms',
+          'types': './@types',
         },
       },
     ],
