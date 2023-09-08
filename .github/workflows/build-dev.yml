@@ -34,7 +34,7 @@ jobs:
             working-directory: ./android
     steps:
       - run: ls
-      - run: ./gradlew assembleRelease
+      - run: ./gradlew assembleRelease  -Pkeystore.storeFile=${{secrets.KEYSTORE_PATH}} -Pkeystore.storePassword=${{secrets.KEYSTORE_PASSWORD}} -Pkeystore.keyAlias=${{secrets.KEY_ALIAS}} -Pkeystore.keyPassword=${{secrets.KEY_PASSWORD}}
   Android-Upload:
     runs-on: self-hosted
     needs:  Android-Build
