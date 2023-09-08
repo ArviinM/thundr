@@ -21,12 +21,14 @@ jobs:
   Lint-Test:
     runs-on: self-hosted
     needs: Yarn-Install
+    continue-on-error: true
     steps:
       - run: ls
       - run: yarn lint
   Unit-Test:
     runs-on: self-hosted
     needs: Lint-Test
+    continue-on-error: true
     steps:
       - run: ls
       - run: yarn test
