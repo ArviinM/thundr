@@ -1,24 +1,18 @@
 import React from 'react';
-import { Example, KeyFeatures } from '../screens';
+import { KeyFeatures } from '../screens';
 import { createStackNavigator } from '@react-navigation/stack';
 
-/**
- * TODO: Remove this before push
- */
+type RootStackParamList = {
+  KeyFeatures: undefined;
+};
 
-import BasicButton from '@atoms/Buttons/Basic';
-
-const SamplePage: React.FC = () => {
-  return <BasicButton title='Hello World'/>
-}
-
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 // @refresh reset
 const MainNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={KeyFeatures} />
+      <Stack.Screen name="KeyFeatures" component={KeyFeatures} />
     </Stack.Navigator>
   );
 };
