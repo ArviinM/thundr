@@ -21,7 +21,7 @@ jobs:
     needs: Git-Fetch-State
     steps:
         - run: ls
-        - run: react-native-rename-next "${{ENV.APP_NAME}}" "${{ENV.APP_ID}}"
+        - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
   Yarn-Install:
         runs-on: self-hosted
         needs: Package-Rename
