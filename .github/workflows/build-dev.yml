@@ -103,7 +103,8 @@ jobs:
         needs: iOS-Prepare-Build
         steps:
         - run: ls    
-        - run: ls ios    
+        - run: ls ios
+        - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"
         - run: xcodebuild archive -scheme "${{ENV.APP_NAME}}" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
   iOS-Upload:
         runs-on: macos
