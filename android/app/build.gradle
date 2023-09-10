@@ -78,8 +78,8 @@ android {
         applicationId "com.thundr"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode project.properties["BUILD_NUMBER"]?BUILD_NUMBER as int :1
+        versionName project.properties["BUILD_NAME"]?BUILD_NAME:"1.0"
     }
     signingConfigs {
         debug {
@@ -89,10 +89,10 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file(MYAPP_RELEASE_STORE_FILE)
-            storePassword MYAPP_RELEASE_STORE_PASSWORD
-            keyAlias MYAPP_RELEASE_KEY_ALIAS
-            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            storeFile file(project.properties["MYAPP_RELEASE_STORE_FILE"]?MYAPP_RELEASE_STORE_FILE:'debug.keystore')
+            storePassword project.properties["MYAPP_RELEASE_STORE_PASSWORD"]?MYAPP_RELEASE_STORE_PASSWORD:'android'
+            keyAlias project.properties["MYAPP_RELEASE_KEY_ALIAS"]?MYAPP_RELEASE_KEY_ALIAS:'androiddebugkey'
+            keyPassword project.properties["MYAPP_RELEASE_KEY_PASSWORD"]?MYAPP_RELEASE_KEY_PASSWORD:'android'
         }
     }
     buildTypes {
