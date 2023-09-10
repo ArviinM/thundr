@@ -29,6 +29,8 @@ jobs:
       - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >> gradle.properties
       - run: echo "MYAPP_RELEASE_KEY_ALIAS=${{secrets.KEY_ALIAS}}" >> gradle.properties
       - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
+      - run: echo "BUILD_NUMBER=${{github.run_number}}" >> gradle.properties
+      #- run: echo "BUILD_NAME=${{secrets.KEY_PASSWORD}}" >> gradle.properties
       - run: ./gradlew clean
   Android-Build:
     runs-on: self-hosted
