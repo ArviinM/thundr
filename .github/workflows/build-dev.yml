@@ -43,6 +43,9 @@ jobs:
       - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
       - run: echo "BUILD_NUMBER=${{ENV.BUILD_NUMBER}}" >> gradle.properties
       - run: echo "BUILD_NAME=${{ENV.BUILD_NAME}}" >> gradle.properties
+      - run: echo "PLAY_PUBLISH_KEY_JSON=app-publisher.json >> gradle.properties
+      - run: echo "${{secrets.PLAYSTORE_JSON_KEY}} >> app/app-publisher.json
+
       - run: ./gradlew clean
   Android-APK-Build:
     runs-on: macos
@@ -81,7 +84,16 @@ jobs:
     steps:
       - run: ls
       - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-      - run: gdrive files upload "thundr-dev-${{  github.run_number }}.aab" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'          
+      - run: gdrive files upload "thundr-dev-${{  github.run_number }}.aab" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'
+  Android-Publish-Dev-PlayStore:
+    runs-on: macos
+    needs:  Android-AAB-Build
+    defaults:
+        run:            
+          working-directory: ./android
+    steps:
+      - run: ls
+      - run: gradlew publishBundle           
   iOS-Pod-Install:
     runs-on: macos
     needs: Yarn-Install
