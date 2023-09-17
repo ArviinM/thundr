@@ -45,7 +45,8 @@ jobs:
       - run: echo "BUILD_NAME=${{ENV.BUILD_NAME}}" >> gradle.properties
       - run: echo "PLAY_PUBLISH_KEY_JSON=app-publisher.json >> gradle.properties
       - run: echo "${{secrets.PLAYSTORE_JSON_KEY}} >> app/app-publisher.json
-
+      - run: echo "PLAY_PUBLISH_TRACK=internal >> gradle.properties
+     
       - run: ./gradlew clean
   Android-APK-Build:
     runs-on: macos
