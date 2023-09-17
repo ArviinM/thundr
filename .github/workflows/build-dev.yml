@@ -95,7 +95,7 @@ jobs:
           working-directory: ./android
     steps:
       - run: ls
-      - run: ./gradlew publishBundle  
+      - run: ./gradlew publishBundle  --releaseStatus completed
   iOS-Pod-Install:
     runs-on: macos
     needs: Yarn-Install
