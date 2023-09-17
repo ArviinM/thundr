@@ -43,8 +43,7 @@ jobs:
       - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
       - run: echo "BUILD_NUMBER=${{ENV.BUILD_NUMBER}}" >> gradle.properties
       - run: echo "BUILD_NAME=${{ENV.BUILD_NAME}}" >> gradle.properties
-      - run: echo "PLAY_PUBLISH_KEY_JSON=app-publisher.json" >> gradle.properties
-      - run: echo "${{secrets.PLAYSTORE_JSON_KEY}}" >> app/app-publisher.json
+      - run: echo "PLAY_PUBLISH_KEY_JSON=${{secrets.PLAYSTORE_JSON_KEY}}" >> gradle.properties
       - run: echo "PLAY_PUBLISH_TRACK=internal" >> gradle.properties
       - run: more gradle.properties
       - run: ls app

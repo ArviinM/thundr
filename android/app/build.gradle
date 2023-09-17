@@ -133,4 +133,6 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 play {
     serviceAccountCredentials = file(project.properties["PLAY_PUBLISH_KEY_JSON"]?PLAY_PUBLISH_KEY_JSON:'key.json')
     track = project.properties["PLAY_PUBLISH_TRACK"]?PLAY_PUBLISH_TRACK:'internal'
+    defaultToAppBundles = true
+    releaseName = project.properties["RELEASE_NAME"]?RELEASE_NAME:'My App'
 }
