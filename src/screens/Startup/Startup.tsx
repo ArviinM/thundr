@@ -1,39 +1,103 @@
-import React, { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { useTheme } from '../../hooks';
-import { Brand } from '../../components';
-import { setDefaultTheme } from '../../store/theme';
-import { ApplicationScreenProps } from '../../../@types/navigation';
+import React from 'react';
 
-import BasicButton from '@atoms/Buttons/Basic';
+import { Image } from 'react-native';
 
-const Startup = ({ navigation }: ApplicationScreenProps) => {
-  const { Layout, Gutters } = useTheme();
+import type { StackScreenProps } from '@react-navigation/stack';
+import type { RootStackParamList } from '@navigators/Main';
 
-  const init = async () => {
-    await new Promise(resolve =>
-      setTimeout(() => {
-        resolve(true);
-      }, 2000),
-    );
-    await setDefaultTheme({ theme: 'default', darkMode: null });
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Main' }],
-    });
-  };
+import styled from 'styled-components/native';
 
-  useEffect(() => {
-    init();
-  }, []);
+import StandardSkeleton from '@/components/templates/StandardSkeleton';
+import BasicButton from '@/components/atoms/Buttons/Basic';
 
-  return (
-    <View style={[Layout.fill, Layout.colCenter]}>
-      <Brand />
-      <BasicButton title='Hello world'/>
-      <ActivityIndicator size={'large'} style={[Gutters.largeVMargin]} />
-    </View>
-  );
+import IconButton from '@/components/molecules/IconButton/IconButton';
+
+import { useTheme } from '@hooks';
+
+const AlignVertical = styled.View`
+   flex: 1;
+   align-items: center;
+   justify-content: center;
+`;
+
+const LogoImage = styled(Image).attrs({
+   resizeMode: 'contain',
+})`
+   width: 200px;
+`;
+
+const ActionsContainer = styled.View`
+   flex: 1;
+   gap: 10px;
+`;
+
+const LoginTitle = styled.Text`
+   align-self: center;
+`;
+
+const FooterContainer = styled.View`
+   flex: 1;
+   align-items: center;
+   justify-content: center;
+`;
+
+const FooterText = styled.Text`
+   align-self: center;
+   text-align: center;
+   font-size: 12px;
+`;
+
+interface StartupProps
+   extends StackScreenProps<RootStackParamList, 'Startup'> {}
+
+const Startup: React.FC<StartupProps> = ({ navigation }) => {
+   const { Images } = useTheme();
+
+   return (
+      <StandardSkeleton
+         firstSection={
+            <AlignVertical>
+               <LogoImage source={Images.logo} />
+            </AlignVertical>
+         }
+         secondSection={
+            <ActionsContainer>
+               <LoginTitle>Register here</LoginTitle>
+               <BasicButton
+                  title="Continue with Google"
+                  onPress={() => console.log(1)}
+               />
+               <BasicButton
+                  title="Continue with Facebook"
+                  onPress={() => console.log(1)}
+               />
+               <BasicButton
+                  title="Continue with Mobile Number"
+                  onPress={() =>
+                     navigation.navigate('Registration', {
+                        screen: 'MobileRegistration',
+                     })
+                  }
+               />
+               <BasicButton
+                  title="LOGIN"
+                  onPress={() => navigation.navigate('Login')}
+                  style={{ alignSelf: 'center' }}
+               />
+            </ActionsContainer>
+         }
+         thirdSection={
+            <FooterContainer>
+               <FooterText>
+                  By signing up, I am 35 years of age or older and agrees to the
+                  <FooterText>Terms and Conditions</FooterText> of Thundr and
+                  its
+                  <FooterText>Privacy Policy</FooterText>.
+               </FooterText>
+            </FooterContainer>
+         }
+      />
+   );
 };
 
 export default Startup;

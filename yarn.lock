@@ -7127,6 +7127,13 @@ react-native-mmkv@^2.10.0:
   resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.10.0.tgz#2d8872e3ef67a91648cc06d6c377ee2ce7a85816"
   integrity sha512-q8WYRjHKIWQMJW1qGJHBMWKOVJkMrl9ggK9uY2QMF18KSC98Bj+HxvO3ztjguE0Z4GWUOzpyyULxSCHJ9p+t2w==
 
+react-native-otp-textinput@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-otp-textinput/-/react-native-otp-textinput-1.1.3.tgz#5675628e2bf54edc964755bb93699e9f9fdefd8a"
+  integrity sha512-C32Tz9spngydOpiyjI20SCDDJ5vGGkR0EBYM0ynVhyPZ8gUHZEfz7zxdtvGhAp+PKiU7d6rvI3i5ZpTQJpPg+g==
+  dependencies:
+    react "^18.2.0"
+
 react-native-reanimated@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.3.0.tgz#80f9d58e28fddf62fe4c1bc792337b8ab57936ab"
@@ -7157,6 +7164,11 @@ react-native-snap-carousel@^3.9.1:
   dependencies:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
+
+react-native-toast-message@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.1.6.tgz#322827c66901fa22cb3db614c7383cc717f5bbe2"
+  integrity sha512-VctXuq20vmRa9AE13acaNZhrLcS3FaBS2zEevS3+vhBsnVZYG0FIlWIis9tVnpnNxUb3ART+BWtwQjzSttXTng==
 
 react-native@0.72.1:
   version "0.72.1"
@@ -7234,7 +7246,7 @@ react-test-renderer@18.2.0:
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
 
-react@18.2.0:
+react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
