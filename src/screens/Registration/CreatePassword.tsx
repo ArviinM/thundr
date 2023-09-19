@@ -41,18 +41,6 @@ export const FooterContainer = styled.View`
    justify-content: center;
 `;
 
-const FooterText = styled.Text`
-   align-self: center;
-   text-align: center;
-   font-size: 12px;
-`;
-
-const FooterIcon = styled(Image).attrs({
-   resizeMode: 'contain',
-})`
-   width: 18px;
-`;
-
 // TODO: should create a separate component for this
 export const TextInput = styled.TextInput<TextInputProps>`
    background-color: white;
@@ -131,10 +119,12 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
                   title="Continue"
                   onPress={() => {
                      if (credentials.password === credentials.retypepassword) {
+                        console.log('credentials.password', credentials);
                         validateQuestion({
                            phoneNumber: username,
                            challengeName: 'NEW_PASSWORD_REQUIRED',
-                           challengeAnswer: credentials.password,
+                           challengeAnswer: '',
+                           password: credentials.password,
                            session: session,
                         });
                      } else {

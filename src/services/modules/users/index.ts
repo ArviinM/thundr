@@ -16,6 +16,7 @@ export interface ValidateQuestion {
    session: string;
    challengeName: string;
    challengeAnswer: string;
+   password: string;
 }
 
 interface ErrorResponse {
