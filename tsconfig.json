@@ -10,9 +10,13 @@
     "paths": {
       "@/*": ["./src/*"],
       "@hooks": ["./src/hooks"],
+      "@navigators/*": ["./src/navigators/*"],
       "@atoms/*": ["./src/components/atoms/*"],
       "@molecules/*": ["./src/components/molecules/*"],
       "@organisms/*": ["./src/components/organisms/*"],
+      "@templates/*": ["./src/components/templates/*"],
+      "@services/*": ["./src/services/*"],
+      "@screens/*": ["./src/screens/*"],
       "types/*": ["./@types/*"]
     }
   }

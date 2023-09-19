@@ -7,11 +7,11 @@ import ApplicationNavigator from './navigators/Application';
 import './translations';
 
 const App = () => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <ApplicationNavigator />
-    </PersistGate>
-  </Provider>
+   <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+         <ApplicationNavigator />
+      </PersistGate>
+   </Provider>
 );
 
 export default App;
