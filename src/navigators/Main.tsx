@@ -68,7 +68,7 @@ const MainNavigator = () => {
    return (
       <MainStack.Navigator
          screenOptions={{ headerShown: false }}
-         initialRouteName="Registration"
+         initialRouteName="KeyFeatures"
       >
          <MainStack.Screen name="KeyFeatures" component={KeyFeatures} />
          <MainStack.Screen name="Startup" component={Startup} />
