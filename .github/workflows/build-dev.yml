@@ -129,6 +129,7 @@ jobs:
                 working-directory: ./ios
         steps:
             - run: ls
+            - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
             - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
 concurrency:
   group: default
