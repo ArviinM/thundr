@@ -119,17 +119,14 @@ jobs:
         steps:
         - run: ls    
         - run: ls ios
-        - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"
-        - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
+        - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"        
+        - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
+        - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -exportOptionsPlist exportOptions.plist -allowProvisioningUpdates 
   iOS-Upload:
         runs-on: macos
         needs: iOS-Build
-        defaults:
-            run:            
-                working-directory: ./ios
         steps:
             - run: ls
-            - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
             - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
 concurrency:
   group: default
