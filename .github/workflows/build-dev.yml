@@ -121,7 +121,7 @@ jobs:
         - run: ls ios
         - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"        
         - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
-        - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -exportOptionsPlist exportOptions.plist -allowProvisioningUpdates 
+        - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
   iOS-Upload:
         runs-on: macos
         needs: iOS-Build
