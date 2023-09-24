@@ -41,5 +41,3 @@ jobs:
 concurrency:
   group: default
   cancel-in-progress: true
-
-  
