@@ -1,37 +1,45 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 
-import { Pressable, PressableProps } from 'react-native';
+import { PressableProps, TextStyle } from 'react-native';
 
 import styled from 'styled-components/native';
 
-/**
- * TODO: Remove this block after theme implementation
- */
-
-const basicButtonTextColor: string = '#E33051';
-
-const CustomButton = styled(Pressable).attrs({})<BasicButtonProps>`
-   padding: 10px;
+export const PressableButtonContainer = styled.Pressable<
+   Omit<BasicButtonProps, 'textStyles'>
+>`
+   padding: 8px 25px;
    border-radius: 10px;
    align-items: center;
    justify-content: center;
-   background-color: ${props => (props.disabled ? 'gray' : props.bgColor)};
+   background-color: ${props => (props.disabled ? '#9C9EA1' : props.bgColor)};
 `;
 
-const BasicButtonTitle = styled.Text`
-   color: ${basicButtonTextColor};
-`;
+const BasicButtonTitle = styled.Text``;
 
 export interface BasicButtonProps extends PressableProps {
    title: string;
    onPress: PressableProps['onPress'];
    bgColor?: string;
+   textStyles?: TextStyle;
 }
 
-const BasicButton: React.FC<BasicButtonProps> = props => (
-   <CustomButton bgColor={props.bgColor || 'white'} {...props}>
-      <BasicButtonTitle>{props.title}</BasicButtonTitle>
-   </CustomButton>
-);
+const BasicButton: React.FC<BasicButtonProps> = props => {
+   const { textStyles: _, ...pressableProps } = props;
 
+   return (
+      <PressableButtonContainer
+         bgColor={props.bgColor || 'white'}
+         {...pressableProps}
+      >
+         <BasicButtonTitle
+            style={{
+               color: props.disabled ? 'white' : '#e33051',
+               ...(props.textStyles && props.textStyles),
+            }}
+         >
+            {props.title}
+         </BasicButtonTitle>
+      </PressableButtonContainer>
+   );
+};
 export default BasicButton;

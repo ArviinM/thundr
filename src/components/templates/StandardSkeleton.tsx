@@ -1,6 +1,10 @@
 import React, { ReactElement } from 'react';
 
+import { Platform } from 'react-native';
+
 import styled from 'styled-components/native';
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 export interface StandardSkeletonProps {
    firstSection: ReactElement;
@@ -10,7 +14,7 @@ export interface StandardSkeletonProps {
 
 const bgColor: string = '#F2CECD';
 
-export const Container = styled.View`
+export const Container = styled.KeyboardAvoidingView`
    flex: 1;
    align-items: center;
    background-color: ${bgColor};
@@ -37,7 +41,10 @@ const StandardSkeleton: React.FC<StandardSkeletonProps> = ({
    thirdSection,
 }) => {
    return (
-      <Container>
+      <Container
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         keyboardVerticalOffset={0}
+      >
          <Wrapper>
             <FirstSectionContainer>{firstSection}</FirstSectionContainer>
             <SecondSectionContainer>{secondSection}</SecondSectionContainer>

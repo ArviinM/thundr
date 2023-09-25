@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ListRenderItem, Dimensions, Text, Pressable } from 'react-native';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RootStackParamList } from '@navigators/Main';
+import type { RootStackParamList } from 'types/navigation';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
@@ -15,7 +15,6 @@ import { useTheme } from '@hooks';
 const KFImage = styled.ImageBackground`
    flex: 1;
    background-color: #f5d1d0;
-   box-shadow: 1px 1px 3px #edadab;
 `;
 
 const CarouselContainer = styled.View`
@@ -103,7 +102,9 @@ const KeyFeatures: React.FC<KeyFeaturesProps> = ({ navigation }) => {
    const [activeFeature, setActiveFeature] = useState<number>(0);
 
    const onLastPageClick = () => {
-      navigation.navigate('Startup');
+      navigation.navigate('StartUpStack', {
+         screen: 'StartUp',
+      });
    };
 
    const renderFeatures: ListRenderItem<number> = ({ index }) => {
@@ -120,8 +121,10 @@ const KeyFeatures: React.FC<KeyFeaturesProps> = ({ navigation }) => {
                data={features}
                renderItem={renderFeatures}
                sliderWidth={screenWidth}
-               sliderHeight={screenWidth}
                itemWidth={screenWidth}
+               slideStyle={{ width: screenWidth }}
+               inactiveSlideOpacity={1}
+               inactiveSlideScale={1}
                onSnapToItem={setActiveFeature}
             />
          </CarouselContainer>

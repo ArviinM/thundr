@@ -1,32 +1,46 @@
 import React from 'react';
 
+import { ImageSourcePropType, Text } from 'react-native';
+
 import styled from 'styled-components/native';
 
-import BasicButton, {
+import {
    BasicButtonProps,
-} from '@/components/atoms/Buttons/Basic';
+   PressableButtonContainer,
+} from '@atoms/Buttons/Basic';
 
-import { useTheme } from '@/hooks';
-
-const Container = styled.View`
+const CustomPressableButton = styled(PressableButtonContainer)`
    display: flex;
    flex-direction: row;
-   justify-content: flex-start;
-   background-color: red;
+   justify-content: center;
 `;
 
-const SampleImage = styled.Image``;
+const SampleImage = styled.Image`
+   height: 25px;
+`;
 
-interface IconButtonProps extends BasicButtonProps {}
+interface IconButtonProps extends BasicButtonProps {
+   icon: ImageSourcePropType;
+}
 
 const IconButton: React.FC<IconButtonProps> = props => {
-   const { Images } = useTheme();
+   const { icon: _, ...customPressableProps } = props;
 
    return (
-      <Container>
-         <SampleImage source={Images.socials.icon_google} />
-         <BasicButton {...props} />
-      </Container>
+      <CustomPressableButton
+         bgColor={props.bgColor || 'white'}
+         {...customPressableProps}
+      >
+         <SampleImage source={props.icon} resizeMode="contain" />
+         <Text
+            style={{
+               color: props.disabled ? 'white' : '#e33051',
+               ...(props.textStyles && props.textStyles),
+            }}
+         >
+            {props.title}
+         </Text>
+      </CustomPressableButton>
    );
 };
 
