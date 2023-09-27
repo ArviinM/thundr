@@ -31,6 +31,8 @@ target 'Thundr' do
   # Flags change depending on the env values.
   flags = get_default_flags()
 
+  use_flipper!({'Flipper' => '0.126.0', configurations: ['Debug', 'Dev.Debug']}) # Add the Build Configuration name (not scheme name)
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
