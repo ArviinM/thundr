@@ -22,49 +22,76 @@ import CreatePassword from '@screens/Registration/CreatePassword';
 import Login from '@screens/Login';
 
 import PrimaryDetails from '@screens/ProfileCreation/PrimaryDetails';
+import CompatibilityQuestions from '@screens/ProfileCreation/CompatibilityQuestions';
+import { Image } from 'react-native';
+import { useTheme } from '@hooks';
 
 const MainStack = createStackNavigator<RootStackParamList>();
 const RegistrationStack = createStackNavigator<RegistrationStackParamList>();
 
-const RegistrationRoutes = () => (
-   <RegistrationStack.Navigator initialRouteName="PrimaryDetails">
-      <RegistrationStack.Screen
-         name="PrimaryDetails"
-         component={PrimaryDetails}
-      />
-      <RegistrationStack.Screen
-         name="StartUp"
-         component={StartUp}
-         options={{
-            headerShown: false,
-         }}
-      />
-      <RegistrationStack.Group
-         screenOptions={({ navigation }) => ({
-            headerShown: true,
-            headerBackTitleVisible: false,
-            headerTitle: '',
-            headerStyle: {
-               backgroundColor: '#F2CECD',
-            },
-            headerLeft: () => (
-               <BackButtonArrow onPress={() => navigation.goBack()} />
-            ),
-         })}
-      >
+const RegistrationRoutes = () => {
+   const { Images } = useTheme();
+
+   return (
+      <RegistrationStack.Navigator initialRouteName="StartUp">
+         <RegistrationStack.Group
+            screenOptions={({ navigation }) => ({
+               headerTitleAlign: 'center',
+               headerTitle: () => (
+                  <Image
+                     source={Images.app_bar.logo}
+                     style={{ width: 130 }}
+                     resizeMode="center"
+                  />
+               ),
+               headerLeft: () => (
+                  <BackButtonArrow onPress={() => navigation.goBack()} />
+               ),
+            })}
+         >
+            <RegistrationStack.Screen
+               name="PrimaryDetails"
+               component={PrimaryDetails}
+            />
+            <RegistrationStack.Screen
+               name="CompatibilityQuestions"
+               component={CompatibilityQuestions}
+            />
+         </RegistrationStack.Group>
          <RegistrationStack.Screen
-            name="MobileRegistration"
-            component={MobileNumber}
+            name="StartUp"
+            component={StartUp}
+            options={{
+               headerShown: false,
+            }}
          />
-         <RegistrationStack.Screen name="OTP" component={OTP} />
-         <RegistrationStack.Screen
-            name="CreatePassword"
-            component={CreatePassword}
-         />
-         <RegistrationStack.Screen name="Login" component={Login} />
-      </RegistrationStack.Group>
-   </RegistrationStack.Navigator>
-);
+         <RegistrationStack.Group
+            screenOptions={({ navigation }) => ({
+               headerShown: true,
+               headerBackTitleVisible: false,
+               headerTitle: '',
+               headerStyle: {
+                  backgroundColor: '#F2CECD',
+               },
+               headerLeft: () => (
+                  <BackButtonArrow onPress={() => navigation.goBack()} />
+               ),
+            })}
+         >
+            <RegistrationStack.Screen
+               name="MobileRegistration"
+               component={MobileNumber}
+            />
+            <RegistrationStack.Screen name="OTP" component={OTP} />
+            <RegistrationStack.Screen
+               name="CreatePassword"
+               component={CreatePassword}
+            />
+            <RegistrationStack.Screen name="Login" component={Login} />
+         </RegistrationStack.Group>
+      </RegistrationStack.Navigator>
+   );
+};
 
 // @refresh reset
 const MainNavigator = () => {

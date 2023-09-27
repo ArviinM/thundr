@@ -80,19 +80,6 @@ const Startup: React.FC<StartupProps> = ({ navigation }) => {
          secondSection={
             <ActionsContainer>
                <LoginTitle>Register here</LoginTitle>
-               {/* <SocialButton
-                  title="Continue with Facebook"
-                  onPress={() => console.log(1)}
-               /> */}
-               {/* <SocialButton
-                  title="Continue with Mobile Number"
-                  disabled
-                  // onPress={() =>
-                  //    // navigation.navigate('Registration', {
-                  //    //    screen: 'MobileRegistration',
-                  //    // })
-                  // }
-               /> */}
                <SocialButton
                   title="Continue with Google"
                   icon={Images.icons.icon_google}

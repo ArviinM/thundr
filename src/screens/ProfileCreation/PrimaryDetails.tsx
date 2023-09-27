@@ -235,7 +235,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = props => {
    );
 };
 
-const PrimaryDetails = () => {
+const PrimaryDetails = ({ navigation }) => {
    const [monthValue, setMonth] = useState('');
    const [dayValue, setDay] = useState('');
    const [yearValue, setYear] = useState('');
@@ -283,7 +283,10 @@ const PrimaryDetails = () => {
                />
             </BirthdayContainer>
             <LabeledInput label="Hometown" validationLabel="(Required)" />
-            <PrimaryButton title="Continue" onPress={() => {}} />
+            <PrimaryButton
+               title="Continue"
+               onPress={() => navigation.navigate('CompatibilityQuestions')}
+            />
          </Wrapper>
       </Container>
    );

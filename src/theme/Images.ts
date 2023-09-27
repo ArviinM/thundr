@@ -30,5 +30,8 @@ export default function ({}: ThemeVariables) {
       forms: {
          lgbtq: require('./assets/images/lgbtqia_plus.png'),
       },
+      app_bar: {
+         logo: require('./assets/images/app_bar_logo.png'),
+      },
    };
 }

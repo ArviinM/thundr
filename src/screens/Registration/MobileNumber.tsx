@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Image } from 'react-native';
+import { Image, Text } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -13,12 +13,14 @@ import {
    TextInput as GenericTextInput,
    FooterContainer as GenericFC,
 } from '@screens/Login/Login';
-import BasicButton from '@atoms/Buttons/Basic';
+
+import IconTextInput from '@molecules/IconTextInput';
 
 import {
    useRegisterMobileMutation,
    RegisterMobilePostBody,
 } from '@services/modules/users';
+import PrimaryButton from '@atoms/Buttons/Primary';
 
 const LogoImage = styled(Image).attrs({
    resizeMode: 'contain',
@@ -88,9 +90,10 @@ export const Instructions: React.FC<InstructionsProps> = ({
          <Sub>{sub}</Sub>
       </CenterFlex>
       <HorizontalSpacer />
-      <TextInput onChangeText={onChangeText} />
+      <IconTextInput placeholder="xx xxxx xxxx" />
+      {/* <TextInput onChangeText={onChangeText} inlineImageLeft="test" /> */}
       <HorizontalSpacer />
-      <BasicButton
+      <PrimaryButton
          title="Continue"
          style={{ alignSelf: 'center' }}
          onPress={onPress}

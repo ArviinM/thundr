@@ -8,6 +8,7 @@ export type RegistrationStackParamList = {
    CreatePassword: undefined;
    Login: undefined;
    PrimaryDetails: undefined;
+   CompatibilityQuestions: undefined;
 };
 
 export type RootStackParamList = {
