@@ -99,12 +99,9 @@ jobs:
   iOS-Pod-Install:
     runs-on: macos
     needs: Yarn-Install
-    defaults:
-        run:            
-            working-directory: ./ios
     steps:
       - run: ls
-      - run: pod install
+      - run: npx pod-install
   iOS-Prepare-Build:
     runs-on: macos
     needs:  iOS-Pod-Install
