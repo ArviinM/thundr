@@ -30,7 +30,7 @@ target 'Thundr' do
 
   # Flags change depending on the env values.
   flags = get_default_flags()
-
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
@@ -44,7 +44,7 @@ target 'Thundr' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
+  use_flipper!({ configurations: ['Debug', 'Dev.Debug'] })
   target 'ThundrTests' do
     inherit! :complete
     # Pods for testing
