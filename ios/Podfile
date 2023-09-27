@@ -45,15 +45,6 @@ target 'Thundr' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  project 'Thundr',
-    'Dev.Debug' => :debug, # '{Build Configuration name}' => :{debug or release}
-    'Debug' => :debug,
-    'Dev.Release' => :release,
-    'Release' => :release
-
-  use_flipper!({'Flipper' => '0.126.0', configurations: ['Debug', 'Dev.Debug']}) # Add the Build Configuration name (not scheme name)
-
-
   target 'ThundrTests' do
     inherit! :complete
     # Pods for testing
