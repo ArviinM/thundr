@@ -45,7 +45,7 @@ target 'Thundr' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  project 'MyApp',
+  project 'Thundr',
     'Dev.Debug' => :debug, # '{Build Configuration name}' => :{debug or release}
     'Debug' => :debug,
     'Dev.Release' => :release,
