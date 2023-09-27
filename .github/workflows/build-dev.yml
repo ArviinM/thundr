@@ -21,7 +21,7 @@ jobs:
     needs: Git-Fetch-State
     steps:
         - run: ls
-        - run: react-native-rename "${{ENV.APP_NAME}}" --androidBundleID "${{ENV.APP_ID}}" --iosBundleID "${{ENV.APP_ID}}.ios"
+        - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}""
         - run: echo -en "${{ENV.DEV_ENV}}" >> .env
   Yarn-Install:
         runs-on: macos
