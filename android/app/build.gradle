@@ -74,9 +74,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.thundr"
+    namespace "ph.thundr.app.dev"
     defaultConfig {
-        applicationId "com.thundr"
+        applicationId "ph.thundr.app.dev"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode project.properties["BUILD_NUMBER"]?BUILD_NUMBER as int :1
