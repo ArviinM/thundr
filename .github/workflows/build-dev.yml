@@ -22,7 +22,7 @@ jobs:
       steps:
          - run: ls
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
-         - run: echo -en "${{ENV.DEV_ENV}}" >> .env
+         - run: echo -en "${{VARS.DEV_ENV}}" >> .env
    Yarn-Install:
       runs-on: m2
       needs: Package-Rename
