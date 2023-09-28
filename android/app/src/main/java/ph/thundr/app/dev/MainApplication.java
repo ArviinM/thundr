@@ -1,4 +1,4 @@
-package com.thundr;
+package ph.thundr.app.dev;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
