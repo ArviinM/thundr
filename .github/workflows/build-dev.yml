@@ -113,7 +113,7 @@ jobs:
          - run: ls ios
          - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"
          - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
-         - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates
+         - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -destination 'generic/platform=iOS' -allowProvisioningUpdates
          - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
    iOS-IPA-Upload:
       runs-on: m2
