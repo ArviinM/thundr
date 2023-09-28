@@ -122,7 +122,8 @@ jobs:
          run:
             working-directory: MyApp
       steps:
-         - run: cp ${{env.APP_NAME}}.ipa "thundr-dev-${{ github.run_number }}.ipa"
+        - run: ls
+         # - run: cp ${{env.APP_NAME}}.ipa "thundr-dev-${{ github.run_number }}.ipa"
          # - run: gdrive files upload "thundr-dev-${{ github.run_number }}.ipa" --parent '${{secrets.DEV_IPA_GOOGLE_REPO}}'
 concurrency:
    group: default
