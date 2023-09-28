@@ -21,6 +21,7 @@ const TextInputLeftContainer = styled.View`
    border-right-color: #b1b3b5;
    border-right-width: 1px;
    padding: 0 10px;
+   margin: 0;
 `;
 
 const TextInput = styled.TextInput`
