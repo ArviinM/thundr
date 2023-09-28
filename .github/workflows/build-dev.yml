@@ -95,43 +95,35 @@ jobs:
           working-directory: ./android
     steps:
       - run: ls
-      - run: ./gradlew publishBundle  --release-status draft 
-  iOS-Pod-Install:
-    runs-on: macos
-    needs: Yarn-Install
-    defaults:
-        run:            
-            working-directory: ./ios
-    steps:
-      - run: ls
-      - run: pod install
+      - run: ./gradlew publishBundle  --release-status draft   
   iOS-Prepare-Build:
     runs-on: macos
-    needs:  iOS-Pod-Install
+    needs:  Yarn-Install
     steps:
       - run: ls
+      - run: npx pod-install
       - run: npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ios
       - run: /usr/libexec/Plistbuddy -c "Set CFBundleVersion ${{ENV.BUILD_NUMBER}}" "ios/"${{env.APP_NAME}}"/Info.plist"
       - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
-  iOS-Build:
+  iOS-Build-Export:
         runs-on: macos
         needs: iOS-Prepare-Build
         steps:
         - run: ls    
         - run: ls ios
-        - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"
+        - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"        
+        - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
         - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
-  iOS-Upload:
+        - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
+  iOS-IPA-Upload:
         runs-on: macos
-        needs: iOS-Build
+        needs: iOS-Build-Export
         defaults:
-            run:            
-                working-directory: ./ios
+          run:            
+            working-directory: MyApp
         steps:
-            - run: ls
-            - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
+          - run: cp ${{env.APP_NAME}}.ipa "thundr-dev-${{ github.run_number }}.ipa"
+          - run: gdrive files upload "thundr-dev-${{ github.run_number }}.ipa" --parent '${{secrets.DEV_IPA_GOOGLE_REPO}}'
 concurrency:
   group: default
   cancel-in-progress: true
-
-                        
