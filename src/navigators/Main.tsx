@@ -1,83 +1,107 @@
 import React from 'react';
-import { KeyFeatures, Startup, Login } from '../screens';
-import MobileNumber from '../screens/Registration/MobileNumber';
-import OTP from '../screens/Registration/OTP';
-import CreatePassword from '../screens/Registration/CreatePassword';
-import {
-   createStackNavigator,
-   StackNavigationOptions,
-} from '@react-navigation/stack';
+
+import { createStackNavigator } from '@react-navigation/stack';
 
 import BackButtonArrow from '@atoms/BackButtonArrow';
-import { useNavigation, NavigatorScreenParams } from '@react-navigation/native';
 
-export type RootStackParamList = {
-   KeyFeatures: undefined;
-   Startup: undefined;
-   Login: undefined;
-   Registration: NavigatorScreenParams<RegistrationStackParamList>;
-};
+import type {
+   RootStackParamList,
+   RegistrationStackParamList,
+} from 'types/navigation';
 
-const bgColor: string = '#F2CECD';
+/**
+ * Screens
+ */
+import KeyFeatures from '@screens/KeyFeatures';
+import StartUp from '@screens/Startup';
+
+import MobileNumber from '@screens/Registration/MobileNumber';
+import OTP from '@screens/Registration/OTP';
+import CreatePassword from '@screens/Registration/CreatePassword';
+
+import Login from '@screens/Login';
+
+import PrimaryDetails from '@screens/ProfileCreation/PrimaryDetails';
+import CompatibilityQuestions from '@screens/ProfileCreation/CompatibilityQuestions';
+import { Image } from 'react-native';
+import { useTheme } from '@hooks';
 
 const MainStack = createStackNavigator<RootStackParamList>();
-
-export type RegistrationStackParamList = {
-   MobileRegistration: undefined;
-   OTP: undefined;
-   CreatePassword: undefined;
-};
-
 const RegistrationStack = createStackNavigator<RegistrationStackParamList>();
 
-// TODO: Remove any type
+const RegistrationRoutes = () => {
+   const { Images } = useTheme();
 
-const getCustomHeaderConfig = (navigation: any): StackNavigationOptions => {
-   return {
-      headerShown: true,
-      headerBackTitleVisible: false,
-      headerTitle: '',
-      headerStyle: {
-         backgroundColor: bgColor,
-      },
-      headerLeft: () => <BackButtonArrow onPress={navigation.goBack} />,
-   };
+   return (
+      <RegistrationStack.Navigator initialRouteName="StartUp">
+         <RegistrationStack.Group
+            screenOptions={({ navigation }) => ({
+               headerTitleAlign: 'center',
+               headerTitle: () => (
+                  <Image
+                     source={Images.app_bar.logo}
+                     style={{ width: 130 }}
+                     resizeMode="center"
+                  />
+               ),
+               headerLeft: () => (
+                  <BackButtonArrow onPress={() => navigation.goBack()} />
+               ),
+            })}
+         >
+            <RegistrationStack.Screen
+               name="PrimaryDetails"
+               component={PrimaryDetails}
+            />
+            <RegistrationStack.Screen
+               name="CompatibilityQuestions"
+               component={CompatibilityQuestions}
+            />
+         </RegistrationStack.Group>
+         <RegistrationStack.Screen
+            name="StartUp"
+            component={StartUp}
+            options={{
+               headerShown: false,
+            }}
+         />
+         <RegistrationStack.Group
+            screenOptions={({ navigation }) => ({
+               headerShown: true,
+               headerBackTitleVisible: false,
+               headerTitle: '',
+               headerStyle: {
+                  backgroundColor: '#F2CECD',
+               },
+               headerLeft: () => (
+                  <BackButtonArrow onPress={() => navigation.goBack()} />
+               ),
+            })}
+         >
+            <RegistrationStack.Screen
+               name="MobileRegistration"
+               component={MobileNumber}
+            />
+            <RegistrationStack.Screen name="OTP" component={OTP} />
+            <RegistrationStack.Screen
+               name="CreatePassword"
+               component={CreatePassword}
+            />
+            <RegistrationStack.Screen name="Login" component={Login} />
+         </RegistrationStack.Group>
+      </RegistrationStack.Navigator>
+   );
 };
-
-// TODO: Remove any type
-const RegistrationRoutes = ({ navigation }: { navigation: any }) => (
-   <RegistrationStack.Navigator
-      screenOptions={getCustomHeaderConfig(navigation)}
-   >
-      <RegistrationStack.Screen
-         name="MobileRegistration"
-         component={MobileNumber}
-      />
-      <RegistrationStack.Screen name="OTP" component={OTP} />
-      <RegistrationStack.Screen
-         name="CreatePassword"
-         component={CreatePassword}
-      />
-   </RegistrationStack.Navigator>
-);
 
 // @refresh reset
 const MainNavigator = () => {
-   const navigation = useNavigation();
-
    return (
       <MainStack.Navigator
          screenOptions={{ headerShown: false }}
-         initialRouteName="KeyFeatures"
+         initialRouteName="StartUpStack"
       >
          <MainStack.Screen name="KeyFeatures" component={KeyFeatures} />
-         <MainStack.Screen name="Startup" component={Startup} />
-         <MainStack.Screen
-            name="Login"
-            component={Login}
-            options={getCustomHeaderConfig(navigation)}
-         />
-         <MainStack.Screen name="Registration" component={RegistrationRoutes} />
+         <MainStack.Screen name="StartUpStack" component={RegistrationRoutes} />
       </MainStack.Navigator>
    );
 };

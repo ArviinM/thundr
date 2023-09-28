@@ -3,14 +3,15 @@ import React from 'react';
 import { Image } from 'react-native';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RootStackParamList } from '@navigators/Main';
 
 import styled from 'styled-components/native';
 
-import StandardSkeleton from '@/components/templates/StandardSkeleton';
-import BasicButton from '@/components/atoms/Buttons/Basic';
+import StandardSkeleton from '@templates/StandardSkeleton';
+import BasicButton from '@atoms/Buttons/Basic';
 
-import IconButton from '@/components/molecules/IconButton/IconButton';
+import IconButton from '@molecules/IconButton/IconButton';
+
+import type { RegistrationStackParamList } from 'types/navigation';
 
 import { useTheme } from '@hooks';
 
@@ -47,8 +48,24 @@ const FooterText = styled.Text`
    font-size: 12px;
 `;
 
+const FooterTextUnderline = styled(FooterText)`
+   text-decoration: underline;
+`;
+
+const SocialButton = styled(IconButton)`
+   border-radius: 30px;
+`;
+
+const LoginButton = styled(BasicButton).attrs({
+   textStyles: {
+      fontWeight: '800',
+   },
+})`
+   border-radius: 30px;
+`;
+
 interface StartupProps
-   extends StackScreenProps<RootStackParamList, 'Startup'> {}
+   extends StackScreenProps<RegistrationStackParamList, 'StartUp'> {}
 
 const Startup: React.FC<StartupProps> = ({ navigation }) => {
    const { Images } = useTheme();
@@ -63,23 +80,22 @@ const Startup: React.FC<StartupProps> = ({ navigation }) => {
          secondSection={
             <ActionsContainer>
                <LoginTitle>Register here</LoginTitle>
-               <BasicButton
+               <SocialButton
                   title="Continue with Google"
+                  icon={Images.icons.icon_google}
                   onPress={() => console.log(1)}
                />
-               <BasicButton
+               <SocialButton
                   title="Continue with Facebook"
+                  icon={Images.icons.icon_facebook}
                   onPress={() => console.log(1)}
                />
-               <BasicButton
+               <SocialButton
                   title="Continue with Mobile Number"
-                  onPress={() =>
-                     navigation.navigate('Registration', {
-                        screen: 'MobileRegistration',
-                     })
-                  }
+                  icon={Images.icons.icon_phone_hold}
+                  onPress={() => navigation.navigate('MobileRegistration')}
                />
-               <BasicButton
+               <LoginButton
                   title="LOGIN"
                   onPress={() => navigation.navigate('Login')}
                   style={{ alignSelf: 'center' }}
@@ -89,10 +105,12 @@ const Startup: React.FC<StartupProps> = ({ navigation }) => {
          thirdSection={
             <FooterContainer>
                <FooterText>
-                  By signing up, I am 35 years of age or older and agrees to the
-                  <FooterText>Terms and Conditions</FooterText> of Thundr and
-                  its
-                  <FooterText>Privacy Policy</FooterText>.
+                  By signing up, I am 35 years of age or older and agrees to the{' '}
+                  <FooterTextUnderline>
+                     Terms and Conditions
+                  </FooterTextUnderline>{' '}
+                  of Thundr and its{' '}
+                  <FooterTextUnderline>Privacy Policy</FooterTextUnderline>.
                </FooterText>
             </FooterContainer>
          }

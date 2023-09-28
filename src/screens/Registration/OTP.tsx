@@ -5,12 +5,12 @@ import { Image } from 'react-native';
 import styled from 'styled-components/native';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RegistrationStackParamList } from '@navigators/Main';
+import type { RegistrationStackParamList } from 'types/navigation';
 
 import OTPTextView from 'react-native-otp-textinput';
 
 import RegistrationSkeleton from '@templates/RegistrationSkeleton';
-import { useTheme } from '@/hooks';
+import { useTheme } from '@hooks';
 import {
    TextInput as GenericTextInput,
    FooterContainer as GenericFC,

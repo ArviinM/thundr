@@ -7,12 +7,12 @@ import Toast from 'react-native-toast-message';
 import { Footer } from '@screens/Registration/MobileNumber';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RegistrationStackParamList } from '@navigators/Main';
+import type { RegistrationStackParamList } from 'types/navigation';
 
 import styled from 'styled-components/native';
 
-import StandardSkeleton from '@/components/templates/StandardSkeleton';
-import BasicButton from '@/components/atoms/Buttons/Basic';
+import StandardSkeleton from '@templates/StandardSkeleton';
+import BasicButton from '@atoms/Buttons/Basic';
 
 import { useValidateQuestionMutation } from '@services/modules/users';
 
@@ -123,8 +123,7 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
                         validateQuestion({
                            phoneNumber: username,
                            challengeName: 'NEW_PASSWORD_REQUIRED',
-                           challengeAnswer: '',
-                           password: credentials.password,
+                           challengeAnswer: credentials.password,
                            session: session,
                         });
                      } else {
