@@ -1,129 +1,129 @@
 name: Build the App on Dev Environment
 run-name: ${{ github.actor }} is Triggering Develop Build 🚀
-on: 
-  push:
-    branches:
-    - develop-build
+on:
+   push:
+      branches:
+         - develop-build
 env:
-  BUILD_NAME: 1.0.0
-  BUILD_NUMBER: ${{github.run_number}}
-  APP_NAME: ThundrDev
-  APP_ID: ph.thundr.app.dev
+   BUILD_NAME: 1.0.0
+   BUILD_NUMBER: ${{github.run_number}}
+   APP_NAME: ThundrDev
+   APP_ID: ph.thundr.app.dev
 jobs:
-  Git-Fetch-State:
-    runs-on: macos
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "${{ github.event.head_commit.message }}"
-  Package-Rename:
-    runs-on: macos
-    needs: Git-Fetch-State
-    steps:
-        - run: ls
-        - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
-        - run: echo -en "${{ENV.DEV_ENV}}" >> .env
-  Yarn-Install:
-        runs-on: macos
-        needs: Package-Rename
-        steps:
-            - run: yarn install
-            - run: ls
-  Android-Prepare-Build:
-    runs-on: macos
-    needs: Yarn-Install
-    defaults:
-        run:            
+   Git-Fetch-State:
+      runs-on: m2
+      steps:
+         - name: Check out repository code
+           uses: actions/checkout@v3
+         - run: echo "${{ github.event.head_commit.message }}"
+   Package-Rename:
+      runs-on: m2
+      needs: Git-Fetch-State
+      steps:
+         - run: ls
+         - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
+         - run: echo -en "${{ENV.DEV_ENV}}" >> .env
+   Yarn-Install:
+      runs-on: m2
+      needs: Package-Rename
+      steps:
+         - run: yarn install
+         - run: ls
+   Android-Prepare-Build:
+      runs-on: m2
+      needs: Yarn-Install
+      defaults:
+         run:
             working-directory: ./android
-    steps:
-      - run: ls        
-      - run: echo "MYAPP_RELEASE_STORE_FILE=${{secrets.KEYSTORE_PATH}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_KEY_ALIAS=${{secrets.KEY_ALIAS}}" >> gradle.properties
-      - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
-      - run: echo "BUILD_NUMBER=${{ENV.BUILD_NUMBER}}" >> gradle.properties
-      - run: echo "BUILD_NAME=${{ENV.BUILD_NAME}}" >> gradle.properties
-      - run: echo "PLAY_PUBLISH_KEY_JSON=${{secrets.PLAYSTORE_JSON_KEY}}" >> gradle.properties
-      - run: echo "PLAY_PUBLISH_TRACK=internal" >> gradle.properties
-      - run: echo "RELEASE_NAME=Release ${{ENV.BUILD_NUMBER}}" >> gradle.properties
-      - run: more gradle.properties
-      - run: ls app
-      - run: ./gradlew clean
-  Android-APK-Build:
-    runs-on: macos
-    needs: Android-Prepare-Build
-    defaults:
-        run:            
+      steps:
+         - run: ls
+         - run: echo "MYAPP_RELEASE_STORE_FILE=${{secrets.KEYSTORE_PATH}}" >> gradle.properties
+         - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >> gradle.properties
+         - run: echo "MYAPP_RELEASE_KEY_ALIAS=${{secrets.KEY_ALIAS}}" >> gradle.properties
+         - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >> gradle.properties
+         - run: echo "BUILD_NUMBER=${{ENV.BUILD_NUMBER}}" >> gradle.properties
+         - run: echo "BUILD_NAME=${{ENV.BUILD_NAME}}" >> gradle.properties
+         - run: echo "PLAY_PUBLISH_KEY_JSON=${{secrets.PLAYSTORE_JSON_KEY}}" >> gradle.properties
+         - run: echo "PLAY_PUBLISH_TRACK=internal" >> gradle.properties
+         - run: echo "RELEASE_NAME=Release ${{ENV.BUILD_NUMBER}}" >> gradle.properties
+         - run: more gradle.properties
+         - run: ls app
+         - run: ./gradlew clean
+   Android-APK-Build:
+      runs-on: m2
+      needs: Android-Prepare-Build
+      defaults:
+         run:
             working-directory: ./android
-    steps:
-      - run: ls
-      - run: ./gradlew assembleRelease
-  Android-APK-Upload:
-    runs-on: macos
-    needs:  Android-APK-Build
-    defaults:
-        run:            
+      steps:
+         - run: ls
+         - run: ./gradlew assembleRelease
+   Android-APK-Upload:
+      runs-on: m2
+      needs: Android-APK-Build
+      defaults:
+         run:
             working-directory: ./android/app/build/outputs/apk/release
-    steps:
-      - run: ls
-      - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"   
-      - run: gdrive files upload "thundr-dev-${{  github.run_number }}.apk" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'
-  Android-AAB-Build:
-    runs-on: macos
-    needs: Android-Prepare-Build
-    defaults:
-        run:            
+      steps:
+         - run: ls
+         - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
+         # - run: gdrive files upload "thundr-dev-${{  github.run_number }}.apk" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'
+   Android-AAB-Build:
+      runs-on: m2
+      needs: Android-Prepare-Build
+      defaults:
+         run:
             working-directory: ./android
-    steps:
-      - run: ls
-      - run: ./gradlew bundleRelease
-  Android-AAB-Upload:
-    runs-on: macos
-    needs:  Android-AAB-Build
-    defaults:
-        run:            
+      steps:
+         - run: ls
+         - run: ./gradlew bundleRelease
+   Android-AAB-Upload:
+      runs-on: m2
+      needs: Android-AAB-Build
+      defaults:
+         run:
             working-directory: ./android/app/build/outputs/bundle/release
-    steps:
-      - run: ls
-      - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-      - run: gdrive files upload "thundr-dev-${{  github.run_number }}.aab" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'
-  Android-Publish-Dev-PlayStore:
-    runs-on: macos
-    needs:  Android-AAB-Upload
-    defaults:
-        run:            
-          working-directory: ./android
-    steps:
-      - run: ls
-      - run: ./gradlew publishBundle  --release-status draft   
-  iOS-Prepare-Build:
-    runs-on: macos
-    needs:  Yarn-Install
-    steps:
-      - run: ls
-      - run: npx pod-install
-      - run: npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ios
-      - run: /usr/libexec/Plistbuddy -c "Set CFBundleVersion ${{ENV.BUILD_NUMBER}}" "ios/"${{env.APP_NAME}}"/Info.plist"
-      - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
-  iOS-Build-Export:
-        runs-on: macos
-        needs: iOS-Prepare-Build
-        steps:
-        - run: ls    
-        - run: ls ios
-        - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"        
-        - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
-        - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates 
-        - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
-  iOS-IPA-Upload:
-        runs-on: macos
-        needs: iOS-Build-Export
-        defaults:
-          run:            
+      steps:
+         - run: ls
+         - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
+         # - run: gdrive files upload "thundr-dev-${{  github.run_number }}.aab" --parent '${{secrets.DEV_APK_GOOGLE_REPO}}'
+   Android-Publish-Dev-PlayStore:
+      runs-on: m2
+      needs: Android-AAB-Upload
+      defaults:
+         run:
+            working-directory: ./android
+      steps:
+         - run: ls
+         - run: ./gradlew publishBundle  --release-status draft
+   iOS-Prepare-Build:
+      runs-on: m2
+      needs: Yarn-Install
+      steps:
+         - run: ls
+         - run: npx pod-install
+         - run: npx react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ios
+         - run: /usr/libexec/Plistbuddy -c "Set CFBundleVersion ${{ENV.BUILD_NUMBER}}" "ios/"${{env.APP_NAME}}"/Info.plist"
+         - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
+   iOS-Build-Export:
+      runs-on: m2
+      needs: iOS-Prepare-Build
+      steps:
+         - run: ls
+         - run: ls ios
+         - run: xcodebuild -list -workspace "ios/${{ENV.APP_NAME}}.xcworkspace"
+         - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
+         - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -allowProvisioningUpdates
+         - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
+   iOS-IPA-Upload:
+      runs-on: m2
+      needs: iOS-Build-Export
+      defaults:
+         run:
             working-directory: MyApp
-        steps:
-          - run: cp ${{env.APP_NAME}}.ipa "thundr-dev-${{ github.run_number }}.ipa"
-          - run: gdrive files upload "thundr-dev-${{ github.run_number }}.ipa" --parent '${{secrets.DEV_IPA_GOOGLE_REPO}}'
+      steps:
+         - run: cp ${{env.APP_NAME}}.ipa "thundr-dev-${{ github.run_number }}.ipa"
+         # - run: gdrive files upload "thundr-dev-${{ github.run_number }}.ipa" --parent '${{secrets.DEV_IPA_GOOGLE_REPO}}'
 concurrency:
-  group: default
-  cancel-in-progress: true
+   group: default
+   cancel-in-progress: true
