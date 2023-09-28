@@ -115,16 +115,6 @@ jobs:
          - run: echo "${{vars.DEV_EXPORT_OPTIONS_PLIST}}" >> exportOptions.plist
          - run: xcodebuild archive -scheme "Thundr" -workspace "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release -archivePath myArch -destination 'generic/platform=iOS' -allowProvisioningUpdates
          - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
-   iOS-IPA-Upload:
-      runs-on: m2
-      needs: iOS-Build-Export
-      defaults:
-         run:
-            working-directory: MyApp
-      steps:
-        - run: ls
-         # - run: cp ${{env.APP_NAME}}.ipa "thundr-dev-${{ github.run_number }}.ipa"
-         # - run: gdrive files upload "thundr-dev-${{ github.run_number }}.ipa" --parent '${{secrets.DEV_IPA_GOOGLE_REPO}}'
-concurrency:
+   concurrency:
    group: default
    cancel-in-progress: true
