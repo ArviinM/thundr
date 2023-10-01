@@ -26,6 +26,7 @@ export default function ({}: ThemeVariables) {
       socials: {
          icon_google: require('./assets/images/1x/icon_google.png'),
          icon_facebook: require('./assets/images/1x/icon_facebook.png'),
+         icon_apple: require('./assets/images/social/icon_apple.png'),
       },
       forms: {
          lgbtq: require('./assets/images/lgbtqia_plus.png'),

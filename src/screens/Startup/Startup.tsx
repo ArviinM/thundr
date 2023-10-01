@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Image, Linking } from 'react-native';
+import { Image, Linking, Platform } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
 
@@ -74,7 +74,7 @@ const LoginButton = styled(BasicButton).attrs({
 enum AUTH_TYPE {
    google = 'Google',
    facebook = 'Facebook',
-   apple = 'Apple',
+   apple = 'SignInWithApple',
 }
 
 const getActualURL = (ref: AUTH_TYPE) =>
@@ -137,9 +137,9 @@ const Startup: React.FC<StartupProps> = ({ navigation }) => {
       );
    }, []);
 
-   const openGoogle = async () => {
+   const openSSO = async (auth: AUTH_TYPE) => {
       // const localURL = 'http://127.0.0.1:8080/'; (Local testing)
-      const actualURL = getActualURL(AUTH_TYPE.google);
+      const actualURL = getActualURL(auth);
 
       await Linking.openURL(actualURL);
    };
@@ -154,15 +154,23 @@ const Startup: React.FC<StartupProps> = ({ navigation }) => {
          secondSection={
             <ActionsContainer>
                <LoginTitle>Register here</LoginTitle>
-               <SocialButton
-                  title="Continue with Google"
-                  icon={Images.icons.icon_google}
-                  onPress={openGoogle}
-               />
+               {Platform.OS === 'ios' ? (
+                  <SocialButton
+                     title="Continue with Apple"
+                     icon={Images.socials.icon_apple}
+                     onPress={() => openSSO(AUTH_TYPE.apple)}
+                  />
+               ) : (
+                  <SocialButton
+                     title="Continue with Google"
+                     icon={Images.icons.icon_google}
+                     onPress={() => openSSO(AUTH_TYPE.google)}
+                  />
+               )}
                <SocialButton
                   title="Continue with Facebook"
                   icon={Images.icons.icon_facebook}
-                  onPress={() => console.log(1)}
+                  onPress={() => openSSO(AUTH_TYPE.facebook)}
                />
                <SocialButton
                   title="Continue with Mobile Number"
