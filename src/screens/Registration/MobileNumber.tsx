@@ -137,13 +137,10 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
                sub="Enter your mobile number. We will send
          you an OTP to verify"
                onPress={() => {
-                  // navigation.navigate('OTP', {
-                  //    phoneNumber: 09123123232,
-                  // });
-                  // registerMobile({
-                  //    phoneNumber,
-                  //    email: 'chester.danao@thundr.ph',
-                  // });
+                  registerMobile({
+                     phoneNumber,
+                     email: 'chester.danao@thundr.ph',
+                  });
                }}
                onChangeText={setPhoneNumber}
             />
