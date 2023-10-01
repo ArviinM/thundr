@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 
 import { Image, Linking, Platform } from 'react-native';
 
-import DeepLinking from 'react-native-deep-linking';
-
 import base64 from 'react-native-base64';
 
 import type { StackScreenProps } from '@react-navigation/stack';
@@ -83,62 +81,32 @@ const getActualURL = (ref: AUTH_TYPE) =>
 interface StartupProps
    extends StackScreenProps<RegistrationStackParamList, 'StartUp'> {}
 
-const Startup: React.FC<StartupProps> = ({ navigation }) => {
+const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
    const { Images } = useTheme();
    const { authenticateUser } = useAuth();
 
-   const onTriggerDeepLinking = ({ url }: { url: string }) => {
-      Linking.canOpenURL(url).then(supported => {
-         if (supported) {
-            DeepLinking.evaluateUrl(url);
-         }
-      });
-   };
+   const { params } = route;
 
    useEffect(() => {
-      DeepLinking.addScheme('ph.thundr.app://');
+      if (params?.payload) {
+         const responseObject: APIResponseOject = JSON.parse(
+            base64.decode(params.payload),
+         );
 
-      Linking.addEventListener('url', onTriggerDeepLinking);
+         const { forProfileCreation } = responseObject;
 
-      DeepLinking.addRoute(
-         '/sso/:payload',
-         (response: { scheme: string; payload: string }) => {
-            console.log('PAYLOAD: ', base64.decode(response.payload));
+         authenticateUser(responseObject);
 
-            const responseObject: APIResponseOject = JSON.parse(
-               base64.decode(response.payload),
-            );
-
-            authenticateUser(responseObject);
-
-            const { forProfileCreation } = responseObject;
-
-            /**
-             * TODO: Should dispatch
-            
-            navigation.dispatch(state => {
-               const routes = state.routes.filter(r => r.name !== 'StartUp');
-
-               return CommonActions.reset({
-                  ...state,
-                  routes,
-                  index: 4,
-               });
-            });
-
-             */
-
-            if (forProfileCreation) {
-               navigation.navigate('PrimaryDetails');
-            } else {
-               navigation.navigate('Dashboard');
-            }
-         },
-      );
-   }, []);
+         if (forProfileCreation) {
+            navigation.navigate('PrimaryDetails');
+         } else {
+            navigation.navigate('Dashboard');
+         }
+      }
+   }, [params]);
 
    const openSSO = async (auth: AUTH_TYPE) => {
-      // const localURL = 'http://127.0.0.1:8080/'; (Local testing)
+      // const localURL = 'http://127.0.0.1:8080/';
       const actualURL = getActualURL(auth);
 
       await Linking.openURL(actualURL);

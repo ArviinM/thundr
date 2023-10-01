@@ -2,7 +2,9 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 
 export type RegistrationStackParamList = {
-   StartUp: undefined;
+   StartUp: {
+      payload: string;
+   };
    MobileRegistration: undefined;
    OTP: undefined;
    CreatePassword: undefined;
