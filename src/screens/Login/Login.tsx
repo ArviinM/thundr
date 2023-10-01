@@ -136,7 +136,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             thirdSection={
                <PrimaryButton
                   title="Continue"
-                  onPress={() => authenticate(credentials)}
+                  onPress={() => console.log(1)}
                   style={{ alignSelf: 'center' }}
                />
             }
@@ -146,3 +146,5 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 };
 
 export default Login;
+
+// authenticate(credentials)

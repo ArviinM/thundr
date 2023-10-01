@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { Image } from 'react-native';
+import { Image, Linking, Platform } from 'react-native';
+
+import DeepLinking from 'react-native-deep-linking';
+
+import base64 from 'react-native-base64';
 
 import type { StackScreenProps } from '@react-navigation/stack';
+import { CommonActions } from '@react-navigation/native';
+
+import { APIResponseOject } from '@store/authentication';
 
 import styled from 'styled-components/native';
 
@@ -13,7 +20,7 @@ import IconButton from '@molecules/IconButton/IconButton';
 
 import type { RegistrationStackParamList } from 'types/navigation';
 
-import { useTheme } from '@hooks';
+import { useTheme, useAuth } from '@hooks';
 
 const AlignVertical = styled.View`
    flex: 1;
@@ -64,11 +71,78 @@ const LoginButton = styled(BasicButton).attrs({
    border-radius: 30px;
 `;
 
+enum AUTH_TYPE {
+   google = 'Google',
+   facebook = 'Facebook',
+   apple = 'SignInWithApple',
+}
+
+const getActualURL = (ref: AUTH_TYPE) =>
+   `${process.env.API_URL}auth/get-sso-url?sso=${ref}`;
+
 interface StartupProps
    extends StackScreenProps<RegistrationStackParamList, 'StartUp'> {}
 
 const Startup: React.FC<StartupProps> = ({ navigation }) => {
    const { Images } = useTheme();
+   const { authenticateUser } = useAuth();
+
+   const onTriggerDeepLinking = ({ url }: { url: string }) => {
+      Linking.canOpenURL(url).then(supported => {
+         if (supported) {
+            DeepLinking.evaluateUrl(url);
+         }
+      });
+   };
+
+   useEffect(() => {
+      DeepLinking.addScheme('ph.thundr.app://');
+
+      Linking.addEventListener('url', onTriggerDeepLinking);
+
+      DeepLinking.addRoute(
+         '/sso/:payload',
+         (response: { scheme: string; payload: string }) => {
+            console.log('PAYLOAD: ', base64.decode(response.payload));
+
+            const responseObject: APIResponseOject = JSON.parse(
+               base64.decode(response.payload),
+            );
+
+            authenticateUser(responseObject);
+
+            const { forProfileCreation } = responseObject;
+
+            /**
+             * TODO: Should dispatch
+            
+            navigation.dispatch(state => {
+               const routes = state.routes.filter(r => r.name !== 'StartUp');
+
+               return CommonActions.reset({
+                  ...state,
+                  routes,
+                  index: 4,
+               });
+            });
+
+             */
+
+            if (forProfileCreation) {
+               navigation.navigate('PrimaryDetails');
+            } else {
+               navigation.navigate('Dashboard');
+            }
+         },
+      );
+   }, []);
+
+   const openSSO = async (auth: AUTH_TYPE) => {
+      // const localURL = 'http://127.0.0.1:8080/'; (Local testing)
+      const actualURL = getActualURL(auth);
+
+      await Linking.openURL(actualURL);
+   };
 
    return (
       <StandardSkeleton
@@ -80,15 +154,23 @@ const Startup: React.FC<StartupProps> = ({ navigation }) => {
          secondSection={
             <ActionsContainer>
                <LoginTitle>Register here</LoginTitle>
-               <SocialButton
-                  title="Continue with Google"
-                  icon={Images.icons.icon_google}
-                  onPress={() => console.log(1)}
-               />
+               {Platform.OS === 'ios' ? (
+                  <SocialButton
+                     title="Continue with Apple"
+                     icon={Images.socials.icon_apple}
+                     onPress={() => openSSO(AUTH_TYPE.apple)}
+                  />
+               ) : (
+                  <SocialButton
+                     title="Continue with Google"
+                     icon={Images.icons.icon_google}
+                     onPress={() => openSSO(AUTH_TYPE.google)}
+                  />
+               )}
                <SocialButton
                   title="Continue with Facebook"
                   icon={Images.icons.icon_facebook}
-                  onPress={() => console.log(1)}
+                  onPress={() => openSSO(AUTH_TYPE.facebook)}
                />
                <SocialButton
                   title="Continue with Mobile Number"
