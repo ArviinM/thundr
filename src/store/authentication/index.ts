@@ -1,16 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface AuthState {
-   accessToken: string;
-   idToken: string;
-   refreshToken: string;
-   challengeName: string;
+export interface APIResponseOject {
+   username?: string;
+   accessToken?: string;
+   idToken?: string;
+   refreshToken?: string;
+   forProfileCreation?: boolean;
+   session?: string;
+   challengeName?: string;
 }
 
-const slice = createSlice({
+export interface APIResponseData {
+   data: APIResponseOject;
+}
+
+interface AuthState extends APIResponseOject {
+   isLogin: boolean;
+}
+
+type AuthPayload = {
+   payload: Partial<AuthState>;
+};
+
+export const slice = createSlice({
    name: 'auth',
-   initialState: {} as AuthState,
-   reducers: {},
+   initialState: { isLogin: false } as AuthState,
+   reducers: {
+      authenticate: (_, { payload }: AuthPayload) => {
+         return {
+            isLogin: true,
+            ...payload,
+         };
+      },
+   },
 });
 
-export default slice.reducer;
+export const { authenticate } = slice.actions;

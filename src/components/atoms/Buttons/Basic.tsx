@@ -29,6 +29,10 @@ const BasicButton: React.FC<BasicButtonProps> = props => {
    return (
       <PressableButtonContainer
          bgColor={props.bgColor || 'white'}
+         style={({ pressed }) => [
+            { opacity: pressed ? 0.8 : 1 },
+            props.style && props.style,
+         ]}
          {...pressableProps}
       >
          <BasicButtonTitle

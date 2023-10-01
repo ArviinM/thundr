@@ -21,6 +21,8 @@ import CreatePassword from '@screens/Registration/CreatePassword';
 
 import Login from '@screens/Login';
 
+import Dashboard from '@screens/Dashboard';
+
 import PrimaryDetails from '@screens/ProfileCreation/PrimaryDetails';
 import CompatibilityQuestions from '@screens/ProfileCreation/CompatibilityQuestions';
 import { Image } from 'react-native';
@@ -89,6 +91,7 @@ const RegistrationRoutes = () => {
             />
             <RegistrationStack.Screen name="Login" component={Login} />
          </RegistrationStack.Group>
+         <RegistrationStack.Screen name="Dashboard" component={Dashboard} />
       </RegistrationStack.Navigator>
    );
 };
@@ -98,7 +101,7 @@ const MainNavigator = () => {
    return (
       <MainStack.Navigator
          screenOptions={{ headerShown: false }}
-         initialRouteName="StartUpStack"
+         initialRouteName="KeyFeatures"
       >
          <MainStack.Screen name="KeyFeatures" component={KeyFeatures} />
          <MainStack.Screen name="StartUpStack" component={RegistrationRoutes} />

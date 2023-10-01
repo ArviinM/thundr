@@ -9,6 +9,7 @@ module.exports = {
             extensions: ['.js', '.json', '.tsx', '.ts'],
             alias: {
                '@hooks': './src/hooks',
+               '@store': './src/store',
                '@assets': './src/theme/assets',
                '@atoms': './src/components/atoms',
                '@molecules': './src/components/molecules',

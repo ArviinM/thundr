@@ -9,6 +9,7 @@ export type RegistrationStackParamList = {
    Login: undefined;
    PrimaryDetails: undefined;
    CompatibilityQuestions: undefined;
+   Dashboard: undefined;
 };
 
 export type RootStackParamList = {

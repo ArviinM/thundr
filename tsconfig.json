@@ -9,6 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "@hooks": ["./src/hooks"],
+      "@store/*": ["./src/store/*"],
       "@assets/*": ["./src/theme/assets/*"],
       "@navigators/*": ["./src/navigators/*"],
       "@atoms/*": ["./src/components/atoms/*"],
