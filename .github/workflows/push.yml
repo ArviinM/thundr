@@ -39,5 +39,5 @@ jobs:
       - run: ls
       - run: sonar-scanner -Dsonar.projectKey=thundr-mobile -Dsonar.sources=src -Dsonar.host.url=https://sonarqube.thundr.ph -Dsonar.token=${{secrets.SONAR_TOKEN}}
 concurrency:
-  group: thundr-mobile-push
+  group: thundr-mobile
   cancel-in-progress: false
