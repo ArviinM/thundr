@@ -16,6 +16,8 @@
        steps:
          - name: Check out repository code
            uses: actions/checkout@v3
+           with:
+            fetch-depth: 0
          - run: echo "${{ github.event.head_commit.message }}"
      Package-Rename:
        runs-on: m2
