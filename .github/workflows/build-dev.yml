@@ -74,7 +74,7 @@
        steps:
          - run: ls
          - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         - run: cp "thundr-dev-${{ github.run_number }}.apk /Users/thundr/Documents/Projects/Thundr/artifacts/
+         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/thundr/Documents/Projects/Thundr/artifacts/
      Android-AAB-Build:
        runs-on: m2
        needs: Android-Prepare-Build
@@ -93,7 +93,7 @@
        steps:
          - run: ls
          - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         - run: cp "thundr-dev-${{ github.run_number }}.aab /Users/thundr/Documents/Projects/Thundr/artifacts/
+         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/thundr/Documents/Projects/Thundr/artifacts/
      Android-Publish-Dev-PlayStore:
        runs-on: m2
        needs: Android-AAB-Upload
