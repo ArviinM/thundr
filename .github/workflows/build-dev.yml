@@ -144,6 +144,6 @@
       - run: ls ios      
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
    concurrency:
-     group: default
-     cancel-in-progress: true
+     group: thundr-mobile-build
+     cancel-in-progress: false
    
