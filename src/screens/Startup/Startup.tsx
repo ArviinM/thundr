@@ -93,6 +93,8 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
             base64.decode(params.payload),
          );
 
+         console.log('responseObject', responseObject);
+
          const { forProfileCreation } = responseObject;
 
          authenticateUser(responseObject);

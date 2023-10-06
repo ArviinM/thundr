@@ -14,6 +14,7 @@ export default function ({}: ThemeVariables) {
          icon_facebook: require('./assets/images/social/facebook.png'),
          icon_phone_hold: require('./assets/images/phone_hold.png'),
          icon_plus: require('./assets/images/plus.png'),
+         icon_email: require('./assets/images/icon_email.png'),
       },
       key_features: [
          require('./assets/images/key_features/1x/1.png'),

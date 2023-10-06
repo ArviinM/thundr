@@ -42,7 +42,7 @@ const IconTextInput: React.FC<IconTextInputProps> = props => {
          <TextInputLeftContainer>
             <Text>+63</Text>
          </TextInputLeftContainer>
-         <TextInput {...props} inputMode="numeric" maxLength={10} />
+         <TextInput {...props} />
       </Container>
    );
 };
