@@ -23,7 +23,6 @@ const LoginContainer = styled.View`
    flex: 1;
    align-items: center;
    justify-content: center;
-   /* background-color: red; */
 `;
 
 const LoginContainerWrapper = styled.View`
@@ -36,7 +35,8 @@ const LogoImage = styled(Image).attrs({
    resizeMode: 'contain',
 })`
    flex: 1;
-   background-color: pink;
+   align-self: center;
+   width: 200px;
 `;
 
 const LoginTitle = styled.Text`
@@ -97,12 +97,51 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 
    useEffect(() => {
       if (isError) {
+         console.log(error);
          Toast.show({
             type: 'error',
             text1: 'Successfully Login',
          });
       }
    }, [isError]);
+
+   return (
+      <StandardSkeleton
+         firstSection={<LogoImage source={Images.logo} />}
+         secondSection={
+            <ActionsContainer>
+               <LoginTitle>LOGIN ACCOUNT</LoginTitle>
+               <TextInput
+                  placeholder="Email / Phone Number"
+                  onChangeText={text =>
+                     handleOnInputChange('phoneNumber', text.toLowerCase())
+                  }
+               />
+               <TextInput
+                  placeholder="Password"
+                  secureTextEntry
+                  onChangeText={text => handleOnInputChange('password', text)}
+               />
+               <PrimaryButton
+                  title="Continue"
+                  onPress={() => authenticate(credentials)}
+                  style={{ alignSelf: 'center' }}
+                  disabled={isLoading}
+               />
+            </ActionsContainer>
+         }
+         thirdSection={
+            <FooterContainer>
+               <FooterText>
+                  By signing up, I am 35 years of age or older and agrees to the
+                  <FooterText>Terms and Conditions</FooterText> of Thundr and
+                  its
+                  <FooterText>Privacy Policy</FooterText>.
+               </FooterText>
+            </FooterContainer>
+         }
+      />
+   );
 
    return (
       <>

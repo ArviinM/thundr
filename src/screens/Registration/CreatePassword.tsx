@@ -12,11 +12,15 @@ import type { RegistrationStackParamList } from 'types/navigation';
 import styled from 'styled-components/native';
 
 import StandardSkeleton from '@templates/StandardSkeleton';
-import BasicButton from '@atoms/Buttons/Basic';
 
-import { useValidateQuestionMutation } from '@services/modules/users';
+import {
+   useValidateQuestionMutation,
+   ChallengeName,
+   ErrorResponse,
+} from '@services/modules/users';
 
 import { useTheme } from '@hooks';
+import PrimaryButton from '@atoms/Buttons/Primary';
 
 const AlignVertical = styled.View`
    flex: 1;
@@ -58,40 +62,65 @@ const Title = styled.Text`
 interface CreatePasswordProps
    extends StackScreenProps<RegistrationStackParamList, 'CreatePassword'> {}
 
+type CredentialsState = {
+   password: string;
+   retypepassword: string;
+};
+
 const CreatePassword: React.FC<CreatePasswordProps> = ({
    navigation,
    route,
 }) => {
    const { Images } = useTheme();
 
-   const { username, session } = route.params.data;
+   const { phoneNumber, session } = route.params;
 
-   const [validateQuestion, { error, isError, isLoading, isSuccess, data }] =
+   const [validateQuestion, { isError, isLoading, isSuccess, data }] =
       useValidateQuestionMutation();
 
-   const [credentials, setCredentials] = useState<AuthenticationPostBody>({
+   const [credentials, setCredentials] = useState<CredentialsState>({
       password: '',
       retypepassword: '',
    });
 
-   const handleOnInputChange = (
-      key: keyof AuthenticationPostBody,
-      text: string,
-   ) => {
+   const handleOnInputChange = (key: keyof CredentialsState, text: string) => {
       setCredentials({
          ...credentials,
          [key]: text,
       });
    };
 
-   useEffect(() => {
-      if (isError) {
+   const handleOnPasswordSubmit = async () => {
+      if (credentials.password === credentials.retypepassword) {
+         try {
+            await validateQuestion({
+               phoneNumber,
+               challengeName: ChallengeName.new_password_required,
+               challengeAnswer: credentials.password,
+               session: session,
+               password: credentials.password,
+            }).unwrap();
+
+            navigation.navigate('PrimaryDetails');
+         } catch (message: any) {
+            Toast.show({
+               type: 'error',
+               text1: message || 'Server Error',
+            });
+         }
+      } else {
          Toast.show({
             type: 'error',
-            text1: error,
+            text1: 'Password not match',
          });
       }
-   }, [isError]);
+   };
+
+   useEffect(() => {
+      if (data) {
+         console.log('data', data);
+      }
+   }, [data]);
 
    return (
       <StandardSkeleton
@@ -115,24 +144,9 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
                      handleOnInputChange('retypepassword', text)
                   }
                />
-               <BasicButton
+               <PrimaryButton
                   title="Continue"
-                  onPress={() => {
-                     if (credentials.password === credentials.retypepassword) {
-                        console.log('credentials.password', credentials);
-                        validateQuestion({
-                           phoneNumber: username,
-                           challengeName: 'NEW_PASSWORD_REQUIRED',
-                           challengeAnswer: credentials.password,
-                           session: session,
-                        });
-                     } else {
-                        Toast.show({
-                           type: 'error',
-                           text1: 'Password not match',
-                        });
-                     }
-                  }}
+                  onPress={handleOnPasswordSubmit}
                   style={{ alignSelf: 'center' }}
                   disabled={isLoading}
                />
