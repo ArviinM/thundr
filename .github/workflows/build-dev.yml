@@ -136,6 +136,8 @@
       - run: ls
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
       - run: ls MyApp
+      - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-dev-${{ github.run_number }}.ipa"
+      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/thundr/Documents/Projects/Thundr/artifacts/
      iOS-Export-AppStore:
       runs-on: m2
       needs: iOS-Export-IPA
