@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Image, Text } from 'react-native';
+import { Image } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -20,9 +20,11 @@ import {
    useRegisterMobileMutation,
    RegisterMobilePostBody,
    ChallengeName,
+   useValidateMobileSSOMutation,
 } from '@services/modules/users';
 import PrimaryButton from '@atoms/Buttons/Primary';
-import { StackActions } from '@react-navigation/native';
+
+import { useAuth } from '@hooks';
 
 const LogoImage = styled(Image).attrs({
    resizeMode: 'contain',
@@ -122,24 +124,50 @@ interface MobileNumberProps
    extends StackScreenProps<RegistrationStackParamList, 'MobileRegistration'> {}
 
 const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
+   const { authenticationState } = useAuth();
    const { Images } = useTheme();
 
    const [phoneNumber, setPhoneNumber] = useState<string>('');
 
-   const [registerMobile, { isLoading, isSuccess, data, error }] =
-      useRegisterMobileMutation();
+   const [
+      validateMobileSSO,
+      {
+         isLoading: ssoLoading,
+         isSuccess: ssoSuccess,
+         data: ssoData,
+         error: ssoError,
+      },
+   ] = useValidateMobileSSOMutation();
+
+   const [
+      registerMobile,
+      {
+         isLoading: rmLoading,
+         isSuccess: rmSuccess,
+         data: rmData,
+         error: rmError,
+      },
+   ] = useRegisterMobileMutation();
 
    useEffect(() => {
-      console.log('error', error);
+      if (rmSuccess) {
+         console.log('rmData', rmData);
 
-      if (isSuccess) {
-         console.log('sucess');
          navigation.navigate('OTP', {
             phoneNumber: `+63${phoneNumber}`,
-            session: data?.data.session,
+            session: rmData?.data.session,
          });
       }
-   }, [isSuccess, error]);
+   }, [rmSuccess, rmError]);
+
+   useEffect(() => {
+      if (ssoSuccess) {
+         console.log('SSO Mobile', ssoData);
+         navigation.navigate('OTP', {
+            phoneNumber: `+63${phoneNumber}`,
+         });
+      }
+   }, [ssoSuccess, ssoError]);
 
    return (
       <RegistrationSkeleton
@@ -150,15 +178,23 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
                sub="Enter your mobile number. We will send
          you an OTP to verify"
                onPress={() => {
-                  console.log('gumana');
-
-                  registerMobile({
-                     phoneNumber: `+63${phoneNumber}`,
-                  });
+                  if (authenticationState.isLogin) {
+                     validateMobileSSO({
+                        phoneNumber: `+63${phoneNumber}`,
+                        sub: authenticationState.sub,
+                     });
+                  } else {
+                     registerMobile({
+                        phoneNumber: `+63${phoneNumber}`,
+                     });
+                  }
                }}
                onChangeText={setPhoneNumber}
                disabled={
-                  phoneNumber === '' || phoneNumber.length < 10 || isLoading
+                  phoneNumber === '' ||
+                  phoneNumber.length < 10 ||
+                  rmLoading ||
+                  ssoLoading
                }
             />
          }

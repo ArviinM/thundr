@@ -5,9 +5,8 @@ import { Image, Linking, Platform } from 'react-native';
 import base64 from 'react-native-base64';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import { CommonActions } from '@react-navigation/native';
 
-import { APIResponseOject } from '@store/authentication';
+import { APIChallengeQuestionResponseData } from '@services/modules/users';
 
 import styled from 'styled-components/native';
 
@@ -89,18 +88,14 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
 
    useEffect(() => {
       if (params?.payload) {
-         const responseObject: APIResponseOject = JSON.parse(
+         const responseObject: APIChallengeQuestionResponseData = JSON.parse(
             base64.decode(params.payload),
          );
 
-         console.log('responseObject', responseObject);
-
-         const { forProfileCreation } = responseObject;
-
          authenticateUser(responseObject);
 
-         if (forProfileCreation) {
-            navigation.navigate('PrimaryDetails');
+         if (responseObject.forProfileCreation) {
+            navigation.navigate('MobileRegistration');
          } else {
             navigation.navigate('Dashboard');
          }

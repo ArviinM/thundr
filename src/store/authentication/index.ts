@@ -1,20 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
-export interface APIResponseOject {
-   username?: string;
-   accessToken?: string;
-   idToken?: string;
-   refreshToken?: string;
-   forProfileCreation?: boolean;
-   session?: string;
-   challengeName?: string;
-}
-
-export interface APIResponseData {
-   data: APIResponseOject;
-}
-
-interface AuthState extends APIResponseOject {
+import { APIChallengeQuestionResponseData } from '@services/modules/users';
+export interface AuthState extends APIChallengeQuestionResponseData {
    isLogin: boolean;
 }
 

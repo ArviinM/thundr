@@ -19,10 +19,15 @@ import PrimaryButton from '@atoms/Buttons/Primary';
 
 import { useFocusEffect } from '@react-navigation/native';
 
+import Toast from 'react-native-toast-message';
+
+import { useAuth } from '@hooks';
+
 import {
    useValidateQuestionMutation,
    ChallengeName,
    ValidateQuestion,
+   useConfirmMobileSSOMutation,
 } from '@services/modules/users';
 
 const LogoImage = styled(Image).attrs({
@@ -88,8 +93,19 @@ export const Instructions: React.FC<InstructionsProps> = ({
    sub,
    navigationProps,
 }) => {
-   const [validateQuestion, { error, isLoading, isSuccess, data }] =
+   const [validateQuestion, { error, isLoading, isSuccess, data, isError }] =
       useValidateQuestionMutation();
+
+   const [
+      confirmMobileSSO,
+      {
+         error: confirmSSOError,
+         isLoading: confirmSSOIsLoading,
+         isSuccess: confirmSSOSuccess,
+         isError: confirmSSOIsError,
+         data: confirmSSOData,
+      },
+   ] = useConfirmMobileSSOMutation();
 
    const {
       params: { email, phoneNumber, session },
@@ -97,11 +113,26 @@ export const Instructions: React.FC<InstructionsProps> = ({
 
    const [otpInput, setOtpInput] = useState<string>('');
 
+   const { authenticationState } = useAuth();
+
    const input = useRef<OTPTextView>(null);
+
+   useEffect(() => {
+      if (confirmSSOSuccess) {
+         console.log('confirmSSOData', confirmSSOData);
+      }
+   }, [confirmSSOSuccess, confirmSSOIsError]);
 
    useEffect(() => {
       console.log('OTP: challengeError', error);
       console.log('OTP: isSuccess', isSuccess);
+
+      if (isError) {
+         Toast.show({
+            type: 'error',
+            text1: 'An Error occured during the request',
+         });
+      }
 
       if (isSuccess) {
          console.log('Params: ', { email, phoneNumber, session });
@@ -143,9 +174,16 @@ export const Instructions: React.FC<InstructionsProps> = ({
          };
       }
 
-      console.log('handleOnProceed', challengeObject);
-
-      validateQuestion(challengeObject);
+      if (authenticationState.isLogin) {
+         confirmMobileSSO({
+            phoneNumber,
+            sub: authenticationState.sub,
+            session: authenticationState.session,
+            challengeAnswer: otpInput.toString(),
+         });
+      } else {
+         validateQuestion(challengeObject);
+      }
    };
 
    useFocusEffect(
@@ -186,7 +224,7 @@ export const Instructions: React.FC<InstructionsProps> = ({
             title="Continue"
             style={{ alignSelf: 'center' }}
             onPress={handleOnProceed}
-            disabled={isLoading}
+            disabled={isLoading || confirmSSOIsLoading}
          />
       </>
    );

@@ -28,7 +28,6 @@ const LoginContainer = styled.View`
 const LoginContainerWrapper = styled.View`
    height: 60%;
    width: 60%;
-   /* background-color: blue; */
 `;
 
 const LogoImage = styled(Image).attrs({
@@ -141,46 +140,6 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             </FooterContainer>
          }
       />
-   );
-
-   return (
-      <>
-         <StandardSkeleton
-            firstSection={
-               <LoginContainer>
-                  <LoginContainerWrapper>
-                     {/* <LogoImage source={Images.logo} /> */}
-                  </LoginContainerWrapper>
-               </LoginContainer>
-            }
-            secondSection={
-               <ActionsContainer>
-                  <LoginTitle>LOGIN ACCOUNT</LoginTitle>
-                  <TextInput
-                     placeholder="Email / Phone Number"
-                     onChangeText={text =>
-                        handleOnInputChange('phoneNumber', text)
-                     }
-                     disableFullscreenUI
-                  />
-                  <TextInput
-                     placeholder="Password"
-                     secureTextEntry
-                     onChangeText={text =>
-                        handleOnInputChange('password', text)
-                     }
-                  />
-               </ActionsContainer>
-            }
-            thirdSection={
-               <PrimaryButton
-                  title="Continue"
-                  onPress={() => authenticate(credentials)}
-                  style={{ alignSelf: 'center' }}
-               />
-            }
-         />
-      </>
    );
 };
 

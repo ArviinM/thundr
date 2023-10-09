@@ -39,16 +39,15 @@ export interface ValidateQuestion {
 }
 
 export interface APIChallengeQuestionResponseData {
-   username: string;
+   username?: string;
    accessToken?: string;
    idToken?: string;
    refreshToken?: string;
    session?: string;
-   challengeName: ChallengeName;
+   challengeName?: ChallengeName;
    sub?: string;
-   forProfileCreation: boolean;
+   forProfileCreation?: boolean;
 }
-
 export interface APIChallengeQuestionResponse {
    data: APIChallengeQuestionResponseData;
    message: string;
@@ -69,6 +68,16 @@ export interface ErrorResponse {
    data: {
       message: string;
    };
+}
+
+export interface ApiSMSSSOPostBody {
+   sub: string;
+   phoneNumber: string;
+}
+
+export interface ApiSMSSSOConfirmPostBody extends ApiSMSSSOPostBody {
+   session: string;
+   challengeAnswer: string;
 }
 
 export const userApi = api.injectEndpoints({
@@ -125,6 +134,22 @@ export const userApi = api.injectEndpoints({
             return response.data.message;
          },
       }),
+      validateMobileSSO: build.mutation<void, Partial<ApiSMSSSOPostBody>>({
+         query: body => ({
+            url: 'auth/sso-sms-otp',
+            method: 'POST',
+            body,
+         }),
+      }),
+      confirmMobileSSO: build.mutation<void, Partial<ApiSMSSSOConfirmPostBody>>(
+         {
+            query: body => ({
+               url: 'auth/sso-validate-sms-otp',
+               method: 'POST',
+               body,
+            }),
+         },
+      ),
    }),
 });
 
@@ -132,5 +157,7 @@ export const {
    useAuthenticateMutation,
    useRegisterMobileMutation,
    useValidateQuestionMutation,
+   useValidateMobileSSOMutation,
    useRegisterEmailMutation,
+   useConfirmMobileSSOMutation,
 } = userApi;

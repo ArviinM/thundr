@@ -16,6 +16,7 @@ const baseQuery = fetchBaseQuery({
       } = getState() as RootState;
 
       if (accessToken) {
+         console.log(`Bearer ${accessToken}`);
          headers.set('authorization', `Bearer ${accessToken}`);
          return headers;
       }
@@ -30,6 +31,7 @@ const baseQueryWithInterceptor: BaseQueryFn<
    let result = await baseQuery(args, api, extraOptions);
    if (result.error && result.error.status === 401) {
    }
+
    return result;
 };
 
