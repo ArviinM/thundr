@@ -116,7 +116,6 @@
              "ios/"${{env.APP_NAME}}"/Info.plist"
          - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString
              ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
-         - run: xcrun altool --store-session ThundrMobileBuild -u ${{secrets.XCODE_USERNAME}} -p ${{secrets.XCODE_PASSWORD}}   
      iOS-Build:
        runs-on: m2
        needs: iOS-Prepare-Build
@@ -129,13 +128,13 @@
          - run: xcodebuild archive -scheme "Thundr" -workspace
              "ios/${{ENV.APP_NAME}}.xcworkspace" -configuration Release
              -archivePath myArch -destination 'generic/platform=iOS'
-             -allowProvisioningUpdates -session ThundrMobileBuild
+             -allowProvisioningUpdates
      iOS-Export-IPA:
       runs-on: m2
       needs: iOS-Build
       steps:
       - run: ls
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist -session ThundrMobileBuild      
+      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
       - run: ls 
      iOS-Export-AppStore:
       runs-on: m2
@@ -143,7 +142,7 @@
       steps:
       - run: ls
       - run: ls ios      
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist -session ThundrMobileBuild
+      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
