@@ -15,9 +15,12 @@ import type {
 import KeyFeatures from '@screens/KeyFeatures';
 import StartUp from '@screens/Startup';
 
-import MobileNumber from '@screens/Registration/MobileNumber';
-import OTP from '@screens/Registration/OTP';
-import CreatePassword from '@screens/Registration/CreatePassword';
+import {
+   MobileNumber,
+   CreatePassword,
+   Email,
+   OTP,
+} from '@screens/Registration';
 
 import Login from '@screens/Login';
 
@@ -85,6 +88,7 @@ const RegistrationRoutes = () => {
                component={MobileNumber}
             />
             <RegistrationStack.Screen name="OTP" component={OTP} />
+            <RegistrationStack.Screen name="Email" component={Email} />
             <RegistrationStack.Screen
                name="CreatePassword"
                component={CreatePassword}
@@ -101,7 +105,7 @@ const MainNavigator = () => {
    return (
       <MainStack.Navigator
          screenOptions={{ headerShown: false }}
-         initialRouteName="KeyFeatures"
+         initialRouteName="StartUpStack"
       >
          <MainStack.Screen name="KeyFeatures" component={KeyFeatures} />
          <MainStack.Screen name="StartUpStack" component={RegistrationRoutes} />

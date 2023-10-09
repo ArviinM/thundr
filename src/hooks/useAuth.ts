@@ -1,17 +1,19 @@
-import { RootState, AppDispatch } from '@store/index';
+import { useAppDispatch, useAppSelector } from '@store/index';
 
-import { authenticate, APIResponseOject } from '@store/authentication';
+import { APIChallengeQuestionResponseData } from '@services/modules/users';
 
-import { useDispatch } from 'react-redux';
+import { authenticate } from '@store/authentication';
 
 const useAuth = () => {
-   const dispatch = useDispatch<AppDispatch>();
+   const authenticationState = useAppSelector(state => state.authentication);
+   const dispatch = useAppDispatch();
 
-   const authenticateUser = (params: APIResponseOject) => {
+   const authenticateUser = (params: APIChallengeQuestionResponseData) => {
       dispatch(authenticate(params));
    };
 
    return {
+      authenticationState,
       authenticateUser,
    };
 };

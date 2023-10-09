@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Image } from 'react-native';
+import { Image, Text } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -19,12 +19,10 @@ import IconTextInput from '@molecules/IconTextInput';
 import {
    useRegisterMobileMutation,
    RegisterMobilePostBody,
-   ChallengeName,
-   useValidateMobileSSOMutation,
+   useValidateQuestionMutation,
+   useRegisterEmailMutation,
 } from '@services/modules/users';
 import PrimaryButton from '@atoms/Buttons/Primary';
-
-import { useAuth } from '@hooks';
 
 const LogoImage = styled(Image).attrs({
    resizeMode: 'contain',
@@ -63,7 +61,7 @@ type InstructionsProps = {
 };
 
 const TextInput = styled(GenericTextInput).attrs({
-   placeholder: 'xxxxxxxxxx',
+   placeholder: 'Email',
 })``;
 
 const FooterContainer = styled(GenericFC).attrs({})`
@@ -96,12 +94,7 @@ export const Instructions: React.FC<InstructionsProps> = ({
          <Sub>{sub}</Sub>
       </CenterFlex>
       <HorizontalSpacer />
-      <IconTextInput
-         placeholder="xx xxxx xxxx"
-         onChangeText={onChangeText}
-         maxLength={10}
-         inputMode="numeric"
-      />
+      <TextInput onChangeText={onChangeText} inputMode="email" />
       <HorizontalSpacer />
       <PrimaryButton
          title="Continue"
@@ -120,82 +113,47 @@ export const Footer: React.FC<FooterProps> = ({ text }) => (
    <FooterText>{text}</FooterText>
 );
 
-interface MobileNumberProps
-   extends StackScreenProps<RegistrationStackParamList, 'MobileRegistration'> {}
+const expression: RegExp =
+   /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
 
-const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
-   const { authenticationState } = useAuth();
+const isValidEmail = (email: string) => expression.test(email);
+
+interface EmailProps
+   extends StackScreenProps<RegistrationStackParamList, 'Email'> {}
+
+const Email: React.FC<EmailProps> = ({ navigation, route }) => {
    const { Images } = useTheme();
 
-   const [phoneNumber, setPhoneNumber] = useState<string>('');
+   const [email, setEmail] = useState<string>('');
 
-   const [
-      validateMobileSSO,
-      {
-         isLoading: ssoLoading,
-         isSuccess: ssoSuccess,
-         data: ssoData,
-         error: ssoError,
-      },
-   ] = useValidateMobileSSOMutation();
-
-   const [
-      registerMobile,
-      {
-         isLoading: rmLoading,
-         isSuccess: rmSuccess,
-         data: rmData,
-         error: rmError,
-      },
-   ] = useRegisterMobileMutation();
+   const [registerEmail, { error, isError, isLoading, isSuccess, data }] =
+      useRegisterEmailMutation();
 
    useEffect(() => {
-      if (rmSuccess) {
-         console.log('rmData', rmData);
-
+      if (isSuccess) {
          navigation.navigate('OTP', {
-            phoneNumber: `+63${phoneNumber}`,
-            session: rmData?.data.session,
+            email: email.toLocaleLowerCase(),
+            phoneNumber: route.params.phoneNumber,
+            session: data?.session,
          });
       }
-   }, [rmSuccess, rmError]);
-
-   useEffect(() => {
-      if (ssoSuccess) {
-         console.log('SSO Mobile', ssoData);
-         navigation.navigate('OTP', {
-            phoneNumber: `+63${phoneNumber}`,
-         });
-      }
-   }, [ssoSuccess, ssoError]);
+   }, [isSuccess]);
 
    return (
       <RegistrationSkeleton
-         firstSection={<LogoImage source={Images.icons.icon_hold_phone} />}
+         firstSection={<LogoImage source={Images.icons.icon_email} />}
          secondSection={
             <Instructions
-               title="Register with Mobile Number"
-               sub="Enter your mobile number. We will send
-         you an OTP to verify"
-               onPress={() => {
-                  if (authenticationState.isLogin) {
-                     validateMobileSSO({
-                        phoneNumber: `+63${phoneNumber}`,
-                        sub: authenticationState.sub,
-                     });
-                  } else {
-                     registerMobile({
-                        phoneNumber: `+63${phoneNumber}`,
-                     });
-                  }
-               }}
-               onChangeText={setPhoneNumber}
-               disabled={
-                  phoneNumber === '' ||
-                  phoneNumber.length < 10 ||
-                  rmLoading ||
-                  ssoLoading
+               title="Add Email"
+               sub="Enter your email address for
+               added security of your account."
+               onPress={() =>
+                  registerEmail({
+                     email: email.toLocaleLowerCase(),
+                  })
                }
+               onChangeText={setEmail}
+               disabled={email === '' || !isValidEmail(email) || isLoading}
             />
          }
          thirdSection={
@@ -203,7 +161,7 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
                <FooterIcon source={Images.icons.icon_lock} />
                <Footer
                   text="We never share this with anyone
-         and it won’t be on your profile"
+                  and it won’t be on your profile"
                />
             </FooterContainer>
          }
@@ -211,4 +169,4 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
    );
 };
 
-export default MobileNumber;
+export default Email;

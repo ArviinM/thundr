@@ -15,9 +15,20 @@ import {
    TextInput as GenericTextInput,
    FooterContainer as GenericFC,
 } from '@screens/Login/Login';
-import BasicButton from '@atoms/Buttons/Basic';
+import PrimaryButton from '@atoms/Buttons/Primary';
 
-import { useValidateQuestionMutation } from '@services/modules/users';
+import { useFocusEffect } from '@react-navigation/native';
+
+import Toast from 'react-native-toast-message';
+
+import { useAuth } from '@hooks';
+
+import {
+   useValidateQuestionMutation,
+   ChallengeName,
+   ValidateQuestion,
+   useConfirmMobileSSOMutation,
+} from '@services/modules/users';
 
 const LogoImage = styled(Image).attrs({
    resizeMode: 'contain',
@@ -47,15 +58,8 @@ const HorizontalSpacer = styled.View`
    height: 30px;
 `;
 
-type InstructionsProps = {
-   title: string;
-   sub: string;
-   navigation: any;
-   route: any;
-};
-
 const TextInput = styled(GenericTextInput).attrs({
-   placeholder: 'xxxxxxxxxx',
+   placeholder: 'Email Verficiation Code',
 })``;
 
 const FooterContainer = styled(GenericFC).attrs({})`
@@ -75,25 +79,120 @@ const FooterText = styled(Sub).attrs({})`
    font-size: 12px;
 `;
 
+interface OTPProps
+   extends StackScreenProps<RegistrationStackParamList, 'OTP'> {}
+
+type InstructionsProps = {
+   title: string;
+   sub: string;
+   navigationProps: OTPProps;
+};
+
 export const Instructions: React.FC<InstructionsProps> = ({
    title,
    sub,
-   navigation,
-   route,
+   navigationProps,
 }) => {
-   const [validateQuestion, { error, isError, isLoading, isSuccess, data }] =
+   const [validateQuestion, { error, isLoading, isSuccess, data, isError }] =
       useValidateQuestionMutation();
 
+   const [
+      confirmMobileSSO,
+      {
+         error: confirmSSOError,
+         isLoading: confirmSSOIsLoading,
+         isSuccess: confirmSSOSuccess,
+         isError: confirmSSOIsError,
+         data: confirmSSOData,
+      },
+   ] = useConfirmMobileSSOMutation();
+
+   const {
+      params: { email, phoneNumber, session },
+   } = navigationProps.route;
+
    const [otpInput, setOtpInput] = useState<string>('');
+
+   const { authenticationState } = useAuth();
 
    const input = useRef<OTPTextView>(null);
 
    useEffect(() => {
+      if (confirmSSOSuccess) {
+         console.log('confirmSSOData', confirmSSOData);
+      }
+   }, [confirmSSOSuccess, confirmSSOIsError]);
+
+   useEffect(() => {
+      console.log('OTP: challengeError', error);
+      console.log('OTP: isSuccess', isSuccess);
+
+      if (isError) {
+         Toast.show({
+            type: 'error',
+            text1: 'An Error occured during the request',
+         });
+      }
+
       if (isSuccess) {
-         // console.log(data);
-         navigation.navigate('CreatePassword', data);
+         console.log('Params: ', { email, phoneNumber, session });
+         console.log('OTP: ', data);
+         if (data?.challengeName === ChallengeName.email_required) {
+            console.log('EMAIL: Phone Number', {
+               session: data.session,
+               phoneNumber,
+            });
+
+            navigationProps.navigation.navigate('Email', {
+               session: data.session,
+               phoneNumber,
+            });
+         } else if (
+            data?.challengeName === ChallengeName.new_password_required
+         ) {
+            navigationProps.navigation.navigate('CreatePassword', {
+               session: data.session,
+               phoneNumber,
+            });
+         }
       }
    }, [isSuccess, error]);
+
+   const handleOnProceed = () => {
+      let challengeObject: ValidateQuestion = {
+         phoneNumber,
+         session,
+         challengeName: ChallengeName.sms_mfa,
+         challengeAnswer: otpInput.toString(),
+      };
+
+      if (email) {
+         challengeObject = {
+            ...challengeObject,
+            email,
+            challengeName: ChallengeName.email_mfa,
+         };
+      }
+
+      if (authenticationState.isLogin) {
+         confirmMobileSSO({
+            phoneNumber,
+            sub: authenticationState.sub,
+            session: authenticationState.session,
+            challengeAnswer: otpInput.toString(),
+         });
+      } else {
+         validateQuestion(challengeObject);
+      }
+   };
+
+   useFocusEffect(
+      React.useCallback(() => {
+         return () => {
+            setOtpInput('');
+         };
+      }, []),
+   );
 
    return (
       <>
@@ -102,32 +201,30 @@ export const Instructions: React.FC<InstructionsProps> = ({
             <Sub>{sub}</Sub>
          </CenterFlex>
          <HorizontalSpacer />
-         <OTPTextView
-            ref={input}
-            inputCount={6}
-            tintColor="#FFFFFF"
-            offTintColor="#FFFFFF"
-            autoFocus
-            textInputStyle={{
-               backgroundColor: 'white',
-               borderRadius: 10,
-               width: 40,
-               height: 40,
-            }}
-            handleTextChange={setOtpInput}
-         />
+         {email ? (
+            <TextInput onChangeText={setOtpInput} value={otpInput} />
+         ) : (
+            <OTPTextView
+               ref={input}
+               inputCount={6}
+               tintColor="#FFFFFF"
+               offTintColor="#FFFFFF"
+               autoFocus
+               textInputStyle={{
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                  width: 40,
+                  height: 40,
+               }}
+               handleTextChange={setOtpInput}
+            />
+         )}
          <HorizontalSpacer />
-         <BasicButton
+         <PrimaryButton
             title="Continue"
             style={{ alignSelf: 'center' }}
-            onPress={() => {
-               validateQuestion({
-                  phoneNumber: route.params.phoneNumber,
-                  session: 'default sms authentication',
-                  challengeName: 'SMS_MFA',
-                  challengeAnswer: otpInput.toString(),
-               });
-            }}
+            onPress={handleOnProceed}
+            disabled={isLoading || confirmSSOIsLoading}
          />
       </>
    );
@@ -141,10 +238,7 @@ export const Footer: React.FC<FooterProps> = ({ text }) => (
    <FooterText>{text}</FooterText>
 );
 
-interface OTPProps
-   extends StackScreenProps<RegistrationStackParamList, 'OTP'> {}
-
-const OTP: React.FC<OTPProps> = ({ navigation, route }) => {
+const OTP: React.FC<OTPProps> = navigationProps => {
    const { Images } = useTheme();
 
    return (
@@ -155,8 +249,7 @@ const OTP: React.FC<OTPProps> = ({ navigation, route }) => {
                title="Verification"
                sub="Enter OTP code sent to your number
                +63 xxxxxxxxxx"
-               navigation={navigation}
-               route={route}
+               navigationProps={navigationProps}
             />
          }
          thirdSection={
