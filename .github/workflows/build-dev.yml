@@ -135,7 +135,7 @@
       steps:
       - run: ls
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
-      - run: ls 
+      - run: ls MyApp
      iOS-Export-AppStore:
       runs-on: m2
       needs: iOS-Export-IPA
