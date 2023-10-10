@@ -146,10 +146,15 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
          isSuccess: rmSuccess,
          data: rmData,
          error: rmError,
+         isError: rmIsError,
       },
    ] = useRegisterMobileMutation();
 
    useEffect(() => {
+      if (rmIsError) {
+         console.log('rmError', rmError);
+      }
+
       if (rmSuccess) {
          console.log('rmData', rmData);
 
@@ -162,6 +167,7 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
 
    useEffect(() => {
       if (ssoSuccess) {
+         console.log('authenticationState', authenticationState);
          console.log('SSO Mobile', ssoData);
          navigation.navigate('OTP', {
             phoneNumber: `+63${phoneNumber}`,
