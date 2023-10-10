@@ -107,9 +107,7 @@ export const Instructions: React.FC<InstructionsProps> = ({
       },
    ] = useConfirmMobileSSOMutation();
 
-   const {
-      params: { email, phoneNumber, session },
-   } = navigationProps.route;
+   const { params } = navigationProps.route;
 
    const [otpInput, setOtpInput] = useState<string>('');
 
@@ -118,15 +116,16 @@ export const Instructions: React.FC<InstructionsProps> = ({
    const input = useRef<OTPTextView>(null);
 
    useEffect(() => {
+      if (confirmSSOIsError) {
+         console.log('confirmSSOIsError', confirmSSOIsError);
+      }
+
       if (confirmSSOSuccess) {
          console.log('confirmSSOData', confirmSSOData);
       }
    }, [confirmSSOSuccess, confirmSSOIsError]);
 
    useEffect(() => {
-      console.log('OTP: challengeError', error);
-      console.log('OTP: isSuccess', isSuccess);
-
       if (isError) {
          Toast.show({
             type: 'error',
@@ -135,14 +134,9 @@ export const Instructions: React.FC<InstructionsProps> = ({
       }
 
       if (isSuccess) {
-         console.log('Params: ', { email, phoneNumber, session });
-         console.log('OTP: ', data);
-         if (data?.challengeName === ChallengeName.email_required) {
-            console.log('EMAIL: Phone Number', {
-               session: data.session,
-               phoneNumber,
-            });
+         const phoneNumber = params?.phoneNumber;
 
+         if (data?.challengeName === ChallengeName.email_required) {
             navigationProps.navigation.navigate('Email', {
                session: data.session,
                phoneNumber,
@@ -160,23 +154,23 @@ export const Instructions: React.FC<InstructionsProps> = ({
 
    const handleOnProceed = () => {
       let challengeObject: ValidateQuestion = {
-         phoneNumber,
-         session,
+         phoneNumber: params?.phoneNumber,
+         session: params?.session,
          challengeName: ChallengeName.sms_mfa,
          challengeAnswer: otpInput.toString(),
       };
 
-      if (email) {
+      if (params?.email) {
          challengeObject = {
             ...challengeObject,
-            email,
+            email: params?.email,
             challengeName: ChallengeName.email_mfa,
          };
       }
 
       if (authenticationState.isLogin) {
          confirmMobileSSO({
-            phoneNumber,
+            phoneNumber: params?.phoneNumber,
             sub: authenticationState.sub,
             session: authenticationState.session,
             challengeAnswer: otpInput.toString(),
@@ -201,7 +195,7 @@ export const Instructions: React.FC<InstructionsProps> = ({
             <Sub>{sub}</Sub>
          </CenterFlex>
          <HorizontalSpacer />
-         {email ? (
+         {params?.email ? (
             <TextInput onChangeText={setOtpInput} value={otpInput} />
          ) : (
             <OTPTextView
