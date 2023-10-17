@@ -10,6 +10,8 @@ import BasicButton, { BasicButtonProps } from '@atoms/Buttons/Basic';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
+import { useGetAllQuestionsQuery } from '@services/modules/compquestions';
+
 const { width: screenWidth } = Dimensions.get('window');
 
 const Container = styled.View`
@@ -58,7 +60,6 @@ const QuestionText = styled(Title)`
 
 const ItemContainer = styled.View`
    background-color: pink;
-   /* padding: 30px; */
 `;
 
 const CompQuestionButtonWithGradient: React.FC<BasicButtonProps> = props => {
@@ -276,9 +277,22 @@ const CompatibilityQuestions = () => {
    const [selectedIndex, setSelectedIndex] = useState(0);
    const [selectedItem, setSelectedItem] = useState(API_MOCK_QUESTIONS[0]);
 
+   const { isFetching, isSuccess, isError, error, data } =
+      useGetAllQuestionsQuery();
+
+   // useEffect(() => {
+   //    setSelectedItem(API_MOCK_QUESTIONS[selectedIndex]);
+   // }, [selectedIndex]);
+
    useEffect(() => {
-      setSelectedItem(API_MOCK_QUESTIONS[selectedIndex]);
-   }, [selectedIndex]);
+      if (isError) {
+         console.log('Error', error);
+      }
+
+      if (isSuccess) {
+         console.log('Data', data);
+      }
+   }, [isSuccess, isError, error]);
 
    return (
       <Container>
