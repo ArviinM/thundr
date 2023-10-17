@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { ImageSourcePropType, Text } from 'react-native';
+import { ImageSourcePropType, Text, StyleProp, ViewStyle } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import {
+import BasicButton, {
    BasicButtonProps,
    PressableButtonContainer,
 } from '@atoms/Buttons/Basic';
@@ -17,6 +17,7 @@ const CustomPressableButton = styled(PressableButtonContainer)`
 
 const SampleImage = styled.Image`
    height: 25px;
+   width: 25px;
 `;
 
 interface IconButtonProps extends BasicButtonProps {
@@ -28,7 +29,10 @@ const IconButton: React.FC<IconButtonProps> = props => {
 
    return (
       <CustomPressableButton
-         bgColor={props.bgColor || 'white'}
+         style={({ pressed }) => [
+            { opacity: pressed ? 0.8 : 1 },
+            customPressableProps.style as StyleProp<ViewStyle>,
+         ]}
          {...customPressableProps}
       >
          <SampleImage source={props.icon} resizeMode="contain" />

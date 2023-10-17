@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Image, Linking, Platform } from 'react-native';
+import { Alert, Image, Linking, Platform } from 'react-native';
 
 import base64 from 'react-native-base64';
 
@@ -18,6 +18,8 @@ import IconButton from '@molecules/IconButton/IconButton';
 import type { RegistrationStackParamList } from 'types/navigation';
 
 import { useTheme, useAuth } from '@hooks';
+
+import { useAppSelector, useAppDispatch } from '@store/index';
 
 const AlignVertical = styled.View`
    flex: 1;
@@ -82,7 +84,7 @@ interface StartupProps
 
 const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
    const { Images } = useTheme();
-   const { authenticateUser } = useAuth();
+   const { authenticateUser, authenticationState } = useAuth();
 
    const { params } = route;
 
@@ -103,65 +105,67 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
    }, [params]);
 
    const openSSO = async (auth: AUTH_TYPE) => {
-      // const localURL = 'http://127.0.0.1:8080/';
       const actualURL = getActualURL(auth);
 
       await Linking.openURL(actualURL);
    };
 
    return (
-      <StandardSkeleton
-         firstSection={
-            <AlignVertical>
-               <LogoImage source={Images.logo} />
-            </AlignVertical>
-         }
-         secondSection={
-            <ActionsContainer>
-               <LoginTitle>Register here</LoginTitle>
-               {Platform.OS === 'ios' ? (
+      <>
+         <StandardSkeleton
+            firstSection={
+               <AlignVertical>
+                  <LogoImage source={Images.logo} />
+               </AlignVertical>
+            }
+            secondSection={
+               <ActionsContainer>
+                  <LoginTitle>Register here</LoginTitle>
+                  {Platform.OS === 'ios' ? (
+                     <SocialButton
+                        title="Continue with Apple"
+                        icon={Images.socials.icon_apple}
+                        onPress={() => openSSO(AUTH_TYPE.apple)}
+                     />
+                  ) : (
+                     <SocialButton
+                        title="Continue with Google"
+                        icon={Images.icons.icon_google}
+                        onPress={() => openSSO(AUTH_TYPE.google)}
+                     />
+                  )}
                   <SocialButton
-                     title="Continue with Apple"
-                     icon={Images.socials.icon_apple}
-                     onPress={() => openSSO(AUTH_TYPE.apple)}
+                     title="Continue with Facebook"
+                     icon={Images.icons.icon_facebook}
+                     onPress={() => openSSO(AUTH_TYPE.facebook)}
                   />
-               ) : (
                   <SocialButton
-                     title="Continue with Google"
-                     icon={Images.icons.icon_google}
-                     onPress={() => openSSO(AUTH_TYPE.google)}
+                     title="Continue with Mobile Number"
+                     icon={Images.icons.icon_phone_hold}
+                     onPress={() => navigation.navigate('MobileRegistration')}
                   />
-               )}
-               <SocialButton
-                  title="Continue with Facebook"
-                  icon={Images.icons.icon_facebook}
-                  onPress={() => openSSO(AUTH_TYPE.facebook)}
-               />
-               <SocialButton
-                  title="Continue with Mobile Number"
-                  icon={Images.icons.icon_phone_hold}
-                  onPress={() => navigation.navigate('MobileRegistration')}
-               />
-               <LoginButton
-                  title="LOGIN"
-                  onPress={() => navigation.navigate('Login')}
-                  style={{ alignSelf: 'center' }}
-               />
-            </ActionsContainer>
-         }
-         thirdSection={
-            <FooterContainer>
-               <FooterText>
-                  By signing up, I am 35 years of age or older and agrees to the{' '}
-                  <FooterTextUnderline>
-                     Terms and Conditions
-                  </FooterTextUnderline>{' '}
-                  of Thundr and its{' '}
-                  <FooterTextUnderline>Privacy Policy</FooterTextUnderline>.
-               </FooterText>
-            </FooterContainer>
-         }
-      />
+                  <LoginButton
+                     title="LOGIN"
+                     onPress={() => navigation.navigate('Login')}
+                     style={{ alignSelf: 'center' }}
+                  />
+               </ActionsContainer>
+            }
+            thirdSection={
+               <FooterContainer>
+                  <FooterText>
+                     By signing up, I declare that I'm 35 years of age or older
+                     and hereby agree to the{' '}
+                     <FooterTextUnderline>
+                        Terms and Conditions
+                     </FooterTextUnderline>{' '}
+                     of Thundr and its{' '}
+                     <FooterTextUnderline>Privacy Policy</FooterTextUnderline>.
+                  </FooterText>
+               </FooterContainer>
+            }
+         />
+      </>
    );
 };
 

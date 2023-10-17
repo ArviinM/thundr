@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { configureStore, combineReducers, createSlice } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import {
@@ -17,10 +17,12 @@ import { MMKV } from 'react-native-mmkv';
 import { api } from '../services/api';
 import theme from './theme';
 
-import { slice as authenticationSlice } from './authentication';
+import authentication from './authentication';
+import spinner from './spinner/spinner.slice';
 
 const reducers = combineReducers({
-   authentication: authenticationSlice.reducer,
+   authentication,
+   spinner,
    theme,
    [api.reducerPath]: api.reducer,
 });
@@ -44,7 +46,8 @@ export const reduxStorage: Storage = {
 const persistConfig = {
    key: 'root',
    storage: reduxStorage,
-   whitelist: ['theme', 'auth'],
+   whitelist: ['theme', 'authentication'],
+   blacklist: ['spinner'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -68,6 +71,8 @@ const store = configureStore({
 });
 
 const persistor = persistStore(store);
+
+// persistor.purge();
 
 setupListeners(store.dispatch);
 

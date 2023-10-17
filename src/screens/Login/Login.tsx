@@ -17,7 +17,7 @@ import {
    AuthenticationPostBody,
 } from '@services/modules/users';
 
-import { useTheme } from '@hooks';
+import { useAuth, useTheme } from '@hooks';
 
 const LoginContainer = styled.View`
    flex: 1;
@@ -35,7 +35,8 @@ const LogoImage = styled(Image).attrs({
 })`
    flex: 1;
    align-self: center;
-   width: 200px;
+   margin: 20px;
+   /* width: 150px; */
 `;
 
 const LoginTitle = styled.Text`
@@ -76,8 +77,10 @@ interface LoginProps
 const Login: React.FC<LoginProps> = ({ navigation }) => {
    const { Images } = useTheme();
 
-   const [authenticate, { error, isError, isLoading }] =
+   const [authenticate, { isError, isLoading, isSuccess, data, error }] =
       useAuthenticateMutation();
+
+   const { authenticateUser } = useAuth();
 
    const [credentials, setCredentials] = useState<AuthenticationPostBody>({
       phoneNumber: '',
@@ -96,13 +99,18 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 
    useEffect(() => {
       if (isError) {
-         console.log(error);
          Toast.show({
             type: 'error',
-            text1: 'Successfully Login',
+            text1: 'Invalid username or password',
          });
+
+         console.log('error', error);
       }
-   }, [isError]);
+
+      if (isSuccess && data) {
+         authenticateUser(data);
+      }
+   }, [isSuccess, data, isError, error]);
 
    return (
       <StandardSkeleton
@@ -129,16 +137,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
                />
             </ActionsContainer>
          }
-         thirdSection={
-            <FooterContainer>
-               <FooterText>
-                  By signing up, I am 35 years of age or older and agrees to the
-                  <FooterText>Terms and Conditions</FooterText> of Thundr and
-                  its
-                  <FooterText>Privacy Policy</FooterText>.
-               </FooterText>
-            </FooterContainer>
-         }
+         thirdSection={<></>}
       />
    );
 };

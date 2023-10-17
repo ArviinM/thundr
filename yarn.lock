@@ -2232,11 +2232,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@react-native-clipboard/clipboard@^1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.12.1.tgz#a23f9defb732077afa860d0598baa95f5ee9f54b"
-  integrity sha512-+PNk8kflpGte0W1Nz61/Dp8gHTxyuRjkVyRYBawymSIGTDHCC/zOJSbig6kGIkD8MeaGHC2vGYQJyUyCrgVPBQ==
-
 "@react-native-community/cli-clean@11.3.3":
   version "11.3.3"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-11.3.3.tgz#e3b2d5a374f1b35d158087c3be196b59e1757262"
@@ -5924,6 +5919,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-react-native@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-6.3.1.tgz#3ad152da79601e6a79ea811436a12a84fe1a4a72"
+  integrity sha512-M18nAVYeGMF//bhL27D2zuMcrFPH0jbD/deBvcWi0CCcfZf6LQfx45xt+cuDqwr5nh6dMm+ta8KfZJmkbNhtlg==
+
 lower-case@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/lower-case/-/lower-case-2.0.2.tgz#6fa237c63dbdc4a82ca0fd882e4722dc5e634e28"
@@ -7484,11 +7484,6 @@ react-native-linear-gradient@^3.0.0-alpha.1:
   version "3.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-3.0.0-alpha.1.tgz#fa1914462536f052faa211c34240be3ab1856bdd"
   integrity sha512-vo9ks7m2VTLtbdAIMqwk944SB65+rc0U1a2R1CAQetT282DnH4rI3GKenaa+Gj2gPngF1l7Mc3Jxk9+6IZDraA==
-
-react-native-loading-spinner-overlay@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-3.0.1.tgz#092481b8cce157d3af5ef942f845ad981f96bd36"
-  integrity sha512-4GdR54HQnKg2HPSSisVizfTLuyhSh4splY9eb8mKiYF1Ihjn/5EmdNo5bN3S7uKPFRC3WLzIZIouX6G6fXfnjw==
 
 react-native-mmkv@^2.10.0:
   version "2.10.0"

@@ -80,10 +80,20 @@ export interface ApiSMSSSOConfirmPostBody extends ApiSMSSSOPostBody {
    challengeAnswer: string;
 }
 
+interface ApiCreatePrimaryDetailsPostBody {
+   sub: string;
+   name: string;
+   gender: string;
+   birthday: string;
+   hometown: string;
+}
+
+interface ApiCreatePrimaryDetailsResponse {}
+
 export const userApi = api.injectEndpoints({
    endpoints: build => ({
       authenticate: build.mutation<
-         AuthenticationPostBody,
+         APIChallengeQuestionResponseData,
          Partial<AuthenticationPostBody>
       >({
          query: body => ({
@@ -91,9 +101,10 @@ export const userApi = api.injectEndpoints({
             method: 'POST',
             body,
          }),
-         transformErrorResponse: (response: ErrorResponse) => {
-            return response.data.message;
-         },
+         transformErrorResponse: (response: ErrorResponse) =>
+            response.data.message,
+         transformResponse: (response: APIChallengeQuestionResponse) =>
+            response.data,
       }),
       registerMobile: build.mutation<
          RegisterMobileResponse,
@@ -130,16 +141,23 @@ export const userApi = api.injectEndpoints({
          },
          transformResponse: (response: APIChallengeQuestionResponse) =>
             response.data,
-         transformErrorResponse: (response: ErrorResponse) => {
-            return response.data.message;
-         },
+         transformErrorResponse: (response: ErrorResponse) =>
+            response.data.message,
+         invalidatesTags: ['ChallengeQuestion'],
       }),
-      validateMobileSSO: build.mutation<void, Partial<ApiSMSSSOPostBody>>({
+      validateMobileSSO: build.mutation<
+         APIChallengeQuestionResponseData,
+         Partial<ApiSMSSSOPostBody>
+      >({
          query: body => ({
             url: 'auth/sso-sms-otp',
             method: 'POST',
             body,
          }),
+         transformResponse: (response: APIChallengeQuestionResponse) =>
+            response.data,
+         transformErrorResponse: (response: ErrorResponse) =>
+            response.data.message,
       }),
       confirmMobileSSO: build.mutation<void, Partial<ApiSMSSSOConfirmPostBody>>(
          {
@@ -150,6 +168,16 @@ export const userApi = api.injectEndpoints({
             }),
          },
       ),
+      createPrimaryDetails: build.mutation<
+         ApiCreatePrimaryDetailsResponse,
+         Partial<ApiCreatePrimaryDetailsPostBody>
+      >({
+         query: body => ({
+            url: 'customer/create-profile',
+            method: 'POST',
+            body,
+         }),
+      }),
    }),
 });
 

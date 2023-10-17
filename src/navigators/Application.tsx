@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { SafeAreaView, StatusBar } from 'react-native';
 
+import { useAppSelector } from '@store/index';
+
 import Toast from 'react-native-toast-message';
-import Spinner from '@atoms/Spinner/Spinner';
+import Spinner from '@atoms/Spinner';
 
 import {
    NavigationContainer,
@@ -32,6 +34,8 @@ const linking = {
 
 // @refresh reset
 const ApplicationNavigator = () => {
+   const isSpinnerVisible = useAppSelector(state => state.spinner.isVisible);
+
    const { Layout, darkMode, NavigationTheme } = useTheme();
    const { colors } = NavigationTheme;
 
@@ -41,6 +45,7 @@ const ApplicationNavigator = () => {
 
    return (
       <>
+         <Spinner visible={isSpinnerVisible} />
          <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
             <NavigationContainer
                theme={NavigationTheme}

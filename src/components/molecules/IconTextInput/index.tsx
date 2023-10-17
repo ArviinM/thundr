@@ -4,8 +4,6 @@ import { TextInputProps } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { useTheme } from '@hooks';
-
 const Container = styled.View`
    display: flex;
    flex-direction: row;
