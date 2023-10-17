@@ -10,7 +10,7 @@ type AuthPayload = {
 };
 
 export const slice = createSlice({
-   name: 'auth',
+   name: 'authentication',
    initialState: { isLogin: false } as AuthState,
    reducers: {
       authenticate: (_, { payload }: AuthPayload) => {
@@ -19,7 +19,14 @@ export const slice = createSlice({
             ...payload,
          };
       },
+      logout: _ => {
+         return {
+            isLogin: false,
+         };
+      },
    },
 });
+
+export default slice.reducer;
 
 export const { authenticate } = slice.actions;

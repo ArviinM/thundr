@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ThundrDev.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ThundrDev.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-849442198/ThundrDev.react-native-gesture-handler.main.iml" filepath="$PROJECT_DIR$/.idea/modules/-849442198/ThundrDev.react-native-gesture-handler.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1237233575/ThundrDev.react-native-mmkv.main.iml" filepath="$PROJECT_DIR$/.idea/modules/1237233575/ThundrDev.react-native-mmkv.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/849328498/ThundrDev.react-native-reanimated.main.iml" filepath="$PROJECT_DIR$/.idea/modules/849328498/ThundrDev.react-native-reanimated.main.iml" />
+    </modules>
+  </component>
+</project>

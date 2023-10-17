@@ -116,12 +116,6 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
       }
    };
 
-   useEffect(() => {
-      if (data) {
-         console.log('data', data);
-      }
-   }, [data]);
-
    return (
       <StandardSkeleton
          firstSection={

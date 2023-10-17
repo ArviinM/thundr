@@ -25,6 +25,7 @@ import {
 import PrimaryButton from '@atoms/Buttons/Primary';
 
 import { useAuth } from '@hooks';
+import Toast from 'react-native-toast-message';
 
 const LogoImage = styled(Image).attrs({
    resizeMode: 'contain',
@@ -136,6 +137,7 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
          isSuccess: ssoSuccess,
          data: ssoData,
          error: ssoError,
+         isError: ssoIsError,
       },
    ] = useValidateMobileSSOMutation();
 
@@ -166,43 +168,67 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
    }, [rmSuccess, rmError]);
 
    useEffect(() => {
-      if (ssoSuccess) {
-         console.log('authenticationState', authenticationState);
-         console.log('SSO Mobile', ssoData);
-         navigation.navigate('OTP', {
-            phoneNumber: `+63${phoneNumber}`,
+      if (ssoIsError) {
+         console.log('ssoError mobile', ssoError);
+         Toast.show({
+            type: 'error',
+            text1: 'An error occured during the request',
          });
       }
-   }, [ssoSuccess, ssoError]);
+
+      if (ssoSuccess) {
+         console.log('authenticationState', authenticationState);
+         console.log('SSO Mobile', JSON.stringify(ssoData));
+
+         navigation.navigate('OTP', {
+            phoneNumber: `+63${phoneNumber}`,
+            session: ssoData?.session,
+         });
+      }
+   }, [ssoSuccess, ssoIsError, ssoError]);
 
    return (
       <RegistrationSkeleton
          firstSection={<LogoImage source={Images.icons.icon_hold_phone} />}
          secondSection={
-            <Instructions
-               title="Register with Mobile Number"
-               sub="Enter your mobile number. We will send
-         you an OTP to verify"
-               onPress={() => {
-                  if (authenticationState.isLogin) {
-                     validateMobileSSO({
-                        phoneNumber: `+63${phoneNumber}`,
-                        sub: authenticationState.sub,
-                     });
-                  } else {
-                     registerMobile({
-                        phoneNumber: `+63${phoneNumber}`,
-                     });
+            <>
+               <CenterFlex>
+                  <Title>Register with Mobile Number</Title>
+                  <Sub>
+                     Enter your mobile number. We will send you an OTP to verify
+                  </Sub>
+               </CenterFlex>
+               <HorizontalSpacer />
+               <IconTextInput
+                  placeholder="xx xxxx xxxx"
+                  onChangeText={setPhoneNumber}
+                  maxLength={10}
+                  inputMode="numeric"
+               />
+               <HorizontalSpacer />
+               <PrimaryButton
+                  title="Continue"
+                  style={{ alignSelf: 'center' }}
+                  onPress={() => {
+                     if (authenticationState.isLogin) {
+                        validateMobileSSO({
+                           phoneNumber: `+63${phoneNumber}`,
+                           sub: authenticationState.sub,
+                        });
+                     } else {
+                        registerMobile({
+                           phoneNumber: `+63${phoneNumber}`,
+                        });
+                     }
+                  }}
+                  disabled={
+                     phoneNumber === '' ||
+                     phoneNumber.length < 10 ||
+                     rmLoading ||
+                     ssoLoading
                   }
-               }}
-               onChangeText={setPhoneNumber}
-               disabled={
-                  phoneNumber === '' ||
-                  phoneNumber.length < 10 ||
-                  rmLoading ||
-                  ssoLoading
-               }
-            />
+               />
+            </>
          }
          thirdSection={
             <FooterContainer>

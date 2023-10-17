@@ -82,17 +82,17 @@ const FooterText = styled(Sub).attrs({})`
 interface OTPProps
    extends StackScreenProps<RegistrationStackParamList, 'OTP'> {}
 
-type InstructionsProps = {
-   title: string;
-   sub: string;
-   navigationProps: OTPProps;
+type FooterProps = {
+   text: string;
 };
 
-export const Instructions: React.FC<InstructionsProps> = ({
-   title,
-   sub,
-   navigationProps,
-}) => {
+export const Footer: React.FC<FooterProps> = ({ text }) => (
+   <FooterText>{text}</FooterText>
+);
+
+const OTP: React.FC<OTPProps> = navigationProps => {
+   const { Images } = useTheme();
+
    const [validateQuestion, { error, isLoading, isSuccess, data, isError }] =
       useValidateQuestionMutation();
 
@@ -117,19 +117,22 @@ export const Instructions: React.FC<InstructionsProps> = ({
 
    useEffect(() => {
       if (confirmSSOIsError) {
-         console.log('confirmSSOIsError', confirmSSOIsError);
+         Toast.show({
+            type: 'error',
+            text1: 'An error occured during the request',
+         });
       }
 
       if (confirmSSOSuccess) {
-         console.log('confirmSSOData', confirmSSOData);
+         navigationProps.navigation.navigate('Dashboard');
       }
-   }, [confirmSSOSuccess, confirmSSOIsError]);
+   }, [confirmSSOSuccess, confirmSSOIsError, confirmSSOError]);
 
    useEffect(() => {
       if (isError) {
          Toast.show({
             type: 'error',
-            text1: 'An Error occured during the request',
+            text1: 'An error occured during the request',
          });
       }
 
@@ -150,7 +153,7 @@ export const Instructions: React.FC<InstructionsProps> = ({
             });
          }
       }
-   }, [isSuccess, error]);
+   }, [isSuccess, isError, error]);
 
    const handleOnProceed = () => {
       let challengeObject: ValidateQuestion = {
@@ -169,13 +172,24 @@ export const Instructions: React.FC<InstructionsProps> = ({
       }
 
       if (authenticationState.isLogin) {
+         console.log(
+            'Sent to BE: loggedin - ',
+            JSON.stringify({
+               phoneNumber: params?.phoneNumber,
+               sub: authenticationState.sub,
+               session: params.session,
+               challengeAnswer: otpInput.toString(),
+            }),
+         );
+
          confirmMobileSSO({
             phoneNumber: params?.phoneNumber,
             sub: authenticationState.sub,
-            session: authenticationState.session,
+            session: params.session,
             challengeAnswer: otpInput.toString(),
          });
       } else {
+         console.log('Sent to BE: Not login - ', challengeObject);
          validateQuestion(challengeObject);
       }
    };
@@ -188,63 +202,64 @@ export const Instructions: React.FC<InstructionsProps> = ({
       }, []),
    );
 
-   return (
-      <>
-         <CenterFlex>
-            <Title>{title}</Title>
-            <Sub>{sub}</Sub>
-         </CenterFlex>
-         <HorizontalSpacer />
-         {params?.email ? (
-            <TextInput onChangeText={setOtpInput} value={otpInput} />
-         ) : (
-            <OTPTextView
-               ref={input}
-               inputCount={6}
-               tintColor="#FFFFFF"
-               offTintColor="#FFFFFF"
-               autoFocus
-               textInputStyle={{
-                  backgroundColor: 'white',
-                  borderRadius: 10,
-                  width: 40,
-                  height: 40,
-               }}
-               handleTextChange={setOtpInput}
-            />
-         )}
-         <HorizontalSpacer />
-         <PrimaryButton
-            title="Continue"
-            style={{ alignSelf: 'center' }}
-            onPress={handleOnProceed}
-            disabled={isLoading || confirmSSOIsLoading}
-         />
-      </>
-   );
-};
+   const censorWord = (str: string) =>
+      str[0] + '*'.repeat(str.length - 2) + str.slice(-1);
 
-type FooterProps = {
-   text: string;
-};
-
-export const Footer: React.FC<FooterProps> = ({ text }) => (
-   <FooterText>{text}</FooterText>
-);
-
-const OTP: React.FC<OTPProps> = navigationProps => {
-   const { Images } = useTheme();
+   const censorEmail = (email: string) => {
+      const arr = email.split('@');
+      return censorWord(arr[0]) + '@' + censorWord(arr[1]);
+   };
 
    return (
       <RegistrationSkeleton
-         firstSection={<LogoImage source={Images.icons.icon_mobile_otp} />}
-         secondSection={
-            <Instructions
-               title="Verification"
-               sub="Enter OTP code sent to your number
-               +63 xxxxxxxxxx"
-               navigationProps={navigationProps}
+         firstSection={
+            <LogoImage
+               source={
+                  params?.email
+                     ? Images.icons.icon_email
+                     : Images.icons.icon_mobile_otp
+               }
             />
+         }
+         secondSection={
+            <>
+               <CenterFlex>
+                  <Title>Verification</Title>
+                  <Sub>
+                     {params?.email
+                        ? `Enter OTP code sent to your email \n ${censorEmail(
+                             params?.email,
+                          )}`
+                        : 'Enter OTP code sent to your number \n +63 xxxxxxxxxx'}
+                  </Sub>
+               </CenterFlex>
+               <HorizontalSpacer />
+               {params?.email ? (
+                  <TextInput onChangeText={setOtpInput} value={otpInput} />
+               ) : (
+                  <OTPTextView
+                     ref={input}
+                     inputCount={6}
+                     tintColor="#FFFFFF"
+                     offTintColor="#FFFFFF"
+                     autoFocus
+                     textInputStyle={{
+                        backgroundColor: 'white',
+                        borderRadius: 10,
+                        width: 40,
+                        height: 40,
+                     }}
+                     handleTextChange={setOtpInput}
+                  />
+               )}
+               <HorizontalSpacer />
+               <PrimaryButton
+                  title="Continue"
+                  style={{ alignSelf: 'center' }}
+                  onPress={handleOnProceed}
+                  disabled={isLoading || confirmSSOIsLoading}
+               />
+            </>
          }
          thirdSection={
             <FooterContainer>
