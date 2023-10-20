@@ -6,7 +6,7 @@ on:
       - develop-build
 jobs:
   Git-Fetch-State:
-    runs-on: m2
+    runs-on: self-hosted
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -14,26 +14,26 @@ jobs:
           fetch-depth: 0
       - run: ls
   Yarn-Install:
-        runs-on: m2
+        runs-on: self-hosted
         needs: Git-Fetch-State
         steps:
             - run: yarn install
   Lint-Test:
-    runs-on: m2
+    runs-on: self-hosted
     needs: Yarn-Install
     continue-on-error: true
     steps:
       - run: ls
       - run: yarn lint
   Unit-Test:
-    runs-on: m2
+    runs-on: self-hosted
     needs: Lint-Test
     continue-on-error: true
     steps:
       - run: ls
       - run: yarn test
   Sonar-Test:
-    runs-on: m2
+    runs-on: self-hosted
     needs: Unit-Test
     steps:
       - run: ls
