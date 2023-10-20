@@ -12,7 +12,7 @@
      APP_ID: ph.thundr.app.dev
    jobs:
      Git-Fetch-State:
-       runs-on: self-hosted
+       runs-on: aws
        steps:
          - name: Check out repository code
            uses: actions/checkout@v3
@@ -20,7 +20,7 @@
             fetch-depth: 0
          - run: echo "${{ github.event.head_commit.message }}"
      Package-Rename:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Git-Fetch-State
        steps:
          - run: ls
@@ -29,13 +29,13 @@
          - run: ls android
          - run: echo -en "${{VARS.DEV_ENV}}" >> .env
      Yarn-Install:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Package-Rename
        steps:
          - run: yarn install
          - run: ls
      Android-Prepare-Build:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Yarn-Install
        defaults:
          run:
@@ -44,7 +44,7 @@
          - run: ls         
          - run: ./gradlew clean
      Android-APK-Build:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Android-Prepare-Build
        defaults:
          run:
@@ -53,7 +53,7 @@
          - run: ls
          - run: ./gradlew assembleRelease
      Android-APK-Upload:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Android-APK-Build
        defaults:
          run:
@@ -63,7 +63,7 @@
          - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
          #- run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/thundr/Documents/Projects/Thundr/artifacts/
      Android-AAB-Build:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Android-Prepare-Build
        defaults:
          run:
@@ -72,7 +72,7 @@
          - run: ls
          - run: ./gradlew bundleRelease
      Android-AAB-Upload:
-       runs-on: self-hosted
+       runs-on: aws
        needs: Android-AAB-Build
        defaults:
          run:
