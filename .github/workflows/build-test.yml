@@ -39,22 +39,7 @@
          run:
            working-directory: ./android
        steps:
-         - run: ls
-         - run: echo "MYAPP_RELEASE_STORE_FILE=${{secrets.KEYSTORE_PATH}}" >>
-             gradle.properties
-         - run: echo "MYAPP_RELEASE_STORE_PASSWORD=${{secrets.KEYSTORE_PASSWORD}}" >>
-             gradle.properties
-         - run: echo "MYAPP_RELEASE_KEY_ALIAS=${{secrets.KEY_ALIAS}}" >> gradle.properties
-         - run: echo "MYAPP_RELEASE_KEY_PASSWORD=${{secrets.KEY_PASSWORD}}" >>
-             gradle.properties
-         - run: echo "BUILD_NUMBER=${{ENV.BUILD_NUMBER}}" >> gradle.properties
-         - run: echo "BUILD_NAME=${{ENV.BUILD_NAME}}" >> gradle.properties
-         - run: echo "PLAY_PUBLISH_KEY_JSON=${{secrets.PLAYSTORE_JSON_KEY}}" >>
-             gradle.properties
-         - run: echo "PLAY_PUBLISH_TRACK=internal" >> gradle.properties
-         - run: echo "RELEASE_NAME=Release ${{ENV.BUILD_NUMBER}}" >> gradle.properties
-         - run: more gradle.properties
-         - run: ls app
+         - run: ls         
          - run: ./gradlew clean
      Android-APK-Build:
        runs-on: self-hosted
@@ -74,7 +59,7 @@
        steps:
          - run: ls
          - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/thundr/Documents/Projects/Thundr/artifacts/
+         #- run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/thundr/Documents/Projects/Thundr/artifacts/
      Android-AAB-Build:
        runs-on: self-hosted
        needs: Android-Prepare-Build
@@ -93,7 +78,7 @@
        steps:
          - run: ls
          - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/thundr/Documents/Projects/Thundr/artifacts/    
+         #- run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/thundr/Documents/Projects/Thundr/artifacts/    
    concurrency:
      group: thundr-mobile-test
      cancel-in-progress: false
