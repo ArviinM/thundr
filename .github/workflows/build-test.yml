@@ -1,5 +1,5 @@
 ---
-   name: Build the App on Dev Environment
+   name: Build the App on Test Environment
    run-name: ${{ github.actor }} is Triggering Develop Build 🚀
    on:
      push:
