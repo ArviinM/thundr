@@ -60,8 +60,8 @@
            working-directory: ./android/app/build/outputs/apk/release
        steps:
          - run: ls
-         - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         #- run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/thundr/Documents/Projects/Thundr/artifacts/
+         - run: cp app-release.apk "thundr-test-${{ github.run_number }}.apk"
+         - run: cp "thundr-test-${{ github.run_number }}.apk" /home/ubuntu/apks/
      Android-AAB-Build:
        runs-on: aws
        needs: Android-Prepare-Build
@@ -79,8 +79,8 @@
            working-directory: ./android/app/build/outputs/bundle/release
        steps:
          - run: ls
-         - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         #- run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/thundr/Documents/Projects/Thundr/artifacts/    
+         - run: cp app-release.aab "thundr-test-${{ github.run_number }}.aab"
+         - run: cp "thundr-test-${{ github.run_number }}.aab" /home/ubuntu/apks/   
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
