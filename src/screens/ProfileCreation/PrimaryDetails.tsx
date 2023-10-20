@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Platform } from 'react-native';
+import { Platform, TextInput } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -13,6 +13,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { useTheme } from '@hooks';
 import PrimaryButton from '@atoms/Buttons/Primary';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model';
 
 const BorderLinearGradient = styled(LinearGradient).attrs({})`
    padding-bottom: 3px;
@@ -176,11 +177,13 @@ const Photo = () => {
 type LabeledInputProps = {
    label: string;
    validationLabel?: string;
+   textInputProps: typeof Input;
 };
 
 const LabeledInput: React.FC<LabeledInputProps> = ({
    label,
    validationLabel = '',
+   textInputProps,
 }) => {
    return (
       <LabeledInputContainer>
@@ -195,7 +198,7 @@ const LabeledInput: React.FC<LabeledInputProps> = ({
             end={{ x: 1, y: 0 }}
             colors={['#E72454', '#FFC227']}
          >
-            <Input />
+            <Input {...textInputProps} />
          </BorderLinearGradient>
       </LabeledInputContainer>
    );
@@ -211,16 +214,7 @@ const DropdownRowContainer = styled.View`
    flex: 1;
 `;
 
-const BirthdayDropDown: typeof Dropdown = styled(Dropdown).attrs({})`
-   flex: 1;
-   background-color: white;
-   padding: 10px;
-   border-radius: 10px;
-`;
-
-interface CustomDropdownProps {}
-
-const CustomDropdown: React.FC<CustomDropdownProps> = props => {
+const CustomDropdown: React.FC<DropdownProps<any>> = props => {
    return (
       <DropdownRowContainer>
          <BorderLinearGradient
@@ -229,16 +223,24 @@ const CustomDropdown: React.FC<CustomDropdownProps> = props => {
             colors={['#E72454', '#FFC227']}
             style={{ flex: 1 }}
          >
-            <BirthdayDropDown {...props} />
+            <Dropdown
+               {...props}
+               style={{
+                  flex: 1,
+                  backgroundColor: 'white',
+                  padding: 10,
+                  borderRadius: 10,
+               }}
+            />
          </BorderLinearGradient>
       </DropdownRowContainer>
    );
 };
 
 const PrimaryDetails = ({ navigation }) => {
-   const [monthValue, setMonth] = useState('');
-   const [dayValue, setDay] = useState('');
-   const [yearValue, setYear] = useState('');
+   const [monthValue, setMonth] = useState<string>('');
+   const [dayValue, setDay] = useState<string>('');
+   const [yearValue, setYear] = useState<string>('');
 
    return (
       <Container
@@ -256,28 +258,28 @@ const PrimaryDetails = ({ navigation }) => {
             <BirthdayContainer>
                <CustomDropdown
                   data={MONTHS}
-                  value={'Jan'}
+                  value={monthValue}
                   labelField="label"
                   valueField="value"
-                  onChange={item => {
+                  onChange={(item: { value: string }) => {
                      setMonth(item.value);
                   }}
                />
                <CustomDropdown
                   data={DAYS}
-                  value={'1'}
+                  value={dayValue}
                   labelField="label"
                   valueField="value"
-                  onChange={item => {
+                  onChange={(item: { value: string }) => {
                      setDay(item.value);
                   }}
                />
                <CustomDropdown
                   data={YEARS}
-                  value={'2023'}
+                  value={yearValue}
                   labelField="label"
                   valueField="value"
-                  onChange={item => {
+                  onChange={(item: { value: string }) => {
                      setYear(item.value);
                   }}
                />
@@ -287,7 +289,7 @@ const PrimaryDetails = ({ navigation }) => {
                title="Continue"
                // onPress={() => navigation.navigate('CompatibilityQuestions')}
                onPress={() => {
-                  console.log('a');
+                  console.log('a', monthValue);
                }}
             />
          </Wrapper>

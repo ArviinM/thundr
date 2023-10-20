@@ -95,13 +95,13 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
 
          authenticateUser(responseObject);
 
-         if (responseObject.forProfileCreation) {
-            navigation.navigate('MobileRegistrationFlow', {
-               screen: 'RegisterMobileNumber',
-            });
-         } else {
-            // navigation.navigate('Dashboard');
-         }
+         // if (responseObject.forProfileCreation) {
+         //    navigation.navigate('MobileRegistrationFlow', {
+         //       screen: 'RegisterMobileNumber',
+         //    });
+         // } else {
+         //    // navigation.navigate('Dashboard');
+         // }
       }
    }, [params]);
 

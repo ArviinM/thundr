@@ -190,7 +190,7 @@ const MainNavigator = () => {
    const { authenticationState } = useAuth();
    const { Images } = useTheme();
 
-   if (authenticationState.isLogin) {
+   if (authenticationState.isLogin && authenticationState.forProfileCreation) {
       return (
          <ForProfileCreationStack.Navigator
             screenOptions={({ navigation }) => ({
