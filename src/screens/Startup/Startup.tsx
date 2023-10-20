@@ -15,7 +15,7 @@ import BasicButton from '@atoms/Buttons/Basic';
 
 import IconButton from '@molecules/IconButton/IconButton';
 
-import type { RegistrationStackParamList } from 'types/navigation';
+import type { RootStackParamList, StartUpFlow } from 'types/navigation';
 
 import { useTheme, useAuth } from '@hooks';
 
@@ -79,8 +79,7 @@ enum AUTH_TYPE {
 const getActualURL = (ref: AUTH_TYPE) =>
    `${process.env.API_URL}auth/get-sso-url?sso=${ref}`;
 
-interface StartupProps
-   extends StackScreenProps<RegistrationStackParamList, 'StartUp'> {}
+interface StartupProps extends StackScreenProps<StartUpFlow, 'StartUp'> {}
 
 const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
    const { Images } = useTheme();
@@ -97,9 +96,11 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
          authenticateUser(responseObject);
 
          if (responseObject.forProfileCreation) {
-            navigation.navigate('MobileRegistration');
+            navigation.navigate('MobileRegistrationFlow', {
+               screen: 'RegisterMobileNumber',
+            });
          } else {
-            navigation.navigate('Dashboard');
+            // navigation.navigate('Dashboard');
          }
       }
    }, [params]);
@@ -109,7 +110,7 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
 
       await Linking.openURL(actualURL);
    };
-
+   // city, province
    return (
       <>
          <StandardSkeleton
@@ -142,7 +143,11 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
                   <SocialButton
                      title="Continue with Mobile Number"
                      icon={Images.icons.icon_phone_hold}
-                     onPress={() => navigation.navigate('MobileRegistration')}
+                     onPress={() =>
+                        navigation.navigate('MobileRegistrationFlow', {
+                           screen: 'RegisterMobileNumber',
+                        })
+                     }
                   />
                   <LoginButton
                      title="LOGIN"

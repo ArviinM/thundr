@@ -5,7 +5,10 @@ import { Image, Text } from 'react-native';
 import styled from 'styled-components/native';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RegistrationStackParamList } from 'types/navigation';
+import type {
+   MobileRegistrationFlow,
+   RegistrationStackParamList,
+} from 'types/navigation';
 
 import RegistrationSkeleton from '@templates/RegistrationSkeleton';
 import { useTheme } from '@hooks';
@@ -119,7 +122,7 @@ const expression: RegExp =
 const isValidEmail = (email: string) => expression.test(email);
 
 interface EmailProps
-   extends StackScreenProps<RegistrationStackParamList, 'Email'> {}
+   extends StackScreenProps<MobileRegistrationFlow, 'RegisterEmail'> {}
 
 const Email: React.FC<EmailProps> = ({ navigation, route }) => {
    const { Images } = useTheme();
@@ -131,13 +134,19 @@ const Email: React.FC<EmailProps> = ({ navigation, route }) => {
 
    useEffect(() => {
       if (isSuccess) {
-         navigation.navigate('OTP', {
+         navigation.navigate('EmailOTP', {
             email: email.toLocaleLowerCase(),
             phoneNumber: route.params.phoneNumber,
             session: data?.session,
          });
       }
    }, [isSuccess]);
+
+   useEffect(() => {
+      navigation.addListener('beforeRemove', e => {
+         e.preventDefault();
+      });
+   }, [navigation]);
 
    return (
       <RegistrationSkeleton

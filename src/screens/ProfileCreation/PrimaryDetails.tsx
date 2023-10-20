@@ -285,7 +285,10 @@ const PrimaryDetails = ({ navigation }) => {
             <LabeledInput label="Hometown" validationLabel="(Required)" />
             <PrimaryButton
                title="Continue"
-               onPress={() => navigation.navigate('CompatibilityQuestions')}
+               // onPress={() => navigation.navigate('CompatibilityQuestions')}
+               onPress={() => {
+                  console.log('a');
+               }}
             />
          </Wrapper>
       </Container>

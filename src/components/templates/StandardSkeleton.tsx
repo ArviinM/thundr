@@ -4,8 +4,6 @@ import { Platform } from 'react-native';
 
 import styled from 'styled-components/native';
 
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-
 export interface StandardSkeletonProps {
    firstSection: ReactElement;
    secondSection: ReactElement;
