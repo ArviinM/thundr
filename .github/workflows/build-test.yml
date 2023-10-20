@@ -1,6 +1,6 @@
 ---
    name: Build the App on Test Environment
-   run-name: ${{ github.actor }} is Triggering Develop Build 🚀
+   run-name: ${{ github.actor }} is Triggering Test Build 🚀
    on:
      push:
        branches:
