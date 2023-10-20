@@ -4,6 +4,7 @@ on:
   push:    
     branches-ignore :
       - develop-build
+      - test-build
 jobs:
   Git-Fetch-State:
     runs-on: self-hosted
