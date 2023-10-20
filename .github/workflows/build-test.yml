@@ -82,6 +82,6 @@
          - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
          #- run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/thundr/Documents/Projects/Thundr/artifacts/    
    concurrency:
-     group: thundr-mobile-test
+     group: thundr-mobile
      cancel-in-progress: false
   
