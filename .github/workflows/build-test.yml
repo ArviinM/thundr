@@ -25,6 +25,8 @@
        steps:
          - run: ls
          #- run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
+         - run: echo -en "sdk.dir = /usr/lib/android-sdk" >> android/local.properties
+         - run: ls android
          - run: echo -en "${{VARS.DEV_ENV}}" >> .env
      Yarn-Install:
        runs-on: self-hosted
