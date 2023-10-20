@@ -107,8 +107,9 @@ const KeyFeatures: React.FC<KeyFeaturesProps> = ({ navigation }) => {
    const [activeFeature, setActiveFeature] = useState<number>(0);
 
    const onLastPageClick = () => {
-      navigation.navigate('StartUpStack', {
+      navigation.navigate('StartUpFlow', {
          screen: 'StartUp',
+         params: { payload: undefined },
       });
    };
 
