@@ -12,6 +12,8 @@ import styled from 'styled-components/native';
 import StandardSkeleton from '@templates/StandardSkeleton';
 import PrimaryButton from '@atoms/Buttons/Primary';
 
+import MyTextInput from '@molecules/TextView';
+
 import {
    useAuthenticateMutation,
    AuthenticationPostBody,
@@ -72,7 +74,7 @@ export const TextInput = styled.TextInput<TextInputProps>`
 `;
 
 interface LoginProps
-   extends StackScreenProps<RegistrationStackParamList, 'Login'> {}
+   extends StackScreenProps<RegistrationStackParamList, 'Login'> { }
 
 const Login: React.FC<LoginProps> = ({ navigation }) => {
    const { Images } = useTheme();
@@ -118,13 +120,13 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
          secondSection={
             <ActionsContainer>
                <LoginTitle>LOGIN ACCOUNT</LoginTitle>
-               <TextInput
+               <MyTextInput
                   placeholder="Email / Phone Number"
                   onChangeText={text =>
                      handleOnInputChange('phoneNumber', text.toLowerCase())
                   }
                />
-               <TextInput
+               <MyTextInput
                   placeholder="Password"
                   secureTextEntry
                   onChangeText={text => handleOnInputChange('password', text)}
