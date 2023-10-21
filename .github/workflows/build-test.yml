@@ -14,6 +14,7 @@
      Git-Fetch-State:
        runs-on: aws
        steps:
+         - uses: AutoModality/action-clean@v1
          - name: Check out repository code
            uses: actions/checkout@v3
            with:
@@ -80,7 +81,7 @@
        steps:
          - run: ls
          - run: cp app-release.aab "thundr-test-${{ github.run_number }}.aab"
-         - run: cp "thundr-test-${{ github.run_number }}.aab" /home/ubuntu/apks/   
+         - run: cp "thundr-test-${{ github.run_number }}.aab" /home/ubuntu/apks/  
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
