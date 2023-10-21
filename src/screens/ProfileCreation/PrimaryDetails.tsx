@@ -15,10 +15,15 @@ import PrimaryButton from '@atoms/Buttons/Primary';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model';
 
+import DropDownPicker from 'react-native-dropdown-picker';
+
+import { SelectList, SelectListProps } from 'react-native-dropdown-select-list';
+
 const BorderLinearGradient = styled(LinearGradient).attrs({})`
    padding-bottom: 3px;
    padding-right: 3px;
    border-radius: 10px;
+   overflow: visible;
 `;
 
 const Input = styled.TextInput`
@@ -214,33 +219,61 @@ const DropdownRowContainer = styled.View`
    flex: 1;
 `;
 
-const CustomDropdown: React.FC<DropdownProps<any>> = props => {
-   return (
-      <DropdownRowContainer>
-         <BorderLinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            colors={['#E72454', '#FFC227']}
-            style={{ flex: 1 }}
-         >
-            <Dropdown
-               {...props}
-               style={{
-                  flex: 1,
-                  backgroundColor: 'white',
-                  padding: 10,
-                  borderRadius: 10,
-               }}
-            />
-         </BorderLinearGradient>
-      </DropdownRowContainer>
-   );
-};
+// const CustomDropdown: React.FC<DropdownProps<any>> = props => {
+//    return (
+//       <BorderLinearGradient
+//          start={{ x: 0, y: 0 }}
+//          end={{ x: 1, y: 0 }}
+//          colors={['#E72454', '#FFC227']}
+//          style={{ flex: 1 }}
+//       >
+//          <Dropdown
+//             {...props}
+//             style={{
+//                flex: 1,
+//                backgroundColor: 'white',
+//                padding: 10,
+//                borderRadius: 10,
+//             }}
+//          />
+//       </BorderLinearGradient>
+//    );
+// };
 
-const PrimaryDetails = ({ navigation }) => {
-   const [monthValue, setMonth] = useState<string>('');
-   const [dayValue, setDay] = useState<string>('');
-   const [yearValue, setYear] = useState<string>('');
+const CustomDropDown = (props: SelectListProps) => (
+   <BorderLinearGradient
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      colors={['#E72454', '#FFC227']}
+   >
+      <SelectList
+         save="value"
+         boxStyles={{
+            backgroundColor: 'white',
+            borderWidth: 0,
+         }}
+         dropdownStyles={{
+            backgroundColor: 'white',
+            borderWidth: 0,
+         }}
+         search={false}
+         {...props}
+      />
+   </BorderLinearGradient>
+);
+
+const PrimaryDetails = () => {
+   const [selected, setSelected] = useState('');
+   const [months, setMonth] = useState<DrownDownContent[]>(MONTHS);
+   const [years, setYear] = useState<DrownDownContent[]>(YEARS);
+   const [days, setDay] = useState<DrownDownContent[]>(DAYS);
+
+   // return (
+   //    <CustomDropDown
+   //       setSelected={(val: string) => setSelected(val)}
+   //       data={months}
+   //    />
+   // );
 
    return (
       <Container
@@ -256,33 +289,9 @@ const PrimaryDetails = ({ navigation }) => {
                <ValidationLabel>(Required)</ValidationLabel>
             </LabelContainer>
             <BirthdayContainer>
-               <CustomDropdown
-                  data={MONTHS}
-                  value={monthValue}
-                  labelField="label"
-                  valueField="value"
-                  onChange={(item: { value: string }) => {
-                     setMonth(item.value);
-                  }}
-               />
-               <CustomDropdown
-                  data={DAYS}
-                  value={dayValue}
-                  labelField="label"
-                  valueField="value"
-                  onChange={(item: { value: string }) => {
-                     setDay(item.value);
-                  }}
-               />
-               <CustomDropdown
-                  data={YEARS}
-                  value={yearValue}
-                  labelField="label"
-                  valueField="value"
-                  onChange={(item: { value: string }) => {
-                     setYear(item.value);
-                  }}
-               />
+               <CustomDropDown setSelected={setMonth} data={months} />
+               <CustomDropDown setSelected={setYear} data={years} />
+               <CustomDropDown setSelected={setDay} data={days} />
             </BirthdayContainer>
             <LabeledInput label="Hometown" validationLabel="(Required)" />
             <PrimaryButton
