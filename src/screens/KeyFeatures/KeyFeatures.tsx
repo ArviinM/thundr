@@ -28,6 +28,10 @@ const GradientButton = styled(LinearGradient).attrs({})`
    border-radius: 10px;
 `;
 
+const Sample = styled.View<{ backgroundColor: string }>`
+   background-color: ${props => props.backgroundColor};
+`;
+
 const GradientBorder = styled(LinearGradient).attrs({})`
    padding: 3px;
    border-radius: 10px;
@@ -52,6 +56,7 @@ type LastKeyFeatureProps = {
 const LastKeyFeature: React.FC<LastKeyFeatureProps> = ({ onLastPageClick }) => {
    return (
       <LastKeyFeatureContainer>
+         <Sample backgroundColor="test" />
          <Text>Bongga ‘di ba?</Text>
          <Text>Swipe swipe ka na diyan!</Text>
          <HorizontalDivider />
@@ -102,8 +107,9 @@ const KeyFeatures: React.FC<KeyFeaturesProps> = ({ navigation }) => {
    const [activeFeature, setActiveFeature] = useState<number>(0);
 
    const onLastPageClick = () => {
-      navigation.navigate('StartUpStack', {
+      navigation.navigate('StartUpFlow', {
          screen: 'StartUp',
+         params: { payload: undefined },
       });
    };
 

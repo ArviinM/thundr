@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 import { Footer } from '@screens/Registration/MobileNumber';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RegistrationStackParamList } from 'types/navigation';
+import type { MobileRegistrationFlow } from 'types/navigation';
 
 import styled from 'styled-components/native';
 
@@ -19,7 +19,7 @@ import {
    ErrorResponse,
 } from '@services/modules/users';
 
-import { useTheme } from '@hooks';
+import { useAuth, useTheme } from '@hooks';
 import PrimaryButton from '@atoms/Buttons/Primary';
 
 const AlignVertical = styled.View`
@@ -60,7 +60,7 @@ const Title = styled.Text`
 `;
 
 interface CreatePasswordProps
-   extends StackScreenProps<RegistrationStackParamList, 'CreatePassword'> {}
+   extends StackScreenProps<MobileRegistrationFlow, 'CreatePassword'> {}
 
 type CredentialsState = {
    password: string;
@@ -74,6 +74,8 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
    const { Images } = useTheme();
 
    const { phoneNumber, session } = route.params;
+
+   const { authenticateUser } = useAuth();
 
    const [validateQuestion, { isError, isLoading, isSuccess, data }] =
       useValidateQuestionMutation();
@@ -93,7 +95,7 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
    const handleOnPasswordSubmit = async () => {
       if (credentials.password === credentials.retypepassword) {
          try {
-            await validateQuestion({
+            const response = await validateQuestion({
                phoneNumber,
                challengeName: ChallengeName.new_password_required,
                challengeAnswer: credentials.password,
@@ -101,7 +103,7 @@ const CreatePassword: React.FC<CreatePasswordProps> = ({
                password: credentials.password,
             }).unwrap();
 
-            navigation.navigate('PrimaryDetails');
+            authenticateUser(response);
          } catch (message: any) {
             Toast.show({
                type: 'error',
