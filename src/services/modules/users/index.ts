@@ -115,6 +115,8 @@ export const userApi = api.injectEndpoints({
             method: 'POST',
             body,
          }),
+         transformErrorResponse: (response: ErrorResponse) =>
+            response.data.message,
       }),
       registerEmail: build.mutation<
          APIEmailVerificationResponseData,

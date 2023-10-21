@@ -5,7 +5,10 @@ import { Image } from 'react-native';
 import styled from 'styled-components/native';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RegistrationStackParamList } from 'types/navigation';
+import type {
+   MobileRegistrationFlow,
+   RegistrationStackParamList,
+} from 'types/navigation';
 
 import OTPTextView from 'react-native-otp-textinput';
 
@@ -80,7 +83,7 @@ const FooterText = styled(Sub).attrs({})`
 `;
 
 interface OTPProps
-   extends StackScreenProps<RegistrationStackParamList, 'OTP'> {}
+   extends StackScreenProps<MobileRegistrationFlow, 'NumberOTP' | 'EmailOTP'> {}
 
 type FooterProps = {
    text: string;
@@ -110,6 +113,7 @@ const OTP: React.FC<OTPProps> = navigationProps => {
    const { params } = navigationProps.route;
 
    const [otpInput, setOtpInput] = useState<string>('');
+   const [hasOTP, setHasOTP] = useState<boolean>(false);
 
    const { authenticationState } = useAuth();
 
@@ -124,7 +128,7 @@ const OTP: React.FC<OTPProps> = navigationProps => {
       }
 
       if (confirmSSOSuccess) {
-         navigationProps.navigation.navigate('Dashboard');
+         console.log('Navigation to dashboard?');
       }
    }, [confirmSSOSuccess, confirmSSOIsError, confirmSSOError]);
 
@@ -138,9 +142,8 @@ const OTP: React.FC<OTPProps> = navigationProps => {
 
       if (isSuccess) {
          const phoneNumber = params?.phoneNumber;
-
          if (data?.challengeName === ChallengeName.email_required) {
-            navigationProps.navigation.navigate('Email', {
+            navigationProps.navigation.navigate('RegisterEmail', {
                session: data.session,
                phoneNumber,
             });
@@ -172,16 +175,6 @@ const OTP: React.FC<OTPProps> = navigationProps => {
       }
 
       if (authenticationState.isLogin) {
-         console.log(
-            'Sent to BE: loggedin - ',
-            JSON.stringify({
-               phoneNumber: params?.phoneNumber,
-               sub: authenticationState.sub,
-               session: params.session,
-               challengeAnswer: otpInput.toString(),
-            }),
-         );
-
          confirmMobileSSO({
             phoneNumber: params?.phoneNumber,
             sub: authenticationState.sub,
@@ -201,6 +194,16 @@ const OTP: React.FC<OTPProps> = navigationProps => {
          };
       }, []),
    );
+
+   useEffect(() => {
+      navigationProps.navigation.addListener('beforeRemove', e => {
+         e.preventDefault();
+      });
+   }, [navigationProps.navigation]);
+
+   useEffect(() => {
+      setHasOTP(otpInput !== '' && otpInput.length === 6);
+   }, [otpInput]);
 
    const censorWord = (str: string) =>
       str[0] + '*'.repeat(str.length - 2) + str.slice(-1);
@@ -239,15 +242,18 @@ const OTP: React.FC<OTPProps> = navigationProps => {
                ) : (
                   <OTPTextView
                      ref={input}
-                     inputCount={6}
-                     tintColor="#FFFFFF"
-                     offTintColor="#FFFFFF"
                      autoFocus
+                     inputCount={6}
+                     tintColor="#e33051"
+                     offTintColor="#e33051"
                      textInputStyle={{
                         backgroundColor: 'white',
                         borderRadius: 10,
+                        borderBottomWidth: 0,
                         width: 40,
-                        height: 40,
+                        height: 50,
+                        // library is using viewstyle props that should be textstyle props
+                        color: '#e33051',
                      }}
                      handleTextChange={setOtpInput}
                   />
@@ -257,7 +263,7 @@ const OTP: React.FC<OTPProps> = navigationProps => {
                   title="Continue"
                   style={{ alignSelf: 'center' }}
                   onPress={handleOnProceed}
-                  disabled={isLoading || confirmSSOIsLoading}
+                  disabled={isLoading || confirmSSOIsLoading || !hasOTP}
                />
             </>
          }
@@ -265,7 +271,7 @@ const OTP: React.FC<OTPProps> = navigationProps => {
             <FooterContainer>
                <FooterIcon source={Images.icons.icon_lock} />
                <Footer
-                  text="Don’t share your OTP
+                  text="Don’t share your OTP   
                   with anyone"
                />
             </FooterContainer>

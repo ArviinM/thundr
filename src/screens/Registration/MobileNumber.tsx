@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 import styled from 'styled-components/native';
 
 import type { StackScreenProps } from '@react-navigation/stack';
-import type { RegistrationStackParamList } from 'types/navigation';
+import type { MobileRegistrationFlow } from 'types/navigation';
 
 import RegistrationSkeleton from '@templates/RegistrationSkeleton';
 import { useTheme } from '@hooks';
@@ -122,7 +122,7 @@ export const Footer: React.FC<FooterProps> = ({ text }) => (
 );
 
 interface MobileNumberProps
-   extends StackScreenProps<RegistrationStackParamList, 'MobileRegistration'> {}
+   extends StackScreenProps<MobileRegistrationFlow, 'RegisterMobileNumber'> {}
 
 const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
    const { authenticationState } = useAuth();
@@ -147,25 +147,28 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
          isLoading: rmLoading,
          isSuccess: rmSuccess,
          data: rmData,
-         error: rmError,
+         error: RMErroMessage,
          isError: rmIsError,
       },
    ] = useRegisterMobileMutation();
 
    useEffect(() => {
       if (rmIsError) {
-         console.log('rmError', rmError);
+         Toast.show({
+            text2: RMErroMessage,
+            type: 'error',
+         });
       }
 
       if (rmSuccess) {
          console.log('rmData', rmData);
 
-         navigation.navigate('OTP', {
+         navigation.navigate('NumberOTP', {
             phoneNumber: `+63${phoneNumber}`,
             session: rmData?.data.session,
          });
       }
-   }, [rmSuccess, rmError]);
+   }, [rmSuccess, RMErroMessage, rmIsError]);
 
    useEffect(() => {
       if (ssoIsError) {
@@ -180,7 +183,7 @@ const MobileNumber: React.FC<MobileNumberProps> = ({ navigation }) => {
          console.log('authenticationState', authenticationState);
          console.log('SSO Mobile', JSON.stringify(ssoData));
 
-         navigation.navigate('OTP', {
+         navigation.navigate('NumberOTP', {
             phoneNumber: `+63${phoneNumber}`,
             session: ssoData?.session,
          });
