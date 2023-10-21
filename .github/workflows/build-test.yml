@@ -25,7 +25,6 @@
        needs: Git-Fetch-State
        steps:
          - run: ls
-         #- run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
          - run: echo -en "sdk.dir = /home/ubuntu/Android/Sdk" >> android/local.properties
          - run: ls android
          - run: echo -en "${{VARS.DEV_ENV}}" >> .env
@@ -85,4 +84,3 @@
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
-  
