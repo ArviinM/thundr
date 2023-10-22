@@ -12,7 +12,6 @@ import styled from 'styled-components/native';
 import StandardSkeleton from '@templates/StandardSkeleton';
 import PrimaryButton from '@atoms/Buttons/Primary';
 
-import MyTextInput from '@molecules/TextView';
 
 import {
    useAuthenticateMutation,
@@ -120,13 +119,13 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
          secondSection={
             <ActionsContainer>
                <LoginTitle>LOGIN ACCOUNT</LoginTitle>
-               <MyTextInput
+               <TextInput
                   placeholder="Email / Phone Number"
                   onChangeText={text =>
                      handleOnInputChange('phoneNumber', text.toLowerCase())
                   }
                />
-               <MyTextInput
+               <TextInput
                   placeholder="Password"
                   secureTextEntry
                   onChangeText={text => handleOnInputChange('password', text)}
