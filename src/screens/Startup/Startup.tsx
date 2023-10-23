@@ -79,7 +79,7 @@ enum AUTH_TYPE {
 const getActualURL = (ref: AUTH_TYPE) =>
    `${process.env.API_URL}auth/get-sso-url?sso=${ref}`;
 
-interface StartupProps extends StackScreenProps<StartUpFlow, 'StartUp'> {}
+interface StartupProps extends StackScreenProps<StartUpFlow, 'StartUp'> { }
 
 const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
    const { Images } = useTheme();
@@ -95,13 +95,13 @@ const Startup: React.FC<StartupProps> = ({ navigation, route }) => {
 
          authenticateUser(responseObject);
 
-         // if (responseObject.forProfileCreation) {
-         //    navigation.navigate('MobileRegistrationFlow', {
-         //       screen: 'RegisterMobileNumber',
-         //    });
-         // } else {
-         //    // navigation.navigate('Dashboard');
-         // }
+         if (responseObject.forProfileCreation) {
+            navigation.navigate('MobileRegistrationFlow', {
+               screen: 'RegisterMobileNumber',
+            });
+         } else {
+            navigation.navigate('Dashboard');
+         }
       }
    }, [params]);
 
