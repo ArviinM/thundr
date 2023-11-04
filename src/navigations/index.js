@@ -12,8 +12,6 @@ import PublicScreenNavigation from './PublicScreenNavigation/PublicScreenNavigat
 const RootNavigation = () => {
   const [hideSplash, setHideSplash] = useState(false);
 
-  console.log('hideSplash', hideSplash);
-
   useEffect(() => {
     let delayHandle;
     if (hideSplash) {
@@ -32,7 +30,7 @@ const RootNavigation = () => {
       onReady={() => {
         setHideSplash(true);
       }}
-      theme={{colors: {background: '#000'}}}>
+      theme={{colors: {background: '#f2cecd'}}}>
       <PublicScreenNavigation />
     </NavigationContainer>
   );

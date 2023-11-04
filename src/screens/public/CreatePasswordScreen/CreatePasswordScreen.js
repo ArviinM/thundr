@@ -1,17 +1,26 @@
+// React modules
 import React, {useState} from 'react';
+import {View} from 'react-native';
+
+// Third party libraries
+import {useNavigation} from '@react-navigation/native';
+
+// Components
 import ScreenContainer from '../../../composition/ScreenContainer/ScreenContainer';
 import Button from '../../../components/Button/Button';
 import Separator from '../../../components/Separator/Separator';
-import {useNavigation} from '@react-navigation/native';
 import Image from '../../../components/Image/Image';
-import {MOBILE_INPUT_URI} from '../../../utils/images';
 import Text from '../../../components/Text/Text';
-import {View, TextInput} from 'react-native';
-import {scale, verticalScale} from '../../../utils/commons';
+import TextInput from '../../../composition/TextInput/TextInput';
+
+// Utils
+import {MOBILE_INPUT_URI} from '../../../utils/images';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const CreatePasswordScreen = () => {
   const navigation = useNavigation();
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
       <View style={{top: verticalScale(80), alignItems: 'center'}}>
@@ -21,36 +30,57 @@ const CreatePasswordScreen = () => {
           height={100}
         />
         <Separator space={20} />
-        <Text color="#E33051">Create Password</Text>
-        <View>
-          <View
-            style={{
-              top: verticalScale(20),
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderRadius: 30,
-              paddingVertical: verticalScale(10),
-              paddingHorizontal: scale(20),
-              backgroundColor: '#fff',
-              width: scale(230),
-            }}>
-            <TextInput
-              style={{
-                flex: 1,
-                top: verticalScale(1),
-                color: '#B1B3B5',
-              }}
-              placeholder="Password"
-              value={mobileNumber}
-              onChangeText={text => setMobileNumber(text)}
-            />
-          </View>
-          <Separator space={25} />
-        </View>
+        <Text color="#E33051" weight={700}>
+          Create Password
+        </Text>
       </View>
+      <Separator space={80} />
+      <View>
+        <TextInput
+          inputStyle={{
+            alignItems: 'center',
+            borderRadius: 30,
+            paddingVertical: verticalScale(isIosDevice() ? 10 : 8),
+            paddingHorizontal: scale(20),
+            backgroundColor: '#fff',
+            width: scale(230),
+            height: verticalScale(35),
+          }}
+          placeholder="Password"
+          value={password1}
+          onChangeText={text => setPassword1(text)}
+        />
+        <Separator space={isIosDevice() ? 5 : 0} />
+        <TextInput
+          inputStyle={{
+            alignItems: 'center',
+            borderRadius: 30,
+            paddingVertical: verticalScale(isIosDevice() ? 10 : 8),
+            paddingHorizontal: scale(20),
+            backgroundColor: '#fff',
+            width: scale(230),
+            top: verticalScale(-10),
+            height: verticalScale(35),
+          }}
+          placeholder="Re-type Password"
+          value={password2}
+          onChangeText={text => setPassword2(text)}
+        />
+      </View>
+      <Button
+        title="Continue"
+        primary
+        textStyle={{weight: 400}}
+        style={{
+          marginTop: verticalScale(20),
+          height: verticalScale(isIosDevice() ? 30 : 40),
+          width: scale(150),
+        }}
+        // onPress={() => navigation.navigate('EmailVerificationScreen')}
+      />
       <View
         style={{
-          top: verticalScale(260),
+          top: verticalScale(150),
           paddingHorizontal: scale(80),
           flexDirection: 'row',
           justifyContent: 'center',
@@ -59,22 +89,12 @@ const CreatePasswordScreen = () => {
           source={MOBILE_INPUT_URI.LOCK_ICON}
           height={20}
           width={20}
-          customStyle={{marginRight: scale(10), top: verticalScale(-3)}}
+          customStyle={{
+            marginRight: scale(10),
+            top: verticalScale(isIosDevice() ? -3 : 0),
+          }}
         />
         <Text color="#59595B">Never share your password.</Text>
-      </View>
-      <View>
-        <Button
-          title="Continue"
-          primary
-          textStyle={{weight: 400}}
-          style={{
-            top: verticalScale(130),
-            height: verticalScale(30),
-            width: scale(150),
-          }}
-          onPress={() => navigation.navigate('EmailVerificationScreen')}
-        />
       </View>
     </ScreenContainer>
   );

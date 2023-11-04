@@ -49,6 +49,7 @@ const PublicScreenNavigation = () => {
     <Stack.Navigator
       initialRouteName="OnboardingScreen"
       screenOptions={{
+        gestureEnabled: false,
         headerShown: false,
         headerStyle: {
           backgroundColor: '#0D5176',

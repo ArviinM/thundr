@@ -72,10 +72,9 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-
-    namespace "com.sampleapp"
+    namespace "ph.thundr.app.dev"
     defaultConfig {
-        applicationId "com.sampleapp"
+        applicationId "ph.thundr.app.dev"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,11 +1,18 @@
+// React modules
 import React from 'react';
-import {Dimensions, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
+
+// Third party libraries
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
-import {ONBOARDING_URI} from '../../../utils/images';
-import Image from '../../../components/Image/Image';
-import {verticalScale} from '../../../utils/commons';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
+
+// Components
+import Image from '../../../components/Image/Image';
+
+// Utils
+import {ONBOARDING_URI} from '../../../utils/images';
+import {scale, verticalScale} from '../../../utils/commons';
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();
@@ -26,34 +33,42 @@ const OnboardingScreen = () => {
       data={ONBOARDING_IMAGES}
       paginationActiveColor="#E53388"
       paginationDefaultColor="#FFC028"
+      paginationStyleItem={{marginLeft: scale(1)}}
       paginationStyle={{bottom: verticalScale(45)}}>
       <View
         style={{
           flex: 1,
           backgroundColor: '#F4D1D0',
         }}>
-        <Image source={ONBOARDING_URI.ONBOARDING_1} height={700} width={350} />
+        <Image source={ONBOARDING_URI.ONBOARDING_1} height={650} width={350} />
       </View>
       <View
         style={{
           flex: 1,
           backgroundColor: '#F4D1D0',
         }}>
-        <Image source={ONBOARDING_URI.ONBOARDING_2} height={700} width={350} />
+        <Image source={ONBOARDING_URI.ONBOARDING_2} height={650} width={350} />
       </View>
       <View
         style={{
           flex: 1,
           backgroundColor: '#F4D1D0',
         }}>
-        <Image source={ONBOARDING_URI.ONBOARDING_3} height={700} width={350} />
+        <Image source={ONBOARDING_URI.ONBOARDING_3} height={650} width={350} />
       </View>
       <View
         style={{
           flex: 1,
           backgroundColor: '#F4D1D0',
         }}>
-        <Image source={ONBOARDING_URI.ONBOARDING_4} height={700} width={350} />
+        <Image source={ONBOARDING_URI.ONBOARDING_4} height={650} width={350} />
+      </View>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#F4D1D0',
+        }}>
+        <Image source={ONBOARDING_URI.ONBOARDING_5} height={650} width={350} />
       </View>
       <LinearGradient
         colors={[
@@ -78,10 +93,9 @@ const OnboardingScreen = () => {
             flex: 1,
           }}>
           <Image
-            source={ONBOARDING_URI.ONBOARDING_5}
-            height={700}
+            source={ONBOARDING_URI.ONBOARDING_6}
+            height={650}
             width={350}
-            stretch={true}
           />
         </View>
       </LinearGradient>
@@ -90,12 +104,12 @@ const OnboardingScreen = () => {
           flex: 1,
           backgroundColor: '#F4D1D0',
         }}>
-        <Image source={ONBOARDING_URI.ONBOARDING_6} height={700} width={350} />
+        <Image source={ONBOARDING_URI.ONBOARDING_7} height={650} width={350} />
         <TouchableOpacity
           onPress={() => navigation.navigate('LoginOptionScreen')}
           style={{
             position: 'absolute',
-            top: verticalScale(280),
+            top: verticalScale(260),
             alignSelf: 'center',
           }}>
           <View>
