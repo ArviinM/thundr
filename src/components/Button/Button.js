@@ -1,0 +1,42 @@
+// React modules
+import React from 'react';
+import {TouchableOpacity} from 'react-native';
+
+// Components
+import Text from '../Text/Text';
+
+// Styles
+import {TitleContainer} from './Styled';
+
+const Button = props => {
+  const {
+    activeOpacity,
+    onPress,
+    disabled = false,
+    title,
+    type,
+    style,
+    textColor,
+  } = props;
+
+  const renderButton = () => {
+    return (
+      <TitleContainer style={style} type={type} disabled={disabled}>
+        <Text size={15} weight={400} color={textColor || '#ffffff'}>
+          {title}
+        </Text>
+      </TitleContainer>
+    );
+  };
+
+  return (
+    <TouchableOpacity
+      activeOpacity={activeOpacity}
+      onPress={onPress}
+      disabled={disabled}>
+      {renderButton()}
+    </TouchableOpacity>
+  );
+};
+
+export default Button;

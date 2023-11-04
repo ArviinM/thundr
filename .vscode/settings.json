@@ -1,5 +1,0 @@
-{
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "prettier.prettierPath": "./node_modules/prettier",
-    "editor.formatOnSave": true
-}
