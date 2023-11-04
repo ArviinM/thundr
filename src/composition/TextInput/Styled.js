@@ -25,7 +25,7 @@ export const StyledTextInput = styled(TextInput)`
   padding-horizontal: ${scale(15)}px;
   width: ${scale(290)}px;
   border-color: ${props => (props.error ? '#EC543C' : '#dfdfdf')};
-  border-radius: 5px;
+  border-radius: 50px;
   color: black;
   background: #fff;
 `;

@@ -78,7 +78,7 @@ android {
 
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-
+    
     defaultConfig {
         applicationId "ph.thundr.app.dev"
         minSdkVersion rootProject.ext.minSdkVersion

@@ -1,19 +1,38 @@
 // React modules
-import React from 'react';
-import {Linking, TouchableOpacity, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {BackHandler, Linking, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {Link, useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
-import {LOGIN_ASSET_URI} from '../../../utils/images';
 import Image from '../../../components/Image/Image';
 import Text from '../../../components/Text/Text';
+
+// Utils
+import {LOGIN_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const LoginOptionScreen = () => {
   const navigation = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+
+      return () => {
+        backHandler.remove();
+      };
+    }, []),
+  );
 
   return (
     <View
@@ -25,8 +44,12 @@ const LoginOptionScreen = () => {
       <Separator space={100} />
       <Image source={LOGIN_ASSET_URI.THUNDR_LOGO} height={210} width={350} />
       <Separator space={30} />
-      <Text color="#59595B" size={14} customStyle={{textAlign: 'center'}}>
-        Register Here
+      <Text
+        color="#59595B"
+        weight={700}
+        size={14}
+        customStyle={{textAlign: 'center'}}>
+        Register here
       </Text>
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
         <TouchableOpacity
@@ -40,7 +63,7 @@ const LoginOptionScreen = () => {
           <View
             style={{
               backgroundColor: '#fff',
-              height: verticalScale(30),
+              height: verticalScale(33),
               width: scale(230),
               justifyContent: 'center',
               borderRadius: 20,
@@ -58,6 +81,7 @@ const LoginOptionScreen = () => {
             />
             <Text
               color="#E33051"
+              weight={700}
               customStyle={{
                 textAlign: 'center',
                 top: verticalScale(isIosDevice() ? 8 : 4),
@@ -76,7 +100,7 @@ const LoginOptionScreen = () => {
           <View
             style={{
               backgroundColor: '#fff',
-              height: verticalScale(30),
+              height: verticalScale(33),
               width: scale(230),
               justifyContent: 'center',
               borderRadius: 20,
@@ -90,6 +114,7 @@ const LoginOptionScreen = () => {
             />
             <Text
               color="#E33051"
+              weight={700}
               customStyle={{
                 textAlign: 'center',
                 top: verticalScale(isIosDevice() ? 8 : 4),
@@ -104,7 +129,7 @@ const LoginOptionScreen = () => {
           <View
             style={{
               backgroundColor: '#fff',
-              height: verticalScale(30),
+              height: verticalScale(33),
               width: scale(230),
               justifyContent: 'center',
               borderRadius: 20,
@@ -118,6 +143,7 @@ const LoginOptionScreen = () => {
             />
             <Text
               color="#E33051"
+              weight={700}
               customStyle={{
                 textAlign: 'center',
                 top: verticalScale(isIosDevice() ? 8 : 4),
@@ -136,7 +162,10 @@ const LoginOptionScreen = () => {
               justifyContent: 'center',
               borderRadius: 20,
             }}>
-            <Text color="#E33051" customStyle={{textAlign: 'center'}}>
+            <Text
+              color="#E33051"
+              weight={700}
+              customStyle={{textAlign: 'center'}}>
               LOGIN
             </Text>
           </View>
@@ -144,12 +173,29 @@ const LoginOptionScreen = () => {
         <View
           style={{
             paddingHorizontal: scale(50),
-            top: verticalScale(100),
+            top: verticalScale(60),
           }}>
-          <Text size={10} color="#59595B" customStyle={{textAlign: 'justify'}}>
+          <Text
+            size={11}
+            color="#59595B"
+            customStyle={{
+              textAlign: 'center',
+            }}>
             By signing up, I declare that I'm 35 years of age or older and
-            hereby agree to the Terms and Conditions of Thundr and its Privacy
-            Policy.
+            hereby agree to the{' '}
+            <Text
+              color="#59595B"
+              size={11}
+              customStyle={{textDecorationLine: 'underline'}}>
+              Terms and Conditions
+            </Text>{' '}
+            of Thundr and its{' '}
+            <Text
+              color="#59595B"
+              size={11}
+              customStyle={{textDecorationLine: 'underline'}}>
+              Privacy Policy.
+            </Text>
           </Text>
         </View>
       </View>

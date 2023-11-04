@@ -1,5 +1,7 @@
 // Third party libraries
 import styled from 'styled-components/native';
+
+// Utils
 import {scale, verticalScale} from '../../utils/commons';
 
 export const TitleContainer = styled.View`

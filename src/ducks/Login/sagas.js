@@ -1,14 +1,6 @@
-import {call, put, takeLatest} from 'redux-saga/effects';
-import {
-  LOGIN_FAILED,
-  LOGIN_SUCCESS,
-  START_LOGIN,
-  START_LOGOUT,
-  START_LOGOUT_FAILED,
-  START_LOGOUT_SUCCESS,
-} from './actionTypes';
-import {GENERIC_ERROR_MESSAGE} from '../../utils/commons';
-import {GET_ACCOUNT_REQUEST} from '../Common/actionTypes';
+import {takeLatest} from 'redux-saga/effects';
+import {START_LOGIN, START_LOGOUT} from './actionTypes';
+
 // import crashlytics from '@react-native-firebase/crashlytics';
 
 export function* startLoginProcess({payload}) {

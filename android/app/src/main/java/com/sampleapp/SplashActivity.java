@@ -1,4 +1,4 @@
-package com.sampleapp; // Change this to your package name.
+package ph.thundr.app.dev; // Change this to your package name.
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -9,6 +9,7 @@ export const ONBOARDING_URI = {
   ONBOARDING_4: require('../assets/Images/Onboarding/onboarding-4.png'),
   ONBOARDING_5: require('../assets/Images/Onboarding/onboarding-5.png'),
   ONBOARDING_6: require('../assets/Images/Onboarding/onboarding-6.png'),
+  ONBOARDING_7: require('../assets/Images/Onboarding/onboarding-7.png'),
   ONBOARDING_THUNDR_BUTTON: require('../assets/Images/Onboarding/thundr-button.png'),
 };
 

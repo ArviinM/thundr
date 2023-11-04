@@ -1,13 +1,4 @@
-import {GENERIC_ERROR_MESSAGE} from '../../utils/commons';
-import {
-  LOGIN_FAILED,
-  LOGIN_SUCCESS,
-  START_LOGIN,
-  START_LOGOUT,
-  START_LOGOUT_FAILED,
-  START_LOGOUT_SUCCESS,
-  UPDATE_LOGIN_STATE,
-} from './actionTypes';
+import {LOGIN_SUCCESS, START_LOGIN, UPDATE_LOGIN_STATE} from './actionTypes';
 
 export const INITIAL_STATE = {
   authenticated: false,

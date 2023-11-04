@@ -1,5 +1,7 @@
 // Third party libraries
 import styled from 'styled-components/native';
+
+// Utils
 import {isIosDevice, moderateScale} from '../../utils/commons';
 
 export const StyledText = styled.Text.attrs(props => ({
