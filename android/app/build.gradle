@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: 'com.github.triplet.play'
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -72,13 +73,18 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
+
     namespace "ph.thundr.app.dev"
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    
     defaultConfig {
         applicationId "ph.thundr.app.dev"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode project.properties["BUILD_NUMBER"]?BUILD_NUMBER as int :1
+        versionName project.properties["BUILD_NAME"]?BUILD_NAME:"1.0"
     }
     signingConfigs {
         debug {
@@ -86,6 +92,12 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        release {
+            storeFile file(project.properties["MYAPP_RELEASE_STORE_FILE"]?MYAPP_RELEASE_STORE_FILE:'debug.keystore')
+            storePassword project.properties["MYAPP_RELEASE_STORE_PASSWORD"]?MYAPP_RELEASE_STORE_PASSWORD:'android'
+            keyAlias project.properties["MYAPP_RELEASE_KEY_ALIAS"]?MYAPP_RELEASE_KEY_ALIAS:'androiddebugkey'
+            keyPassword project.properties["MYAPP_RELEASE_KEY_PASSWORD"]?MYAPP_RELEASE_KEY_PASSWORD:'android'
         }
     }
     buildTypes {
@@ -95,7 +107,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -120,3 +132,10 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+play {
+    serviceAccountCredentials = file(project.properties["PLAY_PUBLISH_KEY_JSON"]?PLAY_PUBLISH_KEY_JSON:'key.json')
+    track = project.properties["PLAY_PUBLISH_TRACK"]?PLAY_PUBLISH_TRACK:'internal'
+    defaultToAppBundles = true
+    releaseName = project.properties["RELEASE_NAME"]?RELEASE_NAME:'My App'
+}
