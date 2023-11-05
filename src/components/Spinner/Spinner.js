@@ -34,7 +34,7 @@ const Spinner = ({visible = false}) => {
         ],
         height: verticalScale(100),
         width: scale(200),
-        borderRadius: 20,
+        elevation: 0,
       }}
       isVisible>
       <ActivityIndicator color={'#e33051'} size={'large'} />
