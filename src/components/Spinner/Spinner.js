@@ -20,7 +20,7 @@ const Spinner = ({visible = false}) => {
 
   return (
     <Overlay
-      backdropStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}
+      backdropStyle={{backgroundColor: 'rgba(255, 255, 255, 0.3)'}}
       overlayStyle={{
         alignItems: 'center',
         justifyContent: 'center',

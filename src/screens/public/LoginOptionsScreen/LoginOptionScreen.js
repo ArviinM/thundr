@@ -3,7 +3,12 @@ import React, {useCallback, useEffect} from 'react';
 import {BackHandler, Linking, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import base64 from 'react-native-base64';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
@@ -13,8 +18,12 @@ import Text from '../../../components/Text/Text';
 // Utils
 import {LOGIN_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {useDispatch} from 'react-redux';
+import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
 
 const LoginOptionScreen = () => {
+  const dispatch = useDispatch();
+  const route = useRoute();
   const navigation = useNavigation();
 
   useFocusEffect(
@@ -34,23 +43,20 @@ const LoginOptionScreen = () => {
     }, []),
   );
 
-  // useEffect(() => {
-  //   // Add an event listener to handle deep links
-  //   const handleDeepLink = ({url}) => {
-  //     const route = url.replace(/.*?:\/\//g, ''); // Extract the route from the URL
-  //     if (route) {
-  //       navigation.navigate(route); // Navigate to the specified route
-  //     }
-  //   };
+  const {params} = route;
 
-  //   // Add the event listener
-  //   Linking.addEventListener('url', handleDeepLink);
+  useEffect(() => {
+    if (params?.payload) {
+      const responseObject = JSON.parse(base64.decode(params.payload));
 
-  //   // Clean up the event listener when your component unmounts
-  //   return () => {
-  //     Linking.removeEventListener('url', handleDeepLink);
-  //   };
-  // }, [navigation]);
+      if (responseObject) {
+        dispatch({
+          type: UPDATE_LOGIN_STATE,
+          newState: {authenticated: true, loginData: responseObject},
+        });
+      }
+    }
+  }, [params]);
 
   const renderButton = (isSSO, link, icon, text) => {
     return (

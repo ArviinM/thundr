@@ -20,13 +20,7 @@ const RootNavigation = () => {
   const [hideSplash, setHideSplash] = useState(false);
 
   const config = {
-    screens: {
-      PrivateScreenNavigation: {
-        screens: {
-          Dashboard: 'sso/:payload',
-        },
-      },
-    },
+    screens: {LoginOptionScreen: 'sso/:payload'},
   };
 
   const linking = {
