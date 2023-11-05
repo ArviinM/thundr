@@ -16,12 +16,18 @@ import TextInput from '../../../composition/TextInput/TextInput';
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {useDispatch, useSelector} from 'react-redux';
+import {START_EMAIL_VALIDATION} from '../../../ducks/MobileEmail/actionTypes';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const EmailValidationScreen = () => {
+  const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.mobileEmail);
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      {loading && <Spinner visible={true} />}
       <View style={{top: verticalScale(80), alignItems: 'center'}}>
         <Image source={MOBILE_INPUT_URI.EMAIL_ICON} width={80} height={100} />
         <Separator space={20} />
@@ -50,6 +56,7 @@ const EmailValidationScreen = () => {
         </View>
       </View>
       <Button
+        disabled={!email.length}
         title="Continue"
         primary
         textStyle={{weight: 400}}
@@ -58,7 +65,14 @@ const EmailValidationScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        onPress={() => navigation.navigate('EmailVerificationScreen')}
+        onPress={() =>
+          dispatch({
+            type: START_EMAIL_VALIDATION,
+            payload: {
+              email,
+            },
+          })
+        }
       />
       <View
         style={{

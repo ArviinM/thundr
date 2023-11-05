@@ -15,12 +15,18 @@ import Text from '../../../components/Text/Text';
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {useDispatch, useSelector} from 'react-redux';
+import {START_MOBILE_VALIDATION} from '../../../ducks/MobileEmail/actionTypes';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const MobileValidationScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const {loading} = useSelector(state => state.mobileEmail);
   const [mobileNumber, setMobileNumber] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      {loading && <Spinner visible={true} />}
       <View style={{top: verticalScale(120), alignItems: 'center'}}>
         <Image source={MOBILE_INPUT_URI.MOBILE_ICON} width={80} height={100} />
         <Separator space={20} />
@@ -71,6 +77,7 @@ const MobileValidationScreen = () => {
       </View>
       <Button
         title="Continue"
+        disabled={!mobileNumber.length}
         primary
         textStyle={{weight: 400}}
         style={{
@@ -78,7 +85,9 @@ const MobileValidationScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        onPress={() => navigation.navigate('MobileVerificationScreen')}
+        onPress={() =>
+          dispatch({type: START_MOBILE_VALIDATION, payload: {mobileNumber}})
+        }
       />
       <View
         style={{

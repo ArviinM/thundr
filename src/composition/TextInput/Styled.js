@@ -28,6 +28,7 @@ export const StyledTextInput = styled(TextInput)`
   border-radius: 50px;
   color: black;
   background: #fff;
+  justify-content: center;
 `;
 
 export const TextInputContainer = styled.View`
@@ -37,6 +38,15 @@ export const TextInputContainer = styled.View`
 export const StyledTouchableOpacity = styled(TouchableOpacity)`
   position: absolute;
   align-self: flex-end;
-  left: ${scale(275)}px;
-  bottom: ${verticalScale(15)}px;
+  align-items: flex-start;
+  left: ${scale(210)}px;
+  bottom: ${props => {
+    let bottom = verticalScale(22);
+    if (props.fromCreatePassword) {
+      bottom = verticalScale(13);
+    } else if (props.fromCreatePassword2) {
+      bottom = verticalScale(22);
+    }
+    return bottom;
+  }};
 `;

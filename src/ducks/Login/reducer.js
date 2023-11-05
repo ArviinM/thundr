@@ -1,4 +1,10 @@
-import {LOGIN_SUCCESS, START_LOGIN, UPDATE_LOGIN_STATE} from './actionTypes';
+import {
+  LOGIN_FAILED,
+  LOGIN_SUCCESS,
+  START_LOGIN,
+  START_LOGOUT,
+  UPDATE_LOGIN_STATE,
+} from './actionTypes';
 
 export const INITIAL_STATE = {
   authenticated: false,
@@ -11,7 +17,7 @@ export const INITIAL_STATE = {
   modalMessage: '',
 };
 
-const login = (state = INITIAL_STATE, action) => {
+const mobileEmail = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case UPDATE_LOGIN_STATE:
       return {
@@ -27,13 +33,23 @@ const login = (state = INITIAL_STATE, action) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        loginData: [{data: 'hahaha'}],
+        loginData: action.payload,
         loading: false,
         authenticated: true,
+      };
+    case LOGIN_FAILED:
+      return {
+        ...state,
+        loading: false,
+      };
+    case START_LOGOUT:
+      return {
+        ...state,
+        authenticated: false,
       };
     default:
       return state;
   }
 };
 
-export default login;
+export default mobileEmail;

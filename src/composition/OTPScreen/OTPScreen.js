@@ -13,12 +13,18 @@ import {
 } from '../../utils/commons';
 
 const OTPScreen = props => {
-  const {otp, setOtp, password = false, keyboardType = 'numeric'} = props;
+  const {
+    otp,
+    setOtp,
+    password = false,
+    keyboardType = 'numeric',
+    restrictToNumbers = true,
+  } = props;
   return (
     <SmoothPinCodeInput
       codeLength={6}
       keyboardType={keyboardType}
-      restrictToNumbers
+      restrictToNumbers={restrictToNumbers}
       password={password}
       mask="*"
       animationFocused={null}

@@ -16,12 +16,17 @@ import OTPScreen from '../../../composition/OTPScreen/OTPScreen';
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {useDispatch, useSelector} from 'react-redux';
+import Spinner from '../../../components/Spinner/Spinner';
+import {START_EMAIL_VERIFICATION} from '../../../ducks/MobileEmail/actionTypes';
 
 const EmailVerificationScreen = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.mobileEmail);
   const [otp, setOtp] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      {loading && <Spinner visible={true} />}
       <View style={{top: verticalScale(80), alignItems: 'center'}}>
         <Image
           source={MOBILE_INPUT_URI.EMAIL_OTP_ICON}
@@ -41,9 +46,16 @@ const EmailVerificationScreen = () => {
         </Text>
       </View>
       <View style={{top: verticalScale(110)}}>
-        <OTPScreen otp={otp} setOtp={setOtp} password keyboardType="alpha" />
+        <OTPScreen
+          otp={otp}
+          setOtp={setOtp}
+          password
+          keyboardType="alpha"
+          restrictToNumbers={false}
+        />
       </View>
       <Button
+        disabled={otp.length !== 6}
         title="Continue"
         primary
         textStyle={{weight: 400}}
@@ -52,7 +64,9 @@ const EmailVerificationScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        onPress={() => navigation.navigate('CreatePasswordScreen')}
+        onPress={() =>
+          dispatch({type: START_EMAIL_VERIFICATION, payload: {otp}})
+        }
       />
       <View
         style={{

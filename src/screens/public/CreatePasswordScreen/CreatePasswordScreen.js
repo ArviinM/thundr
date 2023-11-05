@@ -16,13 +16,20 @@ import TextInput from '../../../composition/TextInput/TextInput';
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {useDispatch, useSelector} from 'react-redux';
+import {START_PASSWORD_VALIDATION} from '../../../ducks/MobileEmail/actionTypes';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const CreatePasswordScreen = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.mobileEmail);
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+  const [isPassword1Visible, setPassword1Visible] = useState(true);
+  const [isPassword2Visible, setPassword2Visible] = useState(true);
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      {loading && <Spinner visible={true} />}
       <View style={{top: verticalScale(80), alignItems: 'center'}}>
         <Image
           source={MOBILE_INPUT_URI.CREATE_PASSWORD_ICON}
@@ -46,11 +53,17 @@ const CreatePasswordScreen = () => {
             width: scale(230),
             height: verticalScale(35),
           }}
+          secureTextEntry={isPassword1Visible}
+          hasIcon
+          onPress={() => setPassword1Visible(!isPassword1Visible)}
           placeholder="Password"
+          fromCreatePassword={true}
           value={password1}
           onChangeText={text => setPassword1(text)}
         />
-        <Separator space={isIosDevice() ? 5 : 0} />
+      </View>
+      <Separator space={isIosDevice() ? 10 : 0} />
+      <View>
         <TextInput
           inputStyle={{
             alignItems: 'center',
@@ -62,11 +75,16 @@ const CreatePasswordScreen = () => {
             top: verticalScale(-10),
             height: verticalScale(35),
           }}
+          secureTextEntry={isPassword2Visible}
+          hasIcon
+          onPress={() => setPassword2Visible(!isPassword2Visible)}
+          fromCreatePassword2={true}
           placeholder="Re-type Password"
           value={password2}
           onChangeText={text => setPassword2(text)}
         />
       </View>
+
       <Button
         title="Continue"
         primary
@@ -76,7 +94,9 @@ const CreatePasswordScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        // onPress={() => navigation.navigate('EmailVerificationScreen')}
+        onPress={() =>
+          dispatch({type: START_PASSWORD_VALIDATION, payload: {password1}})
+        }
       />
       <View
         style={{

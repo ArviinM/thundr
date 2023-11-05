@@ -1,5 +1,5 @@
 // React modules
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {BackHandler, Linking, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -34,6 +34,61 @@ const LoginOptionScreen = () => {
     }, []),
   );
 
+  // useEffect(() => {
+  //   // Add an event listener to handle deep links
+  //   const handleDeepLink = ({url}) => {
+  //     const route = url.replace(/.*?:\/\//g, ''); // Extract the route from the URL
+  //     if (route) {
+  //       navigation.navigate(route); // Navigate to the specified route
+  //     }
+  //   };
+
+  //   // Add the event listener
+  //   Linking.addEventListener('url', handleDeepLink);
+
+  //   // Clean up the event listener when your component unmounts
+  //   return () => {
+  //     Linking.removeEventListener('url', handleDeepLink);
+  //   };
+  // }, [navigation]);
+
+  const renderButton = (isSSO, link, icon, text) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          isSSO
+            ? Linking.openURL(link)
+            : navigation.navigate('MobileAndEmailVerificationStack')
+        }>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            height: verticalScale(33),
+            width: scale(230),
+            justifyContent: 'center',
+            borderRadius: 20,
+            flexDirection: 'row',
+          }}>
+          <Image
+            source={icon}
+            height={30}
+            width={20}
+            customStyle={{marginRight: scale(6)}}
+          />
+          <Text
+            color="#E33051"
+            weight={700}
+            customStyle={{
+              textAlign: 'center',
+              top: verticalScale(isIosDevice() ? 8 : 6),
+            }}>
+            {text}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View
       style={{
@@ -52,106 +107,30 @@ const LoginOptionScreen = () => {
         Register here
       </Text>
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
-        <TouchableOpacity
-          onPress={() =>
-            Linking.openURL(
-              `https://dev-api.thundr.ph/auth/get-sso-url?sso=${
-                isIosDevice() ? 'Apple' : 'Google'
-              }`,
-            )
-          }>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              height: verticalScale(33),
-              width: scale(230),
-              justifyContent: 'center',
-              borderRadius: 20,
-              flexDirection: 'row',
-            }}>
-            <Image
-              source={
-                isIosDevice()
-                  ? LOGIN_ASSET_URI.APPLE_ICON
-                  : LOGIN_ASSET_URI.GOOGLE_ICON
-              }
-              height={30}
-              width={20}
-              customStyle={{marginRight: scale(6)}}
-            />
-            <Text
-              color="#E33051"
-              weight={700}
-              customStyle={{
-                textAlign: 'center',
-                top: verticalScale(isIosDevice() ? 8 : 4),
-              }}>
-              Continue with {isIosDevice() ? 'Apple' : 'Google'}
-            </Text>
-          </View>
-        </TouchableOpacity>
+        {renderButton(
+          true,
+          `https://dev-api.thundr.ph/auth/get-sso-url?sso=${
+            isIosDevice() ? 'Apple' : 'Google'
+          }`,
+          isIosDevice()
+            ? LOGIN_ASSET_URI.APPLE_ICON
+            : LOGIN_ASSET_URI.GOOGLE_ICON,
+          `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
+        )}
         <Separator space={5} />
-        <TouchableOpacity
-          onPress={() =>
-            Linking.openURL(
-              'https://dev-api.thundr.ph/auth/get-sso-url?sso=Facebook',
-            )
-          }>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              height: verticalScale(33),
-              width: scale(230),
-              justifyContent: 'center',
-              borderRadius: 20,
-              flexDirection: 'row',
-            }}>
-            <Image
-              source={LOGIN_ASSET_URI.FACEBOOK_ICON}
-              height={30}
-              width={20}
-              customStyle={{marginRight: scale(6)}}
-            />
-            <Text
-              color="#E33051"
-              weight={700}
-              customStyle={{
-                textAlign: 'center',
-                top: verticalScale(isIosDevice() ? 8 : 4),
-              }}>
-              Continue with Facebook
-            </Text>
-          </View>
-        </TouchableOpacity>
+        {renderButton(
+          true,
+          'https://dev-api.thundr.ph/auth/get-sso-url?sso=Facebook',
+          LOGIN_ASSET_URI.FACEBOOK_ICON,
+          'Continue with Facebook',
+        )}
         <Separator space={5} />
-        <TouchableOpacity
-          onPress={() => navigation.navigate('MobileValidationScreen')}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              height: verticalScale(33),
-              width: scale(230),
-              justifyContent: 'center',
-              borderRadius: 20,
-              flexDirection: 'row',
-            }}>
-            <Image
-              source={LOGIN_ASSET_URI.MOBILE_ICON}
-              height={30}
-              width={20}
-              customStyle={{marginRight: scale(6)}}
-            />
-            <Text
-              color="#E33051"
-              weight={700}
-              customStyle={{
-                textAlign: 'center',
-                top: verticalScale(isIosDevice() ? 8 : 4),
-              }}>
-              Continue with Mobile Number
-            </Text>
-          </View>
-        </TouchableOpacity>
+        {renderButton(
+          false,
+          '',
+          LOGIN_ASSET_URI.MOBILE_ICON,
+          'Continue with Mobile Number',
+        )}
         <Separator space={20} />
         <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
           <View
