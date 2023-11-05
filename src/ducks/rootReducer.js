@@ -1,10 +1,12 @@
 import {combineReducers} from 'redux';
+import onboarding from './Onboarding/reducer';
 import login from './Login/reducer';
 import mobileEmail from './MobileEmail/reducer';
 import ssoValidation from './SSOValidation/reducer';
 import {START_LOGOUT_SUCCESS} from './Login/actionTypes';
 
 const appReducer = combineReducers({
+  onboarding,
   login,
   mobileEmail,
   ssoValidation,

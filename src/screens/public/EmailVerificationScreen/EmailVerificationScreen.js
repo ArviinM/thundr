@@ -49,7 +49,7 @@ const EmailVerificationScreen = () => {
         <OTPScreen
           otp={otp}
           setOtp={setOtp}
-          keyboardType="alpha"
+          keyboardType="default"
           restrictToNumbers={false}
         />
       </View>

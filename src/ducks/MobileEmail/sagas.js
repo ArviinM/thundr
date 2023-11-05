@@ -105,7 +105,7 @@ export function* startEmailVerification({payload}) {
   const {mobileEmailData, phoneNumber, email} = yield select(
     state => state.mobileEmail,
   );
-  const {otp, password1} = payload;
+  const {otp, password} = payload;
   try {
     const response = yield call(MobileEmailConfig.emailVerification, {
       email: email,
@@ -113,7 +113,7 @@ export function* startEmailVerification({payload}) {
       challengeName: mobileEmailData.data.challengeName,
       challengeAnswer: otp,
       phoneNumber,
-      password: password1,
+      password: password,
     });
 
     if (response?.status === 200) {

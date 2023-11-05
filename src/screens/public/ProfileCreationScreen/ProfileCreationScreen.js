@@ -1,11 +1,6 @@
 // React modules
 import React, {useState, useRef} from 'react';
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {Formik} from 'formik';
