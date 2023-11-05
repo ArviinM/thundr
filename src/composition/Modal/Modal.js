@@ -10,7 +10,7 @@ import Separator from '../../components/Separator/Separator';
 import Text from '../../components/Text/Text';
 
 // Utils
-import {scale, verticalScale} from '../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 import {useDispatch} from 'react-redux';
@@ -20,8 +20,18 @@ import {UPDATE_MOBILE_EMAIL_STATE} from '../../ducks/MobileEmail/actionTypes';
 const Modal = props => {
   const dispatch = useDispatch();
   const {modalMessage, showModal} = props;
+
+  const handleCloseModal = () => {
+    dispatch({type: UPDATE_LOGIN_STATE, newState: {showModal: false}});
+    dispatch({
+      type: UPDATE_MOBILE_EMAIL_STATE,
+      newState: {showModal: false},
+    });
+  };
+
   return (
     <Overlay
+      onBackdropPress={handleCloseModal}
       overlayStyle={{
         alignItems: 'center',
         justifyContent: 'center',
@@ -33,7 +43,7 @@ const Modal = props => {
           {translateX: -scale(125)},
           {translateY: -verticalScale(40)},
         ],
-        height: verticalScale(80),
+        height: verticalScale(isIosDevice() ? 80 : 85),
         width: scale(250),
         borderRadius: 20,
       }}
@@ -41,17 +51,10 @@ const Modal = props => {
       <View
         style={{
           position: 'absolute',
-          bottom: verticalScale(65),
+          bottom: verticalScale(isIosDevice() ? 65 : 75),
           right: scale(10),
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch({type: UPDATE_LOGIN_STATE, newState: {showModal: false}});
-            dispatch({
-              type: UPDATE_MOBILE_EMAIL_STATE,
-              newState: {showModal: false},
-            });
-          }}>
+        <TouchableOpacity onPress={handleCloseModal}>
           <Image source={GLOBAL_ASSET_URI.CLOSE_ICON} height={25} width={25} />
         </TouchableOpacity>
       </View>
