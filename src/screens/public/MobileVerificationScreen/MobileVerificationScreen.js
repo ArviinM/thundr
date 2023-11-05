@@ -16,14 +16,18 @@ import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {useDispatch, useSelector} from 'react-redux';
 import {START_MOBILE_VERIFICATION} from '../../../ducks/MobileEmail/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
+import {START_SSO_MOBILE_VERIFICATION} from '../../../ducks/SSOValidation/actionTypes';
 
 const MobileVerificationScreen = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.mobileEmail);
+  const {loginViaSSO, loading: ssoLoading} = useSelector(
+    state => state.ssoValidation,
+  );
   const [otp, setOtp] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
-      {loading && <Spinner visible={true} />}
+      {(loading || ssoLoading) && <Spinner visible={true} />}
       <View style={{top: verticalScale(80), alignItems: 'center'}}>
         <Image
           source={MOBILE_INPUT_URI.MOBILE_OTP_ICON}
@@ -52,14 +56,21 @@ const MobileVerificationScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        onPress={() =>
-          dispatch({
-            type: START_MOBILE_VERIFICATION,
-            payload: {
-              otp,
-            },
-          })
-        }
+        onPress={() => {
+          !loginViaSSO
+            ? dispatch({
+                type: START_MOBILE_VERIFICATION,
+                payload: {
+                  otp,
+                },
+              })
+            : dispatch({
+                type: START_SSO_MOBILE_VERIFICATION,
+                payload: {
+                  otp,
+                },
+              });
+        }}
       />
       <View
         style={{

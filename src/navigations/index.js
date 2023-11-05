@@ -17,6 +17,7 @@ import {GENERIC_ERROR} from '../utils/commons';
 const RootNavigation = () => {
   const {authenticated, showModal} = useSelector(state => state.login);
   const {showModal: showEmailModal} = useSelector(state => state.mobileEmail);
+  const {showModal: showSSOModal} = useSelector(state => state.ssoValidation);
   const [hideSplash, setHideSplash] = useState(false);
 
   const config = {
@@ -50,7 +51,7 @@ const RootNavigation = () => {
       theme={{colors: {background: '#f2cecd'}}}>
       <Modal
         modalMessage={GENERIC_ERROR}
-        showModal={showEmailModal || showModal}
+        showModal={showEmailModal || showModal || showSSOModal}
       />
       {authenticated ? <PrivateScreenNavigation /> : <PublicScreenNavigation />}
     </NavigationContainer>

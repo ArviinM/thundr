@@ -20,6 +20,7 @@ import {LOGIN_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {useDispatch} from 'react-redux';
 import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
+import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTypes';
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
@@ -48,13 +49,32 @@ const LoginOptionScreen = () => {
   useEffect(() => {
     if (params?.payload) {
       const responseObject = JSON.parse(base64.decode(params.payload));
+      const forMobileValidation = true;
 
-      if (responseObject) {
+      if (forMobileValidation) {
+        navigation.navigate('MobileAndEmailVerificationStack');
+        dispatch({
+          type: UPDATE_SSO_VALIDATION_STATE,
+          newState: {ssoValidationData: responseObject, loginViaSSO: true},
+        });
+        dispatch({
+          type: UPDATE_LOGIN_STATE,
+          newState: {loginData: responseObject},
+        });
+      } else {
         dispatch({
           type: UPDATE_LOGIN_STATE,
           newState: {authenticated: true, loginData: responseObject},
         });
       }
+
+      // Temporary comment basta ibabalik to
+      // if (responseObject) {
+      //   dispatch({
+      //     type: UPDATE_LOGIN_STATE,
+      //     newState: {authenticated: true, loginData: responseObject},
+      //   });
+      // }
     }
   }, [params]);
 
