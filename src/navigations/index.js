@@ -8,9 +8,28 @@ import SplashScreen from 'react-native-splash-screen';
 // Utils
 import {navigationRef} from './tempNavigation';
 import PublicScreenNavigation from './PublicScreenNavigation/PublicScreenNavigation';
+import Spinner from '../components/Spinner/Spinner';
+import {useSelector} from 'react-redux';
+import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavigation';
 
 const RootNavigation = () => {
+  const {authenticated} = useSelector(state => state.login);
   const [hideSplash, setHideSplash] = useState(false);
+
+  const config = {
+    screens: {
+      PrivateScreenNavigation: {
+        screens: {
+          Dashboard: 'sso/:payload',
+        },
+      },
+    },
+  };
+
+  const linking = {
+    prefixes: ['ph.thundr.app://'],
+    config,
+  };
 
   useEffect(() => {
     let delayHandle;
@@ -27,11 +46,12 @@ const RootNavigation = () => {
   return (
     <NavigationContainer
       ref={navigationRef}
+      linking={linking}
       onReady={() => {
         setHideSplash(true);
       }}
       theme={{colors: {background: '#f2cecd'}}}>
-      <PublicScreenNavigation />
+      {authenticated ? <PrivateScreenNavigation /> : <PublicScreenNavigation />}
     </NavigationContainer>
   );
 };

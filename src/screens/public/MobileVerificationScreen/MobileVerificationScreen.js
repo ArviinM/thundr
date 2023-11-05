@@ -2,9 +2,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 
-// Third party libraries
-import {useNavigation} from '@react-navigation/native';
-
 // Components
 import ScreenContainer from '../../../composition/ScreenContainer/ScreenContainer';
 import Button from '../../../components/Button/Button';
@@ -16,12 +13,17 @@ import OTPScreen from '../../../composition/OTPScreen/OTPScreen';
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {useDispatch, useSelector} from 'react-redux';
+import {START_MOBILE_VERIFICATION} from '../../../ducks/MobileEmail/actionTypes';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const MobileVerificationScreen = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.mobileEmail);
   const [otp, setOtp] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      {loading && <Spinner visible={true} />}
       <View style={{top: verticalScale(80), alignItems: 'center'}}>
         <Image
           source={MOBILE_INPUT_URI.MOBILE_OTP_ICON}
@@ -41,6 +43,7 @@ const MobileVerificationScreen = () => {
         <OTPScreen otp={otp} setOtp={setOtp} />
       </View>
       <Button
+        disabled={otp.length !== 6}
         title="Continue"
         primary
         textStyle={{weight: 400}}
@@ -49,7 +52,14 @@ const MobileVerificationScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        onPress={() => navigation.navigate('EmailValidationScreen')}
+        onPress={() =>
+          dispatch({
+            type: START_MOBILE_VERIFICATION,
+            payload: {
+              otp,
+            },
+          })
+        }
       />
       <View
         style={{

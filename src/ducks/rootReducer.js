@@ -1,9 +1,11 @@
 import {combineReducers} from 'redux';
 import login from './Login/reducer';
+import mobileEmail from './MobileEmail/reducer';
 import {START_LOGOUT_SUCCESS} from './Login/actionTypes';
 
 const appReducer = combineReducers({
   login,
+  mobileEmail,
 });
 
 const rootReducer = (state, action) => {

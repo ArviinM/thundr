@@ -89,7 +89,7 @@ const Dashboard = () => {
       <Button
         title="Logout"
         onPress={() => {
-          navigation.navigate('LoginScreen');
+          // navigation.navigate('LoginScreen');
           dispatch({type: START_LOGOUT});
         }}
       />

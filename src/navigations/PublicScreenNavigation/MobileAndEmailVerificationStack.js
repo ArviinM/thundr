@@ -4,7 +4,7 @@
  */
 
 // React modules
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 
 // Third party libraries
@@ -12,14 +12,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
 
 // Components
-import OnboardingScreen from '../../screens/public/OnboardingScreen/OnboardingScreen';
-import LoginScreen from '../../screens/public/LoginScreen/LoginScreen';
-import Dashboard from '../../screens/private/Dashboard/Dashboard';
 import Image from '../../components/Image/Image';
 
 // Utils
 import {scale} from '../../utils/commons';
-import LoginOptionScreen from '../../screens/public/LoginOptionsScreen/LoginOptionScreen';
 import MobileValidationScreen from '../../screens/public/MobileValidationScreen/MobileValidationScreen';
 import MobileVerificationScreen from '../../screens/public/MobileVerificationScreen/MobileVerificationScreen';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
@@ -27,11 +23,11 @@ import EmailValidationScreen from '../../screens/public/EmailValidationScreen/Em
 import CreatePasswordScreen from '../../screens/public/CreatePasswordScreen/CreatePasswordScreen';
 import EmailVerificationScreen from '../../screens/public/EmailVerificationScreen/EmailVerificationScreen';
 import {useSelector} from 'react-redux';
-import MobileAndEmailVerificationStack from './MobileAndEmailVerificationStack';
 
 const Stack = createStackNavigator();
 
-const PublicScreenNavigation = () => {
+const MobileAndEmailVerificationStack = () => {
+  const {mobileEmailData} = useSelector(state => state.mobileEmail);
   const navigation = useNavigation();
   const renderBackIcon = () => {
     return (
@@ -46,9 +42,14 @@ const PublicScreenNavigation = () => {
     );
   };
 
+  useEffect(() => {
+    if (mobileEmailData.message === 'SMS OTP Required.') {
+    }
+  }, []);
+
   return (
     <Stack.Navigator
-      initialRouteName="OnboardingScreen"
+      initialRouteName="MobileValidationScreen"
       screenOptions={{
         gestureEnabled: false,
         headerShown: false,
@@ -65,36 +66,28 @@ const PublicScreenNavigation = () => {
         },
         headerLeft: () => renderBackIcon(),
       }}>
-      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-      <Stack.Screen name="LoginOptionScreen" component={LoginOptionScreen} />
       <Stack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#f2cecd',
-            shadowColor: 'transparent',
-            elevation: 0,
-          },
-          headerTitle: '',
-        }}
+        name="MobileValidationScreen"
+        component={MobileValidationScreen}
       />
       <Stack.Screen
-        name="MobileAndEmailVerificationStack"
-        component={MobileAndEmailVerificationStack}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#f2cecd',
-            shadowColor: 'transparent',
-            elevation: 0,
-          },
-          headerTitle: '',
-        }}
+        name="MobileVerificationScreen"
+        component={MobileVerificationScreen}
+      />
+      <Stack.Screen
+        name="EmailValidationScreen"
+        component={EmailValidationScreen}
+      />
+      <Stack.Screen
+        name="EmailVerificationScreen"
+        component={EmailVerificationScreen}
+      />
+      <Stack.Screen
+        name="CreatePasswordScreen"
+        component={CreatePasswordScreen}
       />
     </Stack.Navigator>
   );
 };
 
-export default PublicScreenNavigation;
+export default MobileAndEmailVerificationStack;

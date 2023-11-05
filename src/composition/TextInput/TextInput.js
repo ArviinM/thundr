@@ -36,6 +36,8 @@ const TextInput = props => {
     editable = true,
     hasIcon,
     onPress,
+    fromCreatePassword = false,
+    fromCreatePassword2 = false,
   } = props;
 
   return (
@@ -63,12 +65,18 @@ const TextInput = props => {
           autoCapitalize="none"
         />
         {hasIcon && (
-          <StyledTouchableOpacity activeOpacity={0.8} onPress={onPress}>
+          <StyledTouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPress}
+            fromCreatePassword={fromCreatePassword}
+            fromCreatePassword2={fromCreatePassword2}>
             <Image
               source={require('../../assets/Images/eye-icon.png')}
               height={15}
               width={18}
-              customStyle={{tintColor: secureTextEntry ? 'gray' : '#1FBED6'}}
+              customStyle={{
+                tintColor: secureTextEntry ? 'gray' : '#E33051',
+              }}
             />
           </StyledTouchableOpacity>
         )}

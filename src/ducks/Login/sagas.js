@@ -1,21 +1,44 @@
-import {takeLatest} from 'redux-saga/effects';
-import {START_LOGIN, START_LOGOUT} from './actionTypes';
-
-// import crashlytics from '@react-native-firebase/crashlytics';
+import {call, put, takeLatest} from 'redux-saga/effects';
+import LoginConfig from '../../api/services/loginService';
+import {
+  LOGIN_FAILED,
+  LOGIN_SUCCESS,
+  START_LOGIN,
+  START_LOGOUT,
+  START_LOGOUT_FAILED,
+  START_LOGOUT_SUCCESS,
+} from './actionTypes';
 
 export function* startLoginProcess({payload}) {
+  const {emailOrMobile, password} = payload;
+  const phoneNumber = emailOrMobile;
+
   try {
-    console.log('USER LOGGED IN');
+    const response = yield call(LoginConfig.login, {
+      phoneNumber: phoneNumber,
+      email: emailOrMobile,
+      password: password,
+    });
+
+    if (response?.status === 200) {
+      yield put({type: LOGIN_SUCCESS, payload: response.data.data});
+    }
   } catch (error) {
-    return error;
+    yield put({
+      type: LOGIN_FAILED,
+      payload: error,
+    });
   }
 }
 
 export function* startLogoutProcess({payload}) {
   try {
-    console.log('USER LOGOUT');
+    const response = yield call(LoginConfig.logout);
+    yield put({type: START_LOGOUT_SUCCESS, payload: response.data.data});
   } catch (error) {
-    return error;
+    yield put({
+      type: START_LOGOUT_FAILED,
+    });
   }
 }
 

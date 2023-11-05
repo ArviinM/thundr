@@ -1,0 +1,146 @@
+import {call, put, takeLatest, select} from 'redux-saga/effects';
+import {
+  START_EMAIL_VALIDATION,
+  START_EMAIL_VALIDATION_FAILED,
+  START_EMAIL_VALIDATION_SUCCESS,
+  START_EMAIL_VERIFICATION,
+  START_EMAIL_VERIFICATION_FAILED,
+  START_EMAIL_VERIFICATION_SUCCESS,
+  START_MOBILE_VALIDATION,
+  START_MOBILE_VALIDATION_FAILED,
+  START_MOBILE_VALIDATION_SUCCESS,
+  START_MOBILE_VERIFICATION,
+  START_MOBILE_VERIFICATION_FAILED,
+  START_MOBILE_VERIFICATION_SUCCESS,
+  START_PASSWORD_VALIDATION,
+} from './actionTypes';
+import MobileEmailConfig from '../../api/services/mobileEmailService';
+import * as RootNavigation from '../../navigations/tempNavigation';
+import {UPDATE_LOGIN_STATE} from '../Login/actionTypes';
+
+export function* startMobileValidation({payload}) {
+  const {mobileNumber} = payload;
+  const phoneNumber = `+63${mobileNumber}`;
+
+  try {
+    const response = yield call(MobileEmailConfig.mobileValidation, {
+      phoneNumber: phoneNumber,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: START_MOBILE_VALIDATION_SUCCESS,
+        payload: response.data,
+      });
+      RootNavigation.navigate('MobileVerificationScreen');
+    }
+  } catch (error) {
+    yield put({
+      type: START_MOBILE_VALIDATION_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* startMobileVerification({payload}) {
+  const {mobileEmailData} = yield select(state => state.mobileEmail);
+  const {otp} = payload;
+  try {
+    const response = yield call(MobileEmailConfig.mobileVerification, {
+      phoneNumber: mobileEmailData.data.username,
+      session: mobileEmailData.data.session,
+      challengeName: mobileEmailData.data.challengeName,
+      challengeAnswer: otp,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: START_MOBILE_VERIFICATION_SUCCESS,
+        payload: response.data,
+      });
+      RootNavigation.navigate('EmailValidationScreen');
+    }
+  } catch (error) {
+    yield put({
+      type: START_MOBILE_VERIFICATION_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* startEmailValidation({payload}) {
+  const {mobileEmailData} = yield select(state => state.mobileEmail);
+  const {email} = payload;
+
+  try {
+    const response = yield call(MobileEmailConfig.emailValidation, {
+      email,
+      session: mobileEmailData.data.session,
+      phoneNumber: mobileEmailData.data.phoneNumber,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: START_EMAIL_VALIDATION_SUCCESS,
+        payload: response.data,
+      });
+      RootNavigation.navigate('EmailVerificationScreen');
+    }
+  } catch (error) {
+    yield put({
+      type: START_EMAIL_VALIDATION_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* startEmailVerification({payload}) {
+  const {mobileEmailData, phoneNumber} = yield select(
+    state => state.mobileEmail,
+  );
+  const {otp, password1} = payload;
+  try {
+    const response = yield call(MobileEmailConfig.emailVerification, {
+      email: mobileEmailData.data.username,
+      session: mobileEmailData.data.session,
+      challengeName: mobileEmailData.data.challengeName,
+      challengeAnswer: otp,
+      phoneNumber,
+      password: password1,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: START_EMAIL_VERIFICATION_SUCCESS,
+        payload: response.data,
+      });
+      if (mobileEmailData.data.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        yield put({
+          type: UPDATE_LOGIN_STATE,
+          newState: {
+            authenticated: true,
+            loginData: response.data.data,
+          },
+        });
+        // RootNavigation.navigate('PrivateScreenNavigation');
+      } else {
+        RootNavigation.navigate('CreatePasswordScreen');
+      }
+    }
+  } catch (error) {
+    yield put({
+      type: START_EMAIL_VERIFICATION_FAILED,
+      payload: error,
+    });
+  }
+}
+
+function* mobileEmailWatcher() {
+  yield takeLatest(START_MOBILE_VALIDATION, startMobileValidation);
+  yield takeLatest(START_MOBILE_VERIFICATION, startMobileVerification);
+  yield takeLatest(START_EMAIL_VALIDATION, startEmailValidation);
+  yield takeLatest(START_EMAIL_VERIFICATION, startEmailVerification);
+  yield takeLatest(START_PASSWORD_VALIDATION, startEmailVerification);
+}
+
+export default mobileEmailWatcher;
