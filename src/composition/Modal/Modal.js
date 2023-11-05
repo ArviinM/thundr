@@ -16,6 +16,7 @@ import {GLOBAL_ASSET_URI} from '../../utils/images';
 import {useDispatch} from 'react-redux';
 import {UPDATE_LOGIN_STATE} from '../../ducks/Login/actionTypes';
 import {UPDATE_MOBILE_EMAIL_STATE} from '../../ducks/MobileEmail/actionTypes';
+import {UPDATE_SSO_VALIDATION_STATE} from '../../ducks/SSOValidation/actionTypes';
 
 const Modal = props => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const Modal = props => {
       type: UPDATE_MOBILE_EMAIL_STATE,
       newState: {showModal: false},
     });
+    dispatch({type: UPDATE_SSO_VALIDATION_STATE, newState: {showModal: false}});
   };
 
   return (

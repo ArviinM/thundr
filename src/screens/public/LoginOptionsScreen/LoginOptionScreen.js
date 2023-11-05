@@ -50,8 +50,9 @@ const LoginOptionScreen = () => {
     if (params?.payload) {
       const responseObject = JSON.parse(base64.decode(params.payload));
       const forMobileValidation = true;
+      const forProfileCreation = responseObject?.forProfileCreation;
 
-      if (forMobileValidation) {
+      if (forProfileCreation) {
         navigation.navigate('MobileAndEmailVerificationStack');
         dispatch({
           type: UPDATE_SSO_VALIDATION_STATE,
@@ -67,14 +68,6 @@ const LoginOptionScreen = () => {
           newState: {authenticated: true, loginData: responseObject},
         });
       }
-
-      // Temporary comment basta ibabalik to
-      // if (responseObject) {
-      //   dispatch({
-      //     type: UPDATE_LOGIN_STATE,
-      //     newState: {authenticated: true, loginData: responseObject},
-      //   });
-      // }
     }
   }, [params]);
 

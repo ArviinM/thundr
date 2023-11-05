@@ -67,6 +67,11 @@ export function* startMobileVerification({payload}) {
       sub: sub,
     });
 
+    const updatedValue = {
+      ...ssoValidationData,
+      forProfileCreation: true,
+    };
+
     if (response?.status === 200) {
       yield put({
         type: START_SSO_MOBILE_VERIFICATION_SUCCESS,
@@ -74,7 +79,7 @@ export function* startMobileVerification({payload}) {
       });
       yield put({
         type: UPDATE_LOGIN_STATE,
-        newState: {loginData: ssoValidationData, authenticated: true},
+        newState: {loginData: updatedValue, authenticated: true},
       });
     }
   } catch (error) {
