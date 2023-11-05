@@ -13,7 +13,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === START_LOGOUT_SUCCESS) {
+  if (action.type === START_LOGOUT_SUCCESS && !state.onboarding) {
     return appReducer(undefined, action);
   }
 
