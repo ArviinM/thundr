@@ -2,9 +2,6 @@
 import React, {useState} from 'react';
 import {View, TextInput} from 'react-native';
 
-// Third party libraries
-import {useNavigation} from '@react-navigation/native';
-
 // Components
 import ScreenContainer from '../../../composition/ScreenContainer/ScreenContainer';
 import Button from '../../../components/Button/Button';
@@ -18,15 +15,18 @@ import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {useDispatch, useSelector} from 'react-redux';
 import {START_MOBILE_VALIDATION} from '../../../ducks/MobileEmail/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
+import {START_SSO_MOBILE_VALIDATION} from '../../../ducks/SSOValidation/actionTypes';
 
 const MobileValidationScreen = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const {loading} = useSelector(state => state.mobileEmail);
+  const {loginViaSSO, loading: ssoLoading} = useSelector(
+    state => state.ssoValidation,
+  );
   const [mobileNumber, setMobileNumber] = useState('');
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
-      {loading && <Spinner visible={true} />}
+      {(loading || ssoLoading) && <Spinner visible={true} />}
       <View style={{top: verticalScale(120), alignItems: 'center'}}>
         <Image source={MOBILE_INPUT_URI.MOBILE_ICON} width={80} height={100} />
         <Separator space={20} />
@@ -85,9 +85,14 @@ const MobileValidationScreen = () => {
           height: verticalScale(isIosDevice() ? 30 : 40),
           width: scale(150),
         }}
-        onPress={() =>
-          dispatch({type: START_MOBILE_VALIDATION, payload: {mobileNumber}})
-        }
+        onPress={() => {
+          !loginViaSSO
+            ? dispatch({type: START_MOBILE_VALIDATION, payload: {mobileNumber}})
+            : dispatch({
+                type: START_SSO_MOBILE_VALIDATION,
+                payload: {mobileNumber},
+              });
+        }}
       />
       <View
         style={{

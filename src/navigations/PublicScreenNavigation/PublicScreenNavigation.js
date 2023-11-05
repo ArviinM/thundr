@@ -14,22 +14,15 @@ import {useNavigation} from '@react-navigation/native';
 // Components
 import OnboardingScreen from '../../screens/public/OnboardingScreen/OnboardingScreen';
 import LoginScreen from '../../screens/public/LoginScreen/LoginScreen';
-import Dashboard from '../../screens/private/Dashboard/Dashboard';
 import Image from '../../components/Image/Image';
 
 // Utils
 import {scale} from '../../utils/commons';
 import LoginOptionScreen from '../../screens/public/LoginOptionsScreen/LoginOptionScreen';
-import MobileValidationScreen from '../../screens/public/MobileValidationScreen/MobileValidationScreen';
-import MobileVerificationScreen from '../../screens/public/MobileVerificationScreen/MobileVerificationScreen';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
-import EmailValidationScreen from '../../screens/public/EmailValidationScreen/EmailValidationScreen';
-import CreatePasswordScreen from '../../screens/public/CreatePasswordScreen/CreatePasswordScreen';
-import EmailVerificationScreen from '../../screens/public/EmailVerificationScreen/EmailVerificationScreen';
-import {useSelector} from 'react-redux';
 import MobileAndEmailVerificationStack from './MobileAndEmailVerificationStack';
 
-const Stack = createStackNavigator();
+const PublicScreenStack = createStackNavigator();
 
 const PublicScreenNavigation = () => {
   const navigation = useNavigation();
@@ -47,7 +40,7 @@ const PublicScreenNavigation = () => {
   };
 
   return (
-    <Stack.Navigator
+    <PublicScreenStack.Navigator
       initialRouteName="OnboardingScreen"
       screenOptions={{
         gestureEnabled: false,
@@ -65,9 +58,15 @@ const PublicScreenNavigation = () => {
         },
         headerLeft: () => renderBackIcon(),
       }}>
-      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-      <Stack.Screen name="LoginOptionScreen" component={LoginOptionScreen} />
-      <Stack.Screen
+      <PublicScreenStack.Screen
+        name="OnboardingScreen"
+        component={OnboardingScreen}
+      />
+      <PublicScreenStack.Screen
+        name="LoginOptionScreen"
+        component={LoginOptionScreen}
+      />
+      <PublicScreenStack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{
@@ -80,7 +79,7 @@ const PublicScreenNavigation = () => {
           headerTitle: '',
         }}
       />
-      <Stack.Screen
+      <PublicScreenStack.Screen
         name="MobileAndEmailVerificationStack"
         component={MobileAndEmailVerificationStack}
         options={{
@@ -93,7 +92,7 @@ const PublicScreenNavigation = () => {
           headerTitle: '',
         }}
       />
-    </Stack.Navigator>
+    </PublicScreenStack.Navigator>
   );
 };
 

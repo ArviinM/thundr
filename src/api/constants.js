@@ -9,3 +9,8 @@ export const MOBILE_EMAIL = {
   EMAIL_VALIDATION: 'auth/email-code',
   EMAIL_VERIFICATION: 'auth/validate-challenge-question',
 };
+
+export const SSO_VALIDATION = {
+  SSO_MOBILE_VALIDATION: 'auth/sso-sms-otp',
+  SSO_MOBILE_VERIFICATION: 'auth/sso-validate-sms-otp',
+};
