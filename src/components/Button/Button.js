@@ -32,7 +32,7 @@ const Button = props => {
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
-      onPress={onPress}
+      onPressIn={onPress}
       disabled={disabled}>
       {renderButton()}
     </TouchableOpacity>

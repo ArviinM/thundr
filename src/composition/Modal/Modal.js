@@ -1,6 +1,6 @@
 // React modules
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
@@ -11,34 +11,58 @@ import Text from '../../components/Text/Text';
 
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
+import Image from '../../components/Image/Image';
+import {GLOBAL_ASSET_URI} from '../../utils/images';
+import {useDispatch} from 'react-redux';
+import {UPDATE_LOGIN_STATE} from '../../ducks/Login/actionTypes';
+import {UPDATE_MOBILE_EMAIL_STATE} from '../../ducks/MobileEmail/actionTypes';
 
 const Modal = props => {
-  const {modalMessage, handleCloseModal} = props;
+  const dispatch = useDispatch();
+  const {modalMessage, showModal} = props;
   return (
     <Overlay
       overlayStyle={{
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#E33051',
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: [
-          {translateX: -scale(100)},
-          {translateY: -verticalScale(50)},
+          {translateX: -scale(125)},
+          {translateY: -verticalScale(40)},
         ],
-        height: verticalScale(100),
-        width: scale(200),
+        height: verticalScale(80),
+        width: scale(250),
         borderRadius: 20,
       }}
-      isVisible>
-      <Text customStyle={{textAlign: 'center'}}>{modalMessage}</Text>
+      isVisible={showModal}>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: verticalScale(65),
+          right: scale(10),
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch({type: UPDATE_LOGIN_STATE, newState: {showModal: false}});
+            dispatch({
+              type: UPDATE_MOBILE_EMAIL_STATE,
+              newState: {showModal: false},
+            });
+          }}>
+          <Image source={GLOBAL_ASSET_URI.CLOSE_ICON} height={25} width={25} />
+        </TouchableOpacity>
+      </View>
+      <Text
+        size={18}
+        color="#fff"
+        weight={700}
+        customStyle={{textAlign: 'center'}}>
+        {modalMessage}
+      </Text>
       <Separator space={15} />
-      <TouchableOpacity onPress={handleCloseModal}>
-        <Text color="#add8e6" weight="700">
-          Okay
-        </Text>
-      </TouchableOpacity>
     </Overlay>
   );
 };

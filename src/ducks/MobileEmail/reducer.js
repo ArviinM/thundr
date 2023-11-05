@@ -1,3 +1,4 @@
+import {GENERIC_ERROR} from '../../utils/commons';
 import {
   START_EMAIL_VALIDATION,
   START_EMAIL_VALIDATION_FAILED,
@@ -20,6 +21,9 @@ export const INITIAL_STATE = {
   loading: false,
   mobileEmailData: [],
   phoneNumber: '',
+  email: '',
+  showModal: false,
+  modalMessage: '',
 };
 
 const mobileEmail = (state = INITIAL_STATE, action) => {
@@ -47,6 +51,8 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
       };
     // MOBILE OTP VERIFICATION
     case START_MOBILE_VERIFICATION:
@@ -66,6 +72,8 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
       };
     // EMAIL VALIDATION
     case START_EMAIL_VALIDATION:
@@ -84,6 +92,8 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
       };
     // EMAIL VERIFICATION
     case START_EMAIL_VERIFICATION:
@@ -102,6 +112,8 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
       };
     // PASSWORD VALIDATION
     case START_PASSWORD_VALIDATION:
@@ -120,6 +132,8 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
       };
     default:
       return state;

@@ -11,9 +11,12 @@ import PublicScreenNavigation from './PublicScreenNavigation/PublicScreenNavigat
 import Spinner from '../components/Spinner/Spinner';
 import {useSelector} from 'react-redux';
 import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavigation';
+import Modal from '../composition/Modal/Modal';
+import {GENERIC_ERROR} from '../utils/commons';
 
 const RootNavigation = () => {
-  const {authenticated} = useSelector(state => state.login);
+  const {authenticated, showModal} = useSelector(state => state.login);
+  const {showModal: showEmailModal} = useSelector(state => state.mobileEmail);
   const [hideSplash, setHideSplash] = useState(false);
 
   const config = {
@@ -51,6 +54,10 @@ const RootNavigation = () => {
         setHideSplash(true);
       }}
       theme={{colors: {background: '#f2cecd'}}}>
+      <Modal
+        modalMessage={GENERIC_ERROR}
+        showModal={showEmailModal || showModal}
+      />
       {authenticated ? <PrivateScreenNavigation /> : <PublicScreenNavigation />}
     </NavigationContainer>
   );

@@ -1,5 +1,6 @@
 export const GLOBAL_ASSET_URI = {
   BACK_ICON: require('../assets/Images/Icons/back-button.png'),
+  CLOSE_ICON: require('../assets/Images/Icons/close-icon.png'),
 };
 
 export const ONBOARDING_URI = {
