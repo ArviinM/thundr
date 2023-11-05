@@ -13,6 +13,7 @@ import {
   START_MOBILE_VERIFICATION_FAILED,
   START_MOBILE_VERIFICATION_SUCCESS,
   START_PASSWORD_VALIDATION,
+  UPDATE_MOBILE_EMAIL_STATE,
 } from './actionTypes';
 import MobileEmailConfig from '../../api/services/mobileEmailService';
 import * as RootNavigation from '../../navigations/tempNavigation';
@@ -76,13 +77,19 @@ export function* startEmailValidation({payload}) {
     const response = yield call(MobileEmailConfig.emailValidation, {
       email,
       session: mobileEmailData.data.session,
-      phoneNumber: mobileEmailData.data.phoneNumber,
+      phoneNumber: mobileEmailData.data.username,
     });
 
     if (response?.status === 200) {
       yield put({
         type: START_EMAIL_VALIDATION_SUCCESS,
         payload: response.data,
+      });
+      yield put({
+        type: UPDATE_MOBILE_EMAIL_STATE,
+        newState: {
+          email: email,
+        },
       });
       RootNavigation.navigate('EmailVerificationScreen');
     }
@@ -95,13 +102,13 @@ export function* startEmailValidation({payload}) {
 }
 
 export function* startEmailVerification({payload}) {
-  const {mobileEmailData, phoneNumber} = yield select(
+  const {mobileEmailData, phoneNumber, email} = yield select(
     state => state.mobileEmail,
   );
   const {otp, password1} = payload;
   try {
     const response = yield call(MobileEmailConfig.emailVerification, {
-      email: mobileEmailData.data.username,
+      email: email,
       session: mobileEmailData.data.session,
       challengeName: mobileEmailData.data.challengeName,
       challengeAnswer: otp,

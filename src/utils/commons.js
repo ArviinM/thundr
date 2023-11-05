@@ -285,6 +285,9 @@ export const listOfCountries = [
   'Zimbabwe',
 ];
 
+export const GENERIC_ERROR =
+  'There could be an error. Please restart Thundr and try again.';
+
 export const capitalizeFirstLetter = str => {
   return str?.replace(/^\w/, match => match?.toUpperCase());
 };

@@ -49,7 +49,6 @@ const EmailVerificationScreen = () => {
         <OTPScreen
           otp={otp}
           setOtp={setOtp}
-          password
           keyboardType="alpha"
           restrictToNumbers={false}
         />

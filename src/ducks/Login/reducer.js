@@ -1,3 +1,4 @@
+import {GENERIC_ERROR} from '../../utils/commons';
 import {
   LOGIN_FAILED,
   LOGIN_SUCCESS,
@@ -41,6 +42,8 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
       };
     case START_LOGOUT:
       return {
