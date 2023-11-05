@@ -291,3 +291,32 @@ export const GENERIC_ERROR =
 export const capitalizeFirstLetter = str => {
   return str?.replace(/^\w/, match => match?.toUpperCase());
 };
+
+const currentYear = new Date().getFullYear();
+const range = (start, stop, step) =>
+  Array.from({length: (stop - start) / step + 1}, (_, i) => start + i * step);
+
+export const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'April',
+  'May',
+  'June',
+  'Jul',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
+].map(month => ({label: month, value: month}));
+
+export const DAYS = Array.from({length: 31}, (_, i) => i + 1).map(day => ({
+  label: day.toString(),
+  value: day.toString(),
+}));
+
+export const YEARS = range(currentYear, currentYear - 50, -1).map(year => ({
+  label: year.toString(),
+  value: year.toString(),
+}));

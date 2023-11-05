@@ -15,16 +15,18 @@ import {useNavigation} from '@react-navigation/native';
 import OnboardingScreen from '../../screens/public/OnboardingScreen/OnboardingScreen';
 import LoginScreen from '../../screens/public/LoginScreen/LoginScreen';
 import Image from '../../components/Image/Image';
+import MobileAndEmailVerificationStack from './MobileAndEmailVerificationStack';
 
 // Utils
 import {scale} from '../../utils/commons';
 import LoginOptionScreen from '../../screens/public/LoginOptionsScreen/LoginOptionScreen';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
-import MobileAndEmailVerificationStack from './MobileAndEmailVerificationStack';
+import {useSelector} from 'react-redux';
 
 const PublicScreenStack = createStackNavigator();
 
 const PublicScreenNavigation = () => {
+  const {onboarded} = useSelector(state => state.onboarding);
   const navigation = useNavigation();
   const renderBackIcon = () => {
     return (
@@ -39,9 +41,17 @@ const PublicScreenNavigation = () => {
     );
   };
 
+  const getInitialRoute = () => {
+    if (onboarded) {
+      return 'LoginOptionScreen';
+    } else {
+      return 'OnboardingScreen';
+    }
+  };
+
   return (
     <PublicScreenStack.Navigator
-      initialRouteName="OnboardingScreen"
+      initialRouteName={getInitialRoute()}
       screenOptions={{
         gestureEnabled: false,
         headerShown: false,

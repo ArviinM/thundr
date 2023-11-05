@@ -13,8 +13,11 @@ import Image from '../../../components/Image/Image';
 // Utils
 import {ONBOARDING_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
+import {useDispatch} from 'react-redux';
+import {UPDATE_ONBOARDING_STATE} from '../../../ducks/Onboarding/actionTypes';
 
 const OnboardingScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const ONBOARDING_IMAGES = [
     ONBOARDING_URI.ONBOARDING_1,
@@ -106,7 +109,13 @@ const OnboardingScreen = () => {
         }}>
         <Image source={ONBOARDING_URI.ONBOARDING_7} height={650} width={350} />
         <TouchableOpacity
-          onPress={() => navigation.navigate('LoginOptionScreen')}
+          onPress={() => {
+            navigation.navigate('LoginOptionScreen');
+            dispatch({
+              type: UPDATE_ONBOARDING_STATE,
+              newState: {onboarded: true},
+            });
+          }}
           style={{
             position: 'absolute',
             top: verticalScale(260),

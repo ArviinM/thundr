@@ -59,7 +59,7 @@ const PrivateScreenNavigation = () => {
         gestureEnabled: false,
         headerShown: false,
         headerStyle: {
-          backgroundColor: '#0D5176',
+          backgroundColor: '#fff',
           shadowOpacity: 0,
         },
         headerTitleAlign: 'center',
@@ -75,7 +75,18 @@ const PrivateScreenNavigation = () => {
       <Stack.Screen
         name="ProfileCreationScreen"
         component={ProfileCreationScreen}
-        options={{headerShown: true, title: 'Create Profile'}}
+        options={{
+          headerShown: true,
+          headerTitle: () => {
+            return (
+              <Image
+                source={GLOBAL_ASSET_URI.THUNDR_ICON}
+                height={110}
+                width={110}
+              />
+            );
+          },
+        }}
       />
     </Stack.Navigator>
   );

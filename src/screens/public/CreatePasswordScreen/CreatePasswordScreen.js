@@ -3,7 +3,8 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 // Components
 import ScreenContainer from '../../../composition/ScreenContainer/ScreenContainer';
@@ -23,10 +24,17 @@ import Spinner from '../../../components/Spinner/Spinner';
 const CreatePasswordScreen = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.mobileEmail);
-  const [password1, setPassword1] = useState('');
-  const [password2, setPassword2] = useState('');
   const [isPassword1Visible, setPassword1Visible] = useState(true);
   const [isPassword2Visible, setPassword2Visible] = useState(true);
+
+  const validationSchema = yup.object().shape({
+    password: yup.string().required('Password is required'),
+    password2: yup
+      .string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match')
+      .required('Re-type Password is required'),
+  });
+
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
       {loading && <Spinner visible={true} />}
@@ -42,62 +50,89 @@ const CreatePasswordScreen = () => {
         </Text>
       </View>
       <Separator space={80} />
-      <View>
-        <TextInput
-          inputStyle={{
-            alignItems: 'center',
-            borderRadius: 30,
-            paddingVertical: verticalScale(isIosDevice() ? 10 : 8),
-            paddingHorizontal: scale(20),
-            backgroundColor: '#fff',
-            width: scale(230),
-            height: verticalScale(35),
-          }}
-          secureTextEntry={isPassword1Visible}
-          hasIcon
-          onPress={() => setPassword1Visible(!isPassword1Visible)}
-          placeholder="Password"
-          fromCreatePassword={true}
-          value={password1}
-          onChangeText={text => setPassword1(text)}
-        />
-      </View>
-      <Separator space={isIosDevice() ? 10 : 0} />
-      <View>
-        <TextInput
-          inputStyle={{
-            alignItems: 'center',
-            borderRadius: 30,
-            paddingVertical: verticalScale(isIosDevice() ? 10 : 8),
-            paddingHorizontal: scale(20),
-            backgroundColor: '#fff',
-            width: scale(230),
-            top: verticalScale(-10),
-            height: verticalScale(35),
-          }}
-          secureTextEntry={isPassword2Visible}
-          hasIcon
-          onPress={() => setPassword2Visible(!isPassword2Visible)}
-          fromCreatePassword2={true}
-          placeholder="Re-type Password"
-          value={password2}
-          onChangeText={text => setPassword2(text)}
-        />
-      </View>
-
-      <Button
-        title="Continue"
-        primary
-        textStyle={{weight: 400}}
-        style={{
-          marginTop: verticalScale(20),
-          height: verticalScale(isIosDevice() ? 30 : 40),
-          width: scale(150),
+      <Formik
+        initialValues={{
+          password: '',
+          password2: '',
         }}
-        onPress={() =>
-          dispatch({type: START_PASSWORD_VALIDATION, payload: {password1}})
-        }
-      />
+        validationSchema={validationSchema}
+        onSubmit={values => handleSubmit(values)}>
+        {({handleChange, handleSubmit, values, errors, touched}) => {
+          const password = values.password;
+          const password2 = values.password2;
+          const handleSubmitPasswords = () => {
+            handleSubmit();
+            if (validationSchema.isValidSync(values)) {
+              dispatch({
+                type: START_PASSWORD_VALIDATION,
+                payload: {password},
+              });
+            }
+          };
+          return (
+            <>
+              <View>
+                <TextInput
+                  inputStyle={{
+                    alignItems: 'center',
+                    borderRadius: 30,
+                    paddingVertical: verticalScale(isIosDevice() ? 10 : 8),
+                    paddingHorizontal: scale(20),
+                    backgroundColor: '#fff',
+                    width: scale(230),
+                    height: verticalScale(35),
+                  }}
+                  secureTextEntry={isPassword1Visible}
+                  hasIcon
+                  onPress={() => setPassword1Visible(!isPassword1Visible)}
+                  placeholder="Password"
+                  fromCreatePassword={true}
+                  onChangeText={handleChange('password')}
+                  value={values.password}
+                  errors={errors.password}
+                  touched={touched.password}
+                />
+              </View>
+              <Separator space={isIosDevice() ? 10 : 0} />
+              <View>
+                <TextInput
+                  inputStyle={{
+                    alignItems: 'center',
+                    borderRadius: 30,
+                    paddingVertical: verticalScale(isIosDevice() ? 10 : 8),
+                    paddingHorizontal: scale(20),
+                    backgroundColor: '#fff',
+                    width: scale(230),
+                    top: verticalScale(-10),
+                    height: verticalScale(35),
+                  }}
+                  secureTextEntry={isPassword2Visible}
+                  hasIcon
+                  onPress={() => setPassword2Visible(!isPassword2Visible)}
+                  fromCreatePassword2={true}
+                  placeholder="Re-type password"
+                  onChangeText={handleChange('password2')}
+                  value={values.password2}
+                  errors={errors.password2}
+                  touched={touched.password2}
+                />
+              </View>
+              <Button
+                title="Continue"
+                disabled={!validationSchema.isValidSync(values)}
+                primary
+                textStyle={{weight: 400}}
+                style={{
+                  marginTop: verticalScale(20),
+                  height: verticalScale(isIosDevice() ? 30 : 40),
+                  width: scale(150),
+                }}
+                onPress={handleSubmitPasswords}
+              />
+            </>
+          );
+        }}
+      </Formik>
       <View
         style={{
           top: verticalScale(150),
