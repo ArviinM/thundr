@@ -22,11 +22,14 @@ export const LGBTQ_ASSET_URI = {
 };
 
 export const PERSONALITY_TYPE_URI = {
-  RED_BG: require('../assets/Images/Icons/personality-type-bg.png'),
-  YELLOW_BG: require('../assets/Images/Icons/selected-personality-type-bg.png'),
-  LION: require('../assets/Images/Icons/lion.png'),
-  BEAVER: require('../assets/Images/Icons/beaver.png'),
-  OTTER: require('../assets/Images/Icons/otter.png'),
+  LION_RED: require('../assets/Images/Icons/lion-red.png'),
+  OTTER_RED: require('../assets/Images/Icons/otter-red.png'),
+  DOG_RED: require('../assets/Images/Icons/dog-red.png'),
+  BEAVER_RED: require('../assets/Images/Icons/beaver-red.png'),
+  LION_YELLOW: require('../assets/Images/Icons/lion-yellow.png'),
+  OTTER_YELLOW: require('../assets/Images/Icons/otter-yellow.png'),
+  DOG_YELLOW: require('../assets/Images/Icons/dog-yellow.png'),
+  BEAVER_YELLOW: require('../assets/Images/Icons/beaver-yellow.png'),
 };
 
 export const ONBOARDING_URI = {

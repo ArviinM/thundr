@@ -1,6 +1,18 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {
+  drinkingAndSmoking,
+  education,
+  feet,
+  inches,
+  isIosDevice,
+  pets,
+  politics,
+  religion,
+  scale,
+  starSign,
+  verticalScale,
+} from '../../../utils/commons';
 import {
   BorderLinearGradient,
   Container,
@@ -57,7 +69,7 @@ const CustomDropdown = props => (
     end={{x: 1, y: 0}}
     colors={['#E72454', '#FFC227']}>
     <SelectDropdown
-      data={['Option1', 'Option2']}
+      data={props.data}
       defaultButtonText={props.defaultButtonText || ''}
       buttonStyle={{
         backgroundColor: '#fff',
@@ -78,6 +90,7 @@ const CustomDropdown = props => (
 
 const PersonalityType = () => {
   const [selectedHobby, setSelectedHobby] = useState([]);
+  const [selectedPersonality, setSelectedPersonality] = useState('');
 
   const toggleLetterSelection = index => {
     // Check if the letter is already selected
@@ -130,18 +143,24 @@ const PersonalityType = () => {
                 {isSelected ? (
                   <Image
                     source={GLOBAL_ASSET_URI.CHECKED_SELECTION_BOX}
-                    height={30}
-                    width={30}
+                    height={20}
+                    width={20}
                   />
                 ) : (
                   <Image
                     source={GLOBAL_ASSET_URI.SELECTION_BOX}
-                    height={30}
-                    width={30}
+                    height={20}
+                    width={20}
                   />
                 )}
               </TouchableOpacity>
-              <Text color="#808080" size={15} customStyle={{left: scale(5)}}>
+              <Text
+                color="#808080"
+                size={15}
+                customStyle={{
+                  left: scale(5),
+                  top: verticalScale(-1),
+                }}>
                 {hobby}
               </Text>
             </View>
@@ -156,8 +175,8 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <View style={{flexDirection: 'row', gap: scale(10)}}>
-            <CustomDropdown width={60} defaultButtonText="5'" />
-            <CustomDropdown width={60} defaultButtonText="7'" />
+            <CustomDropdown width={60} defaultButtonText="5'" data={feet} />
+            <CustomDropdown width={60} defaultButtonText="7'" data={inches} />
           </View>
         </View>
         <View style={{left: scale(10)}}>
@@ -166,8 +185,9 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <CustomDropdown
-            width={isIosDevice() ? 140 : 135}
+            width={135}
             defaultButtonText="Sagittarius"
+            data={starSign}
           />
         </View>
       </View>
@@ -177,7 +197,11 @@ const PersonalityType = () => {
           Education
         </Text>
         <Separator space={10} />
-        <CustomDropdown width={285} defaultButtonText="Doctorate" />
+        <CustomDropdown
+          width={285}
+          defaultButtonText="Doctorate"
+          data={education}
+        />
       </View>
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
@@ -188,8 +212,9 @@ const PersonalityType = () => {
           <Separator space={10} />
           <View style={{flexDirection: 'row', gap: scale(10)}}>
             <CustomDropdown
-              width={isIosDevice() ? 140 : 130}
+              width={135}
               defaultButtonText="Occasional"
+              data={drinkingAndSmoking}
             />
           </View>
         </View>
@@ -199,8 +224,9 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <CustomDropdown
-            width={isIosDevice() ? 140 : 130}
+            width={135}
             defaultButtonText="Occasional"
+            data={drinkingAndSmoking}
           />
         </View>
       </View>
@@ -210,7 +236,11 @@ const PersonalityType = () => {
           Religion
         </Text>
         <Separator space={10} />
-        <CustomDropdown width={285} defaultButtonText="Christian" />
+        <CustomDropdown
+          width={285}
+          defaultButtonText="Christian"
+          data={religion}
+        />
       </View>
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
@@ -220,10 +250,7 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <View style={{flexDirection: 'row', gap: scale(10)}}>
-            <CustomDropdown
-              width={isIosDevice() ? 140 : 130}
-              defaultButtonText="Dog"
-            />
+            <CustomDropdown width={135} defaultButtonText="Dog" data={pets} />
           </View>
         </View>
         <View style={{left: scale(10)}}>
@@ -232,8 +259,9 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <CustomDropdown
-            width={isIosDevice() ? 140 : 130}
+            width={135}
             defaultButtonText="Apolitical"
+            data={politics}
           />
         </View>
       </View>
@@ -241,63 +269,153 @@ const PersonalityType = () => {
       <Text color="#e33051" size={18}>
         Personality Type
       </Text>
+      <Separator space={10} />
       <View
         style={{
           flexDirection: 'column',
-          alignItems: 'center',
           justifyContent: 'center',
         }}>
         <View style={{flexDirection: 'row'}}>
-          <Image
-            source={PERSONALITY_TYPE_URI.RED_BG}
-            height={isIosDevice() ? 145 : 130}
-            width={isIosDevice() ? 145 : 130}
-          />
-          <Image
-            source={PERSONALITY_TYPE_URI.RED_BG}
-            height={isIosDevice() ? 145 : 130}
-            width={isIosDevice() ? 145 : 130}
-            customStyle={{left: scale(10)}}
-          />
+          <TouchableOpacity onPress={() => setSelectedPersonality('lion')}>
+            <Image
+              source={
+                selectedPersonality === 'lion'
+                  ? PERSONALITY_TYPE_URI.LION_YELLOW
+                  : PERSONALITY_TYPE_URI.LION_RED
+              }
+              height={140}
+              width={140}
+            />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: scale(15),
+                position: 'absolute',
+                top: verticalScale(isIosDevice() ? 60 : 55),
+              }}>
+              <Text color="#fff" size={12}>
+                Lion
+              </Text>
+              <Text color="#fff" customStyle={{textAlign: 'center'}} size={9}>
+                Takes charge, Determined, Assertive, Competitive, Leader,
+                Goal-driven, Self-reliant, Adventurous.
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setSelectedPersonality('otter')}>
+            <Image
+              source={
+                selectedPersonality === 'otter'
+                  ? PERSONALITY_TYPE_URI.OTTER_YELLOW
+                  : PERSONALITY_TYPE_URI.OTTER_RED
+              }
+              height={140}
+              width={140}
+              customStyle={{left: scale(10)}}
+            />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: scale(15),
+                left: scale(isIosDevice() ? 13 : 10),
+                position: 'absolute',
+                top: verticalScale(isIosDevice() ? 60 : 55),
+              }}>
+              <Text color="#fff" size={12}>
+                Otter
+              </Text>
+              <Text color="#fff" customStyle={{textAlign: 'center'}} size={9}>
+                Takes risks, Visionary, Energetic, Promoter, Fun-loving, Enjoys
+                change, Creative, Optimistic.
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Image
-            source={PERSONALITY_TYPE_URI.RED_BG}
-            height={isIosDevice() ? 145 : 130}
-            width={isIosDevice() ? 145 : 130}
-          />
-          <Image
-            source={PERSONALITY_TYPE_URI.RED_BG}
-            height={isIosDevice() ? 145 : 130}
-            width={isIosDevice() ? 145 : 130}
-            customStyle={{left: scale(10)}}
-          />
+          <TouchableOpacity onPress={() => setSelectedPersonality('dog')}>
+            <Image
+              source={
+                selectedPersonality === 'dog'
+                  ? PERSONALITY_TYPE_URI.DOG_YELLOW
+                  : PERSONALITY_TYPE_URI.DOG_RED
+              }
+              height={140}
+              width={140}
+            />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: scale(15),
+                position: 'absolute',
+                top: verticalScale(isIosDevice() ? 60 : 55),
+              }}>
+              <Text color="#fff" size={12}>
+                Dog
+              </Text>
+              <Text color="#fff" customStyle={{textAlign: 'center'}} size={9}>
+                Loyal, Deep relationships, Adaptable, Sympathetic, Thoughtful,
+                Nurturing, Tolerant, Good listener.
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setSelectedPersonality('beaver')}>
+            <Image
+              source={
+                selectedPersonality === 'beaver'
+                  ? PERSONALITY_TYPE_URI.BEAVER_YELLOW
+                  : PERSONALITY_TYPE_URI.BEAVER_RED
+              }
+              height={140}
+              width={140}
+              customStyle={{left: scale(10)}}
+            />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: scale(15),
+                left: scale(18),
+                position: 'absolute',
+                top: verticalScale(isIosDevice() ? 60 : 55),
+              }}>
+              <Text color="#fff" size={12}>
+                Beaver
+              </Text>
+              <Text color="#fff" customStyle={{textAlign: 'center'}} size={9}>
+                Deliberate, Controlled, Reserved, Practical, Factual,
+                Analytical, Inquisitive, Persistent.
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
       <View
         style={{
-          flexDirection: 'row',
-          gap: scale(20),
-          alignItems: 'center',
+          flexDirection: 'column',
           justifyContent: 'center',
         }}>
-        <Button
-          title="Continue"
-          style={{
-            top: verticalScale(20),
-            height: verticalScale(isIosDevice() ? 30 : 40),
-            width: scale(isIosDevice() ? 140 : 130),
-          }}
-        />
-        <Button
-          title="Skip"
-          style={{
-            top: verticalScale(20),
-            height: verticalScale(isIosDevice() ? 30 : 40),
-            width: scale(isIosDevice() ? 140 : 130),
-            backgroundColor: '#9C9EA1',
-          }}
-        />
+        <View style={{flexDirection: 'row', gap: scale(10)}}>
+          <Button
+            title="Continue"
+            style={{
+              top: verticalScale(20),
+              height: verticalScale(isIosDevice() ? 30 : 40),
+              width: scale(140),
+            }}
+          />
+          <Button
+            title="Skip"
+            style={{
+              top: verticalScale(20),
+              height: verticalScale(isIosDevice() ? 30 : 40),
+              width: scale(140),
+              backgroundColor: '#9C9EA1',
+            }}
+          />
+        </View>
       </View>
       <Separator space={60} />
     </Container>

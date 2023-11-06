@@ -16,7 +16,7 @@ export const Input = styled.TextInput`
   padding: 15px;
   border-radius: 10px;
   line-height: 20px;
-  height: ${props => verticalScale(props.multiline ? 100 : 35)};
+  height: ${props => verticalScale(props.multiline ? 100 : 40)};
 `;
 
 export const Container = styled(KeyboardAwareScrollView).attrs({})`

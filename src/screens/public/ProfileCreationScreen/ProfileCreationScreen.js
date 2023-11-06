@@ -281,26 +281,32 @@ const PrimaryDetails = () => {
             (Required)
           </Text>
         </LabelContainer>
-        <View style={{flexDirection: 'row', gap: scale(5)}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: scale(5),
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <CustomDropdown
             setSelected={setMonth}
             data={months}
             placeholder="Month"
-            width={85}
+            width={78}
             defaultButtonText="March"
           />
           <CustomDropdown
             setSelected={setDay}
             data={days}
             placeholder="Day"
-            width={85}
+            width={78}
             defaultButtonText="11"
           />
           <CustomDropdown
             setSelected={setYear}
             data={years}
             placeholder="Year"
-            width={85}
+            width={78}
             defaultButtonText="1998"
           />
         </View>
@@ -310,7 +316,7 @@ const PrimaryDetails = () => {
           primary
           textStyle={{weight: 400}}
           style={{
-            top: verticalScale(20),
+            top: verticalScale(15),
             height: verticalScale(isIosDevice() ? 30 : 40),
             width: scale(150),
           }}
