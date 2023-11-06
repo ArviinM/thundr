@@ -6,8 +6,8 @@ import styled from 'styled-components/native';
 import {scale, verticalScale} from '../../../utils/commons';
 
 export const BorderLinearGradient = styled(LinearGradient).attrs({})`
-  padding-bottom: ${verticalScale(3)}px;
-  padding-right: ${scale(4)}px;
+  padding-bottom: ${verticalScale(2)}px;
+  padding-right: ${scale(5)}px;
   border-radius: 20px;
 `;
 
@@ -16,12 +16,13 @@ export const Input = styled.TextInput`
   padding: 15px;
   border-radius: 10px;
   line-height: 20px;
+  height: ${props => verticalScale(props.multiline ? 100 : 35)};
 `;
 
 export const Container = styled(KeyboardAwareScrollView).attrs({})`
   flex: 1;
   background-color: #ede8e5;
-  padding: ${scale(20)}px;
+  padding: ${scale(30)}px;
 `;
 
 export const LabeledInputContainer = styled.View`
