@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useNavigation} from '@react-navigation/native';
@@ -47,6 +47,111 @@ const LoginScreen = () => {
     });
   };
 
+  const hasAcc = false;
+  const continueWithAccountButton = () => {
+    return (
+      <TouchableOpacity
+        onPress={{}}
+        style={{alignSelf: 'center', marginTop: verticalScale(30)}}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            height: verticalScale(33),
+            width: scale(230),
+            justifyContent: 'center',
+            borderRadius: 20,
+            flexDirection: 'row',
+          }}>
+          {/* <Image
+            source={icon}
+            height={30}
+            width={20}
+            customStyle={{marginRight: scale(6)}}
+          /> */}
+          <Text
+            color="#E33051"
+            weight={700}
+            customStyle={{
+              textAlign: 'center',
+              top: verticalScale(isIosDevice() ? 8 : 6),
+            }}>
+            Continue as Brylle
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const inputFields = () => {
+    return (
+      <Formik
+        initialValues={{
+          emailOrMobile: '',
+          password: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={values => handleSubmit(values)}>
+        {({handleChange, handleSubmit, values, errors, touched}) => {
+          return (
+            <>
+              <View style={{justifyContent: 'center', alignSelf: 'center'}}>
+                <TextInput
+                  inputStyle={{
+                    alignItems: 'center',
+                    borderRadius: 30,
+                    backgroundColor: '#fff',
+                    width: scale(230),
+                    height: verticalScale(35),
+                  }}
+                  placeholder="Email / Mobile Number"
+                  value={values.emailOrMobile}
+                  onChangeText={handleChange('emailOrMobile')}
+                  errors={capitalizeFirstLetter(
+                    errors.emailOrMobile
+                      ? 'Email or Mobile Number is a required field'
+                      : '',
+                  )}
+                  touched={touched.emailOrMobile}
+                />
+                <TextInput
+                  inputStyle={{
+                    alignItems: 'center',
+                    borderRadius: 30,
+                    backgroundColor: '#fff',
+                    width: scale(230),
+                    top: verticalScale(-10),
+                    height: verticalScale(35),
+                  }}
+                  secureTextEntry={isPasswordVisible}
+                  hasIcon
+                  onPress={() => setPasswordVisible(!isPasswordVisible)}
+                  placeholder="Password"
+                  value={values.password}
+                  onChangeText={handleChange('password')}
+                  errors={capitalizeFirstLetter(errors.password)}
+                  touched={touched.password}
+                />
+              </View>
+              <View>
+                <Button
+                  title="Continue"
+                  primary
+                  textStyle={{weight: 400}}
+                  style={{
+                    top: verticalScale(20),
+                    height: verticalScale(isIosDevice() ? 30 : 40),
+                    width: scale(150),
+                  }}
+                  onPress={handleSubmit}
+                />
+              </View>
+            </>
+          );
+        }}
+      </Formik>
+    );
+  };
+
   return (
     <>
       {loading && <Spinner visible={true} />}
@@ -74,71 +179,7 @@ const LoginScreen = () => {
             customStyle={{textAlign: 'center'}}>
             LOG IN
           </Text>
-          <Formik
-            initialValues={{
-              emailOrMobile: '',
-              password: '',
-            }}
-            validationSchema={validationSchema}
-            onSubmit={values => handleSubmit(values)}>
-            {({handleChange, handleSubmit, values, errors, touched}) => {
-              return (
-                <>
-                  <View style={{justifyContent: 'center', alignSelf: 'center'}}>
-                    <TextInput
-                      inputStyle={{
-                        alignItems: 'center',
-                        borderRadius: 30,
-                        backgroundColor: '#fff',
-                        width: scale(230),
-                        height: verticalScale(35),
-                      }}
-                      placeholder="Email / Mobile Number"
-                      value={values.emailOrMobile}
-                      onChangeText={handleChange('emailOrMobile')}
-                      errors={capitalizeFirstLetter(
-                        errors.emailOrMobile
-                          ? 'Email or Mobile Number is a required field'
-                          : '',
-                      )}
-                      touched={touched.emailOrMobile}
-                    />
-                    <TextInput
-                      inputStyle={{
-                        alignItems: 'center',
-                        borderRadius: 30,
-                        backgroundColor: '#fff',
-                        width: scale(230),
-                        top: verticalScale(-10),
-                        height: verticalScale(35),
-                      }}
-                      secureTextEntry={isPasswordVisible}
-                      hasIcon
-                      onPress={() => setPasswordVisible(!isPasswordVisible)}
-                      placeholder="Password"
-                      value={values.password}
-                      onChangeText={handleChange('password')}
-                      errors={capitalizeFirstLetter(errors.password)}
-                      touched={touched.password}
-                    />
-                  </View>
-                  <View>
-                    <Button
-                      title="Continue"
-                      primary
-                      textStyle={{weight: 400}}
-                      style={{
-                        top: verticalScale(20),
-                        height: verticalScale(isIosDevice() ? 30 : 40),
-                        width: scale(150),
-                      }}
-                      onPress={handleSubmit}
-                    />
-                  </View>
-                </>
-              );
-            }}
-          </Formik>
+          {hasAcc ? continueWithAccountButton() : inputFields()}
         </View>
       </KeyboardAwareScrollView>
     </>

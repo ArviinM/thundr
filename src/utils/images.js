@@ -3,6 +3,30 @@ export const GLOBAL_ASSET_URI = {
   CLOSE_ICON: require('../assets/Images/Icons/close-icon.png'),
   THUNDR_ICON: require('../assets/Images/Icons/thundr-icon.png'),
   ADD_ICON: require('../assets/Images/Icons/plus-icon.png'),
+  ARROW_ICON: require('../assets/Images/Icons/arrow-icon.png'),
+  SELECTION_BOX: require('../assets/Images/Icons/selection-box.png'),
+  CHECKED_SELECTION_BOX: require('../assets/Images/Icons/checked-selection-box.png'),
+};
+
+export const LGBTQ_ASSET_URI = {
+  L_ICON: require('../assets/Images/Icons/L-icon.png'),
+  G_ICON: require('../assets/Images/Icons/G-icon.png'),
+  B_ICON: require('../assets/Images/Icons/B-icon.png'),
+  T_ICON: require('../assets/Images/Icons/T-icon.png'),
+  Q_ICON: require('../assets/Images/Icons/Q-icon.png'),
+  I_ICON: require('../assets/Images/Icons/I-icon.png'),
+  A_ICON: require('../assets/Images/Icons/A-icon.png'),
+  PLUS_ICON: require('../assets/Images/Icons/plus.png'),
+  SELECTED_GENDER: require('../assets/Images/Icons/selected-gender-bg.png'),
+  DROPDOWN_BG: require('../assets/Images/Icons/dropdown-bg.png'),
+};
+
+export const PERSONALITY_TYPE_URI = {
+  RED_BG: require('../assets/Images/Icons/personality-type-bg.png'),
+  YELLOW_BG: require('../assets/Images/Icons/selected-personality-type-bg.png'),
+  LION: require('../assets/Images/Icons/lion.png'),
+  BEAVER: require('../assets/Images/Icons/beaver.png'),
+  OTTER: require('../assets/Images/Icons/otter.png'),
 };
 
 export const ONBOARDING_URI = {
