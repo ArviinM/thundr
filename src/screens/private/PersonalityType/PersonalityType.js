@@ -9,6 +9,7 @@ import {
   pets,
   politics,
   religion,
+  removeSpaces,
   scale,
   starSign,
   verticalScale,
@@ -26,8 +27,13 @@ import Image from '../../../components/Image/Image';
 import {GLOBAL_ASSET_URI, PERSONALITY_TYPE_URI} from '../../../utils/images';
 import SelectDropdown from 'react-native-select-dropdown';
 import Button from '../../../components/Button/Button';
-import {useDispatch} from 'react-redux';
-import {SUBMIT_CUSTOMER_DETAILS} from '../../../ducks/ProfileCreation/actionTypes';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  SUBMIT_CUSTOMER_DETAILS,
+  UPDATE_PROFILE_CREATION_STATE,
+} from '../../../ducks/ProfileCreation/actionTypes';
+import Modal from '../../../composition/Modal/Modal';
+import {Overlay} from 'react-native-elements';
 
 const hobbies = [
   'Sports & Games',
@@ -128,6 +134,9 @@ const PersonalityType = () => {
   const [religionState, setReligionState] = useState('');
   const [petState, setPetState] = useState('');
   const [politicsState, setPoliticsState] = useState('');
+  const [otherEducationValue, setOtherEducationValue] = useState('');
+  const [otherReligionValue, setOtherReligionValue] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const toggleLetterSelection = index => {
     // Check if the letter is already selected
@@ -140,12 +149,90 @@ const PersonalityType = () => {
     }
   };
 
+  const renderModal = () => {
+    return (
+      <Overlay
+        onBackdropPress={() => setShowModal(false)}
+        overlayStyle={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#E33051',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: [
+            {translateX: -scale(125)},
+            {translateY: -verticalScale(40)},
+          ],
+          height: 'auto',
+          width: scale(250),
+          borderRadius: 20,
+        }}
+        isVisible={showModal}>
+        <Text
+          size={18}
+          color="#fff"
+          weight={700}
+          customStyle={{textAlign: 'center'}}>
+          Skipping this may affect the personalization of your profile.
+        </Text>
+        <Separator space={15} />
+        <View style={{flexDirection: 'row', gap: scale(10)}}>
+          <Button
+            title="Continue"
+            primary
+            textStyle={{weight: 400}}
+            textColor="#59595B"
+            style={{
+              height: verticalScale(isIosDevice() ? 30 : 40),
+              width: scale(100),
+              backgroundColor: '#FFFFFF',
+            }}
+            onPress={() => {
+              setShowModal(false);
+              dispatch({
+                type: SUBMIT_CUSTOMER_DETAILS,
+                payload: {
+                  bio: '',
+                  work: '',
+                  location: '',
+                  height: '',
+                  starSign: '',
+                  education: '',
+                  drinking: '',
+                  smoking: '',
+                  religion: '',
+                  pet: '',
+                  politics: '',
+                  personalityType: '',
+                },
+              });
+            }}
+          />
+          <Button
+            title="Go Back"
+            primary
+            textStyle={{weight: 400}}
+            textColor="#E33051"
+            style={{
+              height: verticalScale(isIosDevice() ? 30 : 40),
+              width: scale(100),
+              backgroundColor: '#FFFFFF',
+            }}
+            onPress={() => setShowModal(false)}
+          />
+        </View>
+      </Overlay>
+    );
+  };
+
   return (
     <Container
       showsVerticalScrollIndicator={false}
       bounces={false}
       enableOnAndroid={true}
       enableAutomaticScroll={isIosDevice()}>
+      {renderModal()}
       <LabeledInput label="Bio" isBio={true} value={bio} setter={setBio} />
       <Separator space={20} />
       <LabeledInput label="Work" value={work} setter={setWork} />
@@ -247,18 +334,28 @@ const PersonalityType = () => {
       </View>
       <Separator space={10} />
       <View>
-        <Text color="#e33051" size={18}>
-          Education
-        </Text>
-        <Separator space={10} />
-        <CustomDropdown
-          width={285}
-          defaultButtonText="Doctorate"
-          data={education}
-          placeholder="Education"
-          stateUpdateFunction={setEducationState}
-          selectedItem={educationState}
-        />
+        {educationState === 'Others' ? (
+          <LabeledInput
+            label="Education"
+            value={otherEducationValue}
+            setter={setOtherEducationValue}
+          />
+        ) : (
+          <>
+            <Text color="#e33051" size={18}>
+              Education
+            </Text>
+            <Separator space={10} />
+            <CustomDropdown
+              width={285}
+              defaultButtonText="Doctorate"
+              data={education}
+              placeholder="Education"
+              stateUpdateFunction={setEducationState}
+              selectedItem={educationState}
+            />
+          </>
+        )}
       </View>
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
@@ -295,18 +392,28 @@ const PersonalityType = () => {
       </View>
       <Separator space={10} />
       <View>
-        <Text color="#e33051" size={18}>
-          Religion
-        </Text>
-        <Separator space={10} />
-        <CustomDropdown
-          width={285}
-          defaultButtonText="Christian"
-          data={religion}
-          placeholder="Religion"
-          stateUpdateFunction={setReligionState}
-          selectedItem={religionState}
-        />
+        {religionState === 'Others' ? (
+          <LabeledInput
+            label="Religion"
+            value={otherReligionValue}
+            setter={setOtherReligionValue}
+          />
+        ) : (
+          <>
+            <Text color="#e33051" size={18}>
+              Religion
+            </Text>
+            <Separator space={10} />
+            <CustomDropdown
+              width={285}
+              defaultButtonText="Christian"
+              data={religion}
+              placeholder="Religion"
+              stateUpdateFunction={setReligionState}
+              selectedItem={religionState}
+            />
+          </>
+        )}
       </View>
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
@@ -483,12 +590,15 @@ const PersonalityType = () => {
                   bio,
                   work,
                   location,
-                  height: heightFt + heightIn,
+                  height: `${removeSpaces(
+                    heightFt.toLocaleLowerCase(),
+                  )} ${removeSpaces(heightIn.toLocaleLowerCase())}`,
+
                   starSign: startSignState,
-                  education: educationState,
+                  education: otherEducationValue || educationState,
                   drinking,
                   smoking,
-                  religion: religionState,
+                  religion: otherReligionValue || religionState,
                   pet: petState,
                   politics: politicsState,
                   personalityType: selectedPersonality,
@@ -503,6 +613,7 @@ const PersonalityType = () => {
           />
           <Button
             title="Skip"
+            onPress={() => setShowModal(true)}
             style={{
               top: verticalScale(20),
               height: verticalScale(isIosDevice() ? 30 : 40),

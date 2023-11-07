@@ -72,9 +72,17 @@ const CompatibilityQuestions = () => {
             padding: scale(22),
             alignItems: 'center',
           }}>
-          <Text color="#E33051" size={18}>
-            {currentQuestionIndex + 1}. {currentQuestion.question}
-          </Text>
+          <View
+            style={{
+              justifyContent: 'flex-start',
+            }}>
+            <Text
+              color="#E33051"
+              size={18}
+              customStyle={{maxWidth: scale(230), minWidth: scale(190)}}>
+              {currentQuestionIndex + 1}. {currentQuestion.question}
+            </Text>
+          </View>
           <Separator space={10} />
           {currentQuestion.compatibilityAnswer.map((answer, index) => {
             return (
@@ -98,6 +106,7 @@ const CompatibilityQuestions = () => {
               </TouchableOpacity>
             );
           })}
+          <Separator space={10} />
         </View>
       </BorderLinearGradient>
       <Separator space={20} />

@@ -43,7 +43,7 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage: action.payload,
       };
     case START_LOGOUT:
       return {

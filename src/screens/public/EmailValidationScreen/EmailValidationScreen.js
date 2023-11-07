@@ -1,9 +1,10 @@
 // React modules
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 // Components
 import ScreenContainer from '../../../composition/ScreenContainer/ScreenContainer';
@@ -23,8 +24,11 @@ import Spinner from '../../../components/Spinner/Spinner';
 const EmailValidationScreen = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.mobileEmail);
-  const navigation = useNavigation();
-  const [email, setEmail] = useState('');
+
+  const validationSchema = yup.object().shape({
+    email: yup.string().email().required('Email is required'),
+  });
+
   return (
     <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
       {loading && <Spinner visible={true} />}
@@ -39,41 +43,62 @@ const EmailValidationScreen = () => {
           customStyle={{paddingHorizontal: scale(70), textAlign: 'center'}}>
           Enter your email address to give added security to your account.
         </Text>
-        <View>
-          <TextInput
-            inputStyle={{
-              alignItems: 'center',
-              borderRadius: 30,
-              paddingVertical: verticalScale(10),
-              paddingHorizontal: scale(20),
-              backgroundColor: '#fff',
-              width: scale(230),
-            }}
-            placeholder=""
-            value={email}
-            onChangeText={text => setEmail(text)}
-          />
-        </View>
+        <Formik
+          initialValues={{
+            email: '',
+          }}
+          validationSchema={validationSchema}
+          onSubmit={values => handleSubmit(values)}>
+          {({handleChange, handleSubmit, values, errors, touched}) => {
+            const handleSubmitEmail = () => {
+              handleSubmit();
+              if (validationSchema.isValidSync(values)) {
+                dispatch({
+                  type: START_EMAIL_VALIDATION,
+                  payload: {
+                    email: values.email,
+                  },
+                });
+              }
+            };
+            return (
+              <>
+                <View>
+                  <TextInput
+                    inputStyle={{
+                      alignItems: 'center',
+                      borderRadius: 30,
+                      paddingVertical: verticalScale(10),
+                      paddingHorizontal: scale(20),
+                      backgroundColor: '#fff',
+                      width: scale(230),
+                    }}
+                    placeholder=""
+                    onChangeText={handleChange('email')}
+                    value={values.email}
+                    errors={errors.email}
+                    touched={touched.email}
+                  />
+                </View>
+                <Separator space={20} />
+                <View>
+                  <Button
+                    disabled={!validationSchema.isValidSync(values)}
+                    title="Continue"
+                    primary
+                    textStyle={{weight: 400}}
+                    style={{
+                      height: verticalScale(isIosDevice() ? 30 : 40),
+                      width: scale(150),
+                    }}
+                    onPress={handleSubmitEmail}
+                  />
+                </View>
+              </>
+            );
+          }}
+        </Formik>
       </View>
-      <Button
-        disabled={!email.length}
-        title="Continue"
-        primary
-        textStyle={{weight: 400}}
-        style={{
-          top: verticalScale(105),
-          height: verticalScale(isIosDevice() ? 30 : 40),
-          width: scale(150),
-        }}
-        onPress={() =>
-          dispatch({
-            type: START_EMAIL_VALIDATION,
-            payload: {
-              email,
-            },
-          })
-        }
-      />
       <View
         style={{
           top: verticalScale(260),

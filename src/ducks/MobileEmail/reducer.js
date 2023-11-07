@@ -52,7 +52,7 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage: action.payload,
       };
     // MOBILE OTP VERIFICATION
     case START_MOBILE_VERIFICATION:
@@ -73,7 +73,7 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage: action.payload,
       };
     // EMAIL VALIDATION
     case START_EMAIL_VALIDATION:
@@ -113,7 +113,7 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage: action.payload,
       };
     // PASSWORD VALIDATION
     case START_PASSWORD_VALIDATION:

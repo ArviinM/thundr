@@ -112,10 +112,50 @@ export const months = [
   'Dec',
 ];
 
-export const days = [];
-for (let i = 1; i <= 31; i++) {
-  const formattedDay = i < 10 ? `0${i}` : `${i}`;
-  days.push(formattedDay);
+export function getDaysInMonth(monthName) {
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'April',
+    'May',
+    'June',
+    'Jul',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  const monthIndex = months.findIndex(
+    month => month.toLowerCase() === monthName.toLowerCase(),
+  );
+
+  const daysInMonth = {
+    Jan: 31,
+    Feb: 28, // Assuming a non-leap year
+    Mar: 31,
+    April: 30,
+    May: 31,
+    June: 30,
+    Jul: 31,
+    Aug: 31,
+    Sept: 30,
+    Oct: 31,
+    Nov: 30,
+    Dec: 31,
+  };
+
+  const lastDay = daysInMonth[months[monthIndex]];
+  const days = [];
+
+  for (let i = 1; i <= lastDay; i++) {
+    const formattedDay = i < 10 ? `0${i}` : `${i}`;
+    days.push(formattedDay);
+  }
+
+  return days;
 }
 
 const currYear = new Date().getFullYear();
@@ -168,17 +208,22 @@ export const politics = [
   'Rather not say',
 ];
 
-export const feet = ["4'", "5'", "6'", "7'"];
+export const feet = ['4 Ft', '5 Ft', '6 Ft', '7 Ft'];
 export const inches = [
-  "1'",
-  "2'",
-  "3'",
-  "4'",
-  "5'",
-  "6'",
-  "7'",
-  "8'",
-  "9'",
-  "10'",
-  "11'",
+  '0 In',
+  '1 In',
+  '2 In',
+  '3 In',
+  '4 In',
+  '5 In',
+  '6 In',
+  '7 In',
+  '8 In',
+  '9 In',
+  '10 In',
+  '11 In',
 ];
+
+export const removeSpaces = inputString => {
+  return inputString.replace(/\s/g, '');
+};

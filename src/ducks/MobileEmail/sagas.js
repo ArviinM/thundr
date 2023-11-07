@@ -18,6 +18,7 @@ import {
 import MobileEmailConfig from '../../api/services/mobileEmailService';
 import * as RootNavigation from '../../navigations/tempNavigation';
 import {UPDATE_LOGIN_STATE} from '../Login/actionTypes';
+import {GENERIC_ERROR} from '../../utils/commons';
 
 export function* startMobileValidation({payload}) {
   const {mobileNumber} = payload;
@@ -36,9 +37,13 @@ export function* startMobileValidation({payload}) {
       RootNavigation.navigate('MobileVerificationScreen');
     }
   } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message === 'User already exist.'
+        ? 'User already exist.'
+        : GENERIC_ERROR;
     yield put({
       type: START_MOBILE_VALIDATION_FAILED,
-      payload: error,
+      payload: errorMessage,
     });
   }
 }
@@ -62,9 +67,13 @@ export function* startMobileVerification({payload}) {
       RootNavigation.navigate('EmailValidationScreen');
     }
   } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message === 'OTP Sent Mismatch'
+        ? ' Invalid OTP. Please try again.'
+        : GENERIC_ERROR;
     yield put({
       type: START_MOBILE_VERIFICATION_FAILED,
-      payload: error,
+      payload: errorMessage,
     });
   }
 }
@@ -135,9 +144,13 @@ export function* startEmailVerification({payload}) {
       }
     }
   } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message === 'Code Sent Mismatch'
+        ? ' Invalid OTP. Please try again.'
+        : GENERIC_ERROR;
     yield put({
       type: START_EMAIL_VERIFICATION_FAILED,
-      payload: error,
+      payload: errorMessage,
     });
   }
 }
