@@ -17,6 +17,7 @@ import {useDispatch} from 'react-redux';
 import {UPDATE_LOGIN_STATE} from '../../ducks/Login/actionTypes';
 import {UPDATE_MOBILE_EMAIL_STATE} from '../../ducks/MobileEmail/actionTypes';
 import {UPDATE_SSO_VALIDATION_STATE} from '../../ducks/SSOValidation/actionTypes';
+import {UPDATE_PROFILE_CREATION_STATE} from '../../ducks/ProfileCreation/actionTypes';
 
 const Modal = props => {
   const dispatch = useDispatch();
@@ -29,6 +30,12 @@ const Modal = props => {
       newState: {showModal: false},
     });
     dispatch({type: UPDATE_SSO_VALIDATION_STATE, newState: {showModal: false}});
+    dispatch({
+      type: UPDATE_PROFILE_CREATION_STATE,
+      newState: {
+        showModal: false,
+      },
+    });
   };
 
   return (

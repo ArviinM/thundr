@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import {scale, verticalScale} from '../../../utils/commons';
+import {ScrollView} from 'react-native';
 
 export const BorderLinearGradient = styled(LinearGradient).attrs({})`
   padding-bottom: ${verticalScale(2)}px;
@@ -19,7 +20,7 @@ export const Input = styled.TextInput`
   height: ${props => verticalScale(props.multiline ? 100 : 40)};
 `;
 
-export const Container = styled(KeyboardAwareScrollView).attrs({})`
+export const Container = styled(ScrollView).attrs({})`
   flex: 1;
   background-color: #ede8e5;
   padding: ${scale(30)}px;

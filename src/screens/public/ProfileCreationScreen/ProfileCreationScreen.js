@@ -1,9 +1,8 @@
 // React modules
-import React, {useState} from 'react';
-import {Platform, TouchableOpacity, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
 
 // Third party libraries
-import {SelectList} from 'react-native-dropdown-select-list';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 // Components
@@ -12,28 +11,23 @@ import Text from '../../../components/Text/Text';
 
 // Utils
 import {
-  DAYS,
-  MONTHS,
-  YEARS,
+  days,
   isIosDevice,
+  months,
   scale,
   verticalScale,
+  years,
 } from '../../../utils/commons';
 import {
-  BirthdayContainer,
   BorderLinearGradient,
   Container,
-  DayContainer,
   Input,
   LabelContainer,
   LabeledInputContainer,
-  Lgbtqia,
-  PhotoIcon,
   PhotoIconBorderLinearGradient,
   PhotoIconContainer,
   PhotoIconWrapper,
   Wrapper,
-  YearContainer,
 } from './Styled';
 import Image from '../../../components/Image/Image';
 import {GLOBAL_ASSET_URI, LGBTQ_ASSET_URI} from '../../../utils/images';
@@ -41,6 +35,13 @@ import Separator from '../../../components/Separator/Separator';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  GET_COMPATIBILTY_QUESTIONS,
+  START_PROFILE_CREATION,
+} from '../../../ducks/ProfileCreation/actionTypes';
+import {monthNameToNumber} from './utils';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const iconNames = [
   'L_ICON',
@@ -53,7 +54,13 @@ const iconNames = [
   'PLUS_ICON',
 ];
 
-const LabeledInput = ({label, validationLabel = '', textInputProps}) => {
+const LabeledInput = ({
+  label,
+  validationLabel = '',
+  textInputProps,
+  value,
+  setter,
+}) => {
   return (
     <LabeledInputContainer>
       <LabelContainer>
@@ -73,20 +80,26 @@ const LabeledInput = ({label, validationLabel = '', textInputProps}) => {
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         colors={['#E72454', '#FFC227']}>
-        <Input {...textInputProps} />
+        <Input {...textInputProps} value={value} onChangeText={setter} />
       </BorderLinearGradient>
     </LabeledInputContainer>
   );
 };
 
 const PrimaryDetails = () => {
-  const navigation = useNavigation();
+  const {loading} = useSelector(state => state.profileCreation);
+  const dispatch = useDispatch();
   const [activeIcon, setActiveIcon] = useState('');
-  const [imageSource, setImageSource] = useState(null);
-  const [selected, setSelected] = useState('');
-  const [months, setMonth] = useState(MONTHS);
-  const [years, setYear] = useState(YEARS);
-  const [days, setDay] = useState(DAYS);
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  const [day, setDay] = useState('');
+  const [name, setName] = useState('');
+  const [hometown, setHometown] = useState('');
+  const [imageSource, setImageSource] = useState('');
+
+  useEffect(() => {
+    dispatch({type: GET_COMPATIBILTY_QUESTIONS});
+  }, [dispatch]);
 
   const options = {
     title: 'Select an Image',
@@ -107,7 +120,7 @@ const PrimaryDetails = () => {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        const source = {uri: response.uri};
+        const source = {uri: response.assets[0].uri};
         setImageSource(source);
       }
     });
@@ -139,11 +152,15 @@ const PrimaryDetails = () => {
             end={{x: 1, y: 0}}
             colors={['#E72454', '#FFC227']}>
             <PhotoIconContainer>
-              <Image
-                source={GLOBAL_ASSET_URI.ADD_ICON}
-                height={30}
-                width={30}
-              />
+              {imageSource ? (
+                <Image source={imageSource} height={150} width={180} />
+              ) : (
+                <Image
+                  source={GLOBAL_ASSET_URI.ADD_ICON}
+                  height={30}
+                  width={30}
+                />
+              )}
             </PhotoIconContainer>
           </PhotoIconBorderLinearGradient>
         </PhotoIconWrapper>
@@ -235,30 +252,40 @@ const PrimaryDetails = () => {
     );
   };
 
-  const CustomDropdown = props => (
-    <BorderLinearGradient
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 0}}
-      colors={['#E72454', '#FFC227']}>
-      <SelectDropdown
-        data={['Option1', 'Option2']}
-        defaultButtonText={props.defaultButtonText || ''}
-        buttonStyle={{
-          backgroundColor: '#fff',
-          flex: 1,
-          borderRadius: 10,
-          width: scale(props.width),
-        }}
-        buttonTextStyle={{
-          fontWeight: '700',
-          fontSize: scale(12),
-          color: '#808080',
-        }}
-        dropdownIconPosition="right"
-        // renderDropdownIcon={renderDropdownIcon}
-      />
-    </BorderLinearGradient>
-  );
+  const CustomDropdown = props => {
+    const handleSelect = selectedItem => {
+      props.stateUpdateFunction(selectedItem);
+    };
+
+    return (
+      <BorderLinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={['#E72454', '#FFC227']}>
+        <SelectDropdown
+          data={props.data}
+          onSelect={handleSelect}
+          buttonTextAfterSelection={() => {
+            return props.selectedItem;
+          }}
+          defaultButtonText={props.selectedItem || props.placeholder}
+          buttonStyle={{
+            backgroundColor: '#fff',
+            flex: 1,
+            borderRadius: 10,
+            width: scale(props.width),
+          }}
+          buttonTextStyle={{
+            fontWeight: '700',
+            fontSize: scale(12),
+            color: '#808080',
+          }}
+          dropdownIconPosition="right"
+          // renderDropdownIcon={renderDropdownIcon}
+        />
+      </BorderLinearGradient>
+    );
+  };
 
   return (
     <Container
@@ -266,8 +293,14 @@ const PrimaryDetails = () => {
       bounces={false}
       enableOnAndroid={true}
       enableAutomaticScroll={isIosDevice()}>
+      {loading && <Spinner visible />}
       <Wrapper>
-        <LabeledInput label="Name" validationLabel="(Required)" />
+        <LabeledInput
+          label="Name"
+          validationLabel="(Required)"
+          value={name}
+          setter={text => setName(text)}
+        />
         <Photo />
         <Gender />
         <LabelContainer style={{marginBottom: 0}}>
@@ -289,28 +322,36 @@ const PrimaryDetails = () => {
             alignItems: 'center',
           }}>
           <CustomDropdown
-            setSelected={setMonth}
             data={months}
             placeholder="Month"
             width={78}
             defaultButtonText="March"
+            stateUpdateFunction={setMonth}
+            selectedItem={month}
           />
           <CustomDropdown
-            setSelected={setDay}
             data={days}
             placeholder="Day"
             width={78}
             defaultButtonText="11"
+            stateUpdateFunction={setDay}
+            selectedItem={day}
           />
           <CustomDropdown
-            setSelected={setYear}
             data={years}
             placeholder="Year"
             width={78}
             defaultButtonText="1998"
+            stateUpdateFunction={setYear}
+            selectedItem={year}
           />
         </View>
-        <LabeledInput label="Hometown" validationLabel="(Required)" />
+        <LabeledInput
+          label="Hometown"
+          validationLabel="(Required)"
+          value={hometown}
+          setter={text => setHometown(text)}
+        />
         <Button
           title="Continue"
           primary
@@ -320,7 +361,17 @@ const PrimaryDetails = () => {
             height: verticalScale(isIosDevice() ? 30 : 40),
             width: scale(150),
           }}
-          onPress={() => navigation.navigate('CompatibilityQuestions')}
+          onPress={() =>
+            dispatch({
+              type: START_PROFILE_CREATION,
+              payload: {
+                name: name,
+                hometown: hometown,
+                gender: 'Lesbian',
+                birthday: `${year}-${monthNameToNumber(month)}-${day}`,
+              },
+            })
+          }
         />
         <Separator space={30} />
       </Wrapper>
