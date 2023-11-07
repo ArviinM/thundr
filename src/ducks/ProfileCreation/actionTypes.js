@@ -31,3 +31,8 @@ export const SUBMIT_CUSTOMER_DETAILS_SUCCESS =
   '@profileCreation/SUBMIT_CUSTOMER_DETAILS_SUCCESS';
 export const SUBMIT_CUSTOMER_DETAILS_FAILED =
   '@profileCreation/SUBMIT_CUSTOMER_DETAILS_FAILED';
+
+// UPLOAD PHOTO
+export const UPLOAD_PHOTO = '@profileCreation/UPLOAD_PHOTO';
+export const UPLOAD_PHOTO_SUCCESS = '@profileCreation/UPLOAD_PHOTO_SUCCESS';
+export const UPLOAD_PHOTO_FAILED = '@profileCreation/UPLOAD_PHOTO_FAILED';

@@ -24,12 +24,18 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {useDispatch, useSelector} from 'react-redux';
-import {START_LOGIN} from '../../../ducks/Login/actionTypes';
+import {
+  START_LOGIN,
+  START_LOGIN_VIA_REFRESH_TOKEN,
+} from '../../../ducks/Login/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.login);
+  const {refreshToken, customerPhoto, customerName} = useSelector(
+    state => state.onboarding,
+  );
   const [isPasswordVisible, setPasswordVisible] = useState(true);
 
   const validationSchema = yup.object().shape({
@@ -47,35 +53,39 @@ const LoginScreen = () => {
     });
   };
 
-  const hasAcc = false;
   const continueWithAccountButton = () => {
     return (
       <TouchableOpacity
-        onPress={{}}
+        onPress={() =>
+          dispatch({
+            type: START_LOGIN_VIA_REFRESH_TOKEN,
+            payload: {refreshToken: refreshToken},
+          })
+        }
         style={{alignSelf: 'center', marginTop: verticalScale(30)}}>
         <View
           style={{
             backgroundColor: '#fff',
-            height: verticalScale(33),
+            height: verticalScale(30),
             width: scale(230),
             justifyContent: 'center',
             borderRadius: 20,
             flexDirection: 'row',
           }}>
-          {/* <Image
-            source={icon}
+          <Image
+            source={{uri: customerPhoto}}
             height={30}
-            width={20}
+            width={25}
             customStyle={{marginRight: scale(6)}}
-          /> */}
+          />
           <Text
             color="#E33051"
             weight={700}
             customStyle={{
               textAlign: 'center',
-              top: verticalScale(isIosDevice() ? 8 : 6),
+              top: verticalScale(isIosDevice() ? 8 : 4),
             }}>
-            Continue as Brylle
+            {`Continue as ${customerName}`}
           </Text>
         </View>
       </TouchableOpacity>
@@ -179,7 +189,7 @@ const LoginScreen = () => {
             customStyle={{textAlign: 'center'}}>
             LOG IN
           </Text>
-          {hasAcc ? continueWithAccountButton() : inputFields()}
+          {refreshToken ? continueWithAccountButton() : inputFields()}
         </View>
       </KeyboardAwareScrollView>
     </>

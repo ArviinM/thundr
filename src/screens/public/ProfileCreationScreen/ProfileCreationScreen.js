@@ -40,20 +40,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   GET_COMPATIBILTY_QUESTIONS,
   START_PROFILE_CREATION,
+  UPLOAD_PHOTO,
 } from '../../../ducks/ProfileCreation/actionTypes';
 import {monthNameToNumber} from './utils';
 import Spinner from '../../../components/Spinner/Spinner';
-
-const iconNames = [
-  'L_ICON',
-  'G_ICON',
-  'B_ICON',
-  'T_ICON',
-  'Q_ICON',
-  'I_ICON',
-  'A_ICON',
-  'PLUS_ICON',
-];
 
 const icons = [
   {name: 'L_ICON', value: 'Lesbian'},
@@ -114,20 +104,13 @@ const PrimaryDetails = () => {
     dispatch({type: GET_COMPATIBILTY_QUESTIONS});
   }, [dispatch]);
 
-  const options = {
-    title: 'Select an Image',
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-  };
-
   const openImageLibrary = () => {
     const options = {
       mediaType: 'photo', // Specify that you want to pick photos
     };
 
-    launchImageLibrary(options, response => {
+    launchImageLibrary(options, async response => {
+      console.log('rewew', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -135,6 +118,21 @@ const PrimaryDetails = () => {
       } else {
         const source = {uri: response.assets[0].uri};
         setImageSource(source);
+
+        // const formData = new FormData();
+
+        // console.log('formData', formData);
+        // console.log('source', source);
+        // formData.append(
+        //   'form',
+        //   JSON.stringify({
+        //     uri: response.assets[0].uri,
+        //     type: 'image/jpeg', // Adjust the content type based on the file type
+        //     name: 'file.jpg',
+        //   }),
+        // );
+
+        // dispatch({ type: UPLOAD_PHOTO, payload: { file: formData } });
       }
     });
   };
