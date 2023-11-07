@@ -24,16 +24,23 @@ const Modal = props => {
   const {modalMessage, showModal} = props;
 
   const handleCloseModal = () => {
-    dispatch({type: UPDATE_LOGIN_STATE, newState: {showModal: false}});
+    dispatch({
+      type: UPDATE_LOGIN_STATE,
+      newState: {showModal: false, modalMessage: ''},
+    });
     dispatch({
       type: UPDATE_MOBILE_EMAIL_STATE,
-      newState: {showModal: false},
+      newState: {showModal: false, modalMessage: ''},
     });
-    dispatch({type: UPDATE_SSO_VALIDATION_STATE, newState: {showModal: false}});
+    dispatch({
+      type: UPDATE_SSO_VALIDATION_STATE,
+      newState: {showModal: false, modalMessage: ''},
+    });
     dispatch({
       type: UPDATE_PROFILE_CREATION_STATE,
       newState: {
         showModal: false,
+        modalMessage: '',
       },
     });
   };
