@@ -15,7 +15,6 @@ export const Input = styled.TextInput`
   background-color: white;
   padding: 15px;
   border-radius: 10px;
-  line-height: 20px;
 `;
 
 export const Container = styled(KeyboardAwareScrollView).attrs({})`

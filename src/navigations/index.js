@@ -15,12 +15,17 @@ import Modal from '../composition/Modal/Modal';
 import {GENERIC_ERROR} from '../utils/commons';
 
 const RootNavigation = () => {
-  const {authenticated, showModal} = useSelector(state => state.login);
-  const {showModal: showEmailModal} = useSelector(state => state.mobileEmail);
-  const {showModal: showSSOModal} = useSelector(state => state.ssoValidation);
-  const {showModal: showProfileCreationModal, modalMessage} = useSelector(
-    state => state.profileCreation,
+  const {authenticated, showModal, modalMessage} = useSelector(
+    state => state.login,
   );
+  const {showModal: showEmailModal, modalMessage: mobileEmailMessage} =
+    useSelector(state => state.mobileEmail);
+  const {showModal: showSSOModal, modalMessage: ssoValidationMessage} =
+    useSelector(state => state.ssoValidation);
+  const {
+    showModal: showProfileCreationModal,
+    modalMessage: profileCreationModalMessage,
+  } = useSelector(state => state.profileCreation);
   const [hideSplash, setHideSplash] = useState(false);
 
   const config = {
@@ -53,7 +58,13 @@ const RootNavigation = () => {
       }}
       theme={{colors: {background: '#f2cecd'}}}>
       <Modal
-        modalMessage={modalMessage || GENERIC_ERROR}
+        modalMessage={
+          modalMessage ||
+          profileCreationModalMessage ||
+          mobileEmailMessage ||
+          ssoValidationMessage ||
+          GENERIC_ERROR
+        }
         showModal={
           showEmailModal ||
           showModal ||

@@ -12,6 +12,7 @@ import Text from '../../../components/Text/Text';
 // Utils
 import {
   days,
+  getDaysInMonth,
   isIosDevice,
   months,
   scale,
@@ -54,6 +55,17 @@ const iconNames = [
   'PLUS_ICON',
 ];
 
+const icons = [
+  {name: 'L_ICON', value: 'Lesbian'},
+  {name: 'G_ICON', value: 'Gay'},
+  {name: 'B_ICON', value: 'Bisexual'},
+  {name: 'T_ICON', value: 'Transgender'},
+  {name: 'Q_ICON', value: 'Queer'},
+  {name: 'I_ICON', value: 'Intersex'},
+  {name: 'A_ICON', value: 'Asexual'},
+  {name: 'PLUS_ICON', value: 'Plus'},
+];
+
 const LabeledInput = ({
   label,
   validationLabel = '',
@@ -91,11 +103,12 @@ const PrimaryDetails = () => {
   const dispatch = useDispatch();
   const [activeIcon, setActiveIcon] = useState('');
   const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
-  const [day, setDay] = useState('');
-  const [name, setName] = useState('');
-  const [hometown, setHometown] = useState('');
+  const [year, setYear] = useState(null);
+  const [day, setDay] = useState(null);
+  const [name, setName] = useState(null);
+  const [hometown, setHometown] = useState(null);
   const [imageSource, setImageSource] = useState('');
+  const [gender, setGender] = useState(null);
 
   useEffect(() => {
     dispatch({type: GET_COMPATIBILTY_QUESTIONS});
@@ -146,23 +159,28 @@ const PrimaryDetails = () => {
           customStyle={{bottom: verticalScale(7)}}>
           Can add multiple photos once profile creation is finished.
         </Text>
+        <Separator space={10} />
         <PhotoIconWrapper onPress={openImageLibrary}>
-          <PhotoIconBorderLinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            colors={['#E72454', '#FFC227']}>
-            <PhotoIconContainer>
-              {imageSource ? (
-                <Image source={imageSource} height={150} width={180} />
-              ) : (
+          {imageSource ? (
+            <Image
+              source={imageSource}
+              customStyle={{width: '100%', height: '100%'}}
+              stretch
+            />
+          ) : (
+            <PhotoIconBorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#E72454', '#FFC227']}>
+              <PhotoIconContainer>
                 <Image
                   source={GLOBAL_ASSET_URI.ADD_ICON}
                   height={30}
                   width={30}
                 />
-              )}
-            </PhotoIconContainer>
-          </PhotoIconBorderLinearGradient>
+              </PhotoIconContainer>
+            </PhotoIconBorderLinearGradient>
+          )}
         </PhotoIconWrapper>
       </LabeledInputContainer>
     );
@@ -170,26 +188,26 @@ const PrimaryDetails = () => {
 
   const Gender = () => {
     const renderIcons = () => {
-      return iconNames.map((iconName, index) => {
+      return icons.map((item, index) => {
         const iconWidth = () => {
-          if (iconName === 'L_ICON') {
+          if (item.name === 'L_ICON') {
             return 22;
-          } else if (iconName === 'T_ICON') {
+          } else if (item.name === 'T_ICON') {
             return 23;
-          } else if (iconName === 'I_ICON') {
+          } else if (item.name === 'I_ICON') {
             return 12;
-          } else if (iconName === 'PLUS_ICON') {
+          } else if (item.name === 'PLUS_ICON') {
             return 22;
           } else {
             return 26;
           }
         };
         const iconRightMargin = () => {
-          if (iconName === 'T_ICON') {
+          if (item.name === 'T_ICON') {
             return -7;
-          } else if (iconName === 'I_ICON') {
+          } else if (item.name === 'I_ICON') {
             return -11;
-          } else if (iconName === 'PLUS_ICON') {
+          } else if (item.name === 'PLUS_ICON') {
             return -7;
           } else {
             return -6;
@@ -199,8 +217,11 @@ const PrimaryDetails = () => {
           <TouchableWithoutFeedback
             activeOpacity={1}
             key={index}
-            onPress={() => setActiveIcon(iconName)}>
-            {activeIcon === iconName && (
+            onPress={() => {
+              setActiveIcon(item.name);
+              setGender(item.value);
+            }}>
+            {activeIcon === item.name && (
               <View
                 style={{
                   position: 'absolute',
@@ -210,16 +231,16 @@ const PrimaryDetails = () => {
                 <Image
                   source={LGBTQ_ASSET_URI.SELECTED_GENDER}
                   height={35}
-                  width={iconName === 'I_ICON' ? 35 : 38}
+                  width={item.name === 'I_ICON' ? 35 : 38}
                 />
               </View>
             )}
 
             <Image
-              source={LGBTQ_ASSET_URI[iconName]}
+              source={LGBTQ_ASSET_URI[item.name]}
               height={26}
               width={iconWidth()}
-              tintColor={activeIcon === iconName ? '#fff' : '#E43C59'}
+              tintColor={activeIcon === item.name ? '#fff' : '#E43C59'}
               changeTintColor
             />
           </TouchableWithoutFeedback>
@@ -330,7 +351,7 @@ const PrimaryDetails = () => {
             selectedItem={month}
           />
           <CustomDropdown
-            data={days}
+            data={getDaysInMonth(month)}
             placeholder="Day"
             width={78}
             defaultButtonText="11"
@@ -367,7 +388,7 @@ const PrimaryDetails = () => {
               payload: {
                 name: name,
                 hometown: hometown,
-                gender: 'Lesbian',
+                gender: gender,
                 birthday: `${year}-${monthNameToNumber(month)}-${day}`,
               },
             })

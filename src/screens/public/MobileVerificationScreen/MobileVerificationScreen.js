@@ -40,7 +40,7 @@ const MobileVerificationScreen = () => {
           Verification
         </Text>
         <Text color="#59595B" customStyle={{textAlign: 'center'}}>
-          Enter OTP code sent to +63 xxxxxxxxxx.
+          Enter OTP code sent to +63XXXXXXXXXX.
         </Text>
       </View>
       <View style={{top: verticalScale(110)}}>

@@ -8,6 +8,7 @@ import {
   START_LOGOUT_FAILED,
   START_LOGOUT_SUCCESS,
 } from './actionTypes';
+import {GENERIC_ERROR} from '../../utils/commons';
 
 export function* startLoginProcess({payload}) {
   const {emailOrMobile, password} = payload;
@@ -24,9 +25,13 @@ export function* startLoginProcess({payload}) {
       yield put({type: LOGIN_SUCCESS, payload: response.data.data});
     }
   } catch (error) {
+    const errorMessage =
+      error.response.data.message === 'Incorrect username or password.'
+        ? 'Incorrect Username or Password.'
+        : GENERIC_ERROR;
     yield put({
       type: LOGIN_FAILED,
-      payload: error,
+      payload: errorMessage,
     });
   }
 }

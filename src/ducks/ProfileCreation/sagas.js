@@ -132,6 +132,7 @@ export function* submitCustomerDetails({payload}) {
         type: SUBMIT_CUSTOMER_DETAILS_SUCCESS,
         payload: response.data,
       });
+      RootNavigation.navigate('Dashboard');
     }
   } catch (error) {
     yield put({
