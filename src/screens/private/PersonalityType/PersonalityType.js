@@ -26,6 +26,8 @@ import Image from '../../../components/Image/Image';
 import {GLOBAL_ASSET_URI, PERSONALITY_TYPE_URI} from '../../../utils/images';
 import SelectDropdown from 'react-native-select-dropdown';
 import Button from '../../../components/Button/Button';
+import {useDispatch} from 'react-redux';
+import {SUBMIT_CUSTOMER_DETAILS} from '../../../ducks/ProfileCreation/actionTypes';
 
 const hobbies = [
   'Sports & Games',
@@ -37,7 +39,14 @@ const hobbies = [
   'Travel',
 ];
 
-const LabeledInput = ({label, validationLabel = '', textInputProps, isBio}) => {
+const LabeledInput = ({
+  label,
+  validationLabel = '',
+  textInputProps,
+  isBio,
+  value,
+  setter,
+}) => {
   return (
     <LabeledInputContainer>
       <LabelContainer>
@@ -57,40 +66,68 @@ const LabeledInput = ({label, validationLabel = '', textInputProps, isBio}) => {
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         colors={['#E72454', '#FFC227']}>
-        <Input {...textInputProps} multiline={isBio} />
+        <Input
+          {...textInputProps}
+          multiline={isBio}
+          value={value}
+          onChangeText={setter}
+        />
       </BorderLinearGradient>
     </LabeledInputContainer>
   );
 };
 
-const CustomDropdown = props => (
-  <BorderLinearGradient
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-    colors={['#E72454', '#FFC227']}>
-    <SelectDropdown
-      data={props.data}
-      defaultButtonText={props.defaultButtonText || ''}
-      buttonStyle={{
-        backgroundColor: '#fff',
-        flex: 1,
-        borderRadius: 10,
-        width: scale(props.width),
-      }}
-      buttonTextStyle={{
-        fontWeight: '700',
-        fontSize: scale(12),
-        color: '#808080',
-      }}
-      dropdownIconPosition="right"
-      // renderDropdownIcon={renderDropdownIcon}
-    />
-  </BorderLinearGradient>
-);
+const CustomDropdown = props => {
+  const handleSelect = selectedItem => {
+    props.stateUpdateFunction(selectedItem);
+  };
+
+  return (
+    <BorderLinearGradient
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 0}}
+      colors={['#E72454', '#FFC227']}>
+      <SelectDropdown
+        data={props.data}
+        onSelect={handleSelect}
+        buttonTextAfterSelection={() => {
+          return props.selectedItem;
+        }}
+        defaultButtonText={props.selectedItem || props.placeholder}
+        buttonStyle={{
+          backgroundColor: '#fff',
+          flex: 1,
+          borderRadius: 10,
+          width: scale(props.width),
+        }}
+        buttonTextStyle={{
+          fontWeight: '700',
+          fontSize: scale(12),
+          color: '#808080',
+        }}
+        dropdownIconPosition="right"
+        // renderDropdownIcon={renderDropdownIcon}
+      />
+    </BorderLinearGradient>
+  );
+};
 
 const PersonalityType = () => {
+  const dispatch = useDispatch();
   const [selectedHobby, setSelectedHobby] = useState([]);
   const [selectedPersonality, setSelectedPersonality] = useState('');
+  const [bio, setBio] = useState('');
+  const [work, setWork] = useState('');
+  const [location, setLocation] = useState('');
+  const [heightFt, setHeightFt] = useState('');
+  const [heightIn, setHeightIn] = useState('');
+  const [startSignState, setStartSignState] = useState('');
+  const [educationState, setEducationState] = useState('');
+  const [drinking, setDrinking] = useState('');
+  const [smoking, setSmoking] = useState('');
+  const [religionState, setReligionState] = useState('');
+  const [petState, setPetState] = useState('');
+  const [politicsState, setPoliticsState] = useState('');
 
   const toggleLetterSelection = index => {
     // Check if the letter is already selected
@@ -109,11 +146,11 @@ const PersonalityType = () => {
       bounces={false}
       enableOnAndroid={true}
       enableAutomaticScroll={isIosDevice()}>
-      <LabeledInput label="Bio" isBio={true} />
+      <LabeledInput label="Bio" isBio={true} value={bio} setter={setBio} />
       <Separator space={20} />
-      <LabeledInput label="Work" />
+      <LabeledInput label="Work" value={work} setter={setWork} />
       <Separator space={20} />
-      <LabeledInput label="Location" />
+      <LabeledInput label="Location" value={location} setter={setLocation} />
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
         <Text color="#e33051" size={18}>
@@ -175,8 +212,22 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <View style={{flexDirection: 'row', gap: scale(10)}}>
-            <CustomDropdown width={60} defaultButtonText="5'" data={feet} />
-            <CustomDropdown width={60} defaultButtonText="7'" data={inches} />
+            <CustomDropdown
+              width={60}
+              defaultButtonText="5'"
+              data={feet}
+              placeholder="Ft"
+              stateUpdateFunction={setHeightFt}
+              selectedItem={heightFt}
+            />
+            <CustomDropdown
+              width={60}
+              defaultButtonText="7'"
+              data={inches}
+              placeholder="In"
+              stateUpdateFunction={setHeightIn}
+              selectedItem={heightIn}
+            />
           </View>
         </View>
         <View style={{left: scale(10)}}>
@@ -188,6 +239,9 @@ const PersonalityType = () => {
             width={135}
             defaultButtonText="Sagittarius"
             data={starSign}
+            placeholder="Star Sign"
+            stateUpdateFunction={setStartSignState}
+            selectedItem={startSignState}
           />
         </View>
       </View>
@@ -201,6 +255,9 @@ const PersonalityType = () => {
           width={285}
           defaultButtonText="Doctorate"
           data={education}
+          placeholder="Education"
+          stateUpdateFunction={setEducationState}
+          selectedItem={educationState}
         />
       </View>
       <Separator space={10} />
@@ -215,6 +272,9 @@ const PersonalityType = () => {
               width={135}
               defaultButtonText="Occasional"
               data={drinkingAndSmoking}
+              placeholder="Drinking"
+              stateUpdateFunction={setDrinking}
+              selectedItem={drinking}
             />
           </View>
         </View>
@@ -227,6 +287,9 @@ const PersonalityType = () => {
             width={135}
             defaultButtonText="Occasional"
             data={drinkingAndSmoking}
+            placeholder="Smoking"
+            stateUpdateFunction={setSmoking}
+            selectedItem={smoking}
           />
         </View>
       </View>
@@ -240,6 +303,9 @@ const PersonalityType = () => {
           width={285}
           defaultButtonText="Christian"
           data={religion}
+          placeholder="Religion"
+          stateUpdateFunction={setReligionState}
+          selectedItem={religionState}
         />
       </View>
       <Separator space={10} />
@@ -250,7 +316,14 @@ const PersonalityType = () => {
           </Text>
           <Separator space={10} />
           <View style={{flexDirection: 'row', gap: scale(10)}}>
-            <CustomDropdown width={135} defaultButtonText="Dog" data={pets} />
+            <CustomDropdown
+              width={135}
+              defaultButtonText="Dog"
+              data={pets}
+              placeholder="Pets"
+              stateUpdateFunction={setPetState}
+              selectedItem={petState}
+            />
           </View>
         </View>
         <View style={{left: scale(10)}}>
@@ -262,6 +335,9 @@ const PersonalityType = () => {
             width={135}
             defaultButtonText="Apolitical"
             data={politics}
+            placeholder="Politics"
+            stateUpdateFunction={setPoliticsState}
+            selectedItem={politicsState}
           />
         </View>
       </View>
@@ -400,6 +476,25 @@ const PersonalityType = () => {
         <View style={{flexDirection: 'row', gap: scale(10)}}>
           <Button
             title="Continue"
+            onPress={() => {
+              dispatch({
+                type: SUBMIT_CUSTOMER_DETAILS,
+                payload: {
+                  bio,
+                  work,
+                  location,
+                  height: heightFt + heightIn,
+                  starSign: startSignState,
+                  education: educationState,
+                  drinking,
+                  smoking,
+                  religion: religionState,
+                  pet: petState,
+                  politics: politicsState,
+                  personalityType: selectedPersonality,
+                },
+              });
+            }}
             style={{
               top: verticalScale(20),
               height: verticalScale(isIosDevice() ? 30 : 40),

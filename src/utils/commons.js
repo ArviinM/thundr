@@ -97,7 +97,7 @@ const currentYear = new Date().getFullYear();
 const range = (start, stop, step) =>
   Array.from({length: (stop - start) / step + 1}, (_, i) => start + i * step);
 
-export const MONTHS = [
+export const months = [
   'Jan',
   'Feb',
   'Mar',
@@ -110,17 +110,19 @@ export const MONTHS = [
   'Oct',
   'Nov',
   'Dec',
-].map(month => ({label: month, value: month}));
+];
 
-export const DAYS = Array.from({length: 31}, (_, i) => i + 1).map(day => ({
-  label: day.toString(),
-  value: day.toString(),
-}));
+export const days = [];
+for (let i = 1; i <= 31; i++) {
+  const formattedDay = i < 10 ? `0${i}` : `${i}`;
+  days.push(formattedDay);
+}
 
-export const YEARS = range(currentYear, currentYear - 50, -1).map(year => ({
-  label: year.toString(),
-  value: year.toString(),
-}));
+const currYear = new Date().getFullYear();
+export const years = [];
+for (let i = currYear; i >= currYear - 100; i--) {
+  years.push(i);
+}
 
 export const starSign = [
   'Aries',

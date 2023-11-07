@@ -3,6 +3,7 @@ import onboarding from './Onboarding/reducer';
 import login from './Login/reducer';
 import mobileEmail from './MobileEmail/reducer';
 import ssoValidation from './SSOValidation/reducer';
+import profileCreation from './ProfileCreation/reducer';
 import {START_LOGOUT_SUCCESS} from './Login/actionTypes';
 
 const appReducer = combineReducers({
@@ -10,6 +11,7 @@ const appReducer = combineReducers({
   login,
   mobileEmail,
   ssoValidation,
+  profileCreation,
 });
 
 const rootReducer = (state, action) => {
