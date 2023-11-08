@@ -75,7 +75,7 @@
        steps:
          - run: ls
          - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/thundr/Documents/Projects/Thundr/artifacts/
+         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
      Android-AAB-Build:
        runs-on: m2
        needs: Android-Prepare-Build
@@ -94,7 +94,7 @@
        steps:
          - run: ls
          - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/thundr/Documents/Projects/Thundr/artifacts/
+         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
      Android-Publish-Dev-PlayStore:
        runs-on: m2
        needs: Android-AAB-Upload
@@ -138,7 +138,7 @@
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
       - run: ls MyApp
       - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-dev-${{ github.run_number }}.ipa"
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/thundr/Documents/Projects/Thundr/artifacts/
+      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
      iOS-Export-AppStore:
       runs-on: m2
       needs: iOS-Export-IPA
