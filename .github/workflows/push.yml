@@ -7,7 +7,7 @@ on:
       - test-build
 jobs:
   Git-Fetch-State:
-    runs-on: self-hosted
+    runs-on: linux
     steps:
       - uses: AutoModality/action-clean@v1
       - name: Check out repository code
@@ -16,26 +16,26 @@ jobs:
           fetch-depth: 0
       - run: ls
   Yarn-Install:
-        runs-on: self-hosted
+        runs-on: linux
         needs: Git-Fetch-State
         steps:
             - run: yarn install
   Lint-Test:
-    runs-on: self-hosted
+    runs-on: linux
     needs: Yarn-Install
     continue-on-error: true
     steps:
       - run: ls
       - run: yarn lint
   Unit-Test:
-    runs-on: self-hosted
+    runs-on: linux
     needs: Lint-Test
     continue-on-error: true
     steps:
       - run: ls
       - run: yarn test
   Sonar-Test:
-    runs-on: self-hosted
+    runs-on: linux
     needs: Unit-Test
     steps:
       - run: ls
