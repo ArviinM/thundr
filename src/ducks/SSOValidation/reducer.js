@@ -43,7 +43,7 @@ const ssoValidation = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage: action.payload,
       };
     // MOBILE OTP VERIFICATION
     case START_SSO_MOBILE_VERIFICATION:
@@ -64,7 +64,7 @@ const ssoValidation = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage: action.payload,
       };
     default:
       return state;

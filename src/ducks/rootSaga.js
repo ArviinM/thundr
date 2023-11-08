@@ -3,6 +3,7 @@ import loginWatcher from './Login/sagas';
 import mobileEmailWatcher from './MobileEmail/sagas';
 import ssoValidationWatcher from './SSOValidation/sagas';
 import profileCreationWatcher from './ProfileCreation/sagas';
+import dashboardWatcher from './Dashboard/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -10,5 +11,6 @@ export default function* rootSaga() {
     mobileEmailWatcher(),
     ssoValidationWatcher(),
     profileCreationWatcher(),
+    dashboardWatcher(),
   ]);
 }

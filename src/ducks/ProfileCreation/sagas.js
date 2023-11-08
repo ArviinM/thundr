@@ -12,6 +12,9 @@ import {
   SUBMIT_CUSTOMER_DETAILS,
   SUBMIT_CUSTOMER_DETAILS_FAILED,
   SUBMIT_CUSTOMER_DETAILS_SUCCESS,
+  UPLOAD_PHOTO,
+  UPLOAD_PHOTO_FAILED,
+  UPLOAD_PHOTO_SUCCESS,
 } from './actionTypes';
 import * as RootNavigation from '../../navigations/tempNavigation';
 import ProfileCreationConfig from '../../api/services/profileCreationService';
@@ -141,11 +144,36 @@ export function* submitCustomerDetails({payload}) {
     });
   }
 }
+
+export function* uploadPhoto({payload}) {
+  const {loginData} = yield select(state => state.login);
+  const {file} = payload;
+  try {
+    const response = yield call(ProfileCreationConfig.uploadPhoto, {
+      sub: loginData.sub,
+      file: file,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: UPLOAD_PHOTO_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: UPLOAD_PHOTO_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* profileCreationWatcher() {
   yield takeLatest(START_PROFILE_CREATION, startProfileCreation);
   yield takeLatest(GET_COMPATIBILTY_QUESTIONS, getCompatibilityQuestions);
   yield takeLatest(SUBMIT_COMPATIBILITY_ANSWER, submitCompatibilityAnswer);
   yield takeLatest(SUBMIT_CUSTOMER_DETAILS, submitCustomerDetails);
+  yield takeLatest(UPLOAD_PHOTO, uploadPhoto);
 }
 
 export default profileCreationWatcher;

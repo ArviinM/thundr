@@ -13,6 +13,9 @@ import {
   SUBMIT_CUSTOMER_DETAILS_FAILED,
   SUBMIT_CUSTOMER_DETAILS_SUCCESS,
   UPDATE_PROFILE_CREATION_STATE,
+  UPLOAD_PHOTO,
+  UPLOAD_PHOTO_FAILED,
+  UPLOAD_PHOTO_SUCCESS,
 } from './actionTypes';
 
 export const INITIAL_STATE = {
@@ -102,6 +105,25 @@ const profileCreation = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case SUBMIT_CUSTOMER_DETAILS_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
+      };
+    // UPLOAD PHOTO
+    case UPLOAD_PHOTO:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case UPLOAD_PHOTO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UPLOAD_PHOTO_FAILED:
       return {
         ...state,
         loading: false,

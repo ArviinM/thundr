@@ -1,9 +1,8 @@
 // React modules
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
 import Onboarding from 'react-native-onboarding-swiper';
 
 // Components
@@ -14,12 +13,30 @@ import Image from '../../../components/Image/Image';
 
 // Utils
 import {isIosDevice, verticalScale} from '../../../utils/commons';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {START_LOGOUT} from '../../../ducks/Login/actionTypes';
+import {
+  GET_CUSTOMER_DETAILS,
+  GET_CUSTOMER_PHOTO,
+  GET_CUSTOMER_PROFILE,
+} from '../../../ducks/Dashboard/actionTypes';
 
 const Dashboard = () => {
-  const navigation = useNavigation();
+  const {loginData} = useSelector(state => state.login);
+  const {sub} = useSelector(state => state.onboarding);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: GET_CUSTOMER_DETAILS,
+      payload: {sub: loginData.sub || sub},
+    });
+    dispatch({type: GET_CUSTOMER_PHOTO, payload: {sub: loginData.sub || sub}});
+    dispatch({
+      type: GET_CUSTOMER_PROFILE,
+      payload: {sub: loginData.sub || sub},
+    });
+  }, [dispatch]);
 
   return (
     <View

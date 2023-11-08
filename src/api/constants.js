@@ -1,6 +1,7 @@
 export const LOGIN = {
   LOGIN: 'auth/login',
   LOGOUT: 'auth/logout',
+  LOGIN_VIA_REFRESH_TOKEN: 'auth/refresh',
 };
 
 export const MOBILE_EMAIL = {
@@ -21,4 +22,11 @@ export const PROFILE_CREATION = {
   COMPATIBILITY_QUESTIONS: 'customer/question',
   COMPATIBILITY_ANSWERS: 'customer/customer-answer',
   CUSTOMER_DETAILS: 'customer/customer-details',
+  UPLOAD_PHOTO: 'customer/customer-photo',
+};
+
+export const DASHBOARD = {
+  GET_CUSTOMER_DETAILS: 'customer/customer-details',
+  GET_CUSTOMER_PHOTO: 'customer/customer-photo',
+  GET_CUSTOMER_PROFILE: 'customer/profile',
 };

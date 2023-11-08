@@ -48,9 +48,13 @@ export function* startMobileValidation({payload}) {
       RootNavigation.navigate('MobileVerificationScreen');
     }
   } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message === 'User already exist.'
+        ? 'User already exist.'
+        : GENERIC_ERROR;
     yield put({
       type: START_SSO_MOBILE_VALIDATION_FAILED,
-      payload: error,
+      payload: errorMessage,
     });
   }
 }
@@ -83,9 +87,13 @@ export function* startMobileVerification({payload}) {
       });
     }
   } catch (error) {
+    const errorMessage =
+      error?.response?.data?.message === 'OTP Sent Mismatch'
+        ? ' Invalid OTP. Please try again.'
+        : GENERIC_ERROR;
     yield put({
       type: START_SSO_MOBILE_VERIFICATION_FAILED,
-      payload: error,
+      payload: errorMessage,
     });
   }
 }
