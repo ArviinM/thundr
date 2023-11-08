@@ -19,6 +19,7 @@ export const INITIAL_STATE = {
   password: '',
   showModal: false,
   modalMessage: '',
+  token: null,
 };
 
 const mobileEmail = (state = INITIAL_STATE, action) => {
@@ -40,6 +41,7 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         loginData: action.payload,
         loading: false,
         authenticated: true,
+        token: action.payload.accessToken,
       };
     case LOGIN_FAILED:
       return {

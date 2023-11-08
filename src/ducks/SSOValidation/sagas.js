@@ -62,6 +62,7 @@ export function* startMobileValidation({payload}) {
 export function* startMobileVerification({payload}) {
   const {ssoValidationData, sub} = yield select(state => state.ssoValidation);
   const {otp} = payload;
+
   try {
     const response = yield call(SSOValidationConfig.ssoMobileVerification, {
       phoneNumber: ssoValidationData.data.username,
@@ -74,6 +75,7 @@ export function* startMobileVerification({payload}) {
     const updatedValue = {
       ...ssoValidationData,
       forProfileCreation: true,
+      sub: sub,
     };
 
     if (response?.status === 200) {

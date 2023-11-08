@@ -129,7 +129,7 @@ const LoginOptionScreen = () => {
         {renderButton(
           true,
           `https://dev-api.thundr.ph/auth/get-sso-url?sso=${
-            isIosDevice() ? 'Apple' : 'Google'
+            isIosDevice() ? 'SignInWithApple' : 'Google'
           }`,
           isIosDevice()
             ? LOGIN_ASSET_URI.APPLE_ICON
