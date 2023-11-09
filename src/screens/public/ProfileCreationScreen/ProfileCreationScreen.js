@@ -103,8 +103,7 @@ const PrimaryDetails = () => {
   const [gender, setGender] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
 
-  const shouldBeEnabled =
-    month && year && day && name && hometown && gender && imageSource; // should add imageSource for this checker
+  const shouldBeEnabled = month && year && day && name && hometown && gender; // should add imageSource for this checker
 
   useEffect(() => {
     dispatch({type: GET_COMPATIBILTY_QUESTIONS, payload: loginData.sub});
@@ -147,8 +146,8 @@ const PrimaryDetails = () => {
         },
       );
     } catch (error) {
-      setDisplayModal(true);
-      setImageSource(null);
+      // setDisplayModal(true);
+      // setImageSource(null);
     }
   };
 
