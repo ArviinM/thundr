@@ -60,7 +60,10 @@ const LoginOptionScreen = () => {
         });
         dispatch({
           type: UPDATE_LOGIN_STATE,
-          newState: {loginData: responseObject},
+          newState: {
+            loginData: responseObject,
+            token: responseObject.accessToken,
+          },
         });
       } else {
         dispatch({

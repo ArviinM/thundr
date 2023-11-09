@@ -1,6 +1,6 @@
 // React modules
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -93,7 +93,6 @@ const PrimaryDetails = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.profileCreation);
   const {loginData} = useSelector(state => state.login);
-
   const [activeIcon, setActiveIcon] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState(null);
@@ -103,6 +102,8 @@ const PrimaryDetails = () => {
   const [imageSource, setImageSource] = useState('');
   const [gender, setGender] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
+
+  const shouldBeEnabled = month && year && day && name && hometown && gender; // should add imageSource for this checker
 
   useEffect(() => {
     dispatch({type: GET_COMPATIBILTY_QUESTIONS, payload: loginData.sub});
@@ -150,12 +151,48 @@ const PrimaryDetails = () => {
     }
   };
 
-  const displayFileSizeModal = () => {
+  const renderModal = () => {
     return (
-      <Overlay onBackdropPress={() => setDisplayModal(false)}>
-        <View>
-          <Text>File size is too big. Maximum of 5MB only</Text>
+      <Overlay
+        onBackdropPress={() => setDisplayModal(false)}
+        overlayStyle={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#E33051',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: [
+            {translateX: -scale(125)},
+            {translateY: -verticalScale(40)},
+          ],
+          height: verticalScale(isIosDevice() ? 80 : 85),
+          width: scale(250),
+          borderRadius: 20,
+        }}
+        isVisible={displayModal}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: verticalScale(isIosDevice() ? 65 : 75),
+            right: scale(5),
+          }}>
+          <TouchableOpacity onPress={() => setDisplayModal(false)}>
+            <Image
+              source={GLOBAL_ASSET_URI.CLOSE_ICON}
+              height={25}
+              width={25}
+            />
+          </TouchableOpacity>
         </View>
+        <Text
+          size={18}
+          color="#fff"
+          weight={700}
+          customStyle={{textAlign: 'center'}}>
+          There's something wrong with the photo you uploaded. Please try again.
+        </Text>
+        <Separator space={15} />
       </Overlay>
     );
   };
@@ -163,7 +200,7 @@ const PrimaryDetails = () => {
   const Photo = () => {
     return (
       <LabeledInputContainer>
-        {displayModal && displayFileSizeModal()}
+        {displayModal && renderModal()}
         <LabelContainer>
           <Text color="#e33051" size={18}>
             Photo
@@ -396,6 +433,7 @@ const PrimaryDetails = () => {
           setter={text => setHometown(text)}
         />
         <Button
+          disabled={!shouldBeEnabled}
           title="Continue"
           primary
           textStyle={{weight: 400}}

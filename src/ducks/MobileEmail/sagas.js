@@ -136,6 +136,7 @@ export function* startEmailVerification({payload}) {
           newState: {
             authenticated: true,
             loginData: response.data.data,
+            token: response.data.data.accessToken,
           },
         });
         // RootNavigation.navigate('PrivateScreenNavigation');

@@ -43,7 +43,7 @@ export function* startProfileCreation({payload}) {
   } catch (error) {
     const isBelow35 =
       error.response.data.message === 'Customer is below 35'
-        ? 'Customer is below 35'
+        ? 'Your age does not meet the age requirement'
         : GENERIC_ERROR;
     yield put({
       type: START_PROFILE_CREATION_FAILED,

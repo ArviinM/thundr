@@ -12,6 +12,7 @@ import * as RootNavigation from '../../navigations/tempNavigation';
 import {UPDATE_LOGIN_STATE} from '../Login/actionTypes';
 import SSOValidationConfig from '../../api/services/ssoValidationService';
 import axios from 'axios';
+import {GENERIC_ERROR} from '../../utils/commons';
 
 export function* startMobileValidation({payload}) {
   const {ssoValidationData} = yield select(state => state.ssoValidation);
@@ -84,8 +85,16 @@ export function* startMobileVerification({payload}) {
         payload: response.data,
       });
       yield put({
+        type: UPDATE_SSO_VALIDATION_STATE,
+        newState: {
+          loginViaSSO: false,
+        },
+      });
+      yield put({
         type: UPDATE_LOGIN_STATE,
-        newState: {loginData: updatedValue, authenticated: true},
+        newState: {
+          authenticated: true,
+        },
       });
     }
   } catch (error) {
