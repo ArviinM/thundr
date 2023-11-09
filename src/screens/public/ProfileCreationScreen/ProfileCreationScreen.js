@@ -4,6 +4,7 @@ import {View} from 'react-native';
 
 // Third party libraries
 import {launchImageLibrary} from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
 
 // Components
 import Button from '../../../components/Button/Button';
@@ -11,7 +12,6 @@ import Text from '../../../components/Text/Text';
 
 // Utils
 import {
-  days,
   getDaysInMonth,
   isIosDevice,
   months,
@@ -34,7 +34,6 @@ import Image from '../../../components/Image/Image';
 import {GLOBAL_ASSET_URI, LGBTQ_ASSET_URI} from '../../../utils/images';
 import Separator from '../../../components/Separator/Separator';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -44,6 +43,8 @@ import {
 } from '../../../ducks/ProfileCreation/actionTypes';
 import {monthNameToNumber} from './utils';
 import Spinner from '../../../components/Spinner/Spinner';
+import axios from 'axios';
+import {Overlay} from 'react-native-elements';
 
 const icons = [
   {name: 'L_ICON', value: 'Lesbian'},
@@ -89,8 +90,10 @@ const LabeledInput = ({
 };
 
 const PrimaryDetails = () => {
-  const {loading} = useSelector(state => state.profileCreation);
   const dispatch = useDispatch();
+  const {loading} = useSelector(state => state.profileCreation);
+  const {loginData} = useSelector(state => state.login);
+
   const [activeIcon, setActiveIcon] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState(null);
@@ -99,47 +102,68 @@ const PrimaryDetails = () => {
   const [hometown, setHometown] = useState(null);
   const [imageSource, setImageSource] = useState('');
   const [gender, setGender] = useState(null);
+  const [displayModal, setDisplayModal] = useState(false);
 
   useEffect(() => {
-    dispatch({type: GET_COMPATIBILTY_QUESTIONS});
+    dispatch({type: GET_COMPATIBILTY_QUESTIONS, payload: loginData.sub});
   }, [dispatch]);
 
-  const openImageLibrary = () => {
+  const openImageLibrary = async () => {
     const options = {
-      mediaType: 'photo', // Specify that you want to pick photos
+      mediaType: 'photo',
+      quality: 1,
     };
 
-    launchImageLibrary(options, async response => {
-      console.log('rewew', response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else {
-        const source = {uri: response.assets[0].uri};
-        setImageSource(source);
-
-        // const formData = new FormData();
-
-        // console.log('formData', formData);
-        // console.log('source', source);
-        // formData.append(
-        //   'form',
-        //   JSON.stringify({
-        //     uri: response.assets[0].uri,
-        //     type: 'image/jpeg', // Adjust the content type based on the file type
-        //     name: 'file.jpg',
-        //   }),
-        // );
-
-        // dispatch({ type: UPLOAD_PHOTO, payload: { file: formData } });
-      }
+    const response = await new Promise(resolve => {
+      launchImageLibrary(options, resolve);
     });
+
+    if (!response) {
+      return null;
+    }
+
+    const source = {uri: response.assets[0].uri};
+    const {uri, fileName} = response.assets[0];
+    setImageSource(source);
+
+    const imageBase64 = await RNFS.readFile(uri, 'base64');
+    const formData = new FormData();
+
+    formData.append('sub', loginData.sub);
+    formData.append('isPrimary', 'true');
+    formData.append('filepath', imageBase64);
+    formData.append('filename', fileName);
+
+    try {
+      const uploadResponse = await axios.post(
+        `https://dev-api.thundr.ph/customer/customer-photo-b64`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${loginData.accessToken}`,
+          },
+        },
+      );
+    } catch (error) {
+      setDisplayModal(true);
+      setImageSource(null);
+    }
+  };
+
+  const displayFileSizeModal = () => {
+    return (
+      <Overlay onBackdropPress={() => setDisplayModal(false)}>
+        <View>
+          <Text>File size is too big. Maximum of 5MB only</Text>
+        </View>
+      </Overlay>
+    );
   };
 
   const Photo = () => {
     return (
       <LabeledInputContainer>
+        {displayModal && displayFileSizeModal()}
         <LabelContainer>
           <Text color="#e33051" size={18}>
             Photo
@@ -159,7 +183,7 @@ const PrimaryDetails = () => {
         </Text>
         <Separator space={10} />
         <PhotoIconWrapper onPress={openImageLibrary}>
-          {imageSource ? (
+          {imageSource && !displayModal ? (
             <Image
               source={imageSource}
               customStyle={{width: '100%', height: '100%'}}

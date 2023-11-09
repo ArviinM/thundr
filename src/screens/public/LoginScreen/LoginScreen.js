@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import * as yup from 'yup';
