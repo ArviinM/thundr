@@ -166,7 +166,7 @@ const LoginScreen = () => {
       {loading && <Spinner visible={true} />}
       <KeyboardAwareScrollView
         bounces={false}
-        keyboardShouldPersistTaps={true}
+        keyboardShouldPersistTaps="always"
         contentContainerStyle={{flexGrow: 1}}
         enableOnAndroid={true}>
         <View

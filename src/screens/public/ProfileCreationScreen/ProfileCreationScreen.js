@@ -136,20 +136,7 @@ const PrimaryDetails = () => {
     formData.append('filepath', imageBase64);
     formData.append('filename', fileName);
 
-    try {
-      const uploadResponse = await axios.post(
-        `https://dev-api.thundr.ph/customer/customer-photo-b64`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${loginData.accessToken}`,
-          },
-        },
-      );
-    } catch (error) {
-      // setDisplayModal(true);
-      // setImageSource(null);
-    }
+    dispatch({type: UPLOAD_PHOTO, payload: {formData}});
   };
 
   const renderModal = () => {

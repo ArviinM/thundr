@@ -22,7 +22,7 @@ export const PROFILE_CREATION = {
   COMPATIBILITY_QUESTIONS: 'customer/question',
   COMPATIBILITY_ANSWERS: 'customer/customer-answer',
   CUSTOMER_DETAILS: 'customer/customer-details',
-  UPLOAD_PHOTO: 'customer/customer-photo',
+  UPLOAD_PHOTO_BASE_64: 'customer/customer-photo-b64',
 };
 
 export const DASHBOARD = {

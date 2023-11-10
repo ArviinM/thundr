@@ -128,7 +128,8 @@ const profileCreation = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         showModal: true,
-        modalMessage: GENERIC_ERROR,
+        modalMessage:
+          "There's something wrong with the photo you uploaded. Please try again.",
       };
     default:
       return state;

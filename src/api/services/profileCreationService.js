@@ -14,7 +14,10 @@ const ProfileCreationConfig = {
   customerDetails: payload =>
     api.post(PROFILE_CREATION.CUSTOMER_DETAILS, payload),
   uploadPhoto: payload =>
-    api.post(`${PROFILE_CREATION.UPLOAD_PHOTO}`, payload.formData),
+    api.post(
+      `${PROFILE_CREATION.UPLOAD_PHOTO_BASE_64}`,
+      payload.payload.formData,
+    ),
 };
 
 export default ProfileCreationConfig;
