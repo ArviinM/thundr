@@ -146,12 +146,9 @@ export function* submitCustomerDetails({payload}) {
 }
 
 export function* uploadPhoto({payload}) {
-  const {loginData} = yield select(state => state.login);
-  const {file} = payload;
   try {
     const response = yield call(ProfileCreationConfig.uploadPhoto, {
-      sub: loginData.sub,
-      file: file,
+      payload,
     });
 
     if (response?.status === 200) {
@@ -161,6 +158,7 @@ export function* uploadPhoto({payload}) {
       });
     }
   } catch (error) {
+    console.log('test', error);
     yield put({
       type: UPLOAD_PHOTO_FAILED,
       payload: error,
