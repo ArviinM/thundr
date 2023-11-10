@@ -38,6 +38,13 @@ const CompatibilityQuestions = () => {
         },
       });
     } else {
+      dispatch({
+        type: SUBMIT_COMPATIBILITY_ANSWER,
+        payload: {
+          questionId: questionId,
+          answerId: selectedAnswerId.toString(),
+        },
+      });
       navigation.navigate('PersonalityType');
     }
   };
