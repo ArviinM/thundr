@@ -25,13 +25,8 @@
        needs: Git-Fetch-State
        steps:
          - run: ls
-         - run: ls src
-         - run: ls src/screens
-         - run: ls src/screens/public
-         - run: ls src/screens/public/LoginOptionsScreen
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
          - run: echo -en "${{VARS.DEV_ENV}}" >> .env
-         - run: sudo sed -i '' 's/BUILD_NUMBER/${{github.run_number}}/g' src/screens/public/LoginOptionsScreen/LoginOptionsScreen.js
      Yarn-Install:
        runs-on: m2
        needs: Package-Rename
