@@ -59,7 +59,7 @@ const Modal = props => {
           {translateX: -scale(125)},
           {translateY: -verticalScale(40)},
         ],
-        height: verticalScale(isIosDevice() ? 80 : 85),
+        height: verticalScale(isIosDevice() ? 80 : 100),
         width: scale(250),
         borderRadius: 20,
       }}
@@ -67,7 +67,7 @@ const Modal = props => {
       <View
         style={{
           position: 'absolute',
-          bottom: verticalScale(isIosDevice() ? 65 : 75),
+          bottom: verticalScale(isIosDevice() ? 65 : 85),
           right: scale(10),
         }}>
         <TouchableOpacity onPress={handleCloseModal}>

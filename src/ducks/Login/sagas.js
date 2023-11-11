@@ -10,12 +10,13 @@ import {
   START_LOGOUT,
   START_LOGOUT_FAILED,
   START_LOGOUT_SUCCESS,
+  UPDATE_LOGIN_STATE,
 } from './actionTypes';
 import {GENERIC_ERROR} from '../../utils/commons';
 
 export function* startLoginProcess({payload}) {
   const {emailOrMobile, password} = payload;
-  const phoneNumber = emailOrMobile;
+  const phoneNumber = `+63${emailOrMobile}`;
 
   try {
     const response = yield call(LoginConfig.login, {
@@ -68,7 +69,8 @@ export function* startLoginViaRefreshToken({payload}) {
 
 export function* startLogoutProcess({payload}) {
   try {
-    const response = yield call(LoginConfig.logout);
+    // const response = yield call(LoginConfig.logout);
+    yield put({type: UPDATE_LOGIN_STATE, newState: {token: null}});
     yield put({type: START_LOGOUT_SUCCESS, payload: response.data.data});
   } catch (error) {
     yield put({

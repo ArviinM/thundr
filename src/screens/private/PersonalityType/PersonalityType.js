@@ -52,7 +52,9 @@ const LabeledInput = ({
   isBio,
   value,
   setter,
+  clearState,
 }) => {
+  const clearTextInputs = label === 'Education' || label === 'Religion';
   return (
     <LabeledInputContainer>
       <LabelContainer>
@@ -78,6 +80,22 @@ const LabeledInput = ({
           value={value}
           onChangeText={setter}
         />
+        {clearTextInputs && (
+          <TouchableOpacity
+            onPress={clearState}
+            style={{
+              position: 'absolute',
+              alignSelf: 'flex-end',
+              right: scale(15),
+              top: verticalScale(8),
+            }}>
+            <Image
+              source={GLOBAL_ASSET_URI.CLOSE_ICON}
+              height={25}
+              width={25}
+            />
+          </TouchableOpacity>
+        )}
       </BorderLinearGradient>
     </LabeledInputContainer>
   );
@@ -339,6 +357,10 @@ const PersonalityType = () => {
             label="Education"
             value={otherEducationValue}
             setter={setOtherEducationValue}
+            clearState={() => {
+              setEducationState('');
+              setOtherEducationValue('');
+            }}
           />
         ) : (
           <>
@@ -397,6 +419,10 @@ const PersonalityType = () => {
             label="Religion"
             value={otherReligionValue}
             setter={setOtherReligionValue}
+            clearState={() => {
+              setReligionState('');
+              setOtherReligionValue('');
+            }}
           />
         ) : (
           <>

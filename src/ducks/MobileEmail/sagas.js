@@ -41,10 +41,18 @@ export function* startMobileValidation({payload}) {
       error?.response?.data?.message === 'User already exist.'
         ? 'User already exist.'
         : GENERIC_ERROR;
-    yield put({
-      type: START_MOBILE_VALIDATION_FAILED,
-      payload: errorMessage,
-    });
+    if (error?.response?.data?.message === 'User already exist.') {
+      yield put({
+        type: UPDATE_MOBILE_EMAIL_STATE,
+        newState: {loading: false, phoneNumber: mobileNumber},
+      });
+      RootNavigation.navigate('LoginScreen');
+    } else {
+      yield put({
+        type: START_MOBILE_VALIDATION_FAILED,
+        payload: errorMessage,
+      });
+    }
   }
 }
 

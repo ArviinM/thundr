@@ -1,12 +1,11 @@
 import axios, {CancelToken} from 'axios';
 import store from '../ducks/store';
-
-const DEV_URL = 'https://dev-api.thundr.ph/';
+import {API_BASE_URL} from '@env';
 
 const AXIOS_TIMEOUT = 30000;
 
 const config = {
-  baseURL: DEV_URL,
+  baseURL: API_BASE_URL,
   timeout: AXIOS_TIMEOUT,
 };
 
