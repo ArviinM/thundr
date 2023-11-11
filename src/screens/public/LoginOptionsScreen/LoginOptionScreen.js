@@ -198,6 +198,10 @@ const LoginOptionScreen = () => {
               Privacy Policy.
             </Text>
           </Text>
+          <Separator space={20} />
+          <Text
+            size={11}
+            customStyle={{textAlign: 'center'}}>{`BUILD BUILD_NUMBER`}</Text>
         </View>
       </View>
     </View>
