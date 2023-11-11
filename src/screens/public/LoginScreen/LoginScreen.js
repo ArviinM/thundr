@@ -32,6 +32,7 @@ import Spinner from '../../../components/Spinner/Spinner';
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.login);
+  const {phoneNumber} = useSelector(state => state.mobileEmail);
   const {refreshToken, customerPhoto, customerName} = useSelector(
     state => state.onboarding,
   );
@@ -95,7 +96,7 @@ const LoginScreen = () => {
     return (
       <Formik
         initialValues={{
-          emailOrMobile: '',
+          emailOrMobile: phoneNumber ? phoneNumber : '',
           password: '',
         }}
         validationSchema={validationSchema}
@@ -112,15 +113,18 @@ const LoginScreen = () => {
                     width: scale(230),
                     height: verticalScale(35),
                   }}
-                  placeholder="Email / Mobile Number"
+                  placeholder="XXX XXX XXXX"
                   value={values.emailOrMobile}
                   onChangeText={handleChange('emailOrMobile')}
                   errors={capitalizeFirstLetter(
                     errors.emailOrMobile
-                      ? 'Email or Mobile Number is a required field'
+                      ? 'Mobile Number is a required field'
                       : '',
                   )}
                   touched={touched.emailOrMobile}
+                  showLeftContent={true}
+                  maxLength={10}
+                  editable={false}
                 />
                 <TextInput
                   inputStyle={{

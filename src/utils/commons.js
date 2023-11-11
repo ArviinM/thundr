@@ -134,7 +134,7 @@ export function getDaysInMonth(monthName) {
 
   const daysInMonth = {
     Jan: 31,
-    Feb: 28, // Assuming a non-leap year
+    Feb: 29,
     Mar: 31,
     April: 30,
     May: 31,

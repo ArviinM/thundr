@@ -29,6 +29,7 @@ export const StyledTextInput = styled(TextInput)`
   color: black;
   background: #fff;
   justify-content: center;
+  padding-left: ${props => scale(props.showLeftContent ? 50 : 15)}px;
 `;
 
 export const TextInputContainer = styled.View`

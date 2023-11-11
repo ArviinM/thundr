@@ -14,8 +14,9 @@ import {
 } from './Styled';
 
 // Utils
-import {scale} from '../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import Image from '../../components/Image/Image';
+import {View} from 'react-native';
 
 const TextInput = props => {
   const {
@@ -38,6 +39,7 @@ const TextInput = props => {
     onPress,
     fromCreatePassword = false,
     fromCreatePassword2 = false,
+    showLeftContent = false,
   } = props;
 
   return (
@@ -48,6 +50,28 @@ const TextInput = props => {
         </Text>
       </LabelContainer>
       <TextInputContainer>
+        {showLeftContent && (
+          <View
+            style={{
+              position: 'absolute',
+              left: scale(35),
+              zIndex: 1,
+              top: verticalScale(isIosDevice() ? 12 : 9),
+              flexDirection: 'row',
+            }}>
+            <Text color="#E33051" weight={700}>
+              +63
+            </Text>
+            <View
+              style={{
+                width: 1,
+                height: verticalScale(isIosDevice() ? 18 : 20),
+                backgroundColor: '#B1B3B5',
+                marginHorizontal: scale(6),
+              }}
+            />
+          </View>
+        )}
         <StyledTextInput
           placeholder={placeholder}
           value={value}
@@ -63,6 +87,7 @@ const TextInput = props => {
           numberOfLines={4}
           editable={editable}
           autoCapitalize="none"
+          showLeftContent={showLeftContent}
         />
         {hasIcon && (
           <StyledTouchableOpacity

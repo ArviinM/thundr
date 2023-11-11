@@ -113,7 +113,6 @@ const PrimaryDetails = () => {
   const openImageLibrary = async () => {
     const options = {
       mediaType: 'photo',
-      quality: 0.03,
     };
 
     const response = await new Promise(resolve => {
@@ -212,7 +211,6 @@ const PrimaryDetails = () => {
             <Image
               source={imageSource}
               customStyle={{width: '100%', height: '100%'}}
-              stretch
             />
           ) : (
             <PhotoIconBorderLinearGradient

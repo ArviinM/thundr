@@ -9,6 +9,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import base64 from 'react-native-base64';
+import {API_BASE_URL, BUILD_NUMBER} from '@env';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
@@ -18,12 +19,13 @@ import Text from '../../../components/Text/Text';
 // Utils
 import {LOGIN_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
 import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTypes';
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
+  const {refreshToken} = useSelector(state => state.onboarding);
   const route = useRoute();
   const navigation = useNavigation();
 
@@ -80,13 +82,15 @@ const LoginOptionScreen = () => {
         onPress={() =>
           isSSO
             ? Linking.openURL(link)
+            : refreshToken
+            ? navigation.navigate('LoginScreen')
             : navigation.navigate('MobileAndEmailVerificationStack')
         }>
         <View
           style={{
             backgroundColor: '#fff',
-            height: verticalScale(33),
-            width: scale(230),
+            height: 'auto',
+            width: scale(isIosDevice() ? 260 : 280),
             justifyContent: 'center',
             borderRadius: 20,
             flexDirection: 'row',
@@ -94,15 +98,15 @@ const LoginOptionScreen = () => {
           <Image
             source={icon}
             height={30}
-            width={20}
-            customStyle={{marginRight: scale(6)}}
+            width={25}
+            customStyle={{marginRight: scale(isIosDevice() ? 3 : 2)}}
           />
           <Text
             color="#E33051"
             weight={700}
             customStyle={{
               textAlign: 'center',
-              top: verticalScale(isIosDevice() ? 8 : 6),
+              top: verticalScale(isIosDevice() ? 8 : 4),
             }}>
             {text}
           </Text>
@@ -121,17 +125,10 @@ const LoginOptionScreen = () => {
       <Separator space={100} />
       <Image source={LOGIN_ASSET_URI.THUNDR_LOGO} height={210} width={350} />
       <Separator space={30} />
-      <Text
-        color="#59595B"
-        weight={700}
-        size={14}
-        customStyle={{textAlign: 'center'}}>
-        Register here
-      </Text>
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
         {renderButton(
           true,
-          `https://dev-api.thundr.ph/auth/get-sso-url?sso=${
+          `${API_BASE_URL}auth/get-sso-url?sso=${
             isIosDevice() ? 'SignInWithApple' : 'Google'
           }`,
           isIosDevice()
@@ -142,7 +139,7 @@ const LoginOptionScreen = () => {
         <Separator space={5} />
         {renderButton(
           true,
-          'https://dev-api.thundr.ph/auth/get-sso-url?sso=Facebook',
+          `${API_BASE_URL}auth/get-sso-url?sso=Facebook`,
           LOGIN_ASSET_URI.FACEBOOK_ICON,
           'Continue with Facebook',
         )}
@@ -154,27 +151,10 @@ const LoginOptionScreen = () => {
           'Continue with Mobile Number',
         )}
         <Separator space={20} />
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              height: verticalScale(30),
-              width: scale(80),
-              justifyContent: 'center',
-              borderRadius: 20,
-            }}>
-            <Text
-              color="#E33051"
-              weight={700}
-              customStyle={{textAlign: 'center'}}>
-              LOGIN
-            </Text>
-          </View>
-        </TouchableOpacity>
         <View
           style={{
             paddingHorizontal: scale(50),
-            top: verticalScale(60),
+            top: verticalScale(70),
           }}>
           <Text
             size={11}
@@ -201,7 +181,7 @@ const LoginOptionScreen = () => {
           <Separator space={20} />
           <Text
             size={11}
-            customStyle={{textAlign: 'center'}}>{`BUILD BUILD_NUMBER`}</Text>
+            customStyle={{textAlign: 'center'}}>{`BUILD ${BUILD_NUMBER}`}</Text>
         </View>
       </View>
     </View>

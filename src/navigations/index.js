@@ -8,7 +8,6 @@ import SplashScreen from 'react-native-splash-screen';
 // Utils
 import {navigationRef} from './tempNavigation';
 import PublicScreenNavigation from './PublicScreenNavigation/PublicScreenNavigation';
-import Spinner from '../components/Spinner/Spinner';
 import {useSelector} from 'react-redux';
 import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavigation';
 import Modal from '../composition/Modal/Modal';
