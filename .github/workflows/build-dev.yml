@@ -98,6 +98,7 @@
          - run: ls
          - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
          - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+         -run: cp "thundr-dev-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Dev Upload"
      Android-Publish-Dev-PlayStore:
        runs-on: m2
        needs: Android-AAB-Upload
