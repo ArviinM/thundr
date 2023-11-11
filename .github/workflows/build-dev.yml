@@ -27,7 +27,7 @@
          - run: ls
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
          - run: echo -en "${{VARS.DEV_ENV}}" >> .env
-         - run: sed -i '' 's/BUILD_NUMBER/${{github.run_number}}/g' src/screens/public/LoginOptionsScreen/LoginOptionsScreen.js
+         - run: sed -i '' 's/BUILD_NUMBER/${{github.run_number}}/g' ./src/screens/public/LoginOptionsScreen/LoginOptionsScreen.js
      Yarn-Install:
        runs-on: m2
        needs: Package-Rename
