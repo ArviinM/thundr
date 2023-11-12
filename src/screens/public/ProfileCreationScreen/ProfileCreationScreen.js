@@ -1,24 +1,40 @@
 // React modules
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {launchImageLibrary} from 'react-native-image-picker';
-import RNFS from 'react-native-fs';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import SelectDropdown from 'react-native-select-dropdown';
+import {useDispatch, useSelector} from 'react-redux';
+import {Overlay} from 'react-native-elements';
 
 // Components
 import Button from '../../../components/Button/Button';
 import Text from '../../../components/Text/Text';
+import Image from '../../../components/Image/Image';
+import Separator from '../../../components/Separator/Separator';
+import Spinner from '../../../components/Spinner/Spinner';
+
+// Ducks
+import {
+  GET_COMPATIBILTY_QUESTIONS,
+  START_PROFILE_CREATION,
+  UPLOAD_PHOTO,
+} from '../../../ducks/ProfileCreation/actionTypes';
 
 // Utils
 import {
   getDaysInMonth,
+  isAndroidDevice,
   isIosDevice,
   months,
   scale,
   verticalScale,
   years,
 } from '../../../utils/commons';
+
+// Styles
 import {
   BorderLinearGradient,
   Container,
@@ -30,21 +46,10 @@ import {
   PhotoIconWrapper,
   Wrapper,
 } from './Styled';
-import Image from '../../../components/Image/Image';
+
+// Utils
 import {GLOBAL_ASSET_URI, LGBTQ_ASSET_URI} from '../../../utils/images';
-import Separator from '../../../components/Separator/Separator';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import SelectDropdown from 'react-native-select-dropdown';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  GET_COMPATIBILTY_QUESTIONS,
-  START_PROFILE_CREATION,
-  UPLOAD_PHOTO,
-} from '../../../ducks/ProfileCreation/actionTypes';
 import {monthNameToNumber} from './utils';
-import Spinner from '../../../components/Spinner/Spinner';
-import axios from 'axios';
-import {Overlay} from 'react-native-elements';
 
 const icons = [
   {name: 'L_ICON', value: 'Lesbian'},
@@ -102,6 +107,7 @@ const PrimaryDetails = () => {
   const [imageSource, setImageSource] = useState('');
   const [gender, setGender] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
+  const [imageContent, setImageContent] = useState(null);
 
   const shouldBeEnabled =
     month && year && day && name && hometown && gender && imageSource;
@@ -110,9 +116,28 @@ const PrimaryDetails = () => {
     dispatch({type: GET_COMPATIBILTY_QUESTIONS, payload: loginData.sub});
   }, [dispatch]);
 
+  useEffect(() => {
+    const triggerApiCall = async () => {
+      const formData = new FormData();
+
+      formData.append('sub', loginData.sub);
+      formData.append('isPrimary', 'true');
+      formData.append('filepath', imageContent?.base64);
+      formData.append('filename', imageContent?.fileName);
+
+      dispatch({type: UPLOAD_PHOTO, payload: {formData}});
+    };
+
+    if (imageContent) {
+      triggerApiCall();
+    }
+  }, [imageContent, dispatch]);
+
   const openImageLibrary = async () => {
     const options = {
       mediaType: 'photo',
+      quality: 0.08,
+      includeBase64: true,
     };
 
     const response = await new Promise(resolve => {
@@ -126,16 +151,7 @@ const PrimaryDetails = () => {
     const source = {uri: response.assets[0].uri};
     const {uri, fileName} = response.assets[0];
     setImageSource(source);
-
-    const imageBase64 = await RNFS.readFile(uri, 'base64');
-    const formData = new FormData();
-
-    formData.append('sub', loginData.sub);
-    formData.append('isPrimary', 'true');
-    formData.append('filepath', imageBase64);
-    formData.append('filename', fileName);
-
-    dispatch({type: UPLOAD_PHOTO, payload: {formData}});
+    setImageContent(response.assets[0]);
   };
 
   const renderModal = () => {

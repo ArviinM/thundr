@@ -147,7 +147,7 @@ export function* submitCustomerDetails({payload}) {
 
 export function* uploadPhoto({payload}) {
   try {
-    const response = yield call(ProfileCreationConfig.uploadPhoto, {
+    const response = yield call(ProfileCreationConfig.uploadPhotoB64, {
       payload,
     });
 
@@ -158,7 +158,6 @@ export function* uploadPhoto({payload}) {
       });
     }
   } catch (error) {
-    console.log('test', error);
     yield put({
       type: UPLOAD_PHOTO_FAILED,
       payload: error,
