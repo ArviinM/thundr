@@ -136,7 +136,7 @@ const PrimaryDetails = () => {
   const openImageLibrary = async () => {
     const options = {
       mediaType: 'photo',
-      quality: 0.08,
+      quality: 1,
       includeBase64: true,
     };
 
@@ -149,7 +149,6 @@ const PrimaryDetails = () => {
     }
 
     const source = {uri: response.assets[0].uri};
-    const {uri, fileName} = response.assets[0];
     setImageSource(source);
     setImageContent(response.assets[0]);
   };
