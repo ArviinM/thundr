@@ -1,37 +1,40 @@
 // React modules
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-
-// Third party libraries
-import Onboarding from 'react-native-onboarding-swiper';
 
 // Components
 import Text from '../../../components/Text/Text';
-import Button from '../../../components/Button/Button';
-import Separator from '../../../components/Separator/Separator';
 import Image from '../../../components/Image/Image';
 
 // Utils
-import {isIosDevice, verticalScale} from '../../../utils/commons';
+import {verticalScale} from '../../../utils/commons';
+
+import {DASHBOARD_ASSET_URI} from '../../../utils/images';
+import JowaMareSection from '../../../composition/JowaMareSection/JowaMareSection';
 import {useDispatch, useSelector} from 'react-redux';
-import {START_LOGOUT} from '../../../ducks/Login/actionTypes';
 import {
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_PHOTO,
   GET_CUSTOMER_PROFILE,
 } from '../../../ducks/Dashboard/actionTypes';
+import Separator from '../../../components/Separator/Separator';
 
 const Dashboard = () => {
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.onboarding);
   const dispatch = useDispatch();
+  const [isMare, setMare] = useState(false);
+  const [isJowa, setJowa] = useState(false);
 
   useEffect(() => {
     dispatch({
       type: GET_CUSTOMER_DETAILS,
       payload: {sub: loginData.sub || sub},
     });
-    dispatch({type: GET_CUSTOMER_PHOTO, payload: {sub: loginData.sub || sub}});
+    dispatch({
+      type: GET_CUSTOMER_PHOTO,
+      payload: {sub: loginData.sub || sub},
+    });
     dispatch({
       type: GET_CUSTOMER_PROFILE,
       payload: {sub: loginData.sub || sub},
@@ -39,76 +42,35 @@ const Dashboard = () => {
   }, [dispatch]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#f2cecd',
-      }}>
-      <Separator space={80} />
-      <Text size={30} weight="700" color="#fff">
-        Welcome to Dashboard
-      </Text>
-      <View style={{height: '70%'}}>
-        <Onboarding
-          imageContainerStyles={{padding: 0}}
-          containerStyles={{
-            height: 1,
-            top: verticalScale(isIosDevice() ? -130 : -120),
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <Image
+        source={DASHBOARD_ASSET_URI.PHOTO_CONTAINER}
+        height={310}
+        width={350}
+      />
+      <View style={{alignItems: 'center'}}>
+        <Text size={35} color="#E33C59">
+          Cholo, 39
+        </Text>
+        <Text size={17}>CEO at Business Inc.</Text>
+        <View
+          style={{
+            height: verticalScale(1),
+            backgroundColor: '#E33C59',
+            width: '50%',
+            marginVertical: verticalScale(3),
           }}
-          showPagination={false}
-          bottomBarColor="transparent"
-          bottomBarHighlight={false}
-          pages={[
-            {
-              backgroundColor: '#f2cecd',
-              image: (
-                <Image
-                  source={require('../../../assets/Images/onboarding-1.png')}
-                  height={180}
-                  width={300}
-                />
-              ),
-              title: 'PAGE 1',
-              subtitle:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            },
-            {
-              backgroundColor: '#f2cecd',
-              image: (
-                <Image
-                  source={require('../../../assets/Images/onboarding-2.png')}
-                  height={180}
-                  width={300}
-                />
-              ),
-              title: 'PAGE 2',
-              subtitle:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            },
-            {
-              backgroundColor: '#f2cecd',
-              image: (
-                <Image
-                  source={require('../../../assets/Images/onboarding-3.png')}
-                  height={180}
-                  width={300}
-                />
-              ),
-              title: 'PAGE 3',
-              subtitle:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            },
-          ]}
         />
+        <Text size={15} color="#EE983D">
+          Compatibility Score: 89%
+        </Text>
       </View>
-
-      <Button
-        title="Logout"
-        onPress={() => {
-          // navigation.navigate('LoginScreen');
-          dispatch({type: START_LOGOUT});
-        }}
+      <Separator space={23} />
+      <JowaMareSection
+        isMare={isMare}
+        isJowa={isJowa}
+        setMare={setMare}
+        setJowa={setJowa}
       />
     </View>
   );

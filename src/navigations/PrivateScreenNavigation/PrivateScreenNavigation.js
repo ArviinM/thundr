@@ -23,6 +23,7 @@ import ProfileCreationScreen from '../../screens/public/ProfileCreationScreen/Pr
 import {START_LOGOUT} from '../../ducks/Login/actionTypes';
 import CompatibilityQuestions from '../../screens/private/CompatibilityQuestions/CompatibilityQuestions';
 import PersonalityType from '../../screens/private/PersonalityType/PersonalityType';
+import DashboardNavigations from './DashboardStack';
 
 const Stack = createStackNavigator();
 
@@ -73,7 +74,7 @@ const PrivateScreenNavigation = () => {
         },
         headerLeft: () => renderBackIcon(),
       }}>
-      <Stack.Screen name="Dashboard" component={Dashboard} />
+      <Stack.Screen name="Dashboard" component={DashboardNavigations} />
       <Stack.Screen
         name="ProfileCreationScreen"
         component={ProfileCreationScreen}
