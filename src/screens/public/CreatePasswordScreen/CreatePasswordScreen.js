@@ -56,6 +56,16 @@ const CreatePasswordScreen = () => {
           <Text color="#E33051" weight={700}>
             Create Password
           </Text>
+          {/* <Text
+            color="#59595B"
+            customStyle={{paddingHorizontal: scale(70), textAlign: 'center'}}>
+            Password must contain at least 8 characters
+          </Text>
+          <Text
+            color="#59595B"
+            customStyle={{paddingHorizontal: scale(70), textAlign: 'center'}}>
+            With at least 1 uppercase character, 1 digit, and 1 special symbol
+          </Text> */}
         </View>
         <Separator space={80} />
         <Formik

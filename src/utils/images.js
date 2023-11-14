@@ -59,3 +59,19 @@ export const MOBILE_INPUT_URI = {
   EMAIL_OTP_ICON: require('../assets/Images/Icons/email-otp-icon.png'),
   CREATE_PASSWORD_ICON: require('../assets/Images/Icons/create-password-icon.png'),
 };
+
+export const DASHBOARD_ASSET_URI = {
+  PHOTO_CONTAINER: require('../assets/Images/Images/photo-container.png'),
+  ORANGE_CONTAINER: require('../assets/Images/Images/orange-container.png'),
+  MARE: require('../assets/Images/Icons/mare.png'),
+  JOWA: require('../assets/Images/Icons/jowa.png'),
+  THUNDR: require('../assets/Images/Icons/thundr.png'),
+  GLOWING_MARE: require('../assets/Images/Icons/glowing-mare.png'),
+  GLOWING_JOWA: require('../assets/Images/Icons/glowing-jowa.png'),
+  GLOWING_THUNDR: require('../assets/Images/Icons/glowing-thundr.png'),
+  PROFILE_ICON: require('../assets/Images/Icons/profile-icon.png'),
+  MESSAGE_ICON: require('../assets/Images/Icons/messages-icon.png'),
+  STARS_ICON: require('../assets/Images/Icons/stars-icon.png'),
+  FLASH_THUNDR_ICON: require('../assets/Images/Icons/flash-thundr-icon.png'),
+  HAMBURGER_ICON: require('../assets/Images/Icons/hamburger-icon.png'),
+};

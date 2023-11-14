@@ -13,6 +13,8 @@ import {
   UPDATE_LOGIN_STATE,
 } from './actionTypes';
 import {GENERIC_ERROR} from '../../utils/commons';
+import {UPDATE_ONBOARDING_STATE} from '../Onboarding/actionTypes';
+import RootNavigation from '../../navigations';
 
 export function* startLoginProcess({payload}) {
   const {emailOrMobile, password} = payload;
@@ -64,6 +66,8 @@ export function* startLoginViaRefreshToken({payload}) {
       type: START_LOGIN_VIA_REFRESH_TOKEN_FAILED,
       payload: errorMessage,
     });
+    yield put({type: UPDATE_ONBOARDING_STATE, newState: {refreshToken: null}});
+    RootNavigation.navigate('LoginOptionsScreen');
   }
 }
 
