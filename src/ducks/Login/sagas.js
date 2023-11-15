@@ -13,7 +13,7 @@ import {
   UPDATE_LOGIN_STATE,
 } from './actionTypes';
 import {GENERIC_ERROR} from '../../utils/commons';
-import {UPDATE_ONBOARDING_STATE} from '../Onboarding/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 import RootNavigation from '../../navigations';
 
 export function* startLoginProcess({payload}) {
@@ -29,6 +29,13 @@ export function* startLoginProcess({payload}) {
 
     if (response?.status === 200) {
       yield put({type: LOGIN_SUCCESS, payload: response.data.data});
+      yield put({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {
+          refreshToken: response.data.data.refreshToken,
+          sub: response.data.data.sub,
+        },
+      });
     }
   } catch (error) {
     const errorMessage =
@@ -66,8 +73,8 @@ export function* startLoginViaRefreshToken({payload}) {
       type: START_LOGIN_VIA_REFRESH_TOKEN_FAILED,
       payload: errorMessage,
     });
-    yield put({type: UPDATE_ONBOARDING_STATE, newState: {refreshToken: null}});
-    RootNavigation.navigate('LoginOptionsScreen');
+    yield put({type: UPDATE_PERSISTED_STATE, newState: {refreshToken: null}});
+    RootNavigation.navigate('LoginOptionScreen');
   }
 }
 

@@ -1,1 +1,0 @@
-export const UPDATE_ONBOARDING_STATE = '@onboarding/UPDATE_ONBOARDING_STATE';

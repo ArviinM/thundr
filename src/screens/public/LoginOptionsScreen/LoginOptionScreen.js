@@ -25,7 +25,7 @@ import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTy
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
-  const {refreshToken} = useSelector(state => state.onboarding);
+  const {refreshToken} = useSelector(state => state.persistedState);
   const route = useRoute();
   const navigation = useNavigation();
 

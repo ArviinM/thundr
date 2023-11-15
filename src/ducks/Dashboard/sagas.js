@@ -9,7 +9,7 @@ import {
   GET_CUSTOMER_PROFILE,
 } from './actionTypes';
 import DashboardConfig from '../../api/services/dashboardService';
-import {UPDATE_ONBOARDING_STATE} from '../Onboarding/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 
 export function* getCustomerDetails({payload}) {
   try {
@@ -46,7 +46,6 @@ export function* getCustomerPhoto({payload}) {
 }
 
 export function* getCustomerProfile({payload}) {
-  const {loginData} = yield select(state => state.login);
   try {
     const response = yield call(DashboardConfig.getCustomerProfile, payload);
     if (response?.status === 200) {
@@ -55,13 +54,10 @@ export function* getCustomerProfile({payload}) {
         payload: response.data.data,
       });
       yield put({
-        type: UPDATE_ONBOARDING_STATE,
+        type: UPDATE_PERSISTED_STATE,
         newState: {
           customerName: response.data.data.name,
           customerPhoto: response.data.data.customerPhoto[0].photoUrl,
-          refreshToken: !loginData.forProfileCreation
-            ? loginData.refreshToken
-            : null,
         },
       });
     }
