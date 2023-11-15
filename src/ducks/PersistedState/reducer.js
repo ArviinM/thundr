@@ -1,4 +1,4 @@
-import {UPDATE_ONBOARDING_STATE} from './actionTypes';
+import {UPDATE_PERSISTED_STATE} from './actionTypes';
 
 export const INITIAL_STATE = {
   onboarded: false,
@@ -8,9 +8,9 @@ export const INITIAL_STATE = {
   sub: '',
 };
 
-const onboarding = (state = INITIAL_STATE, action) => {
+const persistedState = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case UPDATE_ONBOARDING_STATE:
+    case UPDATE_PERSISTED_STATE:
       return {
         ...state,
         ...action.newState,
@@ -20,4 +20,4 @@ const onboarding = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default onboarding;
+export default persistedState;

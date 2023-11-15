@@ -1,27 +1,89 @@
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+// React modules
+import React, {useRef} from 'react';
+import {View, PanResponder, Animated} from 'react-native';
+
+// Third party libraries
+
+// Components
 import Image from '../../components/Image/Image';
+
+// Utils
 import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import {verticalScale} from '../../utils/commons';
 
 const JowaMareSection = props => {
-  const {setMare, setJowa, isMare, isJowa} = props;
+  const {setMare, setJowa, isMare, isJowa, swipeValue, setSwipeValue} = props;
+  const leftValue = useRef(0);
+  const rightValue = useRef(0);
+
+  const updateLeftPosition = dx => {
+    leftValue.current = dx;
+  };
+
+  const updateRightPosition = dx => {
+    rightValue.current = dx;
+  };
+
+  const panResponderLeft = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => {
+        setMare(true);
+        return true;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        updateLeftPosition(gestureState.dx);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx > 50) {
+          setMare(false);
+          setSwipeValue('Mare');
+          updateLeftPosition(0);
+        } else {
+          updateLeftPosition(0);
+          setMare(false);
+        }
+      },
+    }),
+  ).current;
+
+  const panResponderRight = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => {
+        setJowa(true);
+        return true;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        updateRightPosition(gestureState.dx);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx < -50) {
+          setJowa(false);
+          setSwipeValue('Jowa');
+          updateRightPosition(0);
+        } else {
+          updateRightPosition(0);
+          setJowa(false);
+        }
+      },
+    }),
+  ).current;
+
   return (
     <View style={{flexDirection: 'row'}}>
-      <TouchableOpacity
-        onLongPress={() => {
-          setMare(true);
-          setJowa(false);
-        }}>
+      <Animated.View
+        style={{
+          transform: [{translateX: leftValue.current}],
+        }}
+        {...panResponderLeft.panHandlers}>
         <Image
           source={
             isMare ? DASHBOARD_ASSET_URI.GLOWING_MARE : DASHBOARD_ASSET_URI.MARE
           }
           height={130}
-          width={60}
+          width={55}
         />
-      </TouchableOpacity>
-      <TouchableOpacity style={{marginTop: verticalScale(40)}}>
+      </Animated.View>
+      <View style={{marginTop: verticalScale(40)}}>
         <Image
           source={
             isMare || isJowa
@@ -29,22 +91,22 @@ const JowaMareSection = props => {
               : DASHBOARD_ASSET_URI.THUNDR
           }
           height={65}
-          width={235}
+          width={240}
         />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onLongPress={() => {
-          setJowa(true);
-          setMare(false);
-        }}>
+      </View>
+      <Animated.View
+        style={{
+          transform: [{translateX: rightValue.current}],
+        }}
+        {...panResponderRight.panHandlers}>
         <Image
           source={
             isJowa ? DASHBOARD_ASSET_URI.GLOWING_JOWA : DASHBOARD_ASSET_URI.JOWA
           }
           height={130}
-          width={60}
+          width={55}
         />
-      </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 };

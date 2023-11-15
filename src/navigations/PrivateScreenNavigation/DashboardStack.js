@@ -4,7 +4,7 @@
  */
 
 // React modules
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -24,8 +24,6 @@ import Image from '../../components/Image/Image';
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
-import {useDispatch} from 'react-redux';
-import {START_LOGOUT} from '../../ducks/Login/actionTypes';
 import DrawerContent from './DrawerContent';
 import Text from '../../components/Text/Text';
 import Profile from '../../screens/private/Profile/Profile';
@@ -45,6 +43,7 @@ const UnderConstruction = () => {
 
 const DashboardTabs = ({route, navigation}) => {
   const focusedRoute = getFocusedRouteNameFromRoute(route);
+
   return (
     <Tab.Navigator
       initialRouteName="DashboardTab"
@@ -92,14 +91,19 @@ const DashboardTabs = ({route, navigation}) => {
         component={Dashboard}
         options={{
           tabBarLabel: '',
-          tabBarIcon: () => (
-            <Image
-              source={DASHBOARD_ASSET_URI.THUNDR}
-              height={70}
-              width={70}
-              customStyle={{bottom: verticalScale(20)}}
-            />
-          ),
+          tabBarIcon: () => {
+            return (
+              focusedRoute !== 'DashboardTab' &&
+              focusedRoute !== 'Profile' && (
+                <Image
+                  source={DASHBOARD_ASSET_URI.THUNDR}
+                  height={70}
+                  width={70}
+                  customStyle={{bottom: verticalScale(20)}}
+                />
+              )
+            );
+          },
         }}
       />
       <Tab.Screen
@@ -135,9 +139,8 @@ const DashboardTabs = ({route, navigation}) => {
 };
 
 const DashboardNavigations = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const renderLeftComponent = shouldLogout => {
+  const renderLeftComponent = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -155,6 +158,7 @@ const DashboardNavigations = () => {
     <Drawer.Navigator
       drawerContent={props => <DrawerContent {...props} />}
       screenOptions={{
+        swipeEdgeWidth: 0,
         gestureEnabled: false,
         headerStyle: {
           backgroundColor: '#fff',
@@ -162,6 +166,15 @@ const DashboardNavigations = () => {
         },
         headerTitleAlign: 'center',
         headerTintColor: '#FFFFFF',
+        headerTitle: () => {
+          return (
+            <Image
+              source={GLOBAL_ASSET_URI.THUNDR_ICON}
+              height={110}
+              width={110}
+            />
+          );
+        },
         headerTitleStyle: {
           color: '#FFFFFF',
           fontWeight: 700,
@@ -169,21 +182,7 @@ const DashboardNavigations = () => {
         },
         headerLeft: () => renderLeftComponent(),
       }}>
-      <Drawer.Screen
-        name="DashboardTabs"
-        component={DashboardTabs}
-        options={{
-          headerTitle: () => {
-            return (
-              <Image
-                source={GLOBAL_ASSET_URI.THUNDR_ICON}
-                height={110}
-                width={110}
-              />
-            );
-          },
-        }}
-      />
+      <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
     </Drawer.Navigator>
   );
 };

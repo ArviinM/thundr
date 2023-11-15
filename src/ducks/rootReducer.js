@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import onboarding from './Onboarding/reducer';
+import persistedState from './PersistedState/reducer';
 import login from './Login/reducer';
 import mobileEmail from './MobileEmail/reducer';
 import ssoValidation from './SSOValidation/reducer';
@@ -8,7 +8,7 @@ import dashboard from './Dashboard/reducer';
 import {START_LOGOUT_SUCCESS} from './Login/actionTypes';
 
 const appReducer = combineReducers({
-  onboarding,
+  persistedState,
   login,
   mobileEmail,
   ssoValidation,
@@ -17,7 +17,7 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === START_LOGOUT_SUCCESS && !state.onboarding) {
+  if (action.type === START_LOGOUT_SUCCESS && !state.persistedState) {
     return appReducer(undefined, action);
   }
 

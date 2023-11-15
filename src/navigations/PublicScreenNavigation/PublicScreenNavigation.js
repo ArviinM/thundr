@@ -26,7 +26,7 @@ import {useSelector} from 'react-redux';
 const PublicScreenStack = createStackNavigator();
 
 const PublicScreenNavigation = () => {
-  const {onboarded} = useSelector(state => state.onboarding);
+  const {onboarded} = useSelector(state => state.persistedState);
   const navigation = useNavigation();
   const renderBackIcon = () => {
     return (

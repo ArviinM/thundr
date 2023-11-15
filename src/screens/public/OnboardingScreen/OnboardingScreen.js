@@ -14,7 +14,7 @@ import Image from '../../../components/Image/Image';
 import {ONBOARDING_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
 import {useDispatch} from 'react-redux';
-import {UPDATE_ONBOARDING_STATE} from '../../../ducks/Onboarding/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
 
 const OnboardingScreen = () => {
   const dispatch = useDispatch();
@@ -112,7 +112,7 @@ const OnboardingScreen = () => {
           onPress={() => {
             navigation.navigate('LoginOptionScreen');
             dispatch({
-              type: UPDATE_ONBOARDING_STATE,
+              type: UPDATE_PERSISTED_STATE,
               newState: {onboarded: true},
             });
           }}

@@ -49,11 +49,11 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(async requestConfig => {
   const {
-    login: {token},
+    login: {loginData}, // Previous value is token, for debugging purposes
   } = store.getState();
 
   requestConfig.headers = {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${loginData.accessToken}`,
     Accept: 'application/json',
   };
 

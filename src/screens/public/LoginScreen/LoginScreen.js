@@ -34,7 +34,7 @@ const LoginScreen = () => {
   const {loading} = useSelector(state => state.login);
   const {phoneNumber} = useSelector(state => state.mobileEmail);
   const {refreshToken, customerPhoto, customerName} = useSelector(
-    state => state.onboarding,
+    state => state.persistedState,
   );
   const [isPasswordVisible, setPasswordVisible] = useState(true);
 

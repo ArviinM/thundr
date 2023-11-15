@@ -4,20 +4,22 @@ import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
 
 // Components
 import Separator from '../../components/Separator/Separator';
 import Text from '../../components/Text/Text';
-
-// Utils
-import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import Image from '../../components/Image/Image';
-import {GLOBAL_ASSET_URI} from '../../utils/images';
-import {useDispatch} from 'react-redux';
+
+// Ducks
 import {UPDATE_LOGIN_STATE} from '../../ducks/Login/actionTypes';
 import {UPDATE_MOBILE_EMAIL_STATE} from '../../ducks/MobileEmail/actionTypes';
 import {UPDATE_SSO_VALIDATION_STATE} from '../../ducks/SSOValidation/actionTypes';
 import {UPDATE_PROFILE_CREATION_STATE} from '../../ducks/ProfileCreation/actionTypes';
+
+// Utils
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
+import {GLOBAL_ASSET_URI} from '../../utils/images';
 
 const Modal = props => {
   const dispatch = useDispatch();
