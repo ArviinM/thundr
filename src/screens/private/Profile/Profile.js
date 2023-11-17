@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 
@@ -16,15 +16,17 @@ import MatchInformationSection from '../../../composition/MatchInformationSectio
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {useNavigation} from '@react-navigation/native';
+import PhotoModal from '../../../composition/PhotoModal/PhotoModal';
 
 const Profile = () => {
   const navigation = useNavigation();
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
   const [swipeValue, setSwipeValue] = useState('');
+  const [openPhotoModal, setOpenPhotoModal] = useState(false);
 
   return (
-    <View style={{backgroundColor: '#fff', flex: 1}}>
+    <View style={{backgroundColor: '#808080', flex: 1}}>
       <Image
         source={DASHBOARD_ASSET_URI.ORANGE_CONTAINER}
         height={isIosDevice() ? 430 : 445}
@@ -59,19 +61,23 @@ const Profile = () => {
             position: 'absolute',
             top: verticalScale(isIosDevice() ? 50 : 80),
           }}>
-          <PhotoCarousel />
+          <PhotoCarousel setOpenPhotoModal={setOpenPhotoModal} />
         </View>
+        <PhotoModal
+          setOpenPhotoModal={setOpenPhotoModal}
+          openPhotoModal={openPhotoModal}
+        />
         <Separator space={90} />
         <MatchInformationSection />
-        {!isIosDevice() && <Separator space={20} />}
-        <JowaMareSection
+
+        {/* <JowaMareSection
           isMare={isMare}
           isJowa={isJowa}
           setMare={setMare}
           setJowa={setJowa}
           setSwipeValue={setSwipeValue}
           swipeValue={swipeValue}
-        />
+        /> */}
       </View>
     </View>
   );

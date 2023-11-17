@@ -5,6 +5,7 @@ import {scale, verticalScale} from '../../utils/commons';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 const PhotoCarousel = props => {
+  const {setOpenPhotoModal} = props;
   const data = ['1', '2', '3', '4', '5'];
 
   const {width: screenWidth} = Dimensions.get('window');
@@ -15,7 +16,7 @@ const PhotoCarousel = props => {
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         colors={['#E72454', '#FFC227']}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setOpenPhotoModal(true)}>
           <View
             style={{
               height: verticalScale(75),
