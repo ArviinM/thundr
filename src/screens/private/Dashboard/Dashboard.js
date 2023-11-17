@@ -1,6 +1,6 @@
 // React modules
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {ScrollView, View} from 'react-native';
 
 // Third party libraries
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,16 +20,32 @@ import {
 
 // Utils
 import {isIosDevice, verticalScale} from '../../../utils/commons';
-import {DASHBOARD_ASSET_URI} from '../../../utils/images';
+import {DASHBOARD_ASSET_URI, SAMPLE_IMAGE} from '../../../utils/images';
+import OutOfSwipeModal from '../../../composition/OutOfSwipeModal/OutOfSwipeModal';
+import Profile from '../Profile/Profile';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
+  const scrollViewRef = useRef(null);
 
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
   const [swipeValue, setSwipeValue] = useState('');
+
+  const scrollToBottom = () => {
+    if (scrollViewRef.current) {
+      const contentHeight = verticalScale(1500);
+      const scrollViewHeight = verticalScale(800);
+      const scrollTo = contentHeight - scrollViewHeight;
+      scrollViewRef.current.scrollTo({y: scrollTo, animated: true});
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
 
   useEffect(() => {
     dispatch({
@@ -70,11 +86,20 @@ const Dashboard = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <Image
-        source={DASHBOARD_ASSET_URI.PHOTO_CONTAINER}
-        height={isIosDevice() ? 310 : 330}
-        width={350}
-      />
+      <ScrollView ref={scrollViewRef}>
+        <OutOfSwipeModal />
+        <Profile />
+        <View
+          style={{
+            backgroundColor: '#808080',
+          }}>
+          <Image
+            source={SAMPLE_IMAGE.SAMPLE_1}
+            height={isIosDevice() ? 310 : 330}
+            width={350}
+          />
+        </View>
+      </ScrollView>
       <View style={{alignItems: 'center'}}>
         {renderMatchDetails()}
         <JowaMareSection

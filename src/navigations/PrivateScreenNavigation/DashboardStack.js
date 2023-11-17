@@ -27,6 +27,7 @@ import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
 import DrawerContent from './DrawerContent';
 import Text from '../../components/Text/Text';
 import Profile from '../../screens/private/Profile/Profile';
+import MatchFound from '../../screens/private/MatchFound/MatchFound';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -108,7 +109,7 @@ const DashboardTabs = ({route, navigation}) => {
       />
       <Tab.Screen
         name="Stars"
-        component={UnderConstruction}
+        component={MatchFound}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => (
@@ -183,6 +184,7 @@ const DashboardNavigations = () => {
         headerLeft: () => renderLeftComponent(),
       }}>
       <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
+      <Drawer.Screen name="MatchFound" component={MatchFound} />
     </Drawer.Navigator>
   );
 };

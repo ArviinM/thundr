@@ -75,4 +75,11 @@ export const DASHBOARD_ASSET_URI = {
   STARS_ICON: require('../assets/Images/Icons/stars-icon.png'),
   FLASH_THUNDR_ICON: require('../assets/Images/Icons/flash-thundr-icon.png'),
   HAMBURGER_ICON: require('../assets/Images/Icons/hamburger-icon.png'),
+  MATCH_FOUND_JOWA: require('../assets/Images/Icons/match-found-jowa.png'),
+  MATCH_FOUND_MARE: require('../assets/Images/Icons/match-found-mare.png'),
+};
+
+// Sample only to be deleted
+export const SAMPLE_IMAGE = {
+  SAMPLE_1: require('../assets/Images/SampleOnly/sample-1.png'),
 };
