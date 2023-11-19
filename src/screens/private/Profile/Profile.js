@@ -1,85 +1,97 @@
 // React modules
 import React, {useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 
 // Third party libraries
+import LinearGradient from 'react-native-linear-gradient';
 
 // Components
 import Text from '../../../components/Text/Text';
 import Image from '../../../components/Image/Image';
-import JowaMareSection from '../../../composition/JowaMareSection/JowaMareSection';
 import Separator from '../../../components/Separator/Separator';
 import PhotoCarousel from '../../../composition/PhotoCarousel/PhotoCarousel';
 import MatchInformationSection from '../../../composition/MatchInformationSection/MatchInformationSection';
-
-// Utils
-import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
-import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
-import {useNavigation} from '@react-navigation/native';
 import PhotoModal from '../../../composition/PhotoModal/PhotoModal';
 
-const Profile = () => {
-  const navigation = useNavigation();
-  const [isMare, setMare] = useState(false);
-  const [isJowa, setJowa] = useState(false);
-  const [swipeValue, setSwipeValue] = useState('');
+// Utils
+import {calculateAge, isIosDevice, verticalScale} from '../../../utils/commons';
+
+const Profile = props => {
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
+  const {compatibilityScore, customerProfile} = props;
+  const customerPhotoUrl = customerProfile?.customerPhoto?.[0]?.photoUrl;
 
   return (
-    <View style={{backgroundColor: '#808080', flex: 1}}>
-      <Image
-        source={DASHBOARD_ASSET_URI.ORANGE_CONTAINER}
-        height={isIosDevice() ? 430 : 445}
-        width={380}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          alignItems: 'center',
-          left: '25%',
-          right: '25%',
-          top: verticalScale(isIosDevice() ? 15 : 5),
-        }}>
+    <LinearGradient
+      colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
+      start={{x: 0.5, y: 1}}
+      end={{x: 0.5, y: 0}}
+      style={{
+        flex: 1,
+        borderBottomLeftRadius: 120,
+        borderBottomRightRadius: 120,
+      }}>
+      <View style={{flex: 1}}>
         <View
           style={{
-            flexDirection: 'row',
-            position: 'absolute',
-            right: scale(225),
+            alignItems: 'center',
           }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={GLOBAL_ASSET_URI.BACK_ICON} height={20} width={20} />
-          </TouchableOpacity>
+          {/* <View
+            style={{
+              flexDirection: 'row',
+              position: 'absolute',
+              right: scale(310),
+              top: verticalScale(10),
+            }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={GLOBAL_ASSET_URI.BACK_ICON}
+                height={20}
+                width={20}
+              />
+            </TouchableOpacity>
+          </View> */}
+          <Text size={25} color="#fff" weight="700">
+            {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
+          </Text>
+          <Text size={15} color="#fff" customStyle={{textAlign: 'center'}}>
+            {`Compatibility Score: ${compatibilityScore}`}
+          </Text>
+          <View
+            style={{
+              position: 'absolute',
+              top: verticalScale(isIosDevice() ? 50 : 80),
+            }}>
+            <PhotoCarousel
+              setOpenPhotoModal={setOpenPhotoModal}
+              customerPhotoUrl={customerPhotoUrl}
+            />
+          </View>
+          <PhotoModal
+            setOpenPhotoModal={setOpenPhotoModal}
+            openPhotoModal={openPhotoModal}
+            customerPhotoUrl={customerPhotoUrl}
+          />
+          <Separator space={isIosDevice() ? 90 : 120} />
+          <MatchInformationSection
+            customerDetails={customerProfile?.customerDetails}
+          />
         </View>
-        <Text size={25} color="#fff" weight="700">
-          Cholo, 39
-        </Text>
-        <Text size={15} color="#fff" customStyle={{textAlign: 'center'}}>
-          Compatibility Score: 89%
-        </Text>
-        <View
-          style={{
-            position: 'absolute',
-            top: verticalScale(isIosDevice() ? 50 : 80),
-          }}>
-          <PhotoCarousel setOpenPhotoModal={setOpenPhotoModal} />
+        <Separator space={20} />
+        <View>
+          <Image
+            source={{uri: customerPhotoUrl}}
+            height={isIosDevice() ? 300 : 340}
+            width={isIosDevice() ? 360 : 355}
+            resizeMode="cover"
+            customStyle={{
+              borderBottomLeftRadius: 120,
+              borderBottomRightRadius: 120,
+            }}
+          />
         </View>
-        <PhotoModal
-          setOpenPhotoModal={setOpenPhotoModal}
-          openPhotoModal={openPhotoModal}
-        />
-        <Separator space={90} />
-        <MatchInformationSection />
-
-        {/* <JowaMareSection
-          isMare={isMare}
-          isJowa={isJowa}
-          setMare={setMare}
-          setJowa={setJowa}
-          setSwipeValue={setSwipeValue}
-          swipeValue={swipeValue}
-        /> */}
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 

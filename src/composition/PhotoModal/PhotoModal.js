@@ -1,14 +1,20 @@
+// React modules
 import React from 'react';
-import {Overlay} from 'react-native-elements';
-import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {TouchableOpacity, View} from 'react-native';
-import Text from '../../components/Text/Text';
+
+// Third party libraries
+import {Overlay} from 'react-native-elements';
+
+// Components
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
-import {GLOBAL_ASSET_URI} from '../../utils/images';
 import Image from '../../components/Image/Image';
 
+// Utils
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
+import {GLOBAL_ASSET_URI} from '../../utils/images';
+
 const PhotoModal = props => {
-  const {openPhotoModal, setOpenPhotoModal} = props;
+  const {openPhotoModal, setOpenPhotoModal, customerPhotoUrl} = props;
   return (
     <BorderLinearGradient
       start={{x: 0, y: 0}}
@@ -24,20 +30,21 @@ const PhotoModal = props => {
           top: '50%',
           left: '50%',
           transform: [
-            {translateX: -scale(150)},
+            {translateX: -scale(140)},
             {translateY: -verticalScale(140)},
           ],
           height: 'auto',
-          width: scale(300),
+          width: scale(280),
           borderRadius: 20,
-          padding: scale(30),
+          padding: scale(0),
         }}
         isVisible={openPhotoModal}>
         <View
           style={{
             position: 'absolute',
-            bottom: verticalScale(isIosDevice() ? 240 : 245),
+            bottom: verticalScale(265),
             right: scale(10),
+            zIndex: 1,
           }}>
           <TouchableOpacity onPress={() => setOpenPhotoModal(false)}>
             <Image
@@ -47,10 +54,13 @@ const PhotoModal = props => {
             />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            height: verticalScale(200),
-          }}></View>
+        <Image
+          source={{uri: customerPhotoUrl}}
+          height={280}
+          width={280}
+          resizeMode="cover"
+          customStyle={{borderRadius: 20}}
+        />
       </Overlay>
     </BorderLinearGradient>
   );

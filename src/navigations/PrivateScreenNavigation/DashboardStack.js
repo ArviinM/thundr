@@ -11,7 +11,6 @@ import {TouchableOpacity, View} from 'react-native';
 import {
   DrawerActions,
   getFocusedRouteNameFromRoute,
-  useRoute,
 } from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -44,11 +43,20 @@ const UnderConstruction = () => {
 
 const DashboardTabs = ({route, navigation}) => {
   const focusedRoute = getFocusedRouteNameFromRoute(route);
+  const [test, setTest] = React.useState(false);
+
+  React.useEffect(() => {
+    if (focusedRoute !== 'DashboardTab') {
+      setTest(true);
+    }
+  }, [focusedRoute, setTest]);
 
   return (
     <Tab.Navigator
       initialRouteName="DashboardTab"
       screenOptions={{
+        gestureEnabled: false,
+        swipeEnabled: false,
         headerShown: false,
         tabBarStyle: {
           backgroundColor: '#D8DCDD',
@@ -61,7 +69,7 @@ const DashboardTabs = ({route, navigation}) => {
       }}>
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={UnderConstruction}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => (
@@ -91,25 +99,34 @@ const DashboardTabs = ({route, navigation}) => {
         name="DashboardTab"
         component={Dashboard}
         options={{
-          tabBarLabel: '',
-          tabBarIcon: () => {
-            return (
-              focusedRoute !== 'DashboardTab' &&
-              focusedRoute !== 'Profile' && (
-                <Image
-                  source={DASHBOARD_ASSET_URI.THUNDR}
-                  height={70}
-                  width={70}
-                  customStyle={{bottom: verticalScale(20)}}
-                />
-              )
-            );
+          tabBarButton: () => {
+            focusedRoute !== 'DashboardTab' ? (
+              <Image
+                source={DASHBOARD_ASSET_URI.THUNDR}
+                height={70}
+                width={70}
+                customStyle={{bottom: verticalScale(20)}}
+              />
+            ) : null;
           },
+          tabBarLabel: '',
+          // tabBarIcon: () => {
+          //   return (
+          //     focusedRoute === 'DashboardTab' && (
+          //       <Image
+          //         source={DASHBOARD_ASSET_URI.THUNDR}
+          //         height={70}
+          //         width={70}
+          //         customStyle={{bottom: verticalScale(20)}}
+          //       />
+          //     )
+          //   );
+          // },
         }}
       />
       <Tab.Screen
         name="Stars"
-        component={MatchFound}
+        component={UnderConstruction}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => (
@@ -157,8 +174,10 @@ const DashboardNavigations = () => {
 
   return (
     <Drawer.Navigator
+      swipeEdgeWidth={0}
       drawerContent={props => <DrawerContent {...props} />}
       screenOptions={{
+        swipeEnabled: false,
         swipeEdgeWidth: 0,
         gestureEnabled: false,
         headerStyle: {

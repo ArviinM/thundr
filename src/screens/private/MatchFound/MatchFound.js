@@ -11,6 +11,7 @@ import Image from '../../../components/Image/Image';
 import {DASHBOARD_ASSET_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
 import Button from '../../../components/Button/Button';
+import {useNavigation} from '@react-navigation/native';
 
 // Utils
 
@@ -31,6 +32,7 @@ const mareGradientColors = [
 ];
 
 const MatchFound = () => {
+  const navigation = useNavigation();
   return (
     <LinearGradient
       colors={isMare ? mareGradientColors : jowaGradientColors}
@@ -64,10 +66,15 @@ const MatchFound = () => {
             bottom: verticalScale(20),
           }}>
           <Button
+            onPress={() => navigation.navigate('DashboardTab')}
             title="Chat now!"
             style={{width: scale(125), backgroundColor: '#FFBC28'}}
           />
-          <Button title="Keep sighting" style={{width: scale(125)}} />
+          <Button
+            onPress={() => navigation.navigate('DashboardTab')}
+            title="Keep sighting"
+            style={{width: scale(125)}}
+          />
         </View>
       </View>
     </LinearGradient>

@@ -10,9 +10,26 @@ import Image from '../../components/Image/Image';
 // Utils
 import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import {verticalScale} from '../../utils/commons';
+import Button from '../../components/Button/Button';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  CUSTOMER_MATCH,
+  UPDATE_DASHBOARD_STATE,
+} from '../../ducks/Dashboard/actionTypes';
 
 const JowaMareSection = props => {
-  const {setMare, setJowa, isMare, isJowa, swipeValue, setSwipeValue} = props;
+  const {
+    setMare,
+    setJowa,
+    isMare,
+    isJowa,
+    swipeValue,
+    setSwipeValue,
+    setCurrentIndex,
+    currentIndex,
+    setOutOfSwipe,
+    matchList,
+  } = props;
   const leftValue = useRef(0);
   const rightValue = useRef(0);
 
@@ -38,6 +55,9 @@ const JowaMareSection = props => {
           setMare(false);
           setSwipeValue('Mare');
           updateLeftPosition(0);
+          // if (matchList.length && currentIndex < matchList.length - 1) {
+          setCurrentIndex(prevIndex => prevIndex + 1);
+          // }
         } else {
           updateLeftPosition(0);
           setMare(false);
@@ -60,6 +80,9 @@ const JowaMareSection = props => {
           setJowa(false);
           setSwipeValue('Jowa');
           updateRightPosition(0);
+          // if (currentIndex < matchList.length - 1) {
+          setCurrentIndex(prevIndex => prevIndex + 1);
+          // }
         } else {
           updateRightPosition(0);
           setJowa(false);
@@ -79,8 +102,8 @@ const JowaMareSection = props => {
           source={
             isMare ? DASHBOARD_ASSET_URI.GLOWING_MARE : DASHBOARD_ASSET_URI.MARE
           }
-          height={130}
-          width={55}
+          height={160}
+          width={65}
         />
       </Animated.View>
       <View style={{marginTop: verticalScale(40)}}>
@@ -103,8 +126,8 @@ const JowaMareSection = props => {
           source={
             isJowa ? DASHBOARD_ASSET_URI.GLOWING_JOWA : DASHBOARD_ASSET_URI.JOWA
           }
-          height={130}
-          width={55}
+          height={160}
+          width={65}
         />
       </Animated.View>
     </View>

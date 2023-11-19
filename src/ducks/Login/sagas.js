@@ -15,8 +15,11 @@ import {
 import {GENERIC_ERROR} from '../../utils/commons';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 import RootNavigation from '../../navigations';
+import {UPDATE_CURRENT_LOCATION} from '../Dashboard/actionTypes';
 
 export function* startLoginProcess({payload}) {
+  const {currentLocation} = yield select(state => state.dashboard);
+  const {longitude, latitude} = currentLocation;
   const {emailOrMobile, password} = payload;
   const phoneNumber = `+63${emailOrMobile}`;
 
@@ -36,6 +39,10 @@ export function* startLoginProcess({payload}) {
           sub: response.data.data.sub,
         },
       });
+      yield put({
+        type: UPDATE_CURRENT_LOCATION,
+        payload: {longitude, latitude},
+      });
     }
   } catch (error) {
     const errorMessage =
@@ -50,8 +57,9 @@ export function* startLoginProcess({payload}) {
 }
 
 export function* startLoginViaRefreshToken({payload}) {
+  const {currentLocation} = yield select(state => state.dashboard);
+  const {longitude, latitude} = currentLocation;
   const {refreshToken} = payload;
-  const {loginData} = yield select(state => state.login);
 
   try {
     const response = yield call(LoginConfig.loginViaRefreshToken, {
@@ -62,6 +70,10 @@ export function* startLoginViaRefreshToken({payload}) {
       yield put({
         type: START_LOGIN_VIA_REFRESH_TOKEN_SUCCESS,
         payload: response.data.data,
+      });
+      yield put({
+        type: UPDATE_CURRENT_LOCATION,
+        payload: {longitude, latitude},
       });
     }
   } catch (error) {

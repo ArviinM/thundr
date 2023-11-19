@@ -227,3 +227,21 @@ export const inches = [
 export const removeSpaces = inputString => {
   return inputString.replace(/\s/g, '');
 };
+
+export const calculateAge = birthDate => {
+  const today = new Date();
+  const birthDateObj = new Date(birthDate);
+
+  let age = today.getFullYear() - birthDateObj.getFullYear();
+  const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+  // If the birth month is later in the year, or it's the same month but the birth day is later
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+  ) {
+    age--;
+  }
+
+  return age;
+};
