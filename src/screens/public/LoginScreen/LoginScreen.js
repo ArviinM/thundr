@@ -124,7 +124,7 @@ const LoginScreen = () => {
     return (
       <Formik
         initialValues={{
-          emailOrMobile: '',
+          emailOrMobile: phoneNumber ? phoneNumber : '',
           password: '',
         }}
         validationSchema={validationSchema}
