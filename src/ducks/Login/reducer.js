@@ -67,6 +67,7 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         loginData: action.payload,
         loading: false,
         authenticated: true,
+        token: action.payload.accessToken,
       };
     case START_LOGIN_VIA_REFRESH_TOKEN_FAILED:
       return {

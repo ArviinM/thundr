@@ -1,16 +1,15 @@
 import React, {version} from 'react';
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel';
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
-import {scale, verticalScale} from '../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
+import Image from '../../components/Image/Image';
 
 const PhotoCarousel = props => {
-  const {setOpenPhotoModal} = props;
-  const data = ['1', '2', '3', '4', '5'];
+  const {setOpenPhotoModal, customerPhotoUrl} = props;
+  const data = [customerPhotoUrl];
 
-  const {width: screenWidth} = Dimensions.get('window');
-
-  const renderItem = ({item, index}, parallaxProps) => {
+  const renderItem = ({item, index}) => {
     return (
       <BorderLinearGradient
         start={{x: 0, y: 0}}
@@ -20,19 +19,16 @@ const PhotoCarousel = props => {
           <View
             style={{
               height: verticalScale(75),
-              width: scale(85),
               backgroundColor: '#D8DCDD',
               borderRadius: 15,
-              padding: scale(22),
               alignItems: 'center',
-              flex: 1,
             }}>
-            <ParallaxImage
-              // source={{uri: item.illustration}}
-              containerStyle={styles.imageContainer}
-              style={styles.image}
-              parallaxFactor={0.4}
-              {...parallaxProps}
+            <Image
+              source={{uri: customerPhotoUrl}}
+              height={75}
+              width={isIosDevice() ? 100 : 93}
+              resizeMode="cover"
+              customStyle={{borderRadius: 15}}
             />
           </View>
         </TouchableOpacity>
@@ -44,11 +40,8 @@ const PhotoCarousel = props => {
     <View>
       <Carousel
         layout={'default'}
-        firstItem={2}
         data={data}
         renderItem={renderItem}
-        // sliderWidth={500}
-        // itemWidth={100}
         sliderWidth={500}
         itemWidth={100}
         hasParallaxImages={true}
@@ -56,21 +49,5 @@ const PhotoCarousel = props => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  imageContainer: {
-    flex: 1,
-    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
-    borderRadius: 8,
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    resizeMode: 'cover',
-  },
-});
 
 export default PhotoCarousel;

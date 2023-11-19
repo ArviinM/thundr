@@ -6,7 +6,7 @@ export const GLOBAL_ASSET_URI = {
   ARROW_ICON: require('../assets/Images/Icons/arrow-icon.png'),
   SELECTION_BOX: require('../assets/Images/Icons/selection-box.png'),
   CHECKED_SELECTION_BOX: require('../assets/Images/Icons/checked-selection-box.png'),
-  BACK_ICON: require('../assets/Images/Icons/back-icon.png'),
+  // BACK_ICON: require('../assets/Images/Icons/back-icon.png'),
 };
 
 export const LGBTQ_ASSET_URI = {
@@ -82,4 +82,5 @@ export const DASHBOARD_ASSET_URI = {
 // Sample only to be deleted
 export const SAMPLE_IMAGE = {
   SAMPLE_1: require('../assets/Images/SampleOnly/sample-1.png'),
+  SAMPLE_2: require('../assets/Images/SampleOnly/sample-2.jpg'),
 };

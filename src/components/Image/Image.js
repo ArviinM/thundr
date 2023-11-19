@@ -10,7 +10,7 @@ const Image = props => {
     width,
     source,
     customStyle,
-    stretch = false,
+    resizeMode = 'contain',
     tintColor,
     changeTintColor = false,
   } = props;
@@ -33,7 +33,7 @@ const Image = props => {
       source={source}
       height={height}
       width={width}
-      resizeMode={stretch ? 'stretch' : 'contain'}
+      resizeMode={resizeMode}
       style={customStyle}
     />
   );

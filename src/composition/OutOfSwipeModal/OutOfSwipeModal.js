@@ -12,10 +12,11 @@ import Separator from '../../components/Separator/Separator';
 import Button from '../../components/Button/Button';
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
 
-const OutOfSwipeModal = () => {
+const OutOfSwipeModal = wew => {
+  const {isOutOfSwipe, setOutOfSwipe} = wew;
   return (
     <Overlay
-      // onBackdropPress={handleCloseModal}
+      onBackdropPress={() => setOutOfSwipe(false)}
       overlayStyle={{
         alignItems: 'center',
         justifyContent: 'center',
@@ -34,7 +35,7 @@ const OutOfSwipeModal = () => {
         borderWidth: 8,
         padding: scale(30),
       }}
-      isVisible={false}>
+      isVisible={isOutOfSwipe}>
       <View style={{alignItems: 'center'}}>
         <View style={{flexDirection: 'row', gap: scale(10)}}>
           <View style={{alignItems: 'center'}}>
@@ -111,7 +112,11 @@ const OutOfSwipeModal = () => {
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         colors={['#E72454', '#FFC227']}>
-        <Button title="Subscribe Now" style={{width: scale(200)}} />
+        <Button
+          title="Subscribe Now"
+          style={{width: scale(200)}}
+          onPress={() => setOutOfSwipe(false)}
+        />
       </BorderLinearGradient>
     </Overlay>
   );

@@ -1,11 +1,12 @@
 // React modules
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import Geolocation from 'react-native-geolocation-service';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
@@ -28,6 +29,7 @@ import {
   START_LOGIN_VIA_REFRESH_TOKEN,
 } from '../../../ducks/Login/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
+import {UPDATE_DASHBOARD_STATE} from '../../../ducks/Dashboard/actionTypes';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -37,6 +39,31 @@ const LoginScreen = () => {
     state => state.persistedState,
   );
   const [isPasswordVisible, setPasswordVisible] = useState(true);
+
+  useEffect(() => {
+    const getCurrentLocation = () => {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position.coords;
+          dispatch({
+            type: UPDATE_DASHBOARD_STATE,
+            newState: {
+              currentLocation: {
+                longitude: longitude,
+                latitude: latitude,
+              },
+            },
+          });
+        },
+        error => {
+          console.error('Error getting location:', error);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    };
+
+    getCurrentLocation();
+  }, []);
 
   const validationSchema = yup.object().shape({
     emailOrMobile: yup.string().required(),
@@ -92,11 +119,12 @@ const LoginScreen = () => {
     );
   };
 
+  // 6886363980
   const inputFields = () => {
     return (
       <Formik
         initialValues={{
-          emailOrMobile: phoneNumber ? phoneNumber : '',
+          emailOrMobile: '',
           password: '',
         }}
         validationSchema={validationSchema}
