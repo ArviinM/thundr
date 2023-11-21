@@ -43,13 +43,6 @@ const UnderConstruction = () => {
 
 const DashboardTabs = ({route, navigation}) => {
   const focusedRoute = getFocusedRouteNameFromRoute(route);
-  const [test, setTest] = React.useState(false);
-
-  React.useEffect(() => {
-    if (focusedRoute !== 'DashboardTab') {
-      setTest(true);
-    }
-  }, [focusedRoute, setTest]);
 
   return (
     <Tab.Navigator
@@ -72,13 +65,21 @@ const DashboardTabs = ({route, navigation}) => {
         component={UnderConstruction}
         options={{
           tabBarLabel: '',
-          tabBarIcon: () => (
-            <Image
-              source={DASHBOARD_ASSET_URI.PROFILE_ICON}
-              height={25}
-              width={25}
-            />
-          ),
+          tabBarIcon: () => {
+            return focusedRoute === 'Profile' ? (
+              <Image
+                source={DASHBOARD_ASSET_URI.SELECTED_PROFILE_ICON}
+                height={40}
+                width={40}
+              />
+            ) : (
+              <Image
+                source={DASHBOARD_ASSET_URI.PROFILE_ICON}
+                height={25}
+                width={25}
+              />
+            );
+          },
         }}
       />
       <Tab.Screen
@@ -86,13 +87,21 @@ const DashboardTabs = ({route, navigation}) => {
         component={UnderConstruction}
         options={{
           tabBarLabel: '',
-          tabBarIcon: () => (
-            <Image
-              source={DASHBOARD_ASSET_URI.MESSAGE_ICON}
-              height={25}
-              width={25}
-            />
-          ),
+          tabBarIcon: () => {
+            return focusedRoute === 'Messages' ? (
+              <Image
+                source={DASHBOARD_ASSET_URI.SELECTED_MESSAGE_ICON}
+                height={40}
+                width={40}
+              />
+            ) : (
+              <Image
+                source={DASHBOARD_ASSET_URI.MESSAGE_ICON}
+                height={25}
+                width={25}
+              />
+            );
+          },
         }}
       />
       <Tab.Screen
@@ -129,27 +138,43 @@ const DashboardTabs = ({route, navigation}) => {
         component={UnderConstruction}
         options={{
           tabBarLabel: '',
-          tabBarIcon: () => (
-            <Image
-              source={DASHBOARD_ASSET_URI.STARS_ICON}
-              height={25}
-              width={25}
-            />
-          ),
+          tabBarIcon: () => {
+            return focusedRoute === 'Stars' ? (
+              <Image
+                source={DASHBOARD_ASSET_URI.SELECTED_STARS_ICON}
+                height={40}
+                width={40}
+              />
+            ) : (
+              <Image
+                source={DASHBOARD_ASSET_URI.STARS_ICON}
+                height={25}
+                width={25}
+              />
+            );
+          },
         }}
       />
       <Tab.Screen
-        name="Right"
+        name="FlashThundr"
         component={UnderConstruction}
         options={{
           tabBarLabel: '',
-          tabBarIcon: () => (
-            <Image
-              source={DASHBOARD_ASSET_URI.FLASH_THUNDR_ICON}
-              height={25}
-              width={25}
-            />
-          ),
+          tabBarIcon: () => {
+            return focusedRoute === 'FlashThundr' ? (
+              <Image
+                source={DASHBOARD_ASSET_URI.SELECTED_FLASH_THUNDR_ICON}
+                height={40}
+                width={40}
+              />
+            ) : (
+              <Image
+                source={DASHBOARD_ASSET_URI.FLASH_THUNDR_ICON}
+                height={25}
+                width={25}
+              />
+            );
+          },
         }}
       />
     </Tab.Navigator>
