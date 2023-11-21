@@ -11,11 +11,8 @@ import Image from '../../../components/Image/Image';
 import {DASHBOARD_ASSET_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
 import Button from '../../../components/Button/Button';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-// Utils
-
-const isMare = true;
 const jowaGradientColors = [
   '#ed2a85',
   '#fe406b',
@@ -32,6 +29,10 @@ const mareGradientColors = [
 ];
 
 const MatchFound = () => {
+  const route = useRoute();
+  const {customerMatchData} = route?.params?.params;
+  const isMare = customerMatchData?.tag === 'MARE';
+
   const navigation = useNavigation();
   return (
     <LinearGradient

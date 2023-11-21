@@ -30,38 +30,65 @@ const JowaMareSection = props => {
     setOutOfSwipe,
     matchList,
   } = props;
-  const leftValue = useRef(0);
-  const rightValue = useRef(0);
+  // const leftValue = useRef(0);
+  const translateXLeft = useRef(new Animated.Value(0)).current;
+  const translateXRight = useRef(new Animated.Value(0)).current;
 
-  const updateLeftPosition = dx => {
-    leftValue.current = dx;
-  };
+  // const updateLeftPosition = dx => {
+  //   leftValue.current = dx;
+  // };
 
-  const updateRightPosition = dx => {
-    rightValue.current = dx;
-  };
+  // const updateRightPosition = dx => {
+  //   rightValue.current = dx;
+  // };
 
-  const panResponderLeft = useRef(
+  // TEMPORARY COMMENT
+  // const panResponderLeft = useRef(
+  //   PanResponder.create({
+  //     onStartShouldSetPanResponder: () => {
+  //       setMare(true);
+  //       return true;
+  //     },
+  //     onPanResponderMove: (_, gestureState) => {
+  //       updateLeftPosition(gestureState.dx);
+  //     },
+  //     onPanResponderRelease: (_, gestureState) => {
+  //       if (gestureState.dx > 50) {
+  //         setMare(false);
+  //         setSwipeValue('Mare');
+  //         updateLeftPosition(0);
+  //         // if (matchList.length && currentIndex < matchList.length - 1) {
+  //         setCurrentIndex(prevIndex => prevIndex + 1);
+  //         // }
+  //       } else {
+  //         updateLeftPosition(0);
+  //         setMare(false);
+  //       }
+  //     },
+  //   }),
+  // ).current;
+
+  const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => {
         setMare(true);
         return true;
       },
       onPanResponderMove: (_, gestureState) => {
-        updateLeftPosition(gestureState.dx);
+        translateXLeft.setValue(gestureState.dx);
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx > 50) {
           setMare(false);
           setSwipeValue('Mare');
-          updateLeftPosition(0);
-          // if (matchList.length && currentIndex < matchList.length - 1) {
           setCurrentIndex(prevIndex => prevIndex + 1);
-          // }
         } else {
-          updateLeftPosition(0);
           setMare(false);
         }
+        Animated.spring(translateXLeft, {
+          toValue: 0,
+          useNativeDriver: false,
+        }).start();
       },
     }),
   ).current;
@@ -73,20 +100,21 @@ const JowaMareSection = props => {
         return true;
       },
       onPanResponderMove: (_, gestureState) => {
-        updateRightPosition(gestureState.dx);
+        translateXRight.setValue(gestureState.dx);
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx < -50) {
           setJowa(false);
           setSwipeValue('Jowa');
-          updateRightPosition(0);
-          // if (currentIndex < matchList.length - 1) {
           setCurrentIndex(prevIndex => prevIndex + 1);
-          // }
         } else {
-          updateRightPosition(0);
           setJowa(false);
         }
+
+        Animated.spring(translateXRight, {
+          toValue: 0,
+          useNativeDriver: false,
+        }).start();
       },
     }),
   ).current;
@@ -94,10 +122,8 @@ const JowaMareSection = props => {
   return (
     <View style={{flexDirection: 'row'}}>
       <Animated.View
-        style={{
-          transform: [{translateX: leftValue.current}],
-        }}
-        {...panResponderLeft.panHandlers}>
+        {...panResponder.panHandlers}
+        style={[{transform: [{translateX: translateXLeft}]}]}>
         <Image
           source={
             isMare ? DASHBOARD_ASSET_URI.GLOWING_MARE : DASHBOARD_ASSET_URI.MARE
@@ -119,7 +145,7 @@ const JowaMareSection = props => {
       </View>
       <Animated.View
         style={{
-          transform: [{translateX: rightValue.current}],
+          transform: [{translateX: translateXRight}],
         }}
         {...panResponderRight.panHandlers}>
         <Image

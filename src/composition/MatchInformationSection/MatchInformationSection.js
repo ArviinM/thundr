@@ -67,7 +67,7 @@ const MatchInformationSection = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginRight: scale(40),
+
             alignItems: 'center',
           }}>
           <View style={{flex: 1}}>
@@ -88,7 +88,6 @@ const MatchInformationSection = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginRight: scale(40),
           }}>
           <View style={{flex: 1}}>
             <Text color="#fff" weight="700">
@@ -108,7 +107,6 @@ const MatchInformationSection = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginRight: scale(40),
           }}>
           <View style={{flex: 1}}>
             <Text color="#fff" weight="700">
@@ -128,7 +126,6 @@ const MatchInformationSection = props => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginRight: scale(40),
           }}>
           <View style={{flex: 1}}>
             <Text color="#fff" weight="700">
