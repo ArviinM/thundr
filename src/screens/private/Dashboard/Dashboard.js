@@ -4,13 +4,16 @@ import {ScrollView, View} from 'react-native';
 
 // Third party libraries
 import {useDispatch, useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 
 // Components
 import Text from '../../../components/Text/Text';
-import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 import JowaMareSection from '../../../composition/JowaMareSection/JowaMareSection';
+import OutOfSwipeModal from '../../../composition/OutOfSwipeModal/OutOfSwipeModal';
+import Profile from '../Profile/Profile';
+import Spinner from '../../../components/Spinner/Spinner';
 
 // Ducks
 import {
@@ -24,17 +27,16 @@ import {
 
 // Utils
 import {calculateAge, verticalScale} from '../../../utils/commons';
-import OutOfSwipeModal from '../../../composition/OutOfSwipeModal/OutOfSwipeModal';
-import Profile from '../Profile/Profile';
-
-import Spinner from '../../../components/Spinner/Spinner';
-import {useNavigation} from '@react-navigation/native';
 
 const MatchDetails = props => {
   const {currentIndex, matchList, customerProfile} = props;
   return (
     <>
-      <Text size={30} color="#E33C59" weight={700}>
+      <Text
+        size={30}
+        color="#E33C59"
+        weight={700}
+        customStyle={{textAlign: 'center'}}>
         {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
       </Text>
       <Text size={15}>{customerProfile?.customerDetails?.work}</Text>
@@ -58,9 +60,8 @@ const Dashboard = () => {
   const navigation = useNavigation();
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
-  const {matchList, matchListLoading, customerProfile} = useSelector(
-    state => state.dashboard,
-  );
+  const {matchList, matchListLoading, customerProfile, customerMatchData} =
+    useSelector(state => state.dashboard);
   const scrollViewRef = useRef(null);
 
   const [isMare, setMare] = useState(false);
@@ -68,9 +69,7 @@ const Dashboard = () => {
   const [swipeValue, setSwipeValue] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isOutOfSwipe, setOutOfSwipe] = useState(false);
-
-  // TEST ONLY, TO BE DELETED
-  const [matchTestOnly, setMatchTestOnly] = useState(false);
+  const [isScrolledToTop, setIsScrolledToTop] = useState(false);
 
   const compatibilityScore = matchList[currentIndex]?.percent;
 
@@ -102,7 +101,7 @@ const Dashboard = () => {
     }
   }, [matchList, dispatch, currentIndex, swipeValue]);
 
-  if (scrollViewRef.current) {
+  if (scrollViewRef.current && !isScrolledToTop) {
     scrollViewRef.current.scrollToEnd({animated: true});
   }
 
@@ -125,15 +124,7 @@ const Dashboard = () => {
     });
   }, [dispatch]);
 
-  // TEST ONLY FOR MATCH FOUND
-  // useEffect(() => {
-  //   if (currentIndex === 3) {
-  //     setMatchTestOnly(true);
-  //   }
-  // }, [setMatchTestOnly, currentIndex]);
-
   useEffect(() => {
-    // Function to get current location and dispatch to Redux
     const getCurrentLocation = () => {
       Geolocation.getCurrentPosition(
         position => {
@@ -153,31 +144,46 @@ const Dashboard = () => {
       );
     };
 
-    // Initial call to get location
     getCurrentLocation();
 
-    // Set up an interval to get location every 30 seconds
     const intervalId = setInterval(() => {
       getCurrentLocation();
     }, 60000);
 
-    // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
   useEffect(() => {
-    if (matchTestOnly) {
-      navigation.navigate('MatchFound');
+    if (customerMatchData?.match) {
+      navigation.navigate('MatchFound', {params: {customerMatchData}});
     }
-  }, [matchTestOnly, navigation]);
+  }, [customerMatchData, navigation]);
 
   if (matchListLoading && !matchList.length) {
     return <Spinner visible={true} />;
   }
 
+  const handleScroll = event => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    const isCloseToTop = scrollPosition <= 0;
+
+    const threshold = 10;
+
+    if (isCloseToTop && !isScrolledToTop) {
+      setIsScrolledToTop(true);
+    } else if (!isCloseToTop && isScrolledToTop) {
+      const isAtOriginalPosition = scrollPosition >= threshold;
+      if (isAtOriginalPosition) {
+        setIsScrolledToTop(false);
+      }
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         nestedScrollEnabled={true}
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
@@ -188,6 +194,7 @@ const Dashboard = () => {
         <Profile
           compatibilityScore={compatibilityScore}
           customerProfile={customerProfile}
+          isScrolledToTop={isScrolledToTop}
         />
       </ScrollView>
       <OutOfSwipeModal
@@ -195,11 +202,13 @@ const Dashboard = () => {
         setOutOfSwipe={setOutOfSwipe}
       />
       <View style={{alignItems: 'center'}}>
-        <MatchDetails
-          currentIndex={currentIndex}
-          matchList={matchList}
-          customerProfile={customerProfile}
-        />
+        {!isScrolledToTop && (
+          <MatchDetails
+            currentIndex={currentIndex}
+            matchList={matchList}
+            customerProfile={customerProfile}
+          />
+        )}
         <JowaMareSection
           isMare={isMare}
           isJowa={isJowa}

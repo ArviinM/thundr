@@ -17,8 +17,8 @@ import PhotoModal from '../../../composition/PhotoModal/PhotoModal';
 import {calculateAge, isIosDevice, verticalScale} from '../../../utils/commons';
 
 const Profile = props => {
+  const {compatibilityScore, customerProfile, isScrolledToTop} = props;
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
-  const {compatibilityScore, customerProfile} = props;
   const customerPhotoUrl = customerProfile?.customerPhoto?.[0]?.photoUrl;
 
   return (
