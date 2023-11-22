@@ -1,6 +1,6 @@
 // React modules
 import React, {useEffect, useState} from 'react';
-import {LogBox} from 'react-native';
+import {LogBox, PermissionsAndroid} from 'react-native';
 
 // Third party libraries
 import {RootSiblingParent} from 'react-native-root-siblings';
@@ -19,7 +19,6 @@ const App = () => {
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
-    // Check and request location permissions
     const requestLocationPermission = async () => {
       try {
         if (Platform.OS === 'android') {

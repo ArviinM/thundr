@@ -134,13 +134,15 @@ const Dashboard = () => {
       Geolocation.getCurrentPosition(
         position => {
           const {latitude, longitude} = position.coords;
-          dispatch({
-            type: UPDATE_CURRENT_LOCATION,
-            payload: {
-              longitude: longitude,
-              latitude: latitude,
-            },
-          });
+          if (latitude && longitude) {
+            dispatch({
+              type: UPDATE_CURRENT_LOCATION,
+              payload: {
+                longitude: longitude,
+                latitude: latitude,
+              },
+            });
+          }
         },
         error => {
           console.error('Error getting location:', error);
