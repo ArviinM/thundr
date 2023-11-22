@@ -6,7 +6,7 @@ export const GLOBAL_ASSET_URI = {
   ARROW_ICON: require('../assets/Images/Icons/arrow-icon.png'),
   SELECTION_BOX: require('../assets/Images/Icons/selection-box.png'),
   CHECKED_SELECTION_BOX: require('../assets/Images/Icons/checked-selection-box.png'),
-  // BACK_ICON: require('../assets/Images/Icons/back-icon.png'),
+  PROFILE_BACK_ICON: require('../assets/Images/Icons/back-icon.png'),
 };
 
 export const LGBTQ_ASSET_URI = {
@@ -85,6 +85,10 @@ export const DASHBOARD_ASSET_URI = {
   MARE_LOWER_BG: require('../assets/Images/Icons/mare-lower-bg.png'),
   JOWA_UPPER_BG: require('../assets/Images/Icons/jowa-upper-bg.png'),
   JOWA_LOWER_BG: require('../assets/Images/Icons/jowa-lower-bg.png'),
+  LION_INFO: require('../assets/Images/Icons/lion-info.png'),
+  OTTER_INFO: require('../assets/Images/Icons/otter-info.png'),
+  DOG_INFO: require('../assets/Images/Icons/dog-info.png'),
+  BEAVER_INFO: require('../assets/Images/Icons/beaver-info.png'),
 };
 
 export const SAMPLE_IMAGE = {

@@ -1,6 +1,6 @@
 // React modules
 import React, {useEffect, useState, useRef} from 'react';
-import {ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 
 // Third party libraries
 import {useDispatch, useSelector} from 'react-redux';
@@ -26,7 +26,7 @@ import {
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
-import {calculateAge, verticalScale} from '../../../utils/commons';
+import {calculateAge, isIosDevice, verticalScale} from '../../../utils/commons';
 import LinearGradient from 'react-native-linear-gradient';
 
 const MatchDetails = props => {
@@ -65,29 +65,27 @@ const Dashboard = () => {
   const navigation = useNavigation();
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
-  const {matchList, matchListLoading, customerProfile, customerMatchData} =
-    useSelector(state => state.dashboard);
+  const {
+    matchList,
+    matchListLoading,
+    customerProfile,
+    customerMatchData,
+    isSwipeReached,
+  } = useSelector(state => state.dashboard);
   const scrollViewRef = useRef(null);
 
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
   const [swipeValue, setSwipeValue] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isOutOfSwipe, setOutOfSwipe] = useState(false);
   const [isScrolledToTop, setIsScrolledToTop] = useState(false);
-
   const compatibilityScore = matchList[currentIndex]?.percent;
 
   useEffect(() => {
-    if (
-      !matchListLoading &&
-      matchList.length &&
-      currentIndex === matchList.length
-    ) {
-      setOutOfSwipe(true);
+    if (isSwipeReached) {
       setCurrentIndex(currentIndex - 1);
     }
-  }, [currentIndex, matchList]);
+  }, [isSwipeReached]);
 
   useEffect(() => {
     dispatch({
@@ -128,6 +126,13 @@ const Dashboard = () => {
       payload: {sub: loginData.sub || sub, accessToken: loginData.accessToken},
     });
   }, [dispatch]);
+
+  const handleRefresh = () => {
+    dispatch({
+      type: GET_MATCH_LIST,
+      payload: {sub: loginData.sub || sub},
+    });
+  };
 
   useEffect(() => {
     const getCurrentLocation = () => {
@@ -173,16 +178,8 @@ const Dashboard = () => {
   const handleScroll = event => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
     const isCloseToTop = scrollPosition <= 0;
-
-    const threshold = 10;
-
-    if (isCloseToTop && !isScrolledToTop) {
+    if (isCloseToTop) {
       setIsScrolledToTop(true);
-    } else if (!isCloseToTop && isScrolledToTop) {
-      const isAtOriginalPosition = scrollPosition >= threshold;
-      if (isAtOriginalPosition) {
-        setIsScrolledToTop(false);
-      }
     }
   };
 
@@ -214,6 +211,14 @@ const Dashboard = () => {
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView
+        refreshControl={
+          !matchList.length && (
+            <RefreshControl
+              refreshing={matchListLoading}
+              onRefresh={handleRefresh}
+            />
+          )
+        }
         onScroll={handleScroll}
         scrollEventThrottle={16}
         nestedScrollEnabled={true}
@@ -222,7 +227,7 @@ const Dashboard = () => {
         onContentSizeChange={() => {
           scrollViewRef.current.scrollToEnd({animated: true});
         }}
-        bounces={false}>
+        bounces={!matchList.length}>
         {!matchList.length ? (
           noAvailableMatches()
         ) : (
@@ -231,13 +236,10 @@ const Dashboard = () => {
             customerProfile={customerProfile}
             isScrolledToTop={isScrolledToTop}
             matchList={matchList}
+            setIsScrolledToTop={setIsScrolledToTop}
           />
         )}
       </ScrollView>
-      <OutOfSwipeModal
-        isOutOfSwipe={isOutOfSwipe}
-        setOutOfSwipe={setOutOfSwipe}
-      />
       <View style={{alignItems: 'center'}}>
         {!isScrolledToTop && (
           <MatchDetails
@@ -246,6 +248,15 @@ const Dashboard = () => {
             customerProfile={customerProfile}
           />
         )}
+      </View>
+      <OutOfSwipeModal isSwipeReached={isSwipeReached} />
+      {!isScrolledToTop && <View style={{height: verticalScale(160)}} />}
+      <View
+        style={{
+          alignItems: 'center',
+          position: 'absolute',
+          top: verticalScale(isIosDevice() ? 360 : 380),
+        }}>
         <JowaMareSection
           isMare={isMare}
           isJowa={isJowa}
@@ -255,11 +266,11 @@ const Dashboard = () => {
           swipeValue={swipeValue}
           currentIndex={currentIndex}
           setCurrentIndex={setCurrentIndex}
-          setOutOfSwipe={setOutOfSwipe}
           matchList={matchList}
+          isScrolledToTop={isScrolledToTop}
         />
       </View>
-      <Separator space={30} />
+      {!isScrolledToTop && <Separator space={30} />}
     </View>
   );
 };

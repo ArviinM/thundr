@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,10 +14,21 @@ import MatchInformationSection from '../../../composition/MatchInformationSectio
 import PhotoModal from '../../../composition/PhotoModal/PhotoModal';
 
 // Utils
-import {calculateAge, isIosDevice, verticalScale} from '../../../utils/commons';
+import {
+  calculateAge,
+  isIosDevice,
+  scale,
+  verticalScale,
+} from '../../../utils/commons';
+import {GLOBAL_ASSET_URI} from '../../../utils/images';
 
 const Profile = props => {
-  const {compatibilityScore, customerProfile, isScrolledToTop} = props;
+  const {
+    compatibilityScore,
+    customerProfile,
+    isScrolledToTop,
+    setIsScrolledToTop,
+  } = props;
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
   const customerPhotoUrl = customerProfile?.customerPhoto?.[0]?.photoUrl;
 
@@ -28,29 +39,29 @@ const Profile = props => {
       end={{x: 0.5, y: 0}}
       style={{
         flex: 1,
-        borderBottomLeftRadius: 120,
-        borderBottomRightRadius: 120,
+        borderBottomLeftRadius: !isScrolledToTop ? 120 : 0,
+        borderBottomRightRadius: !isScrolledToTop ? 120 : 0,
       }}>
       <View style={{flex: 1}}>
         <View
           style={{
             alignItems: 'center',
           }}>
-          {/* <View
+          <View
             style={{
               flexDirection: 'row',
               position: 'absolute',
               right: scale(310),
-              top: verticalScale(10),
+              top: verticalScale(5),
             }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => setIsScrolledToTop(false)}>
               <Image
-                source={GLOBAL_ASSET_URI.BACK_ICON}
+                source={GLOBAL_ASSET_URI.PROFILE_BACK_ICON}
                 height={20}
                 width={20}
               />
             </TouchableOpacity>
-          </View> */}
+          </View>
           <Text size={25} color="#fff" weight="700">
             {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
           </Text>
@@ -75,21 +86,26 @@ const Profile = props => {
           <Separator space={isIosDevice() ? 90 : 120} />
           <MatchInformationSection
             customerDetails={customerProfile?.customerDetails}
+            isScrolledToTop={isScrolledToTop}
           />
         </View>
-        <Separator space={20} />
-        <View>
-          <Image
-            source={{uri: customerPhotoUrl}}
-            height={isIosDevice() ? 300 : 340}
-            width={isIosDevice() ? 360 : 355}
-            resizeMode="cover"
-            customStyle={{
-              borderBottomLeftRadius: 120,
-              borderBottomRightRadius: 120,
-            }}
-          />
-        </View>
+        {!isScrolledToTop && (
+          <>
+            <Separator space={20} />
+            <View>
+              <Image
+                source={{uri: customerPhotoUrl}}
+                height={isIosDevice() ? 300 : 340}
+                width={isIosDevice() ? 360 : 355}
+                resizeMode="cover"
+                customStyle={{
+                  borderBottomLeftRadius: 120,
+                  borderBottomRightRadius: 120,
+                }}
+              />
+            </View>
+          </>
+        )}
       </View>
     </LinearGradient>
   );
