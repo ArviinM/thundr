@@ -10,7 +10,7 @@ import Separator from '../../components/Separator/Separator';
 
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
-import {PERSONALITY_TYPE_URI} from '../../utils/images';
+import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import Image from '../../components/Image/Image';
 
 const data = [
@@ -27,13 +27,13 @@ const data = [
 const getPersonalityTypeImage = personalityType => {
   switch (personalityType) {
     case 'Dog':
-      return PERSONALITY_TYPE_URI.DOG_YELLOW;
+      return DASHBOARD_ASSET_URI.DOG_INFO;
     case 'Otter':
-      return PERSONALITY_TYPE_URI.OTTER_YELLOW;
+      return DASHBOARD_ASSET_URI.OTTER_INFO;
     case 'Lion':
-      return PERSONALITY_TYPE_URI.LION_YELLOW;
+      return DASHBOARD_ASSET_URI.LION_INFO;
     case 'Beaver':
-      return PERSONALITY_TYPE_URI.BEAVER_YELLOW;
+      return DASHBOARD_ASSET_URI.BEAVER_INFO;
     default:
   }
 };
@@ -43,7 +43,7 @@ const MatchInformationSection = props => {
 
   const renderInformationSection = ({item}) => {
     return (
-      <View style={{marginBottom: verticalScale(18)}}>
+      <View>
         <Text color="#fff" weight="700">
           BIO
         </Text>
@@ -59,10 +59,10 @@ const MatchInformationSection = props => {
         </Text>
         <Text color="#fff">{item?.location}</Text>
         <Separator space={10} />
-        <Text color="#fff" weight="700">
+        {/* <Text color="#fff" weight="700">
           HOBBIES
-        </Text>
-        <Separator space={10} />
+        </Text> */}
+        {/* <Separator space={10} /> */}
         <View
           style={{
             flexDirection: 'row',
@@ -146,8 +146,8 @@ const MatchInformationSection = props => {
         </Text>
         <Image
           source={getPersonalityTypeImage(item?.personalityType)}
-          height={100}
-          width={100}
+          height={125}
+          width={125}
         />
       </View>
     );
@@ -157,7 +157,6 @@ const MatchInformationSection = props => {
     <View
       style={{
         backgroundColor: '#E33C59',
-        height: verticalScale(250),
         width: verticalScale(280),
         borderRadius: 30,
         padding: scale(20),
@@ -168,6 +167,7 @@ const MatchInformationSection = props => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderInformationSection}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
       />
     </View>
   );

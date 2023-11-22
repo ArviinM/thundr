@@ -17,6 +17,7 @@ import {
   UPDATE_CURRENT_LOCATION,
   UPDATE_CURRENT_LOCATION_FAILED,
   UPDATE_CURRENT_LOCATION_SUCCESS,
+  UPDATE_DASHBOARD_STATE,
 } from './actionTypes';
 import DashboardConfig from '../../api/services/dashboardService';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
@@ -126,6 +127,14 @@ export function* customerMatch({payload}) {
       });
     }
   } catch (error) {
+    const isNumberOfSwipeReached =
+      error?.response?.data?.message === 'Reach number of swipe allowed';
+    if (isNumberOfSwipeReached) {
+      yield put({
+        type: UPDATE_DASHBOARD_STATE,
+        newState: {isSwipeReached: true},
+      });
+    }
     yield put({
       type: CUSTOMER_MATCH_FAILED,
       payload: error,

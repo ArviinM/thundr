@@ -106,11 +106,14 @@ const LoginScreen = () => {
             customStyle={{marginRight: scale(6)}}
           />
           <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
             color="#E33051"
             weight={700}
             customStyle={{
               textAlign: 'center',
               top: verticalScale(isIosDevice() ? 8 : 4),
+              maxWidth: scale(150),
             }}>
             {`Continue as ${customerName}`}
           </Text>

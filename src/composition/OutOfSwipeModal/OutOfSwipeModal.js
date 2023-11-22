@@ -1,5 +1,5 @@
 // React modules
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
@@ -11,12 +11,52 @@ import Image from '../../components/Image/Image';
 import Separator from '../../components/Separator/Separator';
 import Button from '../../components/Button/Button';
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
+import {useDispatch} from 'react-redux';
+import {UPDATE_DASHBOARD_STATE} from '../../ducks/Dashboard/actionTypes';
 
-const OutOfSwipeModal = wew => {
-  const {isOutOfSwipe, setOutOfSwipe} = wew;
+const OutOfSwipeModal = props => {
+  const dispatch = useDispatch();
+  const {isSwipeReached, setOutOfSwipe} = props;
+  const [remainingTime, setRemainingTime] = useState(calculateRemainingTime());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRemainingTime(calculateRemainingTime());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  function calculateRemainingTime() {
+    const now = new Date();
+    const midnight = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+      0,
+      0,
+      0,
+    ); // Next midnight
+    const timeDifference = midnight - now;
+
+    const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (timeDifference % (1000 * 60 * 60)) / (1000 * 60),
+    );
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    return {hours, minutes, seconds};
+  }
+
+  const formatTime = value => (value < 10 ? `0${value}` : `${value}`);
+
+  const handleCloseModal = () => {
+    dispatch({type: UPDATE_DASHBOARD_STATE, newState: {isSwipeReached: false}});
+  };
+
   return (
     <Overlay
-      onBackdropPress={() => setOutOfSwipe(false)}
+      onBackdropPress={handleCloseModal}
       overlayStyle={{
         alignItems: 'center',
         justifyContent: 'center',
@@ -35,7 +75,7 @@ const OutOfSwipeModal = wew => {
         borderWidth: 8,
         padding: scale(30),
       }}
-      isVisible={isOutOfSwipe}>
+      isVisible={isSwipeReached}>
       <View style={{alignItems: 'center'}}>
         <View style={{flexDirection: 'row', gap: scale(10)}}>
           <View style={{alignItems: 'center'}}>
@@ -53,7 +93,7 @@ const OutOfSwipeModal = wew => {
                 justifyContent: 'center',
               }}>
               <Text size={40} color="#fff">
-                00
+                {formatTime(remainingTime.hours)}
               </Text>
             </View>
           </View>
@@ -72,7 +112,7 @@ const OutOfSwipeModal = wew => {
                 justifyContent: 'center',
               }}>
               <Text size={40} color="#fff">
-                00
+                {formatTime(remainingTime.minutes)}
               </Text>
             </View>
           </View>
@@ -91,7 +131,7 @@ const OutOfSwipeModal = wew => {
                 justifyContent: 'center',
               }}>
               <Text size={40} color="#fff">
-                00
+                {formatTime(remainingTime.seconds)}
               </Text>
             </View>
           </View>
@@ -115,7 +155,7 @@ const OutOfSwipeModal = wew => {
         <Button
           title="Subscribe Now"
           style={{width: scale(200)}}
-          onPress={() => setOutOfSwipe(false)}
+          onPress={handleCloseModal}
         />
       </BorderLinearGradient>
     </Overlay>

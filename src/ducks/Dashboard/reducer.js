@@ -36,6 +36,7 @@ export const INITIAL_STATE = {
     longitude: 0,
     latatitude: 0,
   },
+  isSwipeReached: false,
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
