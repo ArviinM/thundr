@@ -81,4 +81,13 @@ export const DASHBOARD_ASSET_URI = {
   HAMBURGER_ICON: require('../assets/Images/Icons/hamburger-icon.png'),
   MATCH_FOUND_JOWA: require('../assets/Images/Icons/match-found-jowa.png'),
   MATCH_FOUND_MARE: require('../assets/Images/Icons/match-found-mare.png'),
+  MARE_UPPER_BG: require('../assets/Images/Icons/mare-upper-bg.png'),
+  MARE_LOWER_BG: require('../assets/Images/Icons/mare-lower-bg.png'),
+  JOWA_UPPER_BG: require('../assets/Images/Icons/jowa-upper-bg.png'),
+  JOWA_LOWER_BG: require('../assets/Images/Icons/jowa-lower-bg.png'),
+};
+
+export const SAMPLE_IMAGE = {
+  SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
+  SAMPLE_2: require('../assets/Images/Images/sample-2.png'),
 };

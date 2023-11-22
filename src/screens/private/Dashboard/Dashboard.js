@@ -27,9 +27,14 @@ import {
 
 // Utils
 import {calculateAge, verticalScale} from '../../../utils/commons';
+import LinearGradient from 'react-native-linear-gradient';
 
 const MatchDetails = props => {
   const {currentIndex, matchList, customerProfile} = props;
+  if (!matchList.length) {
+    return;
+  }
+
   return (
     <>
       <Text
@@ -179,6 +184,31 @@ const Dashboard = () => {
     }
   };
 
+  const noAvailableMatches = () => {
+    return (
+      <LinearGradient
+        colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
+        start={{x: 0.5, y: 1}}
+        end={{x: 0.5, y: 0}}
+        style={{
+          flex: 1,
+          height: verticalScale(350),
+          borderBottomLeftRadius: 120,
+          borderBottomRightRadius: 120,
+        }}>
+        <View style={{flex: 1, justifyContent: 'center', alignSelf: 'center'}}>
+          <Text
+            size={20}
+            weight="700"
+            color="#E33051"
+            customStyle={{textAlign: 'center'}}>
+            {'No available matches \nPlease try again'}
+          </Text>
+        </View>
+      </LinearGradient>
+    );
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView
@@ -191,11 +221,16 @@ const Dashboard = () => {
           scrollViewRef.current.scrollToEnd({animated: true});
         }}
         bounces={false}>
-        <Profile
-          compatibilityScore={compatibilityScore}
-          customerProfile={customerProfile}
-          isScrolledToTop={isScrolledToTop}
-        />
+        {!matchList.length ? (
+          noAvailableMatches()
+        ) : (
+          <Profile
+            compatibilityScore={compatibilityScore}
+            customerProfile={customerProfile}
+            isScrolledToTop={isScrolledToTop}
+            matchList={matchList}
+          />
+        )}
       </ScrollView>
       <OutOfSwipeModal
         isOutOfSwipe={isOutOfSwipe}
