@@ -39,10 +39,10 @@ export function* startLoginProcess({payload}) {
           sub: response.data.data.sub,
         },
       });
-      yield put({
-        type: UPDATE_CURRENT_LOCATION,
-        payload: {longitude, latitude},
-      });
+      // yield put({
+      //   type: UPDATE_CURRENT_LOCATION,
+      //   payload: {longitude, latitude},
+      // });
     }
   } catch (error) {
     const errorMessage =
@@ -71,10 +71,10 @@ export function* startLoginViaRefreshToken({payload}) {
         type: START_LOGIN_VIA_REFRESH_TOKEN_SUCCESS,
         payload: response.data.data,
       });
-      yield put({
-        type: UPDATE_CURRENT_LOCATION,
-        payload: {longitude, latitude},
-      });
+      // yield put({
+      //   type: UPDATE_CURRENT_LOCATION,
+      //   payload: {longitude, latitude},
+      // });
     }
   } catch (error) {
     const errorMessage =
