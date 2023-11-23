@@ -108,7 +108,7 @@ const Dashboard = () => {
 
   /*Check this useEffect if may kakaibang issue sa swipe*/
   useEffect(() => {
-    if (currentIndex === matchList?.length) {
+    if (matchList?.length && currentIndex === matchList?.length) {
       dispatch({
         type: GET_MATCH_LIST,
         payload: {sub: loginData.sub || sub},
