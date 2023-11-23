@@ -155,7 +155,7 @@ const CreatePasswordScreen = () => {
         </Formik>
         <View
           style={{
-            top: verticalScale(150),
+            top: verticalScale(130),
             paddingHorizontal: scale(80),
             flexDirection: 'row',
             justifyContent: 'center',

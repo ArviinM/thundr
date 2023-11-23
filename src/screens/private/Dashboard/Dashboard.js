@@ -247,6 +247,7 @@ const Dashboard = () => {
       <View
         style={{
           alignItems: 'center',
+          top: verticalScale(isUserInformationShown ? -25 : 0),
         }}>
         <JowaMareSection
           isMare={isMare}
