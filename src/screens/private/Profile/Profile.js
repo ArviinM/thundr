@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Touchable, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,42 +26,48 @@ const Profile = props => {
   const {
     compatibilityScore,
     customerProfile,
-    isScrolledToTop,
-    setIsScrolledToTop,
+    isUserInformationShown,
+    setUserInformationShown,
   } = props;
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
   const customerPhotoUrl = customerProfile?.customerPhoto?.[0]?.photoUrl;
 
-  return (
-    <LinearGradient
-      colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
-      start={{x: 0.5, y: 1}}
-      end={{x: 0.5, y: 0}}
-      style={{
-        flex: 1,
-        borderBottomLeftRadius: !isScrolledToTop ? 120 : 0,
-        borderBottomRightRadius: !isScrolledToTop ? 120 : 0,
-      }}>
-      <View style={{flex: 1}}>
+  const renderBackButton = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          position: 'absolute',
+          right: scale(310),
+          top: verticalScale(5),
+        }}>
+        <TouchableOpacity onPress={() => setUserInformationShown(false)}>
+          <Image
+            source={GLOBAL_ASSET_URI.PROFILE_BACK_ICON}
+            height={20}
+            width={20}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  if (isUserInformationShown) {
+    return (
+      <LinearGradient
+        colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
+        start={{x: 0.5, y: 1}}
+        end={{x: 0.5, y: 0}}
+        style={{
+          height: verticalScale(390),
+          borderBottomLeftRadius: 120,
+          borderBottomRightRadius: 120,
+        }}>
         <View
           style={{
             alignItems: 'center',
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              position: 'absolute',
-              right: scale(310),
-              top: verticalScale(5),
-            }}>
-            <TouchableOpacity onPress={() => setIsScrolledToTop(false)}>
-              <Image
-                source={GLOBAL_ASSET_URI.PROFILE_BACK_ICON}
-                height={20}
-                width={20}
-              />
-            </TouchableOpacity>
-          </View>
+          {renderBackButton()}
           <Text size={25} color="#fff" weight="700">
             {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
           </Text>
@@ -86,28 +92,27 @@ const Profile = props => {
           <Separator space={isIosDevice() ? 90 : 120} />
           <MatchInformationSection
             customerDetails={customerProfile?.customerDetails}
-            isScrolledToTop={isScrolledToTop}
           />
         </View>
-        {!isScrolledToTop && (
-          <>
-            <Separator space={20} />
-            <View>
-              <Image
-                source={{uri: customerPhotoUrl}}
-                height={isIosDevice() ? 300 : 340}
-                width={isIosDevice() ? 360 : 355}
-                resizeMode="cover"
-                customStyle={{
-                  borderBottomLeftRadius: 120,
-                  borderBottomRightRadius: 120,
-                }}
-              />
-            </View>
-          </>
-        )}
-      </View>
-    </LinearGradient>
+      </LinearGradient>
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      activeOpacity={1}
+      onPress={() => setUserInformationShown(true)}>
+      <Image
+        source={{uri: customerPhotoUrl}}
+        height={isIosDevice() ? 320 : 340}
+        width={isIosDevice() ? 360 : 355}
+        resizeMode="cover"
+        customStyle={{
+          borderBottomLeftRadius: 120,
+          borderBottomRightRadius: 120,
+        }}
+      />
+    </TouchableOpacity>
   );
 };
 

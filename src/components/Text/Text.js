@@ -13,6 +13,7 @@ const Text = props => {
     weight,
     numberOfLines,
     ellipsizeMode,
+    fontFamily = 'normal',
   } = props;
   return (
     <StyledText
@@ -20,6 +21,7 @@ const Text = props => {
       customStyle={customStyle}
       size={size}
       weight={weight}
+      fontFamily={fontFamily}
       numberOfLines={numberOfLines}
       ellipsizeMode={ellipsizeMode}>
       {children}

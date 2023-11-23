@@ -34,7 +34,7 @@ const CompatibilityQuestions = () => {
         type: SUBMIT_COMPATIBILITY_ANSWER,
         payload: {
           questionId: questionId,
-          answerId: selectedAnswerId.toString(),
+          answerId: selectedAnswerId?.toString(),
         },
       });
     } else {
@@ -42,7 +42,7 @@ const CompatibilityQuestions = () => {
         type: SUBMIT_COMPATIBILITY_ANSWER,
         payload: {
           questionId: questionId,
-          answerId: selectedAnswerId.toString(),
+          answerId: selectedAnswerId?.toString(),
         },
       });
       navigation.navigate('PersonalityType');

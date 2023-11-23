@@ -92,7 +92,7 @@ const OutOfSwipeModal = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text size={40} color="#fff">
+              <Text size={25} color="#fff" fontFamily="ClimateCrisis-Regular">
                 {formatTime(remainingTime.hours)}
               </Text>
             </View>
@@ -111,7 +111,7 @@ const OutOfSwipeModal = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text size={40} color="#fff">
+              <Text size={25} color="#fff" fontFamily="ClimateCrisis-Regular">
                 {formatTime(remainingTime.minutes)}
               </Text>
             </View>
@@ -130,7 +130,7 @@ const OutOfSwipeModal = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text size={40} color="#fff">
+              <Text size={25} color="#fff" fontFamily="ClimateCrisis-Regular">
                 {formatTime(remainingTime.seconds)}
               </Text>
             </View>
@@ -139,7 +139,11 @@ const OutOfSwipeModal = props => {
       </View>
       <Separator space={10} />
       <View>
-        <Text size={25} color="#565656" customStyle={{textAlign: 'center'}}>
+        <Text
+          size={17}
+          color="#565656"
+          customStyle={{textAlign: 'center'}}
+          fontFamily="ClimateCrisis-Regular">
           Kaloka! You're out of swipes, mars!
         </Text>
         <Text color="#565656" size={15} customStyle={{textAlign: 'center'}}>
