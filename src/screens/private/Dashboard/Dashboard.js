@@ -104,6 +104,19 @@ const Dashboard = () => {
     }
   }, [matchList, dispatch, currentIndex, swipeValue]);
 
+  /*Check this useEffect if may kakaibang issue sa swipe*/
+  useEffect(() => {
+    if (currentIndex === 10) {
+      dispatch({
+        type: GET_MATCH_LIST,
+        payload: {sub: loginData.sub || sub},
+      });
+      if (!matchListLoading) {
+        setCurrentIndex(0);
+      }
+    }
+  }, [matchList, dispatch, currentIndex, matchListLoading]);
+
   if (scrollViewRef.current && !isScrolledToTop) {
     scrollViewRef.current.scrollToEnd({animated: true});
   }
@@ -171,7 +184,7 @@ const Dashboard = () => {
     }
   }, [customerMatchData, navigation]);
 
-  if (matchListLoading && !matchList.length) {
+  if (matchListLoading) {
     return <Spinner visible={true} />;
   }
 
