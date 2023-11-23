@@ -157,7 +157,8 @@ export function* startEmailVerification({payload}) {
       error?.response?.data?.message === 'Code Sent Mismatch';
     const isInvalidPassword =
       error?.response?.data?.message ===
-      'Password does not conform to policy: Password must satisfy regular expression pattern: ^\\S.*\\S$';
+        'Password does not conform to policy: Password must satisfy regular expression pattern: ^\\S.*\\S$' ||
+      'Password does not conform to policy: Password not long enough';
 
     let errorMessage = '';
 

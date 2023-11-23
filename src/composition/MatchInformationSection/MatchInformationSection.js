@@ -158,7 +158,7 @@ const MatchInformationSection = props => {
       style={{
         backgroundColor: '#E33C59',
         width: verticalScale(280),
-        height: verticalScale(isIosDevice() ? 215 : 180),
+        height: verticalScale(isIosDevice() ? 230 : 190),
         borderRadius: 30,
         padding: scale(20),
       }}>
