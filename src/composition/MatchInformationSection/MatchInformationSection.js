@@ -9,7 +9,7 @@ import Text from '../../components/Text/Text';
 import Separator from '../../components/Separator/Separator';
 
 // Utils
-import {scale, verticalScale} from '../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import Image from '../../components/Image/Image';
 
@@ -158,7 +158,7 @@ const MatchInformationSection = props => {
       style={{
         backgroundColor: '#E33C59',
         width: verticalScale(280),
-        height: verticalScale(215),
+        height: verticalScale(isIosDevice() ? 215 : 180),
         borderRadius: 30,
         padding: scale(20),
       }}>
