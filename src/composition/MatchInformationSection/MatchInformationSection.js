@@ -158,6 +158,7 @@ const MatchInformationSection = props => {
       style={{
         backgroundColor: '#E33C59',
         width: verticalScale(280),
+        height: verticalScale(215),
         borderRadius: 30,
         padding: scale(20),
       }}>
@@ -167,7 +168,6 @@ const MatchInformationSection = props => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderInformationSection}
         showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
       />
     </View>
   );

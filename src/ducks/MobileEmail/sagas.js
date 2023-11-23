@@ -153,10 +153,22 @@ export function* startEmailVerification({payload}) {
       }
     }
   } catch (error) {
-    const errorMessage =
-      error?.response?.data?.message === 'Code Sent Mismatch'
-        ? ' Invalid OTP. Please try again.'
-        : GENERIC_ERROR;
+    const isCodeSentMismatch =
+      error?.response?.data?.message === 'Code Sent Mismatch';
+    const isInvalidPassword =
+      error?.response?.data?.message ===
+      'Password does not conform to policy: Password must satisfy regular expression pattern: ^\\S.*\\S$';
+
+    let errorMessage = '';
+
+    if (isCodeSentMismatch) {
+      errorMessage = 'Code Sent Mismatch';
+    } else if (isInvalidPassword) {
+      errorMessage = `Password does not meet criteria.\n\n\nPlease create a new one.`;
+    } else {
+      errorMessage = GENERIC_ERROR;
+    }
+
     yield put({
       type: START_EMAIL_VERIFICATION_FAILED,
       payload: errorMessage,

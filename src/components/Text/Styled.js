@@ -8,7 +8,7 @@ export const StyledText = styled.Text.attrs(props => ({
   ...props.customStyle,
 }))`
   color: ${props => props.color || '#000000'};
-  font-family: ${isIosDevice() ? 'System' : 'Roboto-Regular'};
+  font-family: ${props => props.fontFamily};
   font-size: ${props => moderateScale(props.size) || 14}px;
   font-weight: ${props => props.weight || 400};
   text-decoration-line: ${props =>

@@ -19,6 +19,7 @@ import {
 import * as RootNavigation from '../../navigations/tempNavigation';
 import ProfileCreationConfig from '../../api/services/profileCreationService';
 import {GENERIC_ERROR} from '../../utils/commons';
+import {GET_MATCH_LIST} from '../Dashboard/actionTypes';
 
 export function* startProfileCreation({payload}) {
   const {loginData} = yield select(state => state.login);
@@ -134,6 +135,10 @@ export function* submitCustomerDetails({payload}) {
       yield put({
         type: SUBMIT_CUSTOMER_DETAILS_SUCCESS,
         payload: response.data,
+      });
+      yield put({
+        type: GET_MATCH_LIST,
+        payload: {sub: loginData?.sub},
       });
       RootNavigation.navigate('Dashboard');
     }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {
   drinkingAndSmoking,
@@ -34,6 +34,7 @@ import {
 } from '../../../ducks/ProfileCreation/actionTypes';
 import Modal from '../../../composition/Modal/Modal';
 import {Overlay} from 'react-native-elements';
+import {GET_MATCH_LIST} from '../../../ducks/Dashboard/actionTypes';
 
 const hobbies = [
   'Sports & Games',
@@ -137,6 +138,7 @@ const CustomDropdown = props => {
 };
 
 const PersonalityType = () => {
+  const {loginData} = useSelector(state => state.login);
   const dispatch = useDispatch();
   const [selectedHobby, setSelectedHobby] = useState([]);
   const [selectedPersonality, setSelectedPersonality] = useState('');
@@ -155,6 +157,10 @@ const PersonalityType = () => {
   const [otherEducationValue, setOtherEducationValue] = useState('');
   const [otherReligionValue, setOtherReligionValue] = useState('');
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    dispatch({type: GET_MATCH_LIST, payload: {sub: loginData?.sub}});
+  }, [dispatch]);
 
   const toggleLetterSelection = index => {
     // Check if the letter is already selected

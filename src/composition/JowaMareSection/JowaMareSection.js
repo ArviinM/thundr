@@ -12,17 +12,9 @@ import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import {scale, verticalScale} from '../../utils/commons';
 
 const JowaMareSection = props => {
-  const {
-    setMare,
-    setJowa,
-    isMare,
-    isJowa,
-    setSwipeValue,
-    setCurrentIndex,
-    isScrolledToTop,
-  } = props;
+  const {setMare, setJowa, isMare, isJowa, setSwipeValue, setCurrentIndex} =
+    props;
   // const leftValue = useRef(0);
-  const [visible, setVisible] = React.useState(false);
   const translateXLeft = useRef(new Animated.Value(0)).current;
   const translateXRight = useRef(new Animated.Value(0)).current;
 
@@ -64,7 +56,6 @@ const JowaMareSection = props => {
     PanResponder.create({
       onStartShouldSetPanResponder: () => {
         setMare(true);
-        setVisible(true);
         return true;
       },
       onPanResponderMove: (_, gestureState) => {
@@ -73,11 +64,9 @@ const JowaMareSection = props => {
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx > 50) {
           setMare(false);
-          setVisible(false);
           setSwipeValue('Mare');
           setCurrentIndex(prevIndex => prevIndex + 1);
         } else {
-          setVisible(false);
           setMare(false);
         }
         Animated.spring(translateXLeft, {
@@ -92,7 +81,6 @@ const JowaMareSection = props => {
     PanResponder.create({
       onStartShouldSetPanResponder: () => {
         setJowa(true);
-        setVisible(true);
         return true;
       },
       onPanResponderMove: (_, gestureState) => {
@@ -101,11 +89,9 @@ const JowaMareSection = props => {
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx < -50) {
           setJowa(false);
-          setVisible(false);
           setSwipeValue('Jowa');
           setCurrentIndex(prevIndex => prevIndex + 1);
         } else {
-          setVisible(false);
           setJowa(false);
         }
 
@@ -130,21 +116,17 @@ const JowaMareSection = props => {
           width={65}
         />
       </Animated.View>
-      {isScrolledToTop && !visible ? (
-        <View style={{width: scale(220)}} />
-      ) : (
-        <View style={{marginTop: verticalScale(40)}}>
-          <Image
-            source={
-              isMare || isJowa
-                ? DASHBOARD_ASSET_URI.GLOWING_THUNDR
-                : DASHBOARD_ASSET_URI.THUNDR
-            }
-            height={65}
-            width={220}
-          />
-        </View>
-      )}
+      <View style={{marginTop: verticalScale(40)}}>
+        <Image
+          source={
+            isMare || isJowa
+              ? DASHBOARD_ASSET_URI.GLOWING_THUNDR
+              : DASHBOARD_ASSET_URI.THUNDR
+          }
+          height={65}
+          width={220}
+        />
+      </View>
       <Animated.View
         style={{
           transform: [{translateX: translateXRight}],

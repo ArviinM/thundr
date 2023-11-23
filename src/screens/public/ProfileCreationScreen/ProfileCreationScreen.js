@@ -4,6 +4,7 @@ import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
@@ -122,8 +123,8 @@ const PrimaryDetails = () => {
 
       formData.append('sub', loginData.sub);
       formData.append('isPrimary', 'true');
-      formData.append('filepath', imageContent?.base64);
-      formData.append('filename', imageContent?.fileName);
+      formData.append('filepath', imageContent?.data);
+      formData.append('filename', imageContent?.path);
 
       dispatch({type: UPLOAD_PHOTO, payload: {formData}});
     };
@@ -134,23 +135,29 @@ const PrimaryDetails = () => {
   }, [imageContent, dispatch]);
 
   const openImageLibrary = async () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-    };
+    try {
+      const image = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        multiple: false,
+        includeBase64: true,
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
 
-    const response = await new Promise(resolve => {
-      launchImageLibrary(options, resolve);
-    });
+      if (!image) {
+        return null;
+      }
 
-    if (!response) {
-      return null;
+      console.log('image', image);
+
+      const source = {uri: image.path};
+      setImageSource(source);
+      setImageContent(image);
+    } catch (error) {
+      // Handle error, e.g., user canceled the picker
+      console.error(error);
     }
-
-    const source = {uri: response.assets[0].uri};
-    setImageSource(source);
-    setImageContent(response.assets[0]);
   };
 
   const renderModal = () => {
