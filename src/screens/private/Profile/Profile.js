@@ -39,7 +39,7 @@ const Profile = props => {
           flexDirection: 'row',
           position: 'absolute',
           right: scale(310),
-          top: verticalScale(5),
+          top: verticalScale(isIosDevice() ? 5 : 10),
         }}>
         <TouchableOpacity onPress={() => setUserInformationShown(false)}>
           <Image
@@ -59,7 +59,7 @@ const Profile = props => {
         start={{x: 0.5, y: 1}}
         end={{x: 0.5, y: 0}}
         style={{
-          height: verticalScale(410),
+          height: verticalScale(isIosDevice() ? 410 : 450),
           borderBottomLeftRadius: 120,
           borderBottomRightRadius: 120,
         }}>
@@ -68,12 +68,14 @@ const Profile = props => {
             alignItems: 'center',
           }}>
           {renderBackButton()}
-          <Text size={25} color="#fff" weight="700">
-            {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
-          </Text>
-          <Text size={15} color="#fff" customStyle={{textAlign: 'center'}}>
-            {`Compatibility Score: ${compatibilityScore}`}
-          </Text>
+          <View style={{left: scale(15), alignSelf: 'center'}}>
+            <Text size={25} color="#fff" weight="700">
+              {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
+            </Text>
+            <Text size={15} color="#fff" customStyle={{textAlign: 'center'}}>
+              {`Compatibility Score: ${compatibilityScore}`}
+            </Text>
+          </View>
           <View
             style={{
               position: 'absolute',

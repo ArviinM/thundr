@@ -12,8 +12,15 @@ import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import {scale, verticalScale} from '../../utils/commons';
 
 const JowaMareSection = props => {
-  const {setMare, setJowa, isMare, isJowa, setSwipeValue, setCurrentIndex} =
-    props;
+  const {
+    setMare,
+    setJowa,
+    isMare,
+    isJowa,
+    setSwipeValue,
+    setCurrentIndex,
+    setUserInformationShown,
+  } = props;
   // const leftValue = useRef(0);
   const translateXLeft = useRef(new Animated.Value(0)).current;
   const translateXRight = useRef(new Animated.Value(0)).current;
@@ -66,6 +73,7 @@ const JowaMareSection = props => {
           setMare(false);
           setSwipeValue('Mare');
           setCurrentIndex(prevIndex => prevIndex + 1);
+          setUserInformationShown(false);
         } else {
           setMare(false);
         }
@@ -91,6 +99,7 @@ const JowaMareSection = props => {
           setJowa(false);
           setSwipeValue('Jowa');
           setCurrentIndex(prevIndex => prevIndex + 1);
+          setUserInformationShown(false);
         } else {
           setJowa(false);
         }
