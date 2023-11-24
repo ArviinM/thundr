@@ -1,6 +1,6 @@
 // React modules
 import React, {useRef} from 'react';
-import {View, PanResponder, Animated} from 'react-native';
+import {View, PanResponder, Animated, Dimensions} from 'react-native';
 
 // Third party libraries
 
@@ -9,7 +9,7 @@ import Image from '../../components/Image/Image';
 
 // Utils
 import {DASHBOARD_ASSET_URI} from '../../utils/images';
-import {scale, verticalScale} from '../../utils/commons';
+import {verticalScale} from '../../utils/commons';
 
 const JowaMareSection = props => {
   const {
@@ -24,6 +24,7 @@ const JowaMareSection = props => {
   // const leftValue = useRef(0);
   const translateXLeft = useRef(new Animated.Value(0)).current;
   const translateXRight = useRef(new Animated.Value(0)).current;
+  const screenWidth = Dimensions.get('window').width;
 
   // const updateLeftPosition = dx => {
   //   leftValue.current = dx;
@@ -66,7 +67,12 @@ const JowaMareSection = props => {
         return true;
       },
       onPanResponderMove: (_, gestureState) => {
-        translateXLeft.setValue(gestureState.dx);
+        const maxTranslation = screenWidth / 2 - 75;
+        const clampedTranslation = Math.max(
+          -maxTranslation,
+          Math.min(gestureState.dx, maxTranslation),
+        );
+        translateXLeft.setValue(clampedTranslation);
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx > 50) {
@@ -92,7 +98,12 @@ const JowaMareSection = props => {
         return true;
       },
       onPanResponderMove: (_, gestureState) => {
-        translateXRight.setValue(gestureState.dx);
+        const maxTranslation = screenWidth / 2 - 75;
+        const clampedTranslation = Math.max(
+          -maxTranslation,
+          Math.min(gestureState.dx, maxTranslation),
+        );
+        translateXRight.setValue(clampedTranslation);
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dx < -50) {
@@ -116,13 +127,13 @@ const JowaMareSection = props => {
     <View style={{flexDirection: 'row'}}>
       <Animated.View
         {...panResponder.panHandlers}
-        style={[{transform: [{translateX: translateXLeft}]}]}>
+        style={[{left: -50, transform: [{translateX: translateXLeft}]}]}>
         <Image
           source={
             isMare ? DASHBOARD_ASSET_URI.GLOWING_MARE : DASHBOARD_ASSET_URI.MARE
           }
-          height={160}
-          width={65}
+          height={150}
+          width={150}
         />
       </Animated.View>
       <View style={{marginTop: verticalScale(40)}}>
@@ -133,11 +144,12 @@ const JowaMareSection = props => {
               : DASHBOARD_ASSET_URI.THUNDR
           }
           height={65}
-          width={220}
+          width={135}
         />
       </View>
       <Animated.View
         style={{
+          right: -50,
           transform: [{translateX: translateXRight}],
         }}
         {...panResponderRight.panHandlers}>
@@ -145,8 +157,8 @@ const JowaMareSection = props => {
           source={
             isJowa ? DASHBOARD_ASSET_URI.GLOWING_JOWA : DASHBOARD_ASSET_URI.JOWA
           }
-          height={160}
-          width={65}
+          height={150}
+          width={150}
         />
       </Animated.View>
     </View>
