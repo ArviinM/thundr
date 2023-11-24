@@ -259,6 +259,7 @@ const Dashboard = () => {
           currentIndex={currentIndex}
           setCurrentIndex={setCurrentIndex}
           matchList={matchList}
+          setUserInformationShown={setUserInformationShown}
         />
       </View>
     </View>
