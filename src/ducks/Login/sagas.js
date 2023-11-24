@@ -78,7 +78,7 @@ export function* startLoginViaRefreshToken({payload}) {
     }
   } catch (error) {
     const errorMessage =
-      error.response.data.message === 'Incorrect username or password.'
+      error?.response?.data?.message === 'Incorrect username or password.'
         ? 'Incorrect Username or Password.'
         : GENERIC_ERROR;
     yield put({

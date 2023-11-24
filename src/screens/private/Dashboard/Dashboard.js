@@ -1,5 +1,5 @@
 // React modules
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, View} from 'react-native';
 
 // Third party libraries
@@ -134,7 +134,11 @@ const Dashboard = () => {
     });
     dispatch({
       type: GET_CUSTOMER_PROFILE,
-      payload: {sub: loginData.sub || sub, accessToken: loginData.accessToken},
+      payload: {
+        sub: loginData.sub || sub,
+        accessToken: loginData.accessToken,
+        fromSwipe: false,
+      },
     });
   }, [dispatch]);
 
@@ -176,11 +180,7 @@ const Dashboard = () => {
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (customerMatchData?.match) {
-      navigation.navigate('MatchFound', {params: {customerMatchData}});
-    }
-  }, [customerMatchData, navigation]);
+  // 9473370846
 
   if (matchListLoading) {
     return <Spinner visible={true} />;
