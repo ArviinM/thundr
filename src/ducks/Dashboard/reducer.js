@@ -37,6 +37,7 @@ export const INITIAL_STATE = {
     latatitude: 0,
   },
   isSwipeReached: false,
+  matchPhoto: '',
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {

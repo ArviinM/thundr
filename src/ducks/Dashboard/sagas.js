@@ -21,6 +21,7 @@ import {
 } from './actionTypes';
 import DashboardConfig from '../../api/services/dashboardService';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
+import * as RootNavigation from '../../navigations/tempNavigation';
 
 // Reach number of swipe allowed
 
@@ -48,6 +49,10 @@ export function* getCustomerPhoto({payload}) {
       yield put({
         type: GET_CUSTOMER_PHOTO_SUCCESS,
         payload: response.data.data[0],
+      });
+      yield put({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {customerPhoto: response.data.data[0].photoUrl},
       });
     }
   } catch (error) {
@@ -113,6 +118,7 @@ export function* getMatchList({payload}) {
 export function* customerMatch({payload}) {
   const {target, tag} = payload;
   const {sub} = yield select(state => state.persistedState);
+  const {customerPhoto} = yield select(state => state.dashboard);
   try {
     const response = yield call(DashboardConfig.customerMatch, {
       sub,
@@ -125,6 +131,13 @@ export function* customerMatch({payload}) {
         type: CUSTOMER_MATCH_SUCCESS,
         payload: response.data,
       });
+      yield put({
+        type: UPDATE_DASHBOARD_STATE,
+        newState: {matchPhoto: customerPhoto},
+      });
+      if (response?.data?.data.match === 'true') {
+        RootNavigation.navigate('MatchFound', response?.data?.data);
+      }
     }
   } catch (error) {
     const isNumberOfSwipeReached =

@@ -13,6 +13,7 @@ import {scale, verticalScale} from '../../../utils/commons';
 import Button from '../../../components/Button/Button';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Separator from '../../../components/Separator/Separator';
+import {useSelector} from 'react-redux';
 
 const jowaGradientColors = [
   '#ed2a85',
@@ -51,9 +52,9 @@ const mareGradientColors = [
 // </ImageBackground>
 
 const MatchFound = () => {
-  const route = useRoute();
-  const {customerMatchData} = route?.params?.params;
-  const isMare = customerMatchData?.tag === 'MARE';
+  const {customerMatchData, matchPhoto} = useSelector(state => state.dashboard);
+  const {customerPhoto} = useSelector(state => state.persistedState);
+  const isMare = customerMatchData?.data?.tag === 'Mare';
 
   const navigation = useNavigation();
   return (
@@ -79,7 +80,7 @@ const MatchFound = () => {
             padding: scale(30),
           }}>
           <Image
-            source={SAMPLE_IMAGE.SAMPLE_1}
+            source={{uri: customerPhoto || ''}}
             width={500}
             customStyle={{flex: 1, resizeMode: 'contain', left: scale(20)}}
           />
@@ -101,7 +102,7 @@ const MatchFound = () => {
             padding: scale(30),
           }}>
           <Image
-            source={SAMPLE_IMAGE.SAMPLE_2}
+            source={{uri: matchPhoto || ''}}
             width={500}
             customStyle={{
               flex: 1,
