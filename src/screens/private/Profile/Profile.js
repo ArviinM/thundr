@@ -59,7 +59,7 @@ const Profile = props => {
         start={{x: 0.5, y: 1}}
         end={{x: 0.5, y: 0}}
         style={{
-          height: verticalScale(isIosDevice() ? 410 : 450),
+          height: verticalScale(isIosDevice() ? 420 : 450),
           borderBottomLeftRadius: 120,
           borderBottomRightRadius: 120,
         }}>
