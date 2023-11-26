@@ -87,22 +87,24 @@ const Dashboard = () => {
   }, [isSwipeReached]);
 
   useEffect(() => {
-    dispatch({
-      type: GET_CUSTOMER_PROFILE,
-      payload: {
-        sub: matchList?.length && matchList[currentIndex]?.sub,
-        accessToken: loginData.accessToken,
-        fromSwipe: true,
-      },
-    });
-    if (swipeValue) {
+    if (matchList?.length) {
       dispatch({
-        type: CUSTOMER_MATCH,
+        type: GET_CUSTOMER_PROFILE,
         payload: {
-          tag: swipeValue,
-          target: matchList.length && matchList[currentIndex]?.sub,
+          sub: matchList?.length && matchList[currentIndex]?.sub,
+          accessToken: loginData.accessToken,
+          fromSwipe: true,
         },
       });
+      if (swipeValue) {
+        dispatch({
+          type: CUSTOMER_MATCH,
+          payload: {
+            tag: swipeValue,
+            target: matchList.length && matchList[currentIndex]?.sub,
+          },
+        });
+      }
     }
   }, [matchList, dispatch, currentIndex, swipeValue]);
 
@@ -179,8 +181,6 @@ const Dashboard = () => {
 
     return () => clearInterval(intervalId);
   }, [dispatch]);
-
-  // 9473370846
 
   if (matchListLoading) {
     return <Spinner visible={true} />;
