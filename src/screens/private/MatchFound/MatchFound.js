@@ -1,6 +1,6 @@
 // React modules
 import React from 'react';
-import {ImageBackground, View} from 'react-native';
+import {ImageBackground, View, StyleSheet} from 'react-native';
 
 // Third party libraries
 import LinearGradient from 'react-native-linear-gradient';
@@ -55,6 +55,67 @@ const MatchFound = () => {
   const {customerMatchData, matchPhoto} = useSelector(state => state.dashboard);
   const {customerPhoto} = useSelector(state => state.persistedState);
   const isMare = customerMatchData?.data?.tag === 'Mare';
+  const matchPhotoUrl = matchPhoto?.customerPhoto[0]?.photoUrl;
+
+  const styles = StyleSheet.create({
+    triangleContainer: {
+      width: 0,
+      height: 0,
+      backgroundColor: 'transparent',
+      borderStyle: 'solid',
+      borderLeftWidth: 200, // Adjust this value for the width of the triangle
+      borderBottomWidth: 200, // Adjust this value for the height of the triangle
+      borderLeftColor: 'transparent',
+      borderBottomColor: 'red', // Adjust this color as needed
+      borderTopLeftRadius: 10, // Adjust this value for the curved edges
+    },
+    triangle: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 0,
+      backgroundColor: 'transparent',
+      borderStyle: 'solid',
+      borderLeftWidth: 50, // Adjust this value to match the borderLeftWidth above
+      borderBottomWidth: 50, // Adjust this value to match the borderBottomWidth above
+      borderLeftColor: 'transparent',
+      borderBottomColor: 'transparent',
+      borderTopLeftRadius: 10, // Adjust this value to match the borderTopLeftRadius above
+    },
+  });
+
+  const RightTriangle = () => {
+    return (
+      <View style={styles.triangleContainer}>
+        <View style={styles.triangle}>
+          <ImageBackground
+            source={
+              isMare
+                ? DASHBOARD_ASSET_URI.MARE_UPPER_BG
+                : DASHBOARD_ASSET_URI.JOWA_UPPER_BG
+            }
+            style={{
+              height: verticalScale(200),
+              width: scale(160),
+              top: verticalScale(20),
+              justifyContent: 'center',
+              alignItems: 'center',
+              overflow: 'hidden',
+              padding: scale(30),
+              // borderWidth: 2,
+            }}>
+            <Image
+              source={{uri: customerPhoto || ''}}
+              width={200}
+              height={200}
+              customStyle={{resizeMode: 'cover', left: scale(0), zIndex: 1}}
+            />
+          </ImageBackground>
+        </View>
+      </View>
+    );
+  };
 
   const navigation = useNavigation();
   return (
@@ -64,6 +125,7 @@ const MatchFound = () => {
       end={{x: 0.5, y: 0}}
       style={{flex: 1}}>
       <View style={{left: scale(isMare ? 20 : 50)}}>
+        {/* <RightTriangle /> */}
         <ImageBackground
           source={
             isMare
@@ -78,11 +140,14 @@ const MatchFound = () => {
             alignItems: 'center',
             overflow: 'hidden',
             padding: scale(30),
+            borderColor: 'red',
+            // borderWidth: 2,
           }}>
           <Image
             source={{uri: customerPhoto || ''}}
-            width={500}
-            customStyle={{flex: 1, resizeMode: 'contain', left: scale(20)}}
+            width={200}
+            height={200}
+            customStyle={{resizeMode: 'cover', left: scale(0), zIndex: -1}}
           />
         </ImageBackground>
         <ImageBackground
@@ -102,12 +167,13 @@ const MatchFound = () => {
             padding: scale(30),
           }}>
           <Image
-            source={{uri: matchPhoto || ''}}
-            width={500}
+            source={{uri: matchPhotoUrl || ''}}
+            width={200}
+            height={200}
             customStyle={{
-              flex: 1,
-              resizeMode: 'contain',
+              resizeMode: 'cover',
               right: scale(20),
+              zIndex: -1,
             }}
           />
         </ImageBackground>
