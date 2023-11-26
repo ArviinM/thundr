@@ -89,6 +89,7 @@ export const DASHBOARD_ASSET_URI = {
   OTTER_INFO: require('../assets/Images/Icons/otter-info.png'),
   DOG_INFO: require('../assets/Images/Icons/dog-info.png'),
   BEAVER_INFO: require('../assets/Images/Icons/beaver-info.png'),
+  JOWA_MATCH_INDICATOR: require('../assets/Images/Icons/match-indicator-jowa.png'),
 };
 
 export const SAMPLE_IMAGE = {

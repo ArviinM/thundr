@@ -25,7 +25,6 @@ import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
 import DrawerContent from './DrawerContent';
 import Text from '../../components/Text/Text';
-import Profile from '../../screens/private/Profile/Profile';
 import MatchFound from '../../screens/private/MatchFound/MatchFound';
 
 const Drawer = createDrawerNavigator();

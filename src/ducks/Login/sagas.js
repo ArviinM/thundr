@@ -18,8 +18,6 @@ import RootNavigation from '../../navigations';
 import {UPDATE_CURRENT_LOCATION} from '../Dashboard/actionTypes';
 
 export function* startLoginProcess({payload}) {
-  const {currentLocation} = yield select(state => state.dashboard);
-  const {longitude, latitude} = currentLocation;
   const {emailOrMobile, password} = payload;
   const phoneNumber = `+63${emailOrMobile}`;
 
@@ -39,10 +37,6 @@ export function* startLoginProcess({payload}) {
           sub: response.data.data.sub,
         },
       });
-      // yield put({
-      //   type: UPDATE_CURRENT_LOCATION,
-      //   payload: {longitude, latitude},
-      // });
     }
   } catch (error) {
     const errorMessage =
