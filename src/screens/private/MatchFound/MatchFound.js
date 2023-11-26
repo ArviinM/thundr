@@ -1,19 +1,22 @@
 // React modules
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {ImageBackground, View, Animated} from 'react-native';
 
 // Third party libraries
+import {useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 
 // Components
+import Separator from '../../../components/Separator/Separator';
 import Text from '../../../components/Text/Text';
 import Image from '../../../components/Image/Image';
-import {DASHBOARD_ASSET_URI} from '../../../utils/images';
-import {scale, verticalScale} from '../../../utils/commons';
 import Button from '../../../components/Button/Button';
-import {useNavigation} from '@react-navigation/native';
-import Separator from '../../../components/Separator/Separator';
-import {useSelector} from 'react-redux';
+
+// Utils
+import {DASHBOARD_ASSET_URI} from '../../../utils/images';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const jowaGradientColors = [
   '#ed2a85',
@@ -31,27 +34,32 @@ const mareGradientColors = [
 ];
 
 const MatchFound = () => {
+  const navigation = useNavigation();
   const {customerMatchData, matchPhoto} = useSelector(state => state.dashboard);
   const {customerPhoto} = useSelector(state => state.persistedState);
-  const isMare = customerMatchData?.data?.tag === 'Mare';
   const matchPhotoUrl = matchPhoto?.customerPhoto?.[0]?.photoUrl;
   const animatedValue1 = useRef(new Animated.Value(0)).current;
   const animatedValue2 = useRef(new Animated.Value(0)).current;
+  const isMare = customerMatchData?.data?.tag === 'Mare';
 
-  useEffect(() => {
-    if (matchPhotoUrl && customerPhoto) {
-      Animated.timing(animatedValue1, {
-        toValue: 1,
-        duration: 3000,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(animatedValue2, {
-        toValue: 1,
-        duration: 3000,
-        useNativeDriver: false,
-      }).start();
-    }
-  }, [matchPhotoUrl, customerPhoto]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (customerPhoto && matchPhotoUrl) {
+        animatedValue1.setValue(0);
+        animatedValue2.setValue(0);
+        Animated.timing(animatedValue1, {
+          toValue: 1,
+          duration: 3000,
+          useNativeDriver: false,
+        }).start();
+        Animated.timing(animatedValue2, {
+          toValue: 1,
+          duration: 3000,
+          useNativeDriver: false,
+        }).start();
+      }
+    }, [customerPhoto, matchPhotoUrl]),
+  );
 
   const translateX1 = animatedValue1.interpolate({
     inputRange: [0, 1],
@@ -63,19 +71,23 @@ const MatchFound = () => {
     outputRange: [400, 0],
   });
 
-  const navigation = useNavigation();
   return (
     <LinearGradient
       colors={isMare ? mareGradientColors : jowaGradientColors}
       start={{x: 0.5, y: 1}}
       end={{x: 0.5, y: 0}}
       style={{flex: 1}}>
-      <View style={{left: scale(isMare ? 20 : 50), top: verticalScale(20)}}>
+      <View
+        style={{
+          left: scale(isMare ? 20 : 50),
+          top: verticalScale(isMare ? 10 : 20),
+        }}>
         <ImageBackground
           style={{
             height: verticalScale(200),
             width: scale(160),
             top: verticalScale(20),
+            left: scale(isMare ? 5 : 0),
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'hidden',
@@ -95,25 +107,27 @@ const MatchFound = () => {
             />
           </Animated.View>
         </ImageBackground>
-        <View
-          style={{
-            position: 'absolute',
-            top: verticalScale(145),
-            left: scale(80),
-            zIndex: 2,
-          }}>
-          <Image
-            source={DASHBOARD_ASSET_URI.JOWA_MATCH_INDICATOR}
-            width={80}
-            height={80}
-          />
-        </View>
+        {!isMare && (
+          <View
+            style={{
+              position: 'absolute',
+              top: verticalScale(144.5),
+              left: scale(80),
+              zIndex: 2,
+            }}>
+            <Image
+              source={DASHBOARD_ASSET_URI.JOWA_MATCH_INDICATOR}
+              width={80}
+              height={isIosDevice() ? 80 : 76}
+            />
+          </View>
+        )}
         <ImageBackground
           style={{
             height: verticalScale(200),
             width: scale(160),
-            left: scale(isMare ? 160 : 90),
-            top: verticalScale(isMare ? 0 : -40),
+            left: scale(isMare ? 145 : 90),
+            top: verticalScale(isMare ? 5 : -40),
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'hidden',
@@ -135,12 +149,16 @@ const MatchFound = () => {
         </ImageBackground>
       </View>
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
-        <Separator space={40} />
+        <Separator space={isMare ? 70 : 40} />
         <View style={{alignItems: 'center', bottom: verticalScale(40)}}>
-          <Text color="#fff" size={25}>
+          <Text color="#fff" size={23} fontFamily="ClimateCrisis-Regular">
             {`You got ${isMare ? 'MARE!' : 'JOWA!'}`}
           </Text>
-          <Text color="#fff" size={15}>
+          <Text
+            color="#fff"
+            size={14}
+            fontFamily="Montserrat-Medium"
+            customStyle={{paddingHorizontal: scale(10), textAlign: 'center'}}>
             {isMare
               ? 'Friendship alert! Say hi to your new mare bilis!'
               : 'The wait is over, mars! Landiin mo na, dali'}
@@ -153,7 +171,7 @@ const MatchFound = () => {
             bottom: verticalScale(20),
           }}>
           <Button
-            onPress={() => navigation.navigate('DashboardTab')}
+            onPress={() => navigation.navigate('Messages')}
             title="Chat now!"
             style={{width: scale(125), backgroundColor: '#FFBC28'}}
           />
