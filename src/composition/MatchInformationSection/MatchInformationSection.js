@@ -26,13 +26,13 @@ const data = [
 
 const getPersonalityTypeImage = personalityType => {
   switch (personalityType) {
-    case 'Dog':
+    case 'dog':
       return DASHBOARD_ASSET_URI.DOG_INFO;
-    case 'Otter':
+    case 'otter':
       return DASHBOARD_ASSET_URI.OTTER_INFO;
-    case 'Lion':
+    case 'lion':
       return DASHBOARD_ASSET_URI.LION_INFO;
-    case 'Beaver':
+    case 'beaver':
       return DASHBOARD_ASSET_URI.BEAVER_INFO;
     default:
   }
@@ -41,23 +41,31 @@ const getPersonalityTypeImage = personalityType => {
 const MatchInformationSection = props => {
   const {customerDetails} = props;
 
+  console.log('customerDetails', customerDetails);
+
   const renderInformationSection = ({item}) => {
     return (
       <View>
-        <Text color="#fff" weight="700">
+        <Text color="#fff" weight="700" size={18}>
           BIO
         </Text>
-        <Text color="#fff">{item?.bio}</Text>
+        <Text color="#fff" size={16}>
+          {item?.bio}
+        </Text>
         <Separator space={10} />
-        <Text color="#fff" weight="700">
+        <Text color="#fff" weight="700" size={18}>
           WORK
         </Text>
-        <Text color="#fff">{item?.work}</Text>
+        <Text color="#fff" size={16}>
+          {item?.work}
+        </Text>
         <Separator space={10} />
-        <Text color="#fff" weight="700">
+        <Text color="#fff" weight="700" size={18}>
           LOCATION
         </Text>
-        <Text color="#fff">{item?.location}</Text>
+        <Text color="#fff" size={16}>
+          {item?.location}
+        </Text>
         <Separator space={10} />
         {/* <Text color="#fff" weight="700">
           HOBBIES
@@ -71,16 +79,20 @@ const MatchInformationSection = props => {
             alignItems: 'center',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               EDUCATION
             </Text>
-            <Text color="#fff">{item?.education}</Text>
+            <Text color="#fff" size={16}>
+              {item?.education}
+            </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               RELIGION
             </Text>
-            <Text color="#fff">{item?.religion}</Text>
+            <Text color="#fff" size={16}>
+              {item?.religion}
+            </Text>
           </View>
         </View>
         <Separator space={10} />
@@ -90,16 +102,20 @@ const MatchInformationSection = props => {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               HEIGHT
             </Text>
-            <Text color="#fff">{item?.height}</Text>
+            <Text color="#fff" size={16}>
+              {item?.height}
+            </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               STAR SIGN
             </Text>
-            <Text color="#fff">{item?.starSign}</Text>
+            <Text color="#fff" size={16}>
+              {item?.starSign}
+            </Text>
           </View>
         </View>
         <Separator space={10} />
@@ -109,16 +125,20 @@ const MatchInformationSection = props => {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               DRINKING
             </Text>
-            <Text color="#fff">{item?.drinking}</Text>
+            <Text color="#fff" size={16}>
+              {item?.drinking}
+            </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               SMOKING
             </Text>
-            <Text color="#fff">{item?.smoking}</Text>
+            <Text color="#fff" size={16}>
+              {item?.smoking}
+            </Text>
           </View>
         </View>
         <Separator space={10} />
@@ -128,26 +148,30 @@ const MatchInformationSection = props => {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               PET
             </Text>
-            <Text color="#fff">{item?.pet}</Text>
+            <Text color="#fff" size={16}>
+              {item?.pet}
+            </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700">
+            <Text color="#fff" weight="700" size={18}>
               POLITICS
             </Text>
-            <Text color="#fff">{item?.politics}</Text>
+            <Text color="#fff" size={16}>
+              {item?.politics}
+            </Text>
           </View>
         </View>
         <Separator space={10} />
-        <Text color="#fff" weight="700">
+        <Text color="#fff" weight="700" size={18}>
           PERSONALITY TYPE
         </Text>
         <Image
           source={getPersonalityTypeImage(item?.personalityType)}
-          height={125}
-          width={125}
+          height={160}
+          width={160}
         />
       </View>
     );
@@ -156,9 +180,8 @@ const MatchInformationSection = props => {
   return (
     <View
       style={{
-        backgroundColor: '#E33C59',
         width: verticalScale(280),
-        height: verticalScale(230),
+        height: verticalScale(isIosDevice() ? 260 : 230),
         borderRadius: 30,
         padding: scale(20),
       }}>
