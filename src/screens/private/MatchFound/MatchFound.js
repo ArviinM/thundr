@@ -1,5 +1,5 @@
 // React modules
-import React, {useRef} from 'react';
+import React, {useRef, useCallback, useState} from 'react';
 import {ImageBackground, View, Animated} from 'react-native';
 
 // Third party libraries
@@ -40,10 +40,25 @@ const MatchFound = () => {
   const matchPhotoUrl = matchPhoto?.customerPhoto?.[0]?.photoUrl;
   const animatedValue1 = useRef(new Animated.Value(0)).current;
   const animatedValue2 = useRef(new Animated.Value(0)).current;
+  const [displayIndicator, setDisplayIndicator] = useState(false);
   const isMare = customerMatchData?.data?.tag === 'Mare';
 
+  const handleDisplayIndicator = useCallback(() => {
+    setDisplayIndicator(false);
+
+    const timeoutId = setTimeout(() => {
+      setDisplayIndicator(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [setDisplayIndicator]);
+
+  useFocusEffect(handleDisplayIndicator);
+
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       if (customerPhoto && matchPhotoUrl) {
         animatedValue1.setValue(0);
         animatedValue2.setValue(0);
@@ -107,17 +122,17 @@ const MatchFound = () => {
             />
           </Animated.View>
         </ImageBackground>
-        {!isMare && (
+        {!isMare && displayIndicator && (
           <View
             style={{
               position: 'absolute',
-              top: verticalScale(144.5),
-              left: scale(80),
+              top: verticalScale(isIosDevice() ? 152 : 156),
+              left: scale(isIosDevice() ? 89 : 90),
               zIndex: 2,
             }}>
             <Image
               source={DASHBOARD_ASSET_URI.JOWA_MATCH_INDICATOR}
-              width={80}
+              width={72}
               height={isIosDevice() ? 80 : 76}
             />
           </View>

@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {Touchable, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import LinearGradient from 'react-native-linear-gradient';
@@ -11,7 +11,6 @@ import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 import PhotoCarousel from '../../../composition/PhotoCarousel/PhotoCarousel';
 import MatchInformationSection from '../../../composition/MatchInformationSection/MatchInformationSection';
-import PhotoModal from '../../../composition/PhotoModal/PhotoModal';
 
 // Utils
 import {
@@ -30,7 +29,7 @@ const Profile = props => {
     setUserInformationShown,
   } = props;
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
-  const customerPhotoUrl = customerProfile?.customerPhoto?.[0]?.photoUrl;
+  const customerPhotoUrl = customerProfile?.customerPhoto;
 
   const renderBackButton = () => {
     return (
@@ -84,13 +83,9 @@ const Profile = props => {
             <PhotoCarousel
               setOpenPhotoModal={setOpenPhotoModal}
               customerPhotoUrl={customerPhotoUrl}
+              openPhotoModal={openPhotoModal}
             />
           </View>
-          <PhotoModal
-            setOpenPhotoModal={setOpenPhotoModal}
-            openPhotoModal={openPhotoModal}
-            customerPhotoUrl={customerPhotoUrl}
-          />
           <Separator space={isIosDevice() ? 90 : 120} />
           <MatchInformationSection
             customerDetails={customerProfile?.customerDetails}
@@ -105,7 +100,7 @@ const Profile = props => {
       activeOpacity={1}
       onPress={() => setUserInformationShown(true)}>
       <Image
-        source={{uri: customerPhotoUrl}}
+        source={{uri: customerProfile?.customerPhoto?.[0]?.photoUrl}}
         height={isIosDevice() ? 320 : 340}
         width={isIosDevice() ? 360 : 355}
         resizeMode="cover"

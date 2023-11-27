@@ -149,8 +149,6 @@ const PrimaryDetails = () => {
         return null;
       }
 
-      console.log('image', image);
-
       const source = {uri: image.path};
       setImageSource(source);
       setImageContent(image);

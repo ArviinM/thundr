@@ -41,8 +41,6 @@ const getPersonalityTypeImage = personalityType => {
 const MatchInformationSection = props => {
   const {customerDetails} = props;
 
-  console.log('customerDetails', customerDetails);
-
   const renderInformationSection = ({item}) => {
     return (
       <View>
