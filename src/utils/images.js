@@ -92,6 +92,19 @@ export const DASHBOARD_ASSET_URI = {
   JOWA_MATCH_INDICATOR: require('../assets/Images/Icons/match-indicator-jowa.png'),
 };
 
+export const MESSAGES_ASSET_URI = {
+  JOWA: require('../assets/Images/Icons/jowa-chat.png'),
+  MARE: require('../assets/Images/Icons/mare-chat.png'),
+  SEARCH_CONTAINER: require('../assets/Images/Icons/search-container.png'),
+  SEARCH_ICON: require('../assets/Images/Icons/search-icon.png'),
+  THUNDR_1: require('../assets/Images/Icons/thundr-1.png'),
+  THUNDR_2: require('../assets/Images/Icons/thundr-2.png'),
+  THUNDR_3: require('../assets/Images/Icons/thundr-3.png'),
+  THUNDR_4: require('../assets/Images/Icons/thundr-4.png'),
+  THUNDR_5: require('../assets/Images/Icons/thundr-5.png'),
+  THUNDR_6: require('../assets/Images/Icons/thundr-6.png'),
+};
+
 export const SAMPLE_IMAGE = {
   SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
   SAMPLE_2: require('../assets/Images/Images/sample-2.png'),

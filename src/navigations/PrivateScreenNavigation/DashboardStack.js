@@ -19,13 +19,15 @@ import {useNavigation} from '@react-navigation/native';
 // Components
 import Dashboard from '../../screens/private/Dashboard/Dashboard';
 import Image from '../../components/Image/Image';
+import Text from '../../components/Text/Text';
+import MatchFound from '../../screens/private/MatchFound/MatchFound';
+import Messages from '../../screens/private/Messages/Messages';
+import ChatScreen from '../../screens/private/ChatScreen/ChatScreen';
+import DrawerContent from './DrawerContent';
 
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
-import DrawerContent from './DrawerContent';
-import Text from '../../components/Text/Text';
-import MatchFound from '../../screens/private/MatchFound/MatchFound';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,7 +85,7 @@ const DashboardTabs = ({route, navigation}) => {
       />
       <Tab.Screen
         name="Messages"
-        component={UnderConstruction}
+        component={Messages}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
@@ -228,6 +230,7 @@ const DashboardNavigations = () => {
       }}>
       <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
       <Drawer.Screen name="MatchFound" component={MatchFound} />
+      <Drawer.Screen name="ChatScreen" component={ChatScreen} />
     </Drawer.Navigator>
   );
 };
