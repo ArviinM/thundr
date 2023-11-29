@@ -40,6 +40,9 @@ const TextInput = props => {
     fromCreatePassword = false,
     fromCreatePassword2 = false,
     showLeftContent = false,
+    onBlur,
+    onEndEditing,
+    onSubmitEditing,
   } = props;
 
   return (
@@ -88,6 +91,9 @@ const TextInput = props => {
           editable={editable}
           autoCapitalize="none"
           showLeftContent={showLeftContent}
+          onBlur={onBlur && onBlur}
+          onEndEditing={onEndEditing && onEndEditing}
+          onSubmitEditing={onSubmitEditing && onSubmitEditing}
         />
         {hasIcon && (
           <StyledTouchableOpacity
