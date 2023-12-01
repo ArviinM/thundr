@@ -1,9 +1,20 @@
 // React modules
 import React, {useState} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
-import {scale, verticalScale} from '../../../utils/commons';
+import {
+  isIosDevice,
+  moderateScale,
+  scale,
+  verticalScale,
+} from '../../../utils/commons';
 import Text from '../../../components/Text/Text';
 import TextInput from '../../../composition/TextInput/TextInput';
+import Image from '../../../components/Image/Image';
+import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
+import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
+import {Overlay} from 'react-native-elements';
+import Separator from '../../../components/Separator/Separator';
+import Button from '../../../components/Button/Button';
 
 // Third party libraries
 
@@ -12,6 +23,7 @@ import TextInput from '../../../composition/TextInput/TextInput';
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleSend = () => {
     if (inputText.trim() !== '') {
@@ -20,8 +32,70 @@ const ChatScreen = () => {
     }
   };
 
+  const subscribeModal = () => {
+    return (
+      <Overlay
+        onBackdropPress={() => setShowModal(false)}
+        overlayStyle={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#DBDCDD',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: [
+            {translateX: -scale(125)},
+            {translateY: -verticalScale(40)},
+          ],
+          height: verticalScale(isIosDevice() ? 150 : 180),
+          width: scale(250),
+          borderRadius: 20,
+          borderWidth: 3,
+          borderColor: '#808080',
+        }}
+        isVisible={showModal}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: verticalScale(isIosDevice() ? 130 : 150),
+            right: scale(0),
+          }}>
+          <TouchableOpacity onPress={() => setShowModal(false)}>
+            <Image
+              source={GLOBAL_ASSET_URI.GRAY_CLOSE_BUTTON}
+              height={25}
+              width={25}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text
+          size={18}
+          color="#565656"
+          fontFamily="Montserrat-Bold"
+          weight={700}
+          customStyle={{textAlign: 'center'}}>
+          Di keri mag-upload ng photo/video for free subscribers. Subscribe now
+          to Thundr Bolt, besh!
+        </Text>
+        <Separator space={15} />
+        <Button
+          onPress={() => setShowModal(false)}
+          title="Subscribe Now"
+          style={{
+            width: scale(180),
+            backgroundColor: '#FDBB2A',
+            borderColor: '#E33C59',
+            borderWidth: 3,
+          }}
+        />
+      </Overlay>
+    );
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+      <ChatScreenHeader />
+      {subscribeModal()}
       <ScrollView style={{flex: 1, padding: 10}}>
         {messages.map(message => (
           <View
@@ -48,29 +122,64 @@ const ChatScreen = () => {
           padding: scale(8),
           bottom: verticalScale(20),
         }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            position: 'absolute',
+            zIndex: 1,
+            left: scale(50),
+            gap: scale(12),
+            top: verticalScale(30),
+          }}>
+          <TouchableOpacity onPress={() => setShowModal(true)}>
+            <Image
+              source={MESSAGES_ASSET_URI.CAMERA_ICON}
+              height={25}
+              width={25}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowModal(true)}>
+            <Image
+              source={MESSAGES_ASSET_URI.GALLERY_ICON}
+              height={25}
+              width={25}
+            />
+          </TouchableOpacity>
+          <Image
+            source={MESSAGES_ASSET_URI.DIVIDER}
+            height={25}
+            width={25}
+            customStyle={{left: scale(-15)}}
+          />
+        </View>
         <TextInput
           inputStyle={{
             borderWidth: 1,
             borderRadius: 5,
             padding: 8,
-            backgroundColor: 'white',
+            paddingLeft: scale(100),
+            backgroundColor: '#E33C59',
+            color: '#fff',
+            fontSize: moderateScale(18),
           }}
-          placeholder="Type a message..."
+          textStyle={{color: '#fff'}}
+          placeholder="Chat"
           value={inputText}
           onChangeText={text => setInputText(text)}
           onSubmitEditing={handleSend}
+          placeholderTextColor="#fff"
         />
         <TouchableOpacity
           style={{
             position: 'absolute',
-            left: scale(270),
+            left: scale(280),
             bottom: verticalScale(16),
-            padding: 10,
+            padding: scale(5),
             backgroundColor: '#E33C59',
             borderRadius: 20,
           }}
           onPress={handleSend}>
-          <Text style={{color: 'white'}}>Send</Text>
+          <Image source={MESSAGES_ASSET_URI.SEND_ICON} height={20} width={20} />
         </TouchableOpacity>
       </View>
     </View>
