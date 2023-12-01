@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import TextInput from '../TextInput/TextInput';
 
 const ChatSelection = props => {
-  const {setMareChatListActive} = props;
+  const {isMareChatListActive, setMareChatListActive} = props;
   const [displaySearchContainer, setDisplaySearchContainer] = useState(false);
 
   const renderSearchContainer = () => {
@@ -56,10 +56,26 @@ const ChatSelection = props => {
       }}>
       {displaySearchContainer && renderSearchContainer()}
       <TouchableOpacity onPress={() => setMareChatListActive(false)}>
-        <Image source={MESSAGES_ASSET_URI.JOWA} height={80} width={80} />
+        <Image
+          source={
+            isMareChatListActive
+              ? MESSAGES_ASSET_URI.JOWA_INACTIVE
+              : MESSAGES_ASSET_URI.JOWA
+          }
+          height={80}
+          width={80}
+        />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => setMareChatListActive(true)}>
-        <Image source={MESSAGES_ASSET_URI.MARE} height={80} width={80} />
+        <Image
+          source={
+            isMareChatListActive
+              ? MESSAGES_ASSET_URI.MARE
+              : MESSAGES_ASSET_URI.MARE_INACTIVE
+          }
+          height={80}
+          width={80}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={{top: verticalScale(30), left: scale(70)}}

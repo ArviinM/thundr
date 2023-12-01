@@ -98,7 +98,7 @@ const MareChatList = () => {
       ListEmptyComponent={() => {
         return (
           <View style={{alignItems: 'center'}}>
-            <Text>MARE CHAT LIST EMPTY</Text>
+            <Text>CHAT LIST IS EMPTY</Text>
           </View>
         );
       }}
@@ -114,7 +114,10 @@ const Messages = () => {
         backgroundColor: '#ECE7E4',
         flex: 1,
       }}>
-      <ChatSelection setMareChatListActive={setMareChatListActive} />
+      <ChatSelection
+        setMareChatListActive={setMareChatListActive}
+        isMareChatListActive={isMareChatListActive}
+      />
       <View style={{justifyContent: 'center', flex: 1}}>
         {isMareChatListActive ? <MareChatList /> : <JowaChatList />}
       </View>

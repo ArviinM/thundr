@@ -43,6 +43,7 @@ const TextInput = props => {
     onBlur,
     onEndEditing,
     onSubmitEditing,
+    placeholderTextColor = '#B2B2B2',
   } = props;
 
   return (
@@ -83,7 +84,7 @@ const TextInput = props => {
           keyboardType={numeric ? 'numeric' : 'default'}
           maxLength={maxLength}
           fromForgotPassword={fromForgotPassword}
-          placeholderTextColor="#B2B2B2"
+          placeholderTextColor={placeholderTextColor}
           error={errors && touched}
           style={inputStyle}
           multiline={multiline}

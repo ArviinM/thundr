@@ -7,6 +7,7 @@ export const GLOBAL_ASSET_URI = {
   SELECTION_BOX: require('../assets/Images/Icons/selection-box.png'),
   CHECKED_SELECTION_BOX: require('../assets/Images/Icons/checked-selection-box.png'),
   PROFILE_BACK_ICON: require('../assets/Images/Icons/back-icon.png'),
+  GRAY_CLOSE_BUTTON: require('../assets/Images/Icons/gray-close-button.png'),
 };
 
 export const LGBTQ_ASSET_URI = {
@@ -95,6 +96,8 @@ export const DASHBOARD_ASSET_URI = {
 export const MESSAGES_ASSET_URI = {
   JOWA: require('../assets/Images/Icons/jowa-chat.png'),
   MARE: require('../assets/Images/Icons/mare-chat.png'),
+  JOWA_INACTIVE: require('../assets/Images/Icons/jowa-inactive.png'),
+  MARE_INACTIVE: require('../assets/Images/Icons/mare-inactive.png'),
   SEARCH_CONTAINER: require('../assets/Images/Icons/search-container.png'),
   SEARCH_ICON: require('../assets/Images/Icons/search-icon.png'),
   THUNDR_1: require('../assets/Images/Icons/thundr-1.png'),
@@ -103,6 +106,10 @@ export const MESSAGES_ASSET_URI = {
   THUNDR_4: require('../assets/Images/Icons/thundr-4.png'),
   THUNDR_5: require('../assets/Images/Icons/thundr-5.png'),
   THUNDR_6: require('../assets/Images/Icons/thundr-6.png'),
+  CAMERA_ICON: require('../assets/Images/Icons/camera.png'),
+  GALLERY_ICON: require('../assets/Images/Icons/gallery.png'),
+  DIVIDER: require('../assets/Images/Icons/divider.png'),
+  SEND_ICON: require('../assets/Images/Icons/send-icon.png'),
 };
 
 export const SAMPLE_IMAGE = {
