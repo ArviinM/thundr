@@ -12,8 +12,9 @@ import Separator from '../../../components/Separator/Separator';
 import Image from '../../../components/Image/Image';
 
 // Utils
-import {scale, verticalScale} from '../../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {MESSAGES_ASSET_URI, SAMPLE_IMAGE} from '../../../utils/images';
+import {BorderLinearGradient} from '../PersonalityType/Styled';
 
 const dummyData = [
   {
@@ -40,6 +41,7 @@ const JowaChatList = () => {
   const navigation = useNavigation();
   return (
     <FlatList
+      contentContainerStyle={{flex: 1}}
       showsVerticalScrollIndicator={false}
       data={dummyData}
       renderItem={({item, index}) => {
@@ -50,12 +52,26 @@ const JowaChatList = () => {
             style={{
               top: verticalScale(15),
               flexDirection: 'row',
+              marginBottom: verticalScale(10),
+              alignItems: 'center',
             }}>
             <Separator space={10} />
-            <View style={{bottom: verticalScale(10)}}>
-              <Image source={SAMPLE_IMAGE.SAMPLE_1} height={75} width={75} />
-            </View>
-            <View>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#E72454', '#FFC227']}
+              style={{marginHorizontal: scale(8), height: verticalScale(60)}}>
+              <View
+                style={{
+                  height: verticalScale(57),
+                  backgroundColor: '#9B9DA0',
+                  borderRadius: 15,
+                  alignItems: 'center',
+                }}>
+                <Image source={SAMPLE_IMAGE.SAMPLE_1} height={60} width={60} />
+              </View>
+            </BorderLinearGradient>
+            <View style={{left: scale(5)}}>
               <Text
                 size={25}
                 color="#E33C59"
@@ -70,11 +86,15 @@ const JowaChatList = () => {
                 {`Compatibility Score: ${item.compatibilityScore}`}
               </Text>
             </View>
-            <View style={{bottom: verticalScale(10), left: scale(20)}}>
+            <View
+              style={{
+                top: verticalScale(5),
+                left: scale(isIosDevice() ? 20 : 10),
+              }}>
               <Image
                 source={MESSAGES_ASSET_URI.THUNDR_1}
-                height={75}
-                width={75}
+                height={65}
+                width={65}
               />
             </View>
           </TouchableOpacity>

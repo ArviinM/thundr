@@ -6,6 +6,7 @@ import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI, SAMPLE_IMAGE} from '../../utils/images';
 import Text from '../../components/Text/Text';
 import {useNavigation} from '@react-navigation/native';
+import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
 
 const ChatScreenHeader = () => {
   const navigation = useNavigation();
@@ -28,9 +29,25 @@ const ChatScreenHeader = () => {
             width={25}
           />
         </TouchableOpacity>
-        <View>
-          <Image source={SAMPLE_IMAGE.SAMPLE_1} height={70} width={70} />
-        </View>
+        <BorderLinearGradient
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          colors={['#E72454', '#FFC227']}
+          style={{
+            marginHorizontal: scale(8),
+            height: verticalScale(50),
+            width: scale(60),
+          }}>
+          <View
+            style={{
+              height: verticalScale(47),
+              backgroundColor: '#9B9DA0',
+              borderRadius: 15,
+              alignItems: 'center',
+            }}>
+            <Image source={SAMPLE_IMAGE.SAMPLE_1} height={50} width={50} />
+          </View>
+        </BorderLinearGradient>
         <View>
           <Text
             fontFamily="Montserrat-Medium"

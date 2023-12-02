@@ -1,5 +1,5 @@
 // React modules
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
 import {
   isIosDevice,
@@ -24,11 +24,24 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const scrollViewRef = useRef();
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({animated: true});
+    }
+  }, [messages]);
 
   const handleSend = () => {
     if (inputText.trim() !== '') {
       setMessages([...messages, {id: messages.length, text: inputText}]);
       setInputText('');
+    }
+  };
+
+  const onContentSizeChange = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({animated: true});
     }
   };
 
@@ -57,7 +70,7 @@ const ChatScreen = () => {
         <View
           style={{
             position: 'absolute',
-            bottom: verticalScale(isIosDevice() ? 130 : 150),
+            bottom: verticalScale(isIosDevice() ? 130 : 160),
             right: scale(0),
           }}>
           <TouchableOpacity onPress={() => setShowModal(false)}>
@@ -96,7 +109,11 @@ const ChatScreen = () => {
     <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
       <ChatScreenHeader />
       {subscribeModal()}
-      <ScrollView style={{flex: 1, padding: 10}}>
+      <ScrollView
+        style={{flex: 1, padding: 10}}
+        ref={scrollViewRef}
+        contentContainerStyle={{paddingBottom: 16}}
+        onContentSizeChange={onContentSizeChange}>
         {messages.map(message => (
           <View
             key={message.id}
@@ -129,7 +146,7 @@ const ChatScreen = () => {
             zIndex: 1,
             left: scale(50),
             gap: scale(12),
-            top: verticalScale(30),
+            top: verticalScale(isIosDevice() ? 30 : 40),
           }}>
           <TouchableOpacity onPress={() => setShowModal(true)}>
             <Image
