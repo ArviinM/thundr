@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {ImageBackground, TouchableOpacity, View} from 'react-native';
 import Image from '../../components/Image/Image';
 import {MESSAGES_ASSET_URI} from '../../utils/images';
-import {scale, verticalScale} from '../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import LinearGradient from 'react-native-linear-gradient';
 import TextInput from '../TextInput/TextInput';
 
@@ -25,9 +25,9 @@ const ChatSelection = props => {
         <ImageBackground
           source={MESSAGES_ASSET_URI.SEARCH_CONTAINER}
           style={{
-            top: verticalScale(14),
+            top: verticalScale(isIosDevice() ? 14.5 : 24),
             left: scale(265),
-            height: 56,
+            height: verticalScale(40),
             width: 60,
             justifyContent: 'center',
             alignItems: 'center',
