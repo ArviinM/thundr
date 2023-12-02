@@ -10,7 +10,7 @@ import TextInput from '../../../composition/TextInput/TextInput';
 import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 import Button from '../../../components/Button/Button';
-import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenHeader';
+import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
 import Text from '../../../components/Text/Text';
 
 // Utils
