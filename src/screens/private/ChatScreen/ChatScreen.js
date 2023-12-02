@@ -1,24 +1,26 @@
 // React modules
 import React, {useState, useEffect, useRef} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
+
+// Third party libraries
+import {Overlay} from 'react-native-elements';
+
+// Components
+import TextInput from '../../../composition/TextInput/TextInput';
+import Image from '../../../components/Image/Image';
+import Separator from '../../../components/Separator/Separator';
+import Button from '../../../components/Button/Button';
+import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenHeader';
+import Text from '../../../components/Text/Text';
+
+// Utils
 import {
   isIosDevice,
   moderateScale,
   scale,
   verticalScale,
 } from '../../../utils/commons';
-import Text from '../../../components/Text/Text';
-import TextInput from '../../../composition/TextInput/TextInput';
-import Image from '../../../components/Image/Image';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
-import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
-import {Overlay} from 'react-native-elements';
-import Separator from '../../../components/Separator/Separator';
-import Button from '../../../components/Button/Button';
-
-// Third party libraries
-
-// Utils
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -71,7 +73,7 @@ const ChatScreen = () => {
           style={{
             position: 'absolute',
             bottom: verticalScale(isIosDevice() ? 130 : 160),
-            right: scale(0),
+            right: scale(isIosDevice() ? -5 : 0),
           }}>
           <TouchableOpacity onPress={() => setShowModal(false)}>
             <Image

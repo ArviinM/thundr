@@ -14,6 +14,8 @@ import Image from '../../../components/Image/Image';
 // Utils
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {MESSAGES_ASSET_URI, SAMPLE_IMAGE} from '../../../utils/images';
+
+// Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 
 const dummyData = [

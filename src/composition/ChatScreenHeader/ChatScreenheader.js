@@ -1,12 +1,19 @@
+// React Modules
 import React from 'react';
-import LinearGradient from 'react-native-linear-gradient';
-import {scale, verticalScale} from '../../utils/commons';
 import {TouchableOpacity, View} from 'react-native';
-import Image from '../../components/Image/Image';
-import {GLOBAL_ASSET_URI, SAMPLE_IMAGE} from '../../utils/images';
-import Text from '../../components/Text/Text';
+
+// Third Party Libraries
 import {useNavigation} from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+
+// Components
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
+import Image from '../../components/Image/Image';
+import Text from '../../components/Text/Text';
+
+// Utils
+import {scale, verticalScale} from '../../utils/commons';
+import {GLOBAL_ASSET_URI, SAMPLE_IMAGE} from '../../utils/images';
 
 const ChatScreenHeader = () => {
   const navigation = useNavigation();
@@ -38,15 +45,17 @@ const ChatScreenHeader = () => {
             height: verticalScale(50),
             width: scale(60),
           }}>
-          <View
-            style={{
-              height: verticalScale(47),
-              backgroundColor: '#9B9DA0',
-              borderRadius: 15,
-              alignItems: 'center',
-            }}>
-            <Image source={SAMPLE_IMAGE.SAMPLE_1} height={50} width={50} />
-          </View>
+          <TouchableOpacity>
+            <View
+              style={{
+                height: verticalScale(47),
+                backgroundColor: '#9B9DA0',
+                borderRadius: 15,
+                alignItems: 'center',
+              }}>
+              <Image source={SAMPLE_IMAGE.SAMPLE_1} height={50} width={50} />
+            </View>
+          </TouchableOpacity>
         </BorderLinearGradient>
         <View>
           <Text
