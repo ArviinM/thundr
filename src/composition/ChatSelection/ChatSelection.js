@@ -1,10 +1,17 @@
+// React Modules
 import React, {useState} from 'react';
 import {ImageBackground, TouchableOpacity, View} from 'react-native';
+
+// Third Party Libraries
+import LinearGradient from 'react-native-linear-gradient';
+
+// Components
+import TextInput from '../TextInput/TextInput';
 import Image from '../../components/Image/Image';
+
+// Utils
 import {MESSAGES_ASSET_URI} from '../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../utils/commons';
-import LinearGradient from 'react-native-linear-gradient';
-import TextInput from '../TextInput/TextInput';
 
 const ChatSelection = props => {
   const {isMareChatListActive, setMareChatListActive} = props;
