@@ -3,6 +3,12 @@ import {
   CUSTOMER_MATCH,
   CUSTOMER_MATCH_FAILED,
   CUSTOMER_MATCH_SUCCESS,
+  GET_CHAT_CUSTOMER_DETAILS,
+  GET_CHAT_CUSTOMER_DETAILS_FAILED,
+  GET_CHAT_CUSTOMER_DETAILS_SUCCESS,
+  GET_CHAT_MATCH_LIST,
+  GET_CHAT_MATCH_LIST_FAILED,
+  GET_CHAT_MATCH_LIST_SUCCESS,
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_DETAILS_FAILED,
   GET_CUSTOMER_DETAILS_SUCCESS,
@@ -157,7 +163,6 @@ export function* customerMatch({payload}) {
 
 export function* updateCurrentLocation({payload}) {
   const {longitude, latitude} = payload;
-  const longitudeAbsValue = Math.abs(longitude);
   const {sub} = yield select(state => state.persistedState);
   try {
     const response = yield call(DashboardConfig.updateCurrentLocation, {
@@ -180,6 +185,48 @@ export function* updateCurrentLocation({payload}) {
   }
 }
 
+export function* getChatMatchList({payload}) {
+  const {tag} = payload;
+  try {
+    const response = yield call(DashboardConfig.getChatMatchList, payload);
+    if (response?.status === 200) {
+      if (tag === 'MARE') {
+        yield put({
+          type: GET_CHAT_MATCH_LIST_SUCCESS,
+          marePayload: response.data.data,
+        });
+      } else {
+        yield put({
+          type: GET_CHAT_MATCH_LIST_SUCCESS,
+          jowaPayload: response.data.data,
+        });
+      }
+    }
+  } catch (error) {
+    yield put({
+      type: GET_CHAT_MATCH_LIST_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* getCustomerChatProfile({payload}) {
+  try {
+    const response = yield call(DashboardConfig.getCustomerProfile, payload);
+    if (response?.status === 200) {
+      yield put({
+        type: GET_CHAT_CUSTOMER_DETAILS_SUCCESS,
+        payload: response.data.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_CHAT_CUSTOMER_DETAILS_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -187,6 +234,8 @@ function* dashboardWatcher() {
   yield takeLatest(GET_MATCH_LIST, getMatchList);
   yield takeLatest(CUSTOMER_MATCH, customerMatch);
   yield takeLatest(UPDATE_CURRENT_LOCATION, updateCurrentLocation);
+  yield takeLatest(GET_CHAT_MATCH_LIST, getChatMatchList);
+  yield takeLatest(GET_CHAT_CUSTOMER_DETAILS, getCustomerChatProfile);
 }
 
 export default dashboardWatcher;

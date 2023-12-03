@@ -10,7 +10,6 @@ import TextInput from '../../../composition/TextInput/TextInput';
 import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 import Button from '../../../components/Button/Button';
-import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
 import Text from '../../../components/Text/Text';
 
 // Utils
@@ -21,12 +20,19 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
+import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenHeader';
+import {useRoute} from '@react-navigation/native';
 
 const ChatScreen = () => {
+  const route = useRoute();
+  const scrollViewRef = useRef();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const scrollViewRef = useRef();
+  const {mareChatList, jowaChatList, chatCustomerDetails, tag} = route?.params;
+  const isMare = tag === 'MARE';
+
+  console.log('chatCustomerDetails', chatCustomerDetails);
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -109,7 +115,7 @@ const ChatScreen = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-      <ChatScreenHeader />
+      <ChatScreenHeader chatCustomerDetails={chatCustomerDetails} />
       {subscribeModal()}
       <ScrollView
         style={{flex: 1, padding: 10}}
@@ -121,7 +127,7 @@ const ChatScreen = () => {
             key={message.id}
             style={{
               alignSelf: 'flex-end',
-              backgroundColor: '#E33C59',
+              backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
               padding: scale(20),
               borderRadius: 8,
               marginBottom: 10,
@@ -177,7 +183,7 @@ const ChatScreen = () => {
             borderRadius: 5,
             padding: 8,
             paddingLeft: scale(100),
-            backgroundColor: '#E33C59',
+            backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
             color: '#fff',
             fontSize: moderateScale(18),
           }}
@@ -194,11 +200,19 @@ const ChatScreen = () => {
             left: scale(280),
             bottom: verticalScale(16),
             padding: scale(5),
-            backgroundColor: '#E33C59',
+            backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
             borderRadius: 20,
           }}
           onPress={handleSend}>
-          <Image source={MESSAGES_ASSET_URI.SEND_ICON} height={20} width={20} />
+          <Image
+            source={
+              isMare
+                ? MESSAGES_ASSET_URI.MARE_SEND_ICON
+                : MESSAGES_ASSET_URI.SEND_ICON
+            }
+            height={20}
+            width={20}
+          />
         </TouchableOpacity>
       </View>
     </View>

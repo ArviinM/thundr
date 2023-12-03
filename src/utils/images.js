@@ -110,6 +110,7 @@ export const MESSAGES_ASSET_URI = {
   GALLERY_ICON: require('../assets/Images/Icons/gallery.png'),
   DIVIDER: require('../assets/Images/Icons/divider.png'),
   SEND_ICON: require('../assets/Images/Icons/send-icon.png'),
+  MARE_SEND_ICON: require('../assets/Images/Icons/mare-chat-send.png'),
 };
 
 export const SAMPLE_IMAGE = {
