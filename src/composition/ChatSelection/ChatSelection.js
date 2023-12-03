@@ -1,5 +1,5 @@
 // React Modules
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ImageBackground, TouchableOpacity, View} from 'react-native';
 
 // Third Party Libraries
@@ -62,7 +62,10 @@ const ChatSelection = props => {
         paddingLeft: scale(displaySearchContainer ? 10 : 20),
       }}>
       {displaySearchContainer && renderSearchContainer()}
-      <TouchableOpacity onPress={() => setMareChatListActive(false)}>
+      <TouchableOpacity
+        onPress={() => {
+          setMareChatListActive(false);
+        }}>
         <Image
           source={
             isMareChatListActive
@@ -73,7 +76,10 @@ const ChatSelection = props => {
           width={80}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setMareChatListActive(true)}>
+      <TouchableOpacity
+        onPress={() => {
+          setMareChatListActive(true);
+        }}>
         <Image
           source={
             isMareChatListActive

@@ -13,6 +13,11 @@ const DashboardConfig = {
   customerMatch: payload => api.post(DASHBOARD.CUSTOMER_MATCH, payload),
   updateCurrentLocation: payload =>
     api.post(DASHBOARD.CURRENT_LOCATION, payload),
+  getChatMatchList: payload =>
+    api.get(
+      `${DASHBOARD.CUSTOMER_MATCH}?sub=${payload.sub}&tag=${payload.tag}`,
+      payload,
+    ),
 };
 
 export default DashboardConfig;

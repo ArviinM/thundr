@@ -2,6 +2,12 @@ import {
   CUSTOMER_MATCH,
   CUSTOMER_MATCH_FAILED,
   CUSTOMER_MATCH_SUCCESS,
+  GET_CHAT_CUSTOMER_DETAILS,
+  GET_CHAT_CUSTOMER_DETAILS_FAILED,
+  GET_CHAT_CUSTOMER_DETAILS_SUCCESS,
+  GET_CHAT_MATCH_LIST,
+  GET_CHAT_MATCH_LIST_FAILED,
+  GET_CHAT_MATCH_LIST_SUCCESS,
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_DETAILS_FAILED,
   GET_CUSTOMER_DETAILS_SUCCESS,
@@ -38,6 +44,9 @@ export const INITIAL_STATE = {
   },
   isSwipeReached: false,
   matchPhoto: '',
+  jowaChatList: [],
+  mareChatList: [],
+  chatCustomerDetails: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -161,6 +170,47 @@ const dashboard = (state = INITIAL_STATE, action) => {
     case UPDATE_CURRENT_LOCATION_FAILED:
       return {
         ...state,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET CHAT MATCH LIST
+    case GET_CHAT_MATCH_LIST:
+      return {
+        ...state,
+        ...action.payload,
+        matchListLoading: true,
+      };
+    case GET_CHAT_MATCH_LIST_SUCCESS:
+      return {
+        ...state,
+        jowaChatList: action.jowaPayload,
+        mareChatList: action.marePayload,
+        matchListLoading: false,
+      };
+    case GET_CHAT_MATCH_LIST_FAILED:
+      return {
+        ...state,
+        matchListLoading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET CHAT CUSTOMER DETAILS
+    case GET_CHAT_CUSTOMER_DETAILS:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_CHAT_CUSTOMER_DETAILS_SUCCESS:
+      return {
+        ...state,
+        chatCustomerDetails: action.payload,
+        loading: false,
+      };
+    case GET_CHAT_CUSTOMER_DETAILS_FAILED:
+      return {
+        ...state,
+        loading: false,
         showModal: true,
         modalMessage: action.payload,
       };

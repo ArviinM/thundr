@@ -12,10 +12,11 @@ import Image from '../../components/Image/Image';
 import Text from '../../components/Text/Text';
 
 // Utils
-import {scale, verticalScale} from '../../utils/commons';
+import {calculateAge, scale, verticalScale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI, SAMPLE_IMAGE} from '../../utils/images';
 
-const ChatScreenHeader = () => {
+const ChatScreenHeader = props => {
+  const {chatCustomerDetails} = props;
   const navigation = useNavigation();
   return (
     <LinearGradient
@@ -53,7 +54,17 @@ const ChatScreenHeader = () => {
                 borderRadius: 15,
                 alignItems: 'center',
               }}>
-              <Image source={SAMPLE_IMAGE.SAMPLE_1} height={50} width={50} />
+              <Image
+                source={{
+                  uri: chatCustomerDetails?.customerPhoto?.[0]?.photoUrl,
+                }}
+                height={47}
+                width={58}
+                resizeMode="cover"
+                customStyle={{
+                  borderRadius: 20,
+                }}
+              />
             </View>
           </TouchableOpacity>
         </BorderLinearGradient>
@@ -63,7 +74,8 @@ const ChatScreenHeader = () => {
             color="#fff"
             size={20}
             weight="700">
-            Cholo, 39
+            {chatCustomerDetails?.name},{' '}
+            {calculateAge(chatCustomerDetails?.birthday)}
           </Text>
           <Text fontFamily="Montserrat-Medium" color="#fff" size={15}>
             Compatibility Score: 89%
