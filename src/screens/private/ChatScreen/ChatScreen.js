@@ -20,8 +20,8 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
-import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenHeader';
 import {useRoute} from '@react-navigation/native';
+import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
 
 const ChatScreen = () => {
   const route = useRoute();
