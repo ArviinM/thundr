@@ -110,28 +110,19 @@ const DashboardTabs = ({route, navigation}) => {
         component={Dashboard}
         options={{
           tabBarButton: () => {
-            focusedRoute !== 'DashboardTab' ? (
-              <Image
-                source={DASHBOARD_ASSET_URI.THUNDR}
-                height={70}
-                width={70}
-                customStyle={{bottom: verticalScale(20)}}
-              />
+            return focusedRoute !== 'DashboardTab' ? (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('DashboardTab')}>
+                <Image
+                  source={DASHBOARD_ASSET_URI.THUNDR}
+                  height={70}
+                  width={70}
+                  customStyle={{bottom: verticalScale(30)}}
+                />
+              </TouchableOpacity>
             ) : null;
           },
           tabBarLabel: '',
-          // tabBarIcon: () => {
-          //   return (
-          //     focusedRoute === 'DashboardTab' && (
-          //       <Image
-          //         source={DASHBOARD_ASSET_URI.THUNDR}
-          //         height={70}
-          //         width={70}
-          //         customStyle={{bottom: verticalScale(20)}}
-          //       />
-          //     )
-          //   );
-          // },
         }}
       />
       <Tab.Screen

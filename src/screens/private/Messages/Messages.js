@@ -151,8 +151,9 @@ const JowaChatList = props => {
       }}
       ListEmptyComponent={() => {
         return (
-          <View style={{alignContent: 'center', justifyContent: 'center'}}>
-            <Text>No recent messages</Text>
+          <View
+            style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+            <Text size={20}>No recent messages</Text>
           </View>
         );
       }}
@@ -260,8 +261,9 @@ const MareChatList = props => {
       }}
       ListEmptyComponent={() => {
         return (
-          <View style={{alignContent: 'center', justifyContent: 'center'}}>
-            <Text>No recent messages</Text>
+          <View
+            style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+            <Text size={20}>No recent messages</Text>
           </View>
         );
       }}
