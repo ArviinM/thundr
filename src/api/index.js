@@ -21,11 +21,11 @@ const createCancelToken = () => {
 axiosInstance.interceptors.request.use(
   async requestConfig => {
     const {
-      login: {token},
+      login: {loginData},
     } = store.getState();
 
-    if (token) {
-      requestConfig.headers.Authorization = `Bearer ${token}`;
+    if (loginData) {
+      requestConfig.headers.Authorization = `Bearer ${loginData?.accessToken}`;
     } else {
       requestConfig.headers.Authorization = '';
     }

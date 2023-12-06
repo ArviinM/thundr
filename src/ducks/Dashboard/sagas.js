@@ -124,10 +124,11 @@ export function* getMatchList({payload}) {
 export function* customerMatch({payload}) {
   const {target, tag} = payload;
   const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
   const {customerPhoto} = yield select(state => state.dashboard);
   try {
     const response = yield call(DashboardConfig.customerMatch, {
-      sub,
+      sub: loginData?.sub || sub,
       target,
       tag,
     });
@@ -164,9 +165,10 @@ export function* customerMatch({payload}) {
 export function* updateCurrentLocation({payload}) {
   const {longitude, latitude} = payload;
   const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
   try {
     const response = yield call(DashboardConfig.updateCurrentLocation, {
-      sub,
+      sub: loginData?.sub || sub,
       longitude,
       latitude,
     });
