@@ -28,6 +28,7 @@ import {
   GET_CHAT_MATCH_LIST,
 } from '../../../ducks/Dashboard/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
+import ChatActiveIndicator from '../../../components/ChatActiveIndicator/ChatActiveIndicator';
 
 const dummyData = [
   {
@@ -109,6 +110,7 @@ const JowaChatList = props => {
                 />
               </View>
             </BorderLinearGradient>
+            <ChatActiveIndicator />
             <View style={{left: scale(5)}}>
               <Text
                 size={25}

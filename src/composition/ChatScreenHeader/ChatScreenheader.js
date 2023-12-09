@@ -14,6 +14,7 @@ import Text from '../../components/Text/Text';
 // Utils
 import {calculateAge, scale, verticalScale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI, SAMPLE_IMAGE} from '../../utils/images';
+import ChatActiveIndicator from '../../components/ChatActiveIndicator/ChatActiveIndicator';
 
 const ChatScreenHeader = props => {
   const {chatCustomerDetails} = props;
@@ -68,6 +69,9 @@ const ChatScreenHeader = props => {
             </View>
           </TouchableOpacity>
         </BorderLinearGradient>
+        <ChatActiveIndicator
+          customStyle={{left: scale(80), top: verticalScale(43)}}
+        />
         <View>
           <Text
             fontFamily="Montserrat-Medium"
