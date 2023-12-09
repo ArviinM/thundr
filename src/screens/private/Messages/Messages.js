@@ -51,7 +51,7 @@ const dummyData = [
 ];
 
 const JowaChatList = props => {
-  const {jowaChatList, chatCustomerDetails, matchListLoading, handleRefresh} =
+  const {jowaChatList, matchListLoading, handleRefresh, jowaMareFilteredData} =
     props;
   const navigation = useNavigation();
 
@@ -63,16 +63,16 @@ const JowaChatList = props => {
           onRefresh={handleRefresh}
         />
       }
-      contentContainerStyle={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1}}
       showsVerticalScrollIndicator={false}
-      data={jowaChatList}
+      data={jowaChatList?.length && jowaMareFilteredData}
       renderItem={({item, index}) => {
         return (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('ChatScreen', {
                 jowaChatList,
-                chatCustomerDetails,
+                item,
                 tag: 'JOWA',
               })
             }
@@ -98,7 +98,7 @@ const JowaChatList = props => {
                 }}>
                 <Image
                   source={{
-                    uri: chatCustomerDetails?.customerPhoto?.[0]?.photoUrl,
+                    uri: item?.customerPhoto?.[0]?.photoUrl,
                   }}
                   height={57}
                   width={isIosDevice() ? 60 : 55}
@@ -118,8 +118,7 @@ const JowaChatList = props => {
                 ellipsizeMode="tail"
                 weight="700"
                 customStyle={{maxWidth: scale(180)}}>
-                {chatCustomerDetails?.name},{' '}
-                {calculateAge(chatCustomerDetails.birthday)}
+                {item?.name}, {calculateAge(item.birthday)}
               </Text>
               <Text
                 size={15}
@@ -128,7 +127,7 @@ const JowaChatList = props => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
-                {chatCustomerDetails?.customerDetails?.work}
+                {item?.customerDetails?.work}
               </Text>
               {/**TEMPORARY HARDCODE NEED TO CONFIRM SA BE KUNG SAN MAKUKUHA PERCENTAGE */}
               <Text color="#808080" fontFamily="Montserrat-Medium" size={15}>
@@ -162,9 +161,10 @@ const JowaChatList = props => {
 };
 
 const MareChatList = props => {
-  const {mareChatList, chatCustomerDetails, handleRefresh, matchListLoading} =
+  const {mareChatList, handleRefresh, matchListLoading, jowaMareFilteredData} =
     props;
   const navigation = useNavigation();
+
   return (
     <FlatList
       refreshControl={
@@ -173,16 +173,16 @@ const MareChatList = props => {
           onRefresh={handleRefresh}
         />
       }
-      contentContainerStyle={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1}}
       showsVerticalScrollIndicator={false}
-      data={mareChatList}
+      data={mareChatList?.length && jowaMareFilteredData}
       renderItem={({item, index}) => {
         return (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('ChatScreen', {
                 mareChatList,
-                chatCustomerDetails,
+                item,
                 tag: 'MARE',
               })
             }
@@ -208,7 +208,7 @@ const MareChatList = props => {
                 }}>
                 <Image
                   source={{
-                    uri: chatCustomerDetails?.customerPhoto?.[0]?.photoUrl,
+                    uri: item?.customerPhoto?.[0]?.photoUrl,
                   }}
                   height={57}
                   width={60}
@@ -228,8 +228,7 @@ const MareChatList = props => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
-                {chatCustomerDetails?.name},{' '}
-                {calculateAge(chatCustomerDetails.birthday)}
+                {item?.name}, {calculateAge(item.birthday)}
               </Text>
               <Text
                 size={15}
@@ -238,7 +237,7 @@ const MareChatList = props => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
-                {chatCustomerDetails?.customerDetails?.work}
+                {item?.customerDetails?.work}
               </Text>
               {/**TEMPORARY HARDCODE NEED TO CONFIRM SA BE KUNG SAN MAKUKUHA PERCENTAGE */}
               <Text color="#808080" fontFamily="Montserrat-Medium" size={15}>
@@ -273,28 +272,23 @@ const MareChatList = props => {
 
 const Messages = () => {
   const dispatch = useDispatch();
+  const {sub} = useSelector(state => state.persistedState);
   const {loginData} = useSelector(state => state.login);
   const {matchListLoading, jowaChatList, mareChatList, chatCustomerDetails} =
     useSelector(state => state.dashboard);
+
   const [isMareChatListActive, setMareChatListActive] = useState(false);
   const [jowaMareFilteredData, setJowaMareFilteredData] =
     useState(chatCustomerDetails);
   const [searchText, setSearchText] = useState('');
-  const {sub} = useSelector(state => state.persistedState);
 
   useEffect(() => {
-    const dataToBeUsed = isMareChatListActive ? mareChatList : jowaChatList;
-    const filteredData = dataToBeUsed?.filter(item => {
-      const matchSub = chatCustomerDetails.sub === item.target;
-      const matchName = chatCustomerDetails.name
-        .toLowerCase()
-        .includes(searchText.toLowerCase());
-
-      return matchSub && matchName;
-    });
-
+    const lowerCaseSearchTerm = searchText.toLowerCase();
+    const filteredData = chatCustomerDetails.filter(customer =>
+      customer.name.toLowerCase().includes(lowerCaseSearchTerm),
+    );
     setJowaMareFilteredData(filteredData);
-  }, [searchText, chatCustomerDetails, jowaChatList, isMareChatListActive]);
+  }, [searchText, chatCustomerDetails]);
 
   useEffect(() => {
     if (!isMareChatListActive) {
@@ -311,29 +305,32 @@ const Messages = () => {
   }, [isMareChatListActive, dispatch]);
 
   useEffect(() => {
-    if (
-      !isMareChatListActive &&
-      (mareChatList?.length || jowaChatList?.length)
-    ) {
-      jowaChatList?.forEach(item => {
-        dispatch({
-          type: GET_CHAT_CUSTOMER_DETAILS,
-          payload: {sub: item.target},
+    if (!chatCustomerDetails.length) {
+      if (
+        !isMareChatListActive &&
+        (mareChatList?.length || jowaChatList?.length)
+      ) {
+        jowaChatList?.forEach(item => {
+          dispatch({
+            type: GET_CHAT_CUSTOMER_DETAILS,
+            payload: {sub: item.target},
+          });
         });
-      });
-    } else {
-      mareChatList?.forEach(item => {
-        dispatch({
-          type: GET_CHAT_CUSTOMER_DETAILS,
-          payload: {sub: item.target},
+      } else {
+        mareChatList?.forEach(item => {
+          dispatch({
+            type: GET_CHAT_CUSTOMER_DETAILS,
+            payload: {sub: item.target},
+          });
         });
-      });
+      }
     }
   }, [
     dispatch,
     isMareChatListActive,
     mareChatList?.length,
     jowaChatList?.length,
+    chatCustomerDetails?.length,
   ]);
 
   const handleRefresh = () => {
@@ -369,15 +366,15 @@ const Messages = () => {
       <View style={{justifyContent: 'center', flex: 1}}>
         {!isMareChatListActive ? (
           <JowaChatList
-            jowaChatList={jowaMareFilteredData}
-            chatCustomerDetails={chatCustomerDetails}
+            jowaChatList={jowaChatList}
+            jowaMareFilteredData={jowaMareFilteredData}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
           />
         ) : (
           <MareChatList
-            mareChatList={jowaMareFilteredData}
-            chatCustomerDetails={chatCustomerDetails}
+            mareChatList={mareChatList}
+            jowaMareFilteredData={jowaMareFilteredData}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
           />

@@ -29,10 +29,8 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const {mareChatList, jowaChatList, chatCustomerDetails, tag} = route?.params;
+  const {item, tag} = route?.params;
   const isMare = tag === 'MARE';
-
-  console.log('chatCustomerDetails', chatCustomerDetails);
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -115,7 +113,7 @@ const ChatScreen = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-      <ChatScreenHeader chatCustomerDetails={chatCustomerDetails} />
+      <ChatScreenHeader chatCustomerDetails={item} />
       {subscribeModal()}
       <ScrollView
         style={{flex: 1, padding: 10}}

@@ -204,7 +204,7 @@ const dashboard = (state = INITIAL_STATE, action) => {
     case GET_CHAT_CUSTOMER_DETAILS_SUCCESS:
       return {
         ...state,
-        chatCustomerDetails: action.payload,
+        chatCustomerDetails: [...state.chatCustomerDetails, action.payload],
         loading: false,
       };
     case GET_CHAT_CUSTOMER_DETAILS_FAILED:
