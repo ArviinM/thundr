@@ -18,6 +18,7 @@ const DashboardConfig = {
       `${DASHBOARD.CUSTOMER_MATCH}?sub=${payload.sub}&tag=${payload.tag}`,
       payload,
     ),
+  sendMessage: payload => api.post(DASHBOARD.SEND_MESSAGE, payload),
 };
 
 export default DashboardConfig;
