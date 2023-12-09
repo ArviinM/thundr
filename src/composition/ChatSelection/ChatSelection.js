@@ -14,7 +14,12 @@ import {MESSAGES_ASSET_URI} from '../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 
 const ChatSelection = props => {
-  const {isMareChatListActive, setMareChatListActive} = props;
+  const {
+    isMareChatListActive,
+    setMareChatListActive,
+    searchText,
+    setSearchText,
+  } = props;
   const [displaySearchContainer, setDisplaySearchContainer] = useState(false);
 
   const renderSearchContainer = () => {
@@ -22,6 +27,8 @@ const ChatSelection = props => {
       <View style={{top: verticalScale(5)}}>
         <TextInput
           placeholder="Search"
+          value={searchText}
+          onChangeText={text => setSearchText(text)}
           onBlur={() => {
             setDisplaySearchContainer(false);
           }}

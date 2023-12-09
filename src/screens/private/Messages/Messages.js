@@ -274,10 +274,27 @@ const MareChatList = props => {
 const Messages = () => {
   const dispatch = useDispatch();
   const {loginData} = useSelector(state => state.login);
-  const [isMareChatListActive, setMareChatListActive] = useState(false);
   const {matchListLoading, jowaChatList, mareChatList, chatCustomerDetails} =
     useSelector(state => state.dashboard);
+  const [isMareChatListActive, setMareChatListActive] = useState(false);
+  const [jowaMareFilteredData, setJowaMareFilteredData] =
+    useState(chatCustomerDetails);
+  const [searchText, setSearchText] = useState('');
   const {sub} = useSelector(state => state.persistedState);
+
+  useEffect(() => {
+    const dataToBeUsed = isMareChatListActive ? mareChatList : jowaChatList;
+    const filteredData = dataToBeUsed?.filter(item => {
+      const matchSub = chatCustomerDetails.sub === item.target;
+      const matchName = chatCustomerDetails.name
+        .toLowerCase()
+        .includes(searchText.toLowerCase());
+
+      return matchSub && matchName;
+    });
+
+    setJowaMareFilteredData(filteredData);
+  }, [searchText, chatCustomerDetails, jowaChatList, isMareChatListActive]);
 
   useEffect(() => {
     if (!isMareChatListActive) {
@@ -346,18 +363,20 @@ const Messages = () => {
       <ChatSelection
         setMareChatListActive={setMareChatListActive}
         isMareChatListActive={isMareChatListActive}
+        searchText={searchText}
+        setSearchText={setSearchText}
       />
       <View style={{justifyContent: 'center', flex: 1}}>
         {!isMareChatListActive ? (
           <JowaChatList
-            jowaChatList={jowaChatList}
+            jowaChatList={jowaMareFilteredData}
             chatCustomerDetails={chatCustomerDetails}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
           />
         ) : (
           <MareChatList
-            mareChatList={mareChatList}
+            mareChatList={jowaMareFilteredData}
             chatCustomerDetails={chatCustomerDetails}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
