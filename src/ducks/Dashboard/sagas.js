@@ -1,4 +1,11 @@
-import {call, put, takeLatest, select} from 'redux-saga/effects';
+import {
+  call,
+  put,
+  takeLatest,
+  select,
+  all,
+  takeEvery,
+} from 'redux-saga/effects';
 import {
   CUSTOMER_MATCH,
   CUSTOMER_MATCH_FAILED,
@@ -237,7 +244,7 @@ function* dashboardWatcher() {
   yield takeLatest(CUSTOMER_MATCH, customerMatch);
   yield takeLatest(UPDATE_CURRENT_LOCATION, updateCurrentLocation);
   yield takeLatest(GET_CHAT_MATCH_LIST, getChatMatchList);
-  yield takeLatest(GET_CHAT_CUSTOMER_DETAILS, getCustomerChatProfile);
+  yield takeEvery(GET_CHAT_CUSTOMER_DETAILS, getCustomerChatProfile);
 }
 
 export default dashboardWatcher;
