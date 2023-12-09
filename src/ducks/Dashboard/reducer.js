@@ -20,6 +20,9 @@ import {
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
+  SEND_MESSAGE,
+  SEND_MESSAGE_FAILED,
+  SEND_MESSAGE_SUCCESS,
   UPDATE_CURRENT_LOCATION,
   UPDATE_CURRENT_LOCATION_FAILED,
   UPDATE_CURRENT_LOCATION_SUCCESS,
@@ -47,6 +50,7 @@ export const INITIAL_STATE = {
   jowaChatList: [],
   mareChatList: [],
   chatCustomerDetails: [],
+  sendMessageResponse: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -208,6 +212,25 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case GET_CHAT_CUSTOMER_DETAILS_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    case SEND_MESSAGE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case SEND_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        sendMessageResponse: action.payload,
+        loading: false,
+      };
+    case SEND_MESSAGE_FAILED:
       return {
         ...state,
         loading: false,

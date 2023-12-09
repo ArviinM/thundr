@@ -4,6 +4,8 @@ import {View, TouchableOpacity, ScrollView} from 'react-native';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
+import {useRoute} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 
 // Components
 import TextInput from '../../../composition/TextInput/TextInput';
@@ -11,6 +13,7 @@ import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 import Button from '../../../components/Button/Button';
 import Text from '../../../components/Text/Text';
+import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
 
 // Utils
 import {
@@ -20,10 +23,10 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
-import {useRoute} from '@react-navigation/native';
-import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
+import {SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
 
 const ChatScreen = () => {
+  const dispatch = useDispatch();
   const route = useRoute();
   const scrollViewRef = useRef();
   const [messages, setMessages] = useState([]);
@@ -42,6 +45,10 @@ const ChatScreen = () => {
     if (inputText.trim() !== '') {
       setMessages([...messages, {id: messages.length, text: inputText}]);
       setInputText('');
+      dispatch({
+        type: SEND_MESSAGE,
+        payload: {sub: item?.sub, message: inputText, read: ''},
+      });
     }
   };
 

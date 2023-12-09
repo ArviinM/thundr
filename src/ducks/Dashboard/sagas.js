@@ -27,6 +27,9 @@ import {
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
+  SEND_MESSAGE,
+  SEND_MESSAGE_FAILED,
+  SEND_MESSAGE_SUCCESS,
   UPDATE_CURRENT_LOCATION,
   UPDATE_CURRENT_LOCATION_FAILED,
   UPDATE_CURRENT_LOCATION_SUCCESS,
@@ -236,6 +239,29 @@ export function* getCustomerChatProfile({payload}) {
   }
 }
 
+export function* sendMessage({payload}) {
+  const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
+  try {
+    const response = yield call(DashboardConfig.sendMessage, {
+      senderSub: loginData?.sub || sub,
+      ...payload,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: SEND_MESSAGE_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: SEND_MESSAGE_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -245,6 +271,7 @@ function* dashboardWatcher() {
   yield takeLatest(UPDATE_CURRENT_LOCATION, updateCurrentLocation);
   yield takeLatest(GET_CHAT_MATCH_LIST, getChatMatchList);
   yield takeEvery(GET_CHAT_CUSTOMER_DETAILS, getCustomerChatProfile);
+  yield takeLatest(SEND_MESSAGE, sendMessage);
 }
 
 export default dashboardWatcher;
