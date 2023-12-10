@@ -19,6 +19,9 @@ const DashboardConfig = {
       payload,
     ),
   sendMessage: payload => api.post(DASHBOARD.SEND_MESSAGE, payload),
+  getLastActivity: payload =>
+    api.get(`${DASHBOARD.LAST_ACTIVITY}?sub=${payload.sub}`, payload),
+  updateLastActivity: payload => api.post(DASHBOARD.LAST_ACTIVITY, payload),
 };
 
 export default DashboardConfig;

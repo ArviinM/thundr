@@ -24,6 +24,9 @@ import {
   GET_CUSTOMER_PHOTO_SUCCESS,
   GET_CUSTOMER_PROFILE,
   GET_CUSTOMER_PROFILE_SUCCESS,
+  GET_LAST_ACTIVITY,
+  GET_LAST_ACTIVITY_FAILED,
+  GET_LAST_ACTIVITY_SUCCESS,
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
@@ -34,6 +37,9 @@ import {
   UPDATE_CURRENT_LOCATION_FAILED,
   UPDATE_CURRENT_LOCATION_SUCCESS,
   UPDATE_DASHBOARD_STATE,
+  UPDATE_LAST_ACTIVITY,
+  UPDATE_LAST_ACTIVITY_FAILED,
+  UPDATE_LAST_ACTIVITY_SUCCESS,
 } from './actionTypes';
 import DashboardConfig from '../../api/services/dashboardService';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
@@ -262,6 +268,45 @@ export function* sendMessage({payload}) {
   }
 }
 
+export function* getLastActivity({payload}) {
+  try {
+    const response = yield call(DashboardConfig.getLastActivity, payload);
+    if (response?.status === 200) {
+      yield put({
+        type: GET_LAST_ACTIVITY_SUCCESS,
+        payload: response.data.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_LAST_ACTIVITY_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* updateLastActivity({}) {
+  const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
+  try {
+    const response = yield call(DashboardConfig.updateLastActivity, {
+      sub: loginData?.sub || sub,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: UPDATE_LAST_ACTIVITY_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: UPDATE_LAST_ACTIVITY_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -272,6 +317,8 @@ function* dashboardWatcher() {
   yield takeLatest(GET_CHAT_MATCH_LIST, getChatMatchList);
   yield takeEvery(GET_CHAT_CUSTOMER_DETAILS, getCustomerChatProfile);
   yield takeLatest(SEND_MESSAGE, sendMessage);
+  yield takeLatest(GET_LAST_ACTIVITY, getLastActivity);
+  yield takeLatest(UPDATE_LAST_ACTIVITY, updateLastActivity);
 }
 
 export default dashboardWatcher;

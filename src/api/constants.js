@@ -38,4 +38,5 @@ export const DASHBOARD = {
   CUSTOMER_MATCH: 'match/customer-match',
   CURRENT_LOCATION: 'match/match-location',
   SEND_MESSAGE: 'chat/detail',
+  LAST_ACTIVITY: 'chat/last-activity',
 };

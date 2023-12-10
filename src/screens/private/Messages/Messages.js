@@ -10,10 +10,21 @@ import Text from '../../../components/Text/Text';
 import ChatSelection from '../../../composition/ChatSelection/ChatSelection';
 import Separator from '../../../components/Separator/Separator';
 import Image from '../../../components/Image/Image';
+import Spinner from '../../../components/Spinner/Spinner';
+import ChatActiveIndicator from '../../../components/ChatActiveIndicator/ChatActiveIndicator';
+
+// Ducks
+import {
+  GET_CHAT_CUSTOMER_DETAILS,
+  GET_CHAT_MATCH_LIST,
+  GET_LAST_ACTIVITY,
+  UPDATE_LAST_ACTIVITY,
+} from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
 import {
   calculateAge,
+  isAndroidDevice,
   isIosDevice,
   scale,
   verticalScale,
@@ -23,12 +34,6 @@ import {MESSAGES_ASSET_URI} from '../../../utils/images';
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  GET_CHAT_CUSTOMER_DETAILS,
-  GET_CHAT_MATCH_LIST,
-} from '../../../ducks/Dashboard/actionTypes';
-import Spinner from '../../../components/Spinner/Spinner';
-import ChatActiveIndicator from '../../../components/ChatActiveIndicator/ChatActiveIndicator';
 
 const dummyData = [
   {
@@ -110,7 +115,12 @@ const JowaChatList = props => {
                 />
               </View>
             </BorderLinearGradient>
-            <ChatActiveIndicator />
+            <ChatActiveIndicator
+              customStyle={{
+                left: scale(isAndroidDevice() ? 55 : 60),
+                top: verticalScale(isAndroidDevice() ? 55 : 50),
+              }}
+            />
             <View style={{left: scale(5)}}>
               <Text
                 size={25}
@@ -284,6 +294,11 @@ const Messages = () => {
     useState(chatCustomerDetails);
   const [searchText, setSearchText] = useState('');
 
+  // TO CLARIFY: TUWING KELAN KO I D DISPATCH TO
+  useEffect(() => {
+    dispatch({type: UPDATE_LAST_ACTIVITY});
+  }, [dispatch]);
+
   useEffect(() => {
     const lowerCaseSearchTerm = searchText.toLowerCase();
     const filteredData = chatCustomerDetails.filter(customer =>
@@ -333,6 +348,32 @@ const Messages = () => {
     mareChatList?.length,
     jowaChatList?.length,
     chatCustomerDetails?.length,
+  ]);
+
+  useEffect(() => {
+    if (
+      !isMareChatListActive &&
+      (mareChatList?.length || jowaChatList?.length)
+    ) {
+      jowaChatList?.forEach(item => {
+        dispatch({
+          type: GET_LAST_ACTIVITY,
+          payload: {sub: item.target},
+        });
+      });
+    } else {
+      mareChatList?.forEach(item => {
+        dispatch({
+          type: GET_LAST_ACTIVITY,
+          payload: {sub: item.target},
+        });
+      });
+    }
+  }, [
+    dispatch,
+    isMareChatListActive,
+    mareChatList?.length,
+    jowaChatList?.length,
   ]);
 
   const handleRefresh = () => {
