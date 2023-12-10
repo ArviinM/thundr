@@ -17,6 +17,9 @@ import {
   GET_CUSTOMER_PROFILE,
   GET_CUSTOMER_PROFILE_FAILED,
   GET_CUSTOMER_PROFILE_SUCCESS,
+  GET_LAST_ACTIVITY,
+  GET_LAST_ACTIVITY_FAILED,
+  GET_LAST_ACTIVITY_SUCCESS,
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
@@ -27,6 +30,9 @@ import {
   UPDATE_CURRENT_LOCATION_FAILED,
   UPDATE_CURRENT_LOCATION_SUCCESS,
   UPDATE_DASHBOARD_STATE,
+  UPDATE_LAST_ACTIVITY,
+  UPDATE_LAST_ACTIVITY_FAILED,
+  UPDATE_LAST_ACTIVITY_SUCCESS,
 } from './actionTypes';
 
 export const INITIAL_STATE = {
@@ -51,6 +57,8 @@ export const INITIAL_STATE = {
   mareChatList: [],
   chatCustomerDetails: [],
   sendMessageResponse: [],
+  lastActivity: [],
+  updatedLastActivity: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -218,6 +226,7 @@ const dashboard = (state = INITIAL_STATE, action) => {
         showModal: true,
         modalMessage: action.payload,
       };
+    // FOR CHAT/SEND MESSAGES
     case SEND_MESSAGE:
       return {
         ...state,
@@ -234,6 +243,43 @@ const dashboard = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET LAST ACTIVITY
+    case GET_LAST_ACTIVITY:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_LAST_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        lastActivity: action.payload,
+        loading: false,
+      };
+    case GET_LAST_ACTIVITY_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // UPDATE USER LAST ACTIVITY
+    case UPDATE_LAST_ACTIVITY:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case UPDATE_LAST_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        updatedLastActivity: action.payload,
+      };
+    case UPDATE_LAST_ACTIVITY_FAILED:
+      return {
+        ...state,
         showModal: true,
         modalMessage: action.payload,
       };
