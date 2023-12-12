@@ -23,6 +23,9 @@ import {
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
+  GET_MESSAGE,
+  GET_MESSAGE_FAILED,
+  GET_MESSAGE_SUCCESS,
   SEND_MESSAGE,
   SEND_MESSAGE_FAILED,
   SEND_MESSAGE_SUCCESS,
@@ -57,6 +60,7 @@ export const INITIAL_STATE = {
   mareChatList: [],
   chatCustomerDetails: [],
   sendMessageResponse: [],
+  getMessageResponse: [],
   lastActivity: [],
   updatedLastActivity: [],
 };
@@ -220,6 +224,26 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case GET_CHAT_CUSTOMER_DETAILS_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // FOR CHAT/GET MESSAGES
+    case GET_MESSAGE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        getMessageResponse: action.payload,
+        loading: false,
+      };
+    case GET_MESSAGE_FAILED:
       return {
         ...state,
         loading: false,

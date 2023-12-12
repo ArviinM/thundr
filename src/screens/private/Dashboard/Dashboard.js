@@ -22,6 +22,7 @@ import {
   GET_CUSTOMER_PROFILE,
   GET_MATCH_LIST,
   UPDATE_CURRENT_LOCATION,
+  UPDATE_LAST_ACTIVITY,
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
@@ -177,6 +178,14 @@ const Dashboard = () => {
 
     const intervalId = setInterval(() => {
       getCurrentLocation();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      dispatch({type: UPDATE_LAST_ACTIVITY});
     }, 60000);
 
     return () => clearInterval(intervalId);
