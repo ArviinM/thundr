@@ -8,16 +8,21 @@ import LinearGradient from 'react-native-linear-gradient';
 
 // Components
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
+import ChatActiveIndicator from '../../components/ChatActiveIndicator/ChatActiveIndicator';
 import Image from '../../components/Image/Image';
 import Text from '../../components/Text/Text';
 
 // Utils
 import {calculateAge, scale, verticalScale} from '../../utils/commons';
-import {GLOBAL_ASSET_URI, SAMPLE_IMAGE} from '../../utils/images';
-import ChatActiveIndicator from '../../components/ChatActiveIndicator/ChatActiveIndicator';
+import {GLOBAL_ASSET_URI} from '../../utils/images';
 
 const ChatScreenHeader = props => {
-  const {chatCustomerDetails} = props;
+  const {
+    chatCustomerDetails,
+    is1MinAgoActive,
+    is5MinsAgoActive,
+    is30MinsAgoActive,
+  } = props;
   const navigation = useNavigation();
   return (
     <LinearGradient
@@ -70,6 +75,9 @@ const ChatScreenHeader = props => {
           </TouchableOpacity>
         </BorderLinearGradient>
         <ChatActiveIndicator
+          is1MinAgoActive={is1MinAgoActive}
+          is5MinsAgoActive={is5MinsAgoActive}
+          is30MinsAgoActive={is30MinsAgoActive}
           customStyle={{left: scale(80), top: verticalScale(43)}}
         />
         <View>

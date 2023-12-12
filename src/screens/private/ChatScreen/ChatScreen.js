@@ -23,7 +23,7 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
-import {SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
+import {GET_MESSAGE, SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -32,8 +32,13 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const {item, tag} = route?.params;
+  const {item, tag, is1MinAgoActive, is5MinsAgoActive, is30MinsAgoActive} =
+    route?.params;
   const isMare = tag === 'MARE';
+
+  useEffect(() => {
+    dispatch({type: GET_MESSAGE});
+  }, [dispatch]);
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -47,7 +52,7 @@ const ChatScreen = () => {
       setInputText('');
       dispatch({
         type: SEND_MESSAGE,
-        payload: {sub: item?.sub, message: inputText, read: ''},
+        payload: {sub: item?.sub, message: inputText, read: '0'},
       });
     }
   };
@@ -120,7 +125,12 @@ const ChatScreen = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-      <ChatScreenHeader chatCustomerDetails={item} />
+      <ChatScreenHeader
+        chatCustomerDetails={item}
+        is1MinAgoActive={is1MinAgoActive}
+        is5MinsAgoActive={is5MinsAgoActive}
+        is30MinsAgoActive={is30MinsAgoActive}
+      />
       {subscribeModal()}
       <ScrollView
         style={{flex: 1, padding: 10}}

@@ -30,6 +30,9 @@ import {
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
+  GET_MESSAGE,
+  GET_MESSAGE_FAILED,
+  GET_MESSAGE_SUCCESS,
   SEND_MESSAGE,
   SEND_MESSAGE_FAILED,
   SEND_MESSAGE_SUCCESS,
@@ -44,8 +47,7 @@ import {
 import DashboardConfig from '../../api/services/dashboardService';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 import * as RootNavigation from '../../navigations/tempNavigation';
-
-// Reach number of swipe allowed
+import moment from 'moment';
 
 export function* getCustomerDetails({payload}) {
   try {
@@ -245,11 +247,44 @@ export function* getCustomerChatProfile({payload}) {
   }
 }
 
+export function* getMessage({}) {
+  const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
+
+  const todayFormattedDate = moment().format('YYYY-MM-DD');
+  const twoDaysAgoFormattedDate = moment()
+    .subtract(2, 'days')
+    .format('YYYY-MM-DD');
+
+  const payload = {
+    sub: loginData?.sub || sub,
+    chatRoomId: '',
+    sort: 'ASC',
+    startDate: todayFormattedDate,
+    endDate: twoDaysAgoFormattedDate,
+  };
+  try {
+    const response = yield call(DashboardConfig.getOrSendMessage, payload);
+
+    if (response?.status === 200) {
+      yield put({
+        type: GET_MESSAGE_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_MESSAGE_FAILED,
+      payload: error,
+    });
+  }
+}
+
 export function* sendMessage({payload}) {
   const {sub} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
   try {
-    const response = yield call(DashboardConfig.sendMessage, {
+    const response = yield call(DashboardConfig.getOrSendMessage, {
       senderSub: loginData?.sub || sub,
       ...payload,
     });
@@ -319,6 +354,7 @@ function* dashboardWatcher() {
   yield takeLatest(SEND_MESSAGE, sendMessage);
   yield takeLatest(GET_LAST_ACTIVITY, getLastActivity);
   yield takeLatest(UPDATE_LAST_ACTIVITY, updateLastActivity);
+  yield takeLatest(GET_MESSAGE, getMessage);
 }
 
 export default dashboardWatcher;

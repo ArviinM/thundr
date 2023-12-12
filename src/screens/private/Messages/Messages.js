@@ -57,8 +57,15 @@ const dummyData = [
 ];
 
 const JowaChatList = props => {
-  const {jowaChatList, matchListLoading, handleRefresh, jowaMareFilteredData} =
-    props;
+  const {
+    jowaChatList,
+    matchListLoading,
+    handleRefresh,
+    jowaMareFilteredData,
+    is1MinAgoActive,
+    is5MinsAgoActive,
+    is30MinsAgoActive,
+  } = props;
   const navigation = useNavigation();
 
   return (
@@ -80,6 +87,9 @@ const JowaChatList = props => {
                 jowaChatList,
                 item,
                 tag: 'JOWA',
+                is1MinAgoActive,
+                is5MinsAgoActive,
+                is30MinsAgoActive,
               })
             }
             key={index}
@@ -116,6 +126,9 @@ const JowaChatList = props => {
               </View>
             </BorderLinearGradient>
             <ChatActiveIndicator
+              is1MinAgoActive={is1MinAgoActive}
+              is5MinsAgoActive={is5MinsAgoActive}
+              is30MinsAgoActive={is30MinsAgoActive}
               customStyle={{
                 left: scale(isAndroidDevice() ? 55 : 60),
                 top: verticalScale(isAndroidDevice() ? 55 : 50),
@@ -173,8 +186,15 @@ const JowaChatList = props => {
 };
 
 const MareChatList = props => {
-  const {mareChatList, handleRefresh, matchListLoading, jowaMareFilteredData} =
-    props;
+  const {
+    mareChatList,
+    handleRefresh,
+    matchListLoading,
+    jowaMareFilteredData,
+    is1MinAgoActive,
+    is5MinsAgoActive,
+    is30MinsAgoActive,
+  } = props;
   const navigation = useNavigation();
 
   return (
@@ -196,6 +216,9 @@ const MareChatList = props => {
                 mareChatList,
                 item,
                 tag: 'MARE',
+                is1MinAgoActive,
+                is5MinsAgoActive,
+                is30MinsAgoActive,
               })
             }
             key={index}
@@ -231,6 +254,15 @@ const MareChatList = props => {
                 />
               </View>
             </BorderLinearGradient>
+            <ChatActiveIndicator
+              is1MinAgoActive={is1MinAgoActive}
+              is5MinsAgoActive={is5MinsAgoActive}
+              is30MinsAgoActive={is30MinsAgoActive}
+              customStyle={{
+                left: scale(isAndroidDevice() ? 55 : 60),
+                top: verticalScale(isAndroidDevice() ? 55 : 50),
+              }}
+            />
             <View style={{left: scale(5)}}>
               <Text
                 size={25}
@@ -286,18 +318,42 @@ const Messages = () => {
   const dispatch = useDispatch();
   const {sub} = useSelector(state => state.persistedState);
   const {loginData} = useSelector(state => state.login);
-  const {matchListLoading, jowaChatList, mareChatList, chatCustomerDetails} =
-    useSelector(state => state.dashboard);
+  const {
+    matchListLoading,
+    jowaChatList,
+    mareChatList,
+    chatCustomerDetails,
+    lastActivity,
+  } = useSelector(state => state.dashboard);
 
   const [isMareChatListActive, setMareChatListActive] = useState(false);
   const [jowaMareFilteredData, setJowaMareFilteredData] =
     useState(chatCustomerDetails);
   const [searchText, setSearchText] = useState('');
+  const [is1MinAgoActive, setIs1MinAgoActive] = useState(false);
+  const [is5MinsAgoActive, setIs5MinsAgoActive] = useState(false);
+  const [is30MinsAgoActive, setIs30MinsAgoActive] = useState(false);
 
-  // TO CLARIFY: TUWING KELAN KO I D DISPATCH TO
   useEffect(() => {
-    dispatch({type: UPDATE_LAST_ACTIVITY});
-  }, [dispatch]);
+    const checkUserActivity = () => {
+      const backendTime = new Date(lastActivity?.dateTime);
+      const currentTime = new Date();
+
+      const threshold1Minute = new Date(currentTime - 1 * 60 * 1000);
+      const threshold5Minutes = new Date(currentTime - 5 * 60 * 1000);
+      const threshold30Minutes = new Date(currentTime - 30 * 60 * 1000);
+
+      const userIs1MinAgoActive = backendTime >= threshold1Minute;
+      const userIs5MinsAgoActive = backendTime >= threshold5Minutes;
+      const userIs30MinsAgoActive = backendTime >= threshold30Minutes;
+
+      setIs1MinAgoActive(userIs1MinAgoActive);
+      setIs5MinsAgoActive(userIs5MinsAgoActive);
+      setIs30MinsAgoActive(userIs30MinsAgoActive);
+    };
+
+    checkUserActivity();
+  }, [lastActivity]);
 
   useEffect(() => {
     const lowerCaseSearchTerm = searchText.toLowerCase();
@@ -413,6 +469,9 @@ const Messages = () => {
             jowaMareFilteredData={jowaMareFilteredData}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
+            is1MinAgoActive={is1MinAgoActive}
+            is5MinsAgoActive={is5MinsAgoActive}
+            is30MinsAgoActive={is30MinsAgoActive}
           />
         ) : (
           <MareChatList
@@ -420,6 +479,9 @@ const Messages = () => {
             jowaMareFilteredData={jowaMareFilteredData}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
+            is1MinAgoActive={is1MinAgoActive}
+            is5MinsAgoActive={is5MinsAgoActive}
+            is30MinsAgoActive={is30MinsAgoActive}
           />
         )}
       </View>

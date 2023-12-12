@@ -51,6 +51,11 @@ export const GET_CHAT_CUSTOMER_DETAILS_SUCCESS =
 export const GET_CHAT_CUSTOMER_DETAILS_FAILED =
   '@dashboard/GET_CHAT_CUSTOMER_DETAILS_FAILED';
 
+// GET CHAT MESSAGES
+export const GET_MESSAGE = '@dashboard/GET_MESSAGE';
+export const GET_MESSAGE_SUCCESS = '@dashboard/GET_MESSAGE_SUCCESS';
+export const GET_MESSAGE_FAILED = '@dashboard/GET_MESSAGE_FAILED';
+
 // SEND CHAT MESSAGES
 export const SEND_MESSAGE = '@dashboard/SEND_MESSAGE';
 export const SEND_MESSAGE_SUCCESS = '@dashboard/SEND_MESSAGE_SUCCESS';
