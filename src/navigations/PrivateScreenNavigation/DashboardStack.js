@@ -28,6 +28,7 @@ import DrawerContent from './DrawerContent';
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
+import AdvocacyScreen from '../../screens/private/AdvocacyScreen/AdvocacyScreen';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -127,7 +128,7 @@ const DashboardTabs = ({route, navigation}) => {
       />
       <Tab.Screen
         name="Stars"
-        component={UnderConstruction}
+        component={AdvocacyScreen}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {

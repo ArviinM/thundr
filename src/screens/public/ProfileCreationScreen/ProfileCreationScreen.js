@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import SelectDropdown from 'react-native-select-dropdown';
