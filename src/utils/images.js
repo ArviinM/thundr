@@ -113,6 +113,11 @@ export const MESSAGES_ASSET_URI = {
   MARE_SEND_ICON: require('../assets/Images/Icons/mare-chat-send.png'),
 };
 
+export const ADVOCACY_ASSET_URI = {
+  GOLDEN_GAYS: require('../assets/Images/Icons/golden-gays.png'),
+  GALANG: require('../assets/Images/Icons/galang.png'),
+};
+
 export const SAMPLE_IMAGE = {
   SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
   SAMPLE_2: require('../assets/Images/Images/sample-2.png'),
