@@ -116,6 +116,8 @@ export const MESSAGES_ASSET_URI = {
 export const ADVOCACY_ASSET_URI = {
   GOLDEN_GAYS: require('../assets/Images/Icons/golden-gays.png'),
   GALANG: require('../assets/Images/Icons/galang.png'),
+  GIVE_DONATION: require('../assets/Images/Icons/give-donation.png'),
+  THUNDR_GAS_FULL: require('../assets/Images/Icons/thundr-gas.png'),
 };
 
 export const SAMPLE_IMAGE = {
