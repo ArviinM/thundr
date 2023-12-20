@@ -50,7 +50,12 @@ const AdvocacyScreen = () => {
         </Text>
         <Separator space={20} />
         <View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('AdvocacyInformationScreen', {
+                fromGoldenGays: true,
+              })
+            }>
             <Image
               source={ADVOCACY_ASSET_URI.GOLDEN_GAYS}
               height={150}
@@ -58,7 +63,12 @@ const AdvocacyScreen = () => {
             />
           </TouchableOpacity>
           <Separator space={15} />
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('AdvocacyInformationScreen', {
+                fromGoldenGays: false,
+              })
+            }>
             <Image
               source={ADVOCACY_ASSET_URI.GALANG}
               height={150}
