@@ -43,7 +43,7 @@ const AdvocacyInformationScreen = () => {
         backgroundColor: '#EDE8E5',
         flexGrow: 1,
         alignItems: 'center',
-        paddingBottom: verticalScale(30),
+        paddingBottom: verticalScale(50),
       }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
@@ -109,7 +109,10 @@ const AdvocacyInformationScreen = () => {
           height={100}
           width={100}
         />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('AdvocacyTransaction', {fromGoldenGays})
+          }>
           <Image
             source={ADVOCACY_ASSET_URI.GIVE_DONATION}
             height={100}

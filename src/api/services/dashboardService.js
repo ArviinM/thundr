@@ -18,7 +18,8 @@ const DashboardConfig = {
       `${DASHBOARD.CUSTOMER_MATCH}?sub=${payload.sub}&tag=${payload.tag}`,
       payload,
     ),
-  getOrSendMessage: payload => api.post(DASHBOARD.GET_OR_SEND_MESSAGE, payload),
+  getMessage: payload => api.get(DASHBOARD.GET_OR_SEND_MESSAGE, payload),
+  sendMessage: payload => api.post(DASHBOARD.GET_OR_SEND_MESSAGE, payload),
   getLastActivity: payload =>
     api.get(`${DASHBOARD.LAST_ACTIVITY}?sub=${payload.sub}`, payload),
   updateLastActivity: payload => api.post(DASHBOARD.LAST_ACTIVITY, payload),

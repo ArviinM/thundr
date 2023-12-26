@@ -258,14 +258,13 @@ export function* getMessage({}) {
 
   const payload = {
     sub: loginData?.sub || sub,
-    chatRoomId: '',
+    chatRoomID: '',
     sort: 'ASC',
     startDate: todayFormattedDate,
     endDate: twoDaysAgoFormattedDate,
   };
   try {
-    const response = yield call(DashboardConfig.getOrSendMessage, payload);
-
+    const response = yield call(DashboardConfig.getMessage, payload);
     if (response?.status === 200) {
       yield put({
         type: GET_MESSAGE_SUCCESS,
@@ -284,7 +283,7 @@ export function* sendMessage({payload}) {
   const {sub} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
   try {
-    const response = yield call(DashboardConfig.getOrSendMessage, {
+    const response = yield call(DashboardConfig.sendMessage, {
       senderSub: loginData?.sub || sub,
       ...payload,
     });
