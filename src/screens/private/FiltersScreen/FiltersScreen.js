@@ -9,6 +9,9 @@ import Button from '../../../components/Button/Button';
 import Text from '../../../components/Text/Text';
 import Separator from '../../../components/Separator/Separator';
 import {useNavigation} from '@react-navigation/native';
+import PrimaryDetails from '../../public/ProfileCreationScreen/ProfileCreationScreen';
+import PersonalityType from '../PersonalityType/PersonalityType';
+import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
 
 const FiltersScreen = () => {
   const navigation = useNavigation();
@@ -20,7 +23,8 @@ const FiltersScreen = () => {
   );
 
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{backgroundColor: '#EDE8E5', flexGrow: 1}}>
       <View
         style={{
           flexDirection: 'row',
@@ -123,9 +127,9 @@ const FiltersScreen = () => {
           sliderLength={300}
           onValuesChange={newValue => setProximity(newValue)}
           customMarker={renderCustomMarker}
-          min={35}
-          max={80}
-          step={1}
+          min={2}
+          max={250}
+          step={2}
           allowOverlap
           snapped
           selectedStyle={{backgroundColor: 'transparent'}}
@@ -138,19 +142,23 @@ const FiltersScreen = () => {
           }}
         />
       </View>
-      <TouchableOpacity style={{alignItems: 'center'}}>
-        <Image
-          source={FILTERS_ASSET_URI.ADVANCED_FILTERS}
-          width={250}
-          height={160}
-        />
-      </TouchableOpacity>
-      <Text
-        size={15}
-        color="#808080"
-        customStyle={{textAlign: 'center', bottom: verticalScale(50)}}>
-        More filters, more fun. Gora na!
-      </Text>
+      <View style={{top: verticalScale(20)}}>
+        <TouchableOpacity style={{alignItems: 'center'}}>
+          <Image
+            source={FILTERS_ASSET_URI.ADVANCED_FILTERS}
+            width={250}
+            height={100}
+          />
+        </TouchableOpacity>
+        <Separator space={25} />
+        <Text
+          size={15}
+          color="#808080"
+          customStyle={{textAlign: 'center', bottom: verticalScale(50)}}>
+          More filters, more fun. Gora na!
+        </Text>
+      </View>
+      <AdvancedFilters />
     </ScrollView>
   );
 };
