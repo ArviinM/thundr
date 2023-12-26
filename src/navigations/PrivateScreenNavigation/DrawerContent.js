@@ -14,15 +14,21 @@ const DrawerContent = ({navigation}) => {
     <View
       style={{flex: 1, justifyContent: 'center', backgroundColor: '#f2cecd'}}>
       <View style={{alignSelf: 'center'}}>
-        <TouchableOpacity onPress={() => navigation.navigate('DashboardTab')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
           <Text size={25} color="#E33C59">
-            ● Dashboard
+            ● Filters
           </Text>
         </TouchableOpacity>
         <Separator space={15} />
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('DashboardTab')}>
           <Text size={25} color="#E33C59">
-            ● Profile
+            ● Thunder Bolt
+          </Text>
+        </TouchableOpacity>
+        <Separator space={15} />
+        <TouchableOpacity onPress={() => navigation.navigate('Stars')}>
+          <Text size={25} color="#E33C59">
+            ● The Possibles
           </Text>
         </TouchableOpacity>
         <Separator space={15} />

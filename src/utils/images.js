@@ -124,6 +124,11 @@ export const ADVOCACY_ASSET_URI = {
   CANCELLED_ICON: require('../assets/Images/Icons/cancelled.png'),
 };
 
+export const FILTERS_ASSET_URI = {
+  SLIDER_MARKER: require('../assets/Images/Icons/slider-marker.png'),
+  ADVANCED_FILTERS: require('../assets/Images/Icons/advanced-filters.png'),
+};
+
 export const SAMPLE_IMAGE = {
   SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
   SAMPLE_2: require('../assets/Images/Images/sample-2.png'),

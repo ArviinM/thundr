@@ -31,6 +31,7 @@ import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
 import AdvocacyScreen from '../../screens/private/AdvocacyScreen/AdvocacyScreen';
 import AdvocacyInformationScreen from '../../screens/private/AdvocacyInformationScreen/AdvocacyInformationScreen';
 import AdvocacyStack from './AdvocacyStack';
+import FiltersScreen from '../../screens/private/FiltersScreen/FiltersScreen';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -65,8 +66,8 @@ const DashboardTabs = ({route, navigation}) => {
         },
       }}>
       <Tab.Screen
-        name="Profile"
-        component={UnderConstruction}
+        name="Filters"
+        component={FiltersScreen}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
