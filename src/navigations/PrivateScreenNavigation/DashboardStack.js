@@ -30,6 +30,7 @@ import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
 import AdvocacyScreen from '../../screens/private/AdvocacyScreen/AdvocacyScreen';
 import AdvocacyInformationScreen from '../../screens/private/AdvocacyInformationScreen/AdvocacyInformationScreen';
+import AdvocacyStack from './AdvocacyStack';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -129,7 +130,7 @@ const DashboardTabs = ({route, navigation}) => {
       />
       <Tab.Screen
         name="Stars"
-        component={AdvocacyScreen}
+        component={AdvocacyStack}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
@@ -224,10 +225,6 @@ const DashboardNavigations = () => {
       <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
       <Drawer.Screen name="MatchFound" component={MatchFound} />
       <Drawer.Screen name="ChatScreen" component={ChatScreen} />
-      <Drawer.Screen
-        name="AdvocacyInformationScreen"
-        component={AdvocacyInformationScreen}
-      />
     </Drawer.Navigator>
   );
 };

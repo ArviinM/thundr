@@ -38,6 +38,10 @@ const ChatScreen = () => {
 
   useEffect(() => {
     dispatch({type: GET_MESSAGE});
+    const intervalId = setInterval(() => {
+      dispatch({type: GET_MESSAGE});
+    }, 5000);
+    return () => clearInterval(intervalId);
   }, [dispatch]);
 
   useEffect(() => {
@@ -52,7 +56,7 @@ const ChatScreen = () => {
       setInputText('');
       dispatch({
         type: SEND_MESSAGE,
-        payload: {sub: item?.sub, message: inputText, read: '0'},
+        payload: {targetSub: item?.sub, message: inputText, read: '0'},
       });
     }
   };

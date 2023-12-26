@@ -118,6 +118,10 @@ export const ADVOCACY_ASSET_URI = {
   GALANG: require('../assets/Images/Icons/galang.png'),
   GIVE_DONATION: require('../assets/Images/Icons/give-donation.png'),
   THUNDR_GAS_FULL: require('../assets/Images/Icons/thundr-gas.png'),
+  DONATE_BUTTON: require('../assets/Images/Icons/donate.png'),
+  APPROVED_ICON: require('../assets/Images/Icons/approved.png'),
+  FAILED_ICON: require('../assets/Images/Icons/failed.png'),
+  CANCELLED_ICON: require('../assets/Images/Icons/cancelled.png'),
 };
 
 export const SAMPLE_IMAGE = {
