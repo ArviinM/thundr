@@ -163,12 +163,9 @@ const PersonalityType = () => {
   }, [dispatch]);
 
   const toggleLetterSelection = index => {
-    // Check if the letter is already selected
     if (selectedHobby.includes(index)) {
-      // Deselect the letter
       setSelectedHobby(selectedHobby.filter(i => i !== index));
     } else if (selectedHobby.length < 4) {
-      // Select the letter if not already selected and limit to 4 selections
       setSelectedHobby([...selectedHobby, index]);
     }
   };
