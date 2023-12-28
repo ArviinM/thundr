@@ -9,7 +9,7 @@ import {TouchableOpacity} from 'react-native';
 
 // Third party libraries
 import {createStackNavigator} from '@react-navigation/stack';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 // Components
 import Image from '../../components/Image/Image';
@@ -17,7 +17,7 @@ import Image from '../../components/Image/Image';
 // Utils
 import {scale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {START_LOGOUT} from '../../ducks/Login/actionTypes';
 import AdvocacyScreen from '../../screens/private/AdvocacyScreen/AdvocacyScreen';
 import AdvocacyInformationScreen from '../../screens/private/AdvocacyInformationScreen/AdvocacyInformationScreen';
