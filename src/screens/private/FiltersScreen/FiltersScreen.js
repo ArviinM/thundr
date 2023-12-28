@@ -47,6 +47,7 @@ const FiltersScreen = () => {
         <Button
           title="Save"
           style={{width: scale(50), height: verticalScale(30)}}
+          onPress={() => navigation.navigate('DashboardTab')}
         />
       </View>
       <Separator space={20} />
