@@ -52,7 +52,7 @@ const ChatScreen = () => {
     dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     const intervalId = setInterval(() => {
       dispatch({type: GET_MESSAGE, payload: {chatUUID}});
-    }, 1000);
+    }, 3000);
 
     return () => {
       clearInterval(intervalId);
@@ -73,6 +73,7 @@ const ChatScreen = () => {
         type: SEND_MESSAGE,
         payload: {targetSub: item?.sub, message: inputText, read: '0'},
       });
+      dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     }
   };
 
