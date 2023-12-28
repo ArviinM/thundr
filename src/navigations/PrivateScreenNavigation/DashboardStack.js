@@ -66,8 +66,8 @@ const DashboardTabs = ({route, navigation}) => {
         },
       }}>
       <Tab.Screen
-        name="Filters"
-        component={FiltersScreen}
+        name="Profile"
+        component={UnderConstruction}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
@@ -226,6 +226,7 @@ const DashboardNavigations = () => {
       <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
       <Drawer.Screen name="MatchFound" component={MatchFound} />
       <Drawer.Screen name="ChatScreen" component={ChatScreen} />
+      <Drawer.Screen name="Filters" component={FiltersScreen} />
     </Drawer.Navigator>
   );
 };
