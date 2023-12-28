@@ -1,0 +1,160 @@
+// React modules
+import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
+
+// Third party libraries
+import {useNavigation} from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+
+// Components
+import Text from '../../../components/Text/Text';
+import Image from '../../../components/Image/Image';
+import Separator from '../../../components/Separator/Separator';
+
+// Utils
+import {scale, verticalScale} from '../../../utils/commons';
+import {GLOBAL_ASSET_URI, SUBSCRIPTION_ASSET_URI} from '../../../utils/images';
+
+const ThunderBolt = () => {
+  const navigation = useNavigation();
+  const flag = false;
+  return (
+    <View style={{flex: 1, backgroundColor: '#EDE8E5'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: scale(240),
+          top: verticalScale(20),
+          left: scale(20),
+        }}>
+        <TouchableOpacity onPress={() => navigation.navigate('DashboardTab')}>
+          <Image source={GLOBAL_ASSET_URI.BACK_ICON} width={25} height={25} />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          alignItems: 'center',
+          top: verticalScale(20),
+          paddingHorizontal: scale(25),
+        }}>
+        <Text
+          color="#E43C59"
+          weight={700}
+          fontFamily="ClimateCrisis-Regular"
+          size={25}>
+          Thundr Bolt
+        </Text>
+        <Text
+          customStyle={{textAlign: 'center'}}
+          color="#808080"
+          fontFamily="Montserrat-Regular">
+          Paid subscription para sa mga kabog. Unlock exclusive access to all
+          features.
+        </Text>
+      </View>
+      {!flag && (
+        <LinearGradient
+          colors={['#febc29', '#ef9c3d', '#e43d59']}
+          start={{x: 0, y: 0.5}}
+          end={{x: 1, y: 0.5}}
+          style={{
+            top: verticalScale(30),
+            paddingHorizontal: scale(20),
+            paddingVertical: scale(10),
+            height: verticalScale(140),
+            width: scale(300),
+            left: 'auto',
+            right: 'auto',
+            alignSelf: 'center',
+            borderRadius: 20,
+          }}>
+          <View style={{alignItems: 'center'}}>
+            <Text
+              customStyle={{textAlign: 'center'}}
+              fontFamily="Montserrat-Black"
+              size={15}
+              weight={700}
+              color="#fff">
+              Upgrade now and save P600. May savings na, tuloy-tuloy pa ang
+              perks, mars!
+            </Text>
+            <View style={{flexDirection: 'row', gap: scale(15)}}>
+              <TouchableOpacity disabled>
+                <Image
+                  source={SUBSCRIPTION_ASSET_URI.DISABLED_MONTHLY_BUTTON}
+                  height={100}
+                  width={100}
+                />
+              </TouchableOpacity>
+              <Image
+                source={SUBSCRIPTION_ASSET_URI.SUBSCRIPTION_ARROW}
+                height={100}
+                width={30}
+              />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ThunderPerks')}>
+                <Image
+                  source={SUBSCRIPTION_ASSET_URI.ANNUAL_BUTTON}
+                  height={100}
+                  width={100}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </LinearGradient>
+      )}
+      <Separator space={flag ? 50 : 45} />
+      <View style={{paddingHorizontal: scale(50)}}>
+        <Text
+          customStyle={{textAlign: 'center'}}
+          color="#E43C59"
+          weight={700}
+          fontFamily="Montserrat-Black"
+          size={15}>
+          WHAT’S IN IT FOR YOU? LET ME TELL YOU, MARS!
+        </Text>
+      </View>
+      <View style={{alignItems: 'center'}}>
+        <Image
+          source={SUBSCRIPTION_ASSET_URI.SUBSCRIPTION_TABLE}
+          height={320}
+          width={320}
+        />
+      </View>
+      {flag && (
+        <View style={{alignItems: 'center', top: verticalScale(-15)}}>
+          <Text
+            color="#E43C59"
+            fontFamily="Montserrat-Bold"
+            weight={700}
+            size={20}>
+            Subscribe Now!
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: scale(20),
+              top: verticalScale(-15),
+            }}>
+            <TouchableOpacity>
+              <Image
+                source={SUBSCRIPTION_ASSET_URI.MONTHLY_BUTTON}
+                width={100}
+                height={100}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                source={SUBSCRIPTION_ASSET_URI.ANNUAL_BUTTON}
+                width={100}
+                height={100}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default ThunderBolt;

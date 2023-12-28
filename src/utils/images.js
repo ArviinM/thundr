@@ -131,6 +131,22 @@ export const FILTERS_ASSET_URI = {
   SUBSCRIBE_BUTTON: require('../assets/Images/Icons/subscribe.png'),
 };
 
+export const SUBSCRIPTION_ASSET_URI = {
+  SUBSCRIPTION_ARROW: require('../assets/Images/Icons/subscription-arrow.png'),
+  ANNUAL_BUTTON: require('../assets/Images/Images/annual-button.png'),
+  MONTHLY_BUTTON: require('../assets/Images/Images/monthly-button.png'),
+  DISABLED_MONTHLY_BUTTON: require('../assets/Images/Images/disabled-monthly-button.png'),
+  SUBSCRIPTION_TABLE: require('../assets/Images/Images/subscription-table.png'),
+  THUNDERBOLT_ARC: require('../assets/Images/Images/thunderbolt-arc.png'),
+  GALLERY_ICON: require('../assets/Images/Icons/gallery-icon.png'),
+  SWIPE_ICON: require('../assets/Images/Icons/swipe-icon.png'),
+  ADS_ICON: require('../assets/Images/Icons/ads-icon.png'),
+  SPECIFIC_MATCH_ICON: require('../assets/Images/Icons/specific-match-icon.png'),
+  POSSIBLES_ICON: require('../assets/Images/Icons/possibles-icon.png'),
+  SUBSCRIPTION_WINNER_ICON: require('../assets/Images/Icons/subscription-winner-icon.png'),
+  SAVINGS_ICON: require('../assets/Images/Icons/savings-icon.png'),
+};
+
 export const SAMPLE_IMAGE = {
   SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
   SAMPLE_2: require('../assets/Images/Images/sample-2.png'),

@@ -32,6 +32,8 @@ import AdvocacyScreen from '../../screens/private/AdvocacyScreen/AdvocacyScreen'
 import AdvocacyInformationScreen from '../../screens/private/AdvocacyInformationScreen/AdvocacyInformationScreen';
 import AdvocacyStack from './AdvocacyStack';
 import FiltersScreen from '../../screens/private/FiltersScreen/FiltersScreen';
+import ThunderBoltStack from './ThunderBoltStack';
+import ThunderBolt from '../../screens/private/ThunderBolt/ThunderBolt';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -227,6 +229,7 @@ const DashboardNavigations = () => {
       <Drawer.Screen name="MatchFound" component={MatchFound} />
       <Drawer.Screen name="ChatScreen" component={ChatScreen} />
       <Drawer.Screen name="Filters" component={FiltersScreen} />
+      <Drawer.Screen name="ThunderBolt" component={ThunderBoltStack} />
     </Drawer.Navigator>
   );
 };
