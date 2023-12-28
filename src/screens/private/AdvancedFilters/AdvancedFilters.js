@@ -15,7 +15,9 @@ import Separator from '../../../components/Separator/Separator';
 const AdvancedFilters = () => {
   const [selectedHobby, setSelectedHobby] = useState([]);
   const [selectedStarSign, setSelectedStarSign] = useState([]);
-  const [selectedPersonality, setSelectedPersonality] = useState('');
+  const [selectedPersonality, setSelectedPersonality] = useState([]);
+  const [activeIcon, setActiveIcon] = useState('');
+  const [gender, setGender] = useState([]);
 
   const hobbies = [
     'Sports & Games',
@@ -58,10 +60,15 @@ const AdvancedFilters = () => {
     }
   };
 
-  const Gender = () => {
-    const [activeIcon, setActiveIcon] = useState('');
-    const [gender, setGender] = useState(null);
+  const toggleGenderSelection = (index, gender) => {
+    if (gender.includes(index)) {
+      setGender(gender.filter(i => i !== index));
+    } else if (gender.length < 4) {
+      setGender([...gender, index]);
+    }
+  };
 
+  const Gender = () => {
     const icons = [
       {name: 'L_ICON', value: 'Lesbian'},
       {name: 'G_ICON', value: 'Gay'},
@@ -107,7 +114,7 @@ const AdvancedFilters = () => {
             key={index}
             onPress={() => {
               setActiveIcon(item.name);
-              setGender(item.value);
+              toggleGenderSelection(index, gender);
             }}>
             {activeIcon === item.name && (
               <View
@@ -177,7 +184,13 @@ const AdvancedFilters = () => {
           </Text>
         </View>
         <Separator space={10} />
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            paddingHorizontal: scale(30),
+          }}>
           {data.map((selectedKey, index) => {
             const selectedData = isHobby ? selectedHobby : selectedStarSign;
             const isSelected = selectedData.includes(index);
@@ -234,6 +247,7 @@ const AdvancedFilters = () => {
           style={{
             flexDirection: 'column',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity onPress={() => setSelectedPersonality('lion')}>
@@ -359,8 +373,11 @@ const AdvancedFilters = () => {
   return (
     <View style={{alignItems: 'center'}}>
       <Gender />
+      <Separator space={20} />
       <SelectionBox data={hobbies} isHobby={true} />
+      <Separator space={20} />
       <SelectionBox data={starSigns} isHobby={false} />
+      <Separator space={20} />
       <PersonalityType />
     </View>
   );

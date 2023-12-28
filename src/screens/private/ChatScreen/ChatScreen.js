@@ -5,7 +5,7 @@ import {View, TouchableOpacity, ScrollView} from 'react-native';
 // Third party libraries
 import {Overlay} from 'react-native-elements';
 import {useRoute} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 // Components
 import TextInput from '../../../composition/TextInput/TextInput';
@@ -28,20 +28,35 @@ import {GET_MESSAGE, SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
 const ChatScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
+  const {getMessageResponse} = useSelector(state => state.dashboard);
+  const {sub} = useSelector(state => state.persistedState);
+  const {loginData} = useSelector(state => state.login);
+
   const scrollViewRef = useRef();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const {item, tag, is1MinAgoActive, is5MinsAgoActive, is30MinsAgoActive} =
-    route?.params;
+  const {
+    item,
+    tag,
+    is1MinAgoActive,
+    is5MinsAgoActive,
+    is30MinsAgoActive,
+    chatUUID,
+  } = route?.params;
   const isMare = tag === 'MARE';
+  const currentUserSub = loginData?.sub || sub;
+  const chatMessages = getMessageResponse.data;
 
   useEffect(() => {
-    dispatch({type: GET_MESSAGE});
+    dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     const intervalId = setInterval(() => {
-      dispatch({type: GET_MESSAGE});
-    }, 5000);
-    return () => clearInterval(intervalId);
+      dispatch({type: GET_MESSAGE, payload: {chatUUID}});
+    }, 3000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -58,6 +73,7 @@ const ChatScreen = () => {
         type: SEND_MESSAGE,
         payload: {targetSub: item?.sub, message: inputText, read: '0'},
       });
+      dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     }
   };
 
@@ -141,22 +157,25 @@ const ChatScreen = () => {
         ref={scrollViewRef}
         contentContainerStyle={{paddingBottom: 16}}
         onContentSizeChange={onContentSizeChange}>
-        {messages.map(message => (
-          <View
-            key={message.id}
-            style={{
-              alignSelf: 'flex-end',
-              backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
-              padding: scale(20),
-              borderRadius: 8,
-              marginBottom: 10,
-              maxWidth: '80%',
-            }}>
-            <Text color="#fff" fontFamil="Montserrat-Regular">
-              {message.text}
-            </Text>
-          </View>
-        ))}
+        {chatMessages?.map((message, index) => {
+          const currentUser = message.senderSub === currentUserSub;
+          return (
+            <View
+              key={message.id}
+              style={{
+                alignSelf: currentUser ? 'flex-end' : 'flex-start',
+                backgroundColor: currentUser ? '#E33C59' : '#660707',
+                padding: scale(20),
+                borderRadius: 8,
+                marginBottom: 10,
+                maxWidth: '80%',
+              }}>
+              <Text color="#fff" fontFamil="Montserrat-Regular">
+                {message.message}
+              </Text>
+            </View>
+          );
+        })}
       </ScrollView>
 
       <View

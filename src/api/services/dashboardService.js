@@ -18,7 +18,11 @@ const DashboardConfig = {
       `${DASHBOARD.CUSTOMER_MATCH}?sub=${payload.sub}&tag=${payload.tag}`,
       payload,
     ),
-  getMessage: payload => api.get(DASHBOARD.GET_OR_SEND_MESSAGE, payload),
+  getMessage: payload =>
+    api.get(
+      `${DASHBOARD.GET_OR_SEND_MESSAGE}?sub=${payload.sub}&chatRoomID=${payload.chatRoomID}&sort=${payload.sort}&startDate=${payload.startDate}&endDate=${payload.endDate}`,
+      payload,
+    ),
   sendMessage: payload => api.post(DASHBOARD.GET_OR_SEND_MESSAGE, payload),
   getLastActivity: payload =>
     api.get(`${DASHBOARD.LAST_ACTIVITY}?sub=${payload.sub}`, payload),

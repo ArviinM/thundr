@@ -35,27 +35,6 @@ import {MESSAGES_ASSET_URI} from '../../../utils/images';
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
 
-const dummyData = [
-  {
-    name: 'Cholo',
-    age: '39',
-    work: 'CEO at Business Inc.',
-    compatibilityScore: '89%',
-  },
-  {
-    name: 'John Mark',
-    age: '42',
-    work: 'Creative Director',
-    compatibilityScore: '65%',
-  },
-  {
-    name: 'Jethro',
-    age: '46',
-    work: 'Account Specialist',
-    compatibilityScore: '55%',
-  },
-];
-
 const JowaChatList = props => {
   const {
     jowaChatList,
@@ -80,6 +59,9 @@ const JowaChatList = props => {
       showsVerticalScrollIndicator={false}
       data={jowaChatList?.length && jowaMareFilteredData}
       renderItem={({item, index}) => {
+        const targetData = jowaChatList.filter(obj => obj.target === item.sub);
+        const chatUUID = targetData[0].chatUUID;
+
         return (
           <TouchableOpacity
             onPress={() =>
@@ -90,6 +72,7 @@ const JowaChatList = props => {
                 is1MinAgoActive,
                 is5MinsAgoActive,
                 is30MinsAgoActive,
+                chatUUID,
               })
             }
             key={index}

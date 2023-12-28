@@ -247,7 +247,8 @@ export function* getCustomerChatProfile({payload}) {
   }
 }
 
-export function* getMessage({}) {
+export function* getMessage({payload}) {
+  const {chatUUID} = payload;
   const {sub} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
 
@@ -256,15 +257,15 @@ export function* getMessage({}) {
     .subtract(2, 'days')
     .format('YYYY-MM-DD');
 
-  const payload = {
+  const apiPayload = {
     sub: loginData?.sub || sub,
-    chatRoomID: '',
+    chatRoomID: chatUUID,
     sort: 'ASC',
-    startDate: todayFormattedDate,
-    endDate: twoDaysAgoFormattedDate,
+    startDate: twoDaysAgoFormattedDate,
+    endDate: todayFormattedDate,
   };
   try {
-    const response = yield call(DashboardConfig.getMessage, payload);
+    const response = yield call(DashboardConfig.getMessage, apiPayload);
     if (response?.status === 200) {
       yield put({
         type: GET_MESSAGE_SUCCESS,

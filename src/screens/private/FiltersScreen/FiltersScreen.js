@@ -9,8 +9,6 @@ import Button from '../../../components/Button/Button';
 import Text from '../../../components/Text/Text';
 import Separator from '../../../components/Separator/Separator';
 import {useNavigation} from '@react-navigation/native';
-import PrimaryDetails from '../../public/ProfileCreationScreen/ProfileCreationScreen';
-import PersonalityType from '../PersonalityType/PersonalityType';
 import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
 
 const FiltersScreen = () => {
