@@ -1,20 +1,29 @@
+// React modules
 import React, {useState} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+
+// Third party libraries
 import LinearGradient from 'react-native-linear-gradient';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import {useNavigation} from '@react-navigation/native';
+
+// Components
 import Image from '../../../components/Image/Image';
-import {FILTERS_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
-import {scale, verticalScale} from '../../../utils/commons';
 import Button from '../../../components/Button/Button';
 import Text from '../../../components/Text/Text';
 import Separator from '../../../components/Separator/Separator';
-import {useNavigation} from '@react-navigation/native';
 import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
+
+// Utils
+import {FILTERS_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
+import {scale, verticalScale} from '../../../utils/commons';
 
 const FiltersScreen = () => {
   const navigation = useNavigation();
   const [age, setAge] = useState([35, 80]);
-  const [proximity, setProximity] = useState(0);
+  const [proximity, setProximity] = useState(2);
+  const [isAdvanceFilterVisible, setAdvanceFilterVisible] = useState(false);
+  const isPremium = false;
 
   const renderCustomMarker = () => (
     <Image source={FILTERS_ASSET_URI.SLIDER_MARKER} height={50} width={50} />
@@ -22,6 +31,7 @@ const FiltersScreen = () => {
 
   return (
     <ScrollView
+      bounces={false}
       contentContainerStyle={{backgroundColor: '#EDE8E5', flexGrow: 1}}>
       <View
         style={{
@@ -141,10 +151,17 @@ const FiltersScreen = () => {
         />
       </View>
       <View style={{top: verticalScale(20)}}>
-        <TouchableOpacity style={{alignItems: 'center'}}>
+        <TouchableOpacity
+          disabled={!isPremium}
+          style={{alignItems: 'center'}}
+          onPress={() => setAdvanceFilterVisible(!isAdvanceFilterVisible)}>
           <Image
-            source={FILTERS_ASSET_URI.ADVANCED_FILTERS}
-            width={250}
+            source={
+              isPremium
+                ? FILTERS_ASSET_URI.ADVANCED_FILTERS
+                : FILTERS_ASSET_URI.DISABLED_ADVANCED_FILTERS
+            }
+            width={300}
             height={100}
           />
         </TouchableOpacity>
@@ -152,11 +169,28 @@ const FiltersScreen = () => {
         <Text
           size={15}
           color="#808080"
-          customStyle={{textAlign: 'center', bottom: verticalScale(50)}}>
-          More filters, more fun. Gora na!
+          customStyle={{
+            textAlign: 'center',
+            bottom: verticalScale(50),
+            paddingHorizontal: scale(20),
+          }}>
+          {isPremium
+            ? 'More filters, more fun. Gora na!'
+            : 'More filters, more fun! Sign up now for an even more flexible customization.'}
         </Text>
       </View>
-      <AdvancedFilters />
+      {!isPremium && (
+        <TouchableOpacity>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              source={FILTERS_ASSET_URI.SUBSCRIBE_BUTTON}
+              width={220}
+              height={130}
+            />
+          </View>
+        </TouchableOpacity>
+      )}
+      {isAdvanceFilterVisible && <AdvancedFilters />}
     </ScrollView>
   );
 };

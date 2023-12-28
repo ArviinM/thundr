@@ -127,6 +127,8 @@ export const ADVOCACY_ASSET_URI = {
 export const FILTERS_ASSET_URI = {
   SLIDER_MARKER: require('../assets/Images/Icons/slider-marker.png'),
   ADVANCED_FILTERS: require('../assets/Images/Icons/advanced-filters.png'),
+  DISABLED_ADVANCED_FILTERS: require('../assets/Images/Icons/disabled-advanced-filters.png'),
+  SUBSCRIBE_BUTTON: require('../assets/Images/Icons/subscribe.png'),
 };
 
 export const SAMPLE_IMAGE = {
