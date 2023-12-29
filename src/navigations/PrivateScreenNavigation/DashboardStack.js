@@ -24,17 +24,15 @@ import MatchFound from '../../screens/private/MatchFound/MatchFound';
 import Messages from '../../screens/private/Messages/Messages';
 import ChatScreen from '../../screens/private/ChatScreen/ChatScreen';
 import DrawerContent from './DrawerContent';
+import AdvocacyStack from './AdvocacyStack';
+import FiltersScreen from '../../screens/private/FiltersScreen/FiltersScreen';
+import ThunderBoltStack from './ThunderBoltStack';
+import ThePossiblesStack from './ThePossiblesStack';
+import SettingsStack from './SettingsStack';
 
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
-import AdvocacyScreen from '../../screens/private/AdvocacyScreen/AdvocacyScreen';
-import AdvocacyInformationScreen from '../../screens/private/AdvocacyInformationScreen/AdvocacyInformationScreen';
-import AdvocacyStack from './AdvocacyStack';
-import FiltersScreen from '../../screens/private/FiltersScreen/FiltersScreen';
-import ThunderBoltStack from './ThunderBoltStack';
-import ThunderBolt from '../../screens/private/ThunderBolt/ThunderBolt';
-import ThePossiblesStack from './ThePossiblesStack';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -233,6 +231,7 @@ const DashboardNavigations = () => {
       <Drawer.Screen name="ThunderBolt" component={ThunderBoltStack} />
       <Drawer.Screen name="Advocacy" component={AdvocacyStack} />
       <Drawer.Screen name="ThePossibles" component={ThePossiblesStack} />
+      <Drawer.Screen name="Settings" component={SettingsStack} />
     </Drawer.Navigator>
   );
 };
