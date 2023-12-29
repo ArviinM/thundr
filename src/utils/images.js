@@ -8,6 +8,7 @@ export const GLOBAL_ASSET_URI = {
   CHECKED_SELECTION_BOX: require('../assets/Images/Icons/checked-selection-box.png'),
   PROFILE_BACK_ICON: require('../assets/Images/Icons/back-icon.png'),
   GRAY_CLOSE_BUTTON: require('../assets/Images/Icons/gray-close-button.png'),
+  ACTIVE_INDICATOR: require('../assets/Images/Icons/active-indicator.png'),
 };
 
 export const LGBTQ_ASSET_URI = {
@@ -114,6 +115,7 @@ export const MESSAGES_ASSET_URI = {
 };
 
 export const ADVOCACY_ASSET_URI = {
+  ADVOCACY: require('../assets/Images/Icons/advocacy.png'),
   GOLDEN_GAYS: require('../assets/Images/Icons/golden-gays.png'),
   GALANG: require('../assets/Images/Icons/galang.png'),
   GIVE_DONATION: require('../assets/Images/Icons/give-donation.png'),

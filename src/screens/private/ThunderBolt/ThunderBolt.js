@@ -12,7 +12,7 @@ import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 
 // Utils
-import {scale, verticalScale} from '../../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, SUBSCRIPTION_ASSET_URI} from '../../../utils/images';
 
 const ThunderBolt = () => {
@@ -61,7 +61,7 @@ const ThunderBolt = () => {
             top: verticalScale(30),
             paddingHorizontal: scale(20),
             paddingVertical: scale(10),
-            height: verticalScale(140),
+            height: verticalScale(isIosDevice() ? 140 : 150),
             width: scale(300),
             left: 'auto',
             right: 'auto',

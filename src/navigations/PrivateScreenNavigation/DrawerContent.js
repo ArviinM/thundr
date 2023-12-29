@@ -34,7 +34,7 @@ const DrawerContent = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <Separator space={15} />
-        <TouchableOpacity onPress={() => navigation.navigate('Stars')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ThePossibles')}>
           <Text size={25} color="#E33C59">
             ● The Possibles
           </Text>

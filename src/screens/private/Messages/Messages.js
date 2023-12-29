@@ -61,7 +61,6 @@ const JowaChatList = props => {
       renderItem={({item, index}) => {
         const targetData = jowaChatList.filter(obj => obj.target === item.sub);
         const chatUUID = targetData[0].chatUUID;
-
         return (
           <TouchableOpacity
             onPress={() =>

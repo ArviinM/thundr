@@ -34,6 +34,7 @@ import AdvocacyStack from './AdvocacyStack';
 import FiltersScreen from '../../screens/private/FiltersScreen/FiltersScreen';
 import ThunderBoltStack from './ThunderBoltStack';
 import ThunderBolt from '../../screens/private/ThunderBolt/ThunderBolt';
+import ThePossiblesStack from './ThePossiblesStack';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -116,7 +117,7 @@ const DashboardTabs = ({route, navigation}) => {
         component={Dashboard}
         options={{
           tabBarButton: () => {
-            return focusedRoute !== 'DashboardTab' ? (
+            return focusedRoute && focusedRoute !== 'DashboardTab' ? (
               <TouchableOpacity
                 onPress={() => navigation.navigate('DashboardTab')}>
                 <Image
@@ -133,7 +134,7 @@ const DashboardTabs = ({route, navigation}) => {
       />
       <Tab.Screen
         name="Stars"
-        component={AdvocacyStack}
+        component={UnderConstruction}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
@@ -230,6 +231,8 @@ const DashboardNavigations = () => {
       <Drawer.Screen name="ChatScreen" component={ChatScreen} />
       <Drawer.Screen name="Filters" component={FiltersScreen} />
       <Drawer.Screen name="ThunderBolt" component={ThunderBoltStack} />
+      <Drawer.Screen name="Advocacy" component={AdvocacyStack} />
+      <Drawer.Screen name="ThePossibles" component={ThePossiblesStack} />
     </Drawer.Navigator>
   );
 };

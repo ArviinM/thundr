@@ -46,12 +46,12 @@ const AdvocacyResult = () => {
       end={{x: 0.5, y: 0}}
       style={{flex: 1}}>
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
           navigation.reset({
             index: 0,
-            routes: [{name: 'DashboardTab'}],
-          })
-        }
+            routes: [{name: 'DashboardTabs'}],
+          });
+        }}
         style={{
           flexDirection: 'row',
           justifyContent: 'flex-end',
