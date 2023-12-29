@@ -14,7 +14,7 @@ import Text from '../../../components/Text/Text';
 
 // Utils
 import {GLOBAL_ASSET_URI, SUBSCRIPTION_ASSET_URI} from '../../../utils/images';
-import {scale, verticalScale} from '../../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const PerksLeftIcon = props => {
   const {text, src} = props;
@@ -100,11 +100,16 @@ const ThunderPerks = () => {
         }}>
         <Image
           source={SUBSCRIPTION_ASSET_URI.THUNDERBOLT_ARC}
-          height={230}
+          height={isIosDevice() ? 230 : 240}
           width={400}
         />
         <TouchableOpacity
-          onPress={() => navigation.navigate('DashboardTab')}
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'DashboardTabs'}],
+            })
+          }
           style={{
             position: 'absolute',
             right: scale(20),

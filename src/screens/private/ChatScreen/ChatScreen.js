@@ -24,6 +24,7 @@ import {
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
 import {GET_MESSAGE, SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -177,7 +178,6 @@ const ChatScreen = () => {
           );
         })}
       </ScrollView>
-
       <View
         style={{
           flexDirection: 'row',

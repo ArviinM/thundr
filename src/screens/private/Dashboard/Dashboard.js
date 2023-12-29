@@ -1,6 +1,6 @@
 // React modules
 import React, {useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useDispatch, useSelector} from 'react-redux';
@@ -26,8 +26,10 @@ import {
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
-import {calculateAge, verticalScale} from '../../../utils/commons';
+import {calculateAge, scale, verticalScale} from '../../../utils/commons';
 import LinearGradient from 'react-native-linear-gradient';
+import Image from '../../../components/Image/Image';
+import {ADVOCACY_ASSET_URI} from '../../../utils/images';
 
 const MatchDetails = props => {
   const {currentIndex, matchList, customerProfile} = props;
@@ -253,6 +255,24 @@ const Dashboard = () => {
         />
       )}
       <OutOfSwipeModal isSwipeReached={isSwipeReached} />
+      <View
+        style={{
+          position: 'absolute',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          top: verticalScale(250),
+          left: scale(-35),
+        }}>
+        <TouchableOpacity onPress={() => navigation.navigate('Advocacy')}>
+          <Image
+            source={ADVOCACY_ASSET_URI.ADVOCACY}
+            height={100}
+            width={100}
+          />
+        </TouchableOpacity>
+      </View>
+
       <View
         style={{
           alignItems: 'center',
