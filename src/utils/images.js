@@ -149,6 +149,14 @@ export const SUBSCRIPTION_ASSET_URI = {
   SAVINGS_ICON: require('../assets/Images/Icons/savings-icon.png'),
 };
 
+export const SETTINGS_URI = {
+  NOTIFICATIONS_BUTTON: require('../assets/Images/Images/notifications-button.png'),
+  PRIVACY_BUTTON: require('../assets/Images/Images/privacy-button.png'),
+  CONTACT_US_BUTTON: require('../assets/Images/Images/contact-us-button.png'),
+  PRIVACY_POLICY: require('../assets/Images/Icons/privacy-policy.png'),
+  CONTACT_US: require('../assets/Images/Icons/contact-us.png'),
+};
+
 export const SAMPLE_IMAGE = {
   SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
   SAMPLE_2: require('../assets/Images/Images/sample-2.png'),

@@ -7,13 +7,8 @@ import {useDispatch} from 'react-redux';
 
 // Components
 import Text from '../../components/Text/Text';
-import Button from '../../components/Button/Button';
-
-// Ducks
-import {START_LOGOUT} from '../../ducks/Login/actionTypes';
 
 // Utils
-import {scale} from '../../utils/commons';
 import Separator from '../../components/Separator/Separator';
 
 const DrawerContent = ({navigation}) => {
@@ -40,18 +35,12 @@ const DrawerContent = ({navigation}) => {
           </Text>
         </TouchableOpacity>
         <Separator space={15} />
-        <TouchableOpacity onPress={() => navigation.navigate('Stars')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <Text size={25} color="#E33C59">
             ● Settings
           </Text>
         </TouchableOpacity>
       </View>
-      <Separator space={50} />
-      <Button
-        title="Logout"
-        onPress={() => dispatch({type: START_LOGOUT})}
-        style={{width: scale(150)}}
-      />
     </View>
   );
 };
