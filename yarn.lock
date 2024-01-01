@@ -6190,6 +6190,11 @@ react-native-calendars@^1.1301.0:
   optionalDependencies:
     moment "^2.29.4"
 
+react-native-custom-switch-new@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-custom-switch-new/-/react-native-custom-switch-new-1.0.3.tgz#1e8f05be7c21fa9dc999bb71e57efdf1c6647eba"
+  integrity sha512-XW86PM/YMXgPB0Hb+1FATzfOJHWDtABJpTiI075SIe+ltRoEP4t168r9pw1A1NofOWpC6h1PlrSdTwWWsbIH3Q==
+
 react-native-device-info@^10.11.0:
   version "10.11.0"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.11.0.tgz#2c9f378f1c3c5eb9aafa803d015b84325991a9aa"

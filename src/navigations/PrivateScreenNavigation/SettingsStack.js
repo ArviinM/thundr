@@ -24,6 +24,7 @@ import {START_LOGOUT} from '../../ducks/Login/actionTypes';
 // Utils
 import {scale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
+import NotificationSettings from '../../screens/private/NotificationSettings/NotificationSettings';
 
 const Stack = createStackNavigator();
 
@@ -66,6 +67,10 @@ const SettingsStack = () => {
         headerLeft: () => renderBackIcon(),
       }}>
       <Stack.Screen name="SettingsMainScreen" component={SettingsMainScreen} />
+      <Stack.Screen
+        name="NotificationSettings"
+        component={NotificationSettings}
+      />
       <Stack.Screen name="SecurityAndPrivacy" component={SecurityAndPrivacy} />
       <Stack.Screen name="ContactUs" component={ContactUs} />
     </Stack.Navigator>
