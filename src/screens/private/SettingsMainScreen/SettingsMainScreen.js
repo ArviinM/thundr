@@ -1,5 +1,5 @@
 // React modules
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -18,10 +18,12 @@ import {START_LOGOUT} from '../../../ducks/Login/actionTypes';
 // Utils
 import {SETTINGS_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
+import SettingsModal from '../../../composition/SettingsModal/SettingsModal';
 
 const SettingsMainScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [displayModal, setDisplayModal] = useState('');
 
   const GradientButtons = props => {
     const {src, onPress} = props;
@@ -37,7 +39,14 @@ const SettingsMainScreen = () => {
   return (
     <View style={{top: verticalScale(20)}}>
       <SettingsHeader />
-      <GradientButtons src={SETTINGS_URI.NOTIFICATIONS_BUTTON} />
+      <SettingsModal
+        displayModal={displayModal}
+        setDisplayModal={setDisplayModal}
+      />
+      <GradientButtons
+        src={SETTINGS_URI.NOTIFICATIONS_BUTTON}
+        onPress={() => navigation.navigate('NotificationSettings')}
+      />
       <GradientButtons
         src={SETTINGS_URI.PRIVACY_BUTTON}
         onPress={() => navigation.navigate('SecurityAndPrivacy')}
@@ -55,17 +64,20 @@ const SettingsMainScreen = () => {
         />
         <Separator space={10} />
         <Button
-          disabled
+          // disabled
+          onPress={() => setDisplayModal('delete')}
           title="Delete Account"
-          style={{width: scale(150), backgroundColor: '#B1B3B5'}}
+          style={{width: scale(150)}}
         />
         <Separator space={10} />
         <Button title="Subscribe" style={{width: scale(150)}} />
         <Separator space={10} />
         <Button
-          disabled
+          // disabled
+          // backgroundColor: '#B1B3B5'
+          onPress={() => setDisplayModal('unsubscribe')}
           title="Unsubscribe"
-          style={{width: scale(150), backgroundColor: '#B1B3B5'}}
+          style={{width: scale(150)}}
         />
       </View>
     </View>

@@ -155,6 +155,8 @@ export const SETTINGS_URI = {
   CONTACT_US_BUTTON: require('../assets/Images/Images/contact-us-button.png'),
   PRIVACY_POLICY: require('../assets/Images/Icons/privacy-policy.png'),
   CONTACT_US: require('../assets/Images/Icons/contact-us.png'),
+  SETTINGS_CHECKBOX: require('../assets/Images/Icons/settings-checkbox.png'),
+  SETTINGS_CHECKED_CHECKBOX: require('../assets/Images/Icons/settings-checked-checkbox.png'),
 };
 
 export const SAMPLE_IMAGE = {
