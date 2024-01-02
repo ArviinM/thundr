@@ -159,7 +159,6 @@ export const SETTINGS_URI = {
   SETTINGS_CHECKED_CHECKBOX: require('../assets/Images/Icons/settings-checked-checkbox.png'),
 };
 
-export const SAMPLE_IMAGE = {
-  SAMPLE_1: require('../assets/Images/Images/sample-1.png'),
-  SAMPLE_2: require('../assets/Images/Images/sample-2.png'),
+export const PROFILE_ASSET_URI = {
+  GEAR_ICON: require('../assets/Images/Icons/gear-icon.png'),
 };

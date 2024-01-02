@@ -59,7 +59,7 @@ const LabeledInput = ({
   return (
     <LabeledInputContainer>
       <LabelContainer>
-        <Text color="#e33051" size={18}>
+        <Text color="#e33051" size={18} weight={700}>
           {label}
         </Text>
         {validationLabel && (
@@ -137,7 +137,8 @@ const CustomDropdown = props => {
   );
 };
 
-const PersonalityType = () => {
+const PersonalityType = props => {
+  const {fromEditProfileScreen} = props;
   const {loginData} = useSelector(state => state.login);
   const dispatch = useDispatch();
   const [selectedHobby, setSelectedHobby] = useState([]);
@@ -261,7 +262,7 @@ const PersonalityType = () => {
       <LabeledInput label="Location" value={location} setter={setLocation} />
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
-        <Text color="#e33051" size={18}>
+        <Text color="#e33051" size={18} weight={700}>
           Hobbies
         </Text>
         <Text
@@ -315,7 +316,7 @@ const PersonalityType = () => {
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
         <View>
-          <Text color="#e33051" size={18}>
+          <Text color="#e33051" size={18} weight={700}>
             Height
           </Text>
           <Separator space={10} />
@@ -339,7 +340,7 @@ const PersonalityType = () => {
           </View>
         </View>
         <View style={{left: scale(10)}}>
-          <Text color="#e33051" size={18}>
+          <Text color="#e33051" size={18} weight={700}>
             Star Sign
           </Text>
           <Separator space={10} />
@@ -367,7 +368,7 @@ const PersonalityType = () => {
           />
         ) : (
           <>
-            <Text color="#e33051" size={18}>
+            <Text color="#e33051" size={18} weight={700}>
               Education
             </Text>
             <Separator space={10} />
@@ -385,7 +386,7 @@ const PersonalityType = () => {
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
         <View>
-          <Text color="#e33051" size={18}>
+          <Text color="#e33051" size={18} weight={700}>
             Drinking
           </Text>
           <Separator space={10} />
@@ -401,7 +402,7 @@ const PersonalityType = () => {
           </View>
         </View>
         <View style={{left: scale(10)}}>
-          <Text color="#e33051" size={18}>
+          <Text color="#e33051" size={18} weight={700}>
             Smoking
           </Text>
           <Separator space={10} />
@@ -429,7 +430,7 @@ const PersonalityType = () => {
           />
         ) : (
           <>
-            <Text color="#e33051" size={18}>
+            <Text color="#e33051" size={18} weight={700}>
               Religion
             </Text>
             <Separator space={10} />
@@ -447,7 +448,7 @@ const PersonalityType = () => {
       <Separator space={10} />
       <View style={{flexDirection: 'row'}}>
         <View>
-          <Text color="#e33051" size={18}>
+          <Text color="#e33051" size={18} weight={700}>
             Pet
           </Text>
           <Separator space={10} />
@@ -463,7 +464,7 @@ const PersonalityType = () => {
           </View>
         </View>
         <View style={{left: scale(10)}}>
-          <Text color="#e33051" size={18}>
+          <Text color="#e33051" size={18} weight={700}>
             Politics
           </Text>
           <Separator space={10} />
@@ -478,7 +479,7 @@ const PersonalityType = () => {
         </View>
       </View>
       <Separator space={10} />
-      <Text color="#e33051" size={18}>
+      <Text color="#e33051" size={18} weight={700}>
         Personality Type
       </Text>
       <Separator space={10} />
@@ -609,48 +610,50 @@ const PersonalityType = () => {
           flexDirection: 'column',
           justifyContent: 'center',
         }}>
-        <View style={{flexDirection: 'row', gap: scale(10)}}>
-          <Button
-            title="Continue"
-            onPress={() => {
-              dispatch({
-                type: SUBMIT_CUSTOMER_DETAILS,
-                payload: {
-                  bio,
-                  work,
-                  location,
-                  height: `${removeSpaces(
-                    heightFt.toLocaleLowerCase(),
-                  )} ${removeSpaces(heightIn.toLocaleLowerCase())}`,
+        {!fromEditProfileScreen && (
+          <View style={{flexDirection: 'row', gap: scale(10)}}>
+            <Button
+              title="Continue"
+              onPress={() => {
+                dispatch({
+                  type: SUBMIT_CUSTOMER_DETAILS,
+                  payload: {
+                    bio,
+                    work,
+                    location,
+                    height: `${removeSpaces(
+                      heightFt.toLocaleLowerCase(),
+                    )} ${removeSpaces(heightIn.toLocaleLowerCase())}`,
 
-                  starSign: startSignState,
-                  education: otherEducationValue || educationState,
-                  drinking,
-                  smoking,
-                  religion: otherReligionValue || religionState,
-                  pet: petState,
-                  politics: politicsState,
-                  personalityType: selectedPersonality,
-                },
-              });
-            }}
-            style={{
-              top: verticalScale(20),
-              height: verticalScale(isIosDevice() ? 30 : 40),
-              width: scale(140),
-            }}
-          />
-          <Button
-            title="Skip"
-            onPress={() => setShowModal(true)}
-            style={{
-              top: verticalScale(20),
-              height: verticalScale(isIosDevice() ? 30 : 40),
-              width: scale(140),
-              backgroundColor: '#9C9EA1',
-            }}
-          />
-        </View>
+                    starSign: startSignState,
+                    education: otherEducationValue || educationState,
+                    drinking,
+                    smoking,
+                    religion: otherReligionValue || religionState,
+                    pet: petState,
+                    politics: politicsState,
+                    personalityType: selectedPersonality,
+                  },
+                });
+              }}
+              style={{
+                top: verticalScale(20),
+                height: verticalScale(isIosDevice() ? 30 : 40),
+                width: scale(140),
+              }}
+            />
+            <Button
+              title="Skip"
+              onPress={() => setShowModal(true)}
+              style={{
+                top: verticalScale(20),
+                height: verticalScale(isIosDevice() ? 30 : 40),
+                width: scale(140),
+                backgroundColor: '#9C9EA1',
+              }}
+            />
+          </View>
+        )}
       </View>
       <Separator space={60} />
     </Container>

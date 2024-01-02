@@ -33,6 +33,7 @@ import SettingsStack from './SettingsStack';
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
+import ProfileStack from './ProfileStack';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,7 +69,7 @@ const DashboardTabs = ({route, navigation}) => {
       }}>
       <Tab.Screen
         name="Profile"
-        component={UnderConstruction}
+        component={ProfileStack}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
