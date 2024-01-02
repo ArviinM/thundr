@@ -50,6 +50,7 @@ import {
 // Utils
 import {GLOBAL_ASSET_URI, LGBTQ_ASSET_URI} from '../../../utils/images';
 import {monthNameToNumber} from './utils';
+import MultiplePhotoSelection from '../../../composition/MultiplePhotoSelection/MultiplePhotoSelection';
 
 const icons = [
   {name: 'L_ICON', value: 'Lesbian'},
@@ -237,27 +238,34 @@ const PrimaryDetails = props => {
           </Text>
         )}
         <Separator space={10} />
-        <PhotoIconWrapper onPress={openImageLibrary}>
-          {imageSource && !displayModal ? (
-            <Image
-              source={imageSource}
-              customStyle={{width: '100%', height: '100%'}}
-            />
-          ) : (
-            <PhotoIconBorderLinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              colors={['#E72454', '#FFC227']}>
-              <PhotoIconContainer>
-                <Image
-                  source={GLOBAL_ASSET_URI.ADD_ICON}
-                  height={30}
-                  width={30}
-                />
-              </PhotoIconContainer>
-            </PhotoIconBorderLinearGradient>
-          )}
-        </PhotoIconWrapper>
+        {!fromEditProfileScreen ? (
+          <PhotoIconWrapper onPress={openImageLibrary}>
+            {imageSource && !displayModal ? (
+              <Image
+                source={imageSource}
+                customStyle={{width: '100%', height: '100%'}}
+              />
+            ) : (
+              <PhotoIconBorderLinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E72454', '#FFC227']}>
+                <PhotoIconContainer>
+                  <Image
+                    source={GLOBAL_ASSET_URI.ADD_ICON}
+                    height={30}
+                    width={30}
+                  />
+                </PhotoIconContainer>
+              </PhotoIconBorderLinearGradient>
+            )}
+          </PhotoIconWrapper>
+        ) : (
+          <MultiplePhotoSelection
+            openImageLibrary={openImageLibrary}
+            imageSource={imageSource}
+          />
+        )}
       </LabeledInputContainer>
     );
   };
