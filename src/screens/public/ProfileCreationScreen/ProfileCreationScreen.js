@@ -72,7 +72,7 @@ const LabeledInput = ({
   return (
     <LabeledInputContainer>
       <LabelContainer>
-        <Text color="#e33051" size={18}>
+        <Text color="#e33051" size={18} weight={700}>
           {label}
         </Text>
         {validationLabel && (
@@ -94,7 +94,8 @@ const LabeledInput = ({
   );
 };
 
-const PrimaryDetails = () => {
+const PrimaryDetails = props => {
+  const {fromEditProfileScreen} = props;
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.profileCreation);
   const {loginData} = useSelector(state => state.login);
@@ -113,7 +114,9 @@ const PrimaryDetails = () => {
     month && year && day && name && hometown && gender && imageSource;
 
   useEffect(() => {
-    dispatch({type: GET_COMPATIBILTY_QUESTIONS, payload: loginData.sub});
+    if (!fromEditProfileScreen) {
+      dispatch({type: GET_COMPATIBILTY_QUESTIONS, payload: loginData.sub});
+    }
   }, [dispatch]);
 
   useEffect(() => {
@@ -203,27 +206,36 @@ const PrimaryDetails = () => {
     );
   };
 
-  const Photo = () => {
+  const Photo = props => {
+    const {fromEditProfileScreen} = props;
     return (
       <LabeledInputContainer>
         {displayModal && renderModal()}
         <LabelContainer>
-          <Text color="#e33051" size={18}>
+          <Text
+            color="#e33051"
+            size={18}
+            weight={700}
+            customStyle={{left: scale(fromEditProfileScreen ? -15 : 0)}}>
             Photo
           </Text>
-          <Text
-            size={14}
-            color="#808080"
-            customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
-            (Required 1 photo)
-          </Text>
+          {!fromEditProfileScreen && (
+            <Text
+              size={14}
+              color="#808080"
+              customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
+              (Required 1 photo)
+            </Text>
+          )}
         </LabelContainer>
-        <Text
-          size={10}
-          color="#808080"
-          customStyle={{bottom: verticalScale(7)}}>
-          Can add multiple photos once profile creation is finished.
-        </Text>
+        {!fromEditProfileScreen && (
+          <Text
+            size={10}
+            color="#808080"
+            customStyle={{bottom: verticalScale(7)}}>
+            Can add multiple photos once profile creation is finished.
+          </Text>
+        )}
         <Separator space={10} />
         <PhotoIconWrapper onPress={openImageLibrary}>
           {imageSource && !displayModal ? (
@@ -250,7 +262,8 @@ const PrimaryDetails = () => {
     );
   };
 
-  const Gender = () => {
+  const Gender = props => {
+    const {fromEditProfileScreen} = props;
     const renderIcons = () => {
       return icons.map((item, index) => {
         const iconWidth = () => {
@@ -315,15 +328,21 @@ const PrimaryDetails = () => {
     return (
       <LabeledInputContainer>
         <LabelContainer>
-          <Text color="#e33051" size={18}>
+          <Text
+            color="#e33051"
+            size={18}
+            weight={700}
+            customStyle={{left: scale(fromEditProfileScreen ? -15 : 0)}}>
             Gender
           </Text>
-          <Text
-            size={14}
-            color="#808080"
-            customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
-            (Required)
-          </Text>
+          {!fromEditProfileScreen && (
+            <Text
+              size={14}
+              color="#808080"
+              customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
+              (Required)
+            </Text>
+          )}
         </LabelContainer>
         <View
           style={{
@@ -366,7 +385,6 @@ const PrimaryDetails = () => {
             color: '#808080',
           }}
           dropdownIconPosition="right"
-          // renderDropdownIcon={renderDropdownIcon}
         />
       </BorderLinearGradient>
     );
@@ -380,86 +398,92 @@ const PrimaryDetails = () => {
       enableAutomaticScroll={isIosDevice()}>
       {loading && <Spinner visible />}
       <Wrapper>
-        <LabeledInput
-          label="Name"
-          validationLabel="(Required)"
-          value={name}
-          setter={text => setName(text)}
-        />
-        <Photo />
-        <Gender />
-        <LabelContainer style={{marginBottom: 0}}>
-          <Text color="#e33051" size={18}>
-            Birthday
-          </Text>
-          <Text
-            size={14}
-            color="#808080"
-            customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
-            (Required)
-          </Text>
-        </LabelContainer>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: scale(5),
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <CustomDropdown
-            data={months}
-            placeholder="Month"
-            width={78}
-            defaultButtonText="March"
-            stateUpdateFunction={setMonth}
-            selectedItem={month}
+        {!fromEditProfileScreen && (
+          <LabeledInput
+            label="Name"
+            validationLabel="(Required)"
+            value={name}
+            setter={text => setName(text)}
           />
-          <CustomDropdown
-            data={getDaysInMonth(month)}
-            placeholder="Day"
-            width={78}
-            defaultButtonText="11"
-            stateUpdateFunction={setDay}
-            selectedItem={day}
-          />
-          <CustomDropdown
-            data={years}
-            placeholder="Year"
-            width={78}
-            defaultButtonText="1998"
-            stateUpdateFunction={setYear}
-            selectedItem={year}
-          />
-        </View>
-        <LabeledInput
-          label="Hometown"
-          validationLabel="(Required)"
-          value={hometown}
-          setter={text => setHometown(text)}
-        />
-        <Button
-          disabled={!shouldBeEnabled}
-          title="Continue"
-          primary
-          textStyle={{weight: 400}}
-          style={{
-            top: verticalScale(15),
-            height: verticalScale(isIosDevice() ? 30 : 40),
-            width: scale(150),
-          }}
-          onPress={() =>
-            dispatch({
-              type: START_PROFILE_CREATION,
-              payload: {
-                name: name,
-                hometown: hometown,
-                gender: gender,
-                birthday: `${year}-${monthNameToNumber(month)}-${day}`,
-              },
-            })
-          }
-        />
-        <Separator space={30} />
+        )}
+        <Photo fromEditProfileScreen={fromEditProfileScreen} />
+        <Gender fromEditProfileScreen={fromEditProfileScreen} />
+        {!fromEditProfileScreen && (
+          <>
+            <LabelContainer style={{marginBottom: 0}}>
+              <Text color="#e33051" size={18}>
+                Birthday
+              </Text>
+              <Text
+                size={14}
+                color="#808080"
+                customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
+                (Required)
+              </Text>
+            </LabelContainer>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: scale(5),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <CustomDropdown
+                data={months}
+                placeholder="Month"
+                width={78}
+                defaultButtonText="March"
+                stateUpdateFunction={setMonth}
+                selectedItem={month}
+              />
+              <CustomDropdown
+                data={getDaysInMonth(month)}
+                placeholder="Day"
+                width={78}
+                defaultButtonText="11"
+                stateUpdateFunction={setDay}
+                selectedItem={day}
+              />
+              <CustomDropdown
+                data={years}
+                placeholder="Year"
+                width={78}
+                defaultButtonText="1998"
+                stateUpdateFunction={setYear}
+                selectedItem={year}
+              />
+            </View>
+            <LabeledInput
+              label="Hometown"
+              validationLabel="(Required)"
+              value={hometown}
+              setter={text => setHometown(text)}
+            />
+            <Button
+              disabled={!shouldBeEnabled}
+              title="Continue"
+              primary
+              textStyle={{weight: 400}}
+              style={{
+                top: verticalScale(15),
+                height: verticalScale(isIosDevice() ? 30 : 40),
+                width: scale(150),
+              }}
+              onPress={() =>
+                dispatch({
+                  type: START_PROFILE_CREATION,
+                  payload: {
+                    name: name,
+                    hometown: hometown,
+                    gender: gender,
+                    birthday: `${year}-${monthNameToNumber(month)}-${day}`,
+                  },
+                })
+              }
+            />
+            <Separator space={30} />
+          </>
+        )}
       </Wrapper>
     </Container>
   );
