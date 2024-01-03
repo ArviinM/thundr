@@ -22,6 +22,7 @@ const ChatScreenHeader = props => {
     is1MinAgoActive,
     is5MinsAgoActive,
     is30MinsAgoActive,
+    compatibilityScore,
   } = props;
   const navigation = useNavigation();
   return (
@@ -52,7 +53,13 @@ const ChatScreenHeader = props => {
             height: verticalScale(50),
             width: scale(60),
           }}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ChatmateProfile', {
+                chatCustomerDetails,
+                compatibilityScore,
+              });
+            }}>
             <View
               style={{
                 height: verticalScale(47),
@@ -90,7 +97,7 @@ const ChatScreenHeader = props => {
             {calculateAge(chatCustomerDetails?.birthday)}
           </Text>
           <Text fontFamily="Montserrat-Medium" color="#fff" size={15}>
-            Compatibility Score: 89%
+            {`Compatibility Score: ${compatibilityScore || 0}%`}
           </Text>
         </View>
       </View>

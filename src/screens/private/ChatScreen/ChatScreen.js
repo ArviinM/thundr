@@ -15,6 +15,9 @@ import Button from '../../../components/Button/Button';
 import Text from '../../../components/Text/Text';
 import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
 
+// Ducks
+import {GET_MESSAGE, SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
+
 // Utils
 import {
   isIosDevice,
@@ -23,8 +26,6 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
-import {GET_MESSAGE, SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -44,10 +45,13 @@ const ChatScreen = () => {
     is5MinsAgoActive,
     is30MinsAgoActive,
     chatUUID,
+    compatibilityScore,
   } = route?.params;
   const isMare = tag === 'MARE';
   const currentUserSub = loginData?.sub || sub;
-  const chatMessages = getMessageResponse.data;
+  const chatMessages = getMessageResponse?.data?.length
+    ? getMessageResponse?.data
+    : messages;
 
   useEffect(() => {
     dispatch({type: GET_MESSAGE, payload: {chatUUID}});
@@ -151,6 +155,7 @@ const ChatScreen = () => {
         is1MinAgoActive={is1MinAgoActive}
         is5MinsAgoActive={is5MinsAgoActive}
         is30MinsAgoActive={is30MinsAgoActive}
+        compatibilityScore={compatibilityScore}
       />
       {subscribeModal()}
       <ScrollView
@@ -159,7 +164,9 @@ const ChatScreen = () => {
         contentContainerStyle={{paddingBottom: 16}}
         onContentSizeChange={onContentSizeChange}>
         {chatMessages?.map((message, index) => {
-          const currentUser = message.senderSub === currentUserSub;
+          const currentUser = getMessageResponse?.data?.length
+            ? message.senderSub === currentUserSub
+            : true;
           return (
             <View
               key={message.id}
@@ -172,7 +179,9 @@ const ChatScreen = () => {
                 maxWidth: '80%',
               }}>
               <Text color="#fff" fontFamil="Montserrat-Regular">
-                {message.message}
+                {getMessageResponse?.data?.length
+                  ? message.message
+                  : message.text}
               </Text>
             </View>
           );

@@ -12,6 +12,9 @@ import {
   CUSTOMER_MATCH_SUCCESS,
   GET_CHAT_CUSTOMER_DETAILS,
   GET_CHAT_CUSTOMER_DETAILS_FAILED,
+  GET_CHAT_CUSTOMER_DETAILS_MARE,
+  GET_CHAT_CUSTOMER_DETAILS_MARE_FAILED,
+  GET_CHAT_CUSTOMER_DETAILS_MARE_SUCCESS,
   GET_CHAT_CUSTOMER_DETAILS_SUCCESS,
   GET_CHAT_MATCH_LIST,
   GET_CHAT_MATCH_LIST_FAILED,
@@ -212,10 +215,18 @@ export function* getChatMatchList({payload}) {
     if (response?.status === 200) {
       if (tag === 'MARE') {
         yield put({
+          type: UPDATE_DASHBOARD_STATE,
+          newState: {mareChatList: response.data.data},
+        });
+        yield put({
           type: GET_CHAT_MATCH_LIST_SUCCESS,
           marePayload: response.data.data,
         });
       } else {
+        yield put({
+          type: UPDATE_DASHBOARD_STATE,
+          newState: {jowaChatList: response.data.data},
+        });
         yield put({
           type: GET_CHAT_MATCH_LIST_SUCCESS,
           jowaPayload: response.data.data,
@@ -242,6 +253,23 @@ export function* getCustomerChatProfile({payload}) {
   } catch (error) {
     yield put({
       type: GET_CHAT_CUSTOMER_DETAILS_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* getCustomerChatProfileMare({payload}) {
+  try {
+    const response = yield call(DashboardConfig.getCustomerProfile, payload);
+    if (response?.status === 200) {
+      yield put({
+        type: GET_CHAT_CUSTOMER_DETAILS_MARE_SUCCESS,
+        payload: response.data.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_CHAT_CUSTOMER_DETAILS_MARE_FAILED,
       payload: error,
     });
   }
@@ -351,6 +379,7 @@ function* dashboardWatcher() {
   yield takeLatest(UPDATE_CURRENT_LOCATION, updateCurrentLocation);
   yield takeLatest(GET_CHAT_MATCH_LIST, getChatMatchList);
   yield takeEvery(GET_CHAT_CUSTOMER_DETAILS, getCustomerChatProfile);
+  yield takeEvery(GET_CHAT_CUSTOMER_DETAILS_MARE, getCustomerChatProfileMare);
   yield takeLatest(SEND_MESSAGE, sendMessage);
   yield takeLatest(GET_LAST_ACTIVITY, getLastActivity);
   yield takeLatest(UPDATE_LAST_ACTIVITY, updateLastActivity);
