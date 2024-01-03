@@ -1,9 +1,9 @@
 // React modules
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 // Components
 import Text from '../../../components/Text/Text';
@@ -16,9 +16,9 @@ import ChatActiveIndicator from '../../../components/ChatActiveIndicator/ChatAct
 // Ducks
 import {
   GET_CHAT_CUSTOMER_DETAILS,
+  GET_CHAT_CUSTOMER_DETAILS_MARE,
   GET_CHAT_MATCH_LIST,
   GET_LAST_ACTIVITY,
-  UPDATE_LAST_ACTIVITY,
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
@@ -40,7 +40,7 @@ const JowaChatList = props => {
     jowaChatList,
     matchListLoading,
     handleRefresh,
-    jowaMareFilteredData,
+    jowaFilteredData,
     is1MinAgoActive,
     is5MinsAgoActive,
     is30MinsAgoActive,
@@ -57,10 +57,14 @@ const JowaChatList = props => {
       }
       contentContainerStyle={{flexGrow: 1}}
       showsVerticalScrollIndicator={false}
-      data={jowaChatList?.length && jowaMareFilteredData}
+      data={jowaChatList?.length && jowaFilteredData}
       renderItem={({item, index}) => {
-        const targetData = jowaChatList.filter(obj => obj.target === item.sub);
-        const chatUUID = targetData[0].chatUUID;
+        const targetData = jowaChatList?.filter(
+          obj => obj.target === item?.sub,
+        );
+        const chatUUID = targetData[0]?.chatUUID;
+        const compatibilityScore = targetData[0]?.compatibilityScore;
+
         return (
           <TouchableOpacity
             onPress={() =>
@@ -72,6 +76,7 @@ const JowaChatList = props => {
                 is5MinsAgoActive,
                 is30MinsAgoActive,
                 chatUUID,
+                compatibilityScore,
               })
             }
             key={index}
@@ -125,7 +130,7 @@ const JowaChatList = props => {
                 ellipsizeMode="tail"
                 weight="700"
                 customStyle={{maxWidth: scale(180)}}>
-                {item?.name}, {calculateAge(item.birthday)}
+                {item?.name}, {calculateAge(item?.birthday)}
               </Text>
               <Text
                 size={15}
@@ -136,9 +141,8 @@ const JowaChatList = props => {
                 customStyle={{maxWidth: scale(180)}}>
                 {item?.customerDetails?.work}
               </Text>
-              {/**TEMPORARY HARDCODE NEED TO CONFIRM SA BE KUNG SAN MAKUKUHA PERCENTAGE */}
               <Text color="#808080" fontFamily="Montserrat-Medium" size={15}>
-                {`Compatibility Score: 90%`}
+                {`Compatibility Score: ${compatibilityScore || 0}%`}
               </Text>
             </View>
             <View
@@ -172,7 +176,7 @@ const MareChatList = props => {
     mareChatList,
     handleRefresh,
     matchListLoading,
-    jowaMareFilteredData,
+    mareFilteredData,
     is1MinAgoActive,
     is5MinsAgoActive,
     is30MinsAgoActive,
@@ -189,8 +193,13 @@ const MareChatList = props => {
       }
       contentContainerStyle={{flexGrow: 1}}
       showsVerticalScrollIndicator={false}
-      data={mareChatList?.length && jowaMareFilteredData}
+      data={mareChatList?.length && mareFilteredData}
       renderItem={({item, index}) => {
+        const targetData = mareChatList?.filter(
+          obj => obj.target === item?.sub,
+        );
+        const chatUUID = targetData[0]?.chatUUID;
+        const compatibilityScore = targetData[0]?.compatibilityScore;
         return (
           <TouchableOpacity
             onPress={() =>
@@ -201,6 +210,8 @@ const MareChatList = props => {
                 is1MinAgoActive,
                 is5MinsAgoActive,
                 is30MinsAgoActive,
+                chatUUID,
+                compatibilityScore,
               })
             }
             key={index}
@@ -254,7 +265,7 @@ const MareChatList = props => {
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
-                {item?.name}, {calculateAge(item.birthday)}
+                {item?.name}, {calculateAge(item?.birthday)}
               </Text>
               <Text
                 size={15}
@@ -265,9 +276,8 @@ const MareChatList = props => {
                 customStyle={{maxWidth: scale(180)}}>
                 {item?.customerDetails?.work}
               </Text>
-              {/**TEMPORARY HARDCODE NEED TO CONFIRM SA BE KUNG SAN MAKUKUHA PERCENTAGE */}
               <Text color="#808080" fontFamily="Montserrat-Medium" size={15}>
-                {`Compatibility Score: 90%`}
+                {`Compatibility Score: ${compatibilityScore || 0}%`}
               </Text>
             </View>
             <View
@@ -305,12 +315,13 @@ const Messages = () => {
     jowaChatList,
     mareChatList,
     chatCustomerDetails,
+    mareCustomerDetails,
     lastActivity,
   } = useSelector(state => state.dashboard);
 
   const [isMareChatListActive, setMareChatListActive] = useState(false);
-  const [jowaMareFilteredData, setJowaMareFilteredData] =
-    useState(chatCustomerDetails);
+  const [mareFilteredData, setMareFilteredData] = useState(mareCustomerDetails);
+  const [jowaFilteredData, setJowaFilteredData] = useState(chatCustomerDetails);
   const [searchText, setSearchText] = useState('');
   const [is1MinAgoActive, setIs1MinAgoActive] = useState(false);
   const [is5MinsAgoActive, setIs5MinsAgoActive] = useState(false);
@@ -338,11 +349,15 @@ const Messages = () => {
   }, [lastActivity]);
 
   useEffect(() => {
+    const dataToBeUsed = isMareChatListActive
+      ? mareCustomerDetails
+      : chatCustomerDetails;
     const lowerCaseSearchTerm = searchText.toLowerCase();
-    const filteredData = chatCustomerDetails.filter(customer =>
-      customer.name.toLowerCase().includes(lowerCaseSearchTerm),
+    const filteredData = dataToBeUsed?.filter(customer =>
+      customer?.name?.toLowerCase().includes(lowerCaseSearchTerm),
     );
-    setJowaMareFilteredData(filteredData);
+    setMareFilteredData(filteredData);
+    setJowaFilteredData(filteredData);
   }, [searchText, chatCustomerDetails]);
 
   useEffect(() => {
@@ -360,33 +375,26 @@ const Messages = () => {
   }, [isMareChatListActive, dispatch]);
 
   useEffect(() => {
-    if (!chatCustomerDetails.length) {
-      if (
-        !isMareChatListActive &&
-        (mareChatList?.length || jowaChatList?.length)
-      ) {
-        jowaChatList?.forEach(item => {
-          dispatch({
-            type: GET_CHAT_CUSTOMER_DETAILS,
-            payload: {sub: item.target},
-          });
+    if (!chatCustomerDetails?.length) {
+      jowaChatList?.forEach(item => {
+        dispatch({
+          type: GET_CHAT_CUSTOMER_DETAILS,
+          payload: {sub: item.target},
         });
-      } else {
-        mareChatList?.forEach(item => {
-          dispatch({
-            type: GET_CHAT_CUSTOMER_DETAILS,
-            payload: {sub: item.target},
-          });
-        });
-      }
+      });
     }
-  }, [
-    dispatch,
-    isMareChatListActive,
-    mareChatList?.length,
-    jowaChatList?.length,
-    chatCustomerDetails?.length,
-  ]);
+  }, [dispatch, jowaChatList?.length, chatCustomerDetails?.length]);
+
+  useEffect(() => {
+    if (!mareCustomerDetails?.length) {
+      mareChatList?.forEach(item => {
+        dispatch({
+          type: GET_CHAT_CUSTOMER_DETAILS_MARE,
+          payload: {sub: item.target},
+        });
+      });
+    }
+  }, [dispatch, mareChatList?.length, mareCustomerDetails?.length]);
 
   useEffect(() => {
     if (
@@ -443,12 +451,13 @@ const Messages = () => {
         isMareChatListActive={isMareChatListActive}
         searchText={searchText}
         setSearchText={setSearchText}
+        mareChatList={mareChatList}
       />
       <View style={{justifyContent: 'center', flex: 1}}>
         {!isMareChatListActive ? (
           <JowaChatList
             jowaChatList={jowaChatList}
-            jowaMareFilteredData={jowaMareFilteredData}
+            jowaFilteredData={chatCustomerDetails && jowaFilteredData}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
             is1MinAgoActive={is1MinAgoActive}
@@ -458,7 +467,7 @@ const Messages = () => {
         ) : (
           <MareChatList
             mareChatList={mareChatList}
-            jowaMareFilteredData={jowaMareFilteredData}
+            mareFilteredData={mareCustomerDetails && mareFilteredData}
             matchListLoading={matchListLoading}
             handleRefresh={handleRefresh}
             is1MinAgoActive={is1MinAgoActive}

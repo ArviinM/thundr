@@ -4,6 +4,9 @@ import {
   CUSTOMER_MATCH_SUCCESS,
   GET_CHAT_CUSTOMER_DETAILS,
   GET_CHAT_CUSTOMER_DETAILS_FAILED,
+  GET_CHAT_CUSTOMER_DETAILS_MARE,
+  GET_CHAT_CUSTOMER_DETAILS_MARE_FAILED,
+  GET_CHAT_CUSTOMER_DETAILS_MARE_SUCCESS,
   GET_CHAT_CUSTOMER_DETAILS_SUCCESS,
   GET_CHAT_MATCH_LIST,
   GET_CHAT_MATCH_LIST_FAILED,
@@ -63,6 +66,7 @@ export const INITIAL_STATE = {
   getMessageResponse: [],
   lastActivity: [],
   updatedLastActivity: [],
+  mareCustomerDetails: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -86,6 +90,26 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case GET_CUSTOMER_DETAILS_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET CUSTOMER DETAILS FOR MARE
+    case GET_CHAT_CUSTOMER_DETAILS_MARE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_CHAT_CUSTOMER_DETAILS_MARE_SUCCESS:
+      return {
+        ...state,
+        mareCustomerDetails: action.payload,
+        loading: false,
+      };
+    case GET_CHAT_CUSTOMER_DETAILS_MARE_FAILED:
       return {
         ...state,
         loading: false,
@@ -199,8 +223,6 @@ const dashboard = (state = INITIAL_STATE, action) => {
     case GET_CHAT_MATCH_LIST_SUCCESS:
       return {
         ...state,
-        jowaChatList: action.jowaPayload,
-        mareChatList: action.marePayload,
         matchListLoading: false,
       };
     case GET_CHAT_MATCH_LIST_FAILED:

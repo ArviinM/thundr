@@ -1,6 +1,6 @@
 // React modules
 import React from 'react';
-import {FlatList, ScrollView, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 
 // Third party libraries
 
@@ -13,19 +13,8 @@ import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import Image from '../../components/Image/Image';
 
-const data = [
-  {
-    category: 'BIO',
-    content: 'Lorem ipsum dolor sit amet adadad asdasfjf sjfsjfs jfsfj sfjfj',
-  },
-  {category: 'WORK', content: 'Lorem ipsum dolor sit amet'},
-  {category: 'LOCATION', content: 'Lorem ipsum dolor sit amet'},
-  {category: 'HOBBIES', content: 'Lorem ipsum dolor sit amet'},
-  {category: 'Bio', content: 'Lorem ipsum dolor sit amet'},
-];
-
 const getPersonalityTypeImage = personalityType => {
-  switch (personalityType) {
+  switch (personalityType.toLowerCase()) {
     case 'dog':
       return DASHBOARD_ASSET_URI.DOG_INFO;
     case 'otter':
@@ -39,7 +28,7 @@ const getPersonalityTypeImage = personalityType => {
 };
 
 const MatchInformationSection = props => {
-  const {customerDetails} = props;
+  const {customerDetails, fromChatmateProfile = false} = props;
 
   const renderInformationSection = ({item}) => {
     return (
@@ -179,7 +168,15 @@ const MatchInformationSection = props => {
     <View
       style={{
         width: verticalScale(280),
-        height: verticalScale(isIosDevice() ? 260 : 230),
+        height: verticalScale(
+          isIosDevice()
+            ? fromChatmateProfile
+              ? 350
+              : 260
+            : fromChatmateProfile
+            ? 320
+            : 230,
+        ),
         borderRadius: 30,
         padding: scale(20),
       }}>
