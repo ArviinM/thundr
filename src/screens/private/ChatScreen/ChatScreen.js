@@ -73,7 +73,10 @@ const ChatScreen = () => {
   // // READ MESSAGES
   useEffect(() => {
     if (getMessageResponse?.data?.length) {
-      dispatch({type: READ_CHAT_MESSAGE, payload: getMessageResponse?.data});
+      const filteredMessages = getMessageResponse.data.filter(
+        message => message.senderSub !== currentUserSub,
+      );
+      dispatch({type: READ_CHAT_MESSAGE, payload: filteredMessages});
     }
   }, [dispatch, getMessageResponse]);
 
