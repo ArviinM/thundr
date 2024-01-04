@@ -129,7 +129,7 @@ const Dashboard = () => {
           payload: {chatRoomID: item.chatUUID, sub: item.sub},
         });
       });
-    }, 3000);
+    }, 5000);
 
     // Cleanup function to clear the interval when the component is unmounted
     return () => {
