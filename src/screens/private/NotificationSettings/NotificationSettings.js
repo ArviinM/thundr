@@ -11,7 +11,7 @@ import Text from '../../../components/Text/Text';
 import Separator from '../../../components/Separator/Separator';
 
 // Utils
-import {scale, verticalScale} from '../../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const SwitchComponent = props => {
   const {text, state, setState} = props;
@@ -19,7 +19,7 @@ const SwitchComponent = props => {
     <View
       style={{
         backgroundColor: '#fff',
-        height: verticalScale(40),
+        height: verticalScale(isIosDevice() ? 40 : 45),
         width: scale(300),
         borderRadius: 20,
         paddingVertical: verticalScale(10),
