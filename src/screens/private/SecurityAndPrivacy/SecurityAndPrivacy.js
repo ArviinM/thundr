@@ -15,13 +15,7 @@ import {scale, verticalScale} from '../../../utils/commons';
 const SecurityAndPrivacy = () => {
   const OpenURLButton = ({url}) => {
     const handlePress = async () => {
-      const supported = await Linking.canOpenURL(url);
-
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        console.warn(`Don't know how to open this URL: ${url}`);
-      }
+      await Linking.openURL(url);
     };
 
     return (
