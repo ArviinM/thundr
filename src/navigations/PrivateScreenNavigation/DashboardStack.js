@@ -50,10 +50,13 @@ const UnderConstruction = () => {
 
 const DashboardTabs = ({route, navigation}) => {
   const {unreadMessages} = useSelector(state => state.dashboard);
+  const {sub} = useSelector(state => state.persistedState);
+  const {loginData} = useSelector(state => state.login);
   const focusedRoute = getFocusedRouteNameFromRoute(route);
+  const currentUserSub = loginData?.sub || sub;
 
   const totalUnreadMessage = unreadMessages.filter(
-    item => item.isRead === 0,
+    item => item.isRead === 0 && item.lastChatSub !== currentUserSub,
   ).length;
 
   return (
