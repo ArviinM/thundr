@@ -48,6 +48,7 @@ const ChatStack = () => {
     <Stack.Navigator
       initialRouteName="Messages"
       screenOptions={{
+        animationEnabled: false,
         gestureEnabled: false,
         headerShown: false,
         headerStyle: {

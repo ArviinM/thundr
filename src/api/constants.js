@@ -39,4 +39,6 @@ export const DASHBOARD = {
   CURRENT_LOCATION: 'match/match-location',
   GET_OR_SEND_MESSAGE: 'chat/message',
   LAST_ACTIVITY: 'chat/last-activity',
+  GET_UNREAD_MESSAGES: 'chat/chat-room',
+  READ_CHAT_MESSAGE: 'chat/message-read',
 };

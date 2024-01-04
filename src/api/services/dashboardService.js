@@ -27,6 +27,12 @@ const DashboardConfig = {
   getLastActivity: payload =>
     api.get(`${DASHBOARD.LAST_ACTIVITY}?sub=${payload.sub}`, payload),
   updateLastActivity: payload => api.post(DASHBOARD.LAST_ACTIVITY, payload),
+  getUnreadMessages: payload =>
+    api.get(
+      `${DASHBOARD.GET_UNREAD_MESSAGES}?sub=${payload.sub}&chatRoomID=${payload.chatRoomID}`,
+      payload,
+    ),
+  readChatMessage: payload => api.post(DASHBOARD.READ_CHAT_MESSAGE, payload),
 };
 
 export default DashboardConfig;

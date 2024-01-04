@@ -17,11 +17,14 @@ import Spinner from '../../../components/Spinner/Spinner';
 // Ducks
 import {
   CUSTOMER_MATCH,
+  GET_CHAT_MATCH_LIST,
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_PHOTO,
   GET_CUSTOMER_PROFILE,
   GET_MATCH_LIST,
+  GET_UNREAD_MESSAGES,
   UPDATE_CURRENT_LOCATION,
+  UPDATE_DASHBOARD_STATE,
   UPDATE_LAST_ACTIVITY,
 } from '../../../ducks/Dashboard/actionTypes';
 
@@ -72,8 +75,8 @@ const Dashboard = () => {
     matchList,
     matchListLoading,
     customerProfile,
-    customerMatchData,
     isSwipeReached,
+    allChatList,
   } = useSelector(state => state.dashboard);
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
@@ -110,6 +113,29 @@ const Dashboard = () => {
       }
     }
   }, [matchList, dispatch, currentIndex, swipeValue]);
+
+  useEffect(() => {
+    dispatch({
+      type: GET_CHAT_MATCH_LIST,
+      payload: {sub: loginData.sub || sub, tag: 'ALL'},
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      allChatList.forEach(item => {
+        dispatch({
+          type: GET_UNREAD_MESSAGES,
+          payload: {chatRoomID: item.chatUUID, sub: item.sub},
+        });
+      });
+    }, 3000);
+
+    // Cleanup function to clear the interval when the component is unmounted
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dispatch, allChatList]);
 
   /*Check this useEffect if may kakaibang issue sa swipe*/
   useEffect(() => {
@@ -148,6 +174,16 @@ const Dashboard = () => {
   }, [dispatch]);
 
   const handleRefresh = () => {
+    allChatList.forEach(item => {
+      dispatch({
+        type: GET_UNREAD_MESSAGES,
+        payload: {chatRoomID: item.chatUUID, sub: item.sub, tag: 'ALL'},
+      });
+    });
+    dispatch({
+      type: GET_CHAT_MATCH_LIST,
+      payload: {sub: loginData.sub || sub, tag: 'ALL'},
+    });
     dispatch({
       type: GET_MATCH_LIST,
       payload: {sub: loginData.sub || sub},

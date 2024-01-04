@@ -15,14 +15,15 @@ import {
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import ProfileStack from './ProfileStack';
+import ChatStack from './ChatStack';
 
 // Components
 import Dashboard from '../../screens/private/Dashboard/Dashboard';
 import Image from '../../components/Image/Image';
 import Text from '../../components/Text/Text';
 import MatchFound from '../../screens/private/MatchFound/MatchFound';
-import Messages from '../../screens/private/Messages/Messages';
-import ChatScreen from '../../screens/private/ChatScreen/ChatScreen';
 import DrawerContent from './DrawerContent';
 import AdvocacyStack from './AdvocacyStack';
 import FiltersScreen from '../../screens/private/FiltersScreen/FiltersScreen';
@@ -33,8 +34,6 @@ import SettingsStack from './SettingsStack';
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
-import ProfileStack from './ProfileStack';
-import ChatStack from './ChatStack';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,7 +49,12 @@ const UnderConstruction = () => {
 };
 
 const DashboardTabs = ({route, navigation}) => {
+  const {unreadMessages} = useSelector(state => state.dashboard);
   const focusedRoute = getFocusedRouteNameFromRoute(route);
+
+  const totalUnreadMessage = unreadMessages.filter(
+    item => item.isRead === 0,
+  ).length;
 
   return (
     <Tab.Navigator
@@ -97,17 +101,59 @@ const DashboardTabs = ({route, navigation}) => {
           tabBarLabel: '',
           tabBarIcon: () => {
             return focusedRoute === 'Messages' ? (
-              <Image
-                source={DASHBOARD_ASSET_URI.SELECTED_MESSAGE_ICON}
-                height={40}
-                width={40}
-              />
+              <>
+                {totalUnreadMessage > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      backgroundColor: '#E23051',
+                      zIndex: 1,
+                      bottom: verticalScale(12),
+                      height: verticalScale(20),
+                      width: scale(25),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 30,
+                      left: scale(35),
+                    }}>
+                    <Text color="#fff" weight={700} size={15}>
+                      {totalUnreadMessage}
+                    </Text>
+                  </View>
+                )}
+                <Image
+                  source={DASHBOARD_ASSET_URI.SELECTED_MESSAGE_ICON}
+                  height={40}
+                  width={40}
+                />
+              </>
             ) : (
-              <Image
-                source={DASHBOARD_ASSET_URI.MESSAGE_ICON}
-                height={25}
-                width={25}
-              />
+              <>
+                {totalUnreadMessage > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      backgroundColor: '#E23051',
+                      zIndex: 1,
+                      bottom: verticalScale(5),
+                      height: verticalScale(20),
+                      width: scale(25),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 30,
+                      left: scale(35),
+                    }}>
+                    <Text color="#fff" weight={700} size={15}>
+                      {totalUnreadMessage}
+                    </Text>
+                  </View>
+                )}
+                <Image
+                  source={DASHBOARD_ASSET_URI.MESSAGE_ICON}
+                  height={25}
+                  width={25}
+                />
+              </>
             );
           },
         }}
@@ -119,7 +165,12 @@ const DashboardTabs = ({route, navigation}) => {
           tabBarButton: () => {
             return focusedRoute && focusedRoute !== 'DashboardTab' ? (
               <TouchableOpacity
-                onPress={() => navigation.navigate('DashboardTab')}>
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{name: 'DashboardTabs'}],
+                  })
+                }>
                 <Image
                   source={DASHBOARD_ASSET_URI.THUNDR}
                   height={70}

@@ -36,6 +36,12 @@ import {
   GET_MESSAGE,
   GET_MESSAGE_FAILED,
   GET_MESSAGE_SUCCESS,
+  GET_UNREAD_MESSAGES,
+  GET_UNREAD_MESSAGES_FAILED,
+  GET_UNREAD_MESSAGES_SUCCESS,
+  READ_CHAT_MESSAGE,
+  READ_CHAT_MESSAGE_FAILED,
+  READ_CHAT_MESSAGE_SUCCESS,
   SEND_MESSAGE,
   SEND_MESSAGE_FAILED,
   SEND_MESSAGE_SUCCESS,
@@ -213,7 +219,12 @@ export function* getChatMatchList({payload}) {
   try {
     const response = yield call(DashboardConfig.getChatMatchList, payload);
     if (response?.status === 200) {
-      if (tag === 'MARE') {
+      if (tag === 'ALL') {
+        yield put({
+          type: UPDATE_DASHBOARD_STATE,
+          newState: {allChatList: response.data.data},
+        });
+      } else if (tag === 'MARE') {
         yield put({
           type: UPDATE_DASHBOARD_STATE,
           newState: {mareChatList: response.data.data},
@@ -370,6 +381,42 @@ export function* updateLastActivity({}) {
   }
 }
 
+export function* getUnreadMessages({payload}) {
+  const {tag} = payload;
+  try {
+    const response = yield call(DashboardConfig.getUnreadMessages, payload);
+    if (response?.status === 200) {
+      yield put({
+        type: GET_UNREAD_MESSAGES_SUCCESS,
+        payload: response.data.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_UNREAD_MESSAGES_FAILED,
+      payload: error,
+    });
+  }
+}
+
+export function* readChatMessage({payload}) {
+  try {
+    const response = yield call(DashboardConfig.readChatMessage, payload);
+
+    if (response?.status === 200) {
+      yield put({
+        type: READ_CHAT_MESSAGE_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: READ_CHAT_MESSAGE_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -384,6 +431,8 @@ function* dashboardWatcher() {
   yield takeLatest(GET_LAST_ACTIVITY, getLastActivity);
   yield takeLatest(UPDATE_LAST_ACTIVITY, updateLastActivity);
   yield takeLatest(GET_MESSAGE, getMessage);
+  yield takeEvery(GET_UNREAD_MESSAGES, getUnreadMessages);
+  yield takeLatest(READ_CHAT_MESSAGE, readChatMessage);
 }
 
 export default dashboardWatcher;

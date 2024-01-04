@@ -16,7 +16,13 @@ import Text from '../../../components/Text/Text';
 import ChatScreenHeader from '../../../composition/ChatScreenHeader/ChatScreenheader';
 
 // Ducks
-import {GET_MESSAGE, SEND_MESSAGE} from '../../../ducks/Dashboard/actionTypes';
+import {
+  GET_CHAT_MATCH_LIST,
+  GET_MESSAGE,
+  GET_UNREAD_MESSAGES,
+  READ_CHAT_MESSAGE,
+  SEND_MESSAGE,
+} from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
 import {
@@ -30,7 +36,9 @@ import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
 const ChatScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-  const {getMessageResponse} = useSelector(state => state.dashboard);
+  const {getMessageResponse, allChatList, unreadMessages} = useSelector(
+    state => state.dashboard,
+  );
   const {sub} = useSelector(state => state.persistedState);
   const {loginData} = useSelector(state => state.login);
 
@@ -54,9 +62,32 @@ const ChatScreen = () => {
     : messages;
 
   useEffect(() => {
+    allChatList.forEach(item => {
+      dispatch({
+        type: GET_UNREAD_MESSAGES,
+        payload: {chatRoomID: item.chatUUID, sub: item.sub, tag: 'ALL'},
+      });
+    });
+  }, [dispatch, allChatList]);
+
+  // // READ MESSAGES
+  useEffect(() => {
+    if (getMessageResponse?.data?.length) {
+      dispatch({type: READ_CHAT_MESSAGE, payload: getMessageResponse?.data});
+    }
+  }, [dispatch, getMessageResponse]);
+
+  // GET ALL MESSAGES
+  useEffect(() => {
     dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     const intervalId = setInterval(() => {
       dispatch({type: GET_MESSAGE, payload: {chatUUID}});
+      allChatList.forEach(item => {
+        dispatch({
+          type: GET_UNREAD_MESSAGES,
+          payload: {chatRoomID: item.chatUUID, sub: item.sub},
+        });
+      });
     }, 3000);
 
     return () => {
