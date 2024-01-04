@@ -8,14 +8,14 @@ import {useNavigation} from '@react-navigation/native';
 // Components
 import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
+import Text from '../../../components/Text/Text';
+import MatchInformationSection from '../../../composition/MatchInformationSection/MatchInformationSection';
 
 // Utils
 import {GLOBAL_ASSET_URI, PROFILE_ASSET_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 import LinearGradient from 'react-native-linear-gradient';
-import Text from '../../../components/Text/Text';
-import MatchInformationSection from '../../../composition/MatchInformationSection/MatchInformationSection';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();

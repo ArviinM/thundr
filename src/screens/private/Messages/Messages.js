@@ -1,9 +1,9 @@
 // React modules
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 // Components
 import Text from '../../../components/Text/Text';
@@ -19,6 +19,7 @@ import {
   GET_CHAT_CUSTOMER_DETAILS_MARE,
   GET_CHAT_MATCH_LIST,
   GET_LAST_ACTIVITY,
+  GET_UNREAD_MESSAGES,
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
@@ -44,6 +45,7 @@ const JowaChatList = props => {
     is1MinAgoActive,
     is5MinsAgoActive,
     is30MinsAgoActive,
+    unreadMessages,
   } = props;
   const navigation = useNavigation();
 
@@ -64,6 +66,10 @@ const JowaChatList = props => {
         );
         const chatUUID = targetData[0]?.chatUUID;
         const compatibilityScore = targetData[0]?.compatibilityScore;
+        const getChatMessage = unreadMessages?.filter(
+          obj => obj.chatRoomID === chatUUID,
+        );
+        const isMessageRead = getChatMessage[0]?.isRead === 1;
 
         return (
           <TouchableOpacity
@@ -85,6 +91,8 @@ const JowaChatList = props => {
               flexDirection: 'row',
               marginBottom: verticalScale(10),
               alignItems: 'center',
+              backgroundColor: !isMessageRead ? '#fff' : '',
+              height: verticalScale(80),
             }}>
             <Separator space={10} />
             <BorderLinearGradient
@@ -124,24 +132,29 @@ const JowaChatList = props => {
             <View style={{left: scale(5)}}>
               <Text
                 size={25}
-                color="#E33C59"
+                color={!isMessageRead ? 'red' : '#E33C59'}
                 fontFamily="Montserrat-Bold"
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                weight="700"
+                weight={700}
                 customStyle={{maxWidth: scale(180)}}>
                 {item?.name}, {calculateAge(item?.birthday)}
               </Text>
               <Text
                 size={15}
-                color="#808080"
+                color={!isMessageRead ? 'black' : '#808080'}
+                weight={!isMessageRead ? 700 : 400}
                 fontFamily="Montserrat-Medium"
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
                 {item?.customerDetails?.work}
               </Text>
-              <Text color="#808080" fontFamily="Montserrat-Medium" size={15}>
+              <Text
+                color={!isMessageRead ? 'black' : '#808080'}
+                weight={!isMessageRead ? 700 : 400}
+                fontFamily="Montserrat-Medium"
+                size={15}>
                 {`Compatibility Score: ${compatibilityScore || 0}%`}
               </Text>
             </View>
@@ -180,6 +193,7 @@ const MareChatList = props => {
     is1MinAgoActive,
     is5MinsAgoActive,
     is30MinsAgoActive,
+    unreadMessages,
   } = props;
   const navigation = useNavigation();
 
@@ -200,6 +214,11 @@ const MareChatList = props => {
         );
         const chatUUID = targetData[0]?.chatUUID;
         const compatibilityScore = targetData[0]?.compatibilityScore;
+        const getChatMessage = unreadMessages?.filter(
+          obj => obj.chatRoomID === chatUUID,
+        );
+        const isMessageRead = getChatMessage[0]?.isRead === 1;
+
         return (
           <TouchableOpacity
             onPress={() =>
@@ -220,6 +239,8 @@ const MareChatList = props => {
               flexDirection: 'row',
               marginBottom: verticalScale(10),
               alignItems: 'center',
+              backgroundColor: !isMessageRead ? '#fff' : '',
+              height: verticalScale(80),
             }}>
             <Separator space={10} />
             <BorderLinearGradient
@@ -259,9 +280,9 @@ const MareChatList = props => {
             <View style={{left: scale(5)}}>
               <Text
                 size={25}
-                color="#FFBC28"
+                color={!isMessageRead ? 'yellow' : '#FFBC28'}
                 fontFamily="Montserrat-Bold"
-                weight="700"
+                weight={700}
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
@@ -269,14 +290,19 @@ const MareChatList = props => {
               </Text>
               <Text
                 size={15}
-                color="#808080"
+                color={!isMessageRead ? 'black' : '#808080'}
+                weight={!isMessageRead ? 700 : 400}
                 fontFamily="Montserrat-Medium"
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 customStyle={{maxWidth: scale(180)}}>
                 {item?.customerDetails?.work}
               </Text>
-              <Text color="#808080" fontFamily="Montserrat-Medium" size={15}>
+              <Text
+                color={!isMessageRead ? 'black' : '#808080'}
+                weight={!isMessageRead ? 700 : 400}
+                fontFamily="Montserrat-Medium"
+                size={15}>
                 {`Compatibility Score: ${compatibilityScore || 0}%`}
               </Text>
             </View>
@@ -317,6 +343,8 @@ const Messages = () => {
     chatCustomerDetails,
     mareCustomerDetails,
     lastActivity,
+    allChatList,
+    unreadMessages,
   } = useSelector(state => state.dashboard);
 
   const [isMareChatListActive, setMareChatListActive] = useState(false);
@@ -326,6 +354,15 @@ const Messages = () => {
   const [is1MinAgoActive, setIs1MinAgoActive] = useState(false);
   const [is5MinsAgoActive, setIs5MinsAgoActive] = useState(false);
   const [is30MinsAgoActive, setIs30MinsAgoActive] = useState(false);
+
+  useEffect(() => {
+    allChatList.forEach(item => {
+      dispatch({
+        type: GET_UNREAD_MESSAGES,
+        payload: {chatRoomID: item.chatUUID, sub: item.sub, tag: 'ALL'},
+      });
+    });
+  }, [dispatch, allChatList]);
 
   useEffect(() => {
     const checkUserActivity = () => {
@@ -463,6 +500,7 @@ const Messages = () => {
             is1MinAgoActive={is1MinAgoActive}
             is5MinsAgoActive={is5MinsAgoActive}
             is30MinsAgoActive={is30MinsAgoActive}
+            unreadMessages={unreadMessages}
           />
         ) : (
           <MareChatList
@@ -473,6 +511,7 @@ const Messages = () => {
             is1MinAgoActive={is1MinAgoActive}
             is5MinsAgoActive={is5MinsAgoActive}
             is30MinsAgoActive={is30MinsAgoActive}
+            unreadMessages={unreadMessages}
           />
         )}
       </View>

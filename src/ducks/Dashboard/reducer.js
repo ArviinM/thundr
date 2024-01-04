@@ -29,6 +29,12 @@ import {
   GET_MESSAGE,
   GET_MESSAGE_FAILED,
   GET_MESSAGE_SUCCESS,
+  GET_UNREAD_MESSAGES,
+  GET_UNREAD_MESSAGES_FAILED,
+  GET_UNREAD_MESSAGES_SUCCESS,
+  READ_CHAT_MESSAGE,
+  READ_CHAT_MESSAGE_FAILED,
+  READ_CHAT_MESSAGE_SUCCESS,
   SEND_MESSAGE,
   SEND_MESSAGE_FAILED,
   SEND_MESSAGE_SUCCESS,
@@ -59,6 +65,7 @@ export const INITIAL_STATE = {
   },
   isSwipeReached: false,
   matchPhoto: '',
+  allChatList: [],
   jowaChatList: [],
   mareChatList: [],
   chatCustomerDetails: [],
@@ -67,6 +74,10 @@ export const INITIAL_STATE = {
   lastActivity: [],
   updatedLastActivity: [],
   mareCustomerDetails: [],
+  unreadMessages: [],
+  newUnreadMessage: [],
+  readChatMessage: [],
+  triggerReload: false,
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -326,6 +337,67 @@ const dashboard = (state = INITIAL_STATE, action) => {
     case UPDATE_LAST_ACTIVITY_FAILED:
       return {
         ...state,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET UNREAD MESSAGES
+    case GET_UNREAD_MESSAGES:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_UNREAD_MESSAGES_SUCCESS:
+      const isMessageAlreadyExists = state.unreadMessages.some(
+        message => message.chatRoomID === action.payload.chatRoomID,
+      );
+
+      if (!isMessageAlreadyExists) {
+        // Message with the same chatRoomID does not exist, add it to the array
+        return {
+          ...state,
+          unreadMessages: [...state.unreadMessages, action.payload],
+          loading: false,
+        };
+      } else {
+        // Message with the same chatRoomID already exists
+        return {
+          ...state,
+          unreadMessages: state.unreadMessages.map(message =>
+            message.chatRoomID === action.payload.chatRoomID
+              ? {
+                  ...message,
+                  isRead: action.payload.isRead,
+                } // Update isRead if it changed
+              : message,
+          ),
+          loading: false,
+        };
+      }
+    case GET_UNREAD_MESSAGES_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // READ CHAT MESSAGES
+    case READ_CHAT_MESSAGE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case READ_CHAT_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        readChatMessage: action.payload,
+        loading: false,
+      };
+    case READ_CHAT_MESSAGE_FAILED:
+      return {
+        ...state,
+        loading: false,
         showModal: true,
         modalMessage: action.payload,
       };

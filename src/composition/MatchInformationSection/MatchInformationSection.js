@@ -14,7 +14,7 @@ import {DASHBOARD_ASSET_URI} from '../../utils/images';
 import Image from '../../components/Image/Image';
 
 const getPersonalityTypeImage = personalityType => {
-  switch (personalityType.toLowerCase()) {
+  switch (personalityType?.toLowerCase()) {
     case 'dog':
       return DASHBOARD_ASSET_URI.DOG_INFO;
     case 'otter':
