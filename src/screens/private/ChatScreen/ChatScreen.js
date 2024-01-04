@@ -82,12 +82,6 @@ const ChatScreen = () => {
     dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     const intervalId = setInterval(() => {
       dispatch({type: GET_MESSAGE, payload: {chatUUID}});
-      allChatList.forEach(item => {
-        dispatch({
-          type: GET_UNREAD_MESSAGES,
-          payload: {chatRoomID: item.chatUUID, sub: item.sub},
-        });
-      });
     }, 3000);
 
     return () => {
