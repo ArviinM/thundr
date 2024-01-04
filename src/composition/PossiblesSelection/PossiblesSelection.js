@@ -26,7 +26,7 @@ const PossiblesSelection = props => {
         width: '100%',
         gap: scale(10),
         justifyContent: 'center',
-        height: verticalScale(90),
+        height: verticalScale(100),
         padding: scale(isIosDevice() ? 15 : 15),
         alignItems: 'center',
       }}>
@@ -37,11 +37,11 @@ const PossiblesSelection = props => {
         <View
           style={{
             backgroundColor: '#E43C59',
-            height: verticalScale(60),
+            height: verticalScale(65),
             width: scale(150),
             borderRadius: 20,
             alignItems: 'center',
-            padding: scale(5),
+            padding: scale(8),
           }}>
           <Text
             fontFamily="ClimateCrisis-Regular"
@@ -62,7 +62,7 @@ const PossiblesSelection = props => {
           <View
             style={{
               position: 'absolute',
-              top: verticalScale(isIosDevice() ? 50 : 53),
+              top: verticalScale(isIosDevice() ? 55 : 58),
               left: scale(65),
             }}>
             <Image
@@ -80,7 +80,7 @@ const PossiblesSelection = props => {
         <View
           style={{
             backgroundColor: '#FFBD28',
-            height: verticalScale(60),
+            height: verticalScale(65),
             width: scale(150),
             borderRadius: 20,
             alignItems: 'center',
@@ -105,7 +105,7 @@ const PossiblesSelection = props => {
           <View
             style={{
               position: 'absolute',
-              top: verticalScale(isIosDevice() ? 50 : 53),
+              top: verticalScale(isIosDevice() ? 55 : 58),
               left: scale(65),
             }}>
             <Image

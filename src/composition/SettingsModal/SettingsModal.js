@@ -124,8 +124,20 @@ const SettingsModal = props => {
         top: '50%',
         left: '50%',
         transform: [
-          {translateX: -scale(isUnsubscribe ? 125 : 135)},
-          {translateY: -verticalScale(isUnsubscribe ? 150 : 200)},
+          {
+            translateX: -scale(isUnsubscribe ? 125 : 135),
+          },
+          {
+            translateY: -verticalScale(
+              isUnsubscribe
+                ? isIosDevice()
+                  ? 150
+                  : 200
+                : isIosDevice()
+                ? 220
+                : 250,
+            ),
+          },
         ],
         height: 'auto',
         width: scale(isUnsubscribe ? 250 : 280),
@@ -136,7 +148,13 @@ const SettingsModal = props => {
         style={{
           position: 'absolute',
           bottom: verticalScale(
-            isIosDevice() ? (isUnsubscribe ? 380 : 485) : 285,
+            isUnsubscribe
+              ? isIosDevice()
+                ? 380
+                : 425
+              : isIosDevice()
+              ? 485
+              : 530,
           ),
           right: scale(10),
         }}>

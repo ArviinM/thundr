@@ -162,3 +162,10 @@ export const SETTINGS_URI = {
 export const PROFILE_ASSET_URI = {
   GEAR_ICON: require('../assets/Images/Icons/gear-icon.png'),
 };
+
+export const DRAWER_ASSET_URI = {
+  FILTERS: require('../assets/Images/Icons/filters.png'),
+  THUNDER_BOLT: require('../assets/Images/Icons/thunder-bolt.png'),
+  POSSIBLES: require('../assets/Images/Icons/possibles.png'),
+  SETTINGS: require('../assets/Images/Icons/settings.png'),
+};

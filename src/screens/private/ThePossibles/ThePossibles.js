@@ -164,7 +164,11 @@ const ThePossibles = () => {
           size={22}>
           The Possibles
         </Text>
-        <Text fontFamily="Montserrat-Regular" color="#808080" size={13}>
+        <Text
+          fontFamily="Montserrat-Regular"
+          color="#808080"
+          size={13}
+          customStyle={{textAlign: 'center', paddingHorizontal: scale(50)}}>
           When we say “Walang tapon!”, we are serious about it.
         </Text>
       </View>
@@ -177,7 +181,11 @@ const ThePossibles = () => {
           weight={700}>
           {`See who ${isJowableTabActive ? 'JOWA' : 'MARE'} you!`}
         </Text>
-        <Text fontFamily="Montserrat-Regular" color="#808080" size={13}>
+        <Text
+          fontFamily="Montserrat-Regular"
+          color="#808080"
+          size={13}
+          customStyle={{textAlign: 'center'}}>
           Subscribe to see them all
         </Text>
       </View>

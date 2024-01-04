@@ -3,45 +3,73 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useDispatch} from 'react-redux';
+import LinearGradient from 'react-native-linear-gradient';
 
 // Components
 import Text from '../../components/Text/Text';
+import Separator from '../../components/Separator/Separator';
+import Image from '../../components/Image/Image';
 
 // Utils
-import Separator from '../../components/Separator/Separator';
+import {DRAWER_ASSET_URI} from '../../utils/images';
+import {scale} from '../../utils/commons';
+import {useNavigation} from '@react-navigation/native';
 
-const DrawerContent = ({navigation}) => {
-  const dispatch = useDispatch();
+const DrawerItem = props => {
+  const navigation = useNavigation();
+  const {src, title, screen} = props;
   return (
-    <View
-      style={{flex: 1, justifyContent: 'center', backgroundColor: '#f2cecd'}}>
-      <View style={{alignSelf: 'center'}}>
-        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
-          <Text size={25} color="#E33C59">
-            ● Filters
-          </Text>
-        </TouchableOpacity>
-        <Separator space={15} />
-        <TouchableOpacity onPress={() => navigation.navigate('ThunderBolt')}>
-          <Text size={25} color="#E33C59">
-            ● Thunder Bolt
-          </Text>
-        </TouchableOpacity>
-        <Separator space={15} />
-        <TouchableOpacity onPress={() => navigation.navigate('ThePossibles')}>
-          <Text size={25} color="#E33C59">
-            ● The Possibles
-          </Text>
-        </TouchableOpacity>
-        <Separator space={15} />
-        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Text size={25} color="#E33C59">
-            ● Settings
-          </Text>
-        </TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => navigation.navigate(screen)}
+      style={{
+        flexDirection: 'row',
+        gap: scale(10),
+        alignItems: 'center',
+      }}>
+      <Image source={src} height={30} width={30} />
+      <Text size={20} color="#fff" weight={700} fontFamily="Montserrat-Bold">
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
+const DrawerContent = () => {
+  return (
+    <LinearGradient
+      colors={['#ed2a85', '#fe406b', '#ff5d51', '#ff7c39', '#f89924']}
+      start={{x: 0.5, y: 1}}
+      end={{x: 0.5, y: 0}}
+      style={{flex: 1}}>
+      <Separator space={150} />
+      <View style={{flex: 1}}>
+        <View style={{alignSelf: 'center'}}>
+          <DrawerItem
+            src={DRAWER_ASSET_URI.FILTERS}
+            title="Filters"
+            screen="Filters"
+          />
+          <Separator space={15} />
+          <DrawerItem
+            src={DRAWER_ASSET_URI.THUNDER_BOLT}
+            title="Thunder Bolt"
+            screen="ThunderBolt"
+          />
+          <Separator space={15} />
+          <DrawerItem
+            src={DRAWER_ASSET_URI.POSSIBLES}
+            title="The Possibles"
+            screen="ThePossibles"
+          />
+          <Separator space={15} />
+          <DrawerItem
+            src={DRAWER_ASSET_URI.SETTINGS}
+            title="Settings"
+            screen="Settings"
+          />
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
