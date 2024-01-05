@@ -70,7 +70,11 @@ const SettingsMainScreen = () => {
           style={{width: scale(150)}}
         />
         <Separator space={10} />
-        <Button title="Subscribe" style={{width: scale(150)}} />
+        <Button
+          title="Subscribe"
+          style={{width: scale(150)}}
+          onPress={() => navigation.navigate('ThunderBolt')}
+        />
         <Separator space={10} />
         <Button
           // disabled

@@ -181,7 +181,7 @@ const FiltersScreen = () => {
         </Text>
       </View>
       {!isPremium && (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('ThunderBolt')}>
           <View style={{alignItems: 'center'}}>
             <Image
               source={FILTERS_ASSET_URI.SUBSCRIBE_BUTTON}

@@ -1,10 +1,16 @@
 // React modules
 import React, {useState, useEffect, useRef} from 'react';
-import {View, TouchableOpacity, ScrollView} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
 // Components
@@ -35,8 +41,9 @@ import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const route = useRoute();
-  const {getMessageResponse, allChatList, unreadMessages} = useSelector(
+  const {getMessageResponse, allChatList} = useSelector(
     state => state.dashboard,
   );
   const {sub} = useSelector(state => state.persistedState);
@@ -163,7 +170,10 @@ const ChatScreen = () => {
         </Text>
         <Separator space={15} />
         <Button
-          onPress={() => setShowModal(false)}
+          onPress={() => {
+            navigation.navigate('ThunderBolt');
+            setShowModal(false);
+          }}
           title="Subscribe Now"
           style={{
             width: scale(180),
@@ -177,120 +187,129 @@ const ChatScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-      <ChatScreenHeader
-        chatCustomerDetails={item}
-        is1MinAgoActive={is1MinAgoActive}
-        is5MinsAgoActive={is5MinsAgoActive}
-        is30MinsAgoActive={is30MinsAgoActive}
-        compatibilityScore={compatibilityScore}
-      />
-      {subscribeModal()}
-      <ScrollView
-        style={{flex: 1, padding: 10}}
-        ref={scrollViewRef}
-        contentContainerStyle={{paddingBottom: 16}}
-        onContentSizeChange={onContentSizeChange}>
-        {chatMessages?.map((message, index) => {
-          const currentUser = getMessageResponse?.data?.length
-            ? message.senderSub === currentUserSub
-            : true;
-          return (
-            <View
-              key={message.id}
-              style={{
-                alignSelf: currentUser ? 'flex-end' : 'flex-start',
-                backgroundColor: currentUser ? '#E33C59' : '#660707',
-                padding: scale(20),
-                borderRadius: 8,
-                marginBottom: 10,
-                maxWidth: '80%',
-              }}>
-              <Text color="#fff" fontFamil="Montserrat-Regular">
-                {getMessageResponse?.data?.length
-                  ? message.message
-                  : message.text}
-              </Text>
-            </View>
-          );
-        })}
-      </ScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: scale(8),
-          bottom: verticalScale(20),
-        }}>
+    <KeyboardAvoidingView
+      bounce
+      behavior={isIosDevice() ? 'padding' : 'height'}
+      keyboardVerticalOffset={verticalScale(isIosDevice() ? 50 : 0)}
+      style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+        <ChatScreenHeader
+          chatCustomerDetails={item}
+          is1MinAgoActive={is1MinAgoActive}
+          is5MinsAgoActive={is5MinsAgoActive}
+          is30MinsAgoActive={is30MinsAgoActive}
+          compatibilityScore={compatibilityScore}
+        />
+        {subscribeModal()}
+        <ScrollView
+          style={{flex: 1, padding: 10}}
+          ref={scrollViewRef}
+          contentContainerStyle={{paddingBottom: 16}}
+          onContentSizeChange={onContentSizeChange}>
+          {chatMessages?.map((message, index) => {
+            const currentUser = getMessageResponse?.data?.length
+              ? message.senderSub === currentUserSub
+              : true;
+            return (
+              <View
+                key={message.id}
+                style={{
+                  alignSelf: currentUser ? 'flex-end' : 'flex-start',
+                  backgroundColor: currentUser ? '#E33C59' : '#660707',
+                  padding: scale(20),
+                  borderRadius: 8,
+                  marginBottom: 10,
+                  maxWidth: '80%',
+                }}>
+                <Text color="#fff" fontFamil="Montserrat-Regular">
+                  {getMessageResponse?.data?.length
+                    ? message.message
+                    : message.text}
+                </Text>
+              </View>
+            );
+          })}
+        </ScrollView>
         <View
           style={{
             flexDirection: 'row',
-            position: 'absolute',
-            zIndex: 1,
-            left: scale(50),
-            gap: scale(12),
-            top: verticalScale(isIosDevice() ? 30 : 40),
+            alignItems: 'center',
+            padding: scale(8),
+            bottom: verticalScale(20),
           }}>
-          <TouchableOpacity onPress={() => setShowModal(true)}>
+          <View
+            style={{
+              flexDirection: 'row',
+              position: 'absolute',
+              zIndex: 1,
+              left: scale(50),
+              gap: scale(12),
+              top: verticalScale(isIosDevice() ? 30 : 40),
+            }}>
+            <TouchableOpacity onPress={() => setShowModal(true)}>
+              <Image
+                source={MESSAGES_ASSET_URI.CAMERA_ICON}
+                height={25}
+                width={25}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowModal(true)}>
+              <Image
+                source={MESSAGES_ASSET_URI.GALLERY_ICON}
+                height={25}
+                width={25}
+              />
+            </TouchableOpacity>
             <Image
-              source={MESSAGES_ASSET_URI.CAMERA_ICON}
+              source={MESSAGES_ASSET_URI.DIVIDER}
               height={25}
               width={25}
+              customStyle={{left: scale(-15)}}
             />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setShowModal(true)}>
-            <Image
-              source={MESSAGES_ASSET_URI.GALLERY_ICON}
-              height={25}
-              width={25}
-            />
-          </TouchableOpacity>
-          <Image
-            source={MESSAGES_ASSET_URI.DIVIDER}
-            height={25}
-            width={25}
-            customStyle={{left: scale(-15)}}
+          </View>
+          <TextInput
+            multiline
+            inputStyle={{
+              borderWidth: 1,
+              borderRadius: 5,
+              paddingLeft: scale(100),
+              backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
+              color: '#fff',
+              fontSize: moderateScale(20),
+              height: verticalScale(40),
+              paddingRight: scale(50),
+              lineHeight: verticalScale(25),
+            }}
+            textStyle={{color: '#fff', justifyContent: 'center'}}
+            placeholder="Chat"
+            value={inputText}
+            onChangeText={text => setInputText(text)}
+            onSubmitEditing={handleSend}
+            placeholderTextColor="#fff"
           />
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              left: scale(280),
+              bottom: verticalScale(16),
+              padding: scale(5),
+              backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
+              borderRadius: 20,
+            }}
+            onPress={handleSend}>
+            <Image
+              source={
+                isMare
+                  ? MESSAGES_ASSET_URI.MARE_SEND_ICON
+                  : MESSAGES_ASSET_URI.SEND_ICON
+              }
+              height={20}
+              width={20}
+            />
+          </TouchableOpacity>
         </View>
-        <TextInput
-          inputStyle={{
-            borderWidth: 1,
-            borderRadius: 5,
-            padding: 8,
-            paddingLeft: scale(100),
-            backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
-            color: '#fff',
-            fontSize: moderateScale(18),
-          }}
-          textStyle={{color: '#fff'}}
-          placeholder="Chat"
-          value={inputText}
-          onChangeText={text => setInputText(text)}
-          onSubmitEditing={handleSend}
-          placeholderTextColor="#fff"
-        />
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            left: scale(280),
-            bottom: verticalScale(16),
-            padding: scale(5),
-            backgroundColor: isMare ? '#EE9B3D' : '#E33C59',
-            borderRadius: 20,
-          }}
-          onPress={handleSend}>
-          <Image
-            source={
-              isMare
-                ? MESSAGES_ASSET_URI.MARE_SEND_ICON
-                : MESSAGES_ASSET_URI.SEND_ICON
-            }
-            height={20}
-            width={20}
-          />
-        </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
