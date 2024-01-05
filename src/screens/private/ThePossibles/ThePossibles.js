@@ -137,6 +137,7 @@ const Marebles = props => {
 };
 
 const ThePossibles = () => {
+  const navigation = useNavigation();
   const [isJowableTabActive, setJowableTabActive] = useState(true);
   const handleRefresh = () => {};
 
@@ -199,6 +200,7 @@ const ThePossibles = () => {
       </View>
       <View style={{paddingTop: verticalScale(20)}}>
         <Button
+          onPress={() => navigation.navigate('ThunderBolt')}
           title="Subscribe Now!"
           style={{
             width: scale(150),

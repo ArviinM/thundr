@@ -35,6 +35,7 @@ import {MESSAGES_ASSET_URI} from '../../../utils/images';
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
+import moment from 'moment';
 
 const JowaChatList = props => {
   const {
@@ -70,6 +71,39 @@ const JowaChatList = props => {
           obj => obj.chatRoomID === chatUUID,
         );
         const isMessageRead = getChatMessage[0]?.isRead === 1;
+        const timeRemaining =
+          targetData[0]?.ttl !== 'UNLIMITED'
+            ? parseInt(
+                (targetData[0]?.ttl - moment().valueOf() / 1000) / (4 * 3600),
+              )
+            : 'UNLIMITED';
+
+        let thundrImageSource;
+
+        switch (timeRemaining) {
+          case 5:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_1;
+            break;
+          case 4:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_2;
+            break;
+          case 3:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_3;
+            break;
+          case 2:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_4;
+            break;
+          case 1:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_5;
+            break;
+          case 0:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_6;
+            break;
+          case 'UNLIMITED':
+            thundrImageSource = null;
+          default:
+            break;
+        }
 
         return (
           <TouchableOpacity
@@ -129,9 +163,9 @@ const JowaChatList = props => {
                 top: verticalScale(isAndroidDevice() ? 55 : 50),
               }}
             />
-            <View style={{left: scale(5)}}>
+            <View style={{left: scale(5), width: scale(170)}}>
               <Text
-                size={25}
+                size={23}
                 color={!isMessageRead ? 'red' : '#E33C59'}
                 fontFamily="Montserrat-Bold"
                 numberOfLines={1}
@@ -141,7 +175,7 @@ const JowaChatList = props => {
                 {item?.name}, {calculateAge(item?.birthday)}
               </Text>
               <Text
-                size={15}
+                size={14}
                 color={!isMessageRead ? 'black' : '#808080'}
                 weight={!isMessageRead ? 700 : 400}
                 fontFamily="Montserrat-Medium"
@@ -154,7 +188,7 @@ const JowaChatList = props => {
                 color={!isMessageRead ? 'black' : '#808080'}
                 weight={!isMessageRead ? 700 : 400}
                 fontFamily="Montserrat-Medium"
-                size={15}>
+                size={14}>
                 {`Compatibility Score: ${compatibilityScore || 0}%`}
               </Text>
             </View>
@@ -163,11 +197,7 @@ const JowaChatList = props => {
                 top: verticalScale(5),
                 left: scale(isIosDevice() ? 20 : 10),
               }}>
-              <Image
-                source={MESSAGES_ASSET_URI.THUNDR_1}
-                height={65}
-                width={65}
-              />
+              <Image source={thundrImageSource} height={65} width={65} />
             </View>
           </TouchableOpacity>
         );
@@ -218,6 +248,39 @@ const MareChatList = props => {
           obj => obj.chatRoomID === chatUUID,
         );
         const isMessageRead = getChatMessage[0]?.isRead === 1;
+        const timeRemaining =
+          targetData[0]?.ttl !== 'UNLIMITED'
+            ? parseInt(
+                (targetData[0]?.ttl - moment().valueOf() / 1000) / (4 * 3600),
+              )
+            : 'UNLIMITED';
+
+        let thundrImageSource;
+
+        switch (timeRemaining) {
+          case 5:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_1;
+            break;
+          case 4:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_2;
+            break;
+          case 3:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_3;
+            break;
+          case 2:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_4;
+            break;
+          case 1:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_5;
+            break;
+          case 0:
+            thundrImageSource = MESSAGES_ASSET_URI.THUNDR_6;
+            break;
+          case 'UNLIMITED':
+            thundrImageSource = null;
+          default:
+            break;
+        }
 
         return (
           <TouchableOpacity
@@ -277,9 +340,9 @@ const MareChatList = props => {
                 top: verticalScale(isAndroidDevice() ? 55 : 50),
               }}
             />
-            <View style={{left: scale(5)}}>
+            <View style={{left: scale(5), width: scale(170)}}>
               <Text
-                size={25}
+                size={23}
                 color={!isMessageRead ? 'yellow' : '#FFBC28'}
                 fontFamily="Montserrat-Bold"
                 weight={700}
@@ -289,7 +352,7 @@ const MareChatList = props => {
                 {item?.name}, {calculateAge(item?.birthday)}
               </Text>
               <Text
-                size={15}
+                size={14}
                 color={!isMessageRead ? 'black' : '#808080'}
                 weight={!isMessageRead ? 700 : 400}
                 fontFamily="Montserrat-Medium"
@@ -302,7 +365,7 @@ const MareChatList = props => {
                 color={!isMessageRead ? 'black' : '#808080'}
                 weight={!isMessageRead ? 700 : 400}
                 fontFamily="Montserrat-Medium"
-                size={15}>
+                size={14}>
                 {`Compatibility Score: ${compatibilityScore || 0}%`}
               </Text>
             </View>
@@ -311,11 +374,7 @@ const MareChatList = props => {
                 top: verticalScale(5),
                 left: scale(isIosDevice() ? 20 : 10),
               }}>
-              <Image
-                source={MESSAGES_ASSET_URI.THUNDR_1}
-                height={65}
-                width={65}
-              />
+              <Image source={thundrImageSource} height={65} width={65} />
             </View>
           </TouchableOpacity>
         );
