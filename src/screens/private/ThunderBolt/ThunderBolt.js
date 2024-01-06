@@ -5,6 +5,7 @@ import {TouchableOpacity, View} from 'react-native';
 // Third party libraries
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
 
 // Components
 import Text from '../../../components/Text/Text';
@@ -17,7 +18,9 @@ import {GLOBAL_ASSET_URI, SUBSCRIPTION_ASSET_URI} from '../../../utils/images';
 
 const ThunderBolt = () => {
   const navigation = useNavigation();
-  const flag = false;
+  const {subscriptionDetails} = useSelector(state => state.subscription);
+  const withSubscription = subscriptionDetails?.withSubscription;
+
   return (
     <View style={{flex: 1, backgroundColor: '#EDE8E5'}}>
       <View
@@ -52,7 +55,7 @@ const ThunderBolt = () => {
           features.
         </Text>
       </View>
-      {!flag && (
+      {withSubscription && (
         <LinearGradient
           colors={['#febc29', '#ef9c3d', '#e43d59']}
           start={{x: 0, y: 0.5}}
@@ -103,7 +106,7 @@ const ThunderBolt = () => {
           </View>
         </LinearGradient>
       )}
-      <Separator space={flag ? 50 : 45} />
+      <Separator space={!withSubscription ? 50 : 45} />
       <View style={{paddingHorizontal: scale(50)}}>
         <Text
           customStyle={{textAlign: 'center'}}
@@ -121,7 +124,7 @@ const ThunderBolt = () => {
           width={320}
         />
       </View>
-      {flag && (
+      {!withSubscription && (
         <View style={{alignItems: 'center', top: verticalScale(-15)}}>
           <Text
             color="#E43C59"

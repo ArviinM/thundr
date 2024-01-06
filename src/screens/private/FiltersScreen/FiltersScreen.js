@@ -17,13 +17,15 @@ import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
 // Utils
 import {FILTERS_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
+import {useSelector} from 'react-redux';
 
 const FiltersScreen = () => {
   const navigation = useNavigation();
+  const {subscriptionDetails} = useSelector(state => state.subscription);
   const [age, setAge] = useState([35, 80]);
   const [proximity, setProximity] = useState(2);
   const [isAdvanceFilterVisible, setAdvanceFilterVisible] = useState(false);
-  const isPremium = false;
+  const withSubscription = subscriptionDetails?.withSubscription;
 
   const renderCustomMarker = () => (
     <Image source={FILTERS_ASSET_URI.SLIDER_MARKER} height={50} width={50} />
@@ -153,12 +155,12 @@ const FiltersScreen = () => {
       </View>
       <View style={{top: verticalScale(20)}}>
         <TouchableOpacity
-          disabled={!isPremium}
+          disabled={!withSubscription}
           style={{alignItems: 'center'}}
           onPress={() => setAdvanceFilterVisible(!isAdvanceFilterVisible)}>
           <Image
             source={
-              isPremium
+              withSubscription
                 ? FILTERS_ASSET_URI.ADVANCED_FILTERS
                 : FILTERS_ASSET_URI.DISABLED_ADVANCED_FILTERS
             }
@@ -175,12 +177,12 @@ const FiltersScreen = () => {
             bottom: verticalScale(50),
             paddingHorizontal: scale(20),
           }}>
-          {isPremium
+          {withSubscription
             ? 'More filters, more fun. Gora na!'
             : 'More filters, more fun! Sign up now for an even more flexible customization.'}
         </Text>
       </View>
-      {!isPremium && (
+      {!withSubscription && (
         <TouchableOpacity onPress={() => navigation.navigate('ThunderBolt')}>
           <View style={{alignItems: 'center'}}>
             <Image

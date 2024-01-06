@@ -33,6 +33,7 @@ import {calculateAge, scale, verticalScale} from '../../../utils/commons';
 import LinearGradient from 'react-native-linear-gradient';
 import Image from '../../../components/Image/Image';
 import {ADVOCACY_ASSET_URI} from '../../../utils/images';
+import {GET_SUBSCRIPTION_DETAILS} from '../../../ducks/Subscription/actionTypes';
 
 const MatchDetails = props => {
   const {currentIndex, matchList, customerProfile} = props;
@@ -119,6 +120,10 @@ const Dashboard = () => {
       type: GET_CHAT_MATCH_LIST,
       payload: {sub: loginData.sub || sub, tag: 'ALL'},
     });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch({type: GET_SUBSCRIPTION_DETAILS});
   }, [dispatch]);
 
   useEffect(() => {

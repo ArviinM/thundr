@@ -1,0 +1,10 @@
+export const UPDATE_SUBSCRIPTION_STATE =
+  '@ssoValidation/UPDATE_SUBSCRIPTION_STATE';
+
+// Get subscription details
+export const GET_SUBSCRIPTION_DETAILS =
+  '@ssoValidation/GET_SUBSCRIPTION_DETAILS';
+export const GET_SUBSCRIPTION_DETAILS_SUCCESS =
+  '@ssoValidation/GET_SUBSCRIPTION_DETAILS_SUCCESS';
+export const GET_SUBSCRIPTION_DETAILS_FAILED =
+  '@ssoValidation/GET_SUBSCRIPTION_DETAILS_FAILED';
