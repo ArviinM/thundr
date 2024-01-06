@@ -6,6 +6,7 @@ import ssoValidation from './SSOValidation/reducer';
 import profileCreation from './ProfileCreation/reducer';
 import dashboard from './Dashboard/reducer';
 import subscription from './Subscription/reducer';
+import filters from './Filters/reducer';
 import {START_LOGOUT_SUCCESS} from './Login/actionTypes';
 
 const appReducer = combineReducers({
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   profileCreation,
   dashboard,
   subscription,
+  filters,
 });
 
 const rootReducer = (state, action) => {

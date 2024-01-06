@@ -5,7 +5,7 @@ import rootReducer from './rootReducer';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['persistedState'],
+  whitelist: ['persistedState', 'filters'],
 };
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);
