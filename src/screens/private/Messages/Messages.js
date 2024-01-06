@@ -163,7 +163,8 @@ const JowaChatList = props => {
                 top: verticalScale(isAndroidDevice() ? 55 : 50),
               }}
             />
-            <View style={{left: scale(5), width: scale(170)}}>
+            <View
+              style={{left: scale(5), width: scale(isIosDevice() ? 190 : 200)}}>
               <Text
                 size={23}
                 color={!isMessageRead ? 'red' : '#E33C59'}
@@ -195,7 +196,6 @@ const JowaChatList = props => {
             <View
               style={{
                 top: verticalScale(5),
-                left: scale(isIosDevice() ? 20 : 10),
               }}>
               <Image source={thundrImageSource} height={65} width={65} />
             </View>
@@ -340,7 +340,8 @@ const MareChatList = props => {
                 top: verticalScale(isAndroidDevice() ? 55 : 50),
               }}
             />
-            <View style={{left: scale(5), width: scale(170)}}>
+            <View
+              style={{left: scale(5), width: scale(isIosDevice() ? 190 : 200)}}>
               <Text
                 size={23}
                 color={!isMessageRead ? 'yellow' : '#FFBC28'}
@@ -372,7 +373,6 @@ const MareChatList = props => {
             <View
               style={{
                 top: verticalScale(5),
-                left: scale(isIosDevice() ? 20 : 10),
               }}>
               <Image source={thundrImageSource} height={65} width={65} />
             </View>
