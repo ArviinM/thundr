@@ -43,6 +43,11 @@ export const DASHBOARD = {
   READ_CHAT_MESSAGE: 'chat/message-read',
 };
 
+// Filter sercices
+export const FILTERS = {
+  GET_AND_UPDATE_FILTER: 'customer/customer-filter',
+};
+
 // Subscription services
 export const SUBSCRIPTION = {
   GET_SUBSCRIPTION_DETAILS: 'subscription/details',

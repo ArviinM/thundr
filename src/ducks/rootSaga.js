@@ -5,6 +5,7 @@ import ssoValidationWatcher from './SSOValidation/sagas';
 import profileCreationWatcher from './ProfileCreation/sagas';
 import dashboardWatcher from './Dashboard/sagas';
 import subscriptionWatcher from './Subscription/sagas';
+import filtersWatcher from './Filters/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     profileCreationWatcher(),
     dashboardWatcher(),
     subscriptionWatcher(),
+    filtersWatcher(),
   ]);
 }

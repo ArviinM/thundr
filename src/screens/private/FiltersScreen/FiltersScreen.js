@@ -1,5 +1,5 @@
 // React modules
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
 
 // Third party libraries
@@ -17,19 +17,28 @@ import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
 // Utils
 import {FILTERS_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {GET_FILTERS, UPDATE_FILTERS} from '../../../ducks/Filters/actionTypes';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const FiltersScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {subscriptionDetails} = useSelector(state => state.subscription);
-  const [age, setAge] = useState([35, 80]);
-  const [proximity, setProximity] = useState(2);
+  const {updatedFilters, loading} = useSelector(state => state.filters);
+  const {ageMin, ageMax, proximity: apiProximity} = updatedFilters;
+  const [age, setAge] = useState([Number(ageMin || 35), Number(ageMax || 80)]);
+  const [proximity, setProximity] = useState(Number(apiProximity || 2));
   const [isAdvanceFilterVisible, setAdvanceFilterVisible] = useState(false);
   const withSubscription = subscriptionDetails?.withSubscription;
 
   const renderCustomMarker = () => (
     <Image source={FILTERS_ASSET_URI.SLIDER_MARKER} height={50} width={50} />
   );
+
+  if (loading && !updatedFilters.length) {
+    return <Spinner />;
+  }
 
   return (
     <ScrollView
@@ -43,13 +52,32 @@ const FiltersScreen = () => {
           justifyContent: 'center',
           top: verticalScale(20),
         }}>
-        <TouchableOpacity onPress={() => navigation.navigate('DashboardTab')}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'DashboardTabs'}],
+            })
+          }>
           <Image source={GLOBAL_ASSET_URI.BACK_ICON} width={25} height={25} />
         </TouchableOpacity>
         <Button
           title="Save"
           style={{width: scale(50), height: verticalScale(30)}}
-          onPress={() => navigation.navigate('DashboardTab')}
+          onPress={() => {
+            dispatch({
+              type: UPDATE_FILTERS,
+              payload: {
+                ageMax: age[1],
+                ageMin: age[0],
+                proximity: proximity[0],
+              },
+            });
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'DashboardTabs'}],
+            });
+          }}
         />
       </View>
       <Separator space={20} />
@@ -83,7 +111,7 @@ const FiltersScreen = () => {
       <Separator space={10} />
       <View style={{alignSelf: 'center'}}>
         <LinearGradient
-          colors={['#FEBC29', '#E43D59']} // Your gradient colors
+          colors={['#FEBC29', '#E43D59']}
           style={{
             height: verticalScale(10),
             width: scale(250),
