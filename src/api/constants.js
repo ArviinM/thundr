@@ -42,3 +42,8 @@ export const DASHBOARD = {
   GET_UNREAD_MESSAGES: 'chat/chat-room',
   READ_CHAT_MESSAGE: 'chat/message-read',
 };
+
+// Subscription services
+export const SUBSCRIPTION = {
+  GET_SUBSCRIPTION_DETAILS: 'subscription/details',
+};

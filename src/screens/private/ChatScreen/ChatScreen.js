@@ -189,7 +189,7 @@ const ChatScreen = () => {
   return (
     <KeyboardAvoidingView
       bounce
-      behavior={isIosDevice() ? 'padding' : 'height'}
+      behavior={isIosDevice() ? 'padding' : 'null'}
       keyboardVerticalOffset={verticalScale(isIosDevice() ? 50 : 0)}
       style={{flex: 1}}>
       <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
