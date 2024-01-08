@@ -11,48 +11,22 @@ import GenderSelection from '../../../composition/GenderSelection/GenderSelectio
 // Utils
 import {verticalScale} from '../../../utils/commons';
 
-const AdvancedFilters = () => {
-  const [selectedHobby, setSelectedHobby] = useState([]);
-  const [selectedStarSign, setSelectedStarSign] = useState([]);
-  const [selectedPersonality, setSelectedPersonality] = useState([]);
-  const [activeGenderIcon, setActiveGenderIcon] = useState([]);
-  const [gender, setGender] = useState([]);
-
-  const hobbies = [
-    'Sports & Games',
-    'Arts & Crafts',
-    'Film & TV',
-    'Reading',
-    'Music',
-    'Food & Drinks',
-    'Travel',
-  ];
-
-  const starSigns = [
-    'Aries',
-    'Scorpio',
-    'Taurus',
-    'Sagittarius',
-    'Gemini',
-    'Capricorn',
-    'Cancer',
-    'Aquarius',
-    'Leo',
-    'Pisces',
-    'Virgo',
-    'Libra',
-  ];
-
-  const genderIcons = [
-    {name: 'L_ICON', value: 'Lesbian'},
-    {name: 'G_ICON', value: 'Gay'},
-    {name: 'B_ICON', value: 'Bisexual'},
-    {name: 'T_ICON', value: 'Transgender'},
-    {name: 'Q_ICON', value: 'Queer'},
-    {name: 'I_ICON', value: 'Intersex'},
-    {name: 'A_ICON', value: 'Asexual'},
-    {name: 'PLUS_ICON', value: 'Plus'},
-  ];
+const AdvancedFilters = props => {
+  const {
+    selectedHobby,
+    setSelectedHobby,
+    selectedStarSign,
+    setSelectedStarSign,
+    selectedPersonality,
+    setSelectedPersonality,
+    gender,
+    setGender,
+    activeGenderIcon,
+    setActiveGenderIcon,
+    starSigns,
+    hobbies,
+    genderIcons,
+  } = props;
 
   const toggleGenderSelection = (index, gender) => {
     if (gender.includes(index)) {

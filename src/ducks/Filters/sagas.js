@@ -35,7 +35,8 @@ export function* getFilterDetails() {
 }
 
 export function* updateFilters({payload}) {
-  const {ageMax, ageMin, proximity} = payload;
+  const {ageMax, ageMin, proximity, gender, starSign, hobbies, personality} =
+    payload;
   const {sub} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
 
@@ -45,6 +46,10 @@ export function* updateFilters({payload}) {
       ageMax,
       ageMin,
       proximity,
+      gender,
+      starSign,
+      hobbies,
+      personality,
     });
 
     if (response?.status === 200) {
