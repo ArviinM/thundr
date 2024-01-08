@@ -41,7 +41,7 @@ const SelectionBox = props => {
           alignItems: 'center',
           paddingHorizontal: scale(40),
         }}>
-        {data.map((selectedKey, index) => {
+        {data?.map((selectedKey, index) => {
           const selectedData = isHobby ? selectedHobby : selectedStarSign;
           const isSelected = selectedData.includes(index);
           return (

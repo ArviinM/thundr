@@ -18,19 +18,138 @@ import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
 import {FILTERS_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
 import {useDispatch, useSelector} from 'react-redux';
-import {GET_FILTERS, UPDATE_FILTERS} from '../../../ducks/Filters/actionTypes';
+import {UPDATE_FILTERS} from '../../../ducks/Filters/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
+
+const starSigns = [
+  'Aries',
+  'Scorpio',
+  'Taurus',
+  'Sagittarius',
+  'Gemini',
+  'Capricorn',
+  'Cancer',
+  'Aquarius',
+  'Leo',
+  'Pisces',
+  'Virgo',
+  'Libra',
+];
+
+const hobbies = [
+  'Sports & Games',
+  'Arts & Crafts',
+  'Film & TV',
+  'Reading',
+  'Music',
+  'Food & Drinks',
+  'Travel',
+];
+
+const genderIcons = [
+  {name: 'L_ICON', value: 'Lesbian'},
+  {name: 'G_ICON', value: 'Gay'},
+  {name: 'B_ICON', value: 'Bisexual'},
+  {name: 'T_ICON', value: 'Transgender'},
+  {name: 'Q_ICON', value: 'Queer'},
+  {name: 'I_ICON', value: 'Intersex'},
+  {name: 'A_ICON', value: 'Asexual'},
+  {name: 'PLUS_ICON', value: 'Plus'},
+];
 
 const FiltersScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {subscriptionDetails} = useSelector(state => state.subscription);
-  const {updatedFilters, loading} = useSelector(state => state.filters);
-  const {ageMin, ageMax, proximity: apiProximity} = updatedFilters;
+  const {updatedFilters, loading, personality} = useSelector(
+    state => state.filters,
+  );
+  const {
+    ageMin,
+    ageMax,
+    proximity: apiProximity,
+    starSign,
+    hobbies: apiHobbies,
+    gender: apiGender,
+    // personality: apiPersonality,
+  } = updatedFilters;
   const [age, setAge] = useState([Number(ageMin || 35), Number(ageMax || 80)]);
   const [proximity, setProximity] = useState(Number(apiProximity || 2));
   const [isAdvanceFilterVisible, setAdvanceFilterVisible] = useState(false);
   const withSubscription = subscriptionDetails?.withSubscription;
+
+  const getSelectedSigns = selectedIndices => {
+    const selectedSigns = selectedIndices.map(index => starSigns[index]);
+    return selectedSigns.join(', ');
+  };
+
+  const getSelectedHobby = selectedIndices => {
+    const selectedHobbyData = selectedIndices.map(index => hobbies[index]);
+    return selectedHobbyData.join(', ');
+  };
+
+  const getSelectedGender = selectedIndices => {
+    return selectedIndices.map(index => genderIcons[index].value).join(', ');
+  };
+
+  // Convert API response from string to array
+  const stringToArray = inputString => {
+    const trimmedString = inputString.trim();
+    const arrayResult = trimmedString.split(',');
+    const finalArray = arrayResult.map(item => item.trim());
+
+    return finalArray;
+  };
+
+  // Default value of gender if existing
+  const defaultGenderState = (genderIcons, genderIdentities) => {
+    const matchedIndices = [];
+    genderIcons.forEach((icon, index) => {
+      if (genderIdentities.includes(icon.value)) {
+        matchedIndices.push(index);
+      }
+    });
+
+    return matchedIndices;
+  };
+
+  // Default value of star sign if existing
+  const defaultStarSignState = (starSigns, namesToMatch) => {
+    const matchedIndices = [];
+    starSigns.forEach((sign, index) => {
+      if (namesToMatch.includes(sign)) {
+        matchedIndices.push(index);
+      }
+    });
+    return matchedIndices;
+  };
+
+  // Default value of hobbies if existing
+  const defaultHobbyState = (hobbies, namesToMatch) => {
+    const matchedIndices = [];
+    hobbies.forEach((sign, index) => {
+      if (namesToMatch.includes(sign)) {
+        matchedIndices.push(index);
+      }
+    });
+    return matchedIndices;
+  };
+
+  const [gender, setGender] = useState(
+    apiGender ? defaultGenderState(genderIcons, stringToArray(apiGender)) : [],
+  );
+  const [activeGenderIcon, setActiveGenderIcon] = useState(
+    apiGender ? defaultGenderState(genderIcons, stringToArray(apiGender)) : [],
+  );
+  const [selectedHobby, setSelectedHobby] = useState(
+    apiHobbies ? defaultHobbyState(hobbies, stringToArray(apiHobbies)) : [],
+  );
+  const [selectedStarSign, setSelectedStarSign] = useState(
+    starSigns ? defaultStarSignState(starSigns, stringToArray(starSign)) : [],
+  );
+  const [selectedPersonality, setSelectedPersonality] = useState(
+    personality ? stringToArray(personality) : [],
+  );
 
   const renderCustomMarker = () => (
     <Image source={FILTERS_ASSET_URI.SLIDER_MARKER} height={50} width={50} />
@@ -70,7 +189,11 @@ const FiltersScreen = () => {
               payload: {
                 ageMax: age[1],
                 ageMin: age[0],
-                proximity: proximity[0],
+                proximity: Number(proximity),
+                gender: getSelectedGender(gender),
+                starSign: getSelectedSigns(selectedStarSign),
+                hobbies: getSelectedHobby(selectedHobby),
+                personality: selectedPersonality?.join(', '),
               },
             });
             navigation.reset({
@@ -221,7 +344,23 @@ const FiltersScreen = () => {
           </View>
         </TouchableOpacity>
       )}
-      {isAdvanceFilterVisible && <AdvancedFilters />}
+      {isAdvanceFilterVisible && (
+        <AdvancedFilters
+          gender={gender}
+          setGender={setGender}
+          activeGenderIcon={activeGenderIcon}
+          setActiveGenderIcon={setActiveGenderIcon}
+          selectedHobby={selectedHobby}
+          setSelectedHobby={setSelectedHobby}
+          selectedStarSign={selectedStarSign}
+          setSelectedStarSign={setSelectedStarSign}
+          selectedPersonality={selectedPersonality}
+          setSelectedPersonality={setSelectedPersonality}
+          starSigns={starSigns}
+          hobbies={hobbies}
+          genderIcons={genderIcons}
+        />
+      )}
     </ScrollView>
   );
 };
