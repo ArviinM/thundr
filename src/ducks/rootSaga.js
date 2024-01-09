@@ -6,6 +6,7 @@ import profileCreationWatcher from './ProfileCreation/sagas';
 import dashboardWatcher from './Dashboard/sagas';
 import subscriptionWatcher from './Subscription/sagas';
 import filtersWatcher from './Filters/sagas';
+import settingsWatcher from './Settings/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -16,5 +17,6 @@ export default function* rootSaga() {
     dashboardWatcher(),
     subscriptionWatcher(),
     filtersWatcher(),
+    settingsWatcher(),
   ]);
 }

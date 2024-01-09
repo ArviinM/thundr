@@ -3,7 +3,8 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 
 // Third party libraries
-import CustomSwitch from 'react-native-custom-switch-new';
+
+import {Switch} from 'react-native-switch';
 
 // Components
 import SettingsHeader from '../../../composition/SettingsHeader/SettingsHeader';
@@ -12,42 +13,20 @@ import Separator from '../../../components/Separator/Separator';
 
 // Utils
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
-
-const SwitchComponent = props => {
-  const {text, state, setState} = props;
-  return (
-    <View
-      style={{
-        backgroundColor: '#fff',
-        height: verticalScale(isIosDevice() ? 40 : 45),
-        width: scale(300),
-        borderRadius: 20,
-        paddingVertical: verticalScale(10),
-        paddingHorizontal: scale(20),
-        flexDirection: 'row',
-        gap: scale(20),
-        justifyContent: 'space-around',
-      }}>
-      <Text size={18} weight={700} color="#808080" fontFamily="Montserrat-Bold">
-        {text}
-      </Text>
-      <View style={{justifyContent: 'center'}}>
-        <CustomSwitch
-          buttonColor={state ? '#FFBD28' : '#808080'}
-          switchBackgroundColor={'#9B9DA0'}
-          onSwitchBackgroundColor={'#E43D59'}
-          buttonPadding={6}
-          onSwitch={() => setState(true)}
-          onSwitchReverse={() => setState(false)}
-        />
-      </View>
-    </View>
-  );
-};
+import {useDispatch, useSelector} from 'react-redux';
+import {UPDATE_CUSTOMER_SETTINGS} from '../../../ducks/Settings/actionTypes';
 
 const NotificationSettings = () => {
-  const [isNotificationEnabled, setNotificationEnabled] = useState(false);
-  const [isEmailEnabled, setEmailEnabled] = useState(false);
+  const dispatch = useDispatch();
+  const {customerSettings} = useSelector(state => state.settings);
+  const {inAppNotificationOn, emailNotificationOn} = customerSettings;
+  const [isNotificationEnabled, setNotificationEnabled] = useState(
+    inAppNotificationOn ? true : false,
+  );
+  const [isEmailEnabled, setEmailEnabled] = useState(
+    emailNotificationOn ? true : false,
+  );
+
   return (
     <View style={{top: verticalScale(30)}}>
       <SettingsHeader />
@@ -61,17 +40,89 @@ const NotificationSettings = () => {
           Turning this off might mean you miss alerts
         </Text>
         <Separator space={20} />
-        <SwitchComponent
-          text="In-app notification"
-          state={isNotificationEnabled}
-          setState={setNotificationEnabled}
-        />
+        <View
+          style={{
+            backgroundColor: '#fff',
+            height: verticalScale(isIosDevice() ? 40 : 45),
+            width: scale(300),
+            borderRadius: 20,
+            paddingVertical: verticalScale(10),
+            paddingHorizontal: scale(20),
+            flexDirection: 'row',
+            gap: scale(20),
+            justifyContent: 'space-around',
+          }}>
+          <Text
+            size={18}
+            weight={700}
+            color="#808080"
+            fontFamily="Montserrat-Bold">
+            In-app notification
+          </Text>
+          <View style={{justifyContent: 'center'}}>
+            <Switch
+              value={isNotificationEnabled}
+              onValueChange={() => {
+                setNotificationEnabled(!isNotificationEnabled);
+                dispatch({
+                  type: UPDATE_CUSTOMER_SETTINGS,
+                  payload: {
+                    inAppNotificationOn: !isNotificationEnabled,
+                    emailNotificationOn: isEmailEnabled,
+                  },
+                });
+              }}
+              backgroundActive="#E43D59"
+              backgroundInactive="#9B9DA0"
+              circleActiveColor="#FFBD28"
+              circleInActiveColor="#808080"
+              activeText=""
+              inActiveText=""
+            />
+          </View>
+        </View>
         <Separator space={20} />
-        <SwitchComponent
-          text="Email notification"
-          state={isEmailEnabled}
-          setState={setEmailEnabled}
-        />
+        <View
+          style={{
+            backgroundColor: '#fff',
+            height: verticalScale(isIosDevice() ? 40 : 45),
+            width: scale(300),
+            borderRadius: 20,
+            paddingVertical: verticalScale(10),
+            paddingHorizontal: scale(20),
+            flexDirection: 'row',
+            gap: scale(20),
+            justifyContent: 'space-around',
+          }}>
+          <Text
+            size={18}
+            weight={700}
+            color="#808080"
+            fontFamily="Montserrat-Bold">
+            Email notification
+          </Text>
+          <View style={{justifyContent: 'center'}}>
+            <Switch
+              value={isEmailEnabled}
+              onValueChange={() => {
+                setEmailEnabled(!isEmailEnabled);
+                dispatch({
+                  type: UPDATE_CUSTOMER_SETTINGS,
+                  payload: {
+                    emailNotificationOn: !isEmailEnabled,
+                    inAppNotificationOn: isNotificationEnabled,
+                  },
+                });
+              }}
+              backgroundActive="#E43D59"
+              backgroundInactive="#9B9DA0"
+              circleActiveColor="#FFBD28"
+              circleInActiveColor="#808080"
+              activeText=""
+              inActiveText=""
+            />
+          </View>
+        </View>
       </View>
     </View>
   );

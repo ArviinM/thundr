@@ -1,29 +1,40 @@
 // React modules
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 
 // Components
 import Image from '../../../components/Image/Image';
 import Button from '../../../components/Button/Button';
 import Separator from '../../../components/Separator/Separator';
 import SettingsHeader from '../../../composition/SettingsHeader/SettingsHeader';
+import SettingsModal from '../../../composition/SettingsModal/SettingsModal';
+import Spinner from '../../../components/Spinner/Spinner';
 
 // Ducks
 import {START_LOGOUT} from '../../../ducks/Login/actionTypes';
+import {GET_CUSTOMER_SETTINGS} from '../../../ducks/Settings/actionTypes';
 
 // Utils
 import {SETTINGS_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
-import SettingsModal from '../../../composition/SettingsModal/SettingsModal';
 
 const SettingsMainScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const {loading} = useSelector(state => state.settings);
+  const {subscriptionDetails} = useSelector(state => state.subscription);
+  const withSubscription = subscriptionDetails?.withSubscription;
   const [displayModal, setDisplayModal] = useState('');
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch({type: GET_CUSTOMER_SETTINGS});
+    }, [dispatch]),
+  );
 
   const GradientButtons = props => {
     const {src, onPress} = props;
@@ -36,6 +47,11 @@ const SettingsMainScreen = () => {
       </View>
     );
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <View style={{top: verticalScale(20)}}>
       <SettingsHeader />
@@ -64,24 +80,29 @@ const SettingsMainScreen = () => {
         />
         <Separator space={10} />
         <Button
-          // disabled
           onPress={() => setDisplayModal('delete')}
           title="Delete Account"
           style={{width: scale(150)}}
         />
         <Separator space={10} />
         <Button
+          disabled={withSubscription}
           title="Subscribe"
-          style={{width: scale(150)}}
+          style={{
+            width: scale(150),
+            backgroundColor: !withSubscription ? '#E33051' : '#B1B3B5',
+          }}
           onPress={() => navigation.navigate('ThunderBolt')}
         />
         <Separator space={10} />
         <Button
-          // disabled
-          // backgroundColor: '#B1B3B5'
+          disabled={!withSubscription}
           onPress={() => setDisplayModal('unsubscribe')}
           title="Unsubscribe"
-          style={{width: scale(150)}}
+          style={{
+            width: scale(150),
+            backgroundColor: !withSubscription ? '#B1B3B5' : '#E33051',
+          }}
         />
       </View>
     </View>
