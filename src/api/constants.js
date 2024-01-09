@@ -52,3 +52,10 @@ export const FILTERS = {
 export const SUBSCRIPTION = {
   GET_SUBSCRIPTION_DETAILS: 'subscription/details',
 };
+
+// Settings
+
+export const SETTINGS = {
+  GET_AND_SAVE_CUSTOMER_SETTINGS: 'customer/customer-setting',
+  GET_AND_SAVE_CUSTOMER_SURVEY: 'customer/customer-survey',
+};
