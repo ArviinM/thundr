@@ -11,6 +11,9 @@ import {
   GET_CHAT_MATCH_LIST,
   GET_CHAT_MATCH_LIST_FAILED,
   GET_CHAT_MATCH_LIST_SUCCESS,
+  GET_CURRENT_USER_PROFILE,
+  GET_CURRENT_USER_PROFILE_FAILED,
+  GET_CURRENT_USER_PROFILE_SUCCESS,
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_DETAILS_FAILED,
   GET_CUSTOMER_DETAILS_SUCCESS,
@@ -77,7 +80,10 @@ export const INITIAL_STATE = {
   unreadMessages: [],
   newUnreadMessage: [],
   readChatMessage: [],
+  currentUserProfile: [],
   triggerReload: false,
+  primaryDetailsState: [],
+  personalityDetailsState: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -161,6 +167,26 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case GET_CUSTOMER_PROFILE_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET CURRENT USER PROFILE
+    case GET_CURRENT_USER_PROFILE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_CURRENT_USER_PROFILE_SUCCESS:
+      return {
+        ...state,
+        currentUserProfile: action.payload,
+        loading: false,
+      };
+    case GET_CURRENT_USER_PROFILE_FAILED:
       return {
         ...state,
         loading: false,

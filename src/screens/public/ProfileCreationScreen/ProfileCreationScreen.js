@@ -51,6 +51,7 @@ import {
 import {GLOBAL_ASSET_URI, LGBTQ_ASSET_URI} from '../../../utils/images';
 import {monthNameToNumber} from './utils';
 import MultiplePhotoSelection from '../../../composition/MultiplePhotoSelection/MultiplePhotoSelection';
+import {UPDATE_DASHBOARD_STATE} from '../../../ducks/Dashboard/actionTypes';
 
 const icons = [
   {name: 'L_ICON', value: 'Lesbian'},
@@ -96,20 +97,49 @@ const LabeledInput = ({
 };
 
 const PrimaryDetails = props => {
-  const {fromEditProfileScreen} = props;
+  const {fromEditProfileScreen, currentUserProfile} = props;
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.profileCreation);
   const {loginData} = useSelector(state => state.login);
-  const [activeIcon, setActiveIcon] = useState('');
+  const {sub} = useSelector(state => state.persistedState);
   const [month, setMonth] = useState('');
   const [year, setYear] = useState(null);
   const [day, setDay] = useState(null);
   const [name, setName] = useState(null);
   const [hometown, setHometown] = useState(null);
   const [imageSource, setImageSource] = useState('');
-  const [gender, setGender] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
   const [imageContent, setImageContent] = useState(null);
+  const getIconFromValue = value => {
+    const foundIcon = icons.find(icon => icon.value === value);
+    if (foundIcon) {
+      return foundIcon.name;
+    } else {
+      return null;
+    }
+  };
+
+  const [gender, setGender] = useState(
+    currentUserProfile.gender && fromEditProfileScreen
+      ? currentUserProfile.gender
+      : null,
+  );
+  const [activeIcon, setActiveIcon] = useState(
+    getIconFromValue(
+      currentUserProfile.gender && fromEditProfileScreen
+        ? currentUserProfile.gender
+        : '',
+    ),
+  );
+
+  useEffect(() => {
+    if (fromEditProfileScreen) {
+      dispatch({
+        type: UPDATE_DASHBOARD_STATE,
+        newState: {primaryDetailsState: {gender}},
+      });
+    }
+  }, [dispatch, gender]);
 
   const shouldBeEnabled =
     month && year && day && name && hometown && gender && imageSource;
@@ -124,7 +154,7 @@ const PrimaryDetails = props => {
     const triggerApiCall = async () => {
       const formData = new FormData();
 
-      formData.append('sub', loginData.sub);
+      formData.append('sub', loginData.sub || sub);
       formData.append('isPrimary', 'true');
       formData.append('filepath', imageContent?.data);
       formData.append('filename', imageContent?.path);

@@ -225,7 +225,7 @@ export const inches = [
 ];
 
 export const removeSpaces = inputString => {
-  return inputString.replace(/\s/g, '');
+  return inputString?.replace(/\s/g, '');
 };
 
 export const calculateAge = birthDate => {

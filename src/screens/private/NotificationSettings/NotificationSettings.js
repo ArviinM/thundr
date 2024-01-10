@@ -19,12 +19,11 @@ import {UPDATE_CUSTOMER_SETTINGS} from '../../../ducks/Settings/actionTypes';
 const NotificationSettings = () => {
   const dispatch = useDispatch();
   const {customerSettings} = useSelector(state => state.settings);
-  const {inAppNotificationOn, emailNotificationOn} = customerSettings;
   const [isNotificationEnabled, setNotificationEnabled] = useState(
-    inAppNotificationOn ? true : false,
+    customerSettings?.inAppNotificationOn ? true : false,
   );
   const [isEmailEnabled, setEmailEnabled] = useState(
-    emailNotificationOn ? true : false,
+    customerSettings?.emailNotificationOn ? true : false,
   );
 
   return (

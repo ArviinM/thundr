@@ -15,6 +15,8 @@ import Button from '../../components/Button/Button';
 // Utils
 import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI, SETTINGS_URI} from '../../utils/images';
+import {useDispatch, useSelector} from 'react-redux';
+import {UPDATE_CUSTOMER_SURVEY} from '../../ducks/Settings/actionTypes';
 
 const OtherCheckBoxItem = ({label}) => {
   const [checked, setChecked] = useState(false);
@@ -50,7 +52,7 @@ const OtherCheckBoxItem = ({label}) => {
   );
 };
 
-const CheckboxItem = ({label}) => {
+const CheckboxItem = ({label, handleCheckBoxPress}) => {
   const [checked, setChecked] = useState(false);
   const showTextInput =
     label === 'Issues with perks. Please specify' ||
@@ -66,7 +68,11 @@ const CheckboxItem = ({label}) => {
   return (
     <View style={{marginVertical: scale(5)}}>
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => setChecked(!checked)}>
+        <TouchableOpacity
+          onPress={() => {
+            setChecked(!checked);
+            handleCheckBoxPress(label);
+          }}>
           <Image
             source={
               checked
@@ -98,7 +104,10 @@ const CheckboxItem = ({label}) => {
 };
 
 const SettingsModal = props => {
+  const dispatch = useDispatch();
   const {displayModal, setDisplayModal} = props;
+  const {loginData} = useSelector(state => state.login);
+  const {sub} = useSelector(state => state.persistedState);
   const isUnsubscribe = displayModal === 'unsubscribe';
   const [unsubscribeValues, setUnsubscribeValues] = useState([
     'Issues with billings',
@@ -114,6 +123,27 @@ const SettingsModal = props => {
     'Dissatisfied with the app',
     'Others. Please specify',
   ]);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleCheckBoxPress = value => {
+    const updatedSelectedItems = selectedItems.includes(value)
+      ? selectedItems.filter(item => item !== value)
+      : [...selectedItems, value];
+
+    setSelectedItems(updatedSelectedItems);
+  };
+
+  const handleDeleteOrUnsubscribe = () => {
+    const apiPayload = selectedItems.map(value => ({
+      sub: loginData?.sub || sub,
+      type: isUnsubscribe ? 'UNSUBSCRIBE' : 'DELETE',
+      value,
+    }));
+
+    console.log('sdsdsds', apiPayload);
+
+    dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: {apiPayload}});
+  };
 
   return (
     <Overlay
@@ -186,13 +216,22 @@ const SettingsModal = props => {
       <Separator space={15} />
       {isUnsubscribe
         ? unsubscribeValues.map((value, index) => (
-            <CheckboxItem key={index} label={value} />
+            <CheckboxItem
+              key={index}
+              label={value}
+              handleCheckBoxPress={handleCheckBoxPress}
+            />
           ))
         : deleteValues.map((value, index) => (
-            <CheckboxItem key={index} label={value} />
+            <CheckboxItem
+              key={index}
+              label={value}
+              handleCheckBoxPress={handleCheckBoxPress}
+            />
           ))}
       <Separator space={20} />
       <Button
+        onPress={handleDeleteOrUnsubscribe}
         title={isUnsubscribe ? 'Unsubscribe' : 'Delete'}
         style={{backgroundColor: '#fff', width: scale(150)}}
         textColor="#E43C59"

@@ -4,6 +4,8 @@ import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useNavigation} from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
 
 // Components
 import Image from '../../../components/Image/Image';
@@ -13,12 +15,18 @@ import MatchInformationSection from '../../../composition/MatchInformationSectio
 
 // Utils
 import {GLOBAL_ASSET_URI, PROFILE_ASSET_URI} from '../../../utils/images';
-import {scale, verticalScale} from '../../../utils/commons';
+import {calculateAge, scale, verticalScale} from '../../../utils/commons';
+
+// Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
-import LinearGradient from 'react-native-linear-gradient';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const {currentUserProfile} = useSelector(state => state.dashboard);
+  const currentUserPrimaryPhoto = currentUserProfile?.customerPhoto.filter(
+    item => item.primary,
+  );
+
   return (
     <LinearGradient
       colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
@@ -41,7 +49,9 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('EditProfileScreen')}>
+            onPress={() =>
+              navigation.navigate('EditProfileScreen', {currentUserProfile})
+            }>
             <Image
               source={PROFILE_ASSET_URI.GEAR_ICON}
               height={25}
@@ -55,7 +65,8 @@ const ProfileScreen = () => {
           weight={700}
           size={30}
           color="#fff">
-          Cholo, 39
+          {currentUserProfile?.name},{' '}
+          {calculateAge(currentUserProfile?.birthday)}
         </Text>
         <View style={{flexDirection: 'row', flex: 1, padding: scale(25)}}>
           <BorderLinearGradient
@@ -78,6 +89,7 @@ const ProfileScreen = () => {
                 alignItems: 'center',
               }}>
               <Image
+                source={{url: currentUserPrimaryPhoto?.[0]?.photoUrl}}
                 height={200}
                 width={150}
                 resizeMode="cover"
@@ -90,36 +102,62 @@ const ProfileScreen = () => {
               <View
                 key={index}
                 style={{flexDirection: 'row', top: index * verticalScale(75)}}>
-                {[...Array(2)].map((_, subIndex) => (
-                  <BorderLinearGradient
-                    key={subIndex}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
-                    colors={['#E72454', '#FFC227']}
-                    style={{
-                      height: verticalScale(65),
-                      alignItems: 'center',
-                      flex: 1,
-                      marginHorizontal: scale(4),
-                      marginBottom: verticalScale(5),
-                    }}>
-                    <View
+                {[...Array(2)].map((_, subIndex) => {
+                  const photoIndex = index * 2 + subIndex;
+                  const photo =
+                    photoIndex < currentUserProfile?.customerPhoto.length
+                      ? currentUserProfile?.customerPhoto[photoIndex]
+                      : null;
+                  return (
+                    <BorderLinearGradient
+                      key={subIndex}
+                      start={{x: 0, y: 0}}
+                      end={{x: 1, y: 0}}
+                      colors={['#E72454', '#FFC227']}
                       style={{
-                        height: verticalScale(62),
-                        width: scale(60),
-                        backgroundColor: '#9B9DA0',
-                        borderRadius: 15,
+                        height: verticalScale(65),
                         alignItems: 'center',
+                        flex: 1,
+                        marginHorizontal: scale(4),
+                        marginBottom: verticalScale(5),
                       }}>
-                      <Image
-                        height={100}
-                        width={75}
-                        resizeMode="cover"
-                        customStyle={{borderRadius: 15}}
-                      />
-                    </View>
-                  </BorderLinearGradient>
-                ))}
+                      {photo && !photo.primary ? (
+                        <View
+                          style={{
+                            height: verticalScale(62),
+                            width: scale(60),
+                            backgroundColor: '#9B9DA0',
+                            borderRadius: 15,
+                            alignItems: 'center',
+                          }}>
+                          <Image
+                            height={100}
+                            width={75}
+                            resizeMode="cover"
+                            source={{uri: photo.photoUrl}}
+                            style={{borderRadius: 15}}
+                          />
+                        </View>
+                      ) : (
+                        <View
+                          style={{
+                            height: verticalScale(62),
+                            width: scale(60),
+                            backgroundColor: '#9B9DA0',
+                            borderRadius: 15,
+                            alignItems: 'center',
+                          }}>
+                          <Image
+                            height={100}
+                            width={75}
+                            resizeMode="cover"
+                            customStyle={{borderRadius: 15}}
+                          />
+                        </View>
+                      )}
+                    </BorderLinearGradient>
+                  );
+                })}
               </View>
             ))}
           </View>
@@ -132,7 +170,9 @@ const ProfileScreen = () => {
             alignSelf: 'center',
             borderRadius: 20,
           }}>
-          <MatchInformationSection />
+          <MatchInformationSection
+            customerDetails={currentUserProfile?.customerDetails}
+          />
         </View>
       </View>
     </LinearGradient>

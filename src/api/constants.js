@@ -54,8 +54,12 @@ export const SUBSCRIPTION = {
 };
 
 // Settings
-
 export const SETTINGS = {
   GET_AND_SAVE_CUSTOMER_SETTINGS: 'customer/customer-setting',
   GET_AND_SAVE_CUSTOMER_SURVEY: 'customer/customer-survey',
+};
+
+// Current user profile
+export const USER_PROFILE = {
+  UPDATE_USER_PROFILE: 'customer/update-details',
 };

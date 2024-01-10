@@ -1,10 +1,10 @@
 // React modules
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 // Components
 import Text from '../../../components/Text/Text';
@@ -17,9 +17,23 @@ import Image from '../../../components/Image/Image';
 // Utils
 import {scale, verticalScale} from '../../../utils/commons';
 import {GLOBAL_ASSET_URI} from '../../../utils/images';
+import {useDispatch, useSelector} from 'react-redux';
+import {UPDATE_USER_PROFILE} from '../../../ducks/UserProfile/actionTypes';
+import {GET_CURRENT_USER_PROFILE} from '../../../ducks/Dashboard/actionTypes';
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {personalityDetailsState, primaryDetailsState} = useSelector(
+    state => state.dashboard,
+  );
+  const route = useRoute();
+  const {currentUserProfile} = route?.params;
+
+  useEffect(() => {
+    dispatch({type: GET_CURRENT_USER_PROFILE});
+  }, [dispatch]);
+
   return (
     <KeyboardAwareScrollView
       bounces={false}
@@ -46,11 +60,28 @@ const EditProfileScreen = () => {
         </Text>
       </View>
       <View>
-        <PrimaryDetails fromEditProfileScreen={true} />
+        <PrimaryDetails
+          fromEditProfileScreen={true}
+          currentUserProfile={currentUserProfile}
+        />
         <Separator space={-40} />
-        <PersonalityType fromEditProfileScreen={true} />
+        <PersonalityType
+          fromEditProfileScreen={true}
+          currentUserProfile={currentUserProfile}
+        />
         <Separator space={-70} />
-        <Button title="Save" style={{width: scale(160)}} />
+        <Button
+          title="Save"
+          style={{width: scale(160)}}
+          onPress={() => {
+            navigation.reset({index: 0, routes: [{name: 'DashboardTabs'}]});
+            dispatch({
+              type: UPDATE_USER_PROFILE,
+              payload: {...personalityDetailsState, ...primaryDetailsState},
+            });
+            dispatch({type: GET_CURRENT_USER_PROFILE});
+          }}
+        />
       </View>
     </KeyboardAwareScrollView>
   );

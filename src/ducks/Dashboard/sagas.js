@@ -19,6 +19,9 @@ import {
   GET_CHAT_MATCH_LIST,
   GET_CHAT_MATCH_LIST_FAILED,
   GET_CHAT_MATCH_LIST_SUCCESS,
+  GET_CURRENT_USER_PROFILE,
+  GET_CURRENT_USER_PROFILE_FAILED,
+  GET_CURRENT_USER_PROFILE_SUCCESS,
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_DETAILS_FAILED,
   GET_CUSTOMER_DETAILS_SUCCESS,
@@ -417,6 +420,30 @@ export function* readChatMessage({payload}) {
   }
 }
 
+export function* getCurrentUserProfile() {
+  const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
+
+  const payload = {
+    sub: loginData?.sub || sub,
+  };
+
+  try {
+    const response = yield call(DashboardConfig.getCustomerProfile, payload);
+    if (response?.status === 200) {
+      yield put({
+        type: GET_CURRENT_USER_PROFILE_SUCCESS,
+        payload: response.data.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: GET_CURRENT_USER_PROFILE_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -433,6 +460,7 @@ function* dashboardWatcher() {
   yield takeLatest(GET_MESSAGE, getMessage);
   yield takeEvery(GET_UNREAD_MESSAGES, getUnreadMessages);
   yield takeLatest(READ_CHAT_MESSAGE, readChatMessage);
+  yield takeLatest(GET_CURRENT_USER_PROFILE, getCurrentUserProfile);
 }
 
 export default dashboardWatcher;
