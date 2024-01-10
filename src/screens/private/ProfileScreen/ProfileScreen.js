@@ -15,7 +15,12 @@ import MatchInformationSection from '../../../composition/MatchInformationSectio
 
 // Utils
 import {GLOBAL_ASSET_URI, PROFILE_ASSET_URI} from '../../../utils/images';
-import {calculateAge, scale, verticalScale} from '../../../utils/commons';
+import {
+  calculateAge,
+  isIosDevice,
+  scale,
+  verticalScale,
+} from '../../../utils/commons';
 
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
@@ -23,7 +28,7 @@ import {BorderLinearGradient} from '../PersonalityType/Styled';
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const {currentUserProfile} = useSelector(state => state.dashboard);
-  const currentUserPrimaryPhoto = currentUserProfile?.customerPhoto.filter(
+  const currentUserPrimaryPhoto = currentUserProfile?.customerPhoto?.filter(
     item => item.primary,
   );
 
@@ -89,8 +94,8 @@ const ProfileScreen = () => {
                 alignItems: 'center',
               }}>
               <Image
-                source={{url: currentUserPrimaryPhoto?.[0]?.photoUrl}}
-                height={200}
+                source={{uri: currentUserPrimaryPhoto?.[0]?.photoUrl}}
+                height={isIosDevice() ? 200 : 140}
                 width={150}
                 resizeMode="cover"
                 customStyle={{borderRadius: 15}}
@@ -131,11 +136,11 @@ const ProfileScreen = () => {
                             alignItems: 'center',
                           }}>
                           <Image
-                            height={100}
-                            width={75}
+                            height={isIosDevice() ? 100 : 65}
+                            width={isIosDevice() ? 75 : 70}
                             resizeMode="cover"
                             source={{uri: photo.photoUrl}}
-                            style={{borderRadius: 15}}
+                            customStyle={{borderRadius: 15}}
                           />
                         </View>
                       ) : (

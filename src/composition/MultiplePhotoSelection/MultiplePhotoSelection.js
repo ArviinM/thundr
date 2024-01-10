@@ -13,7 +13,7 @@ import Image from '../../components/Image/Image';
 
 // Utils
 import {GLOBAL_ASSET_URI} from '../../utils/images';
-import {scale, verticalScale} from '../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {UPLOAD_PHOTO} from '../../ducks/ProfileCreation/actionTypes';
 import {
   GET_CURRENT_USER_PROFILE,
@@ -66,7 +66,9 @@ const MultiplePhotoSelection = () => {
   );
   return (
     <View style={{flexDirection: 'row', left: scale(-10), flex: 1}}>
-      <TouchableOpacity onPress={() => openImageLibrary({primaryPhoto: true})}>
+      <TouchableOpacity
+        onPress={() => openImageLibrary({primaryPhoto: true})}
+        activeOpacity={1}>
         <BorderLinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
@@ -88,9 +90,9 @@ const MultiplePhotoSelection = () => {
             }}>
             {currentUserProfile?.customerPhoto ? (
               <Image
-                source={{url: currentUserPrimaryPhoto?.[0]?.photoUrl}}
-                height={200}
-                width={150}
+                source={{uri: currentUserPrimaryPhoto?.[0]?.photoUrl}}
+                height={isIosDevice() ? 200 : 140}
+                width={isIosDevice() ? 150 : 140}
                 resizeMode="cover"
                 customStyle={{borderRadius: 15}}
               />
@@ -106,7 +108,7 @@ const MultiplePhotoSelection = () => {
           </View>
         </BorderLinearGradient>
       </TouchableOpacity>
-      <View style={{flex: 1, flexDirection: 'column'}}>
+      <View style={{flex: 1, flexDirection: 'column', left: scale(5)}}>
         {[...Array(2)].map((_, index) => (
           <View key={index} style={{flexDirection: 'row'}}>
             {[...Array(2)].map((_, subIndex) => {
@@ -118,6 +120,7 @@ const MultiplePhotoSelection = () => {
 
               return (
                 <TouchableOpacity
+                  activeOpacity={1}
                   onPress={() => {
                     dispatch({
                       type: UPDATE_DASHBOARD_STATE,
@@ -152,8 +155,8 @@ const MultiplePhotoSelection = () => {
                       {photo && !photo.primary ? (
                         <Image
                           source={{uri: photo.photoUrl}}
-                          height={100}
-                          width={75}
+                          height={isIosDevice() ? 100 : 65}
+                          width={isIosDevice() ? 75 : 70}
                           resizeMode="cover"
                           customStyle={{borderRadius: 15}}
                         />
