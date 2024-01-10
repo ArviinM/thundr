@@ -19,7 +19,12 @@ import {GLOBAL_ASSET_URI, SETTINGS_URI} from '../../utils/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_CUSTOMER_SURVEY} from '../../ducks/Settings/actionTypes';
 
-const OtherCheckBoxItem = ({label, isDisabled}) => {
+const OtherCheckBoxItem = ({
+  label,
+  isDisabled,
+  setSecondarySelectedItems,
+  setInputValue,
+}) => {
   const [checked, setChecked] = useState(false);
   const showTextInput = label === 'Other reasons. Please specify';
 
@@ -45,6 +50,7 @@ const OtherCheckBoxItem = ({label, isDisabled}) => {
           isChecked={checked}
           onClick={() => {
             setChecked(!checked);
+            setSecondarySelectedItems(label);
           }}
         />
         <Text color="#fff" size={15} customStyle={{marginLeft: scale(10)}}>
@@ -53,9 +59,10 @@ const OtherCheckBoxItem = ({label, isDisabled}) => {
       </View>
       {showTextInput && (
         <TextInput
+          onChangeText={text => setInputValue(text)}
           inputStyle={{
             width: scale(200),
-            height: verticalScale(30),
+            height: verticalScale(isIosDevice() ? 30 : 40),
           }}
         />
       )}
@@ -63,9 +70,12 @@ const OtherCheckBoxItem = ({label, isDisabled}) => {
   );
 };
 
-const CheckboxItem = ({label, handleCheckBoxPress, customerSurvey}) => {
-  console.log(label);
-  console.log('customerSurvey', customerSurvey);
+const CheckboxItem = ({
+  label,
+  handleCheckBoxPress,
+  setSecondarySelectedItems,
+  setInputValue,
+}) => {
   const [checked, setChecked] = useState(false);
   const showTextInput =
     label === 'Issues with perks. Please specify' ||
@@ -77,10 +87,6 @@ const CheckboxItem = ({label, handleCheckBoxPress, customerSurvey}) => {
     'I don’t find my matches engaging during chat',
     'Other reasons. Please specify',
   ]);
-  const customerSurveyValue = customerSurvey?.map(item => item.value);
-  const defaultValue = customerSurveyValue
-    ? customerSurveyValue?.includes(label)
-    : checked;
 
   return (
     <View style={{marginVertical: scale(5)}}>
@@ -100,7 +106,7 @@ const CheckboxItem = ({label, handleCheckBoxPress, customerSurvey}) => {
               width={18}
             />
           }
-          isChecked={defaultValue}
+          isChecked={checked}
           onClick={() => {
             setChecked(!checked);
             handleCheckBoxPress(label);
@@ -116,13 +122,15 @@ const CheckboxItem = ({label, handleCheckBoxPress, customerSurvey}) => {
             key={index}
             label={value}
             isDisabled={showOtherCheckboxes && !checked}
+            setSecondarySelectedItems={setSecondarySelectedItems}
+            setInputValue={setInputValue}
           />
         ))}
       {showTextInput && (
         <TextInput
           inputStyle={{
             width: scale(200),
-            height: verticalScale(30),
+            height: verticalScale(isIosDevice() ? 30 : 40),
           }}
         />
       )}
@@ -152,6 +160,8 @@ const SettingsModal = props => {
     'Others. Please specify',
   ]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [secondarySelectedItems, setSecondarySelectedItems] = useState([]);
+  const [inputValue, setInputValue] = useState('');
 
   const handleCheckBoxPress = value => {
     const updatedSelectedItems = selectedItems.includes(value)
@@ -165,7 +175,9 @@ const SettingsModal = props => {
     const apiPayload = selectedItems.map(value => ({
       sub: loginData?.sub || sub,
       type: isUnsubscribe ? 'UNSUBSCRIBE' : 'DELETE',
-      value,
+      value: secondarySelectedItems
+        ? `${value}:${secondarySelectedItems}:${inputValue}`
+        : value,
     }));
 
     dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: apiPayload});
@@ -192,7 +204,7 @@ const SettingsModal = props => {
                   : 200
                 : isIosDevice()
                 ? 220
-                : 250,
+                : 280,
             ),
           },
         ],
@@ -208,10 +220,10 @@ const SettingsModal = props => {
             isUnsubscribe
               ? isIosDevice()
                 ? 380
-                : 425
+                : 450
               : isIosDevice()
               ? 485
-              : 530,
+              : 600,
           ),
           right: scale(10),
         }}>
@@ -248,6 +260,8 @@ const SettingsModal = props => {
               label={value}
               handleCheckBoxPress={handleCheckBoxPress}
               customerSurvey={customerSurvey}
+              setSecondarySelectedItems={setSecondarySelectedItems}
+              setInputValue={setInputValue}
             />
           ))
         : deleteValues.map((value, index) => (
@@ -256,6 +270,8 @@ const SettingsModal = props => {
               label={value}
               handleCheckBoxPress={handleCheckBoxPress}
               customerSurvey={customerSurvey}
+              setSecondarySelectedItems={setSecondarySelectedItems}
+              setInputValue={setInputValue}
             />
           ))}
       <Separator space={20} />

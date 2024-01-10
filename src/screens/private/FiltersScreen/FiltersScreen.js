@@ -16,7 +16,7 @@ import AdvancedFilters from '../AdvancedFilters/AdvancedFilters';
 
 // Utils
 import {FILTERS_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
-import {scale, verticalScale} from '../../../utils/commons';
+import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_FILTERS} from '../../../ducks/Filters/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
@@ -94,9 +94,9 @@ const FiltersScreen = () => {
 
   // Convert API response from string to array
   const stringToArray = inputString => {
-    const trimmedString = inputString.trim();
-    const arrayResult = trimmedString.split(',');
-    const finalArray = arrayResult.map(item => item.trim());
+    const trimmedString = inputString?.trim();
+    const arrayResult = trimmedString?.split(',');
+    const finalArray = arrayResult?.map(item => item.trim());
 
     return finalArray;
   };
@@ -105,7 +105,7 @@ const FiltersScreen = () => {
   const defaultGenderState = (genderIcons, genderIdentities) => {
     const matchedIndices = [];
     genderIcons.forEach((icon, index) => {
-      if (genderIdentities.includes(icon.value)) {
+      if (genderIdentities?.includes(icon.value)) {
         matchedIndices.push(index);
       }
     });
@@ -117,7 +117,7 @@ const FiltersScreen = () => {
   const defaultStarSignState = (starSigns, namesToMatch) => {
     const matchedIndices = [];
     starSigns.forEach((sign, index) => {
-      if (namesToMatch.includes(sign)) {
+      if (namesToMatch?.includes(sign)) {
         matchedIndices.push(index);
       }
     });
@@ -128,7 +128,7 @@ const FiltersScreen = () => {
   const defaultHobbyState = (hobbies, namesToMatch) => {
     const matchedIndices = [];
     hobbies.forEach((sign, index) => {
-      if (namesToMatch.includes(sign)) {
+      if (namesToMatch?.includes(sign)) {
         matchedIndices.push(index);
       }
     });
@@ -339,7 +339,7 @@ const FiltersScreen = () => {
             <Image
               source={FILTERS_ASSET_URI.SUBSCRIBE_BUTTON}
               width={220}
-              height={130}
+              height={isIosDevice() ? 130 : 80}
             />
           </View>
         </TouchableOpacity>
