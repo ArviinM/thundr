@@ -84,6 +84,7 @@ export const INITIAL_STATE = {
   triggerReload: false,
   primaryDetailsState: [],
   personalityDetailsState: [],
+  currentPhotoId: null,
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {

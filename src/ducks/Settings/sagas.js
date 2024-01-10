@@ -92,20 +92,14 @@ export function* getCustomerSurvey() {
 }
 
 export function* updateCustomerSurvey({payload}) {
-  const {apiPayload} = payload;
-
-  console.log('POTA', apiPayload);
-
   try {
-    const response = yield call(SettingsConfig.updateCustomerSurvey, {
-      ...apiPayload,
-    });
-
+    const response = yield call(SettingsConfig.updateCustomerSurvey, payload);
     if (response?.status === 200) {
       yield put({
         type: UPDATE_CUSTOMER_SURVEY_SUCCESS,
         payload: response.data,
       });
+      yield put({type: GET_CUSTOMER_SURVEY});
     }
   } catch (error) {
     yield put({

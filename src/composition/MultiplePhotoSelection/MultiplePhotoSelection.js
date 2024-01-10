@@ -1,5 +1,5 @@
 // React modules
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 
 // Third party libraries
@@ -15,13 +15,18 @@ import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 import {scale, verticalScale} from '../../utils/commons';
 import {UPLOAD_PHOTO} from '../../ducks/ProfileCreation/actionTypes';
-import {GET_CURRENT_USER_PROFILE} from '../../ducks/Dashboard/actionTypes';
+import {
+  GET_CURRENT_USER_PROFILE,
+  UPDATE_DASHBOARD_STATE,
+} from '../../ducks/Dashboard/actionTypes';
 
-const MultiplePhotoSelection = props => {
+const MultiplePhotoSelection = () => {
   const dispatch = useDispatch();
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
-  const {currentUserProfile} = useSelector(state => state.dashboard);
+  const {currentUserProfile, currentPhotoId} = useSelector(
+    state => state.dashboard,
+  );
 
   const openImageLibrary = async ({primaryPhoto}) => {
     try {
@@ -41,7 +46,7 @@ const MultiplePhotoSelection = props => {
         formData.append('isPrimary', primaryPhoto ? 'true' : 'false');
         formData.append('filepath', image?.data);
         formData.append('filename', image?.path);
-        formData.append('oldPhotoId', '');
+        formData.append('oldPhotoId', primaryPhoto ? '' : currentPhotoId);
 
         dispatch({type: UPLOAD_PHOTO, payload: {formData}});
         dispatch({type: GET_CURRENT_USER_PROFILE});
@@ -110,9 +115,18 @@ const MultiplePhotoSelection = props => {
                 photoIndex < currentUserProfile?.customerPhoto.length
                   ? currentUserProfile?.customerPhoto[photoIndex]
                   : null;
+
               return (
                 <TouchableOpacity
-                  onPress={() => openImageLibrary({primaryPhoto: false})}>
+                  onPress={() => {
+                    dispatch({
+                      type: UPDATE_DASHBOARD_STATE,
+                      newState: {currentPhotoId: photo.id},
+                    });
+                    openImageLibrary({
+                      primaryPhoto: false,
+                    });
+                  }}>
                   <BorderLinearGradient
                     key={subIndex}
                     start={{x: 0, y: 0}}

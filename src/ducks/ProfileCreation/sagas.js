@@ -19,7 +19,10 @@ import {
 import * as RootNavigation from '../../navigations/tempNavigation';
 import ProfileCreationConfig from '../../api/services/profileCreationService';
 import {GENERIC_ERROR} from '../../utils/commons';
-import {GET_MATCH_LIST} from '../Dashboard/actionTypes';
+import {
+  GET_CURRENT_USER_PROFILE,
+  GET_MATCH_LIST,
+} from '../Dashboard/actionTypes';
 
 export function* startProfileCreation({payload}) {
   const {loginData} = yield select(state => state.login);
@@ -160,6 +163,9 @@ export function* uploadPhoto({payload}) {
       yield put({
         type: UPLOAD_PHOTO_SUCCESS,
         payload: response.data,
+      });
+      yield put({
+        type: GET_CURRENT_USER_PROFILE,
       });
     }
   } catch (error) {

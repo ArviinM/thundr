@@ -79,7 +79,6 @@ const EditProfileScreen = () => {
               type: UPDATE_USER_PROFILE,
               payload: {...personalityDetailsState, ...primaryDetailsState},
             });
-            dispatch({type: GET_CURRENT_USER_PROFILE});
           }}
         />
       </View>
