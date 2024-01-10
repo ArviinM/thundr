@@ -1,10 +1,10 @@
 // React modules
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 
 // Components
@@ -18,6 +18,7 @@ import Spinner from '../../../components/Spinner/Spinner';
 import {
   CUSTOMER_MATCH,
   GET_CHAT_MATCH_LIST,
+  GET_CURRENT_USER_PROFILE,
   GET_CUSTOMER_DETAILS,
   GET_CUSTOMER_PHOTO,
   GET_CUSTOMER_PROFILE,
@@ -124,6 +125,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch({type: GET_SUBSCRIPTION_DETAILS});
+    dispatch({type: GET_CURRENT_USER_PROFILE});
   }, [dispatch]);
 
   useEffect(() => {

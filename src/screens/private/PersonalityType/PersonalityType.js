@@ -34,7 +34,10 @@ import {
 } from '../../../ducks/ProfileCreation/actionTypes';
 import Modal from '../../../composition/Modal/Modal';
 import {Overlay} from 'react-native-elements';
-import {GET_MATCH_LIST} from '../../../ducks/Dashboard/actionTypes';
+import {
+  GET_MATCH_LIST,
+  UPDATE_DASHBOARD_STATE,
+} from '../../../ducks/Dashboard/actionTypes';
 
 const hobbies = [
   'Sports & Games',
@@ -138,26 +141,118 @@ const CustomDropdown = props => {
 };
 
 const PersonalityType = props => {
-  const {fromEditProfileScreen} = props;
+  const {fromEditProfileScreen, currentUserProfile} = props;
+  const {
+    bio: apiBio,
+    work: apiWork,
+    location: apiLocation,
+    height,
+    starSign: apiStarSign,
+    education: apiEducation,
+    drinking: apiDrinking,
+    smoking: apiSmoking,
+    religion: apiReligion,
+    pet: apiPet,
+    politics: apiPolitics,
+    personalityType,
+  } = currentUserProfile?.customerDetails;
+
   const {loginData} = useSelector(state => state.login);
   const dispatch = useDispatch();
   const [selectedHobby, setSelectedHobby] = useState([]);
-  const [selectedPersonality, setSelectedPersonality] = useState('');
-  const [bio, setBio] = useState('');
-  const [work, setWork] = useState('');
-  const [location, setLocation] = useState('');
-  const [heightFt, setHeightFt] = useState('');
-  const [heightIn, setHeightIn] = useState('');
-  const [startSignState, setStartSignState] = useState('');
-  const [educationState, setEducationState] = useState('');
-  const [drinking, setDrinking] = useState('');
-  const [smoking, setSmoking] = useState('');
-  const [religionState, setReligionState] = useState('');
-  const [petState, setPetState] = useState('');
-  const [politicsState, setPoliticsState] = useState('');
+  const [selectedPersonality, setSelectedPersonality] = useState(
+    fromEditProfileScreen && personalityType ? personalityType : '',
+  );
+  const [bio, setBio] = useState(fromEditProfileScreen && apiBio ? apiBio : '');
+  const [work, setWork] = useState(
+    fromEditProfileScreen && apiWork ? apiWork : '',
+  );
+  const [location, setLocation] = useState(
+    fromEditProfileScreen && apiLocation ? apiLocation : '',
+  );
+  const [startSignState, setStartSignState] = useState(
+    fromEditProfileScreen && apiStarSign ? apiStarSign : '',
+  );
+  const [educationState, setEducationState] = useState(
+    fromEditProfileScreen && apiEducation ? apiEducation : '',
+  );
+  const [drinking, setDrinking] = useState(
+    fromEditProfileScreen && apiDrinking ? apiDrinking : '',
+  );
+  const [smoking, setSmoking] = useState(
+    fromEditProfileScreen && apiSmoking ? apiSmoking : '',
+  );
+  const [religionState, setReligionState] = useState(
+    fromEditProfileScreen && apiReligion ? apiReligion : '',
+  );
+  const [petState, setPetState] = useState(
+    fromEditProfileScreen && apiPet ? apiPet : '',
+  );
+  const [politicsState, setPoliticsState] = useState(
+    fromEditProfileScreen && apiPolitics ? apiPolitics : '',
+  );
   const [otherEducationValue, setOtherEducationValue] = useState('');
   const [otherReligionValue, setOtherReligionValue] = useState('');
   const [showModal, setShowModal] = useState(false);
+
+  const parseHeight = heightString => {
+    const [feetString, inchesString] = heightString?.split('ft ');
+    const ftState = parseInt(feetString, 10) || 0;
+    const inState = parseInt(inchesString, 10) || 0;
+    return {ftState, inState};
+  };
+
+  const [heightFt, setHeightFt] = useState(
+    fromEditProfileScreen && height ? parseHeight(height)?.ftState + ' Ft' : '',
+  );
+  const [heightIn, setHeightIn] = useState(
+    fromEditProfileScreen && height ? parseHeight(height)?.inState + ' In' : '',
+  );
+
+  useEffect(() => {
+    if (fromEditProfileScreen) {
+      dispatch({
+        type: UPDATE_DASHBOARD_STATE,
+        newState: {
+          personalityDetailsState: {
+            bio,
+            work,
+            location,
+            height: height
+              ? `${removeSpaces(heightFt.toLocaleLowerCase())} ${removeSpaces(
+                  heightIn.toLocaleLowerCase(),
+                )}`
+              : `${heightFt} ${heightIn}`,
+            starSign: startSignState,
+            education: educationState,
+            drinking,
+            smoking,
+            religion: religionState,
+            pet: petState,
+            personalityType: selectedPersonality,
+            politics: politicsState,
+            gender: 'Others',
+          },
+        },
+      });
+    }
+  }, [
+    dispatch,
+    bio,
+    work,
+    location,
+    heightFt,
+    heightIn,
+    height,
+    startSignState,
+    educationState,
+    drinking,
+    smoking,
+    religionState,
+    petState,
+    selectedPersonality,
+    politicsState,
+  ]);
 
   useEffect(() => {
     dispatch({type: GET_MATCH_LIST, payload: {sub: loginData?.sub}});
