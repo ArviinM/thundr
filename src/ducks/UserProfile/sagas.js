@@ -5,6 +5,7 @@ import {
   UPDATE_USER_PROFILE_SUCCESS,
 } from './actionTypes';
 import UserProfileConfig from '../../api/services/userProfileService';
+import {GET_CURRENT_USER_PROFILE} from '../Dashboard/actionTypes';
 
 export function* updateUserProfile({payload}) {
   const {sub} = yield select(state => state.persistedState);
@@ -21,6 +22,7 @@ export function* updateUserProfile({payload}) {
         type: UPDATE_USER_PROFILE_SUCCESS,
         payload: response.data,
       });
+      yield put({type: GET_CURRENT_USER_PROFILE});
     }
   } catch (error) {
     yield put({

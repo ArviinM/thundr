@@ -4,6 +4,7 @@ import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
+import CheckBox from 'react-native-check-box';
 
 // Components
 import Separator from '../../components/Separator/Separator';
@@ -18,24 +19,34 @@ import {GLOBAL_ASSET_URI, SETTINGS_URI} from '../../utils/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_CUSTOMER_SURVEY} from '../../ducks/Settings/actionTypes';
 
-const OtherCheckBoxItem = ({label}) => {
+const OtherCheckBoxItem = ({label, isDisabled}) => {
   const [checked, setChecked] = useState(false);
   const showTextInput = label === 'Other reasons. Please specify';
 
   return (
     <View style={{marginLeft: scale(20)}}>
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => setChecked(!checked)}>
-          <Image
-            source={
-              checked
-                ? SETTINGS_URI.SETTINGS_CHECKED_CHECKBOX
-                : SETTINGS_URI.SETTINGS_CHECKBOX
-            }
-            height={20}
-            width={18}
-          />
-        </TouchableOpacity>
+        <CheckBox
+          disabled={isDisabled}
+          checkedImage={
+            <Image
+              source={SETTINGS_URI.SETTINGS_CHECKED_CHECKBOX}
+              height={20}
+              width={18}
+            />
+          }
+          unCheckedImage={
+            <Image
+              source={SETTINGS_URI.SETTINGS_CHECKBOX}
+              height={20}
+              width={18}
+            />
+          }
+          isChecked={checked}
+          onClick={() => {
+            setChecked(!checked);
+          }}
+        />
         <Text color="#fff" size={15} customStyle={{marginLeft: scale(10)}}>
           {label}
         </Text>
@@ -52,7 +63,9 @@ const OtherCheckBoxItem = ({label}) => {
   );
 };
 
-const CheckboxItem = ({label, handleCheckBoxPress}) => {
+const CheckboxItem = ({label, handleCheckBoxPress, customerSurvey}) => {
+  console.log(label);
+  console.log('customerSurvey', customerSurvey);
   const [checked, setChecked] = useState(false);
   const showTextInput =
     label === 'Issues with perks. Please specify' ||
@@ -64,32 +77,46 @@ const CheckboxItem = ({label, handleCheckBoxPress}) => {
     'I don’t find my matches engaging during chat',
     'Other reasons. Please specify',
   ]);
+  const customerSurveyValue = customerSurvey?.map(item => item.value);
+  const defaultValue = customerSurveyValue
+    ? customerSurveyValue?.includes(label)
+    : checked;
 
   return (
     <View style={{marginVertical: scale(5)}}>
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity
-          onPress={() => {
+        <CheckBox
+          checkedImage={
+            <Image
+              source={SETTINGS_URI.SETTINGS_CHECKED_CHECKBOX}
+              height={20}
+              width={18}
+            />
+          }
+          unCheckedImage={
+            <Image
+              source={SETTINGS_URI.SETTINGS_CHECKBOX}
+              height={20}
+              width={18}
+            />
+          }
+          isChecked={defaultValue}
+          onClick={() => {
             setChecked(!checked);
             handleCheckBoxPress(label);
-          }}>
-          <Image
-            source={
-              checked
-                ? SETTINGS_URI.SETTINGS_CHECKED_CHECKBOX
-                : SETTINGS_URI.SETTINGS_CHECKBOX
-            }
-            height={20}
-            width={18}
-          />
-        </TouchableOpacity>
+          }}
+        />
         <Text color="#fff" size={15} customStyle={{marginLeft: scale(10)}}>
           {label}
         </Text>
       </View>
       {showOtherCheckboxes &&
         dissatisfiedValues.map((value, index) => (
-          <OtherCheckBoxItem key={index} label={value} />
+          <OtherCheckBoxItem
+            key={index}
+            label={value}
+            isDisabled={showOtherCheckboxes && !checked}
+          />
         ))}
       {showTextInput && (
         <TextInput
@@ -108,6 +135,7 @@ const SettingsModal = props => {
   const {displayModal, setDisplayModal} = props;
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
+  const {customerSurvey} = useSelector(state => state.settings);
   const isUnsubscribe = displayModal === 'unsubscribe';
   const [unsubscribeValues, setUnsubscribeValues] = useState([
     'Issues with billings',
@@ -140,9 +168,8 @@ const SettingsModal = props => {
       value,
     }));
 
-    console.log('sdsdsds', apiPayload);
-
-    dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: {apiPayload}});
+    dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: apiPayload});
+    setDisplayModal(false);
   };
 
   return (
@@ -220,6 +247,7 @@ const SettingsModal = props => {
               key={index}
               label={value}
               handleCheckBoxPress={handleCheckBoxPress}
+              customerSurvey={customerSurvey}
             />
           ))
         : deleteValues.map((value, index) => (
@@ -227,6 +255,7 @@ const SettingsModal = props => {
               key={index}
               label={value}
               handleCheckBoxPress={handleCheckBoxPress}
+              customerSurvey={customerSurvey}
             />
           ))}
       <Separator space={20} />

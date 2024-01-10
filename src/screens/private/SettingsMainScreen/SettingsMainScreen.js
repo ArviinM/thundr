@@ -16,7 +16,10 @@ import Spinner from '../../../components/Spinner/Spinner';
 
 // Ducks
 import {START_LOGOUT} from '../../../ducks/Login/actionTypes';
-import {GET_CUSTOMER_SETTINGS} from '../../../ducks/Settings/actionTypes';
+import {
+  GET_CUSTOMER_SETTINGS,
+  GET_CUSTOMER_SURVEY,
+} from '../../../ducks/Settings/actionTypes';
 
 // Utils
 import {SETTINGS_URI} from '../../../utils/images';
@@ -33,6 +36,7 @@ const SettingsMainScreen = () => {
   useFocusEffect(
     useCallback(() => {
       dispatch({type: GET_CUSTOMER_SETTINGS});
+      dispatch({type: GET_CUSTOMER_SURVEY});
     }, [dispatch]),
   );
 
