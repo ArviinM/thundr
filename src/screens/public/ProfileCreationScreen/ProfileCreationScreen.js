@@ -120,13 +120,13 @@ const PrimaryDetails = props => {
   };
 
   const [gender, setGender] = useState(
-    currentUserProfile.gender && fromEditProfileScreen
+    currentUserProfile?.gender && fromEditProfileScreen
       ? currentUserProfile.gender
       : null,
   );
   const [activeIcon, setActiveIcon] = useState(
     getIconFromValue(
-      currentUserProfile.gender && fromEditProfileScreen
+      currentUserProfile?.gender && fromEditProfileScreen
         ? currentUserProfile.gender
         : '',
     ),

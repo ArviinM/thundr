@@ -142,54 +142,65 @@ const CustomDropdown = props => {
 
 const PersonalityType = props => {
   const {fromEditProfileScreen, currentUserProfile} = props;
-  const {
-    bio: apiBio,
-    work: apiWork,
-    location: apiLocation,
-    height,
-    starSign: apiStarSign,
-    education: apiEducation,
-    drinking: apiDrinking,
-    smoking: apiSmoking,
-    religion: apiReligion,
-    pet: apiPet,
-    politics: apiPolitics,
-    personalityType,
-  } = currentUserProfile?.customerDetails;
 
   const {loginData} = useSelector(state => state.login);
   const dispatch = useDispatch();
   const [selectedHobby, setSelectedHobby] = useState([]);
   const [selectedPersonality, setSelectedPersonality] = useState(
-    fromEditProfileScreen && personalityType ? personalityType : '',
+    fromEditProfileScreen &&
+      currentUserProfile?.customerDetails?.personalityType
+      ? currentUserProfile?.customerDetails?.personalityType
+      : '',
   );
-  const [bio, setBio] = useState(fromEditProfileScreen && apiBio ? apiBio : '');
+  const [bio, setBio] = useState(
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.bio
+      ? currentUserProfile?.customerDetails?.bio
+      : '',
+  );
   const [work, setWork] = useState(
-    fromEditProfileScreen && apiWork ? apiWork : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.work
+      ? currentUserProfile?.customerDetails?.work
+      : '',
   );
   const [location, setLocation] = useState(
-    fromEditProfileScreen && apiLocation ? apiLocation : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.location
+      ? currentUserProfile?.customerDetails?.location
+      : '',
   );
   const [startSignState, setStartSignState] = useState(
-    fromEditProfileScreen && apiStarSign ? apiStarSign : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.starSign
+      ? currentUserProfile?.customerDetails?.starSign
+      : '',
   );
   const [educationState, setEducationState] = useState(
-    fromEditProfileScreen && apiEducation ? apiEducation : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.education
+      ? currentUserProfile?.customerDetails?.education
+      : '',
   );
   const [drinking, setDrinking] = useState(
-    fromEditProfileScreen && apiDrinking ? apiDrinking : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.drinking
+      ? currentUserProfile?.customerDetails?.drinking
+      : '',
   );
   const [smoking, setSmoking] = useState(
-    fromEditProfileScreen && apiSmoking ? apiSmoking : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.smoking
+      ? currentUserProfile?.customerDetails?.smoking
+      : '',
   );
   const [religionState, setReligionState] = useState(
-    fromEditProfileScreen && apiReligion ? apiReligion : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.religion
+      ? currentUserProfile?.customerDetails?.religion
+      : '',
   );
   const [petState, setPetState] = useState(
-    fromEditProfileScreen && apiPet ? apiPet : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.pet
+      ? currentUserProfile?.customerDetails?.pet
+      : '',
   );
   const [politicsState, setPoliticsState] = useState(
-    fromEditProfileScreen && apiPolitics ? apiPolitics : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.politics
+      ? currentUserProfile?.customerDetails?.politics
+      : '',
   );
   const [otherEducationValue, setOtherEducationValue] = useState('');
   const [otherReligionValue, setOtherReligionValue] = useState('');
@@ -203,10 +214,16 @@ const PersonalityType = props => {
   };
 
   const [heightFt, setHeightFt] = useState(
-    fromEditProfileScreen && height ? parseHeight(height)?.ftState + ' Ft' : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.height
+      ? parseHeight(currentUserProfile?.customerDetails?.height)?.ftState +
+          ' Ft'
+      : '',
   );
   const [heightIn, setHeightIn] = useState(
-    fromEditProfileScreen && height ? parseHeight(height)?.inState + ' In' : '',
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.height
+      ? parseHeight(currentUserProfile?.customerDetails?.height)?.inState +
+          ' In'
+      : '',
   );
 
   useEffect(() => {
@@ -218,7 +235,7 @@ const PersonalityType = props => {
             bio,
             work,
             location,
-            height: height
+            height: currentUserProfile?.customerDetails?.height
               ? `${removeSpaces(heightFt.toLocaleLowerCase())} ${removeSpaces(
                   heightIn.toLocaleLowerCase(),
                 )}`
@@ -243,7 +260,6 @@ const PersonalityType = props => {
     location,
     heightFt,
     heightIn,
-    height,
     startSignState,
     educationState,
     drinking,
