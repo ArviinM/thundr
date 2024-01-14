@@ -120,7 +120,7 @@ const MultiplePhotoSelection = () => {
 
               return (
                 <TouchableOpacity
-                  activeOpacity={1}
+                  key={index}
                   onPress={() => {
                     dispatch({
                       type: UPDATE_DASHBOARD_STATE,

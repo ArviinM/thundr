@@ -33,6 +33,11 @@ const DashboardConfig = {
       payload,
     ),
   readChatMessage: payload => api.post(DASHBOARD.READ_CHAT_MESSAGE, payload),
+  getPossibles: payload =>
+    api.get(
+      `${DASHBOARD.GET_POSSIBLES}?sub=${payload.sub}&tag=${payload.tag}`,
+      payload,
+    ),
 };
 
 export default DashboardConfig;
