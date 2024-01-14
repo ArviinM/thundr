@@ -1,5 +1,5 @@
 // React modules
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, RefreshControl, View} from 'react-native';
 
 // Third party libraries
@@ -17,9 +17,12 @@ import {scale, verticalScale} from '../../../utils/commons';
 
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
+import {useDispatch, useSelector} from 'react-redux';
+import {GET_POSSIBLES} from '../../../ducks/Dashboard/actionTypes';
+import Spinner from '../../../components/Spinner/Spinner';
 
 const Jowables = props => {
-  const {handleRefresh} = props;
+  const {handleRefresh, jowaPossibles} = props;
   const navigation = useNavigation();
 
   return (
@@ -30,7 +33,7 @@ const Jowables = props => {
       numColumns={2}
       contentContainerStyle={{flexGrow: 1, alignItems: 'center'}}
       showsVerticalScrollIndicator={false}
-      data={['1', '2', '3', '4', '5', '6']}
+      data={jowaPossibles}
       renderItem={({item, index}) => {
         return (
           <BorderLinearGradient
@@ -69,7 +72,7 @@ const Jowables = props => {
         return (
           <View
             style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-            <Text size={20}>No Jowable Data</Text>
+            <Text size={20}>No data available</Text>
           </View>
         );
       }}
@@ -78,7 +81,7 @@ const Jowables = props => {
 };
 
 const Marebles = props => {
-  const {handleRefresh} = props;
+  const {handleRefresh, marePossibles} = props;
   const navigation = useNavigation();
 
   return (
@@ -89,7 +92,7 @@ const Marebles = props => {
       contentContainerStyle={{flexGrow: 1, alignItems: 'center'}}
       showsVerticalScrollIndicator={false}
       numColumns={2}
-      data={['1', '2', '3', '4']}
+      data={marePossibles}
       renderItem={({item, index}) => {
         return (
           <BorderLinearGradient
@@ -128,7 +131,7 @@ const Marebles = props => {
         return (
           <View
             style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-            <Text size={20}>No Mareble Data</Text>
+            <Text size={20}>No data available</Text>
           </View>
         );
       }}
@@ -138,13 +141,30 @@ const Marebles = props => {
 
 const ThePossibles = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {jowaPossibles, marePossibles, loading} = useSelector(
+    state => state.dashboard,
+  );
   const [isJowableTabActive, setJowableTabActive] = useState(true);
-  const handleRefresh = () => {};
+  const handleRefresh = () => {
+    if (isJowableTabActive) {
+      dispatch({type: GET_POSSIBLES, payload: {tag: 'JOWA'}});
+    } else {
+      dispatch({type: GET_POSSIBLES, payload: {tag: 'MARE'}});
+    }
+  };
 
-  // For loader
-  // if (loading) {
-  //   return <Spinner />;
-  // }
+  useEffect(() => {
+    if (isJowableTabActive) {
+      dispatch({type: GET_POSSIBLES, payload: {tag: 'JOWA'}});
+    } else {
+      dispatch({type: GET_POSSIBLES, payload: {tag: 'MARE'}});
+    }
+  }, [dispatch, isJowableTabActive]);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <View
@@ -193,21 +213,31 @@ const ThePossibles = () => {
       <Separator space={10} />
       <View style={{justifyContent: 'center', flex: 1}}>
         {isJowableTabActive ? (
-          <Jowables handleRefresh={handleRefresh} />
+          <Jowables
+            handleRefresh={handleRefresh}
+            jowaPossibles={jowaPossibles}
+          />
         ) : (
-          <Marebles handleRefresh={handleRefresh} />
+          <Marebles
+            handleRefresh={handleRefresh}
+            marePossibles={marePossibles}
+          />
         )}
       </View>
-      <View style={{paddingTop: verticalScale(20)}}>
-        <Button
-          onPress={() => navigation.navigate('ThunderBolt')}
-          title="Subscribe Now!"
-          style={{
-            width: scale(150),
-            backgroundColor: isJowableTabActive ? '#E43C59' : '#FFBD28',
-          }}
-        />
-      </View>
+      {jowaPossibles?.length || marePossibles?.length ? (
+        <View style={{paddingTop: verticalScale(20)}}>
+          <Button
+            onPress={() => navigation.navigate('ThunderBolt')}
+            title="Subscribe Now!"
+            style={{
+              width: scale(150),
+              backgroundColor: isJowableTabActive ? '#E43C59' : '#FFBD28',
+            }}
+          />
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };

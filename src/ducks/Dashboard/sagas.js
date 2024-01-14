@@ -30,15 +30,20 @@ import {
   GET_CUSTOMER_PHOTO_SUCCESS,
   GET_CUSTOMER_PROFILE,
   GET_CUSTOMER_PROFILE_SUCCESS,
+  GET_JOWA_POSSIBLES_SUCCESS,
   GET_LAST_ACTIVITY,
   GET_LAST_ACTIVITY_FAILED,
   GET_LAST_ACTIVITY_SUCCESS,
+  GET_MARE_POSSIBLES_SUCCESS,
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
   GET_MESSAGE,
   GET_MESSAGE_FAILED,
   GET_MESSAGE_SUCCESS,
+  GET_POSSIBLES,
+  GET_POSSIBLES_FAILED,
+  GET_POSSIBLES_SUCCESS,
   GET_UNREAD_MESSAGES,
   GET_UNREAD_MESSAGES_FAILED,
   GET_UNREAD_MESSAGES_SUCCESS,
@@ -385,7 +390,6 @@ export function* updateLastActivity({}) {
 }
 
 export function* getUnreadMessages({payload}) {
-  const {tag} = payload;
   try {
     const response = yield call(DashboardConfig.getUnreadMessages, payload);
     if (response?.status === 200) {
@@ -444,6 +448,37 @@ export function* getCurrentUserProfile() {
   }
 }
 
+export function* getPossibles({payload}) {
+  const {tag} = payload;
+  const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
+
+  try {
+    const response = yield call(DashboardConfig.getPossibles, {
+      sub: loginData?.sub || sub,
+      tag,
+    });
+    if (response?.status === 200) {
+      if (tag === 'JOWA') {
+        yield put({
+          type: GET_JOWA_POSSIBLES_SUCCESS,
+          payload: response.data.data,
+        });
+      } else {
+        yield put({
+          type: GET_MARE_POSSIBLES_SUCCESS,
+          payload: response.data.data,
+        });
+      }
+    }
+  } catch (error) {
+    yield put({
+      type: GET_POSSIBLES_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -461,6 +496,7 @@ function* dashboardWatcher() {
   yield takeEvery(GET_UNREAD_MESSAGES, getUnreadMessages);
   yield takeLatest(READ_CHAT_MESSAGE, readChatMessage);
   yield takeLatest(GET_CURRENT_USER_PROFILE, getCurrentUserProfile);
+  yield takeLatest(GET_POSSIBLES, getPossibles);
 }
 
 export default dashboardWatcher;

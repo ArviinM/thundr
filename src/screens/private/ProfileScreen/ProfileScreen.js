@@ -110,7 +110,7 @@ const ProfileScreen = () => {
                 {[...Array(2)].map((_, subIndex) => {
                   const photoIndex = index * 2 + subIndex;
                   const photo =
-                    photoIndex < currentUserProfile?.customerPhoto.length
+                    photoIndex < currentUserProfile?.customerPhoto?.length
                       ? currentUserProfile?.customerPhoto[photoIndex]
                       : null;
                   return (

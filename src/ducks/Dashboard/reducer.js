@@ -23,15 +23,21 @@ import {
   GET_CUSTOMER_PROFILE,
   GET_CUSTOMER_PROFILE_FAILED,
   GET_CUSTOMER_PROFILE_SUCCESS,
+  GET_JOWA_POSSIBLES,
+  GET_JOWA_POSSIBLES_SUCCESS,
   GET_LAST_ACTIVITY,
   GET_LAST_ACTIVITY_FAILED,
   GET_LAST_ACTIVITY_SUCCESS,
+  GET_MARE_POSSIBLES,
+  GET_MARE_POSSIBLES_SUCCESS,
   GET_MATCH_LIST,
   GET_MATCH_LIST_FAILED,
   GET_MATCH_LIST_SUCCESS,
   GET_MESSAGE,
   GET_MESSAGE_FAILED,
   GET_MESSAGE_SUCCESS,
+  GET_POSSIBLES,
+  GET_POSSIBLES_FAILED,
   GET_UNREAD_MESSAGES,
   GET_UNREAD_MESSAGES_FAILED,
   GET_UNREAD_MESSAGES_SUCCESS,
@@ -85,6 +91,8 @@ export const INITIAL_STATE = {
   primaryDetailsState: [],
   personalityDetailsState: [],
   currentPhotoId: null,
+  jowaPossibles: [],
+  marePossibles: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -422,6 +430,32 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case READ_CHAT_MESSAGE_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // GET POSSIBLES
+    case GET_POSSIBLES:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case GET_JOWA_POSSIBLES_SUCCESS:
+      return {
+        ...state,
+        jowaPossibles: action.payload,
+        loading: false,
+      };
+    case GET_MARE_POSSIBLES_SUCCESS:
+      return {
+        ...state,
+        marePossibles: action.payload,
+        loading: false,
+      };
+    case GET_POSSIBLES_FAILED:
       return {
         ...state,
         loading: false,
