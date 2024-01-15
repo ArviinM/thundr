@@ -188,7 +188,7 @@ const DashboardTabs = ({route, navigation}) => {
       />
       <Tab.Screen
         name="Stars"
-        component={UnderConstruction}
+        component={ThePossiblesStack}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {

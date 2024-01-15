@@ -4,7 +4,7 @@ import {RefreshControl, ScrollView, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 
 // Components
@@ -71,6 +71,7 @@ const MatchDetails = props => {
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const route = useRoute();
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
   const {
@@ -82,7 +83,9 @@ const Dashboard = () => {
   } = useSelector(state => state.dashboard);
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
-  const [isUserInformationShown, setUserInformationShown] = useState(false);
+  const [isUserInformationShown, setUserInformationShown] = useState(
+    route?.params?.fromPossibles ? true : false,
+  );
   const [swipeValue, setSwipeValue] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const compatibilityScore =
@@ -93,6 +96,19 @@ const Dashboard = () => {
       setCurrentIndex(currentIndex - 1);
     }
   }, [isSwipeReached]);
+
+  useEffect(() => {
+    if (route?.params?.fromPossibles) {
+      dispatch({
+        type: GET_CUSTOMER_PROFILE,
+        payload: {
+          sub: route?.params?.sub,
+          accessToken: loginData.accessToken,
+          fromSwipe: true,
+        },
+      });
+    }
+  }, [route]);
 
   useEffect(() => {
     if (matchList?.length) {
