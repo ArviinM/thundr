@@ -1,6 +1,6 @@
 // React modules
 import React, {useEffect, useState} from 'react';
-import {FlatList, RefreshControl, View} from 'react-native';
+import {FlatList, RefreshControl, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useNavigation} from '@react-navigation/native';
@@ -13,7 +13,7 @@ import Button from '../../../components/Button/Button';
 import PossiblesSelection from '../../../composition/PossiblesSelection/PossiblesSelection';
 
 // Utils
-import {scale, verticalScale} from '../../../utils/commons';
+import {calculateAge, scale, verticalScale} from '../../../utils/commons';
 
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
@@ -36,36 +36,64 @@ const Jowables = props => {
       data={jowaPossibles}
       renderItem={({item, index}) => {
         return (
-          <BorderLinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            colors={['#E43C59', '#E43C59']}
-            style={{
-              marginHorizontal: scale(8),
-              height: verticalScale(150),
-              alignItems: 'center',
-              marginBottom: verticalScale(10),
-            }}>
-            <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('DashboardTab', {
+                fromPossibles: true,
+                sub: item?.targetSub,
+              })
+            }
+            style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#FFBD28', '#FFBD28']}
               style={{
-                height: verticalScale(145),
-                backgroundColor: '#9B9DA0',
-                borderRadius: 15,
+                marginHorizontal: scale(8),
+                height: verticalScale(150),
                 alignItems: 'center',
+                marginBottom: verticalScale(10),
               }}>
-              <Image
-                source={{
-                  uri: item?.customerPhoto?.[0]?.photoUrl,
-                }}
-                height={200}
-                width={150}
-                resizeMode="cover"
-                customStyle={{
+              <View
+                style={{
+                  height: verticalScale(145),
+                  backgroundColor: '#9B9DA0',
                   borderRadius: 15,
-                }}
-              />
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={{
+                    uri: item?.picture,
+                  }}
+                  height={200}
+                  width={150}
+                  resizeMode="cover"
+                  customStyle={{
+                    borderRadius: 15,
+                  }}
+                />
+              </View>
+            </BorderLinearGradient>
+            <View style={{alignItems: 'center'}}>
+              <Text
+                color="#FFBD28"
+                size={22}
+                weight={700}
+                fontFamily="Montserrat-Bold">
+                {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
+              </Text>
+              <Text fontFamily="Montserrat-Medium" color="#808080" size={13}>
+                Compatibility Score:{' '}
+                <Text
+                  color="#FFBD28"
+                  size={13}
+                  weight={700}
+                  fontFamily="Montserrat-Bold">
+                  {item?.compatibilityScore}%
+                </Text>
+              </Text>
             </View>
-          </BorderLinearGradient>
+          </TouchableOpacity>
         );
       }}
       ListEmptyComponent={() => {
@@ -95,36 +123,64 @@ const Marebles = props => {
       data={marePossibles}
       renderItem={({item, index}) => {
         return (
-          <BorderLinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            colors={['#FFBD28', '#FFBD28']}
-            style={{
-              marginHorizontal: scale(8),
-              height: verticalScale(150),
-              alignItems: 'center',
-              marginBottom: verticalScale(10),
-            }}>
-            <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('DashboardTab', {
+                fromPossibles: true,
+                sub: item?.targetSub,
+              })
+            }
+            style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#FFBD28', '#FFBD28']}
               style={{
-                height: verticalScale(145),
-                backgroundColor: '#9B9DA0',
-                borderRadius: 15,
+                marginHorizontal: scale(8),
+                height: verticalScale(150),
                 alignItems: 'center',
+                marginBottom: verticalScale(10),
               }}>
-              <Image
-                source={{
-                  uri: item?.customerPhoto?.[0]?.photoUrl,
-                }}
-                height={200}
-                width={150}
-                resizeMode="cover"
-                customStyle={{
+              <View
+                style={{
+                  height: verticalScale(145),
+                  backgroundColor: '#9B9DA0',
                   borderRadius: 15,
-                }}
-              />
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={{
+                    uri: item?.picture,
+                  }}
+                  height={200}
+                  width={150}
+                  resizeMode="cover"
+                  customStyle={{
+                    borderRadius: 15,
+                  }}
+                />
+              </View>
+            </BorderLinearGradient>
+            <View style={{alignItems: 'center'}}>
+              <Text
+                color="#FFBD28"
+                size={22}
+                weight={700}
+                fontFamily="Montserrat-Bold">
+                {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
+              </Text>
+              <Text fontFamily="Montserrat-Medium" color="#808080" size={13}>
+                Compatibility Score:{' '}
+                <Text
+                  color="#FFBD28"
+                  size={13}
+                  weight={700}
+                  fontFamily="Montserrat-Bold">
+                  {item?.compatibilityScore}%
+                </Text>
+              </Text>
             </View>
-          </BorderLinearGradient>
+          </TouchableOpacity>
         );
       }}
       ListEmptyComponent={() => {
@@ -224,20 +280,16 @@ const ThePossibles = () => {
           />
         )}
       </View>
-      {jowaPossibles?.length || marePossibles?.length ? (
-        <View style={{paddingTop: verticalScale(20)}}>
-          <Button
-            onPress={() => navigation.navigate('ThunderBolt')}
-            title="Subscribe Now!"
-            style={{
-              width: scale(150),
-              backgroundColor: isJowableTabActive ? '#E43C59' : '#FFBD28',
-            }}
-          />
-        </View>
-      ) : (
-        <></>
-      )}
+      <View style={{paddingTop: verticalScale(20)}}>
+        <Button
+          onPress={() => navigation.navigate('ThunderBolt')}
+          title="Subscribe Now!"
+          style={{
+            width: scale(150),
+            backgroundColor: isJowableTabActive ? '#E43C59' : '#FFBD28',
+          }}
+        />
+      </View>
     </View>
   );
 };
