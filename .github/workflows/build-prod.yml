@@ -26,7 +26,6 @@
        steps:
          - run: ls
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
-         - run: ls android\app\src\main\java\ph\thundr\app
          - run: ls android\app
          - run: ls android\app\src
          - run: ls android\app\src\main
