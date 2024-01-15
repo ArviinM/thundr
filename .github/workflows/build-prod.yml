@@ -26,7 +26,14 @@
        steps:
          - run: ls
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
-         - run: ls android\app\src\main\java\ph\thundr\app\
+         - run: ls android\app\src\main\java\ph\thundr\app
+         - run: ls android\app
+         - run: ls android\app\src
+         - run: ls android\app\src\main
+         - run: ls android\app\src\main\java
+         - run: ls android\app\src\main\java\ph
+         - run: ls android\app\src\main\java\ph\thundr        
+         - run: ls android\app\src\main\java\ph\thundr\app
          - run: more android\app\src\main\java\ph\thundr\app\SplashActivity.java
          - run: sed -i '1d' android\app\src\main\java\ph\thundr\app\SplashActivity.java
          - run: more android\app\src\main\java\ph\thundr\app\SplashActivity.java
