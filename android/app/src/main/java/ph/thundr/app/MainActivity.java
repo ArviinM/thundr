@@ -1,4 +1,4 @@
-package ph.thundr.app.dev;
+package ph.thundr.app;
 import android.os.Bundle; // required for onCreate parameter
 import org.devio.rn.splashscreen.SplashScreen; // required for react-native-splash-screen >= 0.3.1
 
@@ -15,7 +15,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "ThundrDev";
+    return "Thundr";
   }
 
   /**
