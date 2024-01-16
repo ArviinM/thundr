@@ -26,10 +26,6 @@
        steps:
          - run: ls
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
-         - run: more ./android/app/src/main/java/ph/thundr/app/SplashActivity.java
-         - run: sed -i '1d' './android/app/src/main/java/ph/thundr/app/SplashActivity.java'
-         - run: more ./android/app/src/main/java/ph/thundr/app/SplashActivity.java
-         - run: sed -i '1 i\package ph.thundr.app;' './android/app/src/main/java/ph/thundr/app/SplashActivity.java'
          - run: echo -en "${{VARS.PROD_ENV}}" >> .env
          - run: echo "BUILD_NUMBER=${{github.run_number}}" >> .env
          - run: more .env
