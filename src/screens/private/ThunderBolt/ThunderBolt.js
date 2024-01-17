@@ -1,5 +1,5 @@
 // React modules
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -15,20 +15,30 @@ import Separator from '../../../components/Separator/Separator';
 // Utils
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, SUBSCRIPTION_ASSET_URI} from '../../../utils/images';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const ThunderBolt = () => {
   const navigation = useNavigation();
   const {subscriptionDetails} = useSelector(state => state.subscription);
   const withSubscription = subscriptionDetails?.withSubscription;
+  const [displayModal, setDisplayModal] = useState(false);
 
   return (
     <View style={{flex: 1, backgroundColor: '#EDE8E5'}}>
+      {displayModal && (
+        <FeatureNotAvailableModal
+          fromThunderBolt={true}
+          displayModal={displayModal}
+          setDisplayModal={setDisplayModal}
+        />
+      )}
       <View
         style={{
           flexDirection: 'row',
           gap: scale(240),
           top: verticalScale(20),
           left: scale(20),
+          zIndex: 1,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('DashboardTab')}>
           <Image source={GLOBAL_ASSET_URI.BACK_ICON} width={25} height={25} />
@@ -92,7 +102,8 @@ const ThunderBolt = () => {
                 width={30}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('ThunderPerks')}>
+                // onPress={() => navigation.navigate('ThunderPerks')} // temporary
+                onPress={() => setDisplayModal(true)}>
                 <Image
                   source={SUBSCRIPTION_ASSET_URI.ANNUAL_BUTTON}
                   height={100}
@@ -136,14 +147,14 @@ const ThunderBolt = () => {
               gap: scale(20),
               top: verticalScale(-15),
             }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setDisplayModal(true)}>
               <Image
                 source={SUBSCRIPTION_ASSET_URI.MONTHLY_BUTTON}
                 width={100}
                 height={100}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setDisplayModal(true)}>
               <Image
                 source={SUBSCRIPTION_ASSET_URI.ANNUAL_BUTTON}
                 width={100}
