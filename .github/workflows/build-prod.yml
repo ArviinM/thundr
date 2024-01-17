@@ -78,7 +78,7 @@
          - run: ls
          - run: cp app-release.apk "thundr-prod-${{ github.run_number }}.apk"
          - run: cp "thundr-prod-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-v-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp "thundr-prod-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
      Android-AAB-Build:
        runs-on: m2
        needs: Android-Prepare-Build
