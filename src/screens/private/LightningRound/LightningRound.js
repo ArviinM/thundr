@@ -16,49 +16,11 @@ import Button from '../../../components/Button/Button';
 // Utils
 import {GLOBAL_ASSET_URI, LIGHTNING_ROUND_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const LightningRound = () => {
   const navigation = useNavigation();
   const displayModal = true;
-
-  const renderModal = () => {
-    return (
-      <Overlay
-        onBackdropPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'DashboardTabs'}],
-          })
-        }
-        overlayStyle={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#E43C59',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: [
-            {translateX: -scale(125)},
-            {translateY: -verticalScale(20)},
-          ],
-          height: 'auto',
-          width: scale(250),
-          borderRadius: 20,
-          borderWidth: 3,
-          borderColor: '#FEBC29',
-        }}
-        isVisible={true}>
-        <Text
-          size={18}
-          color="#fff"
-          fontFamily="Montserrat-Bold"
-          weight={700}
-          customStyle={{textAlign: 'center'}}>
-          Oops! Wait lang, mars. This feature will be available soon.
-        </Text>
-      </Overlay>
-    );
-  };
 
   return (
     <LinearGradient
@@ -66,7 +28,7 @@ const LightningRound = () => {
       start={{x: 0.5, y: 1}}
       end={{x: 0.5, y: 0}}
       style={{flex: 1}}>
-      {displayModal && renderModal()}
+      {displayModal && <FeatureNotAvailableModal />}
       <TouchableOpacity
         style={{left: scale(20), top: verticalScale(20)}}
         onPress={() => navigation.navigate('DashboardTab')}>

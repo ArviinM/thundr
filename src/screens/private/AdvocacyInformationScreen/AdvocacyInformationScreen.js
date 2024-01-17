@@ -61,7 +61,7 @@ const AdvocacyInformationScreen = () => {
         customStyle={{textAlign: 'center'}}>
         {fromGoldenGays ? 'Golden Gays' : 'Galang Philippines'}
       </Text>
-      <Separator space={5} />
+      <Separator space={70} />
       <View style={{alignItems: 'center'}}>
         <Image
           source={
@@ -79,7 +79,7 @@ const AdvocacyInformationScreen = () => {
             ? 'The Golden Gays is a nonprofit organization that provides support and care for elderly LGBTQ people. The foundation is in need of assistance with charity works such as outreach programs to raise awareness of the current issues of the LGBTQ community and helping to feed and house elderly and impoverished gays.'
             : 'Galang Philippines is a lesbian initiated, lesbian run, feminist human rights non-profit organization. Their vision is to espouse and aspire for the feminist values of respect, economic justice, equality, diversity, fairness, and empowering processes at all levels of our work by developing and sustaining institutions, capacity building, networking and research. The foundation is in need of assistance with charity works to provide and help the impoverished filipinos including the LGBTQIA+ community.'}
         </Text>
-        <Separator space={20} />
+        <Separator space={40} />
         <Text>Ano ba ang latest? Click here:</Text>
         <OpenURLButton
           url={
@@ -87,49 +87,6 @@ const AdvocacyInformationScreen = () => {
           }></OpenURLButton>
       </View>
       <Separator space={10} />
-      <Text
-        fontFamily="ClimateCrisis-Regular"
-        color="#E43C59"
-        size={22}
-        customStyle={{textAlign: 'center'}}>
-        Donation to date
-      </Text>
-      <View
-        style={{
-          top: verticalScale(10),
-          backgroundColor: '#F5D1D0',
-          height: verticalScale(140),
-          width: scale(250),
-          borderRadius: 30,
-          flexDirection: 'row',
-          padding: scale(20),
-        }}>
-        <Image
-          source={ADVOCACY_ASSET_URI.THUNDR_GAS_FULL}
-          height={100}
-          width={100}
-        />
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('AdvocacyTransaction', {fromGoldenGays})
-          }>
-          <Image
-            source={ADVOCACY_ASSET_URI.GIVE_DONATION}
-            height={100}
-            width={100}
-          />
-        </TouchableOpacity>
-      </View>
-      <Text
-        size={10}
-        customStyle={{
-          textAlign: 'center',
-          top: verticalScale(15),
-          paddingHorizontal: scale(15),
-        }}>
-        Free users can donate a minimum of 100Php and get a 7-day trial
-        subscription for your support. Only valid once per month.
-      </Text>
     </ScrollView>
   );
 };
