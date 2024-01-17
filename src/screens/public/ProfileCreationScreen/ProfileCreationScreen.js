@@ -449,7 +449,7 @@ const PrimaryDetails = props => {
         {!fromEditProfileScreen && (
           <>
             <LabelContainer style={{marginBottom: 0}}>
-              <Text color="#e33051" size={18}>
+              <Text color="#e33051" size={18} weight={700}>
                 Birthday
               </Text>
               <Text

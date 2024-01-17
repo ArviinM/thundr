@@ -33,28 +33,52 @@ const MatchInformationSection = props => {
   const renderInformationSection = ({item}) => {
     return (
       <View>
-        <Text color="#fff" weight="700" size={18}>
+        <Text
+          color="#fff"
+          size={17}
+          fontFamily="Montserrat-ExtraBold"
+          weight={isIosDevice() ? 700 : 400}>
           BIO
         </Text>
-        <Text color="#fff" size={16}>
+        <Text
+          color="#fff"
+          size={14}
+          fontFamily="Montserrat-Medium"
+          weight={isIosDevice() ? 500 : 400}>
           {item?.bio}
         </Text>
         <Separator space={10} />
-        <Text color="#fff" weight="700" size={18}>
+        <Text
+          color="#fff"
+          size={17}
+          fontFamily="Montserrat-ExtraBold"
+          weight={isIosDevice() ? 700 : 400}>
           WORK
         </Text>
-        <Text color="#fff" size={16}>
+        <Text
+          color="#fff"
+          size={14}
+          fontFamily="Montserrat-Medium"
+          weight={isIosDevice() ? 500 : 400}>
           {item?.work}
         </Text>
         <Separator space={10} />
-        <Text color="#fff" weight="700" size={18}>
+        <Text
+          color="#fff"
+          size={17}
+          fontFamily="Montserrat-ExtraBold"
+          weight={isIosDevice() ? 700 : 400}>
           LOCATION
         </Text>
-        <Text color="#fff" size={16}>
+        <Text
+          color="#fff"
+          size={14}
+          fontFamily="Montserrat-Medium"
+          weight={isIosDevice() ? 500 : 400}>
           {item?.location}
         </Text>
         <Separator space={10} />
-        {/* <Text color="#fff" weight="700">
+        {/* <Text color="#fff" >
           HOBBIES
         </Text> */}
         {/* <Separator space={10} /> */}
@@ -66,18 +90,34 @@ const MatchInformationSection = props => {
             alignItems: 'center',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               EDUCATION
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.education}
             </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               RELIGION
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.religion}
             </Text>
           </View>
@@ -89,18 +129,34 @@ const MatchInformationSection = props => {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               HEIGHT
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.height}
             </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               STAR SIGN
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.starSign}
             </Text>
           </View>
@@ -112,18 +168,34 @@ const MatchInformationSection = props => {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               DRINKING
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.drinking}
             </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               SMOKING
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.smoking}
             </Text>
           </View>
@@ -135,24 +207,44 @@ const MatchInformationSection = props => {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               PET
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.pet}
             </Text>
           </View>
           <View style={{flex: 1}}>
-            <Text color="#fff" weight="700" size={18}>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
               POLITICS
             </Text>
-            <Text color="#fff" size={16}>
+            <Text
+              color="#fff"
+              size={14}
+              fontFamily="Montserrat-Medium"
+              weight={isIosDevice() ? 500 : 400}>
               {item?.politics}
             </Text>
           </View>
         </View>
         <Separator space={10} />
-        <Text color="#fff" weight="700" size={18}>
+        <Text
+          color="#fff"
+          size={17}
+          fontFamily="Montserrat-ExtraBold"
+          weight={isIosDevice() ? 700 : 400}>
           PERSONALITY TYPE
         </Text>
         <Image

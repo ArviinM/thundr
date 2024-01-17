@@ -28,7 +28,6 @@ const SettingsHeader = () => {
         <Text
           color="#E43C59"
           fontFamily="ClimateCrisis-Regular"
-          weight={700}
           size={23}
           customStyle={{textAlign: 'center'}}>
           SETTINGS
