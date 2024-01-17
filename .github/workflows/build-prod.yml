@@ -76,9 +76,9 @@
            working-directory: ./android/app/build/outputs/apk/release
        steps:
          - run: ls
-         - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp app-release.apk "thundr-prod-${{ github.run_number }}.apk"
+         - run: cp "thundr-prod-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+         - run: cp "thundr-v-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
      Android-AAB-Build:
        runs-on: m2
        needs: Android-Prepare-Build
@@ -96,9 +96,9 @@
            working-directory: ./android/app/build/outputs/bundle/release
        steps:
          - run: ls
-         - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp app-release.aab "thundr-prod-${{ github.run_number }}.aab"
+         - run: cp "thundr-prod-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+         - run: cp "thundr-prod-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
      Android-Publish-Dev-PlayStore:
        runs-on: m2
        needs: Android-AAB-Upload
@@ -141,9 +141,9 @@
       - run: ls
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
       - run: ls MyApp
-      - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-dev-${{ github.run_number }}.ipa"
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Production Upload"
+      - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-prod-${{ github.run_number }}.ipa"
+      - run: cp "thundr-prod-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+      - run: cp "thundr-prod-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Production Upload"
      iOS-Export-AppStore:
       runs-on: m2
       needs: iOS-Export-IPA
