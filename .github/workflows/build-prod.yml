@@ -29,12 +29,6 @@
          - run: echo -en "${{VARS.PROD_ENV}}" >> .env
          - run: echo "BUILD_NUMBER=${{github.run_number}}" >> .env
          - run: more .env
-     Fixes:
-      runs-on: m2
-      needs: Package-Rename
-      steps:
-        - run: yarn install
-        - run: ls    
      Yarn-Install:
        runs-on: m2
        needs: Package-Rename
