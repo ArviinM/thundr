@@ -17,20 +17,33 @@ import {useNavigation} from '@react-navigation/native';
 
 const DrawerItem = props => {
   const navigation = useNavigation();
-  const {src, title, screen} = props;
+  const {src, title, screen, hideDivider} = props;
   return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate(screen)}
-      style={{
-        flexDirection: 'row',
-        gap: scale(10),
-        alignItems: 'center',
-      }}>
-      <Image source={src} height={30} width={30} />
-      <Text size={20} color="#fff" weight={700} fontFamily="Montserrat-Bold">
-        {title}
-      </Text>
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(screen)}
+        style={{
+          flexDirection: 'row',
+          gap: scale(10),
+          alignItems: 'center',
+          marginLeft: scale(20),
+        }}>
+        <Image source={src} height={30} width={30} />
+        <Text size={20} color="#fff" weight={700} fontFamily="Montserrat-Bold">
+          {title}
+        </Text>
+      </TouchableOpacity>
+      <Separator space={12} />
+      {!hideDivider && (
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: '#FEBC29',
+            width: scale(230),
+          }}
+        />
+      )}
+    </>
   );
 };
 
@@ -66,6 +79,7 @@ const DrawerContent = () => {
             src={DRAWER_ASSET_URI.SETTINGS}
             title="Settings"
             screen="Settings"
+            hideDivider={true}
           />
         </View>
       </View>
