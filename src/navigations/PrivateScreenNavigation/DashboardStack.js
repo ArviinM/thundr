@@ -34,6 +34,7 @@ import SettingsStack from './SettingsStack';
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
+import LightningRound from '../../screens/private/LightningRound/LightningRound';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -187,12 +188,12 @@ const DashboardTabs = ({route, navigation}) => {
         }}
       />
       <Tab.Screen
-        name="Stars"
+        name="Possibles"
         component={ThePossiblesStack}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
-            return focusedRoute === 'Stars' ? (
+            return focusedRoute === 'Possibles' ? (
               <Image
                 source={DASHBOARD_ASSET_URI.SELECTED_STARS_ICON}
                 height={40}
@@ -209,12 +210,12 @@ const DashboardTabs = ({route, navigation}) => {
         }}
       />
       <Tab.Screen
-        name="FlashThundr"
-        component={UnderConstruction}
+        name="LightningRound"
+        component={LightningRound}
         options={{
           tabBarLabel: '',
           tabBarIcon: () => {
-            return focusedRoute === 'FlashThundr' ? (
+            return focusedRoute === 'LightningRound' ? (
               <Image
                 source={DASHBOARD_ASSET_URI.SELECTED_FLASH_THUNDR_ICON}
                 height={40}

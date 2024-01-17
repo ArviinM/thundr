@@ -123,6 +123,16 @@ const JowaMareSection = props => {
     }),
   ).current;
 
+  const renderThundrIcon = () => {
+    if (isMare) {
+      return DASHBOARD_ASSET_URI.GLOWING_THUNDR_YELLOW;
+    } else if (isJowa) {
+      return DASHBOARD_ASSET_URI.GLOWING_THUNDR;
+    } else {
+      return DASHBOARD_ASSET_URI.THUNDR;
+    }
+  };
+
   return (
     <View style={{flexDirection: 'row'}}>
       <Animated.View
@@ -137,15 +147,7 @@ const JowaMareSection = props => {
         />
       </Animated.View>
       <View style={{marginTop: verticalScale(40)}}>
-        <Image
-          source={
-            isMare || isJowa
-              ? DASHBOARD_ASSET_URI.GLOWING_THUNDR
-              : DASHBOARD_ASSET_URI.THUNDR
-          }
-          height={65}
-          width={135}
-        />
+        <Image source={renderThundrIcon()} height={65} width={135} />
       </View>
       <Animated.View
         style={{
