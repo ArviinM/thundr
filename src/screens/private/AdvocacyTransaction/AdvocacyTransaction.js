@@ -3,7 +3,8 @@ import React, {useState} from 'react';
 import {TextInput, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // Components
 import Image from '../../../components/Image/Image';
@@ -18,19 +19,18 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {ADVOCACY_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+// Style
 import {BorderLinearGradient} from '../PersonalityType/Styled';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const AdvocacyTransaction = () => {
-  const route = useRoute();
   const navigation = useNavigation();
-
-  const {fromGoldenGays} = route?.params;
-
   const [inputValue, setInputValue] = useState('');
 
   return (
     <KeyboardAwareScrollView bounces={false}>
+      <FeatureNotAvailableModal displayCloseIcon={true} />
       <View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -40,26 +40,8 @@ const AdvocacyTransaction = () => {
             customStyle={{left: scale(20), top: verticalScale(15)}}
           />
         </TouchableOpacity>
-        <Separator space={20} />
-        <Text
-          fontFamily="ClimateCrisis-Regular"
-          color="#E43C59"
-          size={22}
-          customStyle={{textAlign: 'center'}}>
-          {fromGoldenGays ? 'Golden Gays' : 'Galang Philippines'}
-        </Text>
-        <Separator space={5} />
+        <Separator space={40} />
         <View style={{alignItems: 'center'}}>
-          <Image
-            source={
-              fromGoldenGays
-                ? ADVOCACY_ASSET_URI.GOLDEN_GAYS
-                : ADVOCACY_ASSET_URI.GALANG
-            }
-            height={150}
-            width={150}
-          />
-          <Separator space={10} />
           <Text
             color="#E33051"
             weight={700}
