@@ -15,16 +15,20 @@ import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 
 const FeatureNotAvailableModal = props => {
-  const {displayCloseIcon} = props;
+  const {fromThunderBolt, setDisplayModal, displayModal} = props;
   const navigation = useNavigation();
+
+  const handleNavigation = () => {
+    if (fromThunderBolt) {
+      setDisplayModal(false);
+    } else {
+      navigation.reset({index: 0, routes: [{name: 'DashboardTabs'}]});
+    }
+  };
+
   return (
     <Overlay
-      onBackdropPress={() =>
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'DashboardTabs'}],
-        })
-      }
+      onBackdropPress={handleNavigation}
       overlayStyle={{
         alignItems: 'center',
         justifyContent: 'center',
@@ -42,11 +46,9 @@ const FeatureNotAvailableModal = props => {
         borderWidth: 3,
         borderColor: '#FEBC29',
       }}
-      isVisible={true}>
+      isVisible={fromThunderBolt ? displayModal : true}>
       <TouchableOpacity
-        onPress={() =>
-          navigation.reset({index: 0, routes: [{name: 'DashboardTabs'}]})
-        }
+        onPress={handleNavigation}
         style={{
           position: 'absolute',
           top: verticalScale(-10),

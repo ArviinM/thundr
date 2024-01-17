@@ -170,6 +170,7 @@ const FiltersScreen = () => {
           alignItems: 'center',
           justifyContent: 'center',
           top: verticalScale(20),
+          zIndex: 1,
         }}>
         <TouchableOpacity
           style={{left: scale(10)}}
