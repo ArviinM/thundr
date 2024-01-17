@@ -52,7 +52,7 @@ const DrawerContent = () => {
           <Separator space={15} />
           <DrawerItem
             src={DRAWER_ASSET_URI.THUNDER_BOLT}
-            title="Thunder Bolt"
+            title="Thundr Bolt"
             screen="ThunderBolt"
           />
           <Separator space={15} />

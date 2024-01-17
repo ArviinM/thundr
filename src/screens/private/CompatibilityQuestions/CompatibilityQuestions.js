@@ -60,8 +60,9 @@ const CompatibilityQuestions = () => {
       <Separator space={35} />
       <Text
         color="#E33051"
-        size={30}
-        weight={400}
+        size={isIosDevice() ? 30 : 28}
+        weight={700}
+        fontFamily="Montserrat-Bold"
         customStyle={{textAlign: 'center'}}>
         {`Compatibility\nQuestions`}
       </Text>
@@ -85,7 +86,9 @@ const CompatibilityQuestions = () => {
             }}>
             <Text
               color="#E33051"
-              size={18}
+              fontFamily="Montserrat-Bold"
+              weight={700}
+              size={isIosDevice() ? 18 : 17}
               customStyle={{maxWidth: scale(230), minWidth: scale(190)}}>
               {currentQuestionIndex + 1}. {currentQuestion.question}
             </Text>
@@ -107,7 +110,7 @@ const CompatibilityQuestions = () => {
                   width: scale(200),
                   borderRadius: 10,
                 }}>
-                <Text color="#fff">
+                <Text color="#fff" fontFamily="Montserrat-Medium">
                   {answerLabels[index]} {answer.answer}
                 </Text>
               </TouchableOpacity>

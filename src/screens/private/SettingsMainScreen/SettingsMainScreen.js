@@ -85,7 +85,7 @@ const SettingsMainScreen = () => {
         <Separator space={10} />
         <Button
           onPress={() => setDisplayModal('delete')}
-          title="Delete Account"
+          title="Deactivate"
           style={{width: scale(150)}}
         />
         <Separator space={10} />

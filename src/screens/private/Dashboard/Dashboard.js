@@ -30,7 +30,12 @@ import {
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
-import {calculateAge, scale, verticalScale} from '../../../utils/commons';
+import {
+  calculateAge,
+  isIosDevice,
+  scale,
+  verticalScale,
+} from '../../../utils/commons';
 import LinearGradient from 'react-native-linear-gradient';
 import Image from '../../../components/Image/Image';
 import {ADVOCACY_ASSET_URI} from '../../../utils/images';
@@ -47,10 +52,20 @@ const MatchDetails = props => {
         size={30}
         color="#E33C59"
         weight={700}
+        fontFamily="Montserrat-Bold"
         customStyle={{textAlign: 'center'}}>
-        {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
+        {customerProfile?.name},{' '}
+        <Text
+          fontFamily="Montserrat-Medium"
+          size={30}
+          color="#E33C59"
+          customStyle={{textAlign: 'center'}}>
+          {calculateAge(customerProfile?.birthday)}
+        </Text>
       </Text>
-      <Text size={15}>{customerProfile?.customerDetails?.work}</Text>
+      <Text size={15} fontFamily="Montserrat-Medium">
+        {customerProfile?.customerDetails?.work}
+      </Text>
       <View
         style={{
           height: verticalScale(1),
@@ -59,7 +74,7 @@ const MatchDetails = props => {
           marginVertical: verticalScale(3),
         }}
       />
-      <Text size={15} color="#EE983D">
+      <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
         {`Compatibility Score: ${
           matchList?.length && matchList[currentIndex]?.percent
         }`}
@@ -321,13 +336,13 @@ const Dashboard = () => {
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           top: verticalScale(250),
-          left: scale(-35),
+          left: scale(-40),
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Advocacy')}>
           <Image
             source={ADVOCACY_ASSET_URI.ADVOCACY}
-            height={100}
-            width={100}
+            height={isIosDevice() ? 120 : 120}
+            width={isIosDevice() ? 120 : 120}
           />
         </TouchableOpacity>
       </View>

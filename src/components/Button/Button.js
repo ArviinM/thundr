@@ -22,7 +22,11 @@ const Button = props => {
   const renderButton = () => {
     return (
       <TitleContainer style={style} type={type} disabled={disabled}>
-        <Text size={15} weight={400} color={textColor || '#ffffff'}>
+        <Text
+          size={15}
+          weight={500}
+          color={textColor || '#ffffff'}
+          fontFamily="Montserat-Medium">
           {title}
         </Text>
       </TitleContainer>

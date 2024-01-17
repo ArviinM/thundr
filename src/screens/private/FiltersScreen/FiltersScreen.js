@@ -172,6 +172,7 @@ const FiltersScreen = () => {
           top: verticalScale(20),
         }}>
         <TouchableOpacity
+          style={{left: scale(10)}}
           onPress={() =>
             navigation.reset({
               index: 0,
@@ -182,7 +183,7 @@ const FiltersScreen = () => {
         </TouchableOpacity>
         <Button
           title="Save"
-          style={{width: scale(50), height: verticalScale(30)}}
+          style={{width: scale(65), height: verticalScale(35)}}
           onPress={() => {
             dispatch({
               type: UPDATE_FILTERS,
@@ -203,13 +204,8 @@ const FiltersScreen = () => {
           }}
         />
       </View>
-      <Separator space={20} />
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Text
-          size={30}
-          weight={700}
-          fontFamily="ClimateCrisis-Regular"
-          color="#E43D59">
+        <Text size={30} fontFamily="ClimateCrisis-Regular" color="#E43D59">
           Filters
         </Text>
         <Text
@@ -321,7 +317,8 @@ const FiltersScreen = () => {
         </TouchableOpacity>
         <Separator space={25} />
         <Text
-          size={15}
+          fontFamily="Montserrat-Regular"
+          size={isIosDevice() ? 15 : 12}
           color="#808080"
           customStyle={{
             textAlign: 'center',
@@ -339,7 +336,7 @@ const FiltersScreen = () => {
             <Image
               source={FILTERS_ASSET_URI.SUBSCRIBE_BUTTON}
               width={220}
-              height={isIosDevice() ? 130 : 80}
+              height={80}
             />
           </View>
         </TouchableOpacity>

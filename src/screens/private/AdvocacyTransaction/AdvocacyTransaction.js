@@ -19,6 +19,7 @@ import {
 } from '../../../utils/commons';
 import {ADVOCACY_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {BorderLinearGradient} from '../PersonalityType/Styled';
 
 const AdvocacyTransaction = () => {
   const route = useRoute();
@@ -73,49 +74,54 @@ const AdvocacyTransaction = () => {
         <View style={{alignItems: 'center'}}>
           <Text size={15}>Amount to Donate</Text>
           <Separator space={10} />
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: '#fff',
-              padding: scale(isIosDevice() ? 15 : 0),
-              paddingHorizontal: scale(isIosDevice() ? 0 : 5),
-              width: scale(isIosDevice() ? 180 : 170),
-              height: verticalScale(60),
-              borderRadius: 5,
-            }}>
-            <Text
-              fontFamily="Montserrat-Bold"
-              size={40}
-              weight={700}
-              color="#E43C59"
-              customStyle={{
-                marginRight: scale(5),
-                bottom: verticalScale(isIosDevice() ? 5 : 7),
-              }}>
-              ₱
-            </Text>
-            <TextInput
+          <BorderLinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            colors={['#E72454', '#FFC227']}>
+            <View
               style={{
-                flex: 1,
-                fontSize: moderateScale(40),
-                color: '#E43C59',
-                fontWeight: 'bold',
-              }}
-              placeholder="0,000"
-              placeholderTextColor="#E43C59"
-              value={inputValue}
-              onChangeText={text => setInputValue(text)}
-              keyboardType="numeric"
-            />
-          </View>
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#fff',
+                width: scale(200),
+                height: verticalScale(isIosDevice() ? 60 : 75),
+                borderRadius: 20,
+                paddingLeft: scale(10),
+              }}>
+              <Text
+                fontFamily="Montserrat-Bold"
+                size={40}
+                weight={700}
+                color="#E43C59"
+                customStyle={{
+                  marginRight: scale(5),
+                  bottom: verticalScale(1),
+                }}>
+                ₱
+              </Text>
+              <TextInput
+                style={{
+                  flex: 1,
+                  fontSize: moderateScale(40),
+                  color: '#E43C59',
+                  fontWeight: 'bold',
+                  top: verticalScale(0),
+                }}
+                placeholder="0,000"
+                placeholderTextColor="#E43C59"
+                value={inputValue}
+                onChangeText={text => setInputValue(text)}
+                keyboardType="numeric"
+              />
+            </View>
+          </BorderLinearGradient>
           <TouchableOpacity
             disabled={!inputValue}
             onPress={() => navigation.navigate('AdvocacyResult')}>
             <Image
               source={ADVOCACY_ASSET_URI.DONATE_BUTTON}
               height={60}
-              width={160}
+              width={170}
             />
           </TouchableOpacity>
         </View>
