@@ -49,7 +49,7 @@ const AdvocacyScreen = () => {
           Sharing is caring, da va?!
         </Text>
         <Separator space={20} />
-        <View>
+        <View style={{flexDirection: 'row', gap: scale(5)}}>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('AdvocacyInformationScreen', {
@@ -76,6 +76,48 @@ const AdvocacyScreen = () => {
             />
           </TouchableOpacity>
         </View>
+        <Separator space={20} />
+        <Text
+          fontFamily="ClimateCrisis-Regular"
+          color="#fff"
+          size={22}
+          customStyle={{textAlign: 'center'}}>
+          Donation to date
+        </Text>
+        <View
+          style={{
+            top: verticalScale(10),
+            backgroundColor: '#F5D1D0',
+            height: verticalScale(140),
+            width: scale(250),
+            borderRadius: 30,
+            flexDirection: 'row',
+            padding: scale(20),
+          }}>
+          <Image
+            source={ADVOCACY_ASSET_URI.THUNDR_GAS_FULL}
+            height={100}
+            width={100}
+          />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AdvocacyTransaction')}>
+            <Image
+              source={ADVOCACY_ASSET_URI.GIVE_DONATION}
+              height={100}
+              width={100}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text
+          size={10}
+          customStyle={{
+            textAlign: 'center',
+            top: verticalScale(15),
+            paddingHorizontal: scale(40),
+          }}>
+          Free users can donate a minimum of 100Php and get a 7-day trial
+          subscription for your support. Only valid once per month.
+        </Text>
       </View>
     </LinearGradient>
   );

@@ -72,6 +72,7 @@ export const DASHBOARD_ASSET_URI = {
   GLOWING_MARE: require('../assets/Images/Icons/glowing-mare.png'),
   GLOWING_JOWA: require('../assets/Images/Icons/glowing-jowa.png'),
   GLOWING_THUNDR: require('../assets/Images/Icons/glowing-thundr.png'),
+  GLOWING_THUNDR_YELLOW: require('../assets/Images/Icons/glowing-thundr-yellow.png'),
   PROFILE_ICON: require('../assets/Images/Icons/profile-icon.png'),
   MESSAGE_ICON: require('../assets/Images/Icons/messages-icon.png'),
   STARS_ICON: require('../assets/Images/Icons/stars-icon.png'),
@@ -168,4 +169,8 @@ export const DRAWER_ASSET_URI = {
   THUNDER_BOLT: require('../assets/Images/Icons/thunder-bolt.png'),
   POSSIBLES: require('../assets/Images/Icons/possibles.png'),
   SETTINGS: require('../assets/Images/Icons/settings.png'),
+};
+
+export const LIGHTNING_ROUND_URI = {
+  LIGHTNING_ROUND: require('../assets/Images/Icons/lightning-round.png'),
 };

@@ -67,11 +67,29 @@ const Profile = props => {
             alignItems: 'center',
           }}>
           {renderBackButton()}
-          <View style={{left: scale(15), alignSelf: 'center'}}>
-            <Text size={25} color="#fff" weight="700">
-              {customerProfile?.name}, {calculateAge(customerProfile?.birthday)}
+          <View style={{alignSelf: 'center'}}>
+            <Text
+              fontFamily="Montserrat-Bold"
+              size={25}
+              color="#fff"
+              weight="700"
+              customStyle={{textAlign: 'center'}}>
+              {customerProfile?.name},{' '}
+              <Text
+                size={25}
+                weight={isIosDevice() ? 500 : 400}
+                color="#fff"
+                customStyle={{textAlign: 'center'}}
+                fontFamily="Montserrat-Medium">
+                {calculateAge(customerProfile?.birthday)}
+              </Text>
             </Text>
-            <Text size={15} color="#fff" customStyle={{textAlign: 'center'}}>
+            <Text
+              size={15}
+              weight={isIosDevice() ? 500 : 400}
+              color="#fff"
+              customStyle={{textAlign: 'center'}}
+              fontFamily="Montserrat-Medium">
               {`Compatibility Score: ${compatibilityScore}`}
             </Text>
           </View>
