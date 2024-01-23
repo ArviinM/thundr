@@ -53,7 +53,9 @@ const MatchDetails = props => {
         color="#E33C59"
         weight={700}
         fontFamily="Montserrat-Bold"
-        customStyle={{textAlign: 'center'}}>
+        numberOfLines={2}
+        ellipsizeMode="tail"
+        customStyle={{textAlign: 'center', width: scale(280)}}>
         {customerProfile?.name},{' '}
         <Text
           fontFamily="Montserrat-Medium"

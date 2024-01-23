@@ -50,7 +50,7 @@ const AdvocacyScreen = () => {
         </Text>
         <Separator space={20} />
         <View style={{flexDirection: 'row', gap: scale(5)}}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate('AdvocacyInformationScreen', {
                 fromGoldenGays: true,
@@ -74,7 +74,14 @@ const AdvocacyScreen = () => {
               height={150}
               width={150}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          {/* <LinearGradient
+            colors={['#ed2a85', '#fe406b', '#ff5d51', '#ff7c39', '#f89924']}
+            start={{x: 0.5, y: 1}}
+            end={{x: 0.5, y: 0}}
+            style={{width: scale(300), alignItems: 'center', borderRadius: 30}}> */}
+          <Image source={ADVOCACY_ASSET_URI.TEST} height={200} width={240} />
+          {/* </LinearGradient> */}
         </View>
         <Separator space={20} />
         <Text

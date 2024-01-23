@@ -230,15 +230,6 @@ const FiltersScreen = () => {
       </View>
       <Separator space={10} />
       <View style={{alignSelf: 'center'}}>
-        <LinearGradient
-          colors={['#FEBC29', '#E43D59']}
-          style={{
-            height: verticalScale(10),
-            width: scale(250),
-            borderRadius: 10,
-            top: 7,
-          }}
-        />
         <MultiSlider
           values={age}
           sliderLength={300}
@@ -249,8 +240,14 @@ const FiltersScreen = () => {
           step={1}
           allowOverlap
           snapped
-          selectedStyle={{backgroundColor: 'transparent'}}
-          unselectedStyle={{backgroundColor: 'transparent'}}
+          selectedStyle={{
+            backgroundColor: '#E43D59',
+            height: verticalScale(5),
+          }}
+          unselectedStyle={{
+            backgroundColor: '#808080',
+            height: verticalScale(5),
+          }}
           containerStyle={{
             height: verticalScale(-30),
             marginBottom: 0,
@@ -272,15 +269,6 @@ const FiltersScreen = () => {
       </View>
       <Separator space={10} />
       <View style={{alignSelf: 'center'}}>
-        <LinearGradient
-          colors={['#FEBC29', '#E43D59']}
-          style={{
-            height: verticalScale(10),
-            width: scale(250),
-            borderRadius: 10,
-            top: 7,
-          }}
-        />
         <MultiSlider
           values={[proximity]}
           sliderLength={300}
@@ -291,8 +279,14 @@ const FiltersScreen = () => {
           step={2}
           allowOverlap
           snapped
-          selectedStyle={{backgroundColor: 'transparent'}}
-          unselectedStyle={{backgroundColor: 'transparent'}}
+          selectedStyle={{
+            backgroundColor: '#E43D59',
+            height: verticalScale(5),
+          }}
+          unselectedStyle={{
+            backgroundColor: '#808080',
+            height: verticalScale(5),
+          }}
           containerStyle={{
             height: verticalScale(-30),
             marginBottom: 0,

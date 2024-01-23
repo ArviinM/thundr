@@ -235,11 +235,11 @@ const SettingsModal = props => {
         fontFamily="Montserrat-Light"
         size={11}
         color="#fff"
-        weight={700}
+        weight={500}
         customStyle={{textAlign: 'center'}}>
         {isUnsubscribe
           ? 'Unsubscribing removes your access from Thundr Bolt perks and features.'
-          : 'Deleting your account will remove your information on our database and will no longer be retrievable.'}
+          : 'Deactivate after 7 days otherwise your account autodeletes in 30 days and will no longer be retrievable'}
       </Text>
       <Separator space={10} />
       <Text
@@ -277,7 +277,7 @@ const SettingsModal = props => {
       <Separator space={20} />
       <Button
         onPress={handleDeleteOrUnsubscribe}
-        title={isUnsubscribe ? 'Unsubscribe' : 'Delete'}
+        title={isUnsubscribe ? 'Unsubscribe' : 'Deactivate'}
         style={{backgroundColor: '#fff', width: scale(150)}}
         textColor="#E43C59"
       />

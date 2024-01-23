@@ -12,6 +12,7 @@ import {
   SUBMIT_COMPATIBILITY_ANSWER,
 } from '../../../ducks/ProfileCreation/actionTypes';
 import {mockData} from './utils';
+import LinearGradient from 'react-native-linear-gradient';
 
 const CompatibilityQuestions = () => {
   const dispatch = useDispatch();
@@ -96,24 +97,30 @@ const CompatibilityQuestions = () => {
           <Separator space={10} />
           {currentQuestion.compatibilityAnswer.map((answer, index) => {
             return (
-              <TouchableOpacity
-                key={answer.id}
-                onPress={() => {
-                  setQuestionId(currentQuestion.id);
-                  setSelectedAnswerId(answer.id);
-                }}
-                style={{
-                  padding: 10,
-                  margin: 5,
-                  backgroundColor:
-                    answer.id === selectedAnswerId ? '#FFBD28' : '#E43C59',
-                  width: scale(200),
-                  borderRadius: 10,
-                }}>
-                <Text color="#fff" fontFamily="Montserrat-Medium">
-                  {answerLabels[index]} {answer.answer}
-                </Text>
-              </TouchableOpacity>
+              <LinearGradient
+                colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
+                start={{x: 0.5, y: 1}}
+                end={{x: 0.5, y: 0}}
+                style={{marginBottom: verticalScale(10), borderRadius: 20}}>
+                <TouchableOpacity
+                  key={answer.id}
+                  onPress={() => {
+                    setQuestionId(currentQuestion.id);
+                    setSelectedAnswerId(answer.id);
+                  }}
+                  style={{
+                    padding: 10,
+                    margin: 5,
+                    backgroundColor:
+                      answer.id === selectedAnswerId ? '#FFBD28' : '#E43C59',
+                    width: scale(200),
+                    borderRadius: 20,
+                  }}>
+                  <Text color="#fff" fontFamily="Montserrat-Medium">
+                    {answerLabels[index]} {answer.answer}
+                  </Text>
+                </TouchableOpacity>
+              </LinearGradient>
             );
           })}
           <Separator space={10} />

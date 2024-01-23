@@ -73,7 +73,9 @@ const Profile = props => {
               size={25}
               color="#fff"
               weight="700"
-              customStyle={{textAlign: 'center'}}>
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              customStyle={{textAlign: 'center', width: scale(250)}}>
               {customerProfile?.name},{' '}
               <Text
                 size={25}
@@ -96,7 +98,7 @@ const Profile = props => {
           <View
             style={{
               position: 'absolute',
-              top: verticalScale(isIosDevice() ? 50 : 80),
+              top: verticalScale(isIosDevice() ? 60 : 90),
             }}>
             <PhotoCarousel
               setOpenPhotoModal={setOpenPhotoModal}
