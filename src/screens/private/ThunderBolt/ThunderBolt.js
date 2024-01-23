@@ -120,7 +120,7 @@ const ThunderBolt = () => {
           customStyle={{textAlign: 'center'}}
           color="#E43C59"
           weight={isIosDevice() ? 700 : 400}
-          fontFamily="Montserrat-Black"
+          fontFamily="Montserrat-Bold"
           size={15}>
           WHAT’S IN IT FOR YOU? LET ME TELL YOU, MARS!
         </Text>
@@ -137,7 +137,7 @@ const ThunderBolt = () => {
           <Text
             color="#E43C59"
             fontFamily="Montserrat-Bold"
-            weight={700}
+            weight={isIosDevice() ? 700 : 400}
             size={20}>
             Subscribe Now!
           </Text>

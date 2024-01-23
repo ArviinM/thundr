@@ -10,6 +10,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Image from '../../../components/Image/Image';
 import Separator from '../../../components/Separator/Separator';
 import Text from '../../../components/Text/Text';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 // Utils
 import {
@@ -22,15 +23,20 @@ import {ADVOCACY_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
 
 // Style
 import {BorderLinearGradient} from '../PersonalityType/Styled';
-import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const AdvocacyTransaction = () => {
   const navigation = useNavigation();
   const [inputValue, setInputValue] = useState('');
+  const [displayModal, setDisplayModal] = useState(false);
 
   return (
     <KeyboardAwareScrollView bounces={false}>
-      <FeatureNotAvailableModal displayCloseIcon={true} />
+      <FeatureNotAvailableModal
+        displayCloseIcon={true}
+        displayModal={displayModal}
+        setDisplayModal={setDisplayModal}
+        fromThunderBolt={true}
+      />
       <View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -52,7 +58,6 @@ const AdvocacyTransaction = () => {
           </Text>
         </View>
         <Separator space={25} />
-
         <View style={{alignItems: 'center'}}>
           <Text size={15}>Amount to Donate</Text>
           <Separator space={10} />
@@ -98,8 +103,9 @@ const AdvocacyTransaction = () => {
             </View>
           </BorderLinearGradient>
           <TouchableOpacity
-            disabled={!inputValue}
-            onPress={() => navigation.navigate('AdvocacyResult')}>
+            // disabled={!inputValue}
+            // onPress={() => navigation.navigate('AdvocacyResult')}
+            onPress={() => setDisplayModal(true)}>
             <Image
               source={ADVOCACY_ASSET_URI.DONATE_BUTTON}
               height={60}
