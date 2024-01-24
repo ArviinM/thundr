@@ -13,9 +13,11 @@ import Button from '../../components/Button/Button';
 import {BorderLinearGradient} from '../../screens/public/ProfileCreationScreen/Styled';
 import {useDispatch} from 'react-redux';
 import {UPDATE_DASHBOARD_STATE} from '../../ducks/Dashboard/actionTypes';
+import {useNavigation} from '@react-navigation/native';
 
 const OutOfSwipeModal = props => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {isSwipeReached, setOutOfSwipe} = props;
   const [remainingTime, setRemainingTime] = useState(calculateRemainingTime());
 
@@ -52,6 +54,7 @@ const OutOfSwipeModal = props => {
 
   const handleCloseModal = () => {
     dispatch({type: UPDATE_DASHBOARD_STATE, newState: {isSwipeReached: false}});
+    navigation.navigate('ThunderBolt');
   };
 
   return (
