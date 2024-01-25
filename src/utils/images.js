@@ -125,6 +125,7 @@ export const ADVOCACY_ASSET_URI = {
   APPROVED_ICON: require('../assets/Images/Icons/approved.png'),
   FAILED_ICON: require('../assets/Images/Icons/failed.png'),
   CANCELLED_ICON: require('../assets/Images/Icons/cancelled.png'),
+  TEST: require('../assets/Images/Images/test.png'),
 };
 
 export const FILTERS_ASSET_URI = {

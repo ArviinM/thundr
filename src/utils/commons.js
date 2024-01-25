@@ -158,9 +158,8 @@ export function getDaysInMonth(monthName) {
   return days;
 }
 
-const currYear = new Date().getFullYear();
 export const years = [];
-for (let i = currYear; i >= currYear - 100; i--) {
+for (let i = 1988; i >= 0; i--) {
   years.push(i);
 }
 
