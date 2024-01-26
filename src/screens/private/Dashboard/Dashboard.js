@@ -25,7 +25,6 @@ import {
   GET_MATCH_LIST,
   GET_UNREAD_MESSAGES,
   UPDATE_CURRENT_LOCATION,
-  UPDATE_DASHBOARD_STATE,
   UPDATE_LAST_ACTIVITY,
 } from '../../../ducks/Dashboard/actionTypes';
 
@@ -48,26 +47,30 @@ const MatchDetails = props => {
   } else {
     return (
       <View style={{alignItems: 'center'}}>
-        <Text
-          size={30}
-          color="#E33C59"
-          weight={700}
-          fontFamily="Montserrat-Bold"
-          numberOfLines={2}
-          ellipsizeMode="tail"
-          customStyle={{textAlign: 'center', width: scale(280)}}>
-          {customerProfile?.name || ''},{' '}
-          <Text
-            fontFamily="Montserrat-Medium"
-            size={30}
-            color="#E33C59"
-            customStyle={{textAlign: 'center'}}>
-            {calculateAge(customerProfile?.birthday) || ''}
-          </Text>
-        </Text>
-        <Text size={15} fontFamily="Montserrat-Medium">
-          {customerProfile?.customerDetails?.work}
-        </Text>
+        {customerProfile?.name && (
+          <>
+            <Text
+              size={30}
+              color="#E33C59"
+              weight={700}
+              fontFamily="Montserrat-Bold"
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              customStyle={{textAlign: 'center', width: scale(280)}}>
+              {customerProfile?.name || ''},{' '}
+              <Text
+                fontFamily="Montserrat-Medium"
+                size={30}
+                color="#E33C59"
+                customStyle={{textAlign: 'center'}}>
+                {calculateAge(customerProfile?.birthday) || ''}
+              </Text>
+            </Text>
+            <Text size={15} fontFamily="Montserrat-Medium">
+              {customerProfile?.customerDetails?.work}
+            </Text>
+          </>
+        )}
         <View
           style={{
             height: verticalScale(1),
@@ -76,11 +79,13 @@ const MatchDetails = props => {
             marginVertical: verticalScale(3),
           }}
         />
-        <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
-          {`Compatibility Score: ${
-            matchList?.length && matchList[currentIndex]?.percent
-          }`}
-        </Text>
+        {customerProfile?.name && (
+          <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
+            {`Compatibility Score: ${
+              matchList?.length && matchList[currentIndex]?.percent
+            }`}
+          </Text>
+        )}
       </View>
     );
   }
@@ -198,6 +203,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch({
+      type: GET_MATCH_LIST,
+      payload: {sub: loginData.sub || sub},
+    });
+    dispatch({
       type: GET_CUSTOMER_DETAILS,
       payload: {sub: loginData.sub || sub, accessToken: loginData.accessToken},
     });
@@ -212,10 +221,6 @@ const Dashboard = () => {
         accessToken: loginData.accessToken,
         fromSwipe: false,
       },
-    });
-    dispatch({
-      type: GET_MATCH_LIST,
-      payload: {sub: loginData.sub || sub},
     });
   }, [dispatch]);
 
