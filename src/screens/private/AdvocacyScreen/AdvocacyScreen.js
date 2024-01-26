@@ -1,5 +1,5 @@
 // React modules
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -14,15 +14,24 @@ import Text from '../../../components/Text/Text';
 // Utils
 import {scale, verticalScale} from '../../../utils/commons';
 import {ADVOCACY_ASSET_URI, GLOBAL_ASSET_URI} from '../../../utils/images';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const AdvocacyScreen = () => {
   const navigation = useNavigation();
+  const [displayModal, setDisplayModal] = useState(false);
+
   return (
     <LinearGradient
       colors={['#ed2a85', '#fe406b', '#ff5d51', '#ff7c39', '#f89924']}
       start={{x: 0.5, y: 1}}
       end={{x: 0.5, y: 0}}
       style={{flex: 1}}>
+      <FeatureNotAvailableModal
+        displayCloseIcon={true}
+        displayModal={displayModal}
+        setDisplayModal={setDisplayModal}
+        fromThunderBolt={true}
+      />
       <TouchableOpacity
         onPress={() => navigation.navigate('DashboardTab')}
         style={{left: scale(18), top: verticalScale(10)}}>
@@ -106,8 +115,7 @@ const AdvocacyScreen = () => {
             height={100}
             width={100}
           />
-          <TouchableOpacity
-            onPress={() => navigation.navigate('AdvocacyTransaction')}>
+          <TouchableOpacity onPress={() => setDisplayModal(true)}>
             <Image
               source={ADVOCACY_ASSET_URI.GIVE_DONATION}
               height={100}

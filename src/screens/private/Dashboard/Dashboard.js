@@ -42,47 +42,48 @@ import {ADVOCACY_ASSET_URI} from '../../../utils/images';
 import {GET_SUBSCRIPTION_DETAILS} from '../../../ducks/Subscription/actionTypes';
 
 const MatchDetails = props => {
-  const {currentIndex, matchList, customerProfile} = props;
-  if (!matchList?.length) {
+  const {currentIndex, matchList, customerProfile, currentUser} = props;
+  if (!matchList?.length || currentUser) {
     return;
-  }
-  return (
-    <View style={{alignItems: 'center'}}>
-      <Text
-        size={30}
-        color="#E33C59"
-        weight={700}
-        fontFamily="Montserrat-Bold"
-        numberOfLines={2}
-        ellipsizeMode="tail"
-        customStyle={{textAlign: 'center', width: scale(280)}}>
-        {customerProfile?.name},{' '}
+  } else {
+    return (
+      <View style={{alignItems: 'center'}}>
         <Text
-          fontFamily="Montserrat-Medium"
           size={30}
           color="#E33C59"
-          customStyle={{textAlign: 'center'}}>
-          {calculateAge(customerProfile?.birthday)}
+          weight={700}
+          fontFamily="Montserrat-Bold"
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          customStyle={{textAlign: 'center', width: scale(280)}}>
+          {customerProfile?.name || ''},{' '}
+          <Text
+            fontFamily="Montserrat-Medium"
+            size={30}
+            color="#E33C59"
+            customStyle={{textAlign: 'center'}}>
+            {calculateAge(customerProfile?.birthday) || ''}
+          </Text>
         </Text>
-      </Text>
-      <Text size={15} fontFamily="Montserrat-Medium">
-        {customerProfile?.customerDetails?.work}
-      </Text>
-      <View
-        style={{
-          height: verticalScale(1),
-          backgroundColor: '#E33C59',
-          width: '50%',
-          marginVertical: verticalScale(3),
-        }}
-      />
-      <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
-        {`Compatibility Score: ${
-          matchList?.length && matchList[currentIndex]?.percent
-        }`}
-      </Text>
-    </View>
-  );
+        <Text size={15} fontFamily="Montserrat-Medium">
+          {customerProfile?.customerDetails?.work}
+        </Text>
+        <View
+          style={{
+            height: verticalScale(1),
+            backgroundColor: '#E33C59',
+            width: '50%',
+            marginVertical: verticalScale(3),
+          }}
+        />
+        <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
+          {`Compatibility Score: ${
+            matchList?.length && matchList[currentIndex]?.percent
+          }`}
+        </Text>
+      </View>
+    );
+  }
 };
 
 const Dashboard = () => {
@@ -98,6 +99,7 @@ const Dashboard = () => {
     isSwipeReached,
     allChatList,
   } = useSelector(state => state.dashboard);
+  const currentUserSub = loginData?.sub || sub;
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
   const [isUserInformationShown, setUserInformationShown] = useState(
@@ -137,17 +139,20 @@ const Dashboard = () => {
           fromSwipe: true,
         },
       });
-      if (swipeValue) {
-        dispatch({
-          type: CUSTOMER_MATCH,
-          payload: {
-            tag: swipeValue,
-            target: matchList.length && matchList[currentIndex]?.sub,
-          },
-        });
-      }
     }
   }, [matchList, dispatch, currentIndex, swipeValue]);
+
+  useEffect(() => {
+    if (swipeValue) {
+      dispatch({
+        type: CUSTOMER_MATCH,
+        payload: {
+          tag: swipeValue,
+          target: matchList.length && matchList[currentIndex - 1]?.sub,
+        },
+      });
+    }
+  }, [swipeValue, dispatch]);
 
   useEffect(() => {
     dispatch({
@@ -164,10 +169,12 @@ const Dashboard = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       allChatList.forEach(item => {
-        dispatch({
-          type: GET_UNREAD_MESSAGES,
-          payload: {chatRoomID: item.chatUUID, sub: item.sub},
-        });
+        if (item.chatUUID) {
+          dispatch({
+            type: GET_UNREAD_MESSAGES,
+            payload: {chatRoomID: item.chatUUID, sub: item.sub},
+          });
+        }
       });
     }, 5000);
 
@@ -298,9 +305,11 @@ const Dashboard = () => {
     );
   };
 
+  const currentUser = matchList?.some(item => item.sub === currentUserSub);
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {!matchList || !matchList?.length ? (
+      {!matchList || !matchList?.length || currentUser ? (
         <ScrollView
           refreshControl={
             !matchList?.length && (
@@ -323,12 +332,15 @@ const Dashboard = () => {
           setUserInformationShown={setUserInformationShown}
         />
       )}
-      {!isUserInformationShown && (
+      {!isUserInformationShown && !currentUser ? (
         <MatchDetails
           currentIndex={currentIndex}
           matchList={matchList}
           customerProfile={customerProfile}
+          currentUser={currentUser}
         />
+      ) : (
+        <></>
       )}
       <OutOfSwipeModal isSwipeReached={isSwipeReached} />
       <View

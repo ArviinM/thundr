@@ -132,7 +132,7 @@ const dashboard = (state = INITIAL_STATE, action) => {
     case GET_CHAT_CUSTOMER_DETAILS_MARE_SUCCESS:
       return {
         ...state,
-        mareCustomerDetails: action.payload,
+        mareCustomerDetails: [...state.mareCustomerDetails, action.payload],
         loading: false,
       };
     case GET_CHAT_CUSTOMER_DETAILS_MARE_FAILED:

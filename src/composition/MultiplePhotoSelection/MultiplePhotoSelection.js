@@ -124,7 +124,7 @@ const MultiplePhotoSelection = () => {
                   onPress={() => {
                     dispatch({
                       type: UPDATE_DASHBOARD_STATE,
-                      newState: {currentPhotoId: photo.id},
+                      newState: {currentPhotoId: photo?.id},
                     });
                     openImageLibrary({
                       primaryPhoto: false,
