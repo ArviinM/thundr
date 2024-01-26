@@ -454,7 +454,12 @@ const Messages = () => {
     );
     setMareFilteredData(filteredData);
     setJowaFilteredData(filteredData);
-  }, [searchText, chatCustomerDetails]);
+  }, [
+    searchText,
+    chatCustomerDetails,
+    isMareChatListActive,
+    mareCustomerDetails,
+  ]);
 
   useEffect(() => {
     if (!isMareChatListActive) {
