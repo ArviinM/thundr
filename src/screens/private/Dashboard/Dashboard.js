@@ -152,7 +152,7 @@ const Dashboard = () => {
         },
       });
     }
-  }, [swipeValue, dispatch]);
+  }, [swipeValue, dispatch, currentIndex]);
 
   useEffect(() => {
     dispatch({
@@ -178,7 +178,6 @@ const Dashboard = () => {
       });
     }, 5000);
 
-    // Cleanup function to clear the interval when the component is unmounted
     return () => {
       clearInterval(intervalId);
     };
@@ -199,10 +198,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch({
-      type: GET_MATCH_LIST,
-      payload: {sub: loginData.sub || sub},
-    });
-    dispatch({
       type: GET_CUSTOMER_DETAILS,
       payload: {sub: loginData.sub || sub, accessToken: loginData.accessToken},
     });
@@ -217,6 +212,10 @@ const Dashboard = () => {
         accessToken: loginData.accessToken,
         fromSwipe: false,
       },
+    });
+    dispatch({
+      type: GET_MATCH_LIST,
+      payload: {sub: loginData.sub || sub},
     });
   }, [dispatch]);
 
