@@ -177,6 +177,10 @@ export function* customerMatch({payload}) {
         type: UPDATE_DASHBOARD_STATE,
         newState: {matchPhoto: customerPhoto},
       });
+      yield put({
+        type: GET_CHAT_MATCH_LIST,
+        payload: {sub: loginData.sub || sub, tag: 'ALL'},
+      });
       if (response?.data?.data.match === 'true') {
         RootNavigation.navigate('MatchFound', response?.data?.data);
       }

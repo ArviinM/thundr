@@ -37,13 +37,7 @@ const ChatScreenHeader = props => {
         height: verticalScale(60),
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'Messages'}],
-            })
-          }>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={GLOBAL_ASSET_URI.PROFILE_BACK_ICON}
             height={25}

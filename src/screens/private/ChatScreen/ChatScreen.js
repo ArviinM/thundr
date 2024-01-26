@@ -215,7 +215,11 @@ const ChatScreen = () => {
                 key={message.id}
                 style={{
                   alignSelf: currentUser ? 'flex-end' : 'flex-start',
-                  backgroundColor: currentUser ? '#E33C59' : '#660707',
+                  backgroundColor: currentUser
+                    ? isMare
+                      ? '#EE9B3D'
+                      : '#E33C59'
+                    : '#660707',
                   padding: scale(20),
                   borderRadius: 8,
                   marginBottom: 10,

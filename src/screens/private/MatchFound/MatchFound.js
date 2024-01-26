@@ -186,12 +186,19 @@ const MatchFound = () => {
             bottom: verticalScale(20),
           }}>
           <Button
-            onPress={() => navigation.navigate('Messages')}
+            onPress={() => {
+              navigation.navigate('Messages');
+            }}
             title="Chat now!"
             style={{width: scale(125), backgroundColor: '#FFBC28'}}
           />
           <Button
-            onPress={() => navigation.navigate('DashboardTab')}
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'DashboardTabs'}],
+              })
+            }
             title="Keep sighting"
             style={{width: scale(125)}}
           />
