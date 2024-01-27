@@ -313,10 +313,13 @@ const Dashboard = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {!matchList || !matchList?.length || currentUser ? (
+      {!matchList ||
+      !matchList?.length ||
+      !customerProfile.length ||
+      currentUser ? (
         <ScrollView
           refreshControl={
-            !matchList?.length && (
+            (!matchList?.length || !customerProfile.length) && (
               <RefreshControl
                 refreshing={matchListLoading}
                 onRefresh={handleRefresh}
@@ -324,7 +327,7 @@ const Dashboard = () => {
             )
           }
           showsVerticalScrollIndicator={false}
-          bounces={!matchList?.length}>
+          bounces={!matchList?.length || !customerProfile.length}>
           {noAvailableMatches()}
         </ScrollView>
       ) : (
@@ -336,7 +339,7 @@ const Dashboard = () => {
           setUserInformationShown={setUserInformationShown}
         />
       )}
-      {!isUserInformationShown && !currentUser ? (
+      {!isUserInformationShown && !currentUser && customerProfile.length ? (
         <MatchDetails
           currentIndex={currentIndex}
           matchList={matchList}
