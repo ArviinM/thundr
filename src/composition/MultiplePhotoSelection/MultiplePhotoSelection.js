@@ -109,73 +109,230 @@ const MultiplePhotoSelection = () => {
         </BorderLinearGradient>
       </TouchableOpacity>
       <View style={{flex: 1, flexDirection: 'column', left: scale(5)}}>
-        {[...Array(2)].map((_, index) => (
-          <View key={index} style={{flexDirection: 'row'}}>
-            {[...Array(2)].map((_, subIndex) => {
-              const photoIndex = index * 2 + subIndex;
-              const photo =
-                photoIndex < currentUserProfile?.customerPhoto?.length
-                  ? currentUserProfile?.customerPhoto[photoIndex]
-                  : null;
-
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    dispatch({
-                      type: UPDATE_DASHBOARD_STATE,
-                      newState: {currentPhotoId: photo?.id},
-                    });
-                    openImageLibrary({
-                      primaryPhoto: false,
-                    });
-                  }}>
-                  <BorderLinearGradient
-                    key={subIndex}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}
-                    colors={['#E72454', '#FFC227']}
-                    style={{
-                      height: verticalScale(65),
-                      alignItems: 'center',
-                      flex: 1,
-                      marginHorizontal: scale(4),
-                      marginBottom: verticalScale(5),
-                      justifyContent: 'center',
-                    }}>
-                    <View
-                      style={{
-                        height: verticalScale(62),
-                        width: scale(65),
-                        backgroundColor: '#fff',
-                        borderRadius: 15,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      {photo && !photo.primary ? (
-                        <Image
-                          source={{uri: photo.photoUrl}}
-                          height={isIosDevice() ? 100 : 65}
-                          width={isIosDevice() ? 75 : 70}
-                          resizeMode="cover"
-                          customStyle={{borderRadius: 15}}
-                        />
-                      ) : (
-                        <Image
-                          source={GLOBAL_ASSET_URI.ADD_ICON}
-                          height={20}
-                          width={10}
-                          resizeMode="cover"
-                          customStyle={{borderRadius: 15}}
-                        />
-                      )}
-                    </View>
-                  </BorderLinearGradient>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        ))}
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {
+                  currentPhotoId: currentUserProfile?.customerPhoto?.[1]?.id,
+                },
+              });
+              openImageLibrary({
+                primaryPhoto: false,
+              });
+            }}>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#E72454', '#FFC227']}
+              style={{
+                height: verticalScale(65),
+                alignItems: 'center',
+                flex: 1,
+                marginHorizontal: scale(4),
+                marginBottom: verticalScale(5),
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  height: verticalScale(62),
+                  width: scale(65),
+                  backgroundColor: '#fff',
+                  borderRadius: 15,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {currentUserProfile ? (
+                  <Image
+                    source={{
+                      uri: currentUserProfile?.customerPhoto?.[1]?.photoUrl,
+                    }}
+                    height={isIosDevice() ? 100 : 65}
+                    width={isIosDevice() ? 75 : 70}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                ) : (
+                  <Image
+                    source={GLOBAL_ASSET_URI.ADD_ICON}
+                    height={20}
+                    width={10}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                )}
+              </View>
+            </BorderLinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {
+                  currentPhotoId: currentUserProfile?.customerPhoto?.[2]?.id,
+                },
+              });
+              openImageLibrary({
+                primaryPhoto: false,
+              });
+            }}>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#E72454', '#FFC227']}
+              style={{
+                height: verticalScale(65),
+                alignItems: 'center',
+                flex: 1,
+                marginHorizontal: scale(4),
+                marginBottom: verticalScale(5),
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  height: verticalScale(62),
+                  width: scale(65),
+                  backgroundColor: '#fff',
+                  borderRadius: 15,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {currentUserProfile ? (
+                  <Image
+                    source={{
+                      uri: currentUserProfile?.customerPhoto?.[2]?.photoUrl,
+                    }}
+                    height={isIosDevice() ? 100 : 65}
+                    width={isIosDevice() ? 75 : 70}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                ) : (
+                  <Image
+                    source={GLOBAL_ASSET_URI.ADD_ICON}
+                    height={20}
+                    width={10}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                )}
+              </View>
+            </BorderLinearGradient>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {
+                  currentPhotoId: currentUserProfile?.customerPhoto?.[3]?.id,
+                },
+              });
+              openImageLibrary({
+                primaryPhoto: false,
+              });
+            }}>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#E72454', '#FFC227']}
+              style={{
+                height: verticalScale(65),
+                alignItems: 'center',
+                flex: 1,
+                marginHorizontal: scale(4),
+                marginBottom: verticalScale(5),
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  height: verticalScale(62),
+                  width: scale(65),
+                  backgroundColor: '#fff',
+                  borderRadius: 15,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {currentUserProfile ? (
+                  <Image
+                    source={{
+                      uri: currentUserProfile?.customerPhoto?.[3]?.photoUrl,
+                    }}
+                    height={isIosDevice() ? 100 : 65}
+                    width={isIosDevice() ? 75 : 70}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                ) : (
+                  <Image
+                    source={GLOBAL_ASSET_URI.ADD_ICON}
+                    height={20}
+                    width={10}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                )}
+              </View>
+            </BorderLinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {
+                  currentPhotoId: currentUserProfile?.customerPhoto?.[4]?.id,
+                },
+              });
+              openImageLibrary({
+                primaryPhoto: false,
+              });
+            }}>
+            <BorderLinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#E72454', '#FFC227']}
+              style={{
+                height: verticalScale(65),
+                alignItems: 'center',
+                flex: 1,
+                marginHorizontal: scale(4),
+                marginBottom: verticalScale(5),
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  height: verticalScale(62),
+                  width: scale(65),
+                  backgroundColor: '#fff',
+                  borderRadius: 15,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {currentUserProfile ? (
+                  <Image
+                    source={{
+                      uri: currentUserProfile?.customerPhoto?.[4]?.photoUrl,
+                    }}
+                    height={isIosDevice() ? 100 : 65}
+                    width={isIosDevice() ? 75 : 70}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                ) : (
+                  <Image
+                    source={GLOBAL_ASSET_URI.ADD_ICON}
+                    height={20}
+                    width={10}
+                    resizeMode="cover"
+                    customStyle={{borderRadius: 15}}
+                  />
+                )}
+              </View>
+            </BorderLinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
