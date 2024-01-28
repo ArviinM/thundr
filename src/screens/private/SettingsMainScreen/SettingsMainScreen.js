@@ -85,7 +85,12 @@ const SettingsMainScreen = () => {
             dispatch({type: START_LOGOUT});
             dispatch({
               type: UPDATE_PERSISTED_STATE,
-              newState: {refreshToken: null},
+              newState: {
+                refreshToken: null,
+                customerName: null,
+                sub: null,
+                customerPhoto: null,
+              },
             });
           }}
         />

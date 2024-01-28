@@ -9,7 +9,7 @@ import subscription from './Subscription/reducer';
 import filters from './Filters/reducer';
 import settings from './Settings/reducer';
 import userProfile from './UserProfile/reducer';
-import {START_LOGOUT_SUCCESS} from './Login/actionTypes';
+import {START_LOGOUT, START_LOGOUT_FAILED} from './Login/actionTypes';
 
 const appReducer = combineReducers({
   persistedState,
@@ -25,8 +25,10 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === START_LOGOUT_SUCCESS && !state.persistedState) {
-    return appReducer(undefined, action);
+  if (action.type === START_LOGOUT) {
+    return {
+      persistedState: state?.persistedState,
+    };
   }
 
   return appReducer(state, action);
