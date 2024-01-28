@@ -159,6 +159,23 @@ const Dashboard = () => {
     }
   }, [swipeValue, dispatch, currentIndex]);
 
+  //
+  useEffect(() => {
+    if (route?.params?.fromPossibles) {
+      dispatch({
+        type: CUSTOMER_MATCH,
+        payload: {
+          tag: swipeValue,
+          target:
+            matchList.length && route?.params?.fromPossibles
+              ? route?.params?.sub
+              : matchList[currentIndex - 1]?.sub,
+        },
+      });
+    }
+    navigation.setParams({fromPossibles: false});
+  }, [swipeValue, dispatch, navigation]);
+
   useEffect(() => {
     dispatch({
       type: GET_CHAT_MATCH_LIST,

@@ -227,9 +227,13 @@ const ThePossibles = () => {
 
   useEffect(() => {
     if (isJowableTabActive) {
-      dispatch({type: GET_POSSIBLES, payload: {tag: 'JOWA'}});
+      if (!jowaPossibles.length) {
+        dispatch({type: GET_POSSIBLES, payload: {tag: 'JOWA'}});
+      }
     } else {
-      dispatch({type: GET_POSSIBLES, payload: {tag: 'MARE'}});
+      if (!marePossibles.length) {
+        dispatch({type: GET_POSSIBLES, payload: {tag: 'MARE'}});
+      }
     }
   }, [dispatch, isJowableTabActive]);
 
