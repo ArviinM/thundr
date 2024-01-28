@@ -110,6 +110,7 @@ const MatchInformationSection = props => {
                       marginRight: scale(5),
                       borderRadius: 10,
                       alignItems: 'center',
+                      justifyContent: 'center',
                       padding: scale(5),
                     }}>
                     <Text
