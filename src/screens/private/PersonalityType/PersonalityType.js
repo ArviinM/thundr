@@ -145,7 +145,35 @@ const PersonalityType = props => {
 
   const {loginData} = useSelector(state => state.login);
   const dispatch = useDispatch();
-  const [selectedHobby, setSelectedHobby] = useState([]);
+
+  const stringToArray = inputString => {
+    const trimmedString = inputString?.trim();
+    const arrayResult = trimmedString?.split(',');
+    const finalArray = arrayResult?.map(item => item.trim());
+
+    return finalArray;
+  };
+
+  // Default value of hobbies if existing
+  const defaultHobbyState = (hobbies, namesToMatch) => {
+    const matchedIndices = [];
+    hobbies.forEach((sign, index) => {
+      if (namesToMatch?.includes(sign)) {
+        matchedIndices.push(index);
+      }
+    });
+    return matchedIndices;
+  };
+
+  const [selectedHobby, setSelectedHobby] = useState(
+    fromEditProfileScreen && currentUserProfile?.customerDetails?.hobbies
+      ? defaultHobbyState(
+          hobbies,
+          stringToArray(currentUserProfile?.customerDetails?.hobbies),
+        )
+      : [],
+  );
+
   const [selectedPersonality, setSelectedPersonality] = useState(
     fromEditProfileScreen &&
       currentUserProfile?.customerDetails?.personalityType
@@ -226,6 +254,11 @@ const PersonalityType = props => {
       : '',
   );
 
+  const getSelectedHobby = selectedIndices => {
+    const selectedHobbyData = selectedIndices.map(index => hobbies[index]);
+    return selectedHobbyData.join(', ');
+  };
+
   useEffect(() => {
     if (fromEditProfileScreen) {
       dispatch({
@@ -235,6 +268,7 @@ const PersonalityType = props => {
             bio,
             work,
             location,
+            hobbies: getSelectedHobby(selectedHobby),
             height: currentUserProfile?.customerDetails?.height
               ? `${removeSpaces(heightFt.toLocaleLowerCase())} ${removeSpaces(
                   heightIn.toLocaleLowerCase(),
@@ -268,6 +302,7 @@ const PersonalityType = props => {
     petState,
     selectedPersonality,
     politicsState,
+    selectedHobby,
   ]);
 
   useEffect(() => {
@@ -280,6 +315,10 @@ const PersonalityType = props => {
     } else if (selectedHobby.length < 4) {
       setSelectedHobby([...selectedHobby, index]);
     }
+  };
+
+  const getSelectedHobbiesString = () => {
+    return selectedHobby?.map(index => hobbies[index]).join(',');
   };
 
   const renderModal = () => {
@@ -735,7 +774,7 @@ const PersonalityType = props => {
                     height: `${removeSpaces(
                       heightFt.toLocaleLowerCase(),
                     )} ${removeSpaces(heightIn.toLocaleLowerCase())}`,
-
+                    hobbies: getSelectedHobbiesString(),
                     starSign: startSignState,
                     education: otherEducationValue || educationState,
                     drinking,

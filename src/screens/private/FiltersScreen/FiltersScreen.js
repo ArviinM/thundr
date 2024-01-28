@@ -1,9 +1,8 @@
 // React modules
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, TouchableOpacity, ScrollView} from 'react-native';
 
 // Third party libraries
-import LinearGradient from 'react-native-linear-gradient';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import {useNavigation} from '@react-navigation/native';
 

@@ -344,7 +344,7 @@ const MareChatList = props => {
               style={{left: scale(5), width: scale(isIosDevice() ? 190 : 200)}}>
               <Text
                 size={23}
-                color={!isMessageRead ? 'yellow' : '#FFBC28'}
+                color={!isMessageRead ? '#ffc952' : '#FFBC28'}
                 fontFamily="Montserrat-Bold"
                 weight={700}
                 numberOfLines={1}
