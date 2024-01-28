@@ -46,7 +46,7 @@ const MultiplePhotoSelection = () => {
         formData.append('isPrimary', primaryPhoto ? 'true' : 'false');
         formData.append('filepath', image?.data);
         formData.append('filename', image?.path);
-        formData.append('oldPhotoId', primaryPhoto ? '' : currentPhotoId);
+        formData.append('oldPhotoId', currentPhotoId ? currentPhotoId : 0);
 
         dispatch({type: UPLOAD_PHOTO, payload: {formData}});
         dispatch({type: GET_CURRENT_USER_PROFILE});
@@ -67,7 +67,15 @@ const MultiplePhotoSelection = () => {
   return (
     <View style={{flexDirection: 'row', left: scale(-10), flex: 1}}>
       <TouchableOpacity
-        onPress={() => openImageLibrary({primaryPhoto: true})}
+        onPress={() => {
+          dispatch({
+            type: UPDATE_DASHBOARD_STATE,
+            newState: {
+              currentPhotoId: currentUserProfile?.customerPhoto?.[0]?.id,
+            },
+          });
+          openImageLibrary({primaryPhoto: true});
+        }}
         activeOpacity={1}>
         <BorderLinearGradient
           start={{x: 0, y: 0}}

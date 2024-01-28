@@ -13,7 +13,12 @@ import Button from '../../../components/Button/Button';
 import PossiblesSelection from '../../../composition/PossiblesSelection/PossiblesSelection';
 
 // Utils
-import {calculateAge, scale, verticalScale} from '../../../utils/commons';
+import {
+  calculateAge,
+  isIosDevice,
+  scale,
+  verticalScale,
+} from '../../../utils/commons';
 
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
@@ -152,7 +157,7 @@ const Marebles = props => {
                   source={{
                     uri: item?.picture,
                   }}
-                  height={200}
+                  height={isIosDevice() ? 200 : 145}
                   width={150}
                   resizeMode="cover"
                   customStyle={{

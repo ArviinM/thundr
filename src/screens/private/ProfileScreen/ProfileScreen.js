@@ -54,6 +54,7 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={!currentUserProfile?.name}
             onPress={() =>
               navigation.navigate('EditProfileScreen', {currentUserProfile})
             }>
@@ -64,15 +65,17 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
         </View>
-        <Text
-          customStyle={{textAlign: 'center'}}
-          fontFamily="Montserrat-Bold"
-          weight={700}
-          size={30}
-          color="#fff">
-          {currentUserProfile?.name},{' '}
-          {calculateAge(currentUserProfile?.birthday)}
-        </Text>
+        {currentUserProfile?.name && (
+          <Text
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Bold"
+            weight={700}
+            size={30}
+            color="#fff">
+            {currentUserProfile?.name},{' '}
+            {calculateAge(currentUserProfile?.birthday)}
+          </Text>
+        )}
         <View style={{flexDirection: 'row', flex: 1, padding: scale(25)}}>
           <BorderLinearGradient
             start={{x: 0, y: 0}}
