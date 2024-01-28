@@ -85,13 +85,15 @@ const Jowables = props => {
               </View>
             </BorderLinearGradient>
             <View style={{alignItems: 'center'}}>
-              <Text
-                color="#FFBD28"
-                size={22}
-                weight={700}
-                fontFamily="Montserrat-Bold">
-                {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
-              </Text>
+              {item?.visible && (
+                <Text
+                  color="#FFBD28"
+                  size={22}
+                  weight={700}
+                  fontFamily="Montserrat-Bold">
+                  {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
+                </Text>
+              )}
               <Text fontFamily="Montserrat-Medium" color="#808080" size={13}>
                 Compatibility Score:{' '}
                 <Text
@@ -176,13 +178,15 @@ const Marebles = props => {
               </View>
             </BorderLinearGradient>
             <View style={{alignItems: 'center'}}>
-              <Text
-                color="#FFBD28"
-                size={22}
-                weight={700}
-                fontFamily="Montserrat-Bold">
-                {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
-              </Text>
+              {item?.visible && (
+                <Text
+                  color="#FFBD28"
+                  size={22}
+                  weight={700}
+                  fontFamily="Montserrat-Bold">
+                  {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
+                </Text>
+              )}
               <Text fontFamily="Montserrat-Medium" color="#808080" size={13}>
                 Compatibility Score:{' '}
                 <Text
