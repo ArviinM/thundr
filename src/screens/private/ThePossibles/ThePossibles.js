@@ -25,9 +25,10 @@ import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
 import {GET_POSSIBLES} from '../../../ducks/Dashboard/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const Jowables = props => {
-  const {handleRefresh, jowaPossibles} = props;
+  const {handleRefresh, jowaPossibles, setDisplayModal} = props;
   const navigation = useNavigation();
 
   return (
@@ -42,12 +43,16 @@ const Jowables = props => {
       renderItem={({item, index}) => {
         return (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('DashboardTab', {
-                fromPossibles: true,
-                sub: item?.targetSub,
-              })
-            }
+            onPress={() => {
+              if (!item?.visible) {
+                setDisplayModal(true);
+              } else {
+                navigation.navigate('DashboardTab', {
+                  fromPossibles: true,
+                  sub: item?.targetSub,
+                });
+              }
+            }}
             style={{alignItems: 'center', marginTop: verticalScale(20)}}>
             <BorderLinearGradient
               start={{x: 0, y: 0}}
@@ -70,7 +75,7 @@ const Jowables = props => {
                   source={{
                     uri: item?.picture,
                   }}
-                  height={200}
+                  height={145}
                   width={150}
                   resizeMode="cover"
                   customStyle={{
@@ -114,7 +119,7 @@ const Jowables = props => {
 };
 
 const Marebles = props => {
-  const {handleRefresh, marePossibles} = props;
+  const {handleRefresh, marePossibles, setDisplayModal} = props;
   const navigation = useNavigation();
 
   return (
@@ -129,12 +134,16 @@ const Marebles = props => {
       renderItem={({item, index}) => {
         return (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('DashboardTab', {
-                fromPossibles: true,
-                sub: item?.targetSub,
-              })
-            }
+            onPress={() => {
+              if (!item?.visible) {
+                setDisplayModal(true);
+              } else {
+                navigation.navigate('DashboardTab', {
+                  fromPossibles: true,
+                  sub: item?.targetSub,
+                });
+              }
+            }}
             style={{alignItems: 'center', marginTop: verticalScale(20)}}>
             <BorderLinearGradient
               start={{x: 0, y: 0}}
@@ -157,7 +166,7 @@ const Marebles = props => {
                   source={{
                     uri: item?.picture,
                   }}
-                  height={isIosDevice() ? 200 : 145}
+                  height={145}
                   width={150}
                   resizeMode="cover"
                   customStyle={{
@@ -203,6 +212,7 @@ const Marebles = props => {
 const ThePossibles = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [displayModal, setDisplayModal] = useState(false);
   const {jowaPossibles, marePossibles, loading} = useSelector(
     state => state.dashboard,
   );
@@ -239,6 +249,12 @@ const ThePossibles = () => {
         isJowableTabActive={isJowableTabActive}
       />
       <Separator space={10} />
+      <FeatureNotAvailableModal
+        displayCloseIcon={true}
+        displayModal={displayModal}
+        setDisplayModal={setDisplayModal}
+        fromThunderBolt={true}
+      />
       <View style={{alignItems: 'center'}}>
         <Text
           color={isJowableTabActive ? '#E43C59' : '#FFBD28'}
@@ -277,11 +293,13 @@ const ThePossibles = () => {
           <Jowables
             handleRefresh={handleRefresh}
             jowaPossibles={jowaPossibles}
+            setDisplayModal={setDisplayModal}
           />
         ) : (
           <Marebles
             handleRefresh={handleRefresh}
             marePossibles={marePossibles}
+            setDisplayModal={setDisplayModal}
           />
         )}
       </View>
