@@ -1,5 +1,5 @@
 // React modules
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 // Third party libraries
@@ -24,11 +24,9 @@ const MultiplePhotoSelection = () => {
   const dispatch = useDispatch();
   const {loginData} = useSelector(state => state.login);
   const {sub} = useSelector(state => state.persistedState);
-  const {currentUserProfile, currentPhotoId} = useSelector(
-    state => state.dashboard,
-  );
+  const {currentUserProfile} = useSelector(state => state.dashboard);
 
-  const openImageLibrary = async ({primaryPhoto}) => {
+  const openImageLibrary = async ({primaryPhoto, currentPhotoId}) => {
     try {
       const image = await ImagePicker.openPicker({
         mediaType: 'photo',
@@ -74,7 +72,10 @@ const MultiplePhotoSelection = () => {
               currentPhotoId: currentUserProfile?.customerPhoto?.[0]?.id,
             },
           });
-          openImageLibrary({primaryPhoto: true});
+          openImageLibrary({
+            primaryPhoto: true,
+            currentPhotoId: currentUserProfile?.customerPhoto?.[0]?.id,
+          });
         }}
         activeOpacity={1}>
         <BorderLinearGradient
@@ -128,6 +129,7 @@ const MultiplePhotoSelection = () => {
               });
               openImageLibrary({
                 primaryPhoto: false,
+                currentPhotoId: currentUserProfile?.customerPhoto?.[1]?.id,
               });
             }}>
             <BorderLinearGradient
@@ -183,6 +185,7 @@ const MultiplePhotoSelection = () => {
               });
               openImageLibrary({
                 primaryPhoto: false,
+                currentPhotoId: currentUserProfile?.customerPhoto?.[2]?.id,
               });
             }}>
             <BorderLinearGradient
@@ -240,6 +243,7 @@ const MultiplePhotoSelection = () => {
               });
               openImageLibrary({
                 primaryPhoto: false,
+                currentPhotoId: currentUserProfile?.customerPhoto?.[3]?.id,
               });
             }}>
             <BorderLinearGradient
@@ -295,6 +299,7 @@ const MultiplePhotoSelection = () => {
               });
               openImageLibrary({
                 primaryPhoto: false,
+                currentPhotoId: currentUserProfile?.customerPhoto?.[4]?.id,
               });
             }}>
             <BorderLinearGradient
