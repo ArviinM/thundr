@@ -241,9 +241,10 @@ const ThePossibles = () => {
     }
   }, [dispatch, isJowableTabActive]);
 
-  if (loading) {
-    return <Spinner />;
-  }
+  // Possible cause of flicker
+  // if (loading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <View
