@@ -1,9 +1,9 @@
 // React modules
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 // Components
 import Text from '../../../components/Text/Text';
@@ -20,6 +20,7 @@ import {
   GET_CHAT_MATCH_LIST,
   GET_LAST_ACTIVITY,
   GET_UNREAD_MESSAGES,
+  UPDATE_DASHBOARD_STATE,
 } from '../../../ducks/Dashboard/actionTypes';
 
 // Utils
@@ -404,15 +405,27 @@ const Messages = () => {
     lastActivity,
     allChatList,
     unreadMessages,
+    defaultMareTab,
   } = useSelector(state => state.dashboard);
 
-  const [isMareChatListActive, setMareChatListActive] = useState(false);
+  const [isMareChatListActive, setMareChatListActive] = useState(
+    defaultMareTab ? defaultMareTab : false,
+  );
   const [mareFilteredData, setMareFilteredData] = useState(mareCustomerDetails);
   const [jowaFilteredData, setJowaFilteredData] = useState(chatCustomerDetails);
   const [searchText, setSearchText] = useState('');
   const [is1MinAgoActive, setIs1MinAgoActive] = useState(false);
   const [is5MinsAgoActive, setIs5MinsAgoActive] = useState(false);
   const [is30MinsAgoActive, setIs30MinsAgoActive] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch({
+        type: UPDATE_DASHBOARD_STATE,
+        newState: {defaultMareTab: false},
+      });
+    }, [dispatch]),
+  );
 
   useEffect(() => {
     allChatList.forEach(item => {
