@@ -3,7 +3,7 @@ import React, {useRef, useCallback, useState} from 'react';
 import {ImageBackground, View, Animated} from 'react-native';
 
 // Third party libraries
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,6 +17,7 @@ import Button from '../../../components/Button/Button';
 // Utils
 import {DASHBOARD_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {UPDATE_DASHBOARD_STATE} from '../../../ducks/Dashboard/actionTypes';
 
 const jowaGradientColors = [
   '#ed2a85',
@@ -35,6 +36,7 @@ const mareGradientColors = [
 
 const MatchFound = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const {customerMatchData, matchPhoto} = useSelector(state => state.dashboard);
   const {customerPhoto} = useSelector(state => state.persistedState);
   const matchPhotoUrl = matchPhoto?.customerPhoto?.[0]?.photoUrl;
@@ -187,6 +189,10 @@ const MatchFound = () => {
           }}>
           <Button
             onPress={() => {
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {defaultMareTab: isMare},
+              });
               navigation.navigate('Messages');
             }}
             title="Chat now!"

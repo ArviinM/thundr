@@ -15,8 +15,11 @@ import Text from '../../components/Text/Text';
 // Utils
 import {calculateAge, scale, verticalScale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
+import {useDispatch} from 'react-redux';
+import {UPDATE_DASHBOARD_STATE} from '../../ducks/Dashboard/actionTypes';
 
 const ChatScreenHeader = props => {
+  const dispatch = useDispatch();
   const {
     chatCustomerDetails,
     is1MinAgoActive,
@@ -37,7 +40,17 @@ const ChatScreenHeader = props => {
         height: verticalScale(60),
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Messages'}],
+            });
+            dispatch({
+              type: UPDATE_DASHBOARD_STATE,
+              newState: {defaultMareTab: true},
+            });
+          }}>
           <Image
             source={GLOBAL_ASSET_URI.PROFILE_BACK_ICON}
             height={25}

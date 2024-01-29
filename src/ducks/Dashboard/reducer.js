@@ -93,6 +93,7 @@ export const INITIAL_STATE = {
   currentPhotoId: null,
   jowaPossibles: [],
   marePossibles: [],
+  defaultMareTab: false,
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
