@@ -18,7 +18,12 @@ import Text from '../../../components/Text/Text';
 
 // Utils
 import {LOGIN_ASSET_URI} from '../../../utils/images';
-import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
+import {
+  isAndroidDevice,
+  isIosDevice,
+  scale,
+  verticalScale,
+} from '../../../utils/commons';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
 import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTypes';
@@ -126,24 +131,32 @@ const LoginOptionScreen = () => {
       <Image source={LOGIN_ASSET_URI.THUNDR_LOGO} height={210} width={350} />
       <Separator space={30} />
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
-        {renderButton(
-          true,
-          `${API_BASE_URL}auth/get-sso-url?sso=${
-            isIosDevice() ? 'SignInWithApple' : 'Google'
-          }`,
-          isIosDevice()
-            ? LOGIN_ASSET_URI.APPLE_ICON
-            : LOGIN_ASSET_URI.GOOGLE_ICON,
-          `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
+        {isAndroidDevice() && (
+          <>
+            {renderButton(
+              true,
+              `${API_BASE_URL}auth/get-sso-url?sso=${
+                isIosDevice() ? 'SignInWithApple' : 'Google'
+              }`,
+              isIosDevice()
+                ? LOGIN_ASSET_URI.APPLE_ICON
+                : LOGIN_ASSET_URI.GOOGLE_ICON,
+              `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
+            )}
+            <Separator space={5} />
+          </>
         )}
-        <Separator space={5} />
-        {renderButton(
-          true,
-          `${API_BASE_URL}auth/get-sso-url?sso=Facebook`,
-          LOGIN_ASSET_URI.FACEBOOK_ICON,
-          'Continue with Facebook',
+        {isAndroidDevice() && (
+          <>
+            {renderButton(
+              true,
+              `${API_BASE_URL}auth/get-sso-url?sso=Facebook`,
+              LOGIN_ASSET_URI.FACEBOOK_ICON,
+              'Continue with Facebook',
+            )}
+          </>
         )}
-        <Separator space={5} />
+        <Separator space={isIosDevice() ? 25 : 5} />
         {renderButton(
           false,
           '',
