@@ -13,23 +13,24 @@ import Button from '../../../components/Button/Button';
 import PossiblesSelection from '../../../composition/PossiblesSelection/PossiblesSelection';
 
 // Utils
-import {
-  calculateAge,
-  isIosDevice,
-  scale,
-  verticalScale,
-} from '../../../utils/commons';
+import {calculateAge, scale, verticalScale} from '../../../utils/commons';
 
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
 import {GET_POSSIBLES} from '../../../ducks/Dashboard/actionTypes';
-import Spinner from '../../../components/Spinner/Spinner';
 import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const Jowables = props => {
-  const {handleRefresh, jowaPossibles, setDisplayModal} = props;
+  const {
+    handleRefresh,
+    jowaPossibles,
+    setDisplayModal,
+    displayModal,
+    showPossiblesPrompt,
+  } = props;
   const navigation = useNavigation();
+  const [message, setMessage] = useState('');
 
   return (
     <FlatList
@@ -44,8 +45,14 @@ const Jowables = props => {
         return (
           <TouchableOpacity
             onPress={() => {
-              if (!item?.visible) {
+              if (!item?.visible && !item?.name) {
                 setDisplayModal(true);
+                setMessage('');
+              } else if (showPossiblesPrompt) {
+                setDisplayModal(true);
+                setMessage(
+                  'Wait lang, mars!\nTry again in a few hours.\nKeri?',
+                );
               } else {
                 navigation.navigate('DashboardTab', {
                   fromPossibles: true,
@@ -54,6 +61,13 @@ const Jowables = props => {
               }
             }}
             style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <FeatureNotAvailableModal
+              displayCloseIcon={true}
+              displayModal={displayModal}
+              setDisplayModal={setDisplayModal}
+              fromThunderBolt={true}
+              message={message}
+            />
             <BorderLinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
@@ -121,8 +135,15 @@ const Jowables = props => {
 };
 
 const Marebles = props => {
-  const {handleRefresh, marePossibles, setDisplayModal} = props;
+  const {
+    handleRefresh,
+    marePossibles,
+    setDisplayModal,
+    displayModal,
+    showPossiblesPrompt,
+  } = props;
   const navigation = useNavigation();
+  const [message, setMessage] = useState('');
 
   return (
     <FlatList
@@ -137,8 +158,14 @@ const Marebles = props => {
         return (
           <TouchableOpacity
             onPress={() => {
-              if (!item?.visible) {
+              if (!item?.visible && !item?.name) {
                 setDisplayModal(true);
+                setMessage('');
+              } else if (showPossiblesPrompt) {
+                setDisplayModal(true);
+                setMessage(
+                  'Wait lang, mars!\nTry again in a few hours.\nKeri?',
+                );
               } else {
                 navigation.navigate('DashboardTab', {
                   fromPossibles: true,
@@ -147,6 +174,13 @@ const Marebles = props => {
               }
             }}
             style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <FeatureNotAvailableModal
+              displayCloseIcon={true}
+              displayModal={displayModal}
+              setDisplayModal={setDisplayModal}
+              fromThunderBolt={true}
+              message={message}
+            />
             <BorderLinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
@@ -217,9 +251,8 @@ const ThePossibles = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [displayModal, setDisplayModal] = useState(false);
-  const {jowaPossibles, marePossibles, loading} = useSelector(
-    state => state.dashboard,
-  );
+  const {jowaPossibles, marePossibles} = useSelector(state => state.dashboard);
+  const {showPossiblesPrompt} = useSelector(state => state.persistedState);
   const [isJowableTabActive, setJowableTabActive] = useState(true);
   const handleRefresh = () => {
     if (isJowableTabActive) {
@@ -258,12 +291,6 @@ const ThePossibles = () => {
         isJowableTabActive={isJowableTabActive}
       />
       <Separator space={10} />
-      <FeatureNotAvailableModal
-        displayCloseIcon={true}
-        displayModal={displayModal}
-        setDisplayModal={setDisplayModal}
-        fromThunderBolt={true}
-      />
       <View style={{alignItems: 'center'}}>
         <Text
           color={isJowableTabActive ? '#E43C59' : '#FFBD28'}
@@ -302,13 +329,17 @@ const ThePossibles = () => {
           <Jowables
             handleRefresh={handleRefresh}
             jowaPossibles={jowaPossibles}
+            displayModal={displayModal}
             setDisplayModal={setDisplayModal}
+            showPossiblesPrompt={showPossiblesPrompt}
           />
         ) : (
           <Marebles
             handleRefresh={handleRefresh}
             marePossibles={marePossibles}
+            displayModal={displayModal}
             setDisplayModal={setDisplayModal}
+            showPossiblesPrompt={showPossiblesPrompt}
           />
         )}
       </View>

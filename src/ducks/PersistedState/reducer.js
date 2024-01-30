@@ -6,6 +6,7 @@ export const INITIAL_STATE = {
   customerPhoto: '',
   refreshToken: '',
   sub: '',
+  showPossiblesPrompt: false,
 };
 
 const persistedState = (state = INITIAL_STATE, action) => {

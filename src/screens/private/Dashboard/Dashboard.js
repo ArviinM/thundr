@@ -154,6 +154,7 @@ const Dashboard = () => {
         payload: {
           tag: swipeValue,
           target: matchList.length && matchList[currentIndex - 1]?.sub,
+          fromPossibles: false,
         },
       });
     }
@@ -170,6 +171,7 @@ const Dashboard = () => {
             matchList.length && route?.params?.fromPossibles
               ? route?.params?.sub
               : matchList[currentIndex - 1]?.sub,
+          fromPossibles: true,
         },
       });
     }
