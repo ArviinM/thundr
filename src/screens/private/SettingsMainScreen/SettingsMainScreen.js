@@ -90,6 +90,7 @@ const SettingsMainScreen = () => {
                 customerName: null,
                 sub: null,
                 customerPhoto: null,
+                showPossiblesPrompt: false,
               },
             });
           }}
