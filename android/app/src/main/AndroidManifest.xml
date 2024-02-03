@@ -27,7 +27,7 @@
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="ph.thundr.app" />
+          <data android:scheme="ph.thundr.app.dev" />
         </intent-filter>
         </activity>
 
@@ -42,7 +42,7 @@
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="ph.thundr.app" />
+          <data android:scheme="ph.thundr.app.dev" />
         </intent-filter>
       </activity>
     </application>
