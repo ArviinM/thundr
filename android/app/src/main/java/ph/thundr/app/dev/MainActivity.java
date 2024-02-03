@@ -1,4 +1,4 @@
-package ph.thundr.app;
+package ph.thundr.app.dev;
 import android.os.Bundle; // required for onCreate parameter
 import org.devio.rn.splashscreen.SplashScreen; // required for react-native-splash-screen >= 0.3.1
 
