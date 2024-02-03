@@ -157,7 +157,7 @@ export function* getMatchList({payload}) {
 }
 
 export function* customerMatch({payload}) {
-  const {target, tag} = payload;
+  const {target, tag, fromPossibles = false} = payload;
   const {sub} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
   const {customerPhoto} = yield select(state => state.dashboard);
@@ -167,7 +167,6 @@ export function* customerMatch({payload}) {
       target,
       tag,
     });
-
     if (response?.status === 200) {
       yield put({
         type: CUSTOMER_MATCH_SUCCESS,
@@ -177,12 +176,14 @@ export function* customerMatch({payload}) {
         type: UPDATE_DASHBOARD_STATE,
         newState: {matchPhoto: customerPhoto},
       });
-      yield put({
-        type: GET_CHAT_MATCH_LIST,
-        payload: {sub: loginData.sub || sub, tag: 'ALL'},
-      });
       if (response?.data?.data.match === 'true') {
         RootNavigation.navigate('MatchFound', response?.data?.data);
+        if (fromPossibles) {
+          yield put({
+            type: UPDATE_PERSISTED_STATE,
+            newState: {showPossiblesPrompt: true},
+          });
+        }
       }
     }
   } catch (error) {

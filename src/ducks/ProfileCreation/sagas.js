@@ -114,6 +114,7 @@ export function* submitCustomerDetails({payload}) {
     religion,
     pet,
     politics,
+    hobbies,
     personalityType,
   } = payload;
 
@@ -123,6 +124,7 @@ export function* submitCustomerDetails({payload}) {
       bio,
       work,
       location,
+      hobbies,
       height,
       starSign,
       education,

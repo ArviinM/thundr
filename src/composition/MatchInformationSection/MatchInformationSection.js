@@ -30,6 +30,16 @@ const getPersonalityTypeImage = personalityType => {
 const MatchInformationSection = props => {
   const {customerDetails, fromChatmateProfile = false} = props;
 
+  const stringToArray = inputString => {
+    const trimmedString = inputString?.trim();
+    const arrayResult = trimmedString?.split(',');
+    const finalArray = arrayResult?.map(item => item.trim());
+
+    return finalArray;
+  };
+
+  const selectedHobbies = stringToArray(customerDetails?.hobbies);
+
   const renderInformationSection = ({item}) => {
     return (
       <View>
@@ -78,10 +88,46 @@ const MatchInformationSection = props => {
           {item?.location}
         </Text>
         <Separator space={10} />
-        {/* <Text color="#fff" >
-          HOBBIES
-        </Text> */}
-        {/* <Separator space={10} /> */}
+        {customerDetails?.hobbies && (
+          <>
+            <Text
+              color="#fff"
+              size={17}
+              fontFamily="Montserrat-ExtraBold"
+              weight={isIosDevice() ? 700 : 400}>
+              HOBBIES
+            </Text>
+            <Separator space={10} />
+            <View style={{flexDirection: 'row'}}>
+              {selectedHobbies?.map(item => {
+                return (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      borderWidth: 1,
+                      width: scale(60),
+                      borderColor: '#fff',
+                      marginRight: scale(5),
+                      borderRadius: 10,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: scale(5),
+                    }}>
+                    <Text
+                      color="#fff"
+                      size={12}
+                      fontFamily="Montserrat-ExtraBold"
+                      customStyle={{textAlign: 'center'}}
+                      weight={isIosDevice() ? 700 : 400}>
+                      {item}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+            <Separator space={10} />
+          </>
+        )}
         <View
           style={{
             flexDirection: 'row',

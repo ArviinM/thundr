@@ -26,19 +26,9 @@
        steps:
          - run: ls
          - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
-         - run: more ./android/app/src/main/java/ph/thundr/app/SplashActivity.java
-         - run: sed -i '1d' './android/app/src/main/java/ph/thundr/app/SplashActivity.java'
-         - run: more ./android/app/src/main/java/ph/thundr/app/SplashActivity.java
-         - run: sed -i '1 i\package ph.thundr.app;' './android/app/src/main/java/ph/thundr/app/SplashActivity.java'
          - run: echo -en "${{VARS.PROD_ENV}}" >> .env
          - run: echo "BUILD_NUMBER=${{github.run_number}}" >> .env
          - run: more .env
-     Fixes:
-      runs-on: m2
-      needs: Package-Rename
-      steps:
-        - run: yarn install
-        - run: ls    
      Yarn-Install:
        runs-on: m2
        needs: Package-Rename
@@ -86,9 +76,9 @@
            working-directory: ./android/app/build/outputs/apk/release
        steps:
          - run: ls
-         - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp app-release.apk "thundr-prod-${{ github.run_number }}.apk"
+         - run: cp "thundr-prod-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+         - run: cp "thundr-prod-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
      Android-AAB-Build:
        runs-on: m2
        needs: Android-Prepare-Build
@@ -106,9 +96,9 @@
            working-directory: ./android/app/build/outputs/bundle/release
        steps:
          - run: ls
-         - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp app-release.aab "thundr-prod-${{ github.run_number }}.aab"
+         - run: cp "thundr-prod-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+         - run: cp "thundr-prod-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
      Android-Publish-Dev-PlayStore:
        runs-on: m2
        needs: Android-AAB-Upload
@@ -151,9 +141,9 @@
       - run: ls
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
       - run: ls MyApp
-      - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-dev-${{ github.run_number }}.ipa"
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Production Upload"
+      - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-prod-${{ github.run_number }}.ipa"
+      - run: cp "thundr-prod-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
+      - run: cp "thundr-prod-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Production Upload"
      iOS-Export-AppStore:
       runs-on: m2
       needs: iOS-Export-IPA

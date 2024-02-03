@@ -54,6 +54,7 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={!currentUserProfile?.name}
             onPress={() =>
               navigation.navigate('EditProfileScreen', {currentUserProfile})
             }>
@@ -64,15 +65,17 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
         </View>
-        <Text
-          customStyle={{textAlign: 'center'}}
-          fontFamily="Montserrat-Bold"
-          weight={700}
-          size={30}
-          color="#fff">
-          {currentUserProfile?.name},{' '}
-          {calculateAge(currentUserProfile?.birthday)}
-        </Text>
+        {currentUserProfile?.name && (
+          <Text
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Bold"
+            weight={700}
+            size={30}
+            color="#fff">
+            {currentUserProfile?.name},{' '}
+            {calculateAge(currentUserProfile?.birthday)}
+          </Text>
+        )}
         <View style={{flexDirection: 'row', flex: 1, padding: scale(25)}}>
           <BorderLinearGradient
             start={{x: 0, y: 0}}
@@ -103,68 +106,206 @@ const ProfileScreen = () => {
             </View>
           </BorderLinearGradient>
           <View style={{flex: 1, flexDirection: 'column'}}>
-            {[...Array(2)].map((_, index) => (
-              <View
-                key={index}
-                style={{flexDirection: 'row', top: index * verticalScale(75)}}>
-                {[...Array(2)].map((_, subIndex) => {
-                  const photoIndex = index * 2 + subIndex;
-                  const photo =
-                    photoIndex < currentUserProfile?.customerPhoto?.length
-                      ? currentUserProfile?.customerPhoto[photoIndex]
-                      : null;
-                  return (
-                    <BorderLinearGradient
-                      key={subIndex}
-                      start={{x: 0, y: 0}}
-                      end={{x: 1, y: 0}}
-                      colors={['#E72454', '#FFC227']}
-                      style={{
-                        height: verticalScale(65),
-                        alignItems: 'center',
-                        flex: 1,
-                        marginHorizontal: scale(4),
-                        marginBottom: verticalScale(5),
-                      }}>
-                      {photo && !photo.primary ? (
-                        <View
-                          style={{
-                            height: verticalScale(62),
-                            width: scale(60),
-                            backgroundColor: '#9B9DA0',
-                            borderRadius: 15,
-                            alignItems: 'center',
-                          }}>
-                          <Image
-                            height={isIosDevice() ? 100 : 65}
-                            width={isIosDevice() ? 75 : 70}
-                            resizeMode="cover"
-                            source={{uri: photo.photoUrl}}
-                            customStyle={{borderRadius: 15}}
-                          />
-                        </View>
-                      ) : (
-                        <View
-                          style={{
-                            height: verticalScale(62),
-                            width: scale(60),
-                            backgroundColor: '#9B9DA0',
-                            borderRadius: 15,
-                            alignItems: 'center',
-                          }}>
-                          <Image
-                            height={100}
-                            width={75}
-                            resizeMode="cover"
-                            customStyle={{borderRadius: 15}}
-                          />
-                        </View>
-                      )}
-                    </BorderLinearGradient>
-                  );
-                })}
-              </View>
-            ))}
+            <View style={{flexDirection: 'row'}}>
+              <BorderLinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E72454', '#FFC227']}
+                style={{
+                  height: verticalScale(65),
+                  alignItems: 'center',
+                  flex: 1,
+                  marginHorizontal: scale(4),
+                  marginBottom: verticalScale(5),
+                }}>
+                {currentUserProfile &&
+                !currentUserProfile?.customerPhoto?.[1]?.primary ? (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={isIosDevice() ? 100 : 65}
+                      width={isIosDevice() ? 75 : 70}
+                      resizeMode="cover"
+                      source={{
+                        uri: currentUserProfile?.customerPhoto?.[1]?.photoUrl,
+                      }}
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={100}
+                      width={75}
+                      resizeMode="cover"
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                )}
+              </BorderLinearGradient>
+              <BorderLinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E72454', '#FFC227']}
+                style={{
+                  height: verticalScale(65),
+                  alignItems: 'center',
+                  flex: 1,
+                  marginHorizontal: scale(4),
+                  marginBottom: verticalScale(5),
+                }}>
+                {currentUserProfile &&
+                !currentUserProfile?.customerPhoto?.[2]?.primary ? (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={isIosDevice() ? 100 : 65}
+                      width={isIosDevice() ? 75 : 70}
+                      resizeMode="cover"
+                      source={{
+                        uri: currentUserProfile?.customerPhoto?.[2]?.photoUrl,
+                      }}
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={100}
+                      width={75}
+                      resizeMode="cover"
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                )}
+              </BorderLinearGradient>
+            </View>
+            <View style={{flexDirection: 'row', top: verticalScale(75)}}>
+              <BorderLinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E72454', '#FFC227']}
+                style={{
+                  height: verticalScale(65),
+                  alignItems: 'center',
+                  flex: 1,
+                  marginHorizontal: scale(4),
+                  marginBottom: verticalScale(5),
+                }}>
+                {currentUserProfile &&
+                !currentUserProfile?.customerPhoto?.[3]?.primary ? (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={isIosDevice() ? 100 : 65}
+                      width={isIosDevice() ? 75 : 70}
+                      resizeMode="cover"
+                      source={{
+                        uri: currentUserProfile?.customerPhoto?.[3]?.photoUrl,
+                      }}
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={100}
+                      width={75}
+                      resizeMode="cover"
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                )}
+              </BorderLinearGradient>
+              <BorderLinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#E72454', '#FFC227']}
+                style={{
+                  height: verticalScale(65),
+                  alignItems: 'center',
+                  flex: 1,
+                  marginHorizontal: scale(4),
+                  marginBottom: verticalScale(5),
+                }}>
+                {currentUserProfile &&
+                !currentUserProfile?.customerPhoto?.[4]?.primary ? (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={isIosDevice() ? 100 : 65}
+                      width={isIosDevice() ? 75 : 70}
+                      resizeMode="cover"
+                      source={{
+                        uri: currentUserProfile?.customerPhoto?.[4]?.photoUrl,
+                      }}
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      height: verticalScale(62),
+                      width: scale(60),
+                      backgroundColor: '#9B9DA0',
+                      borderRadius: 15,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      height={100}
+                      width={75}
+                      resizeMode="cover"
+                      customStyle={{borderRadius: 15}}
+                    />
+                  </View>
+                )}
+              </BorderLinearGradient>
+            </View>
           </View>
         </View>
         <Separator space={140} />

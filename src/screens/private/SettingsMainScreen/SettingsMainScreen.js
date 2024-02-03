@@ -24,6 +24,7 @@ import {
 // Utils
 import {SETTINGS_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
+import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
 
 const SettingsMainScreen = () => {
   const dispatch = useDispatch();
@@ -80,7 +81,19 @@ const SettingsMainScreen = () => {
         <Button
           title="Log out"
           style={{width: scale(150)}}
-          onPress={() => dispatch({type: START_LOGOUT})}
+          onPress={() => {
+            dispatch({type: START_LOGOUT});
+            dispatch({
+              type: UPDATE_PERSISTED_STATE,
+              newState: {
+                refreshToken: null,
+                customerName: null,
+                sub: null,
+                customerPhoto: null,
+                showPossiblesPrompt: false,
+              },
+            });
+          }}
         />
         <Separator space={10} />
         <Button

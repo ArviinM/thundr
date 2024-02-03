@@ -19,11 +19,18 @@ import {calculateAge, scale, verticalScale} from '../../../utils/commons';
 import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
 import {GET_POSSIBLES} from '../../../ducks/Dashboard/actionTypes';
-import Spinner from '../../../components/Spinner/Spinner';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const Jowables = props => {
-  const {handleRefresh, jowaPossibles} = props;
+  const {
+    handleRefresh,
+    jowaPossibles,
+    setDisplayModal,
+    displayModal,
+    showPossiblesPrompt,
+  } = props;
   const navigation = useNavigation();
+  const [message, setMessage] = useState('');
 
   return (
     <FlatList
@@ -37,13 +44,30 @@ const Jowables = props => {
       renderItem={({item, index}) => {
         return (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('DashboardTab', {
-                fromPossibles: true,
-                sub: item?.targetSub,
-              })
-            }
+            onPress={() => {
+              if (!item?.visible && !item?.name) {
+                setDisplayModal(true);
+                setMessage('');
+              } else if (showPossiblesPrompt) {
+                setDisplayModal(true);
+                setMessage(
+                  'Wait lang, mars!\nTry again in a few hours.\nKeri?',
+                );
+              } else {
+                navigation.navigate('DashboardTab', {
+                  fromPossibles: true,
+                  sub: item?.targetSub,
+                });
+              }
+            }}
             style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <FeatureNotAvailableModal
+              displayCloseIcon={true}
+              displayModal={displayModal}
+              setDisplayModal={setDisplayModal}
+              fromThunderBolt={true}
+              message={message}
+            />
             <BorderLinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
@@ -65,7 +89,7 @@ const Jowables = props => {
                   source={{
                     uri: item?.picture,
                   }}
-                  height={200}
+                  height={145}
                   width={150}
                   resizeMode="cover"
                   customStyle={{
@@ -75,13 +99,15 @@ const Jowables = props => {
               </View>
             </BorderLinearGradient>
             <View style={{alignItems: 'center'}}>
-              <Text
-                color="#FFBD28"
-                size={22}
-                weight={700}
-                fontFamily="Montserrat-Bold">
-                {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
-              </Text>
+              {item?.visible && (
+                <Text
+                  color="#FFBD28"
+                  size={22}
+                  weight={700}
+                  fontFamily="Montserrat-Bold">
+                  {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
+                </Text>
+              )}
               <Text fontFamily="Montserrat-Medium" color="#808080" size={13}>
                 Compatibility Score:{' '}
                 <Text
@@ -109,8 +135,15 @@ const Jowables = props => {
 };
 
 const Marebles = props => {
-  const {handleRefresh, marePossibles} = props;
+  const {
+    handleRefresh,
+    marePossibles,
+    setDisplayModal,
+    displayModal,
+    showPossiblesPrompt,
+  } = props;
   const navigation = useNavigation();
+  const [message, setMessage] = useState('');
 
   return (
     <FlatList
@@ -124,13 +157,30 @@ const Marebles = props => {
       renderItem={({item, index}) => {
         return (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('DashboardTab', {
-                fromPossibles: true,
-                sub: item?.targetSub,
-              })
-            }
+            onPress={() => {
+              if (!item?.visible && !item?.name) {
+                setDisplayModal(true);
+                setMessage('');
+              } else if (showPossiblesPrompt) {
+                setDisplayModal(true);
+                setMessage(
+                  'Wait lang, mars!\nTry again in a few hours.\nKeri?',
+                );
+              } else {
+                navigation.navigate('DashboardTab', {
+                  fromPossibles: true,
+                  sub: item?.targetSub,
+                });
+              }
+            }}
             style={{alignItems: 'center', marginTop: verticalScale(20)}}>
+            <FeatureNotAvailableModal
+              displayCloseIcon={true}
+              displayModal={displayModal}
+              setDisplayModal={setDisplayModal}
+              fromThunderBolt={true}
+              message={message}
+            />
             <BorderLinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
@@ -152,7 +202,7 @@ const Marebles = props => {
                   source={{
                     uri: item?.picture,
                   }}
-                  height={200}
+                  height={145}
                   width={150}
                   resizeMode="cover"
                   customStyle={{
@@ -162,13 +212,15 @@ const Marebles = props => {
               </View>
             </BorderLinearGradient>
             <View style={{alignItems: 'center'}}>
-              <Text
-                color="#FFBD28"
-                size={22}
-                weight={700}
-                fontFamily="Montserrat-Bold">
-                {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
-              </Text>
+              {item?.visible && (
+                <Text
+                  color="#FFBD28"
+                  size={22}
+                  weight={700}
+                  fontFamily="Montserrat-Bold">
+                  {item?.name?.split(' ')[0]}, {calculateAge(item?.birthday)}
+                </Text>
+              )}
               <Text fontFamily="Montserrat-Medium" color="#808080" size={13}>
                 Compatibility Score:{' '}
                 <Text
@@ -198,9 +250,9 @@ const Marebles = props => {
 const ThePossibles = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {jowaPossibles, marePossibles, loading} = useSelector(
-    state => state.dashboard,
-  );
+  const [displayModal, setDisplayModal] = useState(false);
+  const {jowaPossibles, marePossibles} = useSelector(state => state.dashboard);
+  const {showPossiblesPrompt} = useSelector(state => state.persistedState);
   const [isJowableTabActive, setJowableTabActive] = useState(true);
   const handleRefresh = () => {
     if (isJowableTabActive) {
@@ -212,15 +264,20 @@ const ThePossibles = () => {
 
   useEffect(() => {
     if (isJowableTabActive) {
-      dispatch({type: GET_POSSIBLES, payload: {tag: 'JOWA'}});
+      if (!jowaPossibles.length) {
+        dispatch({type: GET_POSSIBLES, payload: {tag: 'JOWA'}});
+      }
     } else {
-      dispatch({type: GET_POSSIBLES, payload: {tag: 'MARE'}});
+      if (!marePossibles.length) {
+        dispatch({type: GET_POSSIBLES, payload: {tag: 'MARE'}});
+      }
     }
   }, [dispatch, isJowableTabActive]);
 
-  if (loading) {
-    return <Spinner />;
-  }
+  // Possible cause of flicker
+  // if (loading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <View
@@ -272,11 +329,17 @@ const ThePossibles = () => {
           <Jowables
             handleRefresh={handleRefresh}
             jowaPossibles={jowaPossibles}
+            displayModal={displayModal}
+            setDisplayModal={setDisplayModal}
+            showPossiblesPrompt={showPossiblesPrompt}
           />
         ) : (
           <Marebles
             handleRefresh={handleRefresh}
             marePossibles={marePossibles}
+            displayModal={displayModal}
+            setDisplayModal={setDisplayModal}
+            showPossiblesPrompt={showPossiblesPrompt}
           />
         )}
       </View>

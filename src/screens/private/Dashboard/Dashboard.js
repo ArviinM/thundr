@@ -25,7 +25,6 @@ import {
   GET_MATCH_LIST,
   GET_UNREAD_MESSAGES,
   UPDATE_CURRENT_LOCATION,
-  UPDATE_DASHBOARD_STATE,
   UPDATE_LAST_ACTIVITY,
 } from '../../../ducks/Dashboard/actionTypes';
 
@@ -48,26 +47,30 @@ const MatchDetails = props => {
   } else {
     return (
       <View style={{alignItems: 'center'}}>
-        <Text
-          size={30}
-          color="#E33C59"
-          weight={700}
-          fontFamily="Montserrat-Bold"
-          numberOfLines={2}
-          ellipsizeMode="tail"
-          customStyle={{textAlign: 'center', width: scale(280)}}>
-          {customerProfile?.name || ''},{' '}
-          <Text
-            fontFamily="Montserrat-Medium"
-            size={30}
-            color="#E33C59"
-            customStyle={{textAlign: 'center'}}>
-            {calculateAge(customerProfile?.birthday) || ''}
-          </Text>
-        </Text>
-        <Text size={15} fontFamily="Montserrat-Medium">
-          {customerProfile?.customerDetails?.work}
-        </Text>
+        {customerProfile?.name && (
+          <>
+            <Text
+              size={30}
+              color="#E33C59"
+              weight={700}
+              fontFamily="Montserrat-Bold"
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              customStyle={{textAlign: 'center', width: scale(280)}}>
+              {customerProfile?.name || ''},{' '}
+              <Text
+                fontFamily="Montserrat-Medium"
+                size={30}
+                color="#E33C59"
+                customStyle={{textAlign: 'center'}}>
+                {calculateAge(customerProfile?.birthday) || ''}
+              </Text>
+            </Text>
+            <Text size={15} fontFamily="Montserrat-Medium">
+              {customerProfile?.customerDetails?.work}
+            </Text>
+          </>
+        )}
         <View
           style={{
             height: verticalScale(1),
@@ -76,11 +79,13 @@ const MatchDetails = props => {
             marginVertical: verticalScale(3),
           }}
         />
-        <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
-          {`Compatibility Score: ${
-            matchList?.length && matchList[currentIndex]?.percent
-          }`}
-        </Text>
+        {customerProfile?.name && (
+          <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
+            {`Compatibility Score: ${
+              matchList?.length && matchList[currentIndex]?.percent
+            }`}
+          </Text>
+        )}
       </View>
     );
   }
@@ -149,10 +154,29 @@ const Dashboard = () => {
         payload: {
           tag: swipeValue,
           target: matchList.length && matchList[currentIndex - 1]?.sub,
+          fromPossibles: false,
         },
       });
     }
-  }, [swipeValue, dispatch]);
+  }, [swipeValue, dispatch, currentIndex]);
+
+  //
+  useEffect(() => {
+    if (route?.params?.fromPossibles) {
+      dispatch({
+        type: CUSTOMER_MATCH,
+        payload: {
+          tag: swipeValue,
+          target:
+            matchList.length && route?.params?.fromPossibles
+              ? route?.params?.sub
+              : matchList[currentIndex - 1]?.sub,
+          fromPossibles: true,
+        },
+      });
+    }
+    navigation.setParams({fromPossibles: false});
+  }, [swipeValue, dispatch, navigation]);
 
   useEffect(() => {
     dispatch({
@@ -178,7 +202,6 @@ const Dashboard = () => {
       });
     }, 5000);
 
-    // Cleanup function to clear the interval when the component is unmounted
     return () => {
       clearInterval(intervalId);
     };
@@ -309,10 +332,10 @@ const Dashboard = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {!matchList || !matchList?.length || currentUser ? (
+      {!matchList || !matchList?.length || !customerProfile || currentUser ? (
         <ScrollView
           refreshControl={
-            !matchList?.length && (
+            (!matchList?.length || !customerProfile) && (
               <RefreshControl
                 refreshing={matchListLoading}
                 onRefresh={handleRefresh}
@@ -320,7 +343,7 @@ const Dashboard = () => {
             )
           }
           showsVerticalScrollIndicator={false}
-          bounces={!matchList?.length}>
+          bounces={!matchList?.length || !customerProfile}>
           {noAvailableMatches()}
         </ScrollView>
       ) : (
@@ -332,7 +355,7 @@ const Dashboard = () => {
           setUserInformationShown={setUserInformationShown}
         />
       )}
-      {!isUserInformationShown && !currentUser ? (
+      {!isUserInformationShown && !currentUser && customerProfile ? (
         <MatchDetails
           currentIndex={currentIndex}
           matchList={matchList}

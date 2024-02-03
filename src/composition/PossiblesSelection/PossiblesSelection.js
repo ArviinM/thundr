@@ -37,7 +37,7 @@ const PossiblesSelection = props => {
         <View
           style={{
             backgroundColor: '#E43C59',
-            height: verticalScale(65),
+            height: verticalScale(isIosDevice() ? 70 : 65),
             width: scale(150),
             borderRadius: 20,
             alignItems: 'center',
@@ -45,13 +45,13 @@ const PossiblesSelection = props => {
           }}>
           <Text
             fontFamily="ClimateCrisis-Regular"
-            weight={700}
+            weight={isIosDevice() ? 700 : 400}
             color="#fff"
-            size={18}>
+            size={16}>
             JOWABLES
           </Text>
           <Text
-            size={isIosDevice() ? 13 : 10}
+            size={isIosDevice() ? 11 : 10}
             fontFamily="Montserrat-Regular"
             color="#fff"
             customStyle={{textAlign: 'center'}}>
@@ -80,7 +80,7 @@ const PossiblesSelection = props => {
         <View
           style={{
             backgroundColor: '#FFBD28',
-            height: verticalScale(65),
+            height: verticalScale(isIosDevice() ? 70 : 65),
             width: scale(150),
             borderRadius: 20,
             alignItems: 'center',
@@ -88,13 +88,13 @@ const PossiblesSelection = props => {
           }}>
           <Text
             fontFamily="ClimateCrisis-Regular"
-            weight={700}
+            weight={isIosDevice() ? 700 : 400}
             color="#fff"
-            size={18}>
+            size={16}>
             MAREBLES
           </Text>
           <Text
-            size={isIosDevice() ? 13 : 10}
+            size={isIosDevice() ? 11 : 10}
             fontFamily="Montserrat-Regular"
             color="#fff"
             customStyle={{textAlign: 'center'}}>

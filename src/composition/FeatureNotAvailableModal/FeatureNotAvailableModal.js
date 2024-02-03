@@ -15,7 +15,7 @@ import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 
 const FeatureNotAvailableModal = props => {
-  const {fromThunderBolt, setDisplayModal, displayModal} = props;
+  const {fromThunderBolt, setDisplayModal, displayModal, message = ''} = props;
   const navigation = useNavigation();
 
   const handleNavigation = () => {
@@ -62,7 +62,8 @@ const FeatureNotAvailableModal = props => {
         fontFamily="Montserrat-Bold"
         weight={700}
         customStyle={{textAlign: 'center'}}>
-        Oops! Wait lang, mars. This feature will be available soon.
+        {message ||
+          'Oops! Wait lang, mars. This feature will be available soon.'}
       </Text>
     </Overlay>
   );
