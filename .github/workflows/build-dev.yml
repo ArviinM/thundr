@@ -107,7 +107,7 @@
            working-directory: ./android
        steps:
          - run: ls
-         - run: ./gradlew publishBundle  --release-status draft
+    #     - run: ./gradlew publishBundle  --release-status draft
      iOS-Prepare-Build:
        runs-on: m2
        needs: Yarn-Install
@@ -150,7 +150,7 @@
       steps:
       - run: ls
       - run: ls ios      
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
+    #  - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
