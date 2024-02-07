@@ -35,7 +35,7 @@ const AdvocacyTransaction = () => {
         displayCloseIcon={true}
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
-        fromThunderBolt={true}
+        normalBehaviorModal={true}
       />
       <View>
         <TouchableOpacity onPress={() => navigation.goBack()}>

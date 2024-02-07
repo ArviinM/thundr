@@ -1,5 +1,5 @@
 // React modules
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {BackHandler, Linking, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native';
 import base64 from 'react-native-base64';
 import {API_BASE_URL, BUILD_NUMBER} from '@env';
+import CheckBox from 'react-native-check-box';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
@@ -27,12 +28,16 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
 import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTypes';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
-  const {refreshToken} = useSelector(state => state.persistedState);
   const route = useRoute();
   const navigation = useNavigation();
+  const {refreshToken} = useSelector(state => state.persistedState);
+
+  const [checked, setChecked] = useState(false);
+  const [displayModal, setDisplayModal] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -82,15 +87,19 @@ const LoginOptionScreen = () => {
   }, [params]);
 
   const renderButton = (isSSO, link, icon, text) => {
+    const handleClick = () => {
+      if (isSSO) {
+        Linking.openURL(link);
+      } else if (refreshToken) {
+        navigation.navigate('LoginScreen');
+      } else if (!checked) {
+        setDisplayModal(true);
+      } else {
+        navigation.navigate('MobileAndEmailVerificationStack');
+      }
+    };
     return (
-      <TouchableOpacity
-        onPress={() =>
-          isSSO
-            ? Linking.openURL(link)
-            : refreshToken
-            ? navigation.navigate('LoginScreen')
-            : navigation.navigate('MobileAndEmailVerificationStack')
-        }>
+      <TouchableOpacity onPress={handleClick}>
         <View
           style={{
             backgroundColor: '#fff',
@@ -129,6 +138,13 @@ const LoginOptionScreen = () => {
       }}>
       <Separator space={100} />
       <Image source={LOGIN_ASSET_URI.THUNDR_LOGO} height={210} width={350} />
+      <FeatureNotAvailableModal
+        displayModal={displayModal}
+        setDisplayModal={setDisplayModal}
+        normalBehaviorModal={true}
+        message="Gora na ba, sis? 
+        Read the Terms and Conditions pati ang Privacy Policy muna sa baba sis."
+      />
       <Separator space={30} />
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
         {isAndroidDevice() && (
@@ -169,28 +185,36 @@ const LoginOptionScreen = () => {
             paddingHorizontal: scale(50),
             top: verticalScale(70),
           }}>
-          <Text
-            size={11}
-            color="#59595B"
-            customStyle={{
-              textAlign: 'center',
-            }}>
-            By signing up, I declare that I'm 35 years of age or older and
-            hereby agree to the{' '}
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <CheckBox
+              isChecked={checked}
+              onClick={() => {
+                setChecked(!checked);
+              }}
+            />
             <Text
-              color="#59595B"
               size={11}
-              customStyle={{textDecorationLine: 'underline'}}>
-              Terms and Conditions
-            </Text>{' '}
-            of Thundr and its{' '}
-            <Text
               color="#59595B"
-              size={11}
-              customStyle={{textDecorationLine: 'underline'}}>
-              Privacy Policy.
+              customStyle={{
+                textAlign: 'center',
+              }}>
+              By signing up, I declare that I'm 35 years of age or older and
+              hereby agree to the{' '}
+              <Text
+                color="#59595B"
+                size={11}
+                customStyle={{textDecorationLine: 'underline'}}>
+                Terms and Conditions
+              </Text>{' '}
+              of Thundr and its{' '}
+              <Text
+                color="#59595B"
+                size={11}
+                customStyle={{textDecorationLine: 'underline'}}>
+                Privacy Policy.
+              </Text>
             </Text>
-          </Text>
+          </View>
           <Separator space={20} />
           <Text
             size={11}

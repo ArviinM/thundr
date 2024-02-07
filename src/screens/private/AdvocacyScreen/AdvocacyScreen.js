@@ -30,7 +30,7 @@ const AdvocacyScreen = () => {
         displayCloseIcon={true}
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
-        fromThunderBolt={true}
+        normalBehaviorModal={true}
       />
       <TouchableOpacity
         onPress={() => navigation.navigate('DashboardTab')}
