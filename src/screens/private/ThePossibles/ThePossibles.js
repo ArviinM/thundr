@@ -65,7 +65,7 @@ const Jowables = props => {
               displayCloseIcon={true}
               displayModal={displayModal}
               setDisplayModal={setDisplayModal}
-              fromThunderBolt={true}
+              normalBehaviorModal={true}
               message={message}
             />
             <BorderLinearGradient
@@ -178,7 +178,7 @@ const Marebles = props => {
               displayCloseIcon={true}
               displayModal={displayModal}
               setDisplayModal={setDisplayModal}
-              fromThunderBolt={true}
+              normalBehaviorModal={true}
               message={message}
             />
             <BorderLinearGradient

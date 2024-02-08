@@ -15,11 +15,16 @@ import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 
 const FeatureNotAvailableModal = props => {
-  const {fromThunderBolt, setDisplayModal, displayModal, message = ''} = props;
+  const {
+    normalBehaviorModal,
+    setDisplayModal,
+    displayModal,
+    message = '',
+  } = props;
   const navigation = useNavigation();
 
   const handleNavigation = () => {
-    if (fromThunderBolt) {
+    if (normalBehaviorModal) {
       setDisplayModal(false);
     } else {
       navigation.reset({index: 0, routes: [{name: 'DashboardTabs'}]});
@@ -46,7 +51,7 @@ const FeatureNotAvailableModal = props => {
         borderWidth: 3,
         borderColor: '#FEBC29',
       }}
-      isVisible={fromThunderBolt ? displayModal : true}>
+      isVisible={normalBehaviorModal ? displayModal : true}>
       <TouchableOpacity
         onPress={handleNavigation}
         style={{
