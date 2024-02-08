@@ -9,15 +9,21 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import base64 from 'react-native-base64';
-import {API_BASE_URL, BUILD_NUMBER} from '@env';
-import CheckBox from 'react-native-check-box';
+import {useDispatch, useSelector} from 'react-redux';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
 import Image from '../../../components/Image/Image';
 import Text from '../../../components/Text/Text';
+import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
+
+// Ducks
+import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
+import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
+import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTypes';
 
 // Utils
+import {API_BASE_URL, BUILD_NUMBER} from '@env';
 import {LOGIN_ASSET_URI} from '../../../utils/images';
 import {
   isAndroidDevice,
@@ -25,18 +31,18 @@ import {
   scale,
   verticalScale,
 } from '../../../utils/commons';
-import {useDispatch, useSelector} from 'react-redux';
-import {UPDATE_LOGIN_STATE} from '../../../ducks/Login/actionTypes';
-import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTypes';
-import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableModal/FeatureNotAvailableModal';
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
-  const {refreshToken} = useSelector(state => state.persistedState);
+  const {
+    refreshToken,
+    lastLogin,
+    privacyPolicyChecked,
+    termsAndConditionChecked,
+  } = useSelector(state => state.persistedState);
 
-  const [checked, setChecked] = useState(false);
   const [displayModal, setDisplayModal] = useState(false);
 
   useFocusEffect(
@@ -61,7 +67,6 @@ const LoginOptionScreen = () => {
   useEffect(() => {
     if (params?.payload) {
       const responseObject = JSON.parse(base64.decode(params.payload));
-      const forMobileValidation = true;
       const forProfileCreation = responseObject?.forProfileCreation;
 
       if (forProfileCreation) {
@@ -86,15 +91,23 @@ const LoginOptionScreen = () => {
     }
   }, [params]);
 
-  const renderButton = (isSSO, link, icon, text) => {
+  const renderButton = (isSSO, link, icon, text, lastLogin) => {
     const handleClick = () => {
       if (isSSO) {
         Linking.openURL(link);
+        dispatch({
+          type: UPDATE_PERSISTED_STATE,
+          newState: {lastLogin: lastLogin},
+        });
       } else if (refreshToken) {
         navigation.navigate('LoginScreen');
-      } else if (!checked) {
+      } else if (!privacyPolicyChecked || !termsAndConditionChecked) {
         setDisplayModal(true);
       } else {
+        dispatch({
+          type: UPDATE_PERSISTED_STATE,
+          newState: {lastLogin: lastLogin},
+        });
         navigation.navigate('MobileAndEmailVerificationStack');
       }
     };
@@ -158,6 +171,7 @@ const LoginOptionScreen = () => {
                 ? LOGIN_ASSET_URI.APPLE_ICON
                 : LOGIN_ASSET_URI.GOOGLE_ICON,
               `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
+              isIosDevice() ? 'Apple' : 'Google',
             )}
             <Separator space={5} />
           </>
@@ -169,6 +183,7 @@ const LoginOptionScreen = () => {
               `${API_BASE_URL}auth/get-sso-url?sso=Facebook`,
               LOGIN_ASSET_URI.FACEBOOK_ICON,
               'Continue with Facebook',
+              'Facebook',
             )}
           </>
         )}
@@ -178,20 +193,23 @@ const LoginOptionScreen = () => {
           '',
           LOGIN_ASSET_URI.MOBILE_ICON,
           'Continue with Mobile Number',
+          'Mobile Number',
         )}
         <Separator space={20} />
+        {lastLogin && (
+          <Text
+            size={11}
+            color="#59595B"
+            customStyle={{
+              textAlign: 'center',
+            }}>{`Your last sign-in was via (${lastLogin})`}</Text>
+        )}
         <View
           style={{
             paddingHorizontal: scale(50),
             top: verticalScale(70),
           }}>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <CheckBox
-              isChecked={checked}
-              onClick={() => {
-                setChecked(!checked);
-              }}
-            />
             <Text
               size={11}
               color="#59595B"
@@ -200,19 +218,38 @@ const LoginOptionScreen = () => {
               }}>
               By signing up, I declare that I'm 35 years of age or older and
               hereby agree to the{' '}
-              <Text
-                color="#59595B"
-                size={11}
-                customStyle={{textDecorationLine: 'underline'}}>
-                Terms and Conditions
-              </Text>{' '}
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('SecurityAndPrivacy', {
+                    fromLogin: true,
+                    termsAndConditions: true,
+                  })
+                }>
+                <Text
+                  color="#59595B"
+                  size={11}
+                  customStyle={{
+                    textDecorationLine: 'underline',
+                    top: verticalScale(2),
+                  }}>
+                  Terms and Conditions
+                </Text>
+              </TouchableOpacity>
               of Thundr and its{' '}
-              <Text
-                color="#59595B"
-                size={11}
-                customStyle={{textDecorationLine: 'underline'}}>
-                Privacy Policy.
-              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('SecurityAndPrivacy', {fromLogin: true})
+                }>
+                <Text
+                  color="#59595B"
+                  size={11}
+                  customStyle={{
+                    textDecorationLine: 'underline',
+                    top: verticalScale(2),
+                  }}>
+                  Privacy Policy.
+                </Text>
+              </TouchableOpacity>
             </Text>
           </View>
           <Separator space={20} />
