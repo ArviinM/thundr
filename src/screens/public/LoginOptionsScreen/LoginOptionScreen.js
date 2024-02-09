@@ -202,7 +202,7 @@ const LoginOptionScreen = () => {
             color="#59595B"
             customStyle={{
               textAlign: 'center',
-            }}>{`Your last sign-in was via (${lastLogin})`}</Text>
+            }}>{`Your last sign-in was via ${lastLogin}`}</Text>
         )}
         <View
           style={{
@@ -222,7 +222,6 @@ const LoginOptionScreen = () => {
                 onPress={() =>
                   navigation.navigate('SecurityAndPrivacy', {
                     fromLogin: true,
-                    termsAndConditions: true,
                   })
                 }>
                 <Text

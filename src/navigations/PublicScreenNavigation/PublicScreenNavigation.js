@@ -116,19 +116,6 @@ const PublicScreenNavigation = () => {
           headerTitle: '',
         }}
       />
-      <PublicScreenStack.Screen
-        name="TermsAndConditions"
-        component={SecurityAndPrivacy}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#f2cecd',
-            shadowColor: 'transparent',
-            elevation: 0,
-          },
-          headerTitle: '',
-        }}
-      />
     </PublicScreenStack.Navigator>
   );
 };
