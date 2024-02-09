@@ -14,12 +14,13 @@ import SettingsHeader from '../../../composition/SettingsHeader/SettingsHeader';
 // Utils
 import {SETTINGS_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
 
 const SecurityAndPrivacy = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {privacyPolicyChecked, termsAndConditionChecked} = useSelector(
     state => state.persistedState,
   );
@@ -56,7 +57,7 @@ const SecurityAndPrivacy = () => {
             size={20}
             color="#808080"
             customStyle={{textAlign: 'center'}}>
-            Privacy Policy and Terms & Conditions
+            Privacy Policy
           </Text>
           <Separator space={10} />
           <Text fontFamily="Montserrat-Regular" color="#808080">
@@ -452,26 +453,31 @@ const SecurityAndPrivacy = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <CheckBox
-            isChecked={privacyPolicyChecked || termsAndConditionChecked}
-            onClick={() => {
+          <TouchableOpacity
+            onPress={() => {
               dispatch({
                 type: UPDATE_PERSISTED_STATE,
                 newState: {
-                  privacyPolicyChecked: !privacyPolicyChecked,
-                  termsAndConditionChecked: !termsAndConditionChecked,
+                  privacyPolicyChecked: true,
                 },
               });
+              navigation.goBack();
             }}
-          />
-          <Text
-            fontFamily="Montserrat-Regular"
-            color="#808080"
-            customStyle={{left: scale(10)}}>
-            {
-              'I have read and accept the Privacy Policy and\n Terms & Conditions'
-            }
-          </Text>
+            style={{
+              backgroundColor: 'red',
+              height: verticalScale(60),
+              width: scale(280),
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              weight={600}
+              fontFamily="Montserrat-Regular"
+              color="#fff"
+              customStyle={{textAlign: 'center'}}>
+              I agree to the terms & conditions and privacy policy.
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </>
