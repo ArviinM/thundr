@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native';
 import base64 from 'react-native-base64';
 import {useDispatch, useSelector} from 'react-redux';
+import CheckBox from 'react-native-check-box';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
@@ -36,12 +37,9 @@ const LoginOptionScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
-  const {
-    refreshToken,
-    lastLogin,
-    privacyPolicyChecked,
-    termsAndConditionChecked,
-  } = useSelector(state => state.persistedState);
+  const {refreshToken, lastLogin, privacyPolicyChecked} = useSelector(
+    state => state.persistedState,
+  );
 
   const [displayModal, setDisplayModal] = useState(false);
 
@@ -101,7 +99,7 @@ const LoginOptionScreen = () => {
         });
       } else if (refreshToken) {
         navigation.navigate('LoginScreen');
-      } else if (!privacyPolicyChecked || !termsAndConditionChecked) {
+      } else if (!privacyPolicyChecked) {
         setDisplayModal(true);
       } else {
         dispatch({
@@ -210,10 +208,17 @@ const LoginOptionScreen = () => {
             top: verticalScale(70),
           }}>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <CheckBox
+              isChecked={privacyPolicyChecked}
+              disabled={true}
+              checkBoxColor="#fff"
+              uncheckedCheckBoxColor="#fff"
+            />
             <Text
               size={11}
               color="#59595B"
               customStyle={{
+                left: scale(-5),
                 textAlign: 'center',
               }}>
               By signing up, I declare that I'm 35 years of age or older and
@@ -231,7 +236,7 @@ const LoginOptionScreen = () => {
                     textDecorationLine: 'underline',
                     top: verticalScale(2),
                   }}>
-                  Terms and Conditions
+                  Terms and Conditions{' '}
                 </Text>
               </TouchableOpacity>
               of Thundr and its{' '}
