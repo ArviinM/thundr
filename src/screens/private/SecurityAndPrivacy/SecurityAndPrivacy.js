@@ -54,10 +54,9 @@ const SecurityAndPrivacy = () => {
             fontFamily="Montserrat-Bold"
             weight={700}
             size={20}
-            color="#808080">
-            {route?.params?.termsAndConditions
-              ? 'Terms and Conditions'
-              : 'Privacy Policy'}
+            color="#808080"
+            customStyle={{textAlign: 'center'}}>
+            Privacy Policy and Terms & Conditions
           </Text>
           <Separator space={10} />
           <Text fontFamily="Montserrat-Regular" color="#808080">
@@ -469,10 +468,9 @@ const SecurityAndPrivacy = () => {
             fontFamily="Montserrat-Regular"
             color="#808080"
             customStyle={{left: scale(10)}}>
-            I have read and accept the{' '}
-            {route?.params?.termsAndConditions
-              ? 'Terms and Conditions'
-              : 'Privacy Policy'}
+            {
+              'I have read and accept the Privacy Policy and\n Terms & Conditions'
+            }
           </Text>
         </View>
       )}
