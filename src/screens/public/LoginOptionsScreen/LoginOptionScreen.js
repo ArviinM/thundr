@@ -215,14 +215,12 @@ const LoginOptionScreen = () => {
               uncheckedCheckBoxColor="#fff"
             />
             <Text
-              size={11}
+              size={12}
               color="#59595B"
               customStyle={{
-                left: scale(-5),
                 textAlign: 'center',
               }}>
-              By signing up, I declare that I'm 35 years of age or older and
-              hereby agree to the{' '}
+              By signing up, I am 35 years of age or older and agrees to the{' '}
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('SecurityAndPrivacy', {
@@ -231,29 +229,15 @@ const LoginOptionScreen = () => {
                 }>
                 <Text
                   color="#59595B"
-                  size={11}
+                  size={12}
                   customStyle={{
                     textDecorationLine: 'underline',
-                    top: verticalScale(2),
+                    textAlign: 'center',
                   }}>
-                  Terms and Conditions{' '}
+                  Terms and Conditions and its Privacy Policy
                 </Text>
               </TouchableOpacity>
-              of Thundr and its{' '}
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('SecurityAndPrivacy', {fromLogin: true})
-                }>
-                <Text
-                  color="#59595B"
-                  size={11}
-                  customStyle={{
-                    textDecorationLine: 'underline',
-                    top: verticalScale(2),
-                  }}>
-                  Privacy Policy.
-                </Text>
-              </TouchableOpacity>
+              {'\n'}of Thundr
             </Text>
           </View>
           <Separator space={20} />
