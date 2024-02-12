@@ -237,7 +237,7 @@ const LoginOptionScreen = () => {
                   Terms and Conditions and its Privacy Policy
                 </Text>
               </TouchableOpacity>
-              {'\n'}of Thundr
+              {'\n'}of Thundr.
             </Text>
           </View>
           <Separator space={20} />
