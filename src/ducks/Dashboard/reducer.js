@@ -94,6 +94,7 @@ export const INITIAL_STATE = {
   jowaPossibles: [],
   marePossibles: [],
   defaultMareTab: false,
+  showReportUserModal: false,
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
