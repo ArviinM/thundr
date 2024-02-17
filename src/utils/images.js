@@ -93,6 +93,9 @@ export const DASHBOARD_ASSET_URI = {
   DOG_INFO: require('../assets/Images/Icons/dog-info.png'),
   BEAVER_INFO: require('../assets/Images/Icons/beaver-info.png'),
   JOWA_MATCH_INDICATOR: require('../assets/Images/Icons/match-indicator-jowa.png'),
+  REPORT_USER: require('../assets/Images/Icons/report-user.png'),
+  CLOSE_REPORT: require('../assets/Images/Icons/close-report.png'),
+  EXPAND_REPORT: require('../assets/Images/Icons/expand-report.png'),
 };
 
 export const MESSAGES_ASSET_URI = {

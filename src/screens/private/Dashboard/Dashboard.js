@@ -39,6 +39,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Image from '../../../components/Image/Image';
 import {ADVOCACY_ASSET_URI} from '../../../utils/images';
 import {GET_SUBSCRIPTION_DETAILS} from '../../../ducks/Subscription/actionTypes';
+import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModal';
 
 const MatchDetails = props => {
   const {currentIndex, matchList, customerProfile, currentUser} = props;
@@ -402,6 +403,7 @@ const Dashboard = () => {
           setUserInformationShown={setUserInformationShown}
         />
       </View>
+      <ReportUserModal />
     </View>
   );
 };

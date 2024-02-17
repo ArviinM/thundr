@@ -15,7 +15,7 @@ import {
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ProfileStack from './ProfileStack';
 import ChatStack from './ChatStack';
 
@@ -35,6 +35,7 @@ import SettingsStack from './SettingsStack';
 import {scale, verticalScale} from '../../utils/commons';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
 import LightningRound from '../../screens/private/LightningRound/LightningRound';
+import {UPDATE_DASHBOARD_STATE} from '../../ducks/Dashboard/actionTypes';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -237,6 +238,7 @@ const DashboardTabs = ({route, navigation}) => {
 
 const DashboardNavigations = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const renderLeftComponent = () => {
     return (
       <TouchableOpacity
@@ -246,6 +248,25 @@ const DashboardNavigations = () => {
           height={25}
           width={25}
           customStyle={{left: scale(20), justifyContent: 'center'}}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderRightComponent = () => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          dispatch({
+            type: UPDATE_DASHBOARD_STATE,
+            newState: {showReportUserModal: true},
+          })
+        }>
+        <Image
+          source={DASHBOARD_ASSET_URI.REPORT_USER}
+          height={25}
+          width={25}
+          customStyle={{justifyContent: 'center', right: scale(15)}}
         />
       </TouchableOpacity>
     );
@@ -280,6 +301,7 @@ const DashboardNavigations = () => {
           fontSize: 19,
         },
         headerLeft: () => renderLeftComponent(),
+        headerRight: () => renderRightComponent(),
       }}>
       <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
       <Drawer.Screen name="MatchFound" component={MatchFound} />
