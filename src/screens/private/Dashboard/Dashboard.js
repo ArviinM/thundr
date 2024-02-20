@@ -403,7 +403,7 @@ const Dashboard = () => {
           setUserInformationShown={setUserInformationShown}
         />
       </View>
-      <ReportUserModal />
+      <ReportUserModal category="PROFILE" targetSub={customerProfile?.sub} />
     </View>
   );
 };

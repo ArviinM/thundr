@@ -4,13 +4,14 @@
  */
 
 // React modules
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {
   DrawerActions,
   getFocusedRouteNameFromRoute,
+  useRoute,
 } from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -54,12 +55,30 @@ const DashboardTabs = ({route, navigation}) => {
   const {unreadMessages} = useSelector(state => state.dashboard);
   const {sub} = useSelector(state => state.persistedState);
   const {loginData} = useSelector(state => state.login);
+  const dispatch = useDispatch();
   const focusedRoute = getFocusedRouteNameFromRoute(route);
   const currentUserSub = loginData?.sub || sub;
 
   const totalUnreadMessage = unreadMessages.filter(
     item => item.isRead === 0 && item.lastChatSub !== currentUserSub,
   ).length;
+
+  // Display of right header
+  useEffect(() => {
+    if (focusedRoute) {
+      if (focusedRoute === 'DashboardTab') {
+        dispatch({
+          type: UPDATE_DASHBOARD_STATE,
+          newState: {showReportButton: true},
+        });
+      } else {
+        dispatch({
+          type: UPDATE_DASHBOARD_STATE,
+          newState: {showReportButton: false},
+        });
+      }
+    }
+  }, [focusedRoute]);
 
   return (
     <Tab.Navigator
@@ -239,6 +258,7 @@ const DashboardTabs = ({route, navigation}) => {
 const DashboardNavigations = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const {showReportButton} = useSelector(state => state.dashboard);
   const renderLeftComponent = () => {
     return (
       <TouchableOpacity
@@ -301,9 +321,14 @@ const DashboardNavigations = () => {
           fontSize: 19,
         },
         headerLeft: () => renderLeftComponent(),
-        headerRight: () => renderRightComponent(),
       }}>
-      <Drawer.Screen name="DashboardTabs" component={DashboardTabs} />
+      <Drawer.Screen
+        name="DashboardTabs"
+        component={DashboardTabs}
+        options={{
+          headerRight: () => showReportButton && renderRightComponent(),
+        }}
+      />
       <Drawer.Screen name="MatchFound" component={MatchFound} />
       <Drawer.Screen name="Filters" component={FiltersScreen} />
       <Drawer.Screen name="ThunderBolt" component={ThunderBoltStack} />

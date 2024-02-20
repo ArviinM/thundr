@@ -32,11 +32,13 @@ import {
   scale,
   verticalScale,
 } from '../../../utils/commons';
+import DeactivateAccountModal from '../../../composition/DeactivateAccountModal/DeactivateAccountModal';
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
+  const [displayDeactivateModal, setDisplayDeactivateModal] = useState(false);
   const {refreshToken, lastLogin, privacyPolicyChecked} = useSelector(
     state => state.persistedState,
   );
@@ -155,6 +157,11 @@ const LoginOptionScreen = () => {
         normalBehaviorModal={true}
         message="Gora na ba, sis? 
         Read the Terms and Conditions pati ang Privacy Policy muna sa baba sis."
+      />
+      <DeactivateAccountModal
+        fromLogin={true}
+        displayDeactivateModal={displayDeactivateModal}
+        setDisplayDeactivateModal={setDisplayDeactivateModal}
       />
       <Separator space={30} />
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
