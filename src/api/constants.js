@@ -42,6 +42,7 @@ export const DASHBOARD = {
   GET_UNREAD_MESSAGES: 'chat/chat-room',
   READ_CHAT_MESSAGE: 'chat/message-read',
   GET_POSSIBLES: 'match/customer-possible',
+  REPORT_CATEGORY: 'report/customer',
 };
 
 // Filter sercices

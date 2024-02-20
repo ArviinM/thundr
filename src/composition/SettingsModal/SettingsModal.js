@@ -12,6 +12,7 @@ import Text from '../../components/Text/Text';
 import Image from '../../components/Image/Image';
 import TextInput from '../TextInput/TextInput';
 import Button from '../../components/Button/Button';
+import DeactivateAccountModal from '../DeactivateAccountModal/DeactivateAccountModal';
 
 // Utils
 import {isIosDevice, scale, verticalScale} from '../../utils/commons';
@@ -162,6 +163,7 @@ const SettingsModal = props => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [secondarySelectedItems, setSecondarySelectedItems] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [displayDeactivateModal, setDisplayDeactivateModal] = useState(false);
 
   const handleCheckBoxPress = value => {
     const updatedSelectedItems = selectedItems.includes(value)
@@ -180,8 +182,12 @@ const SettingsModal = props => {
         : value,
     }));
 
-    dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: apiPayload});
-    setDisplayModal(false);
+    if (!isUnsubscribe && !displayDeactivateModal) {
+      setDisplayDeactivateModal(true);
+    } else {
+      dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: apiPayload});
+      setDisplayModal(false);
+    }
   };
 
   return (
@@ -239,7 +245,7 @@ const SettingsModal = props => {
         customStyle={{textAlign: 'center'}}>
         {isUnsubscribe
           ? 'Unsubscribing removes your access from Thundr Bolt perks and features.'
-          : 'Deactivate after 7 days otherwise your account autodeletes in 30 days and will no longer be retrievable'}
+          : 'Reactivate after 7 days; otherwise your account autodeletes in 30 days and will no longer be retrievable'}
       </Text>
       <Separator space={10} />
       <Text
@@ -277,9 +283,18 @@ const SettingsModal = props => {
       <Separator space={20} />
       <Button
         onPress={handleDeleteOrUnsubscribe}
-        title={isUnsubscribe ? 'Unsubscribe' : 'Deactivate'}
-        style={{backgroundColor: '#fff', width: scale(150)}}
-        textColor="#E43C59"
+        title={isUnsubscribe ? 'Unsubscribe' : 'Confirm'}
+        style={{
+          backgroundColor: !selectedItems.length ? '#808080' : '#fff',
+          width: scale(150),
+        }}
+        textColor={!selectedItems.length ? '#fff' : '#E43C59'}
+        disabled={!selectedItems.length}
+      />
+      <DeactivateAccountModal
+        handleDeactivate={handleDeleteOrUnsubscribe}
+        displayDeactivateModal={displayDeactivateModal}
+        setDisplayDeactivateModal={setDisplayDeactivateModal}
       />
     </Overlay>
   );

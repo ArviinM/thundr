@@ -108,7 +108,7 @@ const JowaChatList = props => {
 
         return (
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
               navigation.navigate('ChatScreen', {
                 jowaChatList,
                 item,
@@ -118,8 +118,12 @@ const JowaChatList = props => {
                 is30MinsAgoActive,
                 chatUUID,
                 compatibilityScore,
-              })
-            }
+              });
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {showReportButton: true},
+              });
+            }}
             key={index}
             style={{
               top: verticalScale(15),
@@ -227,6 +231,7 @@ const MareChatList = props => {
     unreadMessages,
   } = props;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <FlatList
@@ -285,7 +290,7 @@ const MareChatList = props => {
 
         return (
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
               navigation.navigate('ChatScreen', {
                 mareChatList,
                 item,
@@ -295,8 +300,12 @@ const MareChatList = props => {
                 is30MinsAgoActive,
                 chatUUID,
                 compatibilityScore,
-              })
-            }
+              });
+              dispatch({
+                type: UPDATE_DASHBOARD_STATE,
+                newState: {showReportButton: true},
+              });
+            }}
             key={index}
             style={{
               top: verticalScale(15),

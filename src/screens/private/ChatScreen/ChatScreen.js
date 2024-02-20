@@ -38,6 +38,7 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
+import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModal';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -201,6 +202,7 @@ const ChatScreen = () => {
           compatibilityScore={compatibilityScore}
         />
         {subscribeModal()}
+        <ReportUserModal category="CHAT" targetSub={item?.sub} />
         <ScrollView
           style={{flex: 1, padding: 10}}
           ref={scrollViewRef}
@@ -210,7 +212,6 @@ const ChatScreen = () => {
             const currentUser = getMessageResponse?.data?.length
               ? message.senderSub === currentUserSub
               : true;
-
             const dateObject = new Date(message?.created);
             // Get the hours, minutes, and AM/PM indicator
             const hours = dateObject?.getUTCHours();

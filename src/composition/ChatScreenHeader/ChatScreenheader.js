@@ -48,7 +48,7 @@ const ChatScreenHeader = props => {
             });
             dispatch({
               type: UPDATE_DASHBOARD_STATE,
-              newState: {defaultMareTab: true},
+              newState: {defaultMareTab: true, showReportButton: false},
             });
           }}>
           <Image

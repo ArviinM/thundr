@@ -44,6 +44,9 @@ import {
   READ_CHAT_MESSAGE,
   READ_CHAT_MESSAGE_FAILED,
   READ_CHAT_MESSAGE_SUCCESS,
+  REPORT_CATEGORY,
+  REPORT_CATEGORY_FAILED,
+  REPORT_CATEGORY_SUCCESS,
   SEND_MESSAGE,
   SEND_MESSAGE_FAILED,
   SEND_MESSAGE_SUCCESS,
@@ -95,6 +98,8 @@ export const INITIAL_STATE = {
   marePossibles: [],
   defaultMareTab: false,
   showReportUserModal: false,
+  reportCategoryResponse: [],
+  showReportButton: true,
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -458,6 +463,26 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case GET_POSSIBLES_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // REPORT CATEGORY
+    case REPORT_CATEGORY:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case REPORT_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        reportCategoryResponse: action.payload,
+        loading: false,
+      };
+    case REPORT_CATEGORY_FAILED:
       return {
         ...state,
         loading: false,

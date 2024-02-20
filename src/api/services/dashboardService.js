@@ -38,6 +38,7 @@ const DashboardConfig = {
       `${DASHBOARD.GET_POSSIBLES}?sub=${payload.sub}&tag=${payload.tag}`,
       payload,
     ),
+  reportCategory: payload => api.post(DASHBOARD.REPORT_CATEGORY, payload),
 };
 
 export default DashboardConfig;

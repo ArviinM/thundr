@@ -13,7 +13,10 @@ import Separator from '../../components/Separator/Separator';
 import TextInput from '../TextInput/TextInput';
 
 // Ducks
-import {UPDATE_DASHBOARD_STATE} from '../../ducks/Dashboard/actionTypes';
+import {
+  REPORT_CATEGORY,
+  UPDATE_DASHBOARD_STATE,
+} from '../../ducks/Dashboard/actionTypes';
 
 // Utils
 import {scale, verticalScale} from '../../utils/commons';
@@ -48,10 +51,12 @@ const somethingElse = [
   'Please specify your experience and provide full context.',
 ];
 
-const ReportUserModal = () => {
+const ReportUserModal = props => {
   const dispatch = useDispatch();
+  const {category, targetSub} = props;
   const {showReportUserModal} = useSelector(state => state.dashboard);
   const [expandedDetails, setExpandedDetails] = useState('');
+  const [remarks, setRemarks] = useState('');
 
   const isExpandedDetailsVisible = expandedDetails !== '';
 
@@ -61,6 +66,7 @@ const ReportUserModal = () => {
       newState: {showReportUserModal: false},
     });
     setExpandedDetails('');
+    setRemarks('');
   };
 
   const selectAProblem = () => {
@@ -84,7 +90,9 @@ const ReportUserModal = () => {
               return (
                 <>
                   <TouchableOpacity
-                    onPress={() => setExpandedDetails(item)}
+                    onPress={() => {
+                      setExpandedDetails(item);
+                    }}
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
@@ -188,6 +196,8 @@ const ReportUserModal = () => {
           </Text>
           <TextInput
             inputStyle={{height: verticalScale(35), width: scale(280)}}
+            value={remarks}
+            onChangeText={text => setRemarks(text)}
           />
           <Separator space={10} />
           <Text fontFamily="Montserrat-Regular" size={14}>
@@ -197,7 +207,17 @@ const ReportUserModal = () => {
           <Button
             title="Submit"
             style={{width: scale(100)}}
-            onPress={handleNavigation}
+            onPress={() => {
+              dispatch({
+                type: REPORT_CATEGORY,
+                payload: {
+                  targetSub,
+                  reportCategory: {type: category, category: expandedDetails},
+                  remark: remarks,
+                },
+              });
+              handleNavigation();
+            }}
           />
         </View>
       </>

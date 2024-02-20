@@ -50,6 +50,9 @@ import {
   READ_CHAT_MESSAGE,
   READ_CHAT_MESSAGE_FAILED,
   READ_CHAT_MESSAGE_SUCCESS,
+  REPORT_CATEGORY,
+  REPORT_CATEGORY_FAILED,
+  REPORT_CATEGORY_SUCCESS,
   SEND_MESSAGE,
   SEND_MESSAGE_FAILED,
   SEND_MESSAGE_SUCCESS,
@@ -484,6 +487,29 @@ export function* getPossibles({payload}) {
   }
 }
 
+export function* reportCategory({payload}) {
+  const {sub} = yield select(state => state.persistedState);
+  const {loginData} = yield select(state => state.login);
+  try {
+    const response = yield call(DashboardConfig.reportCategory, {
+      sub: loginData?.sub || sub,
+      ...payload,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: REPORT_CATEGORY_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: REPORT_CATEGORY_FAILED,
+      payload: error,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -502,6 +528,7 @@ function* dashboardWatcher() {
   yield takeLatest(READ_CHAT_MESSAGE, readChatMessage);
   yield takeLatest(GET_CURRENT_USER_PROFILE, getCurrentUserProfile);
   yield takeLatest(GET_POSSIBLES, getPossibles);
+  yield takeLatest(REPORT_CATEGORY, reportCategory);
 }
 
 export default dashboardWatcher;
