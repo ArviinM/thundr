@@ -22,6 +22,7 @@ import {scale} from '../../utils/commons';
 import LoginOptionScreen from '../../screens/public/LoginOptionsScreen/LoginOptionScreen';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 import {useSelector} from 'react-redux';
+import SecurityAndPrivacy from '../../screens/private/SecurityAndPrivacy/SecurityAndPrivacy';
 
 const PublicScreenStack = createStackNavigator();
 
@@ -92,6 +93,19 @@ const PublicScreenNavigation = () => {
       <PublicScreenStack.Screen
         name="MobileAndEmailVerificationStack"
         component={MobileAndEmailVerificationStack}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#f2cecd',
+            shadowColor: 'transparent',
+            elevation: 0,
+          },
+          headerTitle: '',
+        }}
+      />
+      <PublicScreenStack.Screen
+        name="SecurityAndPrivacy"
+        component={SecurityAndPrivacy}
         options={{
           headerShown: true,
           headerStyle: {

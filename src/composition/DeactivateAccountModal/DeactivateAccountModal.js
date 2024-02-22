@@ -13,22 +13,19 @@ import {scale, verticalScale} from '../../utils/commons';
 import {TouchableOpacity} from 'react-native';
 import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
+import Separator from '../../components/Separator/Separator';
+import Button from '../../components/Button/Button';
 
-const FeatureNotAvailableModal = props => {
+const DeactivateAccountModal = props => {
   const {
-    normalBehaviorModal,
-    setDisplayModal,
-    displayModal,
-    message = '',
+    fromLogin,
+    setDisplayDeactivateModal,
+    displayDeactivateModal,
+    handleDeactivate,
   } = props;
-  const navigation = useNavigation();
 
   const handleNavigation = () => {
-    if (normalBehaviorModal) {
-      setDisplayModal(false);
-    } else {
-      navigation.reset({index: 0, routes: [{name: 'DashboardTabs'}]});
-    }
+    setDisplayDeactivateModal(false);
   };
 
   return (
@@ -51,7 +48,7 @@ const FeatureNotAvailableModal = props => {
         borderWidth: 3,
         borderColor: '#FEBC29',
       }}
-      isVisible={normalBehaviorModal ? displayModal : true}>
+      isVisible={displayDeactivateModal}>
       <TouchableOpacity
         onPress={handleNavigation}
         style={{
@@ -67,11 +64,21 @@ const FeatureNotAvailableModal = props => {
         fontFamily="Montserrat-Bold"
         weight={700}
         customStyle={{textAlign: 'center'}}>
-        {message ||
-          'Oops! Wait lang, mars. This feature will be available soon.'}
+        {fromLogin
+          ? 'You have successfully deactivated your account, sis. You may reactivate your account after seven days.'
+          : 'Upon deactivation, you may reactivate your account only after seven days. Gora, sis?'}
       </Text>
+      <Separator space={20} />
+      {!fromLogin && (
+        <Button
+          title="Deactivate"
+          onPress={handleDeactivate}
+          style={{width: scale(200), backgroundColor: '#fff'}}
+          textColor="#E43C59"
+        />
+      )}
     </Overlay>
   );
 };
 
-export default FeatureNotAvailableModal;
+export default DeactivateAccountModal;

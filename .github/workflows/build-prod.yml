@@ -16,7 +16,7 @@
        steps:        
          - run: rm -rf ${{ github.workspace }}/*
          - name: Check out repository code
-           uses: actions/checkout@v3
+           uses: actions/checkout@v4
            with:
             fetch-depth: 0
          - run: echo "${{ github.event.head_commit.message }}"
@@ -71,6 +71,7 @@
      Android-APK-Upload:
        runs-on: m2
        needs: Android-APK-Build
+       continue-on-error: true
        defaults:
          run:
            working-directory: ./android/app/build/outputs/apk/release
@@ -91,6 +92,7 @@
      Android-AAB-Upload:
        runs-on: m2
        needs: Android-AAB-Build
+       continue-on-error: true
        defaults:
          run:
            working-directory: ./android/app/build/outputs/bundle/release
@@ -137,6 +139,7 @@
      iOS-Export-IPA:
       runs-on: m2
       needs: iOS-Build
+      continue-on-error: true
       steps:
       - run: ls
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     

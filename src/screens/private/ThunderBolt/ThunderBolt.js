@@ -27,7 +27,7 @@ const ThunderBolt = () => {
     <View style={{flex: 1, backgroundColor: '#EDE8E5'}}>
       {displayModal && (
         <FeatureNotAvailableModal
-          fromThunderBolt={true}
+          normalBehaviorModal={true}
           displayModal={displayModal}
           setDisplayModal={setDisplayModal}
         />

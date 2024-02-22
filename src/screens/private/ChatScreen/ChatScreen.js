@@ -38,6 +38,7 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
+import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModal';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -201,6 +202,7 @@ const ChatScreen = () => {
           compatibilityScore={compatibilityScore}
         />
         {subscribeModal()}
+        <ReportUserModal category="CHAT" targetSub={item?.sub} />
         <ScrollView
           style={{flex: 1, padding: 10}}
           ref={scrollViewRef}
@@ -210,6 +212,22 @@ const ChatScreen = () => {
             const currentUser = getMessageResponse?.data?.length
               ? message.senderSub === currentUserSub
               : true;
+            const dateObject = new Date(message?.created);
+            // Get the hours, minutes, and AM/PM indicator
+            const hours = dateObject?.getUTCHours();
+            const minutes = dateObject?.getUTCMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            // Convert hours to 12-hour format
+            const formattedHours = hours % 12 || 12;
+
+            // Format the time as hh:mm AM/PM
+            const formattedTime = `${formattedHours
+              ?.toString()
+              ?.padStart(2, '0')}:${minutes
+              ?.toString()
+              ?.padStart(2, '0')} ${ampm}`;
+
             return (
               <View
                 key={message.id}
@@ -224,12 +242,18 @@ const ChatScreen = () => {
                   borderRadius: 8,
                   marginBottom: 10,
                   maxWidth: '80%',
+                  justifyContent: 'center',
                 }}>
-                <Text color="#fff" fontFamil="Montserrat-Regular">
+                <Text color="#fff" fontFamily="Montserrat-Regular" size={20}>
                   {getMessageResponse?.data?.length
                     ? message.message
                     : message.text}
                 </Text>
+                <View style={{alignSelf: 'flex-end'}}>
+                  <Text color="#fff" fontFamily="Montserrat-Regular" size={9}>
+                    {formattedTime}
+                  </Text>
+                </View>
               </View>
             );
           })}

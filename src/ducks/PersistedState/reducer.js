@@ -7,6 +7,9 @@ export const INITIAL_STATE = {
   refreshToken: '',
   sub: '',
   showPossiblesPrompt: false,
+  lastLogin: '',
+  privacyPolicyChecked: false,
+  termsAndConditionChecked: false,
 };
 
 const persistedState = (state = INITIAL_STATE, action) => {
