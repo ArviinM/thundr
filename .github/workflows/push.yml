@@ -6,6 +6,8 @@ on:
       - develop-build
       - test-build
       - production-build
+      - develop-arvin-build
+      - production-arvin-build
 jobs:
   Git-Fetch-State:
     runs-on: linux
