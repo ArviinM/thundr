@@ -39,6 +39,7 @@ import {
 } from '../../../utils/commons';
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
 import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModal';
+import moment from 'moment';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -212,21 +213,25 @@ const ChatScreen = () => {
             const currentUser = getMessageResponse?.data?.length
               ? message.senderSub === currentUserSub
               : true;
-            const dateObject = new Date(message?.created);
-            // Get the hours, minutes, and AM/PM indicator
-            const hours = dateObject?.getUTCHours();
-            const minutes = dateObject?.getUTCMinutes();
+            let dateObject;
+            if (message?.created) {
+              dateObject = new Date(message.created);
+            } else {
+              // If message.created is undefined, get the current time in Philippines timezone
+              const currentTimeInManila = moment().utcOffset('+0800').toDate();
+              dateObject = new Date(currentTimeInManila);
+            }
+            const hours = dateObject.getHours();
+            const minutes = dateObject.getMinutes();
             const ampm = hours >= 12 ? 'PM' : 'AM';
-
             // Convert hours to 12-hour format
             const formattedHours = hours % 12 || 12;
-
             // Format the time as hh:mm AM/PM
-            const formattedTime = `${formattedHours
-              ?.toString()
-              ?.padStart(2, '0')}:${minutes
-              ?.toString()
-              ?.padStart(2, '0')} ${ampm}`;
+            const formattedTime = message?.created
+              ? `${formattedHours?.toString()?.padStart(2, '0')}:${minutes
+                  ?.toString()
+                  ?.padStart(2, '0')} ${ampm}`
+              : moment(dateObject).format('hh:mm A');
 
             return (
               <View
@@ -238,13 +243,13 @@ const ChatScreen = () => {
                       ? '#EE9B3D'
                       : '#E33C59'
                     : '#660707',
-                  padding: scale(20),
+                  padding: scale(15),
                   borderRadius: 8,
                   marginBottom: 10,
                   maxWidth: '80%',
                   justifyContent: 'center',
                 }}>
-                <Text color="#fff" fontFamily="Montserrat-Regular" size={20}>
+                <Text color="#fff" fontFamily="Montserrat-Regular">
                   {getMessageResponse?.data?.length
                     ? message.message
                     : message.text}

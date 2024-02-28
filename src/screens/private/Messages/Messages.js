@@ -50,6 +50,7 @@ const JowaChatList = props => {
     unreadMessages,
   } = props;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <FlatList

@@ -30,15 +30,17 @@ import {
 } from '../../../ducks/Login/actionTypes';
 import Spinner from '../../../components/Spinner/Spinner';
 import {UPDATE_DASHBOARD_STATE} from '../../../ducks/Dashboard/actionTypes';
+import DeactivateAccountModal from '../../../composition/DeactivateAccountModal/DeactivateAccountModal';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
-  const {loading} = useSelector(state => state.login);
+  const {loading, loginData} = useSelector(state => state.login);
   const {phoneNumber} = useSelector(state => state.mobileEmail);
   const {refreshToken, customerPhoto, customerName} = useSelector(
     state => state.persistedState,
   );
   const [isPasswordVisible, setPasswordVisible] = useState(true);
+  const [displayDeactivateModal, setDisplayDeactivateModal] = useState(true);
 
   useEffect(() => {
     const getCurrentLocation = () => {
@@ -204,6 +206,13 @@ const LoginScreen = () => {
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{flexGrow: 1}}
         enableOnAndroid={true}>
+        {loginData?.loginDeactivated && (
+          <DeactivateAccountModal
+            fromLogin={true}
+            displayDeactivateModal={displayDeactivateModal}
+            setDisplayDeactivateModal={setDisplayDeactivateModal}
+          />
+        )}
         <View
           style={{
             alignContent: 'center',

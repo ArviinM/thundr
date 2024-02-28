@@ -23,6 +23,7 @@ import {scale, verticalScale} from '../../utils/commons';
 
 import Image from '../../components/Image/Image';
 import {DASHBOARD_ASSET_URI, GLOBAL_ASSET_URI} from '../../utils/images';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const problemArray = [
   'Nudity/Obscenity',
@@ -158,7 +159,13 @@ const ReportUserModal = props => {
     };
 
     return (
-      <>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          maxWidth: scale(280),
+        }}
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}>
         <View style={{alignSelf: 'flex-start', top: verticalScale(20)}}>
           <Text fontFamily="Montserrat-Bold" weight={700} size={18}>
             {renderTitle()}
@@ -195,7 +202,7 @@ const ReportUserModal = props => {
             Tell us more
           </Text>
           <TextInput
-            inputStyle={{height: verticalScale(35), width: scale(280)}}
+            inputStyle={{height: verticalScale(35), width: scale(250)}}
             value={remarks}
             onChangeText={text => setRemarks(text)}
           />
@@ -220,7 +227,7 @@ const ReportUserModal = props => {
             }}
           />
         </View>
-      </>
+      </KeyboardAwareScrollView>
     );
   };
 
@@ -242,7 +249,7 @@ const ReportUserModal = props => {
         borderRadius: 20,
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        padding: scale(20),
+        padding: scale(isExpandedDetailsVisible ? 15 : 20),
       }}
       isVisible={showReportUserModal}>
       <View
@@ -282,7 +289,6 @@ const ReportUserModal = props => {
           />
         </TouchableOpacity>
       </View>
-
       {isExpandedDetailsVisible ? moreDetails() : selectAProblem()}
     </Overlay>
   );
