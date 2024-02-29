@@ -59,9 +59,9 @@ const ChatSelection = props => {
 
   return (
     <LinearGradient
-      colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
-      start={{x: 0.5, y: 1}}
-      end={{x: 0.5, y: 0}}
+      colors={['#fe9630', '#fa7d35', '#E72454']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 0}}
       style={{
         flexDirection: 'row',
         width: '100%',
