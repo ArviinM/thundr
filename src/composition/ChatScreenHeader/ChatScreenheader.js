@@ -26,6 +26,7 @@ const ChatScreenHeader = props => {
     is5MinsAgoActive,
     is30MinsAgoActive,
     compatibilityScore,
+    isMare,
   } = props;
   const navigation = useNavigation();
   return (
@@ -48,7 +49,7 @@ const ChatScreenHeader = props => {
             });
             dispatch({
               type: UPDATE_DASHBOARD_STATE,
-              newState: {defaultMareTab: true, showReportButton: false},
+              newState: {defaultMareTab: isMare, showReportButton: false},
             });
           }}>
           <Image
