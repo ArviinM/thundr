@@ -115,23 +115,29 @@ const LoginOptionScreen = () => {
           style={{
             backgroundColor: '#fff',
             height: 'auto',
-            width: scale(isIosDevice() ? 260 : 280),
-            justifyContent: 'center',
-            borderRadius: 20,
+            width: scale(260),
             flexDirection: 'row',
+            justifyContent: 'center', // Center items horizontally
+            alignItems: 'center', // Center items vertically
+            borderRadius: 20,
+            paddingVertical: verticalScale(3),
           }}>
-          <Image
-            source={icon}
-            height={30}
-            width={25}
-            customStyle={{marginRight: scale(isIosDevice() ? 3 : 2)}}
-          />
+          <View style={{justifyContent: 'center'}}>
+            <Image
+              source={icon}
+              height={30}
+              width={25}
+              customStyle={{marginRight: scale(isIosDevice() ? 3 : 2)}}
+            />
+          </View>
           <Text
             color="#E33051"
             weight={700}
-            customStyle={{
-              textAlign: 'center',
-              top: verticalScale(isIosDevice() ? 8 : 4),
+            size={scale(12)}
+            style={{
+              flex: 1,
+              textAlign: 'right',
+              // top: verticalScale(isIosDevice() ? 8 : 4),
             }}>
             {text}
           </Text>
@@ -153,7 +159,7 @@ const LoginOptionScreen = () => {
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
         normalBehaviorModal={true}
-        message="Gora na ba, sis? 
+        message="Gora na ba, sis?
         Read the Terms and Conditions pati ang Privacy Policy muna sa baba sis."
       />
       <Separator space={30} />
@@ -185,7 +191,7 @@ const LoginOptionScreen = () => {
             )}
           </>
         )}
-        <Separator space={isIosDevice() ? 25 : 5} />
+        <Separator space={20} />
         {renderButton(
           false,
           '',
