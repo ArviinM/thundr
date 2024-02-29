@@ -49,15 +49,15 @@ const MobileValidationScreen = () => {
             weight={700}
             size={scale(13)}
             fontFamily="Montserrat-Regular">
-            Register your Mobile Number
+            Enter your Mobile Number
           </Text>
-          <Text
-            color="#59595B"
-            size={scale(12)}
-            fontFamily="Montserrat-Regular"
-            customStyle={{paddingHorizontal: scale(30), textAlign: 'center'}}>
-            Enter your mobile number. We will send you an OTP for verification.
-          </Text>
+          {/*<Text*/}
+          {/*  color="#59595B"*/}
+          {/*  size={scale(12)}*/}
+          {/*  fontFamily="Montserrat-Regular"*/}
+          {/*  customStyle={{paddingHorizontal: scale(30), textAlign: 'center'}}>*/}
+          {/*  Enter your mobile number. We will send you an OTP for verification.*/}
+          {/*</Text>*/}
           <View
             style={{
               top: verticalScale(20),
