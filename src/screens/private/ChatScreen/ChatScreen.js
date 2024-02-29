@@ -201,6 +201,7 @@ const ChatScreen = () => {
           is5MinsAgoActive={is5MinsAgoActive}
           is30MinsAgoActive={is30MinsAgoActive}
           compatibilityScore={compatibilityScore}
+          isMare={isMare}
         />
         {subscribeModal()}
         <ReportUserModal category="CHAT" targetSub={item?.sub} />
