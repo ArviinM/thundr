@@ -3,6 +3,7 @@ import {Platform, Dimensions, StatusBar} from 'react-native';
 
 // Third party libraries
 import {getDeviceId, isTablet} from 'react-native-device-info';
+import moment from 'moment';
 
 const {width, height} = Dimensions.get('window');
 const [shortDimension, longDimension] =
@@ -16,7 +17,7 @@ const guidelineBaseHeight = 680;
  * scale - is pretty straight forward and will return the same linear result as using viewport.
  * verticalScale - is like scale, but based on height instead of width, which can be useful.
  * moderateScale - you can control the resize factor (default is 0.5), basically it is good for font sizes.
- 
+
  */
 
 export const scale = size => (shortDimension / guidelineBaseWidth) * size;
@@ -243,4 +244,41 @@ export const calculateAge = birthDate => {
   }
 
   return age;
+};
+
+export const organizeChatMessages = chatMessages => {
+  const groupedMessagesByDay = {};
+
+  chatMessages.forEach(message => {
+    const createdDate = new Date(message.created);
+    const currentDate = new Date();
+
+    if (createdDate.toDateString() === currentDate.toDateString()) {
+      // Message is from today
+      const day = 'Today';
+      if (!groupedMessagesByDay[day]) {
+        groupedMessagesByDay[day] = [];
+      }
+      groupedMessagesByDay[day].push(message);
+    } else if (
+      createdDate.toDateString() ===
+      new Date(currentDate.getTime() - 86400000).toDateString()
+    ) {
+      // Message is from yesterday
+      const day = 'Yesterday';
+      if (!groupedMessagesByDay[day]) {
+        groupedMessagesByDay[day] = [];
+      }
+      groupedMessagesByDay[day].push(message);
+    } else {
+      // Message is from another day
+      const formattedDay = moment(createdDate).format('MMMM DD, dddd');
+      if (!groupedMessagesByDay[formattedDay]) {
+        groupedMessagesByDay[formattedDay] = [];
+      }
+      groupedMessagesByDay[formattedDay].push(message);
+    }
+  });
+
+  return groupedMessagesByDay;
 };

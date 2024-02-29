@@ -38,7 +38,7 @@ import {BorderLinearGradient} from '../PersonalityType/Styled';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 
-const JowaChatList = props => {
+const JowaChatList = React.memo(props => {
   const {
     jowaChatList,
     matchListLoading,
@@ -50,6 +50,7 @@ const JowaChatList = props => {
     unreadMessages,
   } = props;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <FlatList
@@ -211,15 +212,17 @@ const JowaChatList = props => {
         return (
           <View
             style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-            <Text size={20}>No recent messages</Text>
+            <Text size={20} fontFamily="Montserrat-Regular">
+              No recent messages
+            </Text>
           </View>
         );
       }}
     />
   );
-};
+});
 
-const MareChatList = props => {
+const MareChatList = React.memo(props => {
   const {
     mareChatList,
     handleRefresh,
@@ -393,13 +396,15 @@ const MareChatList = props => {
         return (
           <View
             style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-            <Text size={20}>No recent messages</Text>
+            <Text size={20} fontFamily="Montserrat-Regular">
+              No recent messages
+            </Text>
           </View>
         );
       }}
     />
   );
-};
+});
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -559,10 +564,6 @@ const Messages = () => {
     }
   };
 
-  if (matchListLoading) {
-    return <Spinner />;
-  }
-
   return (
     <View
       style={{
@@ -576,31 +577,37 @@ const Messages = () => {
         setSearchText={setSearchText}
         mareChatList={mareChatList}
       />
-      <View style={{justifyContent: 'center', flex: 1}}>
-        {!isMareChatListActive ? (
-          <JowaChatList
-            jowaChatList={jowaChatList}
-            jowaFilteredData={chatCustomerDetails && jowaFilteredData}
-            matchListLoading={matchListLoading}
-            handleRefresh={handleRefresh}
-            is1MinAgoActive={is1MinAgoActive}
-            is5MinsAgoActive={is5MinsAgoActive}
-            is30MinsAgoActive={is30MinsAgoActive}
-            unreadMessages={unreadMessages}
-          />
-        ) : (
-          <MareChatList
-            mareChatList={mareChatList}
-            mareFilteredData={mareCustomerDetails && mareFilteredData}
-            matchListLoading={matchListLoading}
-            handleRefresh={handleRefresh}
-            is1MinAgoActive={is1MinAgoActive}
-            is5MinsAgoActive={is5MinsAgoActive}
-            is30MinsAgoActive={is30MinsAgoActive}
-            unreadMessages={unreadMessages}
-          />
-        )}
-      </View>
+      {matchListLoading ? (
+        <View>
+          <Spinner visible />
+        </View>
+      ) : (
+        <View style={{justifyContent: 'center', flex: 1}}>
+          {!isMareChatListActive ? (
+            <JowaChatList
+              jowaChatList={jowaChatList}
+              jowaFilteredData={chatCustomerDetails && jowaFilteredData}
+              matchListLoading={matchListLoading}
+              handleRefresh={handleRefresh}
+              is1MinAgoActive={is1MinAgoActive}
+              is5MinsAgoActive={is5MinsAgoActive}
+              is30MinsAgoActive={is30MinsAgoActive}
+              unreadMessages={unreadMessages}
+            />
+          ) : (
+            <MareChatList
+              mareChatList={mareChatList}
+              mareFilteredData={mareCustomerDetails && mareFilteredData}
+              matchListLoading={matchListLoading}
+              handleRefresh={handleRefresh}
+              is1MinAgoActive={is1MinAgoActive}
+              is5MinsAgoActive={is5MinsAgoActive}
+              is30MinsAgoActive={is30MinsAgoActive}
+              unreadMessages={unreadMessages}
+            />
+          )}
+        </View>
+      )}
     </View>
   );
 };

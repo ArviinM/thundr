@@ -15,8 +15,13 @@ import Image from '../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../utils/images';
 import Separator from '../../components/Separator/Separator';
 import Button from '../../components/Button/Button';
+import {useDispatch} from 'react-redux';
+import {START_LOGOUT} from '../../ducks/Login/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../../ducks/PersistedState/actionTypes';
 
 const DeactivateAccountModal = props => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {
     fromLogin,
     setDisplayDeactivateModal,
@@ -26,6 +31,21 @@ const DeactivateAccountModal = props => {
 
   const handleNavigation = () => {
     setDisplayDeactivateModal(false);
+
+    if (fromLogin) {
+      navigation.navigate('LoginOptionScreen');
+      dispatch({type: START_LOGOUT});
+      dispatch({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {
+          refreshToken: null,
+          customerName: null,
+          sub: null,
+          customerPhoto: null,
+          showPossiblesPrompt: false,
+        },
+      });
+    }
   };
 
   return (
@@ -40,7 +60,7 @@ const DeactivateAccountModal = props => {
         left: '50%',
         transform: [
           {translateX: -scale(125)},
-          {translateY: -verticalScale(20)},
+          {translateY: -verticalScale(30)},
         ],
         height: 'auto',
         width: scale(250),

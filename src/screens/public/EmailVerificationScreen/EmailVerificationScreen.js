@@ -42,13 +42,25 @@ const EmailVerificationScreen = () => {
             customStyle={{left: scale(15)}}
           />
           <Separator space={20} />
-          <Text color="#E33051" weight={700}>
+          <Text
+            color="#E33051"
+            weight={700}
+            fontFamily="Montserrat-Regular"
+            size={scale(13)}>
             Verification
           </Text>
-          <Text color="#59595B" customStyle={{textAlign: 'center'}}>
+          <Text
+            color="#59595B"
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Regular"
+            size={scale(12)}>
             You are almost done!
           </Text>
-          <Text color="#59595B" customStyle={{textAlign: 'center'}}>
+          <Text
+            color="#59595B"
+            customStyle={{textAlign: 'center', paddingHorizontal: scale(70)}}
+            fontFamily="Montserrat-Regular"
+            size={scale(12)}>
             Enter the verification code sent to your email.
           </Text>
         </View>
@@ -66,8 +78,8 @@ const EmailVerificationScreen = () => {
           primary
           textStyle={{weight: 400}}
           style={{
-            top: verticalScale(150),
-            height: verticalScale(isIosDevice() ? 30 : 40),
+            top: verticalScale(170),
+            height: verticalScale(40),
             width: scale(150),
           }}
           onPress={() =>
@@ -80,19 +92,25 @@ const EmailVerificationScreen = () => {
             paddingHorizontal: scale(isIosDevice() ? 100 : 80),
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Image
-            source={MOBILE_INPUT_URI.LOCK_ICON}
-            height={20}
-            width={20}
-            customStyle={{
-              marginRight: scale(10),
-              top: verticalScale(isIosDevice() ? 2 : 5),
-            }}
-          />
-          <Text color="#59595B" customStyle={{textAlign: 'center'}}>
-            Don’t share your verification code with anyone.
-          </Text>
+          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              size={scale(10)}
+              customStyle={{
+                textAlign: 'center',
+                color: '#59595B',
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              Don’t share your verification code with anyone.
+            </Text>
+          </View>
         </View>
       </ScreenContainer>
     </KeyboardAwareScrollView>

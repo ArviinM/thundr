@@ -19,6 +19,8 @@ import {isIosDevice, scale, verticalScale} from '../../utils/commons';
 import {GLOBAL_ASSET_URI, SETTINGS_URI} from '../../utils/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATE_CUSTOMER_SURVEY} from '../../ducks/Settings/actionTypes';
+import {START_LOGOUT} from '../../ducks/Login/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../../ducks/PersistedState/actionTypes';
 
 const OtherCheckBoxItem = ({
   label,
@@ -187,6 +189,18 @@ const SettingsModal = props => {
     } else {
       dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: apiPayload});
       setDisplayModal(false);
+      //After deactivation - this will go to login screen
+      dispatch({type: START_LOGOUT});
+      dispatch({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {
+          refreshToken: null,
+          customerName: null,
+          sub: null,
+          customerPhoto: null,
+          showPossiblesPrompt: false,
+        },
+      });
     }
   };
 

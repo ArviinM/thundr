@@ -12,7 +12,7 @@
      APP_ID: ph.thundr.app.dev
    jobs:
      Git-Fetch-State:
-       runs-on: m2
+       runs-on: macOS
        steps:        
          - run: rm -rf ${{ github.workspace }}/*
          - name: Check out repository code
@@ -21,7 +21,7 @@
             fetch-depth: 0
          - run: echo "${{ github.event.head_commit.message }}"
      Package-Rename:
-       runs-on: m2
+       runs-on: macOS
        needs: Git-Fetch-State
        steps:
          - run: ls
@@ -30,13 +30,13 @@
          - run: echo "BUILD_NUMBER=${{github.run_number}}" >> .env
          - run: more .env
      Yarn-Install:
-       runs-on: m2
+       runs-on: macOS
        needs: Package-Rename
        steps:
          - run: yarn install
          - run: ls
      Android-Prepare-Build:
-       runs-on: m2
+       runs-on: macOS
        needs: Yarn-Install
        defaults:
          run:
@@ -60,7 +60,7 @@
          - run: ls app
          - run: ./gradlew clean
      Android-APK-Build:
-       runs-on: m2
+       runs-on: macOS
        needs: Android-Prepare-Build
        defaults:
          run:
@@ -69,7 +69,7 @@
          - run: ls
          - run: ./gradlew assembleRelease
      Android-APK-Upload:
-       runs-on: m2
+       runs-on: macOS
        needs: Android-APK-Build
        continue-on-error: true
        defaults:
@@ -81,7 +81,7 @@
          - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
          - run: cp "thundr-dev-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Dev Upload"
      Android-AAB-Build:
-       runs-on: m2
+       runs-on: macOS
        needs: Android-Prepare-Build
        defaults:
          run:
@@ -90,7 +90,7 @@
          - run: ls
          - run: ./gradlew bundleRelease
      Android-AAB-Upload:
-       runs-on: m2
+       runs-on: macOS
        needs: Android-AAB-Build
        continue-on-error: true
        defaults:
@@ -102,7 +102,7 @@
          - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
          - run: cp "thundr-dev-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Dev Upload"
      Android-Publish-Dev-PlayStore:
-       runs-on: m2
+       runs-on: macOS
        needs: Android-AAB-Upload
        defaults:
          run:
@@ -111,7 +111,7 @@
          - run: ls
          - run: ./gradlew publishBundle  --release-status draft
      iOS-Prepare-Build:
-       runs-on: m2
+       runs-on: macOS
        needs: Yarn-Install
        steps:
          - run: ls
@@ -124,7 +124,7 @@
          - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString
              ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
      iOS-Build:
-       runs-on: m2
+       runs-on: macOS
        needs: iOS-Prepare-Build
        steps:
          - run: ls
@@ -137,7 +137,7 @@
              -archivePath myArch -destination 'generic/platform=iOS'
              -allowProvisioningUpdates
      iOS-Export-IPA:
-      runs-on: m2
+      runs-on: macOS
       needs: iOS-Build
       continue-on-error: true
       steps:
@@ -148,7 +148,7 @@
       - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
       - run: cp "thundr-dev-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Dev Upload"
      iOS-Export-AppStore:
-      runs-on: m2
+      runs-on: macOS
       needs: iOS-Export-IPA
       steps:
       - run: ls
@@ -157,4 +157,4 @@
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
-  
+

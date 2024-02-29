@@ -32,13 +32,11 @@ import {
   scale,
   verticalScale,
 } from '../../../utils/commons';
-import DeactivateAccountModal from '../../../composition/DeactivateAccountModal/DeactivateAccountModal';
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   const navigation = useNavigation();
-  const [displayDeactivateModal, setDisplayDeactivateModal] = useState(false);
   const {refreshToken, lastLogin, privacyPolicyChecked} = useSelector(
     state => state.persistedState,
   );
@@ -117,23 +115,30 @@ const LoginOptionScreen = () => {
           style={{
             backgroundColor: '#fff',
             height: 'auto',
-            width: scale(isIosDevice() ? 260 : 280),
-            justifyContent: 'center',
-            borderRadius: 20,
+            width: scale(260),
             flexDirection: 'row',
+            justifyContent: 'center', // Center items horizontally
+            alignItems: 'center', // Center items vertically
+            borderRadius: 20,
+            paddingVertical: verticalScale(3),
           }}>
-          <Image
-            source={icon}
-            height={30}
-            width={25}
-            customStyle={{marginRight: scale(isIosDevice() ? 3 : 2)}}
-          />
+          <View style={{justifyContent: 'center'}}>
+            <Image
+              source={icon}
+              height={30}
+              width={25}
+              customStyle={{marginRight: scale(isIosDevice() ? 3 : 2)}}
+            />
+          </View>
           <Text
             color="#E33051"
             weight={700}
-            customStyle={{
-              textAlign: 'center',
-              top: verticalScale(isIosDevice() ? 8 : 4),
+            size={scale(11)}
+            fontFamily="Montserrat-Regular"
+            style={{
+              flex: 1,
+              textAlign: 'right',
+              // top: verticalScale(isIosDevice() ? 8 : 4),
             }}>
             {text}
           </Text>
@@ -155,13 +160,8 @@ const LoginOptionScreen = () => {
         displayModal={displayModal}
         setDisplayModal={setDisplayModal}
         normalBehaviorModal={true}
-        message="Gora na ba, sis? 
+        message="Gora na ba, sis?
         Read the Terms and Conditions pati ang Privacy Policy muna sa baba sis."
-      />
-      <DeactivateAccountModal
-        fromLogin={true}
-        displayDeactivateModal={displayDeactivateModal}
-        setDisplayDeactivateModal={setDisplayDeactivateModal}
       />
       <Separator space={30} />
       <View style={{alignItems: 'center', top: verticalScale(10)}}>
@@ -192,7 +192,7 @@ const LoginOptionScreen = () => {
             )}
           </>
         )}
-        <Separator space={isIosDevice() ? 25 : 5} />
+        <Separator space={20} />
         {renderButton(
           false,
           '',
@@ -205,6 +205,7 @@ const LoginOptionScreen = () => {
           <Text
             size={11}
             color="#59595B"
+            fontFamily="Montserrat-Regular"
             customStyle={{
               textAlign: 'center',
             }}>{`Your last sign-in was via ${lastLogin}`}</Text>
@@ -224,6 +225,7 @@ const LoginOptionScreen = () => {
             <Text
               size={12}
               color="#59595B"
+              fontFamily="Montserrat-Regular"
               customStyle={{
                 textAlign: 'center',
               }}>
@@ -237,6 +239,7 @@ const LoginOptionScreen = () => {
                 <Text
                   color="#59595B"
                   size={12}
+                  fontFamily="Montserrat-Regular"
                   customStyle={{
                     textDecorationLine: 'underline',
                     textAlign: 'center',
@@ -250,6 +253,7 @@ const LoginOptionScreen = () => {
           <Separator space={20} />
           <Text
             size={11}
+            fontFamily="Montserrat-Regular"
             customStyle={{textAlign: 'center'}}>{`BUILD ${BUILD_NUMBER}`}</Text>
         </View>
       </View>

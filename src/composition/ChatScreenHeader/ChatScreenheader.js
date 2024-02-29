@@ -26,13 +26,14 @@ const ChatScreenHeader = props => {
     is5MinsAgoActive,
     is30MinsAgoActive,
     compatibilityScore,
+    isMare,
   } = props;
   const navigation = useNavigation();
   return (
     <LinearGradient
-      colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
-      start={{x: 0.5, y: 1}}
-      end={{x: 0.5, y: 0}}
+      colors={['#E72454', '#fa7d35', '#fe9630']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 0}}
       style={{
         flexDirection: 'row',
         gap: scale(25),
@@ -48,7 +49,7 @@ const ChatScreenHeader = props => {
             });
             dispatch({
               type: UPDATE_DASHBOARD_STATE,
-              newState: {defaultMareTab: true, showReportButton: false},
+              newState: {defaultMareTab: isMare, showReportButton: false},
             });
           }}>
           <Image

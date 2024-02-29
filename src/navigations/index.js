@@ -8,13 +8,15 @@ import SplashScreen from 'react-native-splash-screen';
 // Utils
 import {navigationRef} from './tempNavigation';
 import PublicScreenNavigation from './PublicScreenNavigation/PublicScreenNavigation';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavigation';
 import Modal from '../composition/Modal/Modal';
 import {GENERIC_ERROR} from '../utils/commons';
+import {START_LOGOUT} from '../ducks/Login/actionTypes';
 
 const RootNavigation = () => {
-  const {authenticated, showModal, modalMessage} = useSelector(
+  const dispatch = useDispatch();
+  const {authenticated, showModal, modalMessage, loginData} = useSelector(
     state => state.login,
   );
   const {showModal: showEmailModal, modalMessage: mobileEmailMessage} =
@@ -48,6 +50,11 @@ const RootNavigation = () => {
     };
   }, [hideSplash]);
 
+  useEffect(() => {
+    if (loginData?.loginDeactivated) {
+    }
+  }, [loginData, dispatch]);
+
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -71,7 +78,11 @@ const RootNavigation = () => {
           showProfileCreationModal
         }
       />
-      {authenticated ? <PrivateScreenNavigation /> : <PublicScreenNavigation />}
+      {authenticated && !loginData?.loginDeactivated ? (
+        <PrivateScreenNavigation />
+      ) : (
+        <PublicScreenNavigation />
+      )}
     </NavigationContainer>
   );
 };

@@ -43,11 +43,17 @@ const EmailValidationScreen = () => {
         <View style={{top: verticalScale(80), alignItems: 'center'}}>
           <Image source={MOBILE_INPUT_URI.EMAIL_ICON} width={80} height={100} />
           <Separator space={20} />
-          <Text color="#E33051" weight={700}>
+          <Text
+            color="#E33051"
+            weight={700}
+            fontFamily="Montserrat-Regular"
+            size={scale(13)}>
             Add Email
           </Text>
           <Text
             color="#59595B"
+            fontFamily="Montserrat-Regular"
+            size={scale(12)}
             customStyle={{paddingHorizontal: scale(70), textAlign: 'center'}}>
             Enter your email address to give added security to your account.
           </Text>
@@ -96,7 +102,8 @@ const EmailValidationScreen = () => {
                       primary
                       textStyle={{weight: 400}}
                       style={{
-                        height: verticalScale(isIosDevice() ? 30 : 40),
+                        top: verticalScale(30),
+                        height: verticalScale(40),
                         width: scale(150),
                       }}
                       onPress={handleSubmitEmail}
@@ -113,19 +120,26 @@ const EmailValidationScreen = () => {
             paddingHorizontal: scale(isIosDevice() ? 80 : 65),
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Image
-            source={MOBILE_INPUT_URI.LOCK_ICON}
-            height={20}
-            width={20}
-            customStyle={{
-              marginRight: scale(10),
-              top: verticalScale(isIosDevice() ? 3 : 7),
-            }}
-          />
-          <Text color="#59595B" customStyle={{textAlign: 'center'}}>
-            We never share this with anyone and it won’t appear on your profile.
-          </Text>
+          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              size={scale(10)}
+              customStyle={{
+                textAlign: 'center',
+                color: '#59595B',
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              We never share this with anyone and it won’t appear on your
+              profile.
+            </Text>
+          </View>
         </View>
       </ScreenContainer>
     </KeyboardAwareScrollView>
