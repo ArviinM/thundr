@@ -44,27 +44,35 @@ const MobileValidationScreen = () => {
             height={100}
           />
           <Separator space={20} />
-          <Text color="#E33051" weight={700}>
+          <Text
+            color="#E33051"
+            weight={700}
+            size={scale(13)}
+            fontFamily="Montserrat-Regular">
             Enter your Mobile Number
           </Text>
-          {/* <Text
-            color="#59595B"
-            customStyle={{paddingHorizontal: scale(70), textAlign: 'center'}}>
-            Enter your mobile number. We will send you an OTP for verification.
-          </Text> */}
+          {/*<Text*/}
+          {/*  color="#59595B"*/}
+          {/*  size={scale(12)}*/}
+          {/*  fontFamily="Montserrat-Regular"*/}
+          {/*  customStyle={{paddingHorizontal: scale(30), textAlign: 'center'}}>*/}
+          {/*  Enter your mobile number. We will send you an OTP for verification.*/}
+          {/*</Text>*/}
           <View
             style={{
               top: verticalScale(20),
               flexDirection: 'row',
               alignItems: 'center',
               borderRadius: 30,
-              paddingVertical: verticalScale(isIosDevice() ? 8 : 3),
+              // paddingVertical: verticalScale(isIosDevice() ? 8 : 8),
+              paddingVertical: scale(8),
               paddingHorizontal: scale(20),
               backgroundColor: '#fff',
               width: scale(230),
-              height: verticalScale(isIosDevice() ? 30 : 40),
+
+              // height: verticalScale(isIosDevice() ? 30 : 30),
             }}>
-            <Text color="#E33051" weight={700}>
+            <Text color="#E33051" size={scale(12)} weight={700}>
               +63
             </Text>
             <View
@@ -78,8 +86,9 @@ const MobileValidationScreen = () => {
             <TextInput
               style={{
                 flex: 1,
-                top: verticalScale(isIosDevice() ? 1 : 2),
+                top: verticalScale(1),
                 color: 'black',
+                fontSize: scale(12),
               }}
               placeholder="XXX XXX XXXX"
               keyboardType="numeric"
@@ -91,12 +100,12 @@ const MobileValidationScreen = () => {
         </View>
         <Button
           title="Continue"
-          disabled={!mobileNumber.length}
+          disabled={mobileNumber.length !== 10}
           primary
           textStyle={{weight: 400}}
           style={{
             top: verticalScale(170),
-            height: verticalScale(isIosDevice() ? 30 : 40),
+            height: verticalScale(40),
             width: scale(150),
           }}
           onPress={() => {
@@ -117,19 +126,26 @@ const MobileValidationScreen = () => {
             paddingHorizontal: scale(isIosDevice() ? 80 : 65),
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Image
-            source={MOBILE_INPUT_URI.LOCK_ICON}
-            height={20}
-            width={20}
-            customStyle={{
-              marginRight: scale(10),
-              top: verticalScale(isIosDevice() ? 3 : 7),
-            }}
-          />
-          <Text color="#59595B">
-            We never share this with anyone and it won’t appear on your profile.
-          </Text>
+          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              size={scale(9)}
+              customStyle={{
+                textAlign: 'center',
+                color: '#59595B',
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              We never share this with anyone and it won’t appear on your
+              profile.
+            </Text>
+          </View>
         </View>
       </ScreenContainer>
     </KeyboardAwareScrollView>

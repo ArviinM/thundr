@@ -26,7 +26,7 @@ const Button = props => {
           size={15}
           weight={500}
           color={textColor || '#ffffff'}
-          fontFamily="Montserat-Medium">
+          fontFamily="Montserrat-Medium">
           {title}
         </Text>
       </TitleContainer>

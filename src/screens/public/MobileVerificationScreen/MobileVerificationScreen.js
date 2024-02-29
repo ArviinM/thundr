@@ -46,10 +46,18 @@ const MobileVerificationScreen = () => {
             customStyle={{left: scale(15)}}
           />
           <Separator space={20} />
-          <Text color="#E33051" weight={700}>
+          <Text
+            color="#E33051"
+            weight={700}
+            fontFamily="Montserrat-Regular"
+            size={scale(13)}>
             Verification
           </Text>
-          <Text color="#59595B" customStyle={{textAlign: 'center'}}>
+          <Text
+            color="#59595B"
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Regular"
+            size={scale(12)}>
             Enter OTP code sent to +63XXXXXXXXXX.
           </Text>
         </View>
@@ -62,8 +70,8 @@ const MobileVerificationScreen = () => {
           primary
           textStyle={{weight: 400}}
           style={{
-            top: verticalScale(150),
-            height: verticalScale(isIosDevice() ? 30 : 40),
+            top: verticalScale(170),
+            height: verticalScale(40),
             width: scale(150),
           }}
           onPress={() => {
@@ -84,23 +92,29 @@ const MobileVerificationScreen = () => {
         />
         <View
           style={{
-            top: verticalScale(260),
-            paddingHorizontal: scale(isIosDevice() ? 110 : 100),
+            top: verticalScale(270),
+            paddingHorizontal: scale(isIosDevice() ? 80 : 65),
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Image
-            source={MOBILE_INPUT_URI.LOCK_ICON}
-            height={20}
-            width={20}
-            customStyle={{
-              marginRight: scale(10),
-              top: verticalScale(isIosDevice() ? 2 : 6),
-            }}
-          />
-          <Text color="#59595B" customStyle={{textAlign: 'center'}}>
-            Don’t share your OTP with anyone.
-          </Text>
+          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              size={scale(10)}
+              customStyle={{
+                textAlign: 'center',
+                color: '#59595B',
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              Don't share your OTP with anyone
+            </Text>
+          </View>
         </View>
       </ScreenContainer>
     </KeyboardAwareScrollView>
