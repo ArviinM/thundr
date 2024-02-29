@@ -185,7 +185,7 @@ const LoginScreen = () => {
                   textStyle={{weight: 400}}
                   style={{
                     top: verticalScale(20),
-                    height: verticalScale(isIosDevice() ? 30 : 40),
+                    height: verticalScale(30),
                     width: scale(150),
                   }}
                   onPress={handleSubmit}

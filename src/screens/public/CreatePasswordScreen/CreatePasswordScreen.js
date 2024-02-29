@@ -53,20 +53,28 @@ const CreatePasswordScreen = () => {
             height={100}
           />
           <Separator space={20} />
-          <Text color="#E33051" weight={700}>
+          <Text
+            color="#E33051"
+            weight={700}
+            fontFamily="Montserrat-Regular"
+            size={scale(13)}>
             Create Password
           </Text>
           <Text
             color="#59595B"
-            weight="700"
+            weight={700}
+            fontFamily="Montserrat-Regular"
+            size={scale(11)}
             customStyle={{textAlign: 'center'}}>
             Password must contain at least 8 characters
           </Text>
           <Text
             color="#59595B"
+            fontFamily="Montserrat-Regular"
+            size={scale(11)}
             customStyle={{paddingHorizontal: scale(60), textAlign: 'center'}}>
             With at least 1 uppercase character, 1 digit, and 1 special symbol
-            {` @!#&^()~{}`}
+            {' @!#&^()~{}'}
           </Text>
         </View>
         <Separator space={80} />
@@ -143,8 +151,8 @@ const CreatePasswordScreen = () => {
                   primary
                   textStyle={{weight: 400}}
                   style={{
-                    marginTop: verticalScale(20),
-                    height: verticalScale(isIosDevice() ? 30 : 40),
+                    top: verticalScale(20),
+                    height: verticalScale(30),
                     width: scale(150),
                   }}
                   onPress={handleSubmitPasswords}
@@ -159,17 +167,25 @@ const CreatePasswordScreen = () => {
             paddingHorizontal: scale(80),
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Image
-            source={MOBILE_INPUT_URI.LOCK_ICON}
-            height={20}
-            width={20}
-            customStyle={{
-              marginRight: scale(10),
-              top: verticalScale(isIosDevice() ? -3 : 0),
-            }}
-          />
-          <Text color="#59595B">Never share your password.</Text>
+          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              size={scale(10)}
+              customStyle={{
+                textAlign: 'center',
+                color: '#59595B',
+                fontFamily: 'Montserrat-Regular',
+              }}>
+              Never share your password.
+            </Text>
+          </View>
         </View>
       </ScreenContainer>
     </KeyboardAwareScrollView>

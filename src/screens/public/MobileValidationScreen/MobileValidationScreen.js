@@ -126,16 +126,9 @@ const MobileValidationScreen = () => {
             paddingHorizontal: scale(isIosDevice() ? 80 : 65),
             flexDirection: 'row',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <Image
-            source={MOBILE_INPUT_URI.LOCK_ICON}
-            height={20}
-            width={20}
-            customStyle={{
-              marginRight: scale(3),
-              top: verticalScale(5),
-            }}
-          />
+          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
           <View
             style={{
               flex: 1,

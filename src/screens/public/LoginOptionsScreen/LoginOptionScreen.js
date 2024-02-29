@@ -133,7 +133,8 @@ const LoginOptionScreen = () => {
           <Text
             color="#E33051"
             weight={700}
-            size={scale(12)}
+            size={scale(11)}
+            fontFamily="Montserrat-Regular"
             style={{
               flex: 1,
               textAlign: 'right',
@@ -204,6 +205,7 @@ const LoginOptionScreen = () => {
           <Text
             size={11}
             color="#59595B"
+            fontFamily="Montserrat-Regular"
             customStyle={{
               textAlign: 'center',
             }}>{`Your last sign-in was via ${lastLogin}`}</Text>
@@ -223,6 +225,7 @@ const LoginOptionScreen = () => {
             <Text
               size={12}
               color="#59595B"
+              fontFamily="Montserrat-Regular"
               customStyle={{
                 textAlign: 'center',
               }}>
@@ -236,6 +239,7 @@ const LoginOptionScreen = () => {
                 <Text
                   color="#59595B"
                   size={12}
+                  fontFamily="Montserrat-Regular"
                   customStyle={{
                     textDecorationLine: 'underline',
                     textAlign: 'center',
@@ -249,6 +253,7 @@ const LoginOptionScreen = () => {
           <Separator space={20} />
           <Text
             size={11}
+            fontFamily="Montserrat-Regular"
             customStyle={{textAlign: 'center'}}>{`BUILD ${BUILD_NUMBER}`}</Text>
         </View>
       </View>
