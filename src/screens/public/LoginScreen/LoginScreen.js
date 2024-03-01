@@ -185,7 +185,7 @@ const LoginScreen = () => {
                   textStyle={{weight: 400}}
                   style={{
                     top: verticalScale(20),
-                    height: verticalScale(30),
+                    height: verticalScale(40),
                     width: scale(150),
                   }}
                   onPress={handleSubmit}
@@ -229,7 +229,8 @@ const LoginScreen = () => {
             color="#E33051"
             size={20}
             weight={700}
-            customStyle={{textAlign: 'center'}}>
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Regular">
             LOG IN
           </Text>
           {refreshToken ? continueWithAccountButton() : inputFields()}
