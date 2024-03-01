@@ -89,19 +89,30 @@ const LoginOptionScreen = () => {
     }
   }, [params]);
 
-  const renderButton = (isSSO, link, icon, text, lastLogin) => {
+  const renderButton = (
+    isSSO,
+    link,
+    icon,
+    text,
+    lastLogin,
+    privacyPolicyChecked,
+  ) => {
     const handleClick = () => {
-      if (isSSO) {
+      //Changed conditional handling of privacy policy
+      if (!privacyPolicyChecked) {
+        setDisplayModal(true);
+      }
+      if (isSSO && privacyPolicyChecked) {
         Linking.openURL(link);
         dispatch({
           type: UPDATE_PERSISTED_STATE,
           newState: {lastLogin: lastLogin},
         });
-      } else if (refreshToken) {
+      }
+      if (refreshToken && privacyPolicyChecked && !isSSO) {
         navigation.navigate('LoginScreen');
-      } else if (!privacyPolicyChecked) {
-        setDisplayModal(true);
-      } else {
+      }
+      if (!isSSO && privacyPolicyChecked) {
         dispatch({
           type: UPDATE_PERSISTED_STATE,
           newState: {lastLogin: lastLogin},
@@ -178,6 +189,7 @@ const LoginOptionScreen = () => {
                   : LOGIN_ASSET_URI.GOOGLE_ICON,
                 `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
                 isIosDevice() ? 'Apple' : 'Google',
+                privacyPolicyChecked,
               )}
               <Separator space={5} />
             </>
@@ -190,6 +202,7 @@ const LoginOptionScreen = () => {
                 LOGIN_ASSET_URI.FACEBOOK_ICON,
                 'Continue with Facebook',
                 'Facebook',
+                privacyPolicyChecked,
               )}
             </>
           )}
@@ -200,6 +213,7 @@ const LoginOptionScreen = () => {
             LOGIN_ASSET_URI.MOBILE_ICON,
             'Continue with Mobile Number',
             'Mobile Number',
+            privacyPolicyChecked,
           )}
           <Separator space={20} />
           {lastLogin && (
