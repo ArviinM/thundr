@@ -154,108 +154,110 @@ const LoginOptionScreen = () => {
         alignContent: 'center',
         backgroundColor: '#F2CECD',
       }}>
-      <Separator space={100} />
-      <Image source={LOGIN_ASSET_URI.THUNDR_LOGO} height={210} width={350} />
-      <FeatureNotAvailableModal
-        displayModal={displayModal}
-        setDisplayModal={setDisplayModal}
-        normalBehaviorModal={true}
-        message="Gora na ba, sis?
+      <View style={{flex: 1}}>
+        <Separator space={100} />
+        <Image source={LOGIN_ASSET_URI.THUNDR_LOGO} height={210} width={350} />
+        <FeatureNotAvailableModal
+          displayModal={displayModal}
+          setDisplayModal={setDisplayModal}
+          normalBehaviorModal={true}
+          message="Gora na ba, sis?
         Read the Terms and Conditions pati ang Privacy Policy muna sa baba sis."
-      />
-      <Separator space={30} />
-      <View style={{alignItems: 'center', top: verticalScale(10)}}>
-        {isAndroidDevice() && (
-          <>
-            {renderButton(
-              true,
-              `${API_BASE_URL}auth/get-sso-url?sso=${
-                isIosDevice() ? 'SignInWithApple' : 'Google'
-              }`,
-              isIosDevice()
-                ? LOGIN_ASSET_URI.APPLE_ICON
-                : LOGIN_ASSET_URI.GOOGLE_ICON,
-              `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
-              isIosDevice() ? 'Apple' : 'Google',
-            )}
-            <Separator space={5} />
-          </>
-        )}
-        {isAndroidDevice() && (
-          <>
-            {renderButton(
-              true,
-              `${API_BASE_URL}auth/get-sso-url?sso=Facebook`,
-              LOGIN_ASSET_URI.FACEBOOK_ICON,
-              'Continue with Facebook',
-              'Facebook',
-            )}
-          </>
-        )}
-        <Separator space={20} />
-        {renderButton(
-          false,
-          '',
-          LOGIN_ASSET_URI.MOBILE_ICON,
-          'Continue with Mobile Number',
-          'Mobile Number',
-        )}
-        <Separator space={20} />
-        {lastLogin && (
-          <Text
-            size={11}
-            color="#59595B"
-            fontFamily="Montserrat-Regular"
-            customStyle={{
-              textAlign: 'center',
-            }}>{`Your last sign-in was via ${lastLogin}`}</Text>
-        )}
-        <View
-          style={{
-            paddingHorizontal: scale(50),
-            top: verticalScale(70),
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <CheckBox
-              isChecked={privacyPolicyChecked}
-              disabled={true}
-              checkBoxColor="#fff"
-              uncheckedCheckBoxColor="#fff"
-            />
+        />
+        <Separator space={30} />
+        <View style={{alignItems: 'center', top: verticalScale(10)}}>
+          {isAndroidDevice() && (
+            <>
+              {renderButton(
+                true,
+                `${API_BASE_URL}auth/get-sso-url?sso=${
+                  isIosDevice() ? 'SignInWithApple' : 'Google'
+                }`,
+                isIosDevice()
+                  ? LOGIN_ASSET_URI.APPLE_ICON
+                  : LOGIN_ASSET_URI.GOOGLE_ICON,
+                `Continue with ${isIosDevice() ? 'Apple' : 'Google'}`,
+                isIosDevice() ? 'Apple' : 'Google',
+              )}
+              <Separator space={5} />
+            </>
+          )}
+          {isAndroidDevice() && (
+            <>
+              {renderButton(
+                true,
+                `${API_BASE_URL}auth/get-sso-url?sso=Facebook`,
+                LOGIN_ASSET_URI.FACEBOOK_ICON,
+                'Continue with Facebook',
+                'Facebook',
+              )}
+            </>
+          )}
+          <Separator space={isIosDevice() ? 25 : 5} />
+          {renderButton(
+            false,
+            '',
+            LOGIN_ASSET_URI.MOBILE_ICON,
+            'Continue with Mobile Number',
+            'Mobile Number',
+          )}
+          <Separator space={20} />
+          {lastLogin && (
             <Text
-              size={12}
+              size={11}
               color="#59595B"
               fontFamily="Montserrat-Regular"
               customStyle={{
                 textAlign: 'center',
-              }}>
-              By signing up, I am 35 years of age or older and agrees to the{' '}
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('SecurityAndPrivacy', {
-                    fromLogin: true,
-                  })
-                }>
-                <Text
-                  color="#59595B"
-                  size={12}
-                  fontFamily="Montserrat-Regular"
-                  customStyle={{
-                    textDecorationLine: 'underline',
-                    textAlign: 'center',
-                  }}>
-                  Terms and Conditions and its Privacy Policy
-                </Text>
-              </TouchableOpacity>
-              {'\n'}of Thundr.
-            </Text>
-          </View>
-          <Separator space={20} />
-          <Text
-            size={11}
-            fontFamily="Montserrat-Regular"
-            customStyle={{textAlign: 'center'}}>{`BUILD ${BUILD_NUMBER}`}</Text>
+              }}>{`Your last sign-in was via ${lastLogin}`}</Text>
+          )}
         </View>
+      </View>
+      <View
+        style={{
+          padding: scale(30),
+          bottom: scale(10),
+        }}>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <CheckBox
+            isChecked={privacyPolicyChecked}
+            disabled={true}
+            checkBoxColor="#fff"
+            uncheckedCheckBoxColor="#fff"
+          />
+          <Text
+            size={scale(10)}
+            color="#59595B"
+            fontFamily="Montserrat-Regular"
+            customStyle={{
+              textAlign: 'center',
+            }}>
+            By signing up, I am 35 years of age or older and agrees to the{' '}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('SecurityAndPrivacy', {
+                  fromLogin: true,
+                })
+              }>
+              <Text
+                color="#59595B"
+                size={scale(10)}
+                fontFamily="Montserrat-Regular"
+                customStyle={{
+                  textDecorationLine: 'underline',
+                  textAlign: 'center',
+                }}>
+                Terms and Conditions and its Privacy Policy
+              </Text>
+            </TouchableOpacity>
+            {'\n'}of Thundr.
+          </Text>
+        </View>
+        <Separator space={20} />
+        <Text
+          size={11}
+          fontFamily="Montserrat-Regular"
+          customStyle={{textAlign: 'center'}}>{`BUILD ${BUILD_NUMBER}`}</Text>
       </View>
     </View>
   );

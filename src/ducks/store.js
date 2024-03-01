@@ -8,7 +8,8 @@ import {persistStore} from 'redux-persist';
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware];
 
-middlewares.push(logger);
+// Turned off logger to prevent terminal bottleneck - turn this on if needed for development
+// middlewares.push(logger);
 
 const store = createStore(persistedReducer, applyMiddleware(...middlewares));
 export const persistor = persistStore(store);

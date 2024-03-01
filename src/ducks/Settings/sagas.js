@@ -14,6 +14,8 @@ import {
   UPDATE_CUSTOMER_SURVEY_SUCCESS,
 } from './actionTypes';
 import SettingsConfig from '../../api/services/settingsService';
+import {START_LOGOUT} from '../Login/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 
 export function* getCustomerSettings() {
   const {sub} = yield select(state => state.persistedState);
@@ -100,6 +102,18 @@ export function* updateCustomerSurvey({payload}) {
         payload: response.data,
       });
       yield put({type: GET_CUSTOMER_SURVEY});
+      //Added this to properly deactivate and logout the user once updated the customer's survey
+      yield put({type: START_LOGOUT});
+      yield put({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {
+          refreshToken: null,
+          customerName: null,
+          sub: null,
+          customerPhoto: null,
+          showPossiblesPrompt: false,
+        },
+      });
     }
   } catch (error) {
     yield put({

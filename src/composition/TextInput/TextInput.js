@@ -60,10 +60,15 @@ const TextInput = props => {
               position: 'absolute',
               left: scale(35),
               zIndex: 1,
-              top: verticalScale(isIosDevice() ? 12 : 9),
+              top: verticalScale(isIosDevice() ? 10 : 9),
               flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            <Text color="#E33051" weight={700}>
+            <Text
+              color="#E33051"
+              size={scale(12)}
+              weight={700}
+              fontFamily="Montserrat-Regular">
               +63
             </Text>
             <View
