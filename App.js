@@ -1,6 +1,6 @@
 // React modules
 import React, {useEffect, useState} from 'react';
-import {LogBox, PermissionsAndroid} from 'react-native';
+import {LogBox, PermissionsAndroid, Platform} from 'react-native';
 
 // Third party libraries
 import {RootSiblingParent} from 'react-native-root-siblings';
