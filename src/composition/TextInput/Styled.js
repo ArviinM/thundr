@@ -30,6 +30,7 @@ export const StyledTextInput = styled(TextInput)`
   background: #fff;
   justify-content: center;
   padding-left: ${props => scale(props.showLeftContent ? 50 : 15)}px;
+  font-family: 'Montserrat-Regular';
 `;
 
 export const TextInputContainer = styled.View`
