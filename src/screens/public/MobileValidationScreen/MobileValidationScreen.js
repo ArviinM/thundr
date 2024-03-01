@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {View, TextInput} from 'react-native';
+import {View} from 'react-native';
 
 // Third party libraries
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -13,6 +13,7 @@ import Separator from '../../../components/Separator/Separator';
 import Image from '../../../components/Image/Image';
 import Text from '../../../components/Text/Text';
 import Spinner from '../../../components/Spinner/Spinner';
+import TextInput from '../../../composition/TextInput/TextInput';
 
 // Ducks
 import {START_SSO_MOBILE_VALIDATION} from '../../../ducks/SSOValidation/actionTypes';
@@ -58,45 +59,21 @@ const MobileValidationScreen = () => {
           {/*  customStyle={{paddingHorizontal: scale(30), textAlign: 'center'}}>*/}
           {/*  Enter your mobile number. We will send you an OTP for verification.*/}
           {/*</Text>*/}
-          <View
-            style={{
-              top: verticalScale(20),
-              flexDirection: 'row',
+          <TextInput
+            inputStyle={{
               alignItems: 'center',
               borderRadius: 30,
-              // paddingVertical: verticalScale(isIosDevice() ? 8 : 8),
-              paddingVertical: scale(8),
-              paddingHorizontal: scale(20),
               backgroundColor: '#fff',
               width: scale(230),
-
-              // height: verticalScale(isIosDevice() ? 30 : 30),
-            }}>
-            <Text color="#E33051" size={scale(12)} weight={700}>
-              +63
-            </Text>
-            <View
-              style={{
-                width: 1,
-                height: verticalScale(15),
-                backgroundColor: '#B1B3B5',
-                marginHorizontal: scale(6),
-              }}
-            />
-            <TextInput
-              style={{
-                flex: 1,
-                top: verticalScale(1),
-                color: 'black',
-                fontSize: scale(12),
-              }}
-              placeholder="XXX XXX XXXX"
-              keyboardType="numeric"
-              maxLength={10}
-              value={mobileNumber}
-              onChangeText={text => setMobileNumber(text)}
-            />
-          </View>
+              height: verticalScale(35),
+            }}
+            showLeftContent
+            placeholder="XXX XXX XXXX"
+            maxLength={10}
+            numeric
+            value={mobileNumber}
+            onChangeText={text => setMobileNumber(text)}
+          />
         </View>
         <Button
           title="Continue"
