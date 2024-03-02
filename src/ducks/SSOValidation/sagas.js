@@ -13,6 +13,7 @@ import {UPDATE_LOGIN_STATE} from '../Login/actionTypes';
 import SSOValidationConfig from '../../api/services/ssoValidationService';
 import axios from 'axios';
 import {GENERIC_ERROR} from '../../utils/commons';
+import {API_BASE_URL} from '@env';
 
 export function* startMobileValidation({payload}) {
   const {ssoValidationData} = yield select(state => state.ssoValidation);
@@ -23,7 +24,7 @@ export function* startMobileValidation({payload}) {
     const callApi = async () => {
       return await axios({
         method: 'post',
-        url: 'https://dev-api.thundr.ph/auth/sso-sms-otp',
+        url: `${API_BASE_URL}auth/sso-sms-otp`,
         data: {
           phoneNumber: phoneNumber,
           sub: ssoValidationData?.sub,
