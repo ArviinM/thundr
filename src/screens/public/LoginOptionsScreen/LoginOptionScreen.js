@@ -112,7 +112,7 @@ const LoginOptionScreen = () => {
       if (refreshToken && privacyPolicyChecked && !isSSO) {
         navigation.navigate('LoginScreen');
       }
-      if (!isSSO && refreshToken && privacyPolicyChecked) {
+      if (!isSSO && !refreshToken && privacyPolicyChecked) {
         dispatch({
           type: UPDATE_PERSISTED_STATE,
           newState: {lastLogin: lastLogin},
