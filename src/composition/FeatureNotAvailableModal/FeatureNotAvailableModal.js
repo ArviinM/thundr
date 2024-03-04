@@ -20,6 +20,8 @@ const FeatureNotAvailableModal = props => {
     setDisplayModal,
     displayModal,
     message = '',
+    content = '',
+    isWithContent = false,
   } = props;
   const navigation = useNavigation();
 
@@ -62,7 +64,7 @@ const FeatureNotAvailableModal = props => {
         <Image source={GLOBAL_ASSET_URI.CLOSE_ICON} width={25} height={25} />
       </TouchableOpacity>
       <Text
-        size={18}
+        size={scale(18)}
         color="#fff"
         fontFamily="Montserrat-Bold"
         weight={700}
@@ -70,6 +72,16 @@ const FeatureNotAvailableModal = props => {
         {message ||
           'Oops! Wait lang, mars. This feature will be available soon.'}
       </Text>
+      {isWithContent && (
+        <Text
+          size={scale(14)}
+          color="#fff"
+          fontFamily="Montserrat-Regular"
+          weight={400}
+          customStyle={{textAlign: 'center', marginTop: 10}}>
+          {content}
+        </Text>
+      )}
     </Overlay>
   );
 };
