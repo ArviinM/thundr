@@ -43,9 +43,26 @@ const SecurityAndPrivacy = () => {
   return (
     <ScrollView
       scrollEventThrottle={16}
-      style={{top: verticalScale(20), marginBottom: verticalScale(25)}}>
+      style={{top: verticalScale(10), marginBottom: verticalScale(25)}}>
       {!route?.params?.fromLogin && <SettingsHeader />}
       <View style={{alignItems: 'center', paddingHorizontal: scale(20)}}>
+        <Text
+          fontFamily="Montserrat-Bold"
+          weight={800}
+          size={20}
+          color="#E33051"
+          customStyle={{textAlign: 'center'}}>
+          Read mo muna, sis!
+        </Text>
+        <Text
+          fontFamily="Montserrat-Regular"
+          weight={400}
+          size={12}
+          color="#E33051"
+          customStyle={{textAlign: 'center', marginBottom: 20}}>
+          Scroll down and click the agree button, which you may find at the
+          bottom of the page
+        </Text>
         <Image source={SETTINGS_URI.PRIVACY_POLICY} height={100} width={100} />
         <Separator space={10} />
         <Text
