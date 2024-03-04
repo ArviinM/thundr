@@ -263,12 +263,17 @@ const LoginOptionScreen = () => {
             )}
           </TouchableOpacity>
           <View style={{paddingHorizontal: 10}}>
-            <Text
-              size={scale(9)}
-              color="#59595B"
-              fontFamily="Montserrat-Regular"
-              customStyle={{textAlign: 'center'}}>
-              By signing up, I am 35 years of age or older and agree to Thundr's{' '}
+            <View>
+              <Text
+                size={scale(9)}
+                color="#59595B"
+                fontFamily="Montserrat-Regular"
+                customStyle={{textAlign: 'center'}}>
+                By signing up, I am 35 years of age or older and agree to
+                Thundr's{' '}
+              </Text>
+            </View>
+            <View>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('SecurityAndPrivacy', {fromLogin: true})
@@ -285,7 +290,7 @@ const LoginOptionScreen = () => {
                   Terms and Conditions and Privacy Policy
                 </Text>
               </TouchableOpacity>
-            </Text>
+            </View>
           </View>
         </View>
         <Separator space={20} />
