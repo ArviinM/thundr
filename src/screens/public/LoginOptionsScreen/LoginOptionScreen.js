@@ -25,7 +25,7 @@ import {UPDATE_SSO_VALIDATION_STATE} from '../../../ducks/SSOValidation/actionTy
 
 // Utils
 import {API_BASE_URL, BUILD_NUMBER} from '@env';
-import {LOGIN_ASSET_URI} from '../../../utils/images';
+import {GLOBAL_ASSET_URI, LOGIN_ASSET_URI} from '../../../utils/images';
 import {
   isAndroidDevice,
   isIosDevice,
@@ -88,6 +88,14 @@ const LoginOptionScreen = () => {
       }
     }
   }, [params]);
+
+  const navigateToSecurityandPolicy = () => {
+    if (!privacyPolicyChecked) {
+      navigation.navigate('SecurityAndPrivacy', {
+        fromLogin: true,
+      });
+    }
+  };
 
   const renderButton = (
     isSSO,
@@ -172,8 +180,9 @@ const LoginOptionScreen = () => {
           displayModal={displayModal}
           setDisplayModal={setDisplayModal}
           normalBehaviorModal={true}
-          message="Gora na ba, sis?
-        Read the Terms and Conditions pati ang Privacy Policy muna sa baba sis."
+          message="Gora na ba, sis?"
+          isWithContent
+          content="Click the Terms and Conditions pati ang Privacy muna sa baba sis."
         />
         <Separator space={30} />
         <View style={{alignItems: 'center', top: verticalScale(10)}}>
@@ -229,43 +238,55 @@ const LoginOptionScreen = () => {
       </View>
       <View
         style={{
-          padding: scale(30),
+          padding: scale(50),
           bottom: scale(10),
         }}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <CheckBox
-            isChecked={privacyPolicyChecked}
-            disabled={true}
-            checkBoxColor="#fff"
-            uncheckedCheckBoxColor="#fff"
-          />
-          <Text
-            size={scale(10)}
-            color="#59595B"
-            fontFamily="Montserrat-Regular"
-            customStyle={{
-              textAlign: 'center',
-            }}>
-            By signing up, I am 35 years of age or older and agrees to the{' '}
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('SecurityAndPrivacy', {
-                  fromLogin: true,
-                })
-              }>
-              <Text
-                color="#59595B"
-                size={scale(10)}
-                fontFamily="Montserrat-Regular"
-                customStyle={{
-                  textDecorationLine: 'underline',
-                  textAlign: 'center',
-                }}>
-                Terms and Conditions and its Privacy Policy
-              </Text>
-            </TouchableOpacity>
-            {'\n'}of Thundr.
-          </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity onPress={() => navigateToSecurityandPolicy()}>
+            {privacyPolicyChecked ? (
+              <Image
+                source={GLOBAL_ASSET_URI.CHECKED_SELECTION_BOX}
+                height={35}
+                width={35}
+              />
+            ) : (
+              <Image
+                source={GLOBAL_ASSET_URI.SELECTION_BOX}
+                height={35}
+                width={35}
+              />
+            )}
+          </TouchableOpacity>
+          <View style={{paddingHorizontal: 10}}>
+            <Text
+              size={scale(9)}
+              color="#59595B"
+              fontFamily="Montserrat-Regular"
+              customStyle={{textAlign: 'center'}}>
+              By signing up, I am 35 years of age or older and agree to Thundr's{' '}
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('SecurityAndPrivacy', {fromLogin: true})
+                }>
+                <Text
+                  color="#59595B"
+                  size={scale(10)}
+                  fontFamily="Montserrat-Bold"
+                  weight={700}
+                  customStyle={{
+                    textDecorationLine: 'underline',
+                    textAlign: 'center',
+                  }}>
+                  Terms and Conditions and Privacy Policy
+                </Text>
+              </TouchableOpacity>
+            </Text>
+          </View>
         </View>
         <Separator space={20} />
         <Text
