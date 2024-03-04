@@ -47,8 +47,8 @@ const SecurityAndPrivacy = () => {
       {!route?.params?.fromLogin && <SettingsHeader />}
       <View style={{alignItems: 'center', paddingHorizontal: scale(20)}}>
         <Text
-          fontFamily="Montserrat-Bold"
-          weight={800}
+          fontFamily="Montserrat-Black"
+          weight={700}
           size={20}
           color="#E33051"
           customStyle={{textAlign: 'center'}}>
