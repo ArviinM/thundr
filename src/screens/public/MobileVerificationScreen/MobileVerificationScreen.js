@@ -16,8 +16,14 @@ import OTPScreen from '../../../composition/OTPScreen/OTPScreen';
 import Spinner from '../../../components/Spinner/Spinner';
 
 // Ducks
-import {START_MOBILE_VERIFICATION} from '../../../ducks/MobileEmail/actionTypes';
-import {START_SSO_MOBILE_VERIFICATION} from '../../../ducks/SSOValidation/actionTypes';
+import {
+  START_MOBILE_VALIDATION,
+  START_MOBILE_VERIFICATION,
+} from '../../../ducks/MobileEmail/actionTypes';
+import {
+  START_SSO_MOBILE_VALIDATION,
+  START_SSO_MOBILE_VERIFICATION,
+} from '../../../ducks/SSOValidation/actionTypes';
 
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
@@ -25,14 +31,15 @@ import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const MobileVerificationScreen = () => {
   const dispatch = useDispatch();
-  const {loading} = useSelector(state => state.mobileEmail);
+  const {loading, mobileEmailData} = useSelector(state => state.mobileEmail);
   const {loginViaSSO, loading: ssoLoading} = useSelector(
     state => state.ssoValidation,
   );
   const [otp, setOtp] = useState('');
 
   const [resendDisabled, setResendDisabled] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  const [resendCount, setResendCount] = useState(0);
+  const [countdown, setCountdown] = useState(45); // Initial countdown set to 45 seconds
 
   const handleResendOTP = () => {
     setResendDisabled(true);
@@ -43,9 +50,36 @@ const MobileVerificationScreen = () => {
 
     setTimeout(() => {
       clearInterval(newTimer);
-      setCountdown(10);
+      if (resendCount === 0) {
+        setCountdown(90); // Change countdown to 90 seconds for the second resend
+      } else if (resendCount === 1) {
+        setCountdown(180); // Change countdown to 180 seconds for the third resend
+      } else {
+        setResendDisabled(true); // Disable resend after the third resend
+      }
+      setResendCount(prevCount => prevCount + 1);
       setResendDisabled(false);
-    }, 10000);
+    }, countdown * 1000);
+
+    if (resendCount !== 0) {
+      // Only dispatch if a resend is requested
+      console.log('Resending OTP...');
+      if (!loginViaSSO) {
+        dispatch({
+          type: START_MOBILE_VALIDATION,
+          payload: {
+            mobileNumber: mobileEmailData.data.username,
+          },
+        });
+      } else {
+        dispatch({
+          type: START_SSO_MOBILE_VALIDATION,
+          payload: {
+            mobileNumber: mobileEmailData.data.username,
+          },
+        });
+      }
+    }
   };
 
   useEffect(() => {

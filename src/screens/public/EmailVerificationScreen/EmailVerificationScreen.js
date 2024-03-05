@@ -16,7 +16,10 @@ import OTPScreen from '../../../composition/OTPScreen/OTPScreen';
 import Spinner from '../../../components/Spinner/Spinner';
 
 // Ducks
-import {START_EMAIL_VERIFICATION} from '../../../ducks/MobileEmail/actionTypes';
+import {
+  START_EMAIL_VALIDATION,
+  START_EMAIL_VERIFICATION,
+} from '../../../ducks/MobileEmail/actionTypes';
 
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
@@ -24,11 +27,12 @@ import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 
 const EmailVerificationScreen = () => {
   const dispatch = useDispatch();
-  const {loading} = useSelector(state => state.mobileEmail);
+  const {loading, mobileEmailData} = useSelector(state => state.mobileEmail);
   const [otp, setOtp] = useState('');
 
   const [resendDisabled, setResendDisabled] = useState(false);
-  const [countdown, setCountdown] = useState(10);
+  const [resendCount, setResendCount] = useState(0);
+  const [countdown, setCountdown] = useState(45); // Initial countdown set to 45 seconds
 
   const handleResendOTP = () => {
     setResendDisabled(true);
@@ -39,9 +43,27 @@ const EmailVerificationScreen = () => {
 
     setTimeout(() => {
       clearInterval(newTimer);
-      setCountdown(10);
+      if (resendCount === 0) {
+        setCountdown(90); // Change countdown to 90 seconds for the second resend
+      } else if (resendCount === 1) {
+        setCountdown(180); // Change countdown to 180 seconds for the third resend
+      } else {
+        setResendDisabled(true); // Disable resend after the third resend
+      }
+      setResendCount(prevCount => prevCount + 1);
       setResendDisabled(false);
-    }, 10000);
+    }, countdown * 1000);
+
+    if (resendCount !== 0) {
+      // Only dispatch if a resend is requested
+      console.log('Resending Email Verification Code...');
+      dispatch({
+        type: START_EMAIL_VALIDATION,
+        payload: {
+          email: mobileEmailData.email,
+        },
+      });
+    }
   };
 
   useEffect(() => {
