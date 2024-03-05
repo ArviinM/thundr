@@ -22,7 +22,9 @@ import {GENERIC_ERROR} from '../../utils/commons';
 
 export function* startMobileValidation({payload}) {
   const {mobileNumber} = payload;
-  const phoneNumber = `+63${mobileNumber}`;
+  const phoneNumber = mobileNumber.startsWith('+63')
+    ? mobileNumber
+    : `+63${mobileNumber}`;
 
   try {
     const response = yield call(MobileEmailConfig.mobileValidation, {
@@ -100,7 +102,10 @@ export function* startEmailValidation({payload}) {
     if (response?.status === 200) {
       yield put({
         type: START_EMAIL_VALIDATION_SUCCESS,
-        payload: response.data,
+        payload: {
+          ...response.data,
+          email, // Adding email to the payload},
+        },
       });
       yield put({
         type: UPDATE_MOBILE_EMAIL_STATE,
@@ -165,7 +170,8 @@ export function* startEmailVerification({payload}) {
     if (isCodeSentMismatch) {
       errorMessage = 'Code Sent Mismatch';
     } else if (isInvalidPassword) {
-      errorMessage = `Password does not meet criteria.\n\n\nPlease create a new one.`;
+      errorMessage =
+        'Password does not meet criteria.\n\n\nPlease create a new one.';
     } else {
       errorMessage = GENERIC_ERROR;
     }

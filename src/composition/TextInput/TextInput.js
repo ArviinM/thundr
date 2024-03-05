@@ -119,7 +119,10 @@ const TextInput = props => {
         )}
       </TextInputContainer>
       {errors && touched && (
-        <Text customStyle={{left: scale(30)}} color="#EC543C">
+        <Text
+          customStyle={{left: scale(30)}}
+          color="#EC543C"
+          fontFamily="Montserrat-Regular">
           {errors}
         </Text>
       )}
