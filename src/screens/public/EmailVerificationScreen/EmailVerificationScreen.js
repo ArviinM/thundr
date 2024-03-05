@@ -1,6 +1,6 @@
 // React modules
-import React, {useState} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -26,88 +26,117 @@ const EmailVerificationScreen = () => {
   const dispatch = useDispatch();
   const {loading} = useSelector(state => state.mobileEmail);
   const [otp, setOtp] = useState('');
+
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(10);
+
+  const handleResendOTP = () => {
+    setResendDisabled(true);
+
+    const newTimer = setInterval(() => {
+      setCountdown(prevCountdown => prevCountdown - 1);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(newTimer);
+      setCountdown(10);
+      setResendDisabled(false);
+    }, 10000);
+  };
+
+  useEffect(() => {
+    handleResendOTP(); // Start countdown on initial render
+  }, []);
+
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{flexGrow: 1}}
+      contentContainerStyle={styles.scrollView}
       enableOnAndroid
       bounces={false}
       keyboardShouldPersistTaps="always">
-      <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      <ScreenContainer customStyle={styles.screenContainer}>
         {loading && <Spinner visible={true} />}
-        <View style={{top: verticalScale(80), alignItems: 'center'}}>
-          <Image
-            source={MOBILE_INPUT_URI.EMAIL_OTP_ICON}
-            width={100}
-            height={100}
-            customStyle={{left: scale(15)}}
-          />
-          <Separator space={20} />
-          <Text
-            color="#E33051"
-            weight={700}
-            fontFamily="Montserrat-Regular"
-            size={scale(13)}>
-            Verification
-          </Text>
-          <Text
-            color="#59595B"
-            customStyle={{textAlign: 'center'}}
-            fontFamily="Montserrat-Regular"
-            size={scale(12)}>
-            You are almost done!
-          </Text>
-          <Text
-            color="#59595B"
-            customStyle={{textAlign: 'center', paddingHorizontal: scale(70)}}
-            fontFamily="Montserrat-Regular"
-            size={scale(12)}>
-            Enter the verification code sent to your email.
-          </Text>
+        <View style={styles.content}>
+          <View style={styles.topContainer}>
+            <Image
+              source={MOBILE_INPUT_URI.EMAIL_OTP_ICON}
+              width={100}
+              height={100}
+              customStyle={{left: scale(15)}}
+            />
+            <Separator space={20} />
+            <Text
+              color="#E33051"
+              weight={700}
+              fontFamily="Montserrat-Regular"
+              size={scale(13)}>
+              Verification
+            </Text>
+            <Text
+              color="#59595B"
+              customStyle={styles.textContent}
+              fontFamily="Montserrat-Regular"
+              size={scale(12)}>
+              You are almost done!
+            </Text>
+            <Text
+              color="#59595B"
+              customStyle={styles.textContent}
+              fontFamily="Montserrat-Regular"
+              size={scale(12)}>
+              Enter the verification code sent to your email.
+            </Text>
+          </View>
+          <View style={styles.otpContainer}>
+            <OTPScreen
+              otp={otp}
+              setOtp={setOtp}
+              keyboardType="default"
+              restrictToNumbers={false}
+            />
+          </View>
+          <View>
+            <Button
+              disabled={otp.length !== 6}
+              title="Continue"
+              primary
+              style={styles.button}
+              onPress={() =>
+                dispatch({type: START_EMAIL_VERIFICATION, payload: {otp}})
+              }
+            />
+          </View>
+          <View style={styles.resendContainer}>
+            <TouchableOpacity
+              disabled={resendDisabled}
+              style={styles.container}
+              onPress={handleResendOTP}>
+              <Text
+                fontFamily="Montserrat-Regular"
+                weight={400}
+                size={scale(10)}
+                color="#59595B">
+                Didn't receive a code?{' '}
+              </Text>
+              <Text
+                fontFamily="Montserrat-Bold"
+                weight={700}
+                size={scale(10)}
+                customStyle={styles.text}
+                color={resendDisabled ? '#59595B' : '#E33051'}>
+                {resendDisabled ? `RESEND OTP ${countdown}s` : 'RESEND OTP'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={{top: verticalScale(110)}}>
-          <OTPScreen
-            otp={otp}
-            setOtp={setOtp}
-            keyboardType="default"
-            restrictToNumbers={false}
-          />
-        </View>
-        <Button
-          disabled={otp.length !== 6}
-          title="Continue"
-          primary
-          textStyle={{weight: 400}}
-          style={{
-            top: verticalScale(170),
-            height: verticalScale(40),
-            width: scale(150),
-          }}
-          onPress={() =>
-            dispatch({type: START_EMAIL_VERIFICATION, payload: {otp}})
-          }
-        />
-        <View
-          style={{
-            top: verticalScale(260),
-            paddingHorizontal: scale(isIosDevice() ? 100 : 80),
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.footerContainer}>
           <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.footerViewContainer}>
             <Text
               size={scale(10)}
-              customStyle={{
-                textAlign: 'center',
-                color: '#59595B',
-                fontFamily: 'Montserrat-Regular',
-              }}>
+              fontFamily="Montserrat-Regular"
+              color="#59595B"
+              customStyle={styles.textCenter}>
               Don’t share your verification code with anyone.
             </Text>
           </View>
@@ -116,5 +145,47 @@ const EmailVerificationScreen = () => {
     </KeyboardAwareScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  resendContainer: {
+    top: verticalScale(170),
+    width: scale(200),
+  },
+  container: {
+    flexDirection: 'row',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    textDecorationLine: 'underline',
+  },
+  scrollView: {flexGrow: 1},
+  screenContainer: {justifyContent: 'flex-start'},
+  content: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  topContainer: {top: verticalScale(80), alignItems: 'center'},
+  footerContainer: {
+    bottom: verticalScale(50),
+    paddingHorizontal: scale(isIosDevice() ? 100 : 80),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textCenter: {textAlign: 'center'},
+  textContent: {textAlign: 'center', paddingHorizontal: scale(30)},
+  button: {
+    top: verticalScale(150),
+    height: verticalScale(40),
+    width: scale(150),
+  },
+  otpContainer: {top: verticalScale(110)},
+});
 
 export default EmailVerificationScreen;
