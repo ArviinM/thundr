@@ -17,13 +17,10 @@ import Spinner from '../../../components/Spinner/Spinner';
 
 // Ducks
 import {
-  START_MOBILE_VALIDATION,
   START_MOBILE_VERIFICATION,
+  START_RESEND_SMS_OTP,
 } from '../../../ducks/MobileEmail/actionTypes';
-import {
-  START_SSO_MOBILE_VALIDATION,
-  START_SSO_MOBILE_VERIFICATION,
-} from '../../../ducks/SSOValidation/actionTypes';
+import {START_SSO_MOBILE_VERIFICATION} from '../../../ducks/SSOValidation/actionTypes';
 
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
@@ -48,37 +45,35 @@ const MobileVerificationScreen = () => {
       setCountdown(prevCountdown => prevCountdown - 1);
     }, 1000);
 
-    setTimeout(() => {
-      clearInterval(newTimer);
-      if (resendCount === 0) {
-        setCountdown(90); // Change countdown to 90 seconds for the second resend
-      } else if (resendCount === 1) {
-        setCountdown(180); // Change countdown to 180 seconds for the third resend
-      } else {
-        setResendDisabled(true); // Disable resend after the third resend
-      }
-      setResendCount(prevCount => prevCount + 1);
-      setResendDisabled(false);
-    }, countdown * 1000);
+    if (resendCount < 3) {
+      setTimeout(() => {
+        clearInterval(newTimer);
+        if (resendCount === 0) {
+          setCountdown(90); // Change countdown to 90 seconds for the second resend
+        } else if (resendCount === 1) {
+          setCountdown(180); // Change countdown to 180 seconds for the third resend
+        } else {
+          setCountdown(0);
+          setResendDisabled(true); // Disable resend after the third resend
+        }
+        setResendCount(prevCount => prevCount + 1);
+        setResendDisabled(false); // Enable resend button after countdown finishes
+      }, countdown * 1000);
+    } else {
+      setResendDisabled(true);
+    }
 
     if (resendCount !== 0) {
       // Only dispatch if a resend is requested
-      console.log('Resending OTP...');
-      if (!loginViaSSO) {
-        dispatch({
-          type: START_MOBILE_VALIDATION,
-          payload: {
-            mobileNumber: mobileEmailData.data.username,
-          },
-        });
-      } else {
-        dispatch({
-          type: START_SSO_MOBILE_VALIDATION,
-          payload: {
-            mobileNumber: mobileEmailData.data.username,
-          },
-        });
-      }
+      console.info('Resending SMS OTP...');
+
+      dispatch({
+        type: START_RESEND_SMS_OTP,
+        payload: {
+          phoneNumber: mobileEmailData.data.username,
+          session: mobileEmailData.data.session,
+        },
+      });
     }
   };
 
@@ -89,7 +84,6 @@ const MobileVerificationScreen = () => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.viewContainer}
-      enableOnAndroid
       bounces={false}
       keyboardShouldPersistTaps="always">
       <ScreenContainer customStyle={styles.screenContainer}>
@@ -163,7 +157,9 @@ const MobileVerificationScreen = () => {
                 size={scale(10)}
                 customStyle={styles.text}
                 color={resendDisabled ? '#59595B' : '#E33051'}>
-                {resendDisabled ? `RESEND OTP ${countdown}s` : 'RESEND OTP'}
+                {resendDisabled
+                  ? `RESEND OTP ${countdown > 0 ? countdown + 's' : 'DISABLED'}`
+                  : 'RESEND OTP'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -188,7 +184,6 @@ const MobileVerificationScreen = () => {
 const styles = StyleSheet.create({
   resendContainer: {
     top: verticalScale(170),
-    width: scale(200),
     textAlign: 'center',
   },
   textOTPContainer: {

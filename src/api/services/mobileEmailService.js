@@ -9,6 +9,8 @@ const MobileEmailConfig = {
   emailValidation: payload => api.post(MOBILE_EMAIL.EMAIL_VALIDATION, payload),
   emailVerification: payload =>
     api.post(MOBILE_EMAIL.EMAIL_VERIFICATION, payload),
+  smsResendOTP: payload => api.post(MOBILE_EMAIL.SMS_RESEND_OTP, payload),
+  emailResendOTP: payload => api.post(MOBILE_EMAIL.EMAIL_RESEND_OTP, payload),
 };
 
 export default MobileEmailConfig;
