@@ -187,13 +187,12 @@ export function* startEmailVerification({payload}) {
 }
 
 export function* startResendSMSOTP({payload}) {
-  const {phoneNumber, session, email} = payload;
+  const {phoneNumber, session} = payload;
 
   try {
-    const response = yield call(MobileEmailConfig.emailResendOTP, {
+    const response = yield call(MobileEmailConfig.smsResendOTP, {
       phoneNumber,
       session,
-      email,
     });
 
     if (response?.status === 200) {
@@ -215,7 +214,7 @@ export function* startResendEmailOTP({payload}) {
   const {phoneNumber, session, email} = payload;
 
   try {
-    const response = yield call(MobileEmailConfig.smsResendOTP, {
+    const response = yield call(MobileEmailConfig.emailResendOTP(), {
       phoneNumber,
       session,
       email,
