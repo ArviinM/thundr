@@ -12,21 +12,28 @@ import {useDispatch, useSelector} from 'react-redux';
 import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavigation';
 import Modal from '../composition/Modal/Modal';
 import {GENERIC_ERROR} from '../utils/commons';
-import {START_LOGOUT} from '../ducks/Login/actionTypes';
 
 const RootNavigation = () => {
   const dispatch = useDispatch();
-  const {authenticated, showModal, modalMessage, loginData} = useSelector(
-    state => state.login,
-  );
-  const {showModal: showEmailModal, modalMessage: mobileEmailMessage} =
-    useSelector(state => state.mobileEmail);
-  const {showModal: showSSOModal, modalMessage: ssoValidationMessage} =
-    useSelector(state => state.ssoValidation);
-  const {
-    showModal: showProfileCreationModal,
-    modalMessage: profileCreationModalMessage,
-  } = useSelector(state => state.profileCreation);
+  const loginState = useSelector(state => state.login);
+  const authenticated = loginState ? loginState.authenticated : false;
+  const showModal = loginState ? loginState.showModal : false;
+  const modalMessage = loginState ? loginState.modalMessage : '';
+  const loginData = loginState ? loginState.loginData : null;
+
+  const mobileEmailState = useSelector(state => state.mobileEmail) || {};
+  const showEmailModal = mobileEmailState.showModal || false;
+  const mobileEmailMessage = mobileEmailState.modalMessage || '';
+
+  const ssoValidationState = useSelector(state => state.ssoValidation) || {};
+  const showSSOModal = ssoValidationState.showModal || false;
+  const ssoValidationMessage = ssoValidationState.modalMessage || '';
+
+  const profileCreationState =
+    useSelector(state => state.profileCreation) || {};
+  const showProfileCreationModal = profileCreationState.showModal || false;
+  const profileCreationModalMessage = profileCreationState.modalMessage || '';
+
   const [hideSplash, setHideSplash] = useState(false);
 
   const config = {

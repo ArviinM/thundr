@@ -189,18 +189,6 @@ const SettingsModal = props => {
     } else {
       dispatch({type: UPDATE_CUSTOMER_SURVEY, payload: apiPayload});
       setDisplayModal(false);
-      //After deactivation - this will go to login screen
-      dispatch({type: START_LOGOUT});
-      dispatch({
-        type: UPDATE_PERSISTED_STATE,
-        newState: {
-          refreshToken: null,
-          customerName: null,
-          sub: null,
-          customerPhoto: null,
-          showPossiblesPrompt: false,
-        },
-      });
     }
   };
 

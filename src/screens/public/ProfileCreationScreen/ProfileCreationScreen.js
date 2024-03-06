@@ -378,7 +378,7 @@ const PrimaryDetails = props => {
               size={14}
               color="#808080"
               customStyle={{marginLeft: scale(5), top: verticalScale(-1)}}>
-              (Required)
+              (Required Choose 1 Below)
             </Text>
           )}
         </LabelContainer>

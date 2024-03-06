@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {View, TextInput} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 // Third party libraries
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -13,6 +13,7 @@ import Separator from '../../../components/Separator/Separator';
 import Image from '../../../components/Image/Image';
 import Text from '../../../components/Text/Text';
 import Spinner from '../../../components/Spinner/Spinner';
+import TextInput from '../../../composition/TextInput/TextInput';
 
 // Ducks
 import {START_SSO_MOBILE_VALIDATION} from '../../../ducks/SSOValidation/actionTypes';
@@ -31,117 +32,70 @@ const MobileValidationScreen = () => {
   const [mobileNumber, setMobileNumber] = useState('');
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{flexGrow: 1}}
-      enableOnAndroid
+      contentContainerStyle={styles.scrollView}
       bounces={false}
       keyboardShouldPersistTaps="always">
-      <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      <ScreenContainer customStyle={styles.screenContainer}>
         {(loading || ssoLoading) && <Spinner visible={true} />}
-        <View style={{top: verticalScale(120), alignItems: 'center'}}>
-          <Image
-            source={MOBILE_INPUT_URI.MOBILE_ICON}
-            width={80}
-            height={100}
-          />
-          <Separator space={20} />
-          <Text
-            color="#E33051"
-            weight={700}
-            size={scale(13)}
-            fontFamily="Montserrat-Regular">
-            Enter your Mobile Number
-          </Text>
-          {/*<Text*/}
-          {/*  color="#59595B"*/}
-          {/*  size={scale(12)}*/}
-          {/*  fontFamily="Montserrat-Regular"*/}
-          {/*  customStyle={{paddingHorizontal: scale(30), textAlign: 'center'}}>*/}
-          {/*  Enter your mobile number. We will send you an OTP for verification.*/}
-          {/*</Text>*/}
-          <View
-            style={{
-              top: verticalScale(20),
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderRadius: 30,
-              // paddingVertical: verticalScale(isIosDevice() ? 8 : 8),
-              paddingVertical: scale(8),
-              paddingHorizontal: scale(20),
-              backgroundColor: '#fff',
-              width: scale(230),
-
-              // height: verticalScale(isIosDevice() ? 30 : 30),
-            }}>
-            <Text color="#E33051" size={scale(12)} weight={700}>
-              +63
-            </Text>
-            <View
-              style={{
-                width: 1,
-                height: verticalScale(15),
-                backgroundColor: '#B1B3B5',
-                marginHorizontal: scale(6),
-              }}
+        <View style={styles.content}>
+          <View style={styles.viewContainer}>
+            <Image
+              source={MOBILE_INPUT_URI.MOBILE_ICON}
+              width={80}
+              height={100}
             />
+            <Separator space={20} />
+            <Text
+              color="#E33051"
+              weight={700}
+              size={scale(13)}
+              fontFamily="Montserrat-Regular">
+              Enter your Mobile Number
+            </Text>
+            {/*<Text*/}
+            {/*  color="#59595B"*/}
+            {/*  size={scale(12)}*/}
+            {/*  fontFamily="Montserrat-Regular"*/}
+            {/*  customStyle={{paddingHorizontal: scale(30), textAlign: 'center'}}>*/}
+            {/*  Enter your mobile number. We will send you an OTP for verification.*/}
+            {/*</Text>*/}
             <TextInput
-              style={{
-                flex: 1,
-                top: verticalScale(1),
-                color: 'black',
-                fontSize: scale(12),
-              }}
+              inputStyle={styles.textInput}
+              showLeftContent
               placeholder="XXX XXX XXXX"
-              keyboardType="numeric"
               maxLength={10}
+              numeric
               value={mobileNumber}
               onChangeText={text => setMobileNumber(text)}
             />
           </View>
+          <Button
+            title="Continue"
+            disabled={mobileNumber.length !== 10}
+            primary
+            textStyle={{weight: 400}}
+            style={styles.button}
+            onPress={() => {
+              !loginViaSSO
+                ? dispatch({
+                    type: START_MOBILE_VALIDATION,
+                    payload: {mobileNumber},
+                  })
+                : dispatch({
+                    type: START_SSO_MOBILE_VALIDATION,
+                    payload: {mobileNumber},
+                  });
+            }}
+          />
         </View>
-        <Button
-          title="Continue"
-          disabled={mobileNumber.length !== 10}
-          primary
-          textStyle={{weight: 400}}
-          style={{
-            top: verticalScale(170),
-            height: verticalScale(40),
-            width: scale(150),
-          }}
-          onPress={() => {
-            !loginViaSSO
-              ? dispatch({
-                  type: START_MOBILE_VALIDATION,
-                  payload: {mobileNumber},
-                })
-              : dispatch({
-                  type: START_SSO_MOBILE_VALIDATION,
-                  payload: {mobileNumber},
-                });
-          }}
-        />
-        <View
-          style={{
-            top: verticalScale(270),
-            paddingHorizontal: scale(isIosDevice() ? 80 : 65),
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.footerContainer}>
           <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.footerViewContainer}>
             <Text
-              size={scale(9)}
-              customStyle={{
-                textAlign: 'center',
-                color: '#59595B',
-                fontFamily: 'Montserrat-Regular',
-              }}>
+              size={scale(10)}
+              fontFamily="Montserrat-Regular"
+              color="#59595B"
+              customStyle={styles.textCenter}>
               We never share this with anyone and it won’t appear on your
               profile.
             </Text>
@@ -151,5 +105,40 @@ const MobileValidationScreen = () => {
     </KeyboardAwareScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {flexGrow: 1},
+  screenContainer: {justifyContent: 'flex-start'},
+  content: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  footerContainer: {
+    bottom: verticalScale(50),
+    paddingHorizontal: scale(isIosDevice() ? 80 : 65),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textCenter: {textAlign: 'center'},
+  textInput: {
+    alignItems: 'center',
+    borderRadius: 30,
+    backgroundColor: '#fff',
+    width: scale(230),
+    height: verticalScale(35),
+  },
+  button: {
+    top: verticalScale(150),
+    height: verticalScale(40),
+    width: scale(150),
+  },
+  viewContainer: {top: verticalScale(120), alignItems: 'center'},
+});
 
 export default MobileValidationScreen;
