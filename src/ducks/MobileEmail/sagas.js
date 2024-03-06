@@ -13,6 +13,12 @@ import {
   START_MOBILE_VERIFICATION_FAILED,
   START_MOBILE_VERIFICATION_SUCCESS,
   START_PASSWORD_VALIDATION,
+  START_RESEND_EMAIL_OTP,
+  START_RESEND_EMAIL_OTP_FAILED,
+  START_RESEND_EMAIL_OTP_SUCCESS,
+  START_RESEND_SMS_OTP,
+  START_RESEND_SMS_OTP_FAILED,
+  START_RESEND_SMS_OTP_SUCCESS,
   UPDATE_MOBILE_EMAIL_STATE,
 } from './actionTypes';
 import MobileEmailConfig from '../../api/services/mobileEmailService';
@@ -22,9 +28,7 @@ import {GENERIC_ERROR} from '../../utils/commons';
 
 export function* startMobileValidation({payload}) {
   const {mobileNumber} = payload;
-  const phoneNumber = mobileNumber.startsWith('+63')
-    ? mobileNumber
-    : `+63${mobileNumber}`;
+  const phoneNumber = `+63${mobileNumber}`;
 
   try {
     const response = yield call(MobileEmailConfig.mobileValidation, {
@@ -162,8 +166,7 @@ export function* startEmailVerification({payload}) {
       error?.response?.data?.message === 'Code Sent Mismatch';
     const isInvalidPassword =
       error?.response?.data?.message ===
-        'Password does not conform to policy: Password must satisfy regular expression pattern: ^\\S.*\\S$' ||
-      'Password does not conform to policy: Password not long enough';
+      'Password does not conform to policy: Password must satisfy regular expression pattern: ^\\S.*\\S$';
 
     let errorMessage = '';
 
@@ -183,12 +186,63 @@ export function* startEmailVerification({payload}) {
   }
 }
 
+export function* startResendSMSOTP({payload}) {
+  const {phoneNumber, session} = payload;
+
+  try {
+    const response = yield call(MobileEmailConfig.smsResendOTP, {
+      phoneNumber,
+      session,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: START_RESEND_SMS_OTP_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    const errorMessage = error?.response?.data?.message || GENERIC_ERROR;
+    yield put({
+      type: START_RESEND_SMS_OTP_FAILED,
+      payload: errorMessage,
+    });
+  }
+}
+
+export function* startResendEmailOTP({payload}) {
+  const {phoneNumber, session, email} = payload;
+
+  try {
+    const response = yield call(MobileEmailConfig.emailResendOTP(), {
+      phoneNumber,
+      session,
+      email,
+    });
+
+    if (response?.status === 200) {
+      yield put({
+        type: START_RESEND_EMAIL_OTP_SUCCESS,
+        payload: response.data,
+      });
+    }
+  } catch (error) {
+    const errorMessage = error?.response?.data?.message || GENERIC_ERROR;
+    yield put({
+      type: START_RESEND_EMAIL_OTP_FAILED,
+      payload: errorMessage,
+    });
+  }
+}
+
 function* mobileEmailWatcher() {
   yield takeLatest(START_MOBILE_VALIDATION, startMobileValidation);
   yield takeLatest(START_MOBILE_VERIFICATION, startMobileVerification);
   yield takeLatest(START_EMAIL_VALIDATION, startEmailValidation);
   yield takeLatest(START_EMAIL_VERIFICATION, startEmailVerification);
   yield takeLatest(START_PASSWORD_VALIDATION, startEmailVerification);
+  yield takeLatest(START_RESEND_SMS_OTP, startResendSMSOTP);
+  yield takeLatest(START_RESEND_EMAIL_OTP, startResendEmailOTP);
 }
 
 export default mobileEmailWatcher;

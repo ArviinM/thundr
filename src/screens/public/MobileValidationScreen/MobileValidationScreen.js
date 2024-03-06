@@ -33,7 +33,6 @@ const MobileValidationScreen = () => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.scrollView}
-      enableOnAndroid
       bounces={false}
       keyboardShouldPersistTaps="always">
       <ScreenContainer customStyle={styles.screenContainer}>
