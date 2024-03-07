@@ -1,22 +1,38 @@
 // React modules
 import React, {useEffect, useState} from 'react';
-import {LogBox, PermissionsAndroid, Platform} from 'react-native';
+import {Alert, LogBox, PermissionsAndroid, Platform} from 'react-native';
 
 // Third party libraries
 import {RootSiblingParent} from 'react-native-root-siblings';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
+import {PERMISSIONS, request} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 
 // Utils
 import RootNavigation from './src/navigations';
 import store, {persistor} from './src/ducks/store';
+import messaging from '@react-native-firebase/messaging';
 
 LogBox.ignoreAllLogs();
 
 const App = () => {
   const [location, setLocation] = useState(null);
+
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    // Added log for testing purposes
+    console.log('Message handled in the background!', remoteMessage);
+  });
+
+  useEffect(() => {
+    return messaging().onMessage(async remoteMessage => {
+      // TODO: Change UI for Alerting User - Like In App Notifications
+      Alert.alert(
+        remoteMessage.notification.title,
+        remoteMessage.notification.body,
+      );
+    });
+  }, []);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
