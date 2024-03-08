@@ -87,18 +87,18 @@ const MobileValidationScreen = () => {
                   });
             }}
           />
-        </View>
-        <View style={styles.footerContainer}>
-          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
-          <View style={styles.footerViewContainer}>
-            <Text
-              size={scale(10)}
-              fontFamily="Montserrat-Regular"
-              color="#59595B"
-              customStyle={styles.textCenter}>
-              We never share this with anyone and it won’t appear on your
-              profile.
-            </Text>
+          <View style={styles.footerContainer}>
+            <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+            <View style={styles.footerViewContainer}>
+              <Text
+                size={scale(10)}
+                fontFamily="Montserrat-Regular"
+                color="#59595B"
+                customStyle={styles.textCenter}>
+                We never share this with anyone and it won’t appear on your
+                profile.
+              </Text>
+            </View>
           </View>
         </View>
       </ScreenContainer>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerContainer: {
-    bottom: verticalScale(50),
+    top: verticalScale(270),
     paddingHorizontal: scale(isIosDevice() ? 80 : 65),
     flexDirection: 'row',
     justifyContent: 'center',

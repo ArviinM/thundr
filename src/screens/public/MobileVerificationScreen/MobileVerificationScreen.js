@@ -20,7 +20,10 @@ import {
   START_MOBILE_VERIFICATION,
   START_RESEND_SMS_OTP,
 } from '../../../ducks/MobileEmail/actionTypes';
-import {START_SSO_MOBILE_VERIFICATION} from '../../../ducks/SSOValidation/actionTypes';
+import {
+  START_SSO_MOBILE_RESEND_OTP,
+  START_SSO_MOBILE_VERIFICATION,
+} from '../../../ducks/SSOValidation/actionTypes';
 
 // Utils
 import {MOBILE_INPUT_URI} from '../../../utils/images';
@@ -36,7 +39,7 @@ const MobileVerificationScreen = () => {
 
   const [resendDisabled, setResendDisabled] = useState(false);
   const [resendCount, setResendCount] = useState(0);
-  const [countdown, setCountdown] = useState(45); // Initial countdown set to 45 seconds
+  const [countdown, setCountdown] = useState(45);
 
   const handleResendOTP = () => {
     setResendDisabled(true);
@@ -49,15 +52,15 @@ const MobileVerificationScreen = () => {
       setTimeout(() => {
         clearInterval(newTimer);
         if (resendCount === 0) {
-          setCountdown(90); // Change countdown to 90 seconds for the second resend
+          setCountdown(90);
         } else if (resendCount === 1) {
-          setCountdown(180); // Change countdown to 180 seconds for the third resend
+          setCountdown(180);
         } else {
           setCountdown(0);
-          setResendDisabled(true); // Disable resend after the third resend
+          setResendDisabled(true);
         }
         setResendCount(prevCount => prevCount + 1);
-        setResendDisabled(false); // Enable resend button after countdown finishes
+        setResendDisabled(false);
       }, countdown * 1000);
     } else {
       setResendDisabled(true);
@@ -66,19 +69,24 @@ const MobileVerificationScreen = () => {
     if (resendCount !== 0) {
       // Only dispatch if a resend is requested
       console.info('Resending SMS OTP...');
-
-      dispatch({
-        type: START_RESEND_SMS_OTP,
-        payload: {
-          phoneNumber: mobileEmailData.data.username,
-          session: mobileEmailData.data.session,
-        },
-      });
+      if (!loginViaSSO) {
+        dispatch({
+          type: START_RESEND_SMS_OTP,
+          payload: {
+            phoneNumber: mobileEmailData.data.username,
+            session: mobileEmailData.data.session,
+          },
+        });
+      } else {
+        dispatch({
+          type: START_SSO_MOBILE_RESEND_OTP,
+        });
+      }
     }
   };
 
   useEffect(() => {
-    handleResendOTP(); // Start countdown on initial render
+    handleResendOTP();
   }, []);
 
   return (
@@ -163,17 +171,17 @@ const MobileVerificationScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
-        <View style={styles.footerContainer}>
-          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
-          <View style={styles.lockContainer}>
-            <Text
-              size={scale(10)}
-              fontFamily="Montserrat-Regular"
-              color="#59595B"
-              customStyle={styles.textCenter}>
-              Don't share your OTP with anyone
-            </Text>
+          <View style={styles.footerContainer}>
+            <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+            <View style={styles.lockContainer}>
+              <Text
+                size={scale(10)}
+                fontFamily="Montserrat-Regular"
+                color="#59595B"
+                customStyle={styles.textCenter}>
+                Don't share your OTP with anyone
+              </Text>
+            </View>
           </View>
         </View>
       </ScreenContainer>
@@ -194,7 +202,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   footerContainer: {
-    bottom: scale(50),
+    top: verticalScale(270),
     paddingHorizontal: scale(isIosDevice() ? 80 : 65),
     flexDirection: 'row',
     justifyContent: 'center',

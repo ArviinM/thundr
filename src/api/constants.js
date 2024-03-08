@@ -19,6 +19,7 @@ export const MOBILE_EMAIL = {
 export const SSO_VALIDATION = {
   SSO_MOBILE_VALIDATION: 'auth/sso-sms-otp',
   SSO_MOBILE_VERIFICATION: 'auth/sso-validate-sms-otp',
+  SSO_MOBILE_RESEND_OTP: 'auth/sso-resend-sms-otp',
 };
 
 // Profile creation services
