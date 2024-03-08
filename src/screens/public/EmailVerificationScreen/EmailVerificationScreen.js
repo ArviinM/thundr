@@ -156,17 +156,17 @@ const EmailVerificationScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
-        <View style={styles.footerContainer}>
-          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
-          <View style={styles.footerViewContainer}>
-            <Text
-              size={scale(10)}
-              fontFamily="Montserrat-Regular"
-              color="#59595B"
-              customStyle={styles.textCenter}>
-              Don’t share your verification code with anyone.
-            </Text>
+          <View style={styles.footerContainer}>
+            <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+            <View style={styles.footerViewContainer}>
+              <Text
+                size={scale(10)}
+                fontFamily="Montserrat-Regular"
+                color="#59595B"
+                customStyle={styles.textCenter}>
+                Don’t share your verification code with anyone.
+              </Text>
+            </View>
           </View>
         </View>
       </ScreenContainer>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {top: verticalScale(80), alignItems: 'center'},
   footerContainer: {
-    bottom: verticalScale(50),
+    top: verticalScale(240),
     paddingHorizontal: scale(isIosDevice() ? 100 : 80),
     flexDirection: 'row',
     justifyContent: 'center',
