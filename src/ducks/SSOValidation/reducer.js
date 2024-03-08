@@ -1,5 +1,8 @@
 import {GENERIC_ERROR} from '../../utils/commons';
 import {
+  START_SSO_MOBILE_RESEND_OTP,
+  START_SSO_MOBILE_RESEND_OTP_FAILED,
+  START_SSO_MOBILE_RESEND_OTP_SUCCESS,
   START_SSO_MOBILE_VALIDATION,
   START_SSO_MOBILE_VALIDATION_FAILED,
   START_SSO_MOBILE_VALIDATION_SUCCESS,
@@ -16,6 +19,7 @@ export const INITIAL_STATE = {
   modalMessage: '',
   sub: '',
   loginViaSSO: false,
+  accessToken: '',
 };
 
 const ssoValidation = (state = INITIAL_STATE, action) => {
@@ -30,6 +34,7 @@ const ssoValidation = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         ...action.payload,
+        sub: action.payload.sub,
         loading: true,
       };
     case START_SSO_MOBILE_VALIDATION_SUCCESS:
@@ -60,6 +65,26 @@ const ssoValidation = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case START_SSO_MOBILE_VERIFICATION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: action.payload,
+      };
+    // MOBILE RESEND OTP
+    case START_SSO_MOBILE_RESEND_OTP:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case START_SSO_MOBILE_RESEND_OTP_SUCCESS:
+      return {
+        ...state,
+        ssoValidationData: action.payload,
+        loading: false,
+      };
+    case START_SSO_MOBILE_RESEND_OTP_FAILED:
       return {
         ...state,
         loading: false,
