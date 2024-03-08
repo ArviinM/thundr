@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Icon-App-20x20@2x 1.png",
+      "filename" : "Icon-App-40x40@1x 1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
@@ -109,7 +109,7 @@
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "ItunesArtwork@2x.png",
+      "filename" : "iTunesArtwork@2x.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
