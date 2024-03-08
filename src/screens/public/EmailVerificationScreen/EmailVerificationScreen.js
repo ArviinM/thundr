@@ -41,26 +41,33 @@ const EmailVerificationScreen = () => {
       setCountdown(prevCountdown => prevCountdown - 1);
     }, 1000);
 
-    setTimeout(() => {
-      clearInterval(newTimer);
-      if (resendCount === 0) {
-        setCountdown(90); // Change countdown to 90 seconds for the second resend
-      } else if (resendCount === 1) {
-        setCountdown(180); // Change countdown to 180 seconds for the third resend
-      } else {
-        setResendDisabled(true); // Disable resend after the third resend
-      }
-      setResendCount(prevCount => prevCount + 1);
-      setResendDisabled(false);
-    }, countdown * 1000);
+    if (resendCount < 3) {
+      setTimeout(() => {
+        clearInterval(newTimer);
+        if (resendCount === 0) {
+          setCountdown(90); // Change countdown to 90 seconds for the second resend
+        } else if (resendCount === 1) {
+          setCountdown(180); // Change countdown to 180 seconds for the third resend
+        } else {
+          setCountdown(0);
+          setResendDisabled(true); // Disable resend after the third resend
+        }
+        setResendCount(prevCount => prevCount + 1);
+        setResendDisabled(false); // Enable resend button after countdown finishes
+      }, countdown * 1000);
+    } else {
+      setResendDisabled(true);
+    }
 
     if (resendCount !== 0) {
       // Only dispatch if a resend is requested
-      console.log('Resending Email Verification Code...');
+      console.log('Resending Email OTP...');
       dispatch({
         type: START_EMAIL_VALIDATION,
         payload: {
           email: mobileEmailData.email,
+          phoneNumber: mobileEmailData.data.username,
+          session: mobileEmailData.data.session,
         },
       });
     }
@@ -73,7 +80,6 @@ const EmailVerificationScreen = () => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.scrollView}
-      enableOnAndroid
       bounces={false}
       keyboardShouldPersistTaps="always">
       <ScreenContainer customStyle={styles.screenContainer}>
@@ -171,7 +177,7 @@ const EmailVerificationScreen = () => {
 const styles = StyleSheet.create({
   resendContainer: {
     top: verticalScale(170),
-    width: scale(200),
+    textAlign: 'center',
   },
   container: {
     flexDirection: 'row',

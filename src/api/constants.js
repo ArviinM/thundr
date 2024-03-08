@@ -11,6 +11,8 @@ export const MOBILE_EMAIL = {
   MOBILE_VERIFICATION: 'auth/validate-challenge-question',
   EMAIL_VALIDATION: 'auth/email-code',
   EMAIL_VERIFICATION: 'auth/validate-challenge-question',
+  SMS_RESEND_OTP: 'auth/cognito-resend-sms-otp',
+  EMAIL_RESEND_OTP: 'auth/cognito-resend-email-otp',
 };
 
 // SSO Registration services

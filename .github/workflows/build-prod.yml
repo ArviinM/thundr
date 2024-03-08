@@ -101,7 +101,7 @@
          - run: cp app-release.aab "thundr-prod-${{ github.run_number }}.aab"
          - run: cp "thundr-prod-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
          - run: cp "thundr-prod-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
-     Android-Publish-Dev-PlayStore:
+     Android-Publish-Prod-PlayStore:
        runs-on: macOS
        needs: Android-AAB-Upload
        defaults:

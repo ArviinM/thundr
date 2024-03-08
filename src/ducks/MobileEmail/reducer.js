@@ -14,7 +14,14 @@ import {
   START_MOBILE_VERIFICATION_SUCCESS,
   START_PASSWORD_VALIDATION,
   START_PASSWORD_VALIDATION_FAILED,
+  START_PASSWORD_VALIDATION_SUCCESS,
+  START_RESEND_SMS_OTP,
+  START_RESEND_SMS_OTP_SUCCESS,
+  START_RESEND_SMS_OTP_FAILED,
   UPDATE_MOBILE_EMAIL_STATE,
+  START_RESEND_EMAIL_OTP,
+  START_RESEND_EMAIL_OTP_SUCCESS,
+  START_RESEND_EMAIL_OTP_FAILED,
 } from './actionTypes';
 
 export const INITIAL_STATE = {
@@ -44,7 +51,6 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         mobileEmailData: action.payload,
-
         loading: false,
       };
     case START_MOBILE_VALIDATION_FAILED:
@@ -122,13 +128,53 @@ const mobileEmail = (state = INITIAL_STATE, action) => {
         ...action.payload,
         loading: true,
       };
-    case START_PASSWORD_VALIDATION_FAILED:
+    case START_PASSWORD_VALIDATION_SUCCESS:
       return {
         ...state,
         mobileEmailData: action.payload,
         loading: false,
       };
     case START_PASSWORD_VALIDATION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
+      };
+    // RESEND SMS OTP
+    case START_RESEND_SMS_OTP:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case START_RESEND_SMS_OTP_SUCCESS:
+      return {
+        ...state,
+        mobileEmailData: action.payload,
+        loading: false,
+      };
+    case START_RESEND_SMS_OTP_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: GENERIC_ERROR,
+      };
+    // RESEND EMAIL OTP
+    case START_RESEND_EMAIL_OTP:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case START_RESEND_EMAIL_OTP_SUCCESS:
+      return {
+        ...state,
+        mobileEmailData: action.payload,
+        loading: false,
+      };
+    case START_RESEND_EMAIL_OTP_FAILED:
       return {
         ...state,
         loading: false,
