@@ -321,7 +321,8 @@ const Dashboard = () => {
             size={20}
             weight="700"
             color="#E33051"
-            customStyle={{textAlign: 'center'}}>
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Regular">
             {'No available matches \nPlease try again'}
           </Text>
         </View>

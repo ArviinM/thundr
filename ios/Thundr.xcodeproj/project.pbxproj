@@ -11,7 +11,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		160AF0D72B998EEA0087C7A6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 160AF0D62B998EEA0087C7A6 /* GoogleService-Info.plist */; };
+		1A5B406E2B9EBAFC00E02C08 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A5B406D2B9EBAFC00E02C08 /* GoogleService-Info.plist */; };
+		1A5B40702B9EE4C800E02C08 /* thundr.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1A5B406F2B9EE4C800E02C08 /* thundr.wav */; };
 		258D10A3E0AA4FF888F9CE06 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F87E5CA2B3D440D8A32BE24 /* Montserrat-ThinItalic.ttf */; };
 		26601BFB00814B05B6AF5281 /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83E6E6F081224FF884E4C39B /* Montserrat-BlackItalic.ttf */; };
 		34168500617B4915A5C6CB69 /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0CB27B5ED6B4C2486D79F0C /* Montserrat-SemiBoldItalic.ttf */; };
@@ -58,8 +59,9 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Thundr/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Thundr/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Thundr/main.m; sourceTree = "<group>"; };
-		160AF0D62B998EEA0087C7A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Thundr/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		165392A42B988DC100998C17 /* Thundr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Thundr.entitlements; path = Thundr/Thundr.entitlements; sourceTree = "<group>"; };
+		1A5B406D2B9EBAFC00E02C08 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1A5B406F2B9EE4C800E02C08 /* thundr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = thundr.wav; path = Thundr/media/thundr.wav; sourceTree = "<group>"; };
 		1F87E5CA2B3D440D8A32BE24 /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ThinItalic.ttf"; path = "../assets/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
 		26F4FFAAA704EC917D2CEAB4 /* Pods-Thundr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Thundr.debug.xcconfig"; path = "Target Support Files/Pods-Thundr/Pods-Thundr.debug.xcconfig"; sourceTree = "<group>"; };
 		2A08D1D84CDE4442B362C666 /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLightItalic.ttf"; path = "../assets/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
@@ -153,7 +155,8 @@
 		13B07FAE1A68108700A75B9A /* Thundr */ = {
 			isa = PBXGroup;
 			children = (
-				160AF0D62B998EEA0087C7A6 /* GoogleService-Info.plist */,
+				1A5B406F2B9EE4C800E02C08 /* thundr.wav */,
+				1A5B406D2B9EBAFC00E02C08 /* GoogleService-Info.plist */,
 				165392A42B988DC100998C17 /* Thundr.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -317,6 +320,7 @@
 				A3341DD452B04BA192F8595A /* Montserrat-Black.ttf in Resources */,
 				26601BFB00814B05B6AF5281 /* Montserrat-BlackItalic.ttf in Resources */,
 				CD0D3BD438B14A0C904925C8 /* Montserrat-Bold.ttf in Resources */,
+				1A5B40702B9EE4C800E02C08 /* thundr.wav in Resources */,
 				FB6F406AA3DE477E9F98A237 /* Montserrat-BoldItalic.ttf in Resources */,
 				8ADC19C9BA91405E931FA4B6 /* Montserrat-ExtraBold.ttf in Resources */,
 				E70932B42D5B45C3B88CF727 /* Montserrat-ExtraBoldItalic.ttf in Resources */,
@@ -330,7 +334,7 @@
 				FECA46C4CFD24A79AFAF4A82 /* Montserrat-Regular.ttf in Resources */,
 				486350BC9F154BCB9BA97101 /* Montserrat-SemiBold.ttf in Resources */,
 				34168500617B4915A5C6CB69 /* Montserrat-SemiBoldItalic.ttf in Resources */,
-				160AF0D72B998EEA0087C7A6 /* GoogleService-Info.plist in Resources */,
+				1A5B406E2B9EBAFC00E02C08 /* GoogleService-Info.plist in Resources */,
 				5FEFAE84E088483DACD54D8D /* Montserrat-Thin.ttf in Resources */,
 				258D10A3E0AA4FF888F9CE06 /* Montserrat-ThinItalic.ttf in Resources */,
 			);

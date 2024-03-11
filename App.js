@@ -8,31 +8,34 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
+import notifee, {EventType} from '@notifee/react-native';
 
 // Utils
 import RootNavigation from './src/navigations';
 import store, {persistor} from './src/ducks/store';
 import messaging from '@react-native-firebase/messaging';
+import {onMessageReceived} from './src/utils/notifications';
 
 LogBox.ignoreAllLogs();
 
 const App = () => {
-  const [location, setLocation] = useState(null);
-
-  messaging().setBackgroundMessageHandler(async remoteMessage => {
-    // Added log for testing purposes
-    console.log('Message handled in the background!', remoteMessage);
-  });
-
   useEffect(() => {
-    return messaging().onMessage(async remoteMessage => {
-      // TODO: Change UI for Alerting User - Like In App Notifications
-      Alert.alert(
-        remoteMessage.notification.title,
-        remoteMessage.notification.body,
-      );
-    });
+    return messaging().onMessage(onMessageReceived);
   }, []);
+
+  // TODO Will be used for deep linking in the app.
+  // useEffect(() => {
+  //   return notifee.onForegroundEvent(({type, detail}) => {
+  //     switch (type) {
+  //       case EventType.DISMISSED:
+  //         console.log('User dismissed notification', detail.notification);
+  //         break;
+  //       case EventType.PRESS:
+  //         console.log('User pressed notification', detail.notification);
+  //         break;
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -64,7 +67,6 @@ const App = () => {
       Geolocation.getCurrentPosition(
         position => {
           const {latitude, longitude} = position.coords;
-          setLocation({latitude, longitude});
           console.log('Current location:', latitude, longitude);
         },
         error => {
