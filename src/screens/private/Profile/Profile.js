@@ -1,6 +1,6 @@
 // React modules
 import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View, ImageBackground} from 'react-native';
 
 // Third party libraries
 import LinearGradient from 'react-native-linear-gradient';
@@ -30,6 +30,7 @@ const Profile = props => {
   } = props;
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
   const customerPhotoUrl = customerProfile?.customerPhoto;
+  const firstName = customerProfile?.name.split(' ')[0];
 
   const renderBackButton = () => {
     return (
@@ -37,8 +38,8 @@ const Profile = props => {
         style={{
           flexDirection: 'row',
           position: 'absolute',
-          right: scale(310),
-          top: verticalScale(isIosDevice() ? 5 : 10),
+          left: 200,
+          top: verticalScale(isIosDevice() ? 8 : 10),
         }}>
         <TouchableOpacity onPress={() => setUserInformationShown(false)}>
           <Image
@@ -54,13 +55,17 @@ const Profile = props => {
   if (isUserInformationShown) {
     return (
       <LinearGradient
-        colors={['#f2653c', '#fa7d35', '#fe9630', '#ffae2f', '#ffc634']}
-        start={{x: 0.5, y: 1}}
-        end={{x: 0.5, y: 0}}
+        colors={['#E72454', '#fa7d35', '#f5bd44']}
+        start={{x: 0.1, y: 1}}
+        end={{x: 0, y: 0.1}}
         style={{
-          height: verticalScale(isIosDevice() ? 420 : 450),
-          borderBottomLeftRadius: 120,
-          borderBottomRightRadius: 120,
+          height: verticalScale(420),
+          width: 730,
+          borderBottomLeftRadius: 730,
+          borderBottomRightRadius: 730,
+          overflow: 'hidden',
+          left: '50%',
+          marginLeft: -365,
         }}>
         <View
           style={{
@@ -72,26 +77,26 @@ const Profile = props => {
               fontFamily="Montserrat-Bold"
               size={25}
               color="#fff"
-              weight="700"
+              weight={700}
               numberOfLines={2}
               ellipsizeMode="tail"
               customStyle={{textAlign: 'center', width: scale(250)}}>
-              {customerProfile?.name},{' '}
+              {firstName},{' '}
               <Text
                 size={25}
-                weight={isIosDevice() ? 500 : 400}
+                weight={500}
                 color="#fff"
                 customStyle={{textAlign: 'center'}}
-                fontFamily="Montserrat-Medium">
+                fontFamily="Montserrat-Bold">
                 {calculateAge(customerProfile?.birthday)}
               </Text>
             </Text>
             <Text
-              size={15}
-              weight={isIosDevice() ? 500 : 400}
+              size={10}
+              weight={700}
               color="#fff"
               customStyle={{textAlign: 'center'}}
-              fontFamily="Montserrat-Medium">
+              fontFamily="Montserrat-Bold">
               {`Compatibility Score: ${compatibilityScore}`}
             </Text>
           </View>
@@ -119,16 +124,29 @@ const Profile = props => {
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => setUserInformationShown(true)}>
-      <Image
+      <ImageBackground // Use ImageBackground for the background image
         source={{uri: customerProfile?.customerPhoto?.[0]?.photoUrl}}
-        height={isIosDevice() ? 320 : 340}
-        width={isIosDevice() ? 360 : 355}
-        resizeMode="cover"
-        customStyle={{
-          borderBottomLeftRadius: 120,
-          borderBottomRightRadius: 120,
+        style={{
+          // flex: 1,
+          height: verticalScale(350),
+          width: 730,
+          borderBottomLeftRadius: 730,
+          borderBottomRightRadius: 730,
+          overflow: 'hidden',
+          left: '50%',
+          marginLeft: -365,
         }}
-      />
+        blurRadius={5} // Apply blur effect to the background image
+      >
+        <Image // Main image remains the same
+          source={{uri: customerProfile?.customerPhoto?.[0]?.photoUrl}}
+          height={verticalScale(400)}
+          resizeMode="contain"
+          customStyle={{
+            width: 730,
+          }}
+        />
+      </ImageBackground>
     </TouchableOpacity>
   );
 };

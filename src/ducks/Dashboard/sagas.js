@@ -120,9 +120,9 @@ export function* getCustomerProfile({payload}) {
         type: GET_CUSTOMER_PROFILE_SUCCESS,
         payload: response.data.data,
       });
-      /* getCustomerProfile is also used in match list. 
-      We need to add !fromSwipe to prevent overriding 
-      of data in persisted state which is used 
+      /* getCustomerProfile is also used in match list.
+      We need to add !fromSwipe to prevent overriding
+      of data in persisted state which is used
       as users profile upon login */
       if (!fromSwipe) {
         yield put({

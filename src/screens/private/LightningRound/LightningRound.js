@@ -1,5 +1,5 @@
 // React modules
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
@@ -20,7 +20,7 @@ import FeatureNotAvailableModal from '../../../composition/FeatureNotAvailableMo
 
 const LightningRound = () => {
   const navigation = useNavigation();
-  const displayModal = true;
+  const [displayModal, setDisplayModal] = useState(true);
 
   return (
     <LinearGradient
@@ -28,7 +28,13 @@ const LightningRound = () => {
       start={{x: 0.5, y: 1}}
       end={{x: 0.5, y: 0}}
       style={{flex: 1}}>
-      {displayModal && <FeatureNotAvailableModal />}
+      {displayModal && (
+        <FeatureNotAvailableModal
+          normalBehaviorModal={true}
+          displayModal={displayModal}
+          setDisplayModal={setDisplayModal}
+        />
+      )}
       <TouchableOpacity
         style={{left: scale(20), top: verticalScale(20)}}
         onPress={() => navigation.navigate('DashboardTab')}>

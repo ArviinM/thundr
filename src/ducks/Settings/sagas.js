@@ -16,6 +16,10 @@ import {
 import SettingsConfig from '../../api/services/settingsService';
 import {START_LOGOUT} from '../Login/actionTypes';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
+import {
+  START_REGISTER_DEVICE_TOKEN,
+  START_UNREGISTER_DEVICE_TOKEN,
+} from '../Notification/actionTypes';
 
 export function* getCustomerSettings() {
   const {sub} = yield select(state => state.persistedState);
@@ -44,10 +48,19 @@ export function* getCustomerSettings() {
 
 export function* updateCustomerSettings({payload}) {
   const {inAppNotificationOn, emailNotificationOn} = payload;
-  const {sub} = yield select(state => state.persistedState);
+  const {sub, fcmToken} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
 
   try {
+    if (inAppNotificationOn) {
+      yield put({
+        type: START_REGISTER_DEVICE_TOKEN,
+        payload: {subId: sub, fcmToken},
+      });
+    } else {
+      yield put({type: START_UNREGISTER_DEVICE_TOKEN, payload: {subId: sub}});
+    }
+
     const response = yield call(SettingsConfig.updateCustomerSettings, {
       sub: loginData?.sub || sub,
       inAppNotificationOn,

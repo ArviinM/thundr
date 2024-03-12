@@ -36,12 +36,11 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const {loading, loginData} = useSelector(state => state.login);
   const {phoneNumber} = useSelector(state => state.mobileEmail);
-  const {refreshToken, customerPhoto, customerName} = useSelector(
+  const {refreshToken, customerPhoto, customerName, sub} = useSelector(
     state => state.persistedState,
   );
   const [isPasswordVisible, setPasswordVisible] = useState(true);
   const [displayDeactivateModal, setDisplayDeactivateModal] = useState(true);
-
   useEffect(() => {
     const getCurrentLocation = () => {
       Geolocation.getCurrentPosition(
@@ -88,37 +87,45 @@ const LoginScreen = () => {
         onPress={() =>
           dispatch({
             type: START_LOGIN_VIA_REFRESH_TOKEN,
-            payload: {refreshToken: refreshToken},
+            payload: {refreshToken, sub},
           })
         }
-        style={{alignSelf: 'center', marginTop: verticalScale(30)}}>
+        style={{marginTop: verticalScale(30)}}>
         <View
           style={{
             backgroundColor: '#fff',
-            height: verticalScale(30),
+            height: 30,
             width: scale(230),
             justifyContent: 'center',
             borderRadius: 20,
-            flexDirection: 'row',
+            alignSelf: 'center',
           }}>
-          <Image
-            source={{uri: customerPhoto}}
-            height={30}
-            width={25}
-            customStyle={{marginRight: scale(6)}}
-          />
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            color="#E33051"
-            weight={700}
-            customStyle={{
-              textAlign: 'center',
-              top: verticalScale(isIosDevice() ? 8 : 4),
-              maxWidth: scale(150),
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
-            {`Continue as ${customerName}`}
-          </Text>
+            <Image
+              source={{uri: customerPhoto}}
+              height={30}
+              width={30}
+              resizeMode="cover"
+              customStyle={{marginRight: scale(6)}}
+            />
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              color="#E33051"
+              weight={700}
+              customStyle={{
+                textAlign: 'center',
+                maxWidth: scale(150),
+                marginTop: 0,
+              }}>
+              {`Continue as ${customerName}`}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     );

@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavigation';
 import Modal from '../composition/Modal/Modal';
 import {GENERIC_ERROR} from '../utils/commons';
+import {START_LOGIN_VIA_REFRESH_TOKEN} from '../ducks/Login/actionTypes';
 
 const RootNavigation = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,10 @@ const RootNavigation = () => {
     useSelector(state => state.profileCreation) || {};
   const showProfileCreationModal = profileCreationState.showModal || false;
   const profileCreationModalMessage = profileCreationState.modalMessage || '';
+
+  const persistedState = useSelector(state => state.persistedState);
+  const refreshToken = persistedState ? persistedState.refreshToken : '';
+  const sub = persistedState ? persistedState.sub : '';
 
   const [hideSplash, setHideSplash] = useState(false);
 
@@ -61,6 +66,15 @@ const RootNavigation = () => {
     if (loginData?.loginDeactivated) {
     }
   }, [loginData, dispatch]);
+
+  useEffect(() => {
+    if (refreshToken) {
+      dispatch({
+        type: START_LOGIN_VIA_REFRESH_TOKEN,
+        payload: {refreshToken, sub},
+      });
+    }
+  }, [refreshToken, sub]);
 
   return (
     <NavigationContainer
