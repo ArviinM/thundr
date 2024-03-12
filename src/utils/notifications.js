@@ -1,7 +1,14 @@
-import messaging from '@react-native-firebase/messaging';
+// React Modules
 import {Platform} from 'react-native';
 import {PERMISSIONS, request} from 'react-native-permissions';
+
+// Third Party Libraries
 import notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+
+// Utils
+import store from '../ducks/store';
+import {UPDATE_PERSISTED_STATE} from '../ducks/PersistedState/actionTypes';
 
 export async function checkApplicationNotificationPermission() {
   let authStatus = await messaging().hasPermission();
@@ -24,7 +31,7 @@ export async function checkApplicationNotificationPermission() {
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
+  let fcmToken = '';
   if (enabled) {
     console.log('Authorization status:', authStatus);
 
@@ -32,8 +39,13 @@ export async function checkApplicationNotificationPermission() {
       await registerDeviceForRemoteMessages();
     }
 
-    const fcmToken = await messaging().getToken();
+    fcmToken = await messaging().getToken();
     console.log('FCM Token:', fcmToken);
+
+    store.dispatch({
+      type: UPDATE_PERSISTED_STATE,
+      newState: {fcmToken: fcmToken},
+    });
   }
 }
 
@@ -47,10 +59,11 @@ async function unregisterDeviceForRemoteMessages() {
   console.log('Device unregistered for remote messages.');
 }
 
-export async function onMessageReceived(message) {
-  await notifee.requestPermission();
+async function onDisplayNotification(message) {
+  if (Platform.OS === 'ios') {
+    await notifee.requestPermission();
+  }
 
-  // Create a channel (required for Android)
   const channelId = await notifee.createChannel({
     id: 'default',
     name: 'Default Channel',
@@ -60,8 +73,8 @@ export async function onMessageReceived(message) {
   console.log(JSON.stringify(message, 0, 2));
 
   await notifee.displayNotification({
-    title: 'Notification Title',
-    body: 'Main body content of the notification',
+    title: message.notification.title,
+    body: message.notification.body,
     android: {
       channelId,
       pressAction: {
@@ -75,5 +88,33 @@ export async function onMessageReceived(message) {
       },
       sound: 'thundr.wav',
     },
+  });
+}
+
+export async function onMessageReceived(message) {
+  await onDisplayNotification(message);
+
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    console.log('Notification Opened App', JSON.stringify(remoteMessage, 0, 2));
+
+    // if (
+    //   !!remoteMessage?.data &&
+    //   remoteMessage?.data?.redirect_to == 'ProductDetail'
+    // ) {
+    //   setTimeout(() => {
+    //     NavigationService.navigate('ProductDetail', {
+    //       data: remoteMessage?.data,
+    //     });
+    //   }, 1200);
+    // }
+    //
+    // if (
+    //   !!remoteMessage?.data &&
+    //   remoteMessage?.data?.redirect_to == 'Profile'
+    // ) {
+    //   setTimeout(() => {
+    //     NavigationService.navigate('Profile', {data: remoteMessage?.data});
+    //   }, 1200);
+    // }
   });
 }

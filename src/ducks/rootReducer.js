@@ -9,7 +9,8 @@ import subscription from './Subscription/reducer';
 import filters from './Filters/reducer';
 import settings from './Settings/reducer';
 import userProfile from './UserProfile/reducer';
-import {START_LOGOUT, START_LOGOUT_FAILED} from './Login/actionTypes';
+import registerNotification from './Notification/reducer';
+import {START_LOGOUT} from './Login/actionTypes';
 
 const appReducer = combineReducers({
   persistedState,
@@ -22,6 +23,7 @@ const appReducer = combineReducers({
   filters,
   settings,
   userProfile,
+  registerNotification,
 });
 
 const rootReducer = (state, action) => {
