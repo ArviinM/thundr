@@ -143,7 +143,7 @@ const Profile = props => {
           height={verticalScale(400)}
           resizeMode="contain"
           customStyle={{
-            width: 730,
+            width: 'auto',
           }}
         />
       </ImageBackground>

@@ -6,6 +6,7 @@ import {
   START_UNREGISTER_DEVICE_TOKEN,
   UNREGISTER_DEVICE_TOKEN_SUCCESS,
   UNREGISTER_DEVICE_TOKEN_FAILED,
+  UPDATE_NOTIFICATION_STATE,
 } from './actionTypes';
 
 export const INITIAL_STATE = {
@@ -13,14 +14,21 @@ export const INITIAL_STATE = {
   fcmToken: '',
   loading: false,
   showModal: false,
+  notificationData: {},
 };
 
-const registerNotification = (state = INITIAL_STATE, action) => {
+const notification = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case START_REGISTER_DEVICE_TOKEN:
+    case UPDATE_NOTIFICATION_STATE:
       return {
         ...state,
         ...action.newState,
+      };
+    case START_REGISTER_DEVICE_TOKEN:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
       };
     case REGISTER_DEVICE_TOKEN_SUCCESS:
       return {
@@ -38,7 +46,8 @@ const registerNotification = (state = INITIAL_STATE, action) => {
     case START_UNREGISTER_DEVICE_TOKEN:
       return {
         ...state,
-        ...action.newState,
+        ...action.payload,
+        loading: true,
       };
     case UNREGISTER_DEVICE_TOKEN_SUCCESS:
       return {
@@ -58,4 +67,4 @@ const registerNotification = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default registerNotification;
+export default notification;

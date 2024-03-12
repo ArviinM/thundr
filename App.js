@@ -23,20 +23,6 @@ const App = () => {
     return messaging().onMessage(onMessageReceived);
   }, []);
 
-  // TODO Will be used for deep linking in the app.
-  // useEffect(() => {
-  //   return notifee.onForegroundEvent(({type, detail}) => {
-  //     switch (type) {
-  //       case EventType.DISMISSED:
-  //         console.log('User dismissed notification', detail.notification);
-  //         break;
-  //       case EventType.PRESS:
-  //         console.log('User pressed notification', detail.notification);
-  //         break;
-  //     }
-  //   });
-  // }, []);
-
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {

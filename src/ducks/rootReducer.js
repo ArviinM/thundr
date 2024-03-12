@@ -9,7 +9,7 @@ import subscription from './Subscription/reducer';
 import filters from './Filters/reducer';
 import settings from './Settings/reducer';
 import userProfile from './UserProfile/reducer';
-import registerNotification from './Notification/reducer';
+import notification from './Notification/reducer';
 import {START_LOGOUT} from './Login/actionTypes';
 
 const appReducer = combineReducers({
@@ -23,7 +23,7 @@ const appReducer = combineReducers({
   filters,
   settings,
   userProfile,
-  registerNotification,
+  notification,
 });
 
 const rootReducer = (state, action) => {

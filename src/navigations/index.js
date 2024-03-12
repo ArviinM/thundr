@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 // Third party libraries
 import {NavigationContainer} from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
+import notifee, {EventType} from '@notifee/react-native';
 
 // Utils
 import {navigationRef} from './tempNavigation';
@@ -13,6 +14,7 @@ import PrivateScreenNavigation from './PrivateScreenNavigation/PrivateScreenNavi
 import Modal from '../composition/Modal/Modal';
 import {GENERIC_ERROR} from '../utils/commons';
 import {START_LOGIN_VIA_REFRESH_TOKEN} from '../ducks/Login/actionTypes';
+import {UPDATE_NOTIFICATION_STATE} from '../ducks/Notification/actionTypes';
 
 const RootNavigation = () => {
   const dispatch = useDispatch();
@@ -75,6 +77,38 @@ const RootNavigation = () => {
       });
     }
   }, [refreshToken, sub]);
+
+  useEffect(() => {
+    return notifee.onForegroundEvent(({type, detail}) => {
+      switch (type) {
+        case EventType.DISMISSED:
+          console.log('User dismissed notification.');
+          break;
+        case EventType.PRESS:
+          console.log(
+            'User pressed notification',
+            JSON.stringify(detail, 0, 2),
+          );
+
+          if (detail.notification.data.channelType === 'chat') {
+            dispatch({
+              type: UPDATE_NOTIFICATION_STATE,
+              newState: {
+                notificationData: {
+                  fromNotification: true,
+                  isMare: detail.notification.data.matchType === 'MARE',
+                  targetSub: detail.notification.data.targetSub,
+                },
+              },
+            });
+            navigationRef.current.navigate('DashboardTabs', {
+              screen: 'Messages',
+            });
+          }
+          break;
+      }
+    });
+  }, []);
 
   return (
     <NavigationContainer

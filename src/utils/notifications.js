@@ -75,6 +75,7 @@ async function onDisplayNotification(message) {
   await notifee.displayNotification({
     title: message.notification.title,
     body: message.notification.body,
+    data: message.data,
     android: {
       channelId,
       pressAction: {
@@ -93,28 +94,4 @@ async function onDisplayNotification(message) {
 
 export async function onMessageReceived(message) {
   await onDisplayNotification(message);
-
-  messaging().onNotificationOpenedApp(remoteMessage => {
-    console.log('Notification Opened App', JSON.stringify(remoteMessage, 0, 2));
-
-    // if (
-    //   !!remoteMessage?.data &&
-    //   remoteMessage?.data?.redirect_to == 'ProductDetail'
-    // ) {
-    //   setTimeout(() => {
-    //     NavigationService.navigate('ProductDetail', {
-    //       data: remoteMessage?.data,
-    //     });
-    //   }, 1200);
-    // }
-    //
-    // if (
-    //   !!remoteMessage?.data &&
-    //   remoteMessage?.data?.redirect_to == 'Profile'
-    // ) {
-    //   setTimeout(() => {
-    //     NavigationService.navigate('Profile', {data: remoteMessage?.data});
-    //   }, 1200);
-    // }
-  });
 }
