@@ -36,22 +36,21 @@ public class MainActivity extends ReactActivity {
 
    @Override
     protected void onCreate(Bundle savedInstanceState) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-              NotificationChannel notificationChannel = new NotificationChannel("default_channel", "{App_Name}", NotificationManager.IMPORTANCE_HIGH);
-              notificationChannel.setShowBadge(true);
-              notificationChannel.setDescription("");
-              AudioAttributes att = new AudioAttributes.Builder()
-                      .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                      .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                      .build();
-              notificationChannel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/thundr"), att);
-              notificationChannel.enableVibration(true);
-              notificationChannel.setVibrationPattern(new long[]{400, 400});
-              notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-              NotificationManager manager = getSystemService(NotificationManager.class);
-              manager.createNotificationChannel(notificationChannel);
-            }
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          NotificationChannel notificationChannel = new NotificationChannel("default_channel", "Thundr", NotificationManager.IMPORTANCE_HIGH);
+          notificationChannel.setShowBadge(true);
+          notificationChannel.setDescription("");
+          AudioAttributes att = new AudioAttributes.Builder()
+                  .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                  .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                  .build();
+          notificationChannel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/thundr"), att);
+          notificationChannel.enableVibration(true);
+          notificationChannel.setVibrationPattern(new long[]{400, 400});
+          notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+          NotificationManager manager = getSystemService(NotificationManager.class);
+          manager.createNotificationChannel(notificationChannel);
+        }
 
         SplashScreen.show(this);
         super.onCreate(savedInstanceState);

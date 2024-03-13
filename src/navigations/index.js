@@ -15,6 +15,7 @@ import Modal from '../composition/Modal/Modal';
 import {GENERIC_ERROR} from '../utils/commons';
 import {START_LOGIN_VIA_REFRESH_TOKEN} from '../ducks/Login/actionTypes';
 import {UPDATE_NOTIFICATION_STATE} from '../ducks/Notification/actionTypes';
+import messaging from '@react-native-firebase/messaging';
 
 const RootNavigation = () => {
   const dispatch = useDispatch();
@@ -78,6 +79,55 @@ const RootNavigation = () => {
     }
   }, [refreshToken, sub]);
 
+  // For android notifications
+  useEffect(() => {
+    // Existing onNotificationOpenedApp listener (unchanged)`
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('User opened the notification in background state:');
+      if (remoteMessage) {
+        console.info('User opened the notification in closed state.');
+        if (remoteMessage.data.channelType === 'chat') {
+          dispatch({
+            type: UPDATE_NOTIFICATION_STATE,
+            newState: {
+              notificationData: {
+                fromNotification: true,
+                isMare: remoteMessage.data.matchType === 'MARE',
+                targetSub: remoteMessage.data.targetSub,
+              },
+            },
+          });
+          navigationRef.current.navigate('Messages');
+        }
+      }
+    });
+
+    // Add getInitialNotification for handling closed app launch
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.info('User opened the notification in closed state.');
+          setTimeout(() => {
+            if (remoteMessage.data.channelType === 'chat') {
+              dispatch({
+                type: UPDATE_NOTIFICATION_STATE,
+                newState: {
+                  notificationData: {
+                    fromNotification: true,
+                    isMare: remoteMessage.data.matchType === 'MARE',
+                    targetSub: remoteMessage.data.targetSub,
+                  },
+                },
+              });
+              navigationRef.current.navigate('Messages');
+            }
+          }, 2000);
+        }
+      });
+  }, []);
+
+  // For iOS notifications
   useEffect(() => {
     return notifee.onForegroundEvent(({type, detail}) => {
       switch (type) {
