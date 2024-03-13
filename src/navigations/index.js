@@ -86,18 +86,31 @@ const RootNavigation = () => {
       console.log('User opened the notification in background state:');
       if (remoteMessage) {
         console.info('User opened the notification in closed state.');
-        if (remoteMessage.data.channelType === 'chat') {
+        if (remoteMessage.data.channelType === 'CHAT') {
           dispatch({
             type: UPDATE_NOTIFICATION_STATE,
             newState: {
               notificationData: {
-                fromNotification: true,
+                messageNotification: true,
                 isMare: remoteMessage.data.matchType === 'MARE',
                 targetSub: remoteMessage.data.targetSub,
               },
             },
           });
           navigationRef.current.navigate('Messages');
+        }
+        if (remoteMessage.data.channelType === 'MATCH') {
+          dispatch({
+            type: UPDATE_NOTIFICATION_STATE,
+            newState: {
+              notificationData: {
+                // matchNotification: true,
+                isMare: remoteMessage.data.matchType === 'MARE',
+                matchPhoto: remoteMessage.data.matchPhoto,
+              },
+            },
+          });
+          navigationRef.current.navigate('MatchFound');
         }
       }
     });
@@ -109,18 +122,31 @@ const RootNavigation = () => {
         if (remoteMessage) {
           console.info('User opened the notification in closed state.');
           setTimeout(() => {
-            if (remoteMessage.data.channelType === 'chat') {
+            if (remoteMessage.data.channelType === 'CHAT') {
               dispatch({
                 type: UPDATE_NOTIFICATION_STATE,
                 newState: {
                   notificationData: {
-                    fromNotification: true,
+                    messageNotification: true,
                     isMare: remoteMessage.data.matchType === 'MARE',
                     targetSub: remoteMessage.data.targetSub,
                   },
                 },
               });
               navigationRef.current.navigate('Messages');
+            }
+            if (remoteMessage.data.channelType === 'MATCH') {
+              dispatch({
+                type: UPDATE_NOTIFICATION_STATE,
+                newState: {
+                  notificationData: {
+                    // matchNotification: true,
+                    isMare: remoteMessage.data.matchType === 'MARE',
+                    matchPhoto: remoteMessage.data.matchPhoto,
+                  },
+                },
+              });
+              navigationRef.current.navigate('MatchFound');
             }
           }, 2000);
         }
@@ -140,12 +166,12 @@ const RootNavigation = () => {
             JSON.stringify(detail, 0, 2),
           );
 
-          if (detail.notification.data.channelType === 'chat') {
+          if (detail.notification.data.channelType === 'CHAT') {
             dispatch({
               type: UPDATE_NOTIFICATION_STATE,
               newState: {
                 notificationData: {
-                  fromNotification: true,
+                  messageNotification: true,
                   isMare: detail.notification.data.matchType === 'MARE',
                   targetSub: detail.notification.data.targetSub,
                 },
@@ -154,6 +180,20 @@ const RootNavigation = () => {
             navigationRef.current.navigate('DashboardTabs', {
               screen: 'Messages',
             });
+          }
+
+          if (detail.notification.data.channelType === 'MATCH') {
+            dispatch({
+              type: UPDATE_NOTIFICATION_STATE,
+              newState: {
+                notificationData: {
+                  // matchNotification: true,
+                  isMare: detail.notification.data.matchType === 'MARE',
+                  matchPhoto: detail.notification.data.matchPhoto,
+                },
+              },
+            });
+            navigationRef.current.navigate('MatchFound');
           }
           break;
       }

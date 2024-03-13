@@ -98,10 +98,7 @@ export function* startLoginViaRefreshToken({payload}) {
 }
 
 export function* startLogoutProcess() {
-  const {sub} = yield select(state => state.persistedState);
   try {
-    // const response = yield call(LoginConfig.logout);
-    yield put({type: START_UNREGISTER_DEVICE_TOKEN, payload: {subId: sub}});
     yield put({type: UPDATE_LOGIN_STATE, newState: {token: null}});
     yield put({type: START_LOGOUT_SUCCESS, payload: {}});
   } catch (error) {

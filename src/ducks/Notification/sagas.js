@@ -15,9 +15,8 @@ export function* startRegisterDeviceToken({payload}) {
   try {
     const response = yield call(notificationTokenConfig.registerDeviceToken, {
       subId,
-      fcmToken,
+      token: fcmToken,
     });
-
     if (response?.status === 200) {
       yield put({
         type: REGISTER_DEVICE_TOKEN_SUCCESS,

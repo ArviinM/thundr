@@ -435,7 +435,7 @@ const Messages = () => {
   const [is5MinsAgoActive, setIs5MinsAgoActive] = useState(false);
   const [is30MinsAgoActive, setIs30MinsAgoActive] = useState(false);
 
-  const {fromNotification, isMare, targetSub} = notificationData;
+  const {messageNotification, isMare, targetSub} = notificationData;
 
   useFocusEffect(
     useCallback(() => {
@@ -571,7 +571,7 @@ const Messages = () => {
 
   // TODO: Add handler for CHAT UUID's - this for user that is in the same screen to prevent navigating again.
   useEffect(() => {
-    if (!matchListLoading && fromNotification) {
+    if (!matchListLoading && messageNotification) {
       setMareChatListActive(isMare);
       const targetData = (isMare ? mareChatList : jowaChatList)?.find(
         obj => obj.target === targetSub,
@@ -610,7 +610,7 @@ const Messages = () => {
   }, [
     isMare,
     matchListLoading,
-    fromNotification,
+    messageNotification,
     jowaChatList,
     mareChatList,
     mareFilteredData,

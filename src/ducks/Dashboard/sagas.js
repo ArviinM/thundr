@@ -179,15 +179,17 @@ export function* customerMatch({payload}) {
         type: UPDATE_DASHBOARD_STATE,
         newState: {matchPhoto: customerPhoto},
       });
-      if (response?.data?.data.match === 'true') {
-        RootNavigation.navigate('MatchFound', response?.data?.data);
-        if (fromPossibles) {
-          yield put({
-            type: UPDATE_PERSISTED_STATE,
-            newState: {showPossiblesPrompt: true},
-          });
-        }
-      }
+
+      // TODO: WILL TEST OR INTEGRATE TO NOTIFICATION
+      // if (response?.data?.data.match === 'true') {
+      //   RootNavigation.navigate('MatchFound', response?.data?.data);
+      //   if (fromPossibles) {
+      //     yield put({
+      //       type: UPDATE_PERSISTED_STATE,
+      //       newState: {showPossiblesPrompt: true},
+      //     });
+      //   }
+      // }
     }
   } catch (error) {
     const isNumberOfSwipeReached =
