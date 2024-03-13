@@ -78,8 +78,8 @@
        steps:
          - run: ls
          - run: cp app-release.apk "thundr-prod-${{ github.run_number }}.apk"
-         - run: cp "thundr-prod-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-prod-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp "thundr-prod-${{ github.run_number }}.apk" /Users/tanders-arvin/Desktop/artifacts/
+         - run: cp "thundr-prod-${{ github.run_number }}.apk" "/Users/tanders-arvin/Library/CloudStorage/GoogleDrive-arvin.medina@thundr.ph/.shortcut-targets-by-id/1-xbXcESj3eDd8VxBddVakOAuKX8PD1ap/Shared Folder/Android Production Upload"
      Android-AAB-Build:
        runs-on: macOS
        needs: Android-Prepare-Build
@@ -99,8 +99,8 @@
        steps:
          - run: ls
          - run: cp app-release.aab "thundr-prod-${{ github.run_number }}.aab"
-         - run: cp "thundr-prod-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-prod-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Production Upload"
+         - run: cp "thundr-prod-${{ github.run_number }}.aab" /Users/tanders-arvin/Desktop/artifacts/
+         - run: cp "thundr-prod-${{ github.run_number }}.aab" "/Users/tanders-arvin/Library/CloudStorage/GoogleDrive-arvin.medina@thundr.ph/.shortcut-targets-by-id/1-xbXcESj3eDd8VxBddVakOAuKX8PD1ap/Shared Folder/Android Production Upload"
      Android-Publish-Prod-PlayStore:
        runs-on: macOS
        needs: Android-AAB-Upload
@@ -145,8 +145,8 @@
       - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
       - run: ls MyApp
       - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-prod-${{ github.run_number }}.ipa"
-      - run: cp "thundr-prod-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-      - run: cp "thundr-prod-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Production Upload"
+      - run: cp "thundr-prod-${{ github.run_number }}.ipa" /Users/tanders-arvin/Desktop/artifacts/
+      - run: cp "thundr-prod-${{ github.run_number }}.ipa" "/Users/tanders-arvin/Library/CloudStorage/GoogleDrive-arvin.medina@thundr.ph/.shortcut-targets-by-id/1-xbXcESj3eDd8VxBddVakOAuKX8PD1ap/Shared Folder/Apple Production Upload"
      iOS-Export-AppStore:
       runs-on: macOS
       needs: iOS-Export-IPA
