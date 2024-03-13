@@ -10,6 +10,7 @@ export const INITIAL_STATE = {
   lastLogin: '',
   privacyPolicyChecked: false,
   termsAndConditionChecked: false,
+  fcmToken: '',
 };
 
 const persistedState = (state = INITIAL_STATE, action) => {

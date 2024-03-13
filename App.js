@@ -1,22 +1,27 @@
 // React modules
 import React, {useEffect, useState} from 'react';
-import {LogBox, PermissionsAndroid, Platform} from 'react-native';
+import {Alert, LogBox, PermissionsAndroid, Platform} from 'react-native';
 
 // Third party libraries
 import {RootSiblingParent} from 'react-native-root-siblings';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
+import {PERMISSIONS, request} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
+import notifee, {EventType} from '@notifee/react-native';
 
 // Utils
 import RootNavigation from './src/navigations';
 import store, {persistor} from './src/ducks/store';
+import messaging from '@react-native-firebase/messaging';
+import {onMessageReceived} from './src/utils/notifications';
 
 LogBox.ignoreAllLogs();
 
 const App = () => {
-  const [location, setLocation] = useState(null);
+  useEffect(() => {
+    return messaging().onMessage(onMessageReceived);
+  }, []);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -48,7 +53,6 @@ const App = () => {
       Geolocation.getCurrentPosition(
         position => {
           const {latitude, longitude} = position.coords;
-          setLocation({latitude, longitude});
           console.log('Current location:', latitude, longitude);
         },
         error => {

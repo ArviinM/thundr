@@ -120,9 +120,9 @@ export function* getCustomerProfile({payload}) {
         type: GET_CUSTOMER_PROFILE_SUCCESS,
         payload: response.data.data,
       });
-      /* getCustomerProfile is also used in match list. 
-      We need to add !fromSwipe to prevent overriding 
-      of data in persisted state which is used 
+      /* getCustomerProfile is also used in match list.
+      We need to add !fromSwipe to prevent overriding
+      of data in persisted state which is used
       as users profile upon login */
       if (!fromSwipe) {
         yield put({
@@ -179,15 +179,17 @@ export function* customerMatch({payload}) {
         type: UPDATE_DASHBOARD_STATE,
         newState: {matchPhoto: customerPhoto},
       });
-      if (response?.data?.data.match === 'true') {
-        RootNavigation.navigate('MatchFound', response?.data?.data);
-        if (fromPossibles) {
-          yield put({
-            type: UPDATE_PERSISTED_STATE,
-            newState: {showPossiblesPrompt: true},
-          });
-        }
-      }
+
+      // TODO: WILL TEST OR INTEGRATE TO NOTIFICATION
+      // if (response?.data?.data.match === 'true') {
+      //   RootNavigation.navigate('MatchFound', response?.data?.data);
+      //   if (fromPossibles) {
+      //     yield put({
+      //       type: UPDATE_PERSISTED_STATE,
+      //       newState: {showPossiblesPrompt: true},
+      //     });
+      //   }
+      // }
     }
   } catch (error) {
     const isNumberOfSwipeReached =

@@ -68,3 +68,8 @@ export const SETTINGS = {
 export const USER_PROFILE = {
   UPDATE_USER_PROFILE: 'customer/update-details',
 };
+
+// Notification Device Token
+export const USER_DEVICE_TOKEN = {
+  REGISTER_USER_DEVICE_TOKEN: 'notification/register-token',
+};
