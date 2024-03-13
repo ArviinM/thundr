@@ -68,3 +68,8 @@ yarn-error.log
 .env**
 
 test/
+
+# Ignored FCM Tokens
+!/android/app/google-services.json
+!/ios/Thundr/GoogleService-Info.plist
+!/ios/ThundrDev/GoogleService-Info.plist
