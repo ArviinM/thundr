@@ -12,14 +12,13 @@ import {
 
 export const INITIAL_STATE = {
   authenticated: false,
-  token: '',
+  token: null,
   loading: false,
   loginData: [],
   email: '',
   password: '',
   showModal: false,
   modalMessage: '',
-  token: null,
 };
 
 const mobileEmail = (state = INITIAL_STATE, action) => {

@@ -20,11 +20,12 @@ import {
   GET_CUSTOMER_SETTINGS,
   GET_CUSTOMER_SURVEY,
 } from '../../../ducks/Settings/actionTypes';
+import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
+import {START_UNREGISTER_DEVICE_TOKEN} from '../../../ducks/Notification/actionTypes';
 
 // Utils
 import {SETTINGS_URI} from '../../../utils/images';
 import {scale, verticalScale} from '../../../utils/commons';
-import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
 
 const SettingsMainScreen = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,28 @@ const SettingsMainScreen = () => {
   const {subscriptionDetails} = useSelector(state => state.subscription);
   const withSubscription = subscriptionDetails?.withSubscription;
   const [displayModal, setDisplayModal] = useState('');
+
+  const {sub} = useSelector(state => state.persistedState);
+
+  const handleLogout = () => {
+    // Dispatch START_UNREGISTER_DEVICE_TOKEN first
+    dispatch({type: START_UNREGISTER_DEVICE_TOKEN, payload: {subId: sub}});
+
+    // Delay the rest of the logout process by 1000 milliseconds (1 second)
+    setTimeout(() => {
+      dispatch({type: START_LOGOUT});
+      dispatch({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {
+          refreshToken: null,
+          customerName: null,
+          sub: null,
+          customerPhoto: null,
+          showPossiblesPrompt: false,
+        },
+      });
+    }, 1000);
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -81,19 +104,7 @@ const SettingsMainScreen = () => {
         <Button
           title="Log out"
           style={{width: scale(150)}}
-          onPress={() => {
-            dispatch({type: START_LOGOUT});
-            dispatch({
-              type: UPDATE_PERSISTED_STATE,
-              newState: {
-                refreshToken: null,
-                customerName: null,
-                sub: null,
-                customerPhoto: null,
-                showPossiblesPrompt: false,
-              },
-            });
-          }}
+          onPress={handleLogout}
         />
         <Separator space={10} />
         <Button

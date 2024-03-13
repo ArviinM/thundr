@@ -22,12 +22,13 @@ prepare_react_native_project!
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+#flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 setup_permissions([
   'LocationAccuracy',
   'LocationAlways',
   'LocationWhenInUse',
+  'Notifications',
 ])
 
 linkage = ENV['USE_FRAMEWORKS']
@@ -42,6 +43,14 @@ target 'Thundr' do
   # Flags change depending on the env values.
   flags = get_default_flags()
 
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+  
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.

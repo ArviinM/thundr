@@ -10,7 +10,6 @@ import {
 } from '@react-navigation/native';
 import base64 from 'react-native-base64';
 import {useDispatch, useSelector} from 'react-redux';
-import CheckBox from 'react-native-check-box';
 
 // Components
 import Separator from '../../../components/Separator/Separator';
@@ -32,6 +31,7 @@ import {
   scale,
   verticalScale,
 } from '../../../utils/commons';
+import {checkApplicationNotificationPermission} from '../../../utils/notifications'; // Import the notification functions
 
 const LoginOptionScreen = () => {
   const dispatch = useDispatch();
@@ -59,6 +59,10 @@ const LoginOptionScreen = () => {
       };
     }, []),
   );
+
+  useEffect(() => {
+    checkApplicationNotificationPermission();
+  }, []);
 
   const {params} = route;
 

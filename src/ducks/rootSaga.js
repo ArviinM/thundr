@@ -8,6 +8,7 @@ import subscriptionWatcher from './Subscription/sagas';
 import filtersWatcher from './Filters/sagas';
 import settingsWatcher from './Settings/sagas';
 import userProfileWatcher from './UserProfile/sagas';
+import registerNotificationWatcher from './Notification/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -20,5 +21,6 @@ export default function* rootSaga() {
     filtersWatcher(),
     settingsWatcher(),
     userProfileWatcher(),
+    registerNotificationWatcher(),
   ]);
 }

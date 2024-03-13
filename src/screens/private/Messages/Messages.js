@@ -32,6 +32,7 @@ import {
   verticalScale,
 } from '../../../utils/commons';
 import {MESSAGES_ASSET_URI} from '../../../utils/images';
+import {UPDATE_NOTIFICATION_STATE} from '../../../ducks/Notification/actionTypes';
 
 // Styles
 import {BorderLinearGradient} from '../PersonalityType/Styled';
@@ -408,8 +409,10 @@ const MareChatList = React.memo(props => {
 
 const Messages = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const {sub} = useSelector(state => state.persistedState);
   const {loginData} = useSelector(state => state.login);
+  const {notificationData} = useSelector(state => state.notification);
   const {
     matchListLoading,
     jowaChatList,
@@ -431,6 +434,8 @@ const Messages = () => {
   const [is1MinAgoActive, setIs1MinAgoActive] = useState(false);
   const [is5MinsAgoActive, setIs5MinsAgoActive] = useState(false);
   const [is30MinsAgoActive, setIs30MinsAgoActive] = useState(false);
+
+  const {messageNotification, isMare, targetSub} = notificationData;
 
   useFocusEffect(
     useCallback(() => {
@@ -563,6 +568,55 @@ const Messages = () => {
       });
     }
   };
+
+  // TODO: Add handler for CHAT UUID's - this for user that is in the same screen to prevent navigating again.
+  useEffect(() => {
+    if (!matchListLoading && messageNotification) {
+      setMareChatListActive(isMare);
+      const targetData = (isMare ? mareChatList : jowaChatList)?.find(
+        obj => obj.target === targetSub,
+      );
+      const targetDataItem = (
+        isMare ? mareFilteredData : jowaFilteredData
+      )?.find(obj => obj.sub === targetSub);
+
+      if (targetData && targetDataItem) {
+        setTimeout(() => {
+          const {chatUUID, compatibilityScore} = targetData;
+          navigation.navigate('ChatScreen', {
+            jowaChatList: isMare ? null : jowaChatList,
+            mareChatList: isMare ? mareChatList : null,
+            tag: isMare ? 'MARE' : 'JOWA',
+            is1MinAgoActive,
+            is5MinsAgoActive,
+            is30MinsAgoActive,
+            chatUUID,
+            compatibilityScore,
+            item: targetDataItem,
+          });
+          dispatch({
+            type: UPDATE_DASHBOARD_STATE,
+            newState: {showReportButton: true},
+          });
+          dispatch({
+            type: UPDATE_NOTIFICATION_STATE,
+            newState: {
+              notificationData: {},
+            },
+          });
+        }, 500); // Timeout duration in milliseconds (e.g., 2000ms = 2 seconds)
+      }
+    }
+  }, [
+    isMare,
+    matchListLoading,
+    messageNotification,
+    jowaChatList,
+    mareChatList,
+    mareFilteredData,
+    jowaFilteredData,
+    setMareChatListActive,
+  ]);
 
   return (
     <View
