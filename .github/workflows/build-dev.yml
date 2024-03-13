@@ -142,7 +142,7 @@
       continue-on-error: true
       steps:
       - run: ls
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
+      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist -allowProvisioningUpdates     
       - run: ls MyApp
       - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-dev-${{ github.run_number }}.ipa"
       - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/tanders-arvin/Desktop/artifacts/
@@ -153,7 +153,7 @@
       steps:
       - run: ls
       - run: ls ios      
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
+      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist -allowProvisioningUpdates
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
