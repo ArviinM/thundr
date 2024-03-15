@@ -5,7 +5,7 @@ import {API_BASE_URL} from '@env';
 const AXIOS_TIMEOUT = 30000;
 
 const config = {
-  baseURL: 'https://dev-api.thundr.ph/',
+  baseURL: API_BASE_URL,
   timeout: AXIOS_TIMEOUT,
 };
 
