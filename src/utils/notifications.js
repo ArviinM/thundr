@@ -9,6 +9,8 @@ import messaging from '@react-native-firebase/messaging';
 // Utils
 import store from '../ducks/store';
 import {UPDATE_PERSISTED_STATE} from '../ducks/PersistedState/actionTypes';
+import {UPDATE_NOTIFICATION_STATE} from '../ducks/Notification/actionTypes';
+import * as RootNavigation from '../navigations/tempNavigation';
 
 export async function checkApplicationNotificationPermission() {
   let authStatus = await messaging().hasPermission();
@@ -70,7 +72,19 @@ async function onDisplayNotification(message) {
     sound: 'thundr',
   });
 
-  console.log(JSON.stringify(message, 0, 2));
+  if (message.data.channelType === 'MATCH') {
+    store.dispatch({
+      type: UPDATE_NOTIFICATION_STATE,
+      newState: {
+        notificationData: {
+          // matchNotification: true,
+          isMare: message.data.matchType === 'MARE',
+          matchPhoto: message.data.matchPhoto,
+        },
+      },
+    });
+    RootNavigation.navigate('MatchFound');
+  }
 
   await notifee.displayNotification({
     title: message.notification.title,
