@@ -30,7 +30,7 @@ const Profile = props => {
   } = props;
   const [openPhotoModal, setOpenPhotoModal] = useState(false);
   const customerPhotoUrl = customerProfile?.customerPhoto;
-  const firstName = customerProfile?.name.split(' ')[0];
+``  const firstName = customerProfile?.name?.split(' ')[0] || ''; // Extracting the first word
 
   const renderBackButton = () => {
     return (

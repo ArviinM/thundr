@@ -47,7 +47,7 @@ const MatchDetails = props => {
   if (!matchList?.length || currentUser) {
     return;
   } else {
-    const firstName = customerProfile?.name.split(' ')[0]; // Extracting the first word
+    const firstName = customerProfile?.name?.split(' ')[0] || ''; // Extracting the first word
 
     return (
       <View style={{alignItems: 'center'}}>
