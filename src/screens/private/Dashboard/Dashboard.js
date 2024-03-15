@@ -54,7 +54,7 @@ const MatchDetails = props => {
         {firstName && (
           <>
             <Text
-              size={25}
+              size={scale(24)}
               color="#E33C59"
               weight={700}
               fontFamily="Montserrat-Bold"
@@ -64,7 +64,7 @@ const MatchDetails = props => {
               {firstName || ''},{' '}
               <Text
                 fontFamily="Montserrat-Medium"
-                size={25}
+                size={scale(24)}
                 color="#E33C59"
                 customStyle={{textAlign: 'center'}}>
                 {calculateAge(customerProfile?.birthday) || ''}
@@ -72,7 +72,7 @@ const MatchDetails = props => {
             </Text>
             {/*<Text size={13} fontFamily="Montserrat-Bold" weight={700}>*/}
             {customerProfile?.customerDetails?.work && (
-              <Text size={13} fontFamily="Montserrat-Bold" weight={700}>
+              <Text size={scale(12)} fontFamily="Montserrat-Bold" weight={700}>
                 {customerProfile?.customerDetails?.work}
               </Text>
             )}
@@ -89,7 +89,7 @@ const MatchDetails = props => {
         />
         {firstName && (
           <Text
-            size={13}
+            size={scale(12)}
             color="#EE983D"
             fontFamily="Montserrat-Regular"
             weight={700}>
