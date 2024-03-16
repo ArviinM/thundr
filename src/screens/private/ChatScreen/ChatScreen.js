@@ -1,16 +1,19 @@
 // React modules
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   View,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 
 // Third party libraries
 import {Overlay} from 'react-native-elements';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
 // Components
@@ -41,6 +44,7 @@ import {
 import {GLOBAL_ASSET_URI, MESSAGES_ASSET_URI} from '../../../utils/images';
 import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModal';
 import moment from 'moment';
+import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -81,6 +85,17 @@ const ChatScreen = () => {
       });
     });
   }, [dispatch, allChatList]);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch({
+        type: UPDATE_PERSISTED_STATE,
+        newState: {chatRoomID: chatUUID},
+      });
+      return () =>
+        dispatch({type: UPDATE_PERSISTED_STATE, newState: {chatRoomID: ''}});
+    }, [chatUUID, dispatch]),
+  );
 
   // // READ MESSAGES
   useEffect(() => {

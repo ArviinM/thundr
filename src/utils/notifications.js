@@ -77,7 +77,6 @@ async function onDisplayNotification(message) {
       type: UPDATE_NOTIFICATION_STATE,
       newState: {
         notificationData: {
-          // matchNotification: true,
           isMare: message.data.matchType === 'MARE',
           matchPhoto: message.data.matchPhoto,
         },
@@ -86,24 +85,29 @@ async function onDisplayNotification(message) {
     RootNavigation.navigate('MatchFound');
   }
 
-  await notifee.displayNotification({
-    title: message.notification.title,
-    body: message.notification.body,
-    data: message.data,
-    android: {
-      channelId,
-      pressAction: {
-        id: 'default',
+  const state = store.getState();
+  const {chatRoomID} = state.persistedState;
+
+  if (chatRoomID !== message.data.chatRoomUuid) {
+    await notifee.displayNotification({
+      title: message.notification.title,
+      body: message.notification.body,
+      data: message.data,
+      android: {
+        channelId,
+        pressAction: {
+          id: 'default',
+        },
       },
-    },
-    ios: {
-      channelId,
-      pressAction: {
-        id: 'default',
+      ios: {
+        channelId,
+        pressAction: {
+          id: 'default',
+        },
+        sound: 'thundr.wav',
       },
-      sound: 'thundr.wav',
-    },
-  });
+    });
+  }
 }
 
 export async function onMessageReceived(message) {
