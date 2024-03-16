@@ -57,6 +57,7 @@
          - run: echo "PLAY_PUBLISH_TRACK=internal" >> gradle.properties
          - run: echo "RELEASE_NAME=Release ${{ENV.BUILD_NUMBER}}" >> gradle.properties
          - run: more gradle.properties
+         - run: echo "${{secrets.PROD_ANDROID_FCM}}" >> app/google-services.json
          - run: ls app
          - run: ./gradlew clean
      Android-APK-Build:
@@ -123,6 +124,7 @@
              "ios/"${{env.APP_NAME}}"/Info.plist"
          - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString
              ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
+         - run: echo "${{secrets.PROD_IOS_FCM}}" >> ios/${{ENV.APP_NAME}}/GoogleService-Info.plist
      iOS-Build:
        runs-on: macOS
        needs: iOS-Prepare-Build
