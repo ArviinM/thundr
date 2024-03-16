@@ -148,7 +148,7 @@ const MatchFound = () => {
               source={{uri: customerPhoto || ''}}
               width={300}
               height={200}
-              resizeMode="center"
+              resizeMode="cover"
               customStyle={{
                 zIndex: 1,
               }}
@@ -188,7 +188,7 @@ const MatchFound = () => {
               source={{uri: matchPhotoUrl || ''}}
               width={300}
               height={200}
-              resizeMode="center"
+              resizeMode="cover"
               customStyle={{
                 right: scale(20),
                 zIndex: 1,
