@@ -1,5 +1,8 @@
 import {call, put, takeLatest, select} from 'redux-saga/effects';
 import {
+  START_SSO_MOBILE_RESEND_OTP,
+  START_SSO_MOBILE_RESEND_OTP_FAILED,
+  START_SSO_MOBILE_RESEND_OTP_SUCCESS,
   START_SSO_MOBILE_VALIDATION,
   START_SSO_MOBILE_VALIDATION_FAILED,
   START_SSO_MOBILE_VALIDATION_SUCCESS,
@@ -41,11 +44,18 @@ export function* startMobileValidation({payload}) {
     if (response?.status === 200) {
       yield put({
         type: START_SSO_MOBILE_VALIDATION_SUCCESS,
-        payload: response.data,
+        payload: {
+          ...response.data,
+          sub: ssoValidationData?.sub,
+        },
       });
       yield put({
         type: UPDATE_SSO_VALIDATION_STATE,
         newState: {sub: ssoValidationData?.sub},
+      });
+      yield put({
+        type: UPDATE_SSO_VALIDATION_STATE,
+        newState: {accessToken: ssoValidationData?.accessToken},
       });
       RootNavigation.navigate('MobileVerificationScreen');
     }
@@ -110,9 +120,52 @@ export function* startMobileVerification({payload}) {
   }
 }
 
+export function* startMobileResendOTP() {
+  const {ssoValidationData, sub, accessToken} = yield select(
+    state => state.ssoValidation,
+  );
+
+  try {
+    const callApi = async () => {
+      return await axios({
+        method: 'post',
+        url: '${API_BASE_URL}auth/sso-resend-sms-otp',
+        data: {
+          phoneNumber: ssoValidationData?.data.username,
+          session: ssoValidationData?.data.session,
+          sub: sub,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: 'application/json',
+        },
+      });
+    };
+
+    const response = yield call(callApi);
+    if (response?.status === 200) {
+      yield put({
+        type: START_SSO_MOBILE_RESEND_OTP_SUCCESS,
+        payload: response.data,
+      });
+      yield put({
+        type: UPDATE_SSO_VALIDATION_STATE,
+        newState: {sub: ssoValidationData?.sub},
+      });
+    }
+  } catch (error) {
+    const errorMessage = error?.response?.data?.message || GENERIC_ERROR;
+    yield put({
+      type: START_SSO_MOBILE_RESEND_OTP_FAILED,
+      payload: errorMessage,
+    });
+  }
+}
+
 function* ssoValidationWatcher() {
   yield takeLatest(START_SSO_MOBILE_VALIDATION, startMobileValidation);
   yield takeLatest(START_SSO_MOBILE_VERIFICATION, startMobileVerification);
+  yield takeLatest(START_SSO_MOBILE_RESEND_OTP, startMobileResendOTP);
 }
 
 export default ssoValidationWatcher;

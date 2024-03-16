@@ -56,7 +56,8 @@
              gradle.properties
          - run: echo "PLAY_PUBLISH_TRACK=internal" >> gradle.properties
          - run: echo "RELEASE_NAME=Release ${{ENV.BUILD_NUMBER}}" >> gradle.properties
-         - run: more gradle.properties
+         - run: more gradle.properties         
+         - run: echo "${{secrets.DEV_ANDROID_FCM}}" >> app/google-services.json
          - run: ls app
          - run: ./gradlew clean
      Android-APK-Build:
@@ -78,8 +79,8 @@
        steps:
          - run: ls
          - run: cp app-release.apk "thundr-dev-${{ github.run_number }}.apk"
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-dev-${{ github.run_number }}.apk" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Dev Upload"
+         - run: cp "thundr-dev-${{ github.run_number }}.apk" /Users/tanders-arvin/Desktop/artifacts/
+         - run: cp "thundr-dev-${{ github.run_number }}.apk" "/Users/tanders-arvin/Library/CloudStorage/GoogleDrive-arvin.medina@thundr.ph/.shortcut-targets-by-id/1-xbXcESj3eDd8VxBddVakOAuKX8PD1ap/Shared Folder/Android Dev Upload"
      Android-AAB-Build:
        runs-on: macOS
        needs: Android-Prepare-Build
@@ -99,8 +100,8 @@
        steps:
          - run: ls
          - run: cp app-release.aab "thundr-dev-${{ github.run_number }}.aab"
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-         - run: cp "thundr-dev-${{ github.run_number }}.aab" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Android Dev Upload"
+         - run: cp "thundr-dev-${{ github.run_number }}.aab" /Users/tanders-arvin/Desktop/artifacts/
+         - run: cp "thundr-dev-${{ github.run_number }}.aab" "/Users/tanders-arvin/Library/CloudStorage/GoogleDrive-arvin.medina@thundr.ph/.shortcut-targets-by-id/1-xbXcESj3eDd8VxBddVakOAuKX8PD1ap/Shared Folder/Android Dev Upload"
      Android-Publish-Dev-PlayStore:
        runs-on: macOS
        needs: Android-AAB-Upload
@@ -123,6 +124,7 @@
              "ios/"${{env.APP_NAME}}"/Info.plist"
          - run: /usr/libexec/Plistbuddy -c "Set CFBundleShortVersionString
              ${{ENV.BUILD_NAME}}" "ios/${{ENV.APP_NAME}}/Info.plist"
+         - run: echo "${{secrets.DEV_IOS_FCM}}" >> ios/${{ENV.APP_NAME}}/GoogleService-Info.plist
      iOS-Build:
        runs-on: macOS
        needs: iOS-Prepare-Build
@@ -142,19 +144,18 @@
       continue-on-error: true
       steps:
       - run: ls
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist     
+      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptionsIPA.plist -allowProvisioningUpdates     
       - run: ls MyApp
       - run: cp "MyApp/${{ENV.APP_NAME}}.ipa" "thundr-dev-${{ github.run_number }}.ipa"
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/bryllebarbosa/Desktop/Jorge/artifacts/
-      - run: cp "thundr-dev-${{ github.run_number }}.ipa" "/Users/bryllebarbosa/Google Drive/My Drive/Shared Folder/Apple Dev Upload"
+      - run: cp "thundr-dev-${{ github.run_number }}.ipa" /Users/tanders-arvin/Desktop/artifacts/
+      - run: cp "thundr-dev-${{ github.run_number }}.ipa" "/Users/tanders-arvin/Library/CloudStorage/GoogleDrive-arvin.medina@thundr.ph/.shortcut-targets-by-id/1-xbXcESj3eDd8VxBddVakOAuKX8PD1ap/Shared Folder/Apple Dev Upload"
      iOS-Export-AppStore:
       runs-on: macOS
       needs: iOS-Export-IPA
       steps:
       - run: ls
       - run: ls ios      
-      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist
+      - run: xcodebuild -exportArchive -archivePath myArch.xcarchive -exportPath MyApp -exportOptionsPlist exportOptions.plist -allowProvisioningUpdates
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
-

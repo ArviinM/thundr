@@ -11,12 +11,15 @@ export const MOBILE_EMAIL = {
   MOBILE_VERIFICATION: 'auth/validate-challenge-question',
   EMAIL_VALIDATION: 'auth/email-code',
   EMAIL_VERIFICATION: 'auth/validate-challenge-question',
+  SMS_RESEND_OTP: 'auth/cognito-resend-sms-otp',
+  EMAIL_RESEND_OTP: 'auth/cognito-resend-email-otp',
 };
 
 // SSO Registration services
 export const SSO_VALIDATION = {
   SSO_MOBILE_VALIDATION: 'auth/sso-sms-otp',
   SSO_MOBILE_VERIFICATION: 'auth/sso-validate-sms-otp',
+  SSO_MOBILE_RESEND_OTP: 'auth/sso-resend-sms-otp',
 };
 
 // Profile creation services
@@ -64,4 +67,9 @@ export const SETTINGS = {
 // Current user profile
 export const USER_PROFILE = {
   UPDATE_USER_PROFILE: 'customer/update-details',
+};
+
+// Notification Device Token
+export const USER_DEVICE_TOKEN = {
+  REGISTER_USER_DEVICE_TOKEN: 'notification/register-token',
 };

@@ -10,6 +10,8 @@ export const INITIAL_STATE = {
   lastLogin: '',
   privacyPolicyChecked: false,
   termsAndConditionChecked: false,
+  fcmToken: '',
+  chatRoomID: '',
 };
 
 const persistedState = (state = INITIAL_STATE, action) => {

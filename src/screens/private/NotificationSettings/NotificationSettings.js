@@ -56,7 +56,7 @@ const NotificationSettings = () => {
             weight={700}
             color="#808080"
             fontFamily="Montserrat-Bold">
-            In-app notification
+            Push Notification
           </Text>
           <View style={{justifyContent: 'center'}}>
             <Switch

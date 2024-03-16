@@ -1,6 +1,6 @@
 // React modules
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 // Third party libraries
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -29,18 +29,28 @@ const EmailValidationScreen = () => {
   const {loading} = useSelector(state => state.mobileEmail);
 
   const validationSchema = yup.object().shape({
-    email: yup.string().email().required('Email is required'),
+    email: yup
+      .string()
+      .email('Please enter a valid email address')
+      .required('Email is required'),
   });
 
+  const handleSubmit = values => {
+    dispatch({
+      type: START_EMAIL_VALIDATION,
+      payload: {
+        email: values.email,
+      },
+    });
+  };
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{flexGrow: 1}}
-      enableOnAndroid
+      contentContainerStyle={styles.scrollView}
       bounces={false}
       keyboardShouldPersistTaps="always">
-      <ScreenContainer customStyle={{justifyContent: 'flex-start'}}>
+      <ScreenContainer customStyle={styles.screenContainer}>
         {loading && <Spinner visible={true} />}
-        <View style={{top: verticalScale(80), alignItems: 'center'}}>
+        <View style={styles.content}>
           <Image source={MOBILE_INPUT_URI.EMAIL_ICON} width={80} height={100} />
           <Separator space={20} />
           <Text
@@ -54,7 +64,7 @@ const EmailValidationScreen = () => {
             color="#59595B"
             fontFamily="Montserrat-Regular"
             size={scale(12)}
-            customStyle={{paddingHorizontal: scale(70), textAlign: 'center'}}>
+            customStyle={styles.textContent}>
             Enter your email address to give added security to your account.
           </Text>
           <Formik
@@ -62,31 +72,16 @@ const EmailValidationScreen = () => {
               email: '',
             }}
             validationSchema={validationSchema}
-            onSubmit={values => handleSubmit(values)}>
-            {({handleChange, handleSubmit, values, errors, touched}) => {
+            onSubmit={handleSubmit}>
+            {({handleChange, values, errors, touched}) => {
               const handleSubmitEmail = () => {
-                handleSubmit();
-                if (validationSchema.isValidSync(values)) {
-                  dispatch({
-                    type: START_EMAIL_VALIDATION,
-                    payload: {
-                      email: values.email,
-                    },
-                  });
-                }
+                handleSubmit(values);
               };
               return (
                 <>
                   <View>
                     <TextInput
-                      inputStyle={{
-                        alignItems: 'center',
-                        borderRadius: 30,
-                        paddingVertical: verticalScale(10),
-                        paddingHorizontal: scale(20),
-                        backgroundColor: '#fff',
-                        width: scale(230),
-                      }}
+                      inputStyle={styles.textInput}
                       placeholder=""
                       onChangeText={handleChange('email')}
                       value={values.email}
@@ -100,12 +95,7 @@ const EmailValidationScreen = () => {
                       disabled={!validationSchema.isValidSync(values)}
                       title="Continue"
                       primary
-                      textStyle={{weight: 400}}
-                      style={{
-                        top: verticalScale(30),
-                        height: verticalScale(40),
-                        width: scale(150),
-                      }}
+                      style={styles.button}
                       onPress={handleSubmitEmail}
                     />
                   </View>
@@ -113,37 +103,62 @@ const EmailValidationScreen = () => {
               );
             }}
           </Formik>
-        </View>
-        <View
-          style={{
-            top: verticalScale(260),
-            paddingHorizontal: scale(isIosDevice() ? 80 : 65),
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              size={scale(10)}
-              customStyle={{
-                textAlign: 'center',
-                color: '#59595B',
-                fontFamily: 'Montserrat-Regular',
-              }}>
-              We never share this with anyone and it won’t appear on your
-              profile.
-            </Text>
+          <View style={styles.footerContainer}>
+            <Image source={MOBILE_INPUT_URI.LOCK_ICON} height={20} width={20} />
+            <View style={styles.footerViewContainer}>
+              <Text
+                size={scale(10)}
+                fontFamily="Montserrat-Regular"
+                color="#59595B"
+                customStyle={styles.textCenter}>
+                We never share this with anyone and it won’t appear on your
+                profile.
+              </Text>
+            </View>
           </View>
         </View>
       </ScreenContainer>
     </KeyboardAwareScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {flexGrow: 1},
+  screenContainer: {justifyContent: 'flex-start'},
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    top: verticalScale(80),
+  },
+  footerContainer: {
+    top: verticalScale(160),
+    paddingHorizontal: scale(isIosDevice() ? 80 : 65),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  button: {
+    top: verticalScale(30),
+    height: verticalScale(40),
+    width: scale(150),
+  },
+  textInput: {
+    alignItems: 'center',
+    borderRadius: 30,
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: scale(20),
+    backgroundColor: '#fff',
+    width: scale(230),
+  },
+  textContent: {paddingHorizontal: scale(70), textAlign: 'center'},
+});
 
 export default EmailValidationScreen;

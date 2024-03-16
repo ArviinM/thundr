@@ -43,33 +43,40 @@ import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModa
 
 const MatchDetails = props => {
   const {currentIndex, matchList, customerProfile, currentUser} = props;
+
   if (!matchList?.length || currentUser) {
     return;
   } else {
+    const firstName = customerProfile?.name?.split(' ')[0] || ''; // Extracting the first word
+
     return (
       <View style={{alignItems: 'center'}}>
-        {customerProfile?.name && (
+        {firstName && (
           <>
             <Text
-              size={30}
+              size={scale(24)}
               color="#E33C59"
               weight={700}
               fontFamily="Montserrat-Bold"
               numberOfLines={2}
               ellipsizeMode="tail"
               customStyle={{textAlign: 'center', width: scale(280)}}>
-              {customerProfile?.name || ''},{' '}
+              {firstName || ''},{' '}
               <Text
                 fontFamily="Montserrat-Medium"
-                size={30}
+                size={scale(24)}
                 color="#E33C59"
                 customStyle={{textAlign: 'center'}}>
                 {calculateAge(customerProfile?.birthday) || ''}
               </Text>
             </Text>
-            <Text size={15} fontFamily="Montserrat-Medium">
-              {customerProfile?.customerDetails?.work}
-            </Text>
+            {/*<Text size={13} fontFamily="Montserrat-Bold" weight={700}>*/}
+            {customerProfile?.customerDetails?.work && (
+              <Text size={scale(12)} fontFamily="Montserrat-Bold" weight={700}>
+                {customerProfile?.customerDetails?.work}
+              </Text>
+            )}
+            {/*</Text>*/}
           </>
         )}
         <View
@@ -80,8 +87,12 @@ const MatchDetails = props => {
             marginVertical: verticalScale(3),
           }}
         />
-        {customerProfile?.name && (
-          <Text size={15} color="#EE983D" fontFamily="Montserrat-Medium">
+        {firstName && (
+          <Text
+            size={scale(12)}
+            color="#EE983D"
+            fontFamily="Montserrat-Regular"
+            weight={700}>
             {`Compatibility Score: ${
               matchList?.length && matchList[currentIndex]?.percent
             }`}
@@ -105,6 +116,7 @@ const Dashboard = () => {
     isSwipeReached,
     allChatList,
   } = useSelector(state => state.dashboard);
+
   const currentUserSub = loginData?.sub || sub;
   const [isMare, setMare] = useState(false);
   const [isJowa, setJowa] = useState(false);
@@ -311,17 +323,23 @@ const Dashboard = () => {
         start={{x: 0.5, y: 1}}
         end={{x: 0.5, y: 0}}
         style={{
+          // position: 'absolute',
           flex: 1,
-          height: verticalScale(320),
-          borderBottomLeftRadius: 120,
-          borderBottomRightRadius: 120,
+          height: verticalScale(350),
+          width: 730,
+          borderBottomLeftRadius: 730,
+          borderBottomRightRadius: 730,
+          overflow: 'hidden',
+          left: '50%',
+          marginLeft: -365,
         }}>
         <View style={{flex: 1, justifyContent: 'center', alignSelf: 'center'}}>
           <Text
             size={20}
             weight="700"
             color="#E33051"
-            customStyle={{textAlign: 'center'}}>
+            customStyle={{textAlign: 'center'}}
+            fontFamily="Montserrat-Regular">
             {'No available matches \nPlease try again'}
           </Text>
         </View>
@@ -374,13 +392,13 @@ const Dashboard = () => {
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           top: verticalScale(250),
-          left: scale(-40),
+          left: scale(-45),
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Advocacy')}>
           <Image
             source={ADVOCACY_ASSET_URI.ADVOCACY}
-            height={isIosDevice() ? 120 : 120}
-            width={isIosDevice() ? 120 : 120}
+            height={120}
+            width={120}
           />
         </TouchableOpacity>
       </View>
@@ -388,7 +406,7 @@ const Dashboard = () => {
       <View
         style={{
           alignItems: 'center',
-          top: verticalScale(isUserInformationShown ? -25 : 0),
+          bottom: verticalScale(10),
         }}>
         <JowaMareSection
           isMare={isMare}

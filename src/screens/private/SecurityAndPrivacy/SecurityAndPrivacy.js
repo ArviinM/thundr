@@ -4,7 +4,7 @@ import {Linking, ScrollView, TouchableOpacity, View} from 'react-native';
 
 // Third party libraries
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 // Components
 import Image from '../../../components/Image/Image';
@@ -25,6 +25,7 @@ const SecurityAndPrivacy = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
+  const {privacyPolicyChecked} = useSelector(state => state.persistedState);
 
   const OpenURLButton = ({url}) => {
     const handlePress = async () => {
@@ -46,23 +47,27 @@ const SecurityAndPrivacy = () => {
       style={{top: verticalScale(10), marginBottom: verticalScale(25)}}>
       {!route?.params?.fromLogin && <SettingsHeader />}
       <View style={{alignItems: 'center', paddingHorizontal: scale(20)}}>
-        <Text
-          fontFamily="Montserrat-Black"
-          weight={700}
-          size={20}
-          color="#E33051"
-          customStyle={{textAlign: 'center'}}>
-          Read mo muna, sis!
-        </Text>
-        <Text
-          fontFamily="Montserrat-Regular"
-          weight={400}
-          size={12}
-          color="#E33051"
-          customStyle={{textAlign: 'center', marginBottom: 20}}>
-          Scroll down and click the agree button, which you may find at the
-          bottom of the page
-        </Text>
+        {!privacyPolicyChecked && (
+          <View>
+            <Text
+              fontFamily="Montserrat-Black"
+              weight={700}
+              size={20}
+              color="#E33051"
+              customStyle={{textAlign: 'center'}}>
+              Read mo muna, sis!
+            </Text>
+            <Text
+              fontFamily="Montserrat-Regular"
+              weight={400}
+              size={12}
+              color="#E33051"
+              customStyle={{textAlign: 'center', marginBottom: 20}}>
+              Scroll down and click the agree button, which you may find at the
+              bottom of the page
+            </Text>
+          </View>
+        )}
         <Image source={SETTINGS_URI.PRIVACY_POLICY} height={100} width={100} />
         <Separator space={10} />
         <Text

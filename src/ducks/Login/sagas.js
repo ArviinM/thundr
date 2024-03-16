@@ -15,7 +15,11 @@ import {
 import {GENERIC_ERROR} from '../../utils/commons';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 import RootNavigation from '../../navigations';
-import {UPDATE_CURRENT_LOCATION} from '../Dashboard/actionTypes';
+//import {UPDATE_CURRENT_LOCATION} from '../Dashboard/actionTypes';
+import {
+  START_REGISTER_DEVICE_TOKEN,
+  START_UNREGISTER_DEVICE_TOKEN,
+} from '../Notification/actionTypes';
 
 export function* startLoginProcess({payload}) {
   const {emailOrMobile, password} = payload;
@@ -37,6 +41,10 @@ export function* startLoginProcess({payload}) {
           sub: response.data.data.sub,
         },
       });
+      yield put({
+        type: START_REGISTER_DEVICE_TOKEN,
+        payload: {subId: response.data.data.sub},
+      });
     }
   } catch (error) {
     const errorMessage =
@@ -51,19 +59,24 @@ export function* startLoginProcess({payload}) {
 }
 
 export function* startLoginViaRefreshToken({payload}) {
-  const {currentLocation} = yield select(state => state.dashboard);
-  const {longitude, latitude} = currentLocation;
-  const {refreshToken} = payload;
+  // const {currentLocation} = yield select(state => state.dashboard);
+  // const {longitude, latitude} = currentLocation;
+  const {refreshToken, sub} = payload;
 
   try {
     const response = yield call(LoginConfig.loginViaRefreshToken, {
-      refreshToken: refreshToken,
+      refreshToken,
     });
 
     if (response?.status === 200) {
       yield put({
         type: START_LOGIN_VIA_REFRESH_TOKEN_SUCCESS,
         payload: response.data.data,
+      });
+      yield put({
+        type: START_REGISTER_DEVICE_TOKEN,
+        // sub will be added here
+        payload: {subId: sub},
       });
       // yield put({
       //   type: UPDATE_CURRENT_LOCATION,
@@ -84,11 +97,10 @@ export function* startLoginViaRefreshToken({payload}) {
   }
 }
 
-export function* startLogoutProcess({payload}) {
+export function* startLogoutProcess() {
   try {
-    // const response = yield call(LoginConfig.logout);
     yield put({type: UPDATE_LOGIN_STATE, newState: {token: null}});
-    yield put({type: START_LOGOUT_SUCCESS, payload: response.data.data});
+    yield put({type: START_LOGOUT_SUCCESS, payload: {}});
   } catch (error) {
     yield put({
       type: START_LOGOUT_FAILED,

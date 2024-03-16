@@ -1,5 +1,5 @@
 // React modules
-import React, {useRef, useCallback, useState} from 'react';
+import React, {useRef, useCallback, useState, useEffect} from 'react';
 import {ImageBackground, View, Animated} from 'react-native';
 
 // Third party libraries
@@ -18,6 +18,7 @@ import Button from '../../../components/Button/Button';
 import {DASHBOARD_ASSET_URI} from '../../../utils/images';
 import {isIosDevice, scale, verticalScale} from '../../../utils/commons';
 import {UPDATE_DASHBOARD_STATE} from '../../../ducks/Dashboard/actionTypes';
+import {UPDATE_NOTIFICATION_STATE} from '../../../ducks/Notification/actionTypes';
 
 const jowaGradientColors = [
   '#ed2a85',
@@ -37,20 +38,24 @@ const mareGradientColors = [
 const MatchFound = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {customerMatchData, matchPhoto} = useSelector(state => state.dashboard);
+  // const {customerMatchData, matchPhoto} = useSelector(state => state.dashboard);
   const {customerPhoto} = useSelector(state => state.persistedState);
-  const matchPhotoUrl = matchPhoto?.customerPhoto?.[0]?.photoUrl;
+  const {notificationData} = useSelector(state => state.notification);
+  const {isMare, matchPhoto} = notificationData;
+  const matchPhotoUrl = matchPhoto;
+  // const matchPhotoUrl = matchPhoto?.customerPhoto?.[0]?.photoUrl;
   const animatedValue1 = useRef(new Animated.Value(0)).current;
   const animatedValue2 = useRef(new Animated.Value(0)).current;
+  const animatedValue3 = useRef(new Animated.Value(0)).current;
   const [displayIndicator, setDisplayIndicator] = useState(false);
-  const isMare = customerMatchData?.data?.tag === 'Mare';
+  // const isMare = customerMatchData?.data?.tag === 'Mare';
 
   const handleDisplayIndicator = useCallback(() => {
     setDisplayIndicator(false);
 
     const timeoutId = setTimeout(() => {
       setDisplayIndicator(true);
-    }, 3000);
+    }, 1900);
 
     return () => {
       clearTimeout(timeoutId);
@@ -64,16 +69,27 @@ const MatchFound = () => {
       if (customerPhoto && matchPhotoUrl) {
         animatedValue1.setValue(0);
         animatedValue2.setValue(0);
+        animatedValue3.setValue(0);
+
         Animated.timing(animatedValue1, {
           toValue: 1,
-          duration: 3000,
+          duration: 2000,
           useNativeDriver: false,
         }).start();
         Animated.timing(animatedValue2, {
           toValue: 1,
-          duration: 3000,
+          duration: 2000,
           useNativeDriver: false,
         }).start();
+
+        Animated.sequence([
+          Animated.delay(1900), // Add a delay of 1000 milliseconds (1 second)
+          Animated.timing(animatedValue3, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: false,
+          }),
+        ]).start();
       }
     }, [customerPhoto, matchPhotoUrl]),
   );
@@ -87,6 +103,22 @@ const MatchFound = () => {
     inputRange: [0, 1],
     outputRange: [400, 0],
   });
+
+  const opacity = animatedValue3.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: UPDATE_NOTIFICATION_STATE,
+        newState: {
+          notificationData: {},
+        },
+      });
+    };
+  }, [dispatch]);
 
   return (
     <LinearGradient
@@ -109,35 +141,35 @@ const MatchFound = () => {
             alignItems: 'center',
             overflow: 'hidden',
             padding: scale(30),
-            borderColor: 'red',
             borderRadius: 35,
           }}>
           <Animated.View style={{transform: [{translateX: translateX1}]}}>
             <Image
               source={{uri: customerPhoto || ''}}
-              width={340}
+              width={300}
               height={200}
+              resizeMode="cover"
               customStyle={{
-                resizeMode: 'cover',
                 zIndex: 1,
               }}
             />
           </Animated.View>
         </ImageBackground>
         {!isMare && displayIndicator && (
-          <View
+          <Animated.View
             style={{
               position: 'absolute',
               top: verticalScale(isIosDevice() ? 152 : 156),
               left: scale(isIosDevice() ? 89 : 90),
               zIndex: 2,
+              opacity: opacity,
             }}>
             <Image
               source={DASHBOARD_ASSET_URI.JOWA_MATCH_INDICATOR}
               width={72}
               height={isIosDevice() ? 80 : 76}
             />
-          </View>
+          </Animated.View>
         )}
         <ImageBackground
           style={{
@@ -156,8 +188,8 @@ const MatchFound = () => {
               source={{uri: matchPhotoUrl || ''}}
               width={300}
               height={200}
+              resizeMode="cover"
               customStyle={{
-                resizeMode: 'cover',
                 right: scale(20),
                 zIndex: 1,
               }}
@@ -165,7 +197,12 @@ const MatchFound = () => {
           </Animated.View>
         </ImageBackground>
       </View>
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+      <Animated.View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: opacity,
+        }}>
         <Separator space={isMare ? 70 : 40} />
         <View style={{alignItems: 'center', bottom: verticalScale(40)}}>
           <Text color="#fff" size={23} fontFamily="ClimateCrisis-Regular">
@@ -209,7 +246,7 @@ const MatchFound = () => {
             style={{width: scale(125)}}
           />
         </View>
-      </View>
+      </Animated.View>
     </LinearGradient>
   );
 };
