@@ -6,7 +6,7 @@
        branches:
          - production-build
    env:
-     BUILD_NAME: 1.0.1
+     BUILD_NAME: 1.1.0
      BUILD_NUMBER: ${{github.run_number}}
      APP_NAME: Thundr
      APP_ID: ph.thundr.app
@@ -159,4 +159,3 @@
    concurrency:
      group: thundr-mobile
      cancel-in-progress: false
-     
