@@ -54,7 +54,7 @@ const somethingElse = [
 
 const ReportUserModal = props => {
   const dispatch = useDispatch();
-  const {category, targetSub} = props;
+  const {category, targetSub, customerName} = props;
   const {showReportUserModal} = useSelector(state => state.dashboard);
   const [expandedDetails, setExpandedDetails] = useState('');
   const [remarks, setRemarks] = useState('');
@@ -208,7 +208,7 @@ const ReportUserModal = props => {
           />
           <Separator space={10} />
           <Text fontFamily="Montserrat-Regular" size={14}>
-            We won’t tell (name) you reported them
+            We won’t tell {customerName} you reported them
           </Text>
           <Separator space={10} />
           <Button
