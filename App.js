@@ -1,6 +1,6 @@
 // React modules
-import React, {useEffect, useState} from 'react';
-import {Alert, LogBox, PermissionsAndroid, Platform} from 'react-native';
+import React, {useEffect} from 'react';
+import {LogBox, PermissionsAndroid, Platform} from 'react-native';
 
 // Third party libraries
 import {RootSiblingParent} from 'react-native-root-siblings';
@@ -8,7 +8,6 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
-import notifee, {EventType} from '@notifee/react-native';
 
 // Utils
 import RootNavigation from './src/navigations';

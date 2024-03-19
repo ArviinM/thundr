@@ -35,6 +35,7 @@
 		FB3EB7262C99424FAB2DEB23 /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CC48AE80EA44E9B6231A98 /* Montserrat-MediumItalic.ttf */; };
 		FB6F406AA3DE477E9F98A237 /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 107485B38E1C4A84B12B6F7F /* Montserrat-BoldItalic.ttf */; };
 		FECA46C4CFD24A79AFAF4A82 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 837FF5DF4B7E48EA951258CE /* Montserrat-Regular.ttf */; };
+		D557B59D7EF54B3D837E5562 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B13E28FAD294416199D0D942 /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		E7CC48AE80EA44E9B6231A98 /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-MediumItalic.ttf"; path = "../assets/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FD4AB2990D57410F9BE1DE5B /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLight.ttf"; path = "../assets/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
+		B13E28FAD294416199D0D942 /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "Thundr/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				B13E28FAD294416199D0D942 /* BootSplash.storyboard */,
 			);
 			name = Thundr;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				34168500617B4915A5C6CB69 /* Montserrat-SemiBoldItalic.ttf in Resources */,
 				5FEFAE84E088483DACD54D8D /* Montserrat-Thin.ttf in Resources */,
 				258D10A3E0AA4FF888F9CE06 /* Montserrat-ThinItalic.ttf in Resources */,
+				D557B59D7EF54B3D837E5562 /* BootSplash.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,7 +687,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -765,7 +772,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",

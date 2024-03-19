@@ -13,24 +13,6 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
-      <!-- Add SplashActivity -->
-        <activity
-          android:name=".SplashActivity"
-          android:theme="@style/SplashTheme"
-          android:exported="true"
-          android:screenOrientation="portrait"
-          android:label="@string/app_name">
-          <intent-filter>
-              <action android:name="android.intent.action.MAIN" />
-              <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
-           <intent-filter>
-          <action android:name="android.intent.action.VIEW" />
-          <category android:name="android.intent.category.DEFAULT" />
-          <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="ph.thundr.app" />
-        </intent-filter>
-        </activity>
 
       <activity
         android:name=".MainActivity"
@@ -39,7 +21,8 @@
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
         android:screenOrientation="portrait"
-        android:exported="true">
+        android:exported="true"
+        android:theme="@style/BootTheme"> <!-- Apply @style/BootTheme on .MainActivity -->
          <intent-filter>
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />

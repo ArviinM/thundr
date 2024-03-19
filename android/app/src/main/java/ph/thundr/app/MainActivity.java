@@ -1,6 +1,6 @@
 package ph.thundr.app;
-import android.os.Bundle; // required for onCreate parameter
-import org.devio.rn.splashscreen.SplashScreen; // required for react-native-splash-screen >= 0.3.1
+import android.os.Bundle;
+import com.zoontek.rnbootsplash.RNBootSplash;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -52,7 +52,7 @@ public class MainActivity extends ReactActivity {
           manager.createNotificationChannel(notificationChannel);
         }
 
-        SplashScreen.show(this);
+        RNBootSplash.init(this, R.style.BootTheme); // ⬅️ initialize the splash screen
         super.onCreate(savedInstanceState);
     }
     
