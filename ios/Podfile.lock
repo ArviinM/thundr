@@ -429,8 +429,6 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
-  - react-native-splash-screen (3.3.0):
-    - React-Core
   - react-native-viewpager (5.0.11):
     - React-Core
   - React-NativeModulesApple (0.72.6):
@@ -538,6 +536,8 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
+  - RNBootSplash (5.4.1):
+    - React-Core
   - RNCAsyncStorage (1.19.4):
     - React-Core
   - RNCMaskedView (0.1.11):
@@ -651,7 +651,6 @@ DEPENDENCIES:
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -670,6 +669,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -758,8 +758,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-splash-screen:
-    :path: "../node_modules/react-native-splash-screen"
   react-native-viewpager:
     :path: "../node_modules/@react-native-community/viewpager"
   React-NativeModulesApple:
@@ -796,6 +794,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNBootSplash:
+    :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
@@ -867,7 +867,6 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-image-picker: be000cd54f1b1bd71dba9677b36847827f9cc012
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
-  react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-viewpager: b99b53127d830885917ef84809c5065edd614a78
   React-NativeModulesApple: f8bb09486c8ba5b44a309123b1d1558faa90c13d
   React-perflogger: e3596db7e753f51766bceadc061936ef1472edc3
@@ -886,6 +885,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 8f9a2cf6c90f35397e80f55eadbf2c0d8378101b
   React-utils: 1dc03e6e55f56388b6fdde3768a66c885bacb627
   ReactCommon: 6044a8a504865d312c1bff6d3ee0a500f7f32987
+  RNBootSplash: eff8239c4f795ce42a0604873aef3733aac0dedd
   RNCAsyncStorage: 3a8f7145d17cdd9f88e7b77666c94a09e4f759c8
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974

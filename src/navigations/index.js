@@ -1,10 +1,10 @@
 // React modules
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 
 // Third party libraries
 import {NavigationContainer} from '@react-navigation/native';
-import SplashScreen from 'react-native-splash-screen';
 import notifee, {EventType} from '@notifee/react-native';
+import BootSplash from 'react-native-bootsplash';
 
 // Utils
 import {navigationRef} from './tempNavigation';
@@ -42,8 +42,6 @@ const RootNavigation = () => {
   const refreshToken = persistedState ? persistedState.refreshToken : '';
   const sub = persistedState ? persistedState.sub : '';
 
-  const [hideSplash, setHideSplash] = useState(false);
-
   const config = {
     screens: {LoginOptionScreen: 'sso/:payload'},
   };
@@ -52,18 +50,6 @@ const RootNavigation = () => {
     prefixes: ['ph.thundr.app://'],
     config,
   };
-
-  useEffect(() => {
-    let delayHandle;
-    if (hideSplash) {
-      delayHandle = setTimeout(() => {
-        SplashScreen.hide();
-      }, 1000);
-    }
-    return () => {
-      clearTimeout(delayHandle);
-    };
-  }, [hideSplash]);
 
   useEffect(() => {
     if (loginData?.loginDeactivated) {
@@ -77,7 +63,7 @@ const RootNavigation = () => {
         payload: {refreshToken, sub},
       });
     }
-  }, [refreshToken, sub]);
+  }, [dispatch, refreshToken, sub]);
 
   // For android notifications
   useEffect(() => {
@@ -205,7 +191,7 @@ const RootNavigation = () => {
       ref={navigationRef}
       linking={linking}
       onReady={() => {
-        setHideSplash(true);
+        BootSplash.hide();
       }}
       theme={{colors: {background: '#f2cecd'}}}>
       <Modal
