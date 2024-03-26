@@ -5,7 +5,7 @@ import {Platform, Dimensions, StatusBar} from 'react-native';
 import {getDeviceId, isTablet} from 'react-native-device-info';
 import moment from 'moment';
 
-const {width, height} = Dimensions.get('window');
+export const {width, height} = Dimensions.get('window');
 const [shortDimension, longDimension] =
   width < height ? [width, height] : [height, width];
 
@@ -246,39 +246,20 @@ export const calculateAge = birthDate => {
   return age;
 };
 
-export const organizeChatMessages = chatMessages => {
-  const groupedMessagesByDay = {};
+// Define the tagStart and tagEnd variables
+export const tagStart = '<<<~';
+export const tagEnd = '~>>>';
 
-  chatMessages.forEach(message => {
-    const createdDate = new Date(message.created);
-    const currentDate = new Date();
-
-    if (createdDate.toDateString() === currentDate.toDateString()) {
-      // Message is from today
-      const day = 'Today';
-      if (!groupedMessagesByDay[day]) {
-        groupedMessagesByDay[day] = [];
-      }
-      groupedMessagesByDay[day].push(message);
-    } else if (
-      createdDate.toDateString() ===
-      new Date(currentDate.getTime() - 86400000).toDateString()
-    ) {
-      // Message is from yesterday
-      const day = 'Yesterday';
-      if (!groupedMessagesByDay[day]) {
-        groupedMessagesByDay[day] = [];
-      }
-      groupedMessagesByDay[day].push(message);
-    } else {
-      // Message is from another day
-      const formattedDay = moment(createdDate).format('MMMM DD, dddd');
-      if (!groupedMessagesByDay[formattedDay]) {
-        groupedMessagesByDay[formattedDay] = [];
-      }
-      groupedMessagesByDay[formattedDay].push(message);
-    }
-  });
-
-  return groupedMessagesByDay;
-};
+// Function to create a custom tag from the imageDataArray
+export function createTag(dataArray) {
+  if (dataArray.length === 1) {
+    return `${tagStart}!messageType=${dataArray[0].messageType}, fileName=${dataArray[0].fileName}!${tagEnd}`;
+  } else {
+    const tagContent = dataArray
+      .map(
+        data => `!messageType=${data.messageType}, fileName=${data.fileName}!`,
+      )
+      .join(' : ');
+    return `${tagStart}${tagContent}${tagEnd}`;
+  }
+}

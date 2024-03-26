@@ -3,13 +3,16 @@ import {
   put,
   takeLatest,
   select,
-  all,
+  takeLeading,
   takeEvery,
 } from 'redux-saga/effects';
 import {
   CUSTOMER_MATCH,
   CUSTOMER_MATCH_FAILED,
   CUSTOMER_MATCH_SUCCESS,
+  DOWNLOAD_PHOTO_MESSAGE,
+  DOWNLOAD_PHOTO_MESSAGE_FAILED,
+  DOWNLOAD_PHOTO_MESSAGE_SUCCESS,
   GET_CHAT_CUSTOMER_DETAILS,
   GET_CHAT_CUSTOMER_DETAILS_FAILED,
   GET_CHAT_CUSTOMER_DETAILS_MARE,
@@ -63,11 +66,17 @@ import {
   UPDATE_LAST_ACTIVITY,
   UPDATE_LAST_ACTIVITY_FAILED,
   UPDATE_LAST_ACTIVITY_SUCCESS,
+  UPLOAD_PHOTO_MESSAGE,
+  UPLOAD_PHOTO_MESSAGE_FAILED,
+  UPLOAD_PHOTO_MESSAGE_SUCCESS,
 } from './actionTypes';
 import DashboardConfig from '../../api/services/dashboardService';
 import {UPDATE_PERSISTED_STATE} from '../PersistedState/actionTypes';
 import * as RootNavigation from '../../navigations/tempNavigation';
 import moment from 'moment';
+import axios from 'axios';
+import {decode} from 'base64-arraybuffer';
+import {formatMessages} from '../../screens/private/ChatScreen/utils';
 
 export function* getCustomerDetails({payload}) {
   try {
@@ -304,30 +313,66 @@ export function* getCustomerChatProfileMare({payload}) {
   }
 }
 
+// Generator function to fetch messages
 export function* getMessage({payload}) {
-  const {chatUUID} = payload;
-  const {sub} = yield select(state => state.persistedState);
-  const {loginData} = yield select(state => state.login);
-
-  const todayFormattedDate = moment().format('YYYY-MM-DD');
-  const twoDaysAgoFormattedDate = moment()
-    .subtract(2, 'days')
-    .format('YYYY-MM-DD');
-
-  const apiPayload = {
-    sub: loginData?.sub || sub,
-    chatRoomID: chatUUID,
-    sort: 'ASC',
-    startDate: twoDaysAgoFormattedDate,
-    endDate: todayFormattedDate,
-  };
   try {
+    const {chatUUID} = payload;
+    const {sub} = yield select(state => state.persistedState);
+    const {loginData} = yield select(state => state.login);
+    const {getMessageResponse} = yield select(state => state.dashboard);
+
+    if (!chatUUID || !sub || !loginData) {
+      throw new Error('Missing required data for fetching messages');
+    }
+
+    const todayFormattedDate = moment().format('YYYY-MM-DD');
+    const twoDaysAgoFormattedDate = moment()
+      .subtract(2, 'days')
+      .format('YYYY-MM-DD');
+
+    const apiPayload = {
+      sub: loginData?.sub || sub,
+      chatRoomID: chatUUID,
+      sort: 'ASC',
+      startDate: twoDaysAgoFormattedDate,
+      endDate: todayFormattedDate,
+    };
+
     const response = yield call(DashboardConfig.getMessage, apiPayload);
+
     if (response?.status === 200) {
-      yield put({
-        type: GET_MESSAGE_SUCCESS,
-        payload: response.data,
-      });
+      const formattedMessages = formatMessages(response.data.data);
+
+      // Check if chatUUID matches the chatRoomID of the first message in response
+      if (
+        response.data.data.length > 0 &&
+        chatUUID === response.data.data[0].chatRoomID
+      ) {
+        if (getMessageResponse.length === 0) {
+          yield put({
+            type: GET_MESSAGE_SUCCESS,
+            payload: formattedMessages,
+          });
+        } else {
+          const newMessages = formattedMessages.filter(
+            message => !getMessageResponse.some(msg => msg._id === message._id),
+          );
+          const mergedMessages = [...getMessageResponse, ...newMessages];
+
+          yield put({
+            type: GET_MESSAGE_SUCCESS,
+            payload: mergedMessages,
+          });
+        }
+      } else {
+        // Return formattedMessages if chatUUID does not match chatRoomID in response
+        yield put({
+          type: GET_MESSAGE_SUCCESS,
+          payload: formattedMessages,
+        });
+      }
+    } else {
+      throw new Error('Failed to fetch messages');
     }
   } catch (error) {
     yield put({
@@ -336,7 +381,6 @@ export function* getMessage({payload}) {
     });
   }
 }
-
 export function* sendMessage({payload}) {
   const {sub} = yield select(state => state.persistedState);
   const {loginData} = yield select(state => state.login);
@@ -512,6 +556,95 @@ export function* reportCategory({payload}) {
   }
 }
 
+export function* uploadPhotoMessage({payload}) {
+  const {sub} = yield select(state => state.persistedState);
+  const {imagesData, targetSub, chatUUID} = payload;
+
+  const imageFileNames = [];
+
+  try {
+    for (const imageData of imagesData) {
+      const response = yield call(DashboardConfig.uploadPhotoMessage, {
+        sub: sub,
+        target: targetSub,
+        contentType: imageData.mime,
+        fileExtension: 'JPG',
+      });
+
+      if (response?.status === 200) {
+        const arrayBuffer = decode(imageData.data);
+        const uploadToS3 = async () => {
+          return await axios({
+            method: 'put',
+            url: response.data.data.url,
+            data: arrayBuffer,
+            headers: {
+              'Content-Type': imageData.mime, // Use the retrieved mime type for accuracy
+              'Content-Encoding': 'base64', // Specify base64 encoding
+            },
+          });
+        };
+
+        const uploadResponse = yield call(uploadToS3);
+        if (uploadResponse?.status === 200) {
+          imageFileNames.push(response.data.data.fileName);
+        }
+      }
+    }
+    yield put({
+      type: SEND_MESSAGE,
+      payload: {
+        targetSub: targetSub,
+        message: '',
+        read: '0',
+        attachments: imageFileNames,
+      },
+    });
+    yield put({type: GET_MESSAGE, payload: {chatUUID}});
+    yield put({
+      type: UPLOAD_PHOTO_MESSAGE_SUCCESS,
+      payload: {message: 'photo uploaded successfully.'},
+    });
+  } catch (error) {
+    console.error(error?.message);
+    yield put({
+      type: UPLOAD_PHOTO_MESSAGE_FAILED,
+    });
+  }
+}
+
+export function* downloadPhotoMessage({payload}) {
+  const {sub} = yield select(state => state.persistedState);
+  const {targetSub, filenames} = payload;
+
+  let imagesURL = [];
+  console.log(targetSub, filenames);
+
+  try {
+    for (const filename of filenames) {
+      const response = yield call(DashboardConfig.downloadPhotoMessage, {
+        sub: sub,
+        target: targetSub,
+        filename: filename,
+      });
+
+      if (response?.status === 200) {
+        imagesURL.push(response.data.data);
+      }
+    }
+
+    yield put({
+      type: DOWNLOAD_PHOTO_MESSAGE_SUCCESS,
+      payload: imagesURL,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: DOWNLOAD_PHOTO_MESSAGE_FAILED,
+    });
+  }
+}
+
 function* dashboardWatcher() {
   yield takeLatest(GET_CUSTOMER_DETAILS, getCustomerDetails);
   yield takeLatest(GET_CUSTOMER_PHOTO, getCustomerPhoto);
@@ -531,6 +664,8 @@ function* dashboardWatcher() {
   yield takeLatest(GET_CURRENT_USER_PROFILE, getCurrentUserProfile);
   yield takeLatest(GET_POSSIBLES, getPossibles);
   yield takeLatest(REPORT_CATEGORY, reportCategory);
+  yield takeLatest(UPLOAD_PHOTO_MESSAGE, uploadPhotoMessage);
+  yield takeLatest(DOWNLOAD_PHOTO_MESSAGE, downloadPhotoMessage);
 }
 
 export default dashboardWatcher;

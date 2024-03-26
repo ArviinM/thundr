@@ -1,6 +1,6 @@
 // React modules
-import React, {useEffect, useState} from 'react';
-import {Alert, LogBox, PermissionsAndroid, Platform} from 'react-native';
+import React, {useEffect} from 'react';
+import {LogBox, PermissionsAndroid, Platform, View, Text} from 'react-native';
 
 // Third party libraries
 import {RootSiblingParent} from 'react-native-root-siblings';
@@ -8,13 +8,14 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
-import notifee, {EventType} from '@notifee/react-native';
+import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 
 // Utils
 import RootNavigation from './src/navigations';
 import store, {persistor} from './src/ducks/store';
 import messaging from '@react-native-firebase/messaging';
 import {onMessageReceived} from './src/utils/notifications';
+import {scale} from './src/utils/commons';
 
 LogBox.ignoreAllLogs();
 
@@ -65,12 +66,63 @@ const App = () => {
     requestLocationPermission();
   }, []);
 
+  const toastConfig = {
+    /*
+      Overwrite 'success' type,
+      by modifying the existing `BaseToast` component
+    */
+    success: props => <BaseToast {...props} />,
+    /*
+      Overwrite 'error' type,
+      by modifying the existing `ErrorToast` component
+    */
+    error: props => <ErrorToast {...props} />,
+    /*
+      Or create a completely new type - `tomatoToast`,
+      building the layout from scratch.
+
+      I can consume any custom `props` I want.
+      They will be passed when calling the `show` method (see below)
+    */
+    warning: ({text1, text2, props}) => (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#E43C59',
+          height: 60,
+          width: '90%',
+          borderRadius: 20,
+          borderWidth: 3,
+          borderColor: '#FEBC29',
+        }}>
+        <Text
+          style={{
+            fontFamily: 'Montserrat-Bold',
+            fontSize: scale(18),
+            color: '#fff',
+          }}>
+          {text1}
+        </Text>
+        <Text
+          style={{
+            fontFamily: 'Montserrat-Regular',
+            fontSize: scale(12),
+            color: '#fff',
+          }}>
+          {text2}
+        </Text>
+      </View>
+    ),
+  };
+
   return (
     <RootSiblingParent>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <RootNavigation />
         </PersistGate>
+        <Toast config={toastConfig} />
       </Provider>
     </RootSiblingParent>
   );

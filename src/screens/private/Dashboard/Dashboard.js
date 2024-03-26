@@ -421,7 +421,11 @@ const Dashboard = () => {
           setUserInformationShown={setUserInformationShown}
         />
       </View>
-      <ReportUserModal category="PROFILE" targetSub={customerProfile?.sub} />
+      <ReportUserModal
+        category="PROFILE"
+        targetSub={customerProfile?.sub}
+        customerName={customerProfile?.name}
+      />
     </View>
   );
 };

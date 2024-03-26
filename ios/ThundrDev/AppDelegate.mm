@@ -1,6 +1,6 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
-// #import "RNSplashScreen.h"
+#import "RNBootSplash.h"
 #import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
 
@@ -21,8 +21,6 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
  [super application:application didFinishLaunchingWithOptions:launchOptions];
-  // TODO: Change to React Native BootSplash
-  // [RNSplashScreen show];
 return YES;
 }
 
@@ -33,6 +31,18 @@ return YES;
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
+                          moduleName:(NSString *)moduleName
+                           initProps:(NSDictionary *)initProps {
+  UIView *rootView = [super createRootViewWithBridge:bridge
+                                          moduleName:moduleName
+                                           initProps:initProps];
+
+  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
+
+  return rootView;
 }
 
 @end

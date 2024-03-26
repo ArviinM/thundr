@@ -189,12 +189,7 @@ const DashboardTabs = ({route, navigation}) => {
           tabBarButton: () => {
             return focusedRoute && focusedRoute !== 'DashboardTab' ? (
               <TouchableOpacity
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{name: 'DashboardTabs'}],
-                  })
-                }>
+                onPress={() => navigation.navigate('DashboardTab')}>
                 <Image
                   source={DASHBOARD_ASSET_URI.THUNDR}
                   height={70}

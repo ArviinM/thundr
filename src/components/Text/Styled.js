@@ -2,7 +2,7 @@
 import styled from 'styled-components/native';
 
 // Utils
-import {isIosDevice, moderateScale} from '../../utils/commons';
+import {moderateScale} from '../../utils/commons';
 
 export const StyledText = styled.Text.attrs(props => ({
   ...props.customStyle,

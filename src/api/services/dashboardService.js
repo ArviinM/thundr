@@ -39,6 +39,16 @@ const DashboardConfig = {
       payload,
     ),
   reportCategory: payload => api.post(DASHBOARD.REPORT_CATEGORY, payload),
+  uploadPhotoMessage: payload =>
+    api.get(
+      `${DASHBOARD.UPLOAD_PHOTO_MESSAGE}?sub=${payload.sub}&target=${payload.target}&contentType=${payload.contentType}&fileExtension=${payload.fileExtension}`,
+      payload,
+    ),
+  downloadPhotoMessage: payload =>
+    api.get(
+      `${DASHBOARD.DOWNLOAD_PHOTO_MESSAGE}?sub=${payload.sub}&target=${payload.target}&filename=${payload.filename}`,
+      payload,
+    ),
 };
 
 export default DashboardConfig;
