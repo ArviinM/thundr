@@ -37,6 +37,7 @@ import ReportUserModal from '../../../composition/ReportUserModal/ReportUserModa
 import {UPDATE_PERSISTED_STATE} from '../../../ducks/PersistedState/actionTypes';
 import {MAX_IMAGE_SIZE_BYTES} from './utils';
 import ChatScreenMessages from './ChatScreenMessages';
+import Toast from 'react-native-toast-message';
 
 const ChatScreen = () => {
   const dispatch = useDispatch();
@@ -163,6 +164,7 @@ const ChatScreen = () => {
           multiple: true,
           includeBase64: true,
           forceJpg: true,
+          maxFiles: 4,
         });
       }
 
@@ -173,6 +175,13 @@ const ChatScreen = () => {
       const imageData = [];
       for (const image of images) {
         if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+          Toast.show({
+            type: 'warning',
+            text1: 'Hala, ang laki!',
+            text2: 'Limit upload up to 8mb per photo',
+            position: 'bottom',
+            bottomOffset: height + 55,
+          });
           throw new Error(
             'Image exceeds maximum size limit. Please select a smaller image.',
           );
@@ -184,11 +193,18 @@ const ChatScreen = () => {
           data: image.data,
         });
       }
-
+      console.log(imageData.length);
       if (Platform.OS === 'android' && imageData.length > 5) {
+        Toast.show({
+          type: 'warning',
+          text1: 'Hala, ang dami!',
+          text2: 'Limit of 4 photos per sending',
+          position: 'bottom',
+          bottomOffset: height + 55,
+        });
         throw new Error('Image selection exceeds the limit of 5 images.');
       }
-      console.log('sending the photo');
+
       dispatch({
         type: UPLOAD_PHOTO_MESSAGE,
         payload: {imagesData: imageData, targetSub: item?.sub, chatUUID},

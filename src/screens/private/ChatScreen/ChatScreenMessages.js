@@ -12,6 +12,7 @@ import moment from 'moment';
 import {formatDateAndTime} from './utils';
 import Image from '../../../components/Image/Image';
 import {GLOBAL_ASSET_URI} from '../../../utils/images';
+import {height} from '../../../utils/commons';
 
 const ChatScreenMessages = forwardRef((props, ref) => {
   const {messages, currentUser, onContentSizeChange} = props;
@@ -165,13 +166,6 @@ const ChatScreenMessages = forwardRef((props, ref) => {
               width={25}
             />
           </TouchableOpacity>
-          {/*<TouchableOpacity*/}
-          {/*  style={styles.closeButton}*/}
-          {/*  onPress={() => setModalVisible(false)}>*/}
-          {/*  <Text style={styles.closeButtonText}>Close</Text>*/}
-          {/*  <Text style={styles.closeButtonText}>Close</Text>*/}
-          {/*  */}
-          {/*</TouchableOpacity>*/}
           <View style={styles.modalImageContainer}>
             <RNImage
               source={{uri: selectedImage}}
@@ -217,7 +211,7 @@ const styles = StyleSheet.create({
   },
   imageMessage: {
     marginBottom: 4,
-    maxWidth: '71%',
+    maxWidth: '73%',
     justifyContent: 'center',
   },
   messageText: {
@@ -263,7 +257,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 40,
+    top: height / 4 - 150,
     right: 20,
     padding: 10,
     zIndex: 1,
