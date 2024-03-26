@@ -2,6 +2,9 @@ import {
   CUSTOMER_MATCH,
   CUSTOMER_MATCH_FAILED,
   CUSTOMER_MATCH_SUCCESS,
+  DOWNLOAD_PHOTO_MESSAGE,
+  DOWNLOAD_PHOTO_MESSAGE_FAILED,
+  DOWNLOAD_PHOTO_MESSAGE_SUCCESS,
   GET_CHAT_CUSTOMER_DETAILS,
   GET_CHAT_CUSTOMER_DETAILS_FAILED,
   GET_CHAT_CUSTOMER_DETAILS_MARE,
@@ -57,6 +60,9 @@ import {
   UPDATE_LAST_ACTIVITY,
   UPDATE_LAST_ACTIVITY_FAILED,
   UPDATE_LAST_ACTIVITY_SUCCESS,
+  UPLOAD_PHOTO_MESSAGE,
+  UPLOAD_PHOTO_MESSAGE_FAILED,
+  UPLOAD_PHOTO_MESSAGE_SUCCESS,
 } from './actionTypes';
 
 export const INITIAL_STATE = {
@@ -100,6 +106,8 @@ export const INITIAL_STATE = {
   showReportUserModal: false,
   reportCategoryResponse: [],
   showReportButton: true,
+  uploadPhotoResponse: [],
+  downloadPhotoResponse: [],
 };
 
 const dashboard = (state = INITIAL_STATE, action) => {
@@ -488,6 +496,46 @@ const dashboard = (state = INITIAL_STATE, action) => {
         loading: false,
         showModal: true,
         modalMessage: action.payload,
+      };
+    // UPLOAD PHOTO MESSAGE
+    case UPLOAD_PHOTO_MESSAGE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case UPLOAD_PHOTO_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        uploadPhotoResponse: action.payload,
+        loading: false,
+      };
+    case UPLOAD_PHOTO_MESSAGE_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: 'There may be an error with the photo sending service',
+      };
+    // DOWNLOAD PHOTO MESSAGE
+    case DOWNLOAD_PHOTO_MESSAGE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: true,
+      };
+    case DOWNLOAD_PHOTO_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        downloadPhotoResponse: action.payload,
+        loading: false,
+      };
+    case DOWNLOAD_PHOTO_MESSAGE_FAILED:
+      return {
+        ...state,
+        loading: false,
+        showModal: true,
+        modalMessage: 'There may be an error with the photo sending service',
       };
     default:
       return state;
