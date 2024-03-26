@@ -46,6 +46,8 @@ export const DASHBOARD = {
   READ_CHAT_MESSAGE: 'chat/message-read',
   GET_POSSIBLES: 'match/customer-possible',
   REPORT_CATEGORY: 'report/customer',
+  UPLOAD_PHOTO_MESSAGE: 'chat/photo-message-upload-url',
+  DOWNLOAD_PHOTO_MESSAGE: 'chat/photo-message-download-url',
 };
 
 // Filter sercices
