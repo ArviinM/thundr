@@ -658,7 +658,7 @@ function* dashboardWatcher() {
   yield takeLatest(SEND_MESSAGE, sendMessage);
   yield takeLatest(GET_LAST_ACTIVITY, getLastActivity);
   yield takeLatest(UPDATE_LAST_ACTIVITY, updateLastActivity);
-  yield takeLeading(GET_MESSAGE, getMessage);
+  yield takeLatest(GET_MESSAGE, getMessage);
   yield takeEvery(GET_UNREAD_MESSAGES, getUnreadMessages);
   yield takeLatest(READ_CHAT_MESSAGE, readChatMessage);
   yield takeLatest(GET_CURRENT_USER_PROFILE, getCurrentUserProfile);
