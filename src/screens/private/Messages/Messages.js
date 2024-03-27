@@ -553,6 +553,8 @@ const Messages = () => {
     isMareChatListActive,
     mareChatList?.length,
     jowaChatList?.length,
+    mareChatList,
+    jowaChatList,
   ]);
 
   const handleRefresh = () => {
@@ -616,6 +618,12 @@ const Messages = () => {
     mareFilteredData,
     jowaFilteredData,
     setMareChatListActive,
+    targetSub,
+    navigation,
+    is1MinAgoActive,
+    is5MinsAgoActive,
+    is30MinsAgoActive,
+    dispatch,
   ]);
 
   return (
