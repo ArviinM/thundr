@@ -79,7 +79,7 @@ const ChatScreen = () => {
     dispatch({type: GET_MESSAGE, payload: {chatUUID}});
     const intervalId = setInterval(() => {
       dispatch({type: GET_MESSAGE, payload: {chatUUID}});
-    }, 5000);
+    }, 3500);
 
     return () => {
       clearInterval(intervalId);
@@ -200,14 +200,14 @@ const ChatScreen = () => {
             'Image exceeds maximum size limit. Please select a smaller image.',
           );
         }
-        // console.log(JSON.stringify(image, 0, 2));
+
         imageData.push({
           fileExtension: 'jpg',
           mime: image.mime,
           data: image.data,
         });
       }
-      console.log(imageData.length);
+
       if (Platform.OS === 'android' && imageData.length >= 5) {
         Toast.show({
           type: 'warning',
