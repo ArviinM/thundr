@@ -1,9 +1,0 @@
-export const UPDATE_USER_PROFILE_STATE =
-  '@userProfile/UPDATE_USER_PROFILE_STATE';
-
-// Update userProfile
-export const UPDATE_USER_PROFILE = '@userProfile/UPDATE_USER_PROFILE';
-export const UPDATE_USER_PROFILE_SUCCESS =
-  '@userProfile/UPDATE_USER_PROFILE_SUCCESS';
-export const UPDATE_USER_PROFILE_FAILED =
-  '@userProfile/UPDATE_USER_PROFILE_FAILED';

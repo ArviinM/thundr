@@ -1,1 +1,0 @@
-export const UPDATE_PERSISTED_STATE = '@persistedState/UPDATE_PERSISTED_STATE';
