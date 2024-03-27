@@ -46,7 +46,6 @@ const ChatScreen = () => {
     state => state.dashboard,
   );
   const {sub} = useSelector(state => state.persistedState);
-  const {loginData} = useSelector(state => state.login);
 
   const scrollViewRef = useRef();
 
@@ -63,7 +62,6 @@ const ChatScreen = () => {
     compatibilityScore,
   } = route?.params;
   const isMare = tag === 'MARE';
-  const currentUserSub = loginData?.sub || sub;
 
   const scrollToLatestMessage = () => {
     if (scrollViewRef.current) {
@@ -115,17 +113,33 @@ const ChatScreen = () => {
 
   // READ MESSAGES
   useEffect(() => {
-    if (getMessageResponse?.data?.length) {
-      const filteredMessages = getMessageResponse.data.filter(
-        message => message.senderSub !== currentUserSub,
+    if (getMessageResponse?.length) {
+      const filteredMessages = getMessageResponse.filter(
+        message => message.user._id !== sub,
       );
-      dispatch({type: READ_CHAT_MESSAGE, payload: filteredMessages});
+
+      // Extracting only the _id field from each object in filteredMessages
+      const transformedMessages = filteredMessages.map(message => ({
+        id: message._id,
+      }));
+
+      dispatch({type: READ_CHAT_MESSAGE, payload: transformedMessages});
     }
-  }, [currentUserSub, dispatch, getMessageResponse]);
+  }, [sub, dispatch, getMessageResponse]);
 
   const handleSend = () => {
     if (inputText.trim() !== '') {
-      setMessages([...messages, {id: messages.length, text: inputText}]);
+      setMessages([
+        ...messages,
+        {
+          _id: messages.length,
+          text: inputText,
+          createdAt: new Date(),
+          user: {_id: sub},
+          image: [],
+          chatRoomID: chatUUID ? chatUUID : '',
+        },
+      ]);
       setInputText('');
       dispatch({
         type: SEND_MESSAGE,
@@ -194,7 +208,7 @@ const ChatScreen = () => {
         });
       }
       console.log(imageData.length);
-      if (Platform.OS === 'android' && imageData.length > 5) {
+      if (Platform.OS === 'android' && imageData.length >= 5) {
         Toast.show({
           type: 'warning',
           text1: 'Hala, ang dami!',
@@ -216,8 +230,8 @@ const ChatScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={height}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'null'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? height : 0}
       style={{flex: 1}}>
       <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
         <ChatScreenHeader
@@ -250,8 +264,8 @@ const ChatScreen = () => {
               value={inputText}
               placeholder="Type a message.."
               textAlignVertical="center"
-              numberOfLines={10}
               placeholderTextColor={'#ffffff'}
+              maxLength={255}
             />
             <TouchableOpacity
               onPress={() => openImageLibrary(false)}
