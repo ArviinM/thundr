@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useAuth} from '../../../providers/Auth.tsx';
 import LinearGradient from 'react-native-linear-gradient';
 import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
@@ -25,29 +25,32 @@ const Login = () => {
       style={styles.flexContainer}
       start={{x: 0.3, y: 0.3}}
       end={{x: 0.1, y: 0.9}}>
-      <SafeAreaView style={styles.flexContainer} edges={['top', 'bottom']}>
+      <SafeAreaView style={[styles.flexContainer]} edges={['bottom', 'top']}>
         <View style={styles.container}>
           <View style={styles.imageContainer}>
             <Image source={IMAGES.thundrLogo} style={{alignSelf: 'center'}} />
           </View>
-          <View style={styles.termsContainer}>
+          <View style={styles.bottomContainer}>
             <Text style={styles.termsText}>
               By tapping ‘Sign in’ you agree to our Terms & Conditions. Learn
               how we process your data in our Privacy Policy.
             </Text>
             <Button
-              onPress={() => console.log('Nothing here yet')}
+              onPress={() => navigation.navigate('MobileValidation')}
               text="CREATE ACCOUNT"
               buttonStyle={styles.button1}
               textStyle={styles.text1}
             />
             <Button
-              onPress={() => navigation.navigate('MobileValidation')}
+              onPress={() => navigation.navigate('LoginValidation')}
               text="SIGN IN"
               loading={loading}
               buttonStyle={styles.button2}
               textStyle={styles.text2}
             />
+            <TouchableOpacity onPress={() => console.log('Trouble Signing In')}>
+              <Text style={styles.text3}>Trouble Signing In?</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>
@@ -64,9 +67,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: height / 8,
   },
-  termsContainer: {
+  bottomContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 10,
   },
   termsText: {
     marginHorizontal: 35,
@@ -105,9 +109,18 @@ const styles = StyleSheet.create({
   },
   text2: {
     letterSpacing: -0.4,
-    fontFamily: 'Montserrat-SemiBold',
+    fontFamily: 'Montserrat-Bold',
     color: COLORS.white,
     fontSize: SIZES.h3,
+  },
+  text3: {
+    marginVertical: 16,
+    marginTop: 20,
+    textAlign: 'center',
+    fontFamily: 'Montserrat-SemiBold',
+    color: COLORS.white,
+    fontSize: 12,
+    letterSpacing: -0.4,
   },
 });
 

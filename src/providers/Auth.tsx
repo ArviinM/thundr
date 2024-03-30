@@ -7,10 +7,12 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {AuthData, authService} from './services/authService.ts';
+import {useSignInUser} from '../hooks/useSignInUser.ts';
+import {AuthDataRequest, AuthDataResponse} from '../types/generated.ts';
+import {useAuthStore} from '../store/authStore.ts';
 
 type AuthContextData = {
-  authData?: AuthData;
+  authData?: AuthDataResponse;
   loading: boolean;
   signIn(): Promise<void>;
   signOut(): void;
@@ -19,12 +21,17 @@ type AuthContextData = {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 interface AuthProviderProps {
-  children: ReactNode; // Explicitly define children as ReactNode
+  children: ReactNode;
 }
-// TODO: Work on auth service using API
 const AuthProvider = ({children}: AuthProviderProps) => {
-  const [authData, setAuthData] = useState<AuthData>();
+  // const [authData, setAuthData] = useState<AuthDataResponse>();
+  // Applying Zustand Auth Store
+  const setAuthData = useAuthStore(state => state.setAuthData);
+  const authData = useAuthStore(state => state.authData);
+
   const [loading, setLoading] = useState(true);
+
+  const signInUser = useSignInUser();
 
   useEffect(() => {
     loadStorageData();
@@ -34,7 +41,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     try {
       const authDataSerialized = await AsyncStorage.getItem('@AuthData');
       if (authDataSerialized) {
-        const _authData: AuthData = JSON.parse(authDataSerialized);
+        const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
         setAuthData(_authData);
       }
     } catch (error) {
@@ -46,10 +53,14 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   const signIn = async () => {
     try {
-      const _authData = await authService.signIn('arvin@gmail.com', '123456');
-      console.log({_authData});
-      setAuthData(_authData);
-      await AsyncStorage.setItem('@AuthData', JSON.stringify(_authData));
+      const data: AuthDataResponse = await signInUser.mutateAsync({
+        phoneNumber: '+639000000001',
+        password: 'George123!',
+      } as AuthDataRequest);
+
+      setAuthData(data);
+
+      await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
     } catch (error) {
       console.error('Error signing in:', error);
     }
@@ -57,6 +68,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   const signOut = async () => {
     try {
+      // @ts-ignore
       setAuthData(undefined);
       await AsyncStorage.removeItem('@AuthData');
     } catch (error) {

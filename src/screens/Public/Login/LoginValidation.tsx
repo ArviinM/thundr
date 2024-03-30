@@ -17,7 +17,7 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import {useAuth} from '../../../providers/Auth.tsx';
 
-const MobileValidation = () => {
+const LoginValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const textInputRef = useRef<TextInput>(null);
 
@@ -53,8 +53,10 @@ const MobileValidation = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Hello Sis!</Text>
-              <Text style={styles.textSubtitle}>Can we get your number?</Text>
+              <Text style={styles.textTitle}>Welcome Back!</Text>
+              <Text style={styles.textSubtitle}>
+                Login to Continue to Thundr! ⚡️
+              </Text>
               <View style={styles.numberContainer}>
                 <View style={styles.numberCodeContainer}>
                   <Text style={styles.textNumberCode}>+63</Text>
@@ -66,15 +68,24 @@ const MobileValidation = () => {
                     maxLength={10}
                     placeholder="XXX XXXX XXX"
                     inputMode={'numeric'}
+                    autoComplete={'tel'}
                     onChangeText={text => setPhoneNumber(text)}
                   />
                 </View>
               </View>
+              <View style={{marginBottom: 20}}>
+                <View style={styles.text2InputContainer}>
+                  <TextInput
+                    style={styles.textInputPassword}
+                    placeholder="Password"
+                    secureTextEntry
+                    autoComplete={'password'}
+                    // onChangeText={text => setPhoneNumber(text)}
+                  />
+                </View>
+              </View>
               <View style={styles.bodyContainer}>
-                <Text style={styles.textBody}>
-                  Mag-text kami sa’yo sis to verify that you’re really you.
-                  Paalala na huwag i-share ang iyong OTP.
-                </Text>
+                <Text style={styles.textBody}>Trouble Signing In?</Text>
               </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -114,8 +125,8 @@ const styles = StyleSheet.create({
     letterSpacing: -0.6,
   },
   numberContainer: {
-    marginTop: 100,
-    marginBottom: 50,
+    marginTop: 68,
+    marginBottom: 20,
     alignItems: 'flex-start',
     flexDirection: 'row',
   },
@@ -136,9 +147,22 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginLeft: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.black,
     flex: 1,
   },
+  text2InputContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
   textInputNumber: {
+    backgroundColor: COLORS.white,
+    fontSize: SIZES.h2,
+    fontFamily: 'Montserrat-Medium',
+    padding: 0,
+    width: '100%',
+  },
+  textInputPassword: {
     backgroundColor: COLORS.white,
     fontSize: SIZES.h2,
     fontFamily: 'Montserrat-Medium',
@@ -147,7 +171,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.black,
   },
-  bodyContainer: {},
+  bodyContainer: {marginRight: 30},
   textBody: {
     fontSize: SIZES.h4,
     fontFamily: 'Montserrat-SemiBold',
@@ -172,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MobileValidation;
+export default LoginValidation;
