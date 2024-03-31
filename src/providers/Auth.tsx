@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSignInUser} from '../hooks/useSignInUser.ts';
 import {AuthDataRequest, AuthDataResponse} from '../types/generated.ts';
 import {useAuthStore} from '../store/authStore.ts';
+import {queryClient} from '../utils/queryClient.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -43,6 +44,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       if (authDataSerialized) {
         const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
         setAuthData(_authData);
+        console.log(' iw was here');
+        // Start refetch of get match list when user opens the app if already logged in.
+        await queryClient.refetchQueries({
+          queryKey: ['get-match-list'],
+        });
       }
     } catch (error) {
       console.error('Error loading data from AsyncStorage:', error);
@@ -60,6 +66,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
       setAuthData(data);
 
+      // Start fetch of get match list depending on the sub (user)
+      await queryClient.refetchQueries({
+        queryKey: ['get-match-list', data.sub],
+      });
+
       await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
     } catch (error) {
       console.error('Error signing in:', error);
@@ -70,6 +81,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     try {
       // @ts-ignore
       setAuthData(undefined);
+      // reset all cache
+      await queryClient.resetQueries({
+        queryKey: ['get-match-list'],
+        type: 'all',
+      });
       await AsyncStorage.removeItem('@AuthData');
     } catch (error) {
       console.error('Error signing out:', error);

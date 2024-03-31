@@ -1,11 +1,9 @@
-import axios, {AxiosInstance, CancelToken} from 'axios';
-import {useAuth} from '../../providers/Auth.tsx';
+import axios, {AxiosInstance} from 'axios';
 import {useAuthStore} from '../../store/authStore.ts';
 
 const AXIOS_TIMEOUT = 30000;
 
 function getCurrentAccessToken() {
-  // this is how you access the zustand store outside of React.
   return useAuthStore.getState().authData?.accessToken;
 }
 
@@ -20,11 +18,8 @@ export function useAxiosWithAuth(): AxiosInstance {
     },
   });
 
-  // Add a request interceptor
   axiosInstance.interceptors.request.use(
     async requestConfig => {
-      const token = getCurrentAccessToken();
-
       if (token) {
         requestConfig.headers.Authorization = `Bearer ${token}`;
       } else {
@@ -39,8 +34,6 @@ export function useAxiosWithAuth(): AxiosInstance {
   );
 
   axiosInstance.interceptors.response.use(async requestConfig => {
-    const token = getCurrentAccessToken();
-
     requestConfig.headers = {
       Authorization: `Bearer ${token}`,
       Accept: 'application/json',
