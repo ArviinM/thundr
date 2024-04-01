@@ -4,7 +4,7 @@ export type AuthData = {
   name: string;
 };
 
-// TODO: Work on auth service using API - this is only a mock API
+// TODO: Work on auth service using API - this is only a mock API Sample
 const signIn = (email: string, _password: string): Promise<AuthData> => {
   // this is a mock of an API call, in a real app
   // will be need connect with some real API,

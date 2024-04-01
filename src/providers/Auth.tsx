@@ -44,7 +44,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       if (authDataSerialized) {
         const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
         setAuthData(_authData);
-        console.log(' iw was here');
         // Start refetch of get match list when user opens the app if already logged in.
         await queryClient.refetchQueries({
           queryKey: ['get-match-list'],
