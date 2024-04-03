@@ -10,4 +10,5 @@ export type RootNavigationParams = {
   Login: undefined;
   LoginValidation: undefined;
   MobileValidation: undefined;
+  Terms: {uri: string};
 };

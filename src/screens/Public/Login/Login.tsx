@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useAuth} from '../../../providers/Auth.tsx';
+
 import LinearGradient from 'react-native-linear-gradient';
-import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
-import Button from '../../../components/shared/Button.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
+import Button from '../../../components/shared/Button.tsx';
+import {useAuth} from '../../../providers/Auth.tsx';
+
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {IMAGES} from '../../../constants/images.ts';
+import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
 
 const Login = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -17,6 +20,16 @@ const Login = () => {
   const signIn = async () => {
     isLoading(true);
     await auth.signIn();
+  };
+
+  const handleTermsPress = (isTerms: boolean) => {
+    if (isTerms) {
+      navigation.navigate('Terms', {
+        uri: 'https://thundr.ph/terms-and-condition/',
+      });
+    } else {
+      navigation.navigate('Terms', {uri: 'https://thundr.ph/privacy-policy/'});
+    }
   };
 
   return (
@@ -32,8 +45,19 @@ const Login = () => {
           </View>
           <View style={styles.bottomContainer}>
             <Text style={styles.termsText}>
-              By tapping ‘Sign in’ you agree to our Terms & Conditions. Learn
-              how we process your data in our Privacy Policy.
+              By tapping ‘Sign in’ you agree to our{' '}
+              <Text
+                style={styles.termsLink}
+                onPress={() => handleTermsPress(true)}>
+                Terms & Conditions
+              </Text>
+              . Learn how we process your data in our{' '}
+              <Text
+                style={styles.termsLink}
+                onPress={() => handleTermsPress(false)}>
+                Privacy Policy
+              </Text>
+              .
             </Text>
             <Button
               onPress={() => navigation.navigate('MobileValidation')}
@@ -80,6 +104,9 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 12,
     letterSpacing: -0.4,
+  },
+  termsLink: {
+    textDecorationLine: 'underline',
   },
   button1: {
     alignItems: 'center',

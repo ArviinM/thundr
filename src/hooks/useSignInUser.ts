@@ -1,5 +1,5 @@
 import {useMutation} from '@tanstack/react-query';
-import {AxiosResponse} from 'axios';
+import {AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from './api/useAxiosWithAuth.ts';
 import {AuthDataRequest, AuthDataResponse} from '../types/generated.ts';
 
@@ -18,6 +18,11 @@ export function useSignInUser() {
       //         errorDetails: response.data as unknown as ErrorData,
       //     } as HookErrorDetails
       // }
+
+      if (response.status !== HttpStatusCode.Ok) {
+        console.error(response.data);
+        throw new Error('An error occurred with useSignInUser');
+      }
 
       return response.data.data;
     },
