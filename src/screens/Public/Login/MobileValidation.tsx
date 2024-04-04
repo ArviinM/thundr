@@ -54,7 +54,7 @@ const MobileValidation = () => {
 
     // Temporary Comment to Bypass
     const result = await mobileValidation.mutateAsync({
-      phoneNumber: data.phoneNumber,
+      phoneNumber: withNumberCode,
     } as MobileValidationRequest);
 
     navigation.navigate('MobileVerification', result);

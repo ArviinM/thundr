@@ -37,3 +37,19 @@ export type MobileValidationResponse = {
   forProfileCreation: boolean;
   loginDeactivated: boolean;
 };
+
+// Mobile Verification Types
+export type MobileVerificationRequest = {
+  phoneNumber: string;
+  session: string;
+  challengeName: string;
+  challengeAnswer: string;
+};
+
+export type MobileVerificationResponse = {
+  username: string;
+  session: string;
+  challengeName: string;
+  forProfileCreation: boolean;
+  loginDeactivated: boolean;
+};
