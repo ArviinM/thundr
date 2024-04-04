@@ -4,6 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {AuthProvider} from './src/providers/Auth.tsx';
 import {asyncStoragePersister, queryClient} from './src/utils/queryClient.ts';
 import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   return (
@@ -12,7 +13,9 @@ function App(): React.JSX.Element {
         client={queryClient}
         persistOptions={{persister: asyncStoragePersister}}>
         <AuthProvider>
-          <RootNavigation />
+          <GestureHandlerRootView style={{flex: 1}}>
+            <RootNavigation />
+          </GestureHandlerRootView>
         </AuthProvider>
       </PersistQueryClientProvider>
     </SafeAreaProvider>
