@@ -70,8 +70,8 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
     } as MobileVerificationRequest);
 
     isLoading(false);
-    console.log('I worked ata?');
-    // navigation.navigate('')
+
+    navigation.navigate('EmailValidation', result);
   };
 
   return (

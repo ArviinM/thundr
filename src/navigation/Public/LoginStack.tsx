@@ -9,6 +9,8 @@ import {Stack} from '../../constants/navigator.ts';
 import {COLORS} from '../../constants/commons.ts';
 import MobileVerification from '../../screens/Public/Login/MobileVerification.tsx';
 import {Platform} from 'react-native';
+import EmailValidation from '../../screens/Public/Login/EmailValidation.tsx';
+import EmailVerification from '../../screens/Public/Login/EmailVerification.tsx';
 
 export const LoginStack = () => {
   return (
@@ -40,6 +42,16 @@ export const LoginStack = () => {
         <Stack.Screen
           name="MobileVerification"
           component={MobileVerification}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="EmailValidation"
+          component={EmailValidation}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="EmailVerification"
+          component={EmailVerification}
           options={{animation: 'fade'}}
         />
       </Stack.Group>

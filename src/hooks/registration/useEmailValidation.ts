@@ -3,26 +3,25 @@ import {AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
-  MobileVerificationRequest,
-  MobileVerificationResponse,
+  EmailValidationRequest,
+  EmailValidationResponse,
 } from '../../types/generated.ts';
 
-export function useMobileVerification() {
+export function useEmailValidation() {
   const axiosInstance = useAxiosWithAuth();
 
   return useMutation({
-    mutationKey: ['mobile-verification'],
+    mutationKey: ['email-validation'],
     mutationFn: async (
-      data: MobileVerificationRequest,
-    ): Promise<MobileVerificationResponse> => {
-      const response: AxiosResponse<BaseResponse<MobileVerificationResponse>> =
-        await axiosInstance.post('/auth/validate-challenge-question', data);
+      data: EmailValidationRequest,
+    ): Promise<EmailValidationResponse> => {
+      const response: AxiosResponse<BaseResponse<EmailValidationResponse>> =
+        await axiosInstance.post('/auth/email-code', data);
 
       if (response.status !== HttpStatusCode.Ok) {
         console.error(response.data);
-        throw new Error('An error occurred with useMobileVerification');
+        throw new Error('An error occurred with useEmailValidation');
       }
-
       console.log(response.data);
       return response.data.data;
     },

@@ -12,7 +12,13 @@ import {
 
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import * as yup from 'yup';
+
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
@@ -20,26 +26,43 @@ import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {useMobileValidation} from '../../../hooks/registration/useMobileValidation.ts';
-import {MobileValidationRequest} from '../../../types/generated.ts';
+import {EmailValidationRequest} from '../../../types/generated.ts';
+import {useEmailValidation} from '../../../hooks/registration/useEmailValidation.ts';
+import {yupResolver} from '@hookform/resolvers/yup';
 
-const MobileValidation = () => {
+type EmailValidationScreenRouteProp = RouteProp<
+  RootNavigationParams,
+  'EmailValidation'
+>;
+
+type EmailValidationProps = {
+  route?: EmailValidationScreenRouteProp;
+};
+
+const EmailValidation = ({route}: EmailValidationProps) => {
+  const {username, challengeName, session} = route?.params || {};
+
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const textInputRef = useRef<TextInput>(null);
 
   const [loading, isLoading] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
 
-  const mobileValidation = useMobileValidation();
+  const emailValidation = useEmailValidation();
+
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .email('Your email address sis is invalid!')
+      .required('Nako mars, we need your email po!'),
+  });
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: {errors, isValid},
   } = useForm({
-    defaultValues: {
-      phoneNumber: '',
-    },
+    resolver: yupResolver(schema),
   });
 
   useEffect(() => {
@@ -48,25 +71,32 @@ const MobileValidation = () => {
     }
   }, []);
 
-  const onSubmit = async (data: {phoneNumber: string}) => {
-    const withNumberCode = `+63${data.phoneNumber}`;
-    isLoading(true);
+  const onSubmit = async (data: {email: string}) => {
+    try {
+      await schema.validate(data);
+      isLoading(true);
 
-    // Temporary Comment to Bypass
-    const result = await mobileValidation.mutateAsync({
-      phoneNumber: withNumberCode,
-    } as MobileValidationRequest);
+      const result = await emailValidation.mutateAsync({
+        phoneNumber: username,
+        email: data.email,
+        session: session,
+        challengeName: challengeName,
+      } as EmailValidationRequest);
 
-    navigation.navigate('MobileVerification', result);
-    isLoading(false);
+      isLoading(false);
+      navigation.navigate('EmailVerification', result);
+    } catch (error) {
+      // Handle validation errors
+      if (error instanceof yup.ValidationError) {
+        console.error(error.message);
+      }
+    }
   };
-
-  const isPhoneNumberIncomplete = phoneNumber.length < 10;
 
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-        <StepProgressBar currentStep={1} totalSteps={10} />
+        <StepProgressBar currentStep={2} totalSteps={10} />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.flex}>
@@ -79,12 +109,11 @@ const MobileValidation = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Hello, mars!</Text>
-              <Text style={styles.textSubtitle}>Can we get your number?</Text>
+              <Text style={styles.textTitle}>Enter your email, sis!</Text>
+              <Text style={styles.textSubtitle}>
+                Para we can stay connected with you, mare.
+              </Text>
               <View style={styles.numberContainer}>
-                <View style={styles.numberCodeContainer}>
-                  <Text style={styles.textNumberCode}>+63</Text>
-                </View>
                 <View style={styles.textInputContainer}>
                   <Controller
                     control={control}
@@ -94,28 +123,28 @@ const MobileValidation = () => {
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
                         ref={textInputRef}
-                        style={styles.textInputNumber}
-                        maxLength={10}
-                        placeholder="XXX XXXX XXX"
-                        inputMode={'numeric'}
+                        style={styles.textInputEmail}
+                        autoComplete="email"
+                        keyboardType="email-address"
+                        placeholder="example@thundr.ph"
+                        inputMode={'email'}
                         onBlur={onBlur}
-                        onChangeText={text => {
-                          setPhoneNumber(text);
-                          onChange(text);
-                        }}
+                        onChangeText={onChange}
                         value={value}
+                        autoCapitalize="none"
                         selectionColor={COLORS.primary1}
                       />
                     )}
-                    name="phoneNumber"
+                    name="email"
                   />
-                  {errors.phoneNumber && <Text>This is required.</Text>}
+                  {errors.email && (
+                    <Text style={styles.errorText}>{errors.email.message}</Text>
+                  )}
                 </View>
               </View>
               <View style={styles.bodyContainer}>
                 <Text style={styles.textBody}>
-                  Mag-text kami sa’yo sis to verify that you’re really you.
-                  Paalala na huwag i-share ang iyong OTP.
+                  Forgot your password? We can recover your account.
                 </Text>
               </View>
             </View>
@@ -124,7 +153,7 @@ const MobileValidation = () => {
                 onPress={handleSubmit(onSubmit)}
                 text="Next"
                 loading={loading}
-                disabled={isPhoneNumberIncomplete}
+                disabled={!isValid}
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
               />
@@ -177,10 +206,9 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    marginLeft: 16,
     flex: 1,
   },
-  textInputNumber: {
+  textInputEmail: {
     backgroundColor: COLORS.white,
     fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
@@ -212,6 +240,13 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: SIZES.h5,
   },
+  errorText: {
+    marginTop: 8,
+    color: COLORS.primary1,
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: -0.8,
+    fontSize: SIZES.h6,
+  },
 });
 
-export default MobileValidation;
+export default EmailValidation;

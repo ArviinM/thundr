@@ -53,3 +53,37 @@ export type MobileVerificationResponse = {
   forProfileCreation: boolean;
   loginDeactivated: boolean;
 };
+
+// Email Validation Types
+export type EmailValidationRequest = {
+  phoneNumber: string;
+  email: string;
+  session: string;
+  challengeName: string;
+};
+
+export type EmailValidationResponse = {
+  username: string;
+  session: string;
+  challengeName: string;
+  forProfileCreation: boolean;
+  loginDeactivated: boolean;
+  // add here email later email: string
+};
+
+// Email Verification Types
+export type EmailVerificationRequest = {
+  phoneNumber: string;
+  email: string;
+  session: string;
+  challengeName: string;
+  challengeAnswer: string;
+};
+
+export type EmailVerificationResponse = {
+  username: string;
+  session: string;
+  challengeName: string;
+  forProfileCreation: boolean;
+  loginDeactivated: boolean;
+};

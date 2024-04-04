@@ -1,18 +1,23 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 
+import Clipboard from '@react-native-clipboard/clipboard';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {Controller, useForm} from 'react-hook-form';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import OTPTextView from 'react-native-otp-textinput';
+
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
@@ -20,53 +25,60 @@ import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {useMobileValidation} from '../../../hooks/registration/useMobileValidation.ts';
-import {MobileValidationRequest} from '../../../types/generated.ts';
+import {useEmailVerification} from '../../../hooks/registration/useEmailVerification.ts';
+import {EmailVerificationRequest} from '../../../types/generated.ts';
 
-const MobileValidation = () => {
+type EmailVerificationScreenRouteProp = RouteProp<
+  RootNavigationParams,
+  'EmailVerification'
+>;
+
+type EmailVerificationProps = {
+  route?: EmailVerificationScreenRouteProp;
+};
+
+const EmailVerification = ({route}: EmailVerificationProps) => {
+  const {username, challengeName, session} = route?.params || {};
+
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const textInputRef = useRef<TextInput>(null);
+  const emailCodeInputRef = useRef<OTPTextView>(null);
 
   const [loading, isLoading] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [emailCodeInput, setEmailCodeInput] = useState<string>('');
 
-  const mobileValidation = useMobileValidation();
+  const emailVerification = useEmailVerification();
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm({
-    defaultValues: {
-      phoneNumber: '',
-    },
-  });
-
-  useEffect(() => {
-    if (textInputRef.current) {
-      textInputRef.current.focus();
+  const handleCellTextChange = async (text: string, i: number) => {
+    if (i === 0) {
+      const clippedText = await Clipboard.getString();
+      if (clippedText.slice(0, 1) === text) {
+        emailCodeInputRef.current?.setValue(clippedText, true);
+      }
     }
-  }, []);
-
-  const onSubmit = async (data: {phoneNumber: string}) => {
-    const withNumberCode = `+63${data.phoneNumber}`;
-    isLoading(true);
-
-    // Temporary Comment to Bypass
-    const result = await mobileValidation.mutateAsync({
-      phoneNumber: withNumberCode,
-    } as MobileValidationRequest);
-
-    navigation.navigate('MobileVerification', result);
-    isLoading(false);
   };
 
-  const isPhoneNumberIncomplete = phoneNumber.length < 10;
+  const onSubmit = async (emailCode: string) => {
+    console.log(emailCode);
+
+    isLoading(true);
+
+    const result = await emailVerification.mutateAsync({
+      phoneNumber: username,
+      session: session,
+      email: 'test@thundr.ph',
+      challengeName: challengeName,
+      challengeAnswer: emailCode,
+    } as EmailVerificationRequest);
+
+    isLoading(false);
+
+    // navigation.navigate('PasswordCreation', result);
+  };
 
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-        <StepProgressBar currentStep={1} totalSteps={10} />
+        <StepProgressBar currentStep={2} totalSteps={10} />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.flex}>
@@ -79,52 +91,34 @@ const MobileValidation = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Hello, mars!</Text>
-              <Text style={styles.textSubtitle}>Can we get your number?</Text>
+              <Text style={styles.textTitle}>Enter your code.</Text>
+              <Text style={styles.textSubtitle}>{username}</Text>
               <View style={styles.numberContainer}>
-                <View style={styles.numberCodeContainer}>
-                  <Text style={styles.textNumberCode}>+63</Text>
-                </View>
-                <View style={styles.textInputContainer}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={textInputRef}
-                        style={styles.textInputNumber}
-                        maxLength={10}
-                        placeholder="XXX XXXX XXX"
-                        inputMode={'numeric'}
-                        onBlur={onBlur}
-                        onChangeText={text => {
-                          setPhoneNumber(text);
-                          onChange(text);
-                        }}
-                        value={value}
-                        selectionColor={COLORS.primary1}
-                      />
-                    )}
-                    name="phoneNumber"
-                  />
-                  {errors.phoneNumber && <Text>This is required.</Text>}
-                </View>
+                <OTPTextView
+                  ref={emailCodeInputRef}
+                  // containerStyle={styles.textInputContainer}
+                  textInputStyle={styles.textInputEmailCode}
+                  handleTextChange={setEmailCodeInput}
+                  handleCellTextChange={handleCellTextChange}
+                  inputCount={6}
+                  tintColor={COLORS.primary1}
+                  offTintColor={COLORS.black}
+                  // inputCellLength={1}
+                  keyboardType="default"
+                />
               </View>
               <View style={styles.bodyContainer}>
                 <Text style={styles.textBody}>
-                  Mag-text kami sa’yo sis to verify that you’re really you.
-                  Paalala na huwag i-share ang iyong OTP.
+                  Wala pa rin email, mars? RESEND EMAIL CODE
                 </Text>
               </View>
             </View>
             <View style={styles.buttonContainer}>
               <GradientButton
-                onPress={handleSubmit(onSubmit)}
+                onPress={() => onSubmit(emailCodeInput)}
                 text="Next"
                 loading={loading}
-                disabled={isPhoneNumberIncomplete}
+                // disabled={isOTPIncomplete}
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
               />
@@ -158,16 +152,16 @@ const styles = StyleSheet.create({
   numberContainer: {
     marginTop: 100,
     marginBottom: 50,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   numberCodeContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '23%',
-    borderBottomWidth: 1,
     borderBottomColor: COLORS.black,
+    width: '13%',
   },
   textNumberCode: {
     color: COLORS.black,
@@ -180,14 +174,10 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     flex: 1,
   },
-  textInputNumber: {
-    backgroundColor: COLORS.white,
+  textInputEmailCode: {
     fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
-    padding: 0,
-    width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.black,
   },
   bodyContainer: {},
   textBody: {
@@ -214,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MobileValidation;
+export default EmailVerification;
