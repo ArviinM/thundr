@@ -87,3 +87,22 @@ export type EmailVerificationResponse = {
   forProfileCreation: boolean;
   loginDeactivated: boolean;
 };
+
+// Password Creation Types
+export type PasswordCreationRequest = {
+  phoneNumber: string;
+  email: string;
+  session: string;
+  challengeName: string;
+  password: string;
+};
+
+export type PasswordCreationResponse = {
+  accessToken: string;
+  idToken: string;
+  username: string;
+  refreshToken: string;
+  sub: string;
+  forProfileCreation: boolean;
+  loginDeactivated: boolean;
+};

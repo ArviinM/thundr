@@ -17,6 +17,7 @@ type AuthContextData = {
   loading: boolean;
   signIn(): Promise<void>;
   signOut(): void;
+  signUp(data: any): Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -91,8 +92,25 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     }
   };
 
+  const signUp = async (data: any) => {
+    try {
+      console.log(data);
+
+      // await queryClient.refetchQueries({
+      //   queryKey: ['get-match-list', data.sub],
+      // });   // await queryClient.refetchQueries({
+      //   queryKey: ['get-match-list', data.sub],
+      // });
+
+      setAuthData(data);
+      await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{authData, loading, signIn, signOut}}>
+    <AuthContext.Provider value={{authData, loading, signIn, signOut, signUp}}>
       {children}
     </AuthContext.Provider>
   );

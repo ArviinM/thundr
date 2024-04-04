@@ -46,7 +46,6 @@ const EmailValidation = ({route}: EmailValidationProps) => {
   const textInputRef = useRef<TextInput>(null);
 
   const [loading, isLoading] = useState(false);
-  const [isButtonDisabled, setButtonDisabled] = useState(true);
 
   const emailValidation = useEmailValidation();
 

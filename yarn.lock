@@ -6533,6 +6533,11 @@ react-native-gesture-handler@^2.16.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-keyboard-controller@^1.11.5:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-controller/-/react-native-keyboard-controller-1.11.5.tgz#480fb0093e421f6947e302c9dd31bf8e349bc1e0"
+  integrity sha512-AtlJVz+Sm9uh5Y+k0AhqJDVnbpYkieOE+qHwO8046Fyt9blxK5pGprOQLNy9hcJjfxwhiwiSFk9VyZlZfaYe6Q==
+
 react-native-linear-gradient@^2.8.3:
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz#9a116649f86d74747304ee13db325e20b21e564f"

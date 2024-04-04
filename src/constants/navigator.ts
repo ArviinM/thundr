@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {
   EmailValidationResponse,
+  EmailVerificationResponse,
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
@@ -19,6 +20,8 @@ export type RootNavigationParams = {
   // Email Process
   EmailValidation: MobileVerificationResponse;
   EmailVerification: EmailValidationResponse;
+  // Password Creation
+  PasswordCreation: EmailVerificationResponse;
   // Login
   Login: undefined;
   LoginValidation: undefined;

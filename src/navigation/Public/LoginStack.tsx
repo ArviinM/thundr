@@ -11,6 +11,7 @@ import MobileVerification from '../../screens/Public/Login/MobileVerification.ts
 import {Platform} from 'react-native';
 import EmailValidation from '../../screens/Public/Login/EmailValidation.tsx';
 import EmailVerification from '../../screens/Public/Login/EmailVerification.tsx';
+import PasswordCreation from '../../screens/Public/Login/PasswordCreation.tsx';
 
 export const LoginStack = () => {
   return (
@@ -27,17 +28,18 @@ export const LoginStack = () => {
       </Stack.Group>
       <Stack.Group
         screenOptions={{
-          presentation: 'fullScreenModal',
+          // presentation: 'm',
           headerShown: false,
           statusBarColor: COLORS.white,
-          statusBarStyle: 'dark',
+          // statusBarStyle: 'dark',
+          statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
           statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="LoginValidation" component={LoginValidation} />
         <Stack.Screen
           name="MobileValidation"
           component={MobileValidation}
-          options={{animation: 'slide_from_bottom'}}
+          options={{animation: 'slide_from_right'}}
         />
         <Stack.Screen
           name="MobileVerification"
@@ -52,6 +54,11 @@ export const LoginStack = () => {
         <Stack.Screen
           name="EmailVerification"
           component={EmailVerification}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="PasswordCreation"
+          component={PasswordCreation}
           options={{animation: 'fade'}}
         />
       </Stack.Group>

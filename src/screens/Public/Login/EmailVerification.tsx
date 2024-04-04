@@ -65,14 +65,14 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
     const result = await emailVerification.mutateAsync({
       phoneNumber: username,
       session: session,
-      email: 'test@thundr.ph',
+      email: 'test8@thundr.ph',
       challengeName: challengeName,
       challengeAnswer: emailCode,
     } as EmailVerificationRequest);
 
     isLoading(false);
 
-    // navigation.navigate('PasswordCreation', result);
+    navigation.navigate('PasswordCreation', result);
   };
 
   return (
@@ -96,14 +96,12 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
               <View style={styles.numberContainer}>
                 <OTPTextView
                   ref={emailCodeInputRef}
-                  // containerStyle={styles.textInputContainer}
                   textInputStyle={styles.textInputEmailCode}
                   handleTextChange={setEmailCodeInput}
                   handleCellTextChange={handleCellTextChange}
                   inputCount={6}
                   tintColor={COLORS.primary1}
                   offTintColor={COLORS.black}
-                  // inputCellLength={1}
                   keyboardType="default"
                 />
               </View>
