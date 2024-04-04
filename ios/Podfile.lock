@@ -1065,6 +1065,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.23.1):
     - React-Core
+  - RNCClipboard (1.13.2):
+    - React-Core
   - RNGestureHandler (2.16.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1139,6 +1141,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1257,6 +1260,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -1323,6 +1328,7 @@ SPEC CHECKSUMS:
   ReactCommon: 2aa35648354bd4c4665b9a5084a7d37097b89c10
   RNBootSplash: eff8239c4f795ce42a0604873aef3733aac0dedd
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
+  RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNGestureHandler: bc2cdb2dc42facdf34992ae364b8a728e19a3686
   RNReanimated: 8a4d86eb951a4a99d8e86266dc71d7735c0c30a9
   RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f

@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {
   Image,
   KeyboardAvoidingView,
@@ -10,20 +9,38 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {Controller, useForm} from 'react-hook-form';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+
+import GradientButton from '../../../components/shared/GradientButton.tsx';
+import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
+
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import GradientButton from '../../../components/shared/GradientButton.tsx';
-import {useAuth} from '../../../providers/Auth.tsx';
+import {useMobileValidation} from '../../../hooks/registration/useMobileValidation.ts';
+import {MobileValidationRequest} from '../../../types/generated.ts';
 
 const MobileValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const textInputRef = useRef<TextInput>(null);
 
-  const auth = useAuth();
   const [loading, isLoading] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const mobileValidation = useMobileValidation();
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: {
+      phoneNumber: '',
+    },
+  });
 
   useEffect(() => {
     if (textInputRef.current) {
@@ -31,16 +48,25 @@ const MobileValidation = () => {
     }
   }, []);
 
-  const isPhoneNumberEmpty = phoneNumber.trim() === '';
-
-  const signIn = async () => {
+  const onSubmit = async (data: {phoneNumber: string}) => {
+    const withNumberCode = `+63${data.phoneNumber}`;
     isLoading(true);
-    await auth.signIn();
+
+    // Temporary Comment to Bypass
+    const result = await mobileValidation.mutateAsync({
+      phoneNumber: data.phoneNumber,
+    } as MobileValidationRequest);
+
+    navigation.navigate('MobileVerification', result);
+    isLoading(false);
   };
+
+  const isPhoneNumberIncomplete = phoneNumber.length < 10;
 
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
+        <StepProgressBar currentStep={1} totalSteps={10} />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.flex}>
@@ -53,21 +79,36 @@ const MobileValidation = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Hello Sis!</Text>
+              <Text style={styles.textTitle}>Hello, mars!</Text>
               <Text style={styles.textSubtitle}>Can we get your number?</Text>
               <View style={styles.numberContainer}>
                 <View style={styles.numberCodeContainer}>
                   <Text style={styles.textNumberCode}>+63</Text>
                 </View>
                 <View style={styles.textInputContainer}>
-                  <TextInput
-                    ref={textInputRef}
-                    style={styles.textInputNumber}
-                    maxLength={10}
-                    placeholder="XXX XXXX XXX"
-                    inputMode={'numeric'}
-                    onChangeText={text => setPhoneNumber(text)}
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <TextInput
+                        ref={textInputRef}
+                        style={styles.textInputNumber}
+                        maxLength={10}
+                        placeholder="XXX XXXX XXX"
+                        inputMode={'numeric'}
+                        onBlur={onBlur}
+                        onChangeText={text => {
+                          setPhoneNumber(text);
+                          onChange(text);
+                        }}
+                        value={value}
+                      />
+                    )}
+                    name="phoneNumber"
                   />
+                  {errors.phoneNumber && <Text>This is required.</Text>}
                 </View>
               </View>
               <View style={styles.bodyContainer}>
@@ -79,10 +120,10 @@ const MobileValidation = () => {
             </View>
             <View style={styles.buttonContainer}>
               <GradientButton
-                onPress={signIn}
-                text="NEXT"
+                onPress={handleSubmit(onSubmit)}
+                text="Next"
                 loading={loading}
-                disabled={isPhoneNumberEmpty}
+                disabled={isPhoneNumberIncomplete}
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
               />
@@ -102,13 +143,13 @@ const styles = StyleSheet.create({
   backImage: {alignSelf: 'flex-start'},
   titleContainer: {flex: 0.9, marginHorizontal: 30},
   textTitle: {
-    fontSize: SIZES.h1,
-    fontFamily: 'Montserrat-Bold',
+    fontSize: SIZES.h2,
+    fontFamily: 'ClimateCrisis-Regular',
     letterSpacing: -0.6,
-    color: COLORS.black,
+    color: COLORS.primary1,
   },
   textSubtitle: {
-    fontSize: SIZES.h4,
+    fontSize: SIZES.h5,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.gray,
     letterSpacing: -0.6,
@@ -129,7 +170,7 @@ const styles = StyleSheet.create({
   },
   textNumberCode: {
     color: COLORS.black,
-    fontSize: SIZES.h2,
+    fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
   },
   textInputContainer: {
@@ -140,7 +181,7 @@ const styles = StyleSheet.create({
   },
   textInputNumber: {
     backgroundColor: COLORS.white,
-    fontSize: SIZES.h2,
+    fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
     padding: 0,
     width: '100%',
@@ -149,7 +190,7 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {},
   textBody: {
-    fontSize: SIZES.h4,
+    fontSize: SIZES.h5,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.gray,
     letterSpacing: -0.6,
@@ -168,7 +209,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.white,
-    fontSize: SIZES.h3,
+    fontSize: SIZES.h5,
   },
 });
 

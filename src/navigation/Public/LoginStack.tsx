@@ -7,6 +7,8 @@ import Terms from '../../screens/Public/Login/Terms.tsx';
 
 import {Stack} from '../../constants/navigator.ts';
 import {COLORS} from '../../constants/commons.ts';
+import MobileVerification from '../../screens/Public/Login/MobileVerification.tsx';
+import {Platform} from 'react-native';
 
 export const LoginStack = () => {
   return (
@@ -16,6 +18,7 @@ export const LoginStack = () => {
         gestureEnabled: false,
         headerShown: false,
         statusBarTranslucent: true,
+        statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
       }}>
       <Stack.Group screenOptions={{statusBarColor: COLORS.primary1}}>
         <Stack.Screen name="Login" component={Login} />
@@ -26,9 +29,19 @@ export const LoginStack = () => {
           headerShown: false,
           statusBarColor: COLORS.white,
           statusBarStyle: 'dark',
+          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="LoginValidation" component={LoginValidation} />
-        <Stack.Screen name="MobileValidation" component={MobileValidation} />
+        <Stack.Screen
+          name="MobileValidation"
+          component={MobileValidation}
+          options={{animation: 'slide_from_bottom'}}
+        />
+        <Stack.Screen
+          name="MobileVerification"
+          component={MobileVerification}
+          options={{animation: 'fade'}}
+        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -37,6 +50,7 @@ export const LoginStack = () => {
           statusBarColor: COLORS.white,
           statusBarStyle: 'dark',
           gestureEnabled: true,
+          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="Terms" component={Terms} />
       </Stack.Group>

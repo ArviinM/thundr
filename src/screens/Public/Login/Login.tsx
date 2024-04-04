@@ -14,13 +14,6 @@ import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
 
 const Login = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const [loading, isLoading] = useState(false);
-  const auth = useAuth();
-  // TODO: For configuration of auth service
-  const signIn = async () => {
-    isLoading(true);
-    await auth.signIn();
-  };
 
   const handleTermsPress = (isTerms: boolean) => {
     if (isTerms) {
@@ -41,7 +34,13 @@ const Login = () => {
       <SafeAreaView style={[styles.flexContainer]} edges={['bottom', 'top']}>
         <View style={styles.container}>
           <View style={styles.imageContainer}>
-            <Image source={IMAGES.thundrLogo} style={{alignSelf: 'center'}} />
+            <Image
+              source={IMAGES.thundrLogo}
+              style={{
+                alignSelf: 'center',
+              }}
+              resizeMode={'contain'}
+            />
           </View>
           <View style={styles.bottomContainer}>
             <Text style={styles.termsText}>
@@ -61,14 +60,13 @@ const Login = () => {
             </Text>
             <Button
               onPress={() => navigation.navigate('MobileValidation')}
-              text="CREATE ACCOUNT"
+              text="Create Account"
               buttonStyle={styles.button1}
               textStyle={styles.text1}
             />
             <Button
               onPress={() => navigation.navigate('LoginValidation')}
-              text="SIGN IN"
-              loading={loading}
+              text="Sign In"
               buttonStyle={styles.button2}
               textStyle={styles.text2}
             />
@@ -90,6 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: height / 8,
+    transform: [{scale: 0.8}],
   },
   bottomContainer: {
     justifyContent: 'center',
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.white,
-    fontSize: 12,
+    fontSize: SIZES.h6,
     letterSpacing: -0.4,
   },
   termsLink: {
@@ -119,10 +118,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   text1: {
-    letterSpacing: -0.4,
+    letterSpacing: -0.8,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.black,
-    fontSize: SIZES.h3,
+    fontSize: SIZES.h5,
   },
   button2: {
     alignItems: 'center',
@@ -135,10 +134,10 @@ const styles = StyleSheet.create({
     borderColor: COLORS.white,
   },
   text2: {
-    letterSpacing: -0.4,
+    letterSpacing: -0.8,
     fontFamily: 'Montserrat-Bold',
     color: COLORS.white,
-    fontSize: SIZES.h3,
+    fontSize: SIZES.h5,
   },
   text3: {
     marginVertical: 16,
