@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="splashscreen_bg">#F2CECD</color>
-    <color name="app_bg">#F2CECD</color>
-    <color name="bootsplash_background">#F2CECD</color>
+    <color name="bootsplash_background">#F4D1D0</color>
 </resources>
