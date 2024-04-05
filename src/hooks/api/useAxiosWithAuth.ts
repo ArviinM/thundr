@@ -1,0 +1,46 @@
+import axios, {AxiosInstance} from 'axios';
+import {useAuthStore} from '../../store/authStore.ts';
+
+const AXIOS_TIMEOUT = 30000;
+
+function getCurrentAccessToken() {
+  return useAuthStore.getState().authData?.accessToken;
+}
+
+export function useAxiosWithAuth(): AxiosInstance {
+  const token = getCurrentAccessToken();
+  const axiosInstance = axios.create({
+    baseURL: 'https://dev-api.thundr.ph/',
+    timeout: AXIOS_TIMEOUT,
+    validateStatus: () => true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  axiosInstance.interceptors.request.use(
+    async requestConfig => {
+      if (token) {
+        requestConfig.headers.Authorization = `Bearer ${token}`;
+      } else {
+        requestConfig.headers.Authorization = '';
+      }
+
+      return requestConfig;
+    },
+    error => {
+      return Promise.reject(error);
+    },
+  );
+
+  axiosInstance.interceptors.response.use(async requestConfig => {
+    requestConfig.headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    };
+
+    return requestConfig;
+  });
+
+  return axiosInstance;
+}
