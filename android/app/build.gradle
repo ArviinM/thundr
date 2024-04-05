@@ -76,6 +76,8 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     namespace "ph.thundr.app.dev"
+
+
     defaultConfig {
         applicationId "ph.thundr.app.dev"
         minSdkVersion rootProject.ext.minSdkVersion
