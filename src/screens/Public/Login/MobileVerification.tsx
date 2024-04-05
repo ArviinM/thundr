@@ -74,6 +74,8 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
     navigation.navigate('EmailValidation', result);
   };
 
+  const isOtpComplete = otpInput.length < 6;
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
@@ -117,7 +119,7 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
                 onPress={() => onSubmit(otpInput)}
                 text="Next"
                 loading={loading}
-                // disabled={isOTPIncomplete}
+                disabled={isOtpComplete}
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
               />

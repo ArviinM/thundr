@@ -75,6 +75,8 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
     navigation.navigate('PasswordCreation', result);
   };
 
+  const isEmailCodeComplete = emailCodeInput.length < 6;
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
@@ -116,7 +118,7 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
                 onPress={() => onSubmit(emailCodeInput)}
                 text="Next"
                 loading={loading}
-                // disabled={isOTPIncomplete}
+                disabled={isEmailCodeComplete}
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
               />
