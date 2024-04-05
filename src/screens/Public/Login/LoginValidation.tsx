@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {
   Image,
   KeyboardAvoidingView,
@@ -10,20 +9,54 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS, SIZES, width} from '../../../constants/commons.ts';
-import {IMAGES} from '../../../constants/images.ts';
+
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {Controller, useForm} from 'react-hook-form';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {yupResolver} from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import {useAuth} from '../../../providers/Auth.tsx';
+import {
+  KeyboardAwareScrollView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
+
+import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
+import {IMAGES} from '../../../constants/images.ts';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+
+import {AuthDataRequest} from '../../../types/generated.ts';
 
 const LoginValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const textInputRef = useRef<TextInput>(null);
+  const passwordRef = useRef<TextInput>(null); // Ref for password input
+
+  const [loading, isLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const auth = useAuth();
-  const [loading, isLoading] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+
+  const validationSchema = yup.object().shape({
+    phoneNumber: yup
+      .string()
+      .required('Phone number is required')
+      .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits'),
+    password: yup
+      .string()
+      .required('Nako mars, we need your password!')
+      .min(8, 'Password must be at least 8 characters.'),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValid},
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
   useEffect(() => {
     if (textInputRef.current) {
@@ -31,20 +64,29 @@ const LoginValidation = () => {
     }
   }, []);
 
-  const isPhoneNumberEmpty = phoneNumber.trim() === '';
-
-  const signIn = async () => {
+  const onSubmit = async (data: AuthDataRequest) => {
+    const withNumberCode = `+63${data.phoneNumber}`;
     isLoading(true);
-    await auth.signIn();
+
+    const signInData: AuthDataRequest = {
+      phoneNumber: withNumberCode,
+      password: data.password,
+    };
+
+    await auth.signIn(signInData);
+
+    isLoading(false);
   };
+
+  // const isPhoneNumberIncomplete = phoneNumber.length < 10;
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.flex}>
+      <SafeAreaView edges={['top']} style={styles.container}>
+        <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
+          {/*Container*/}
           <View style={styles.container}>
+            {/* Back Button */}
             <View style={styles.backButtonContainer}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
@@ -52,54 +94,104 @@ const LoginValidation = () => {
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>
             </View>
+            {/* Title Container */}
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Welcome Back!</Text>
+              <Text style={styles.textTitle}>Welcome back!</Text>
               <Text style={styles.textSubtitle}>
-                Login to Continue to Thundr! ⚡️
+                Login to Continue to Thundr! ⚡
               </Text>
+
               <View style={styles.numberContainer}>
                 <View style={styles.numberCodeContainer}>
                   <Text style={styles.textNumberCode}>+63</Text>
                 </View>
                 <View style={styles.textInputContainer}>
-                  <TextInput
-                    ref={textInputRef}
-                    style={styles.textInputNumber}
-                    maxLength={10}
-                    placeholder="XXX XXXX XXX"
-                    inputMode={'numeric'}
-                    autoComplete={'tel'}
-                    onChangeText={text => setPhoneNumber(text)}
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <TextInput
+                        ref={textInputRef}
+                        style={styles.textInputNumber}
+                        maxLength={10}
+                        placeholder="XXX XXXX XXX"
+                        inputMode={'numeric'}
+                        autoComplete={'tel'}
+                        onBlur={onBlur}
+                        onChangeText={text => onChange(text)}
+                        value={value}
+                        selectionColor={COLORS.primary1}
+                      />
+                    )}
+                    name="phoneNumber"
                   />
+                  {errors.phoneNumber && <Text>This is required.</Text>}
                 </View>
               </View>
-              <View style={{marginBottom: 20}}>
-                <View style={styles.text2InputContainer}>
-                  <TextInput
-                    style={styles.textInputPassword}
-                    placeholder="Password"
-                    secureTextEntry
-                    autoComplete={'password'}
-                    // onChangeText={text => setPhoneNumber(text)}
+
+              {/*Password Container*/}
+
+              <View style={styles.passwordContainer}>
+                <View style={styles.textInputPasswordContainer}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <TextInput
+                        ref={passwordRef}
+                        style={styles.textInputPassword}
+                        placeholder="Enter your password"
+                        secureTextEntry={!showPassword}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        autoCapitalize="none"
+                        selectionColor={COLORS.primary1}
+                      />
+                    )}
+                    name="password"
                   />
+
+                  {/* Show/hide icon */}
+                  <TouchableOpacity
+                    style={styles.showPasswordIcon}
+                    onPress={() => setShowPassword(!showPassword)}>
+                    <Image
+                      source={showPassword ? IMAGES.eye : IMAGES.eyeHidden}
+                      style={styles.showPasswordImage}
+                    />
+                  </TouchableOpacity>
+
+                  {errors.password && (
+                    <Text style={styles.errorText}>
+                      {errors.password.message}
+                    </Text>
+                  )}
                 </View>
               </View>
               <View style={styles.bodyContainer}>
-                <Text style={styles.textBody}>Trouble Signing In?</Text>
+                <Text style={styles.textBody}>Trouble signing in?</Text>
               </View>
             </View>
-            <View style={styles.buttonContainer}>
-              <GradientButton
-                onPress={signIn}
-                text="NEXT"
-                loading={loading}
-                disabled={isPhoneNumberEmpty}
-                buttonStyle={styles.buttonStyle}
-                textStyle={styles.buttonTextStyle}
-              />
-            </View>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
+        {/* sticky footer container*/}
+        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+          <View style={styles.buttonContainer}>
+            <GradientButton
+              onPress={handleSubmit(onSubmit)}
+              text="Login"
+              loading={loading}
+              disabled={!isValid}
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.buttonTextStyle}
+            />
+          </View>
+        </KeyboardStickyView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -111,22 +203,22 @@ const styles = StyleSheet.create({
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
   backButton: {width: 30, alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
-  titleContainer: {flex: 0.9, marginHorizontal: 30},
+  titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
   textTitle: {
-    fontSize: SIZES.h1,
-    fontFamily: 'Montserrat-Bold',
+    fontSize: SIZES.h2,
+    fontFamily: 'ClimateCrisis-Regular',
     letterSpacing: -0.6,
-    color: COLORS.black,
+    color: COLORS.primary1,
   },
   textSubtitle: {
-    fontSize: SIZES.h4,
+    fontSize: SIZES.h5,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.gray,
     letterSpacing: -0.6,
   },
   numberContainer: {
-    marginTop: 68,
-    marginBottom: 20,
+    marginTop: 100,
+    marginBottom: 50,
     alignItems: 'flex-start',
     flexDirection: 'row',
   },
@@ -140,45 +232,37 @@ const styles = StyleSheet.create({
   },
   textNumberCode: {
     color: COLORS.black,
-    fontSize: SIZES.h2,
+    fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
   },
   textInputContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginLeft: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.black,
     flex: 1,
   },
-  text2InputContainer: {
+  textInputPasswordContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+    flex: 1,
   },
   textInputNumber: {
     backgroundColor: COLORS.white,
-    fontSize: SIZES.h2,
-    fontFamily: 'Montserrat-Medium',
-    padding: 0,
-    width: '100%',
-  },
-  textInputPassword: {
-    backgroundColor: COLORS.white,
-    fontSize: SIZES.h2,
+    fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
     padding: 0,
     width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.black,
   },
-  bodyContainer: {marginRight: 30},
+  bodyContainer: {},
   textBody: {
-    fontSize: SIZES.h4,
+    fontSize: SIZES.h5,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.gray,
     letterSpacing: -0.6,
   },
-  buttonContainer: {marginHorizontal: 30, alignItems: 'center'},
+  buttonContainer: {alignItems: 'center'},
   buttonStyle: {
     alignItems: 'center',
     maxWidth: width,
@@ -186,13 +270,43 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     borderRadius: 30,
-    marginBottom: 12,
+    marginVertical: 10,
   },
   buttonTextStyle: {
     letterSpacing: -0.4,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.white,
+    fontSize: SIZES.h5,
+  },
+  passwordContainer: {
+    marginTop: 10,
+    marginBottom: 50,
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+  },
+  textInputPassword: {
+    backgroundColor: COLORS.white,
     fontSize: SIZES.h3,
+    fontFamily: 'Montserrat-Medium',
+    padding: 0,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.black,
+  },
+  showPasswordIcon: {
+    position: 'absolute',
+    right: 15,
+  },
+  showPasswordImage: {
+    width: 22,
+    height: 22,
+  },
+  errorText: {
+    marginTop: 8,
+    color: COLORS.primary1,
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: -0.8,
+    fontSize: SIZES.h6,
   },
 });
 

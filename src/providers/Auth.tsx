@@ -8,16 +8,21 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useSignInUser} from '../hooks/useSignInUser.ts';
-import {AuthDataRequest, AuthDataResponse} from '../types/generated.ts';
+import {
+  AuthDataRequest,
+  AuthDataResponse,
+  PasswordCreationRequest,
+} from '../types/generated.ts';
 import {useAuthStore} from '../store/authStore.ts';
 import {queryClient} from '../utils/queryClient.ts';
+import {usePasswordCreation} from '../hooks/registration/usePasswordCreation.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
   loading: boolean;
-  signIn(): Promise<void>;
+  signIn(data: AuthDataRequest): Promise<void>;
   signOut(): void;
-  signUp(data: any): Promise<void>;
+  signUp(data: PasswordCreationRequest): Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -34,6 +39,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   const signInUser = useSignInUser();
+  const passwordCreation = usePasswordCreation();
 
   useEffect(() => {
     loadStorageData();
@@ -57,21 +63,17 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     }
   }
 
-  const signIn = async () => {
+  const signIn = async (data: AuthDataRequest) => {
     try {
-      const data: AuthDataResponse = await signInUser.mutateAsync({
-        phoneNumber: '+639000000001',
-        password: 'George123!',
-      } as AuthDataRequest);
+      const result: AuthDataResponse = await signInUser.mutateAsync(data);
 
-      setAuthData(data);
+      setAuthData(result);
 
       // Start fetch of get match list depending on the sub (user)
+      await AsyncStorage.setItem('@AuthData', JSON.stringify(result));
       await queryClient.refetchQueries({
-        queryKey: ['get-match-list', data.sub],
+        queryKey: ['get-match-list', result.sub],
       });
-
-      await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
     } catch (error) {
       console.error('Error signing in:', error);
     }
@@ -92,17 +94,14 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     }
   };
 
-  const signUp = async (data: any) => {
+  const signUp = async (data: PasswordCreationRequest) => {
     try {
       console.log(data);
 
-      // await queryClient.refetchQueries({
-      //   queryKey: ['get-match-list', data.sub],
-      // });   // await queryClient.refetchQueries({
-      //   queryKey: ['get-match-list', data.sub],
-      // });
+      const result = await passwordCreation.mutateAsync(data);
 
-      setAuthData(data);
+      setAuthData(result);
+
       await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
     } catch (error) {
       console.error('Error signing up:', error);

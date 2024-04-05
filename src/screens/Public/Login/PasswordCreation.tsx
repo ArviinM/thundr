@@ -74,7 +74,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
       .oneOf(
         [yup.ref('password') as Reference<string>, ''],
         'Passwords must match.',
-      ), // Adjust here
+      ),
   });
 
   const {
@@ -91,11 +91,6 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
     }
   }, []);
 
-  const signUp = (data: any) => {
-    isLoading(true);
-    auth.signUp(data);
-  };
-
   const onSubmit = async (data: {
     password: string;
     confirmPassword: string;
@@ -104,18 +99,17 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
       await schema.validate(data);
       isLoading(true);
 
-      const result = await passwordCreation.mutateAsync({
+      const passwordData = {
         phoneNumber: username,
         email: 'test8@thundr.ph',
         session: session,
         challengeName: challengeName,
         password: data.confirmPassword,
-      } as PasswordCreationRequest);
+      } as PasswordCreationRequest;
 
-      signUp(result);
+      await auth.signUp(passwordData);
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
@@ -185,6 +179,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
                   )}
                 </View>
               </View>
+
               {/* Confirm Password Input */}
               <View style={styles.passwordContainer2}>
                 <View style={styles.textInputContainer}>
@@ -235,8 +230,8 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        {/* Footer Container */}
 
+        {/* Footer Container */}
         <KeyboardStickyView>
           <View style={styles.buttonContainer}>
             <GradientButton
@@ -261,7 +256,7 @@ const styles = StyleSheet.create({
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
   backButton: {width: 30, alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
-  titleContainer: {flex: 0.9, marginHorizontal: 30},
+  titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',

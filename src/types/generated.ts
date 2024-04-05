@@ -68,7 +68,7 @@ export type EmailValidationResponse = {
   challengeName: string;
   forProfileCreation: boolean;
   loginDeactivated: boolean;
-  // add here email later email: string
+  email: string;
 };
 
 // Email Verification Types
@@ -86,6 +86,7 @@ export type EmailVerificationResponse = {
   challengeName: string;
   forProfileCreation: boolean;
   loginDeactivated: boolean;
+  email: string;
 };
 
 // Password Creation Types

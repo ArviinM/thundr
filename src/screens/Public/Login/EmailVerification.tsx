@@ -38,7 +38,7 @@ type EmailVerificationProps = {
 };
 
 const EmailVerification = ({route}: EmailVerificationProps) => {
-  const {username, challengeName, session} = route?.params || {};
+  const {username, challengeName, session, email} = route?.params || {};
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const emailCodeInputRef = useRef<OTPTextView>(null);
@@ -65,7 +65,7 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
     const result = await emailVerification.mutateAsync({
       phoneNumber: username,
       session: session,
-      email: 'test8@thundr.ph',
+      email: email,
       challengeName: challengeName,
       challengeAnswer: emailCode,
     } as EmailVerificationRequest);
