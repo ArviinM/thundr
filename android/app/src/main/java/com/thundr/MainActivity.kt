@@ -1,4 +1,4 @@
-package ph.thundr.app
+package ph.thundr.app.dev
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -24,7 +24,7 @@ class MainActivity : ReactActivity() {
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    RNBootSplash.init(this, R.style.BootTheme) // ⬅️ initialize the splash screen
-    super.onCreate(savedInstanceState) // super.onCreate(null) with react-native-screens
+    RNBootSplash.init(this, R.style.BootTheme)
+    super.onCreate(savedInstanceState)
   }
 }
