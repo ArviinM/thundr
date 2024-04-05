@@ -22,6 +22,10 @@ import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useMobileValidation} from '../../../hooks/registration/useMobileValidation.ts';
 import {MobileValidationRequest} from '../../../types/generated.ts';
+import {
+  KeyboardAwareScrollView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
 
 const MobileValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -65,11 +69,9 @@ const MobileValidation = () => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-        <StepProgressBar currentStep={1} totalSteps={10} />
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.flex}>
+      <SafeAreaView edges={['top']} style={styles.container}>
+        <StepProgressBar currentStep={1} totalSteps={6} />
+        <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
               <TouchableOpacity
@@ -119,18 +121,20 @@ const MobileValidation = () => {
                 </Text>
               </View>
             </View>
-            <View style={styles.buttonContainer}>
-              <GradientButton
-                onPress={handleSubmit(onSubmit)}
-                text="Next"
-                loading={loading}
-                disabled={isPhoneNumberIncomplete}
-                buttonStyle={styles.buttonStyle}
-                textStyle={styles.buttonTextStyle}
-              />
-            </View>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
+        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+          <View style={styles.buttonContainer}>
+            <GradientButton
+              onPress={handleSubmit(onSubmit)}
+              text="Next"
+              loading={loading}
+              disabled={isPhoneNumberIncomplete}
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.buttonTextStyle}
+            />
+          </View>
+        </KeyboardStickyView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
   backButton: {width: 30, alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
-  titleContainer: {flex: 0.9, marginHorizontal: 30},
+  titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',

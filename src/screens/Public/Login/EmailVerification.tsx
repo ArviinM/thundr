@@ -27,6 +27,10 @@ import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useEmailVerification} from '../../../hooks/registration/useEmailVerification.ts';
 import {EmailVerificationRequest} from '../../../types/generated.ts';
+import {
+  KeyboardAwareScrollView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
 
 type EmailVerificationScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -80,10 +84,8 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-        <StepProgressBar currentStep={2} totalSteps={10} />
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.flex}>
+        <StepProgressBar currentStep={4} totalSteps={6} />
+        <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
               <TouchableOpacity
@@ -113,18 +115,20 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
                 </Text>
               </View>
             </View>
-            <View style={styles.buttonContainer}>
-              <GradientButton
-                onPress={() => onSubmit(emailCodeInput)}
-                text="Next"
-                loading={loading}
-                disabled={isEmailCodeComplete}
-                buttonStyle={styles.buttonStyle}
-                textStyle={styles.buttonTextStyle}
-              />
-            </View>
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
+        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+          <View style={styles.buttonContainer}>
+            <GradientButton
+              onPress={() => onSubmit(emailCodeInput)}
+              text="Next"
+              loading={loading}
+              disabled={isEmailCodeComplete}
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.buttonTextStyle}
+            />
+          </View>
+        </KeyboardStickyView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
   backButton: {width: 30, alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
-  titleContainer: {flex: 0.9, marginHorizontal: 30},
+  titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',

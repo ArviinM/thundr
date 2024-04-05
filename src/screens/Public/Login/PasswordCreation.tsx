@@ -121,7 +121,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
-        <StepProgressBar currentStep={3} totalSteps={10} />
+        <StepProgressBar currentStep={5} totalSteps={6} />
         {/*<KeyboardAvoidingView*/}
         {/*  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}*/}
         {/*  style={styles.flex}>*/}
@@ -224,7 +224,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
 
               <View style={styles.bodyContainer}>
                 <Text style={styles.textBody}>
-                  Forgot your password? We can recover your account.
+                  Never share your password, mars!
                 </Text>
               </View>
             </View>
@@ -238,7 +238,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
               onPress={handleSubmit(onSubmit)}
               text="Next"
               loading={loading}
-              // disabled={!isValid}
+              disabled={!isValid}
               buttonStyle={styles.buttonStyle}
               textStyle={styles.buttonTextStyle}
             />
