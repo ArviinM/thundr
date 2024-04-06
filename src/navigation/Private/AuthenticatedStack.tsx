@@ -8,10 +8,11 @@ import {COLORS} from '../../constants/commons.ts';
 import {Platform} from 'react-native';
 import CustomerBirthday from '../../screens/Private/ProfileCreation/CustomerBirthday.tsx';
 import CustomerGender from '../../screens/Private/ProfileCreation/CustomerGender.tsx';
+import CustomerRequestAccess from '../../screens/Private/ProfileCreation/CustomerRequestAccess.tsx';
 
 export const AuthenticatedStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'CustomerGender'}>
+    <Stack.Navigator initialRouteName={'CustomerRequestAccess'}>
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
@@ -27,7 +28,7 @@ export const AuthenticatedStack = () => {
         <Stack.Screen name="CustomerGender" component={CustomerGender} />
         <Stack.Screen
           name="CustomerRequestAccess"
-          component={WorkingInProgress}
+          component={CustomerRequestAccess}
         />
         <Stack.Screen
           name="CompatibilityQuestions"

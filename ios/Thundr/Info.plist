@@ -65,13 +65,15 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan Barcodes</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app requires to access your location to track your current location for filters in finding your match</string>
+	<string>This app requires to access your location to track your current location for filters in finding your match.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app requires to access your location to track your current location for filters in finding your match</string>
+	<string>This app requires to access your location to track your current location for filters in finding your match.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>This app requires to access your location to track your current location for filters in finding your match</string>
+	<string>This app requires to access your location to track your current location for filters in finding your match.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires to access your location to track your current location for filters in finding your match</string>
+	<string>This app requires to access your location to track your current location for filters in finding your match.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This app collects usage data to help us understand how people use it and make it better for everyone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires to access your photo library to pick your desired image in choosing your profile pictures.</string>
 	<key>UIAppFonts</key>

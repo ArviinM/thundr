@@ -86,4 +86,15 @@ export const profileCreationStyles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
+  textImage: {
+    fontSize: SIZES.h2,
+    fontFamily: 'ClimateCrisis-Regular',
+    color: COLORS.primary1,
+  },
+  imageContainer: {
+    marginTop: 45,
+    marginBottom: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
 });

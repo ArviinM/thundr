@@ -1,0 +1,173 @@
+import React, {useState} from 'react';
+import {
+  Alert,
+  Image,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+
+import GradientButton from '../../../components/shared/GradientButton.tsx';
+import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
+
+import {IMAGES} from '../../../constants/images.ts';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+
+import {
+  KeyboardAwareScrollView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
+import {profileCreationStyles} from './styles.tsx';
+import Geolocation from '@react-native-community/geolocation';
+import {
+  PERMISSIONS,
+  request,
+  requestNotifications,
+} from 'react-native-permissions';
+
+const CustomerRequestAccess = () => {
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  const [loading, isLoading] = useState(false);
+
+  const onSubmit = () => {
+    try {
+      isLoading(true);
+
+      isLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getCurrentLocation = () => {
+    Geolocation.getCurrentPosition(
+      pos => {
+        console.log(pos);
+      },
+      error => Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      {enableHighAccuracy: true},
+    );
+  };
+
+  const requestLocationPermission = async () => {
+    // iOS Part:
+    if (Platform.OS === 'ios') {
+      // TODO: Add to Login Page
+      // const result2 = await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
+      // if (result2 === 'granted') {
+      //   getCurrentLocation();
+      // } else if (result2 === 'blocked') {
+      //   getCurrentLocation();
+      // } else {
+      //   console.log('Notification permission denied on iOS');
+      // }
+
+      const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
+      if (result === 'granted') {
+        getCurrentLocation();
+      } else if (result === 'blocked') {
+        getCurrentLocation();
+      } else {
+        console.log('Location permission denied on iOS');
+      }
+
+      const notificationResult = await requestNotifications(['alert', 'sound']);
+      if (notificationResult.status === 'granted') {
+        console.log('user allowed notification');
+      } else {
+        console.log('user notification is not blocked');
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      const result2 = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
+
+      if (result === 'granted') {
+        getCurrentLocation();
+      } else {
+        console.log('Location permission denied on Android');
+      }
+
+      if (result2 === 'granted') {
+        getCurrentLocation();
+      } else {
+        console.log('Location permission denied on Android');
+      }
+    }
+  };
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView
+        edges={['top', 'bottom']}
+        style={profileCreationStyles.container}>
+        <StepProgressBar currentStep={3} totalSteps={6} />
+        <KeyboardAwareScrollView
+          bottomOffset={220}
+          style={profileCreationStyles.flex}>
+          <View style={profileCreationStyles.container}>
+            <View style={profileCreationStyles.backButtonContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={profileCreationStyles.backButton}>
+                <Image
+                  source={IMAGES.back}
+                  style={profileCreationStyles.backImage}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={profileCreationStyles.titleContainer}>
+              <View style={profileCreationStyles.imageContainer}>
+                <Image
+                  source={IMAGES.locNotif}
+                  resizeMode={'contain'}
+                  style={{width: 300, height: 220}}
+                />
+              </View>
+              <Text
+                style={[
+                  profileCreationStyles.textImage,
+                  {textAlign: 'center'},
+                ]}>
+                Location & Notification
+              </Text>
+              <View style={profileCreationStyles.bodyContainer}>
+                <Text
+                  style={[
+                    profileCreationStyles.textBody,
+                    {textAlign: 'center'},
+                  ]}>
+                  Better matching experience? Turn this on to track your
+                  potential mare and jowa. {'\n\n'}Plus, receive push and in-app
+                  notifications para updated ka sa latest news and chika from
+                  Thundr.
+                </Text>
+              </View>
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
+        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+          <View style={profileCreationStyles.buttonContainer}>
+            <GradientButton
+              onPress={requestLocationPermission}
+              text="Next"
+              loading={loading}
+              // disabled={!isValid}
+              buttonStyle={profileCreationStyles.buttonStyle}
+              textStyle={profileCreationStyles.buttonTextStyle}
+            />
+          </View>
+        </KeyboardStickyView>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+};
+
+export default CustomerRequestAccess;
