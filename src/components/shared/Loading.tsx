@@ -8,7 +8,7 @@ export const Loading = () => {
         flex: 1,
         justifyContent: 'center',
       }}>
-      <ActivityIndicator color={'#000'} animating={true} size="small" />
+      <ActivityIndicator color={'#444242'} animating={true} size="small" />
     </View>
   );
 };

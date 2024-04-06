@@ -6,4 +6,6 @@ export const IMAGES: Record<any, any> = {
   thundrHome: require('../assets/images/thundr.png'),
   eye: require('../assets/images/eye.png'),
   eyeHidden: require('../assets/images/eye-hidden.png'),
+  dropdown: require('../assets/images/dropdown.png'),
+  locNotif: require('../assets/images/loc-notif.png'),
 };

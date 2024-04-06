@@ -1,0 +1,50 @@
+import moment from 'moment';
+
+type CustomDropDownData = {
+  label: string;
+  value: string;
+};
+
+export const generateMonthData = (): CustomDropDownData[] => {
+  const monthData: CustomDropDownData[] = [];
+  for (let i = 1; i <= 12; i++) {
+    monthData.push({
+      label: moment()
+        .month(i - 1)
+        .format('MM'), // Zero-padded month number
+      value: moment()
+        .month(i - 1)
+        .format('MM'),
+    });
+  }
+  return monthData;
+};
+
+export const generateDayData = (): CustomDropDownData[] => {
+  let dayData = [];
+  for (let i = 1; i <= 31; i++) {
+    dayData.push({
+      label: i.toString().padStart(2, '0'),
+      value: i.toString().padStart(2, '0'),
+    });
+  }
+  return dayData;
+};
+
+export const generateYearData = (
+  ageLimit: number = 35,
+): CustomDropDownData[] => {
+  const startYear = 1989; // Starting year
+  const endYear = startYear - ageLimit; // Calculate end year based on age limit
+  const yearData: CustomDropDownData[] = [];
+
+  // Generate years starting from 1989 down to endYear
+  for (let i = startYear; i >= endYear; i--) {
+    yearData.push({
+      label: i.toString(),
+      value: i.toString(),
+    });
+  }
+
+  return yearData;
+};

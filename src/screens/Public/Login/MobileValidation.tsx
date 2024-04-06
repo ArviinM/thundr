@@ -56,7 +56,6 @@ const MobileValidation = () => {
     const withNumberCode = `+63${data.phoneNumber}`;
     isLoading(true);
 
-    // Temporary Comment to Bypass
     const result = await mobileValidation.mutateAsync({
       phoneNumber: withNumberCode,
     } as MobileValidationRequest);
@@ -150,7 +149,6 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',
-    letterSpacing: -0.6,
     color: COLORS.primary1,
   },
   textSubtitle: {

@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',
-    letterSpacing: -0.6,
     color: COLORS.primary1,
   },
   textSubtitle: {

@@ -1,0 +1,89 @@
+import {StyleSheet} from 'react-native';
+import {COLORS, SIZES, width} from '../../../constants/commons.ts';
+
+export const profileCreationStyles = StyleSheet.create({
+  flex: {flex: 1},
+  container: {backgroundColor: COLORS.white, flex: 1},
+  backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
+  backButton: {width: 30, alignItems: 'flex-start'},
+  backImage: {alignSelf: 'flex-start'},
+  titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
+  textTitle: {
+    fontSize: SIZES.h2,
+    fontFamily: 'ClimateCrisis-Regular',
+    color: COLORS.primary1,
+  },
+  textSubtitle: {
+    fontSize: SIZES.h5,
+    fontFamily: 'Montserrat-SemiBold',
+    color: COLORS.gray,
+    letterSpacing: -0.6,
+  },
+  textInputContainer: {
+    marginTop: 100,
+    marginBottom: 50,
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+  },
+  textInputStyle: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    flex: 1,
+  },
+  textInput: {
+    backgroundColor: COLORS.white,
+    fontSize: SIZES.h3,
+    fontFamily: 'Montserrat-Medium',
+    padding: 0,
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.black,
+  },
+  bodyContainer: {},
+  textBody: {
+    fontSize: SIZES.h5,
+    fontFamily: 'Montserrat-SemiBold',
+    color: COLORS.gray,
+    letterSpacing: -0.6,
+  },
+  buttonContainer: {marginHorizontal: 30, alignItems: 'center'},
+  buttonStyle: {
+    alignItems: 'center',
+    maxWidth: width,
+    width: width - 64,
+    height: 50,
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginBottom: 12,
+  },
+  buttonTextStyle: {
+    letterSpacing: -0.4,
+    fontFamily: 'Montserrat-SemiBold',
+    color: COLORS.white,
+    fontSize: SIZES.h5,
+  },
+  errorText: {
+    marginTop: 8,
+    color: COLORS.primary1,
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: -0.8,
+    fontSize: SIZES.h6,
+  },
+  dropdownContainer: {
+    marginTop: 100,
+    marginBottom: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    gap: 6,
+  },
+  dropdownSection: {
+    flex: 1,
+  },
+  gridContainer: {
+    marginTop: 100,
+    marginBottom: 50,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  },
+});

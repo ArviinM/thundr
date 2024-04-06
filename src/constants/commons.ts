@@ -9,6 +9,7 @@ export const COLORS = {
   black: '#121111',
   primary1: '#E33051',
   primary2: '#EF9D47',
+  secondary1: '#F05570',
 };
 
 export const SIZES = {
