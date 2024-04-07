@@ -97,4 +97,13 @@ export const profileCreationStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  cardContainer: {
+    marginTop: 75,
+    marginBottom: 50,
+    flex: 1,
+    flexDirection: 'column',
+    padding: 30,
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
 });

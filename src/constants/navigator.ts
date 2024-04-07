@@ -26,4 +26,5 @@ export type RootNavigationParams = {
   Login: undefined;
   LoginValidation: undefined;
   Terms: {uri: string};
+  // Profile Creation
 };

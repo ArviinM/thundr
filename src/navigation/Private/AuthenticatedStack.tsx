@@ -9,10 +9,11 @@ import {Platform} from 'react-native';
 import CustomerBirthday from '../../screens/Private/ProfileCreation/CustomerBirthday.tsx';
 import CustomerGender from '../../screens/Private/ProfileCreation/CustomerGender.tsx';
 import CustomerRequestAccess from '../../screens/Private/ProfileCreation/CustomerRequestAccess.tsx';
+import CompatibilityQuestions from '../../screens/Private/ProfileCreation/CompatibilityQuestions.tsx';
 
 export const AuthenticatedStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'CustomerRequestAccess'}>
+    <Stack.Navigator initialRouteName={'CompatibilityQuestions'}>
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
@@ -32,7 +33,7 @@ export const AuthenticatedStack = () => {
         />
         <Stack.Screen
           name="CompatibilityQuestions"
-          component={WorkingInProgress}
+          component={CompatibilityQuestions}
         />
         <Stack.Screen name="Interests" component={WorkingInProgress} />
         <Stack.Screen

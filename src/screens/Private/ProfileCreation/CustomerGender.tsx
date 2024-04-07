@@ -88,7 +88,7 @@ const CustomerGender = () => {
                 style={profileCreationStyles.backButton}>
                 <Image
                   source={IMAGES.back}
-                  style={[profileCreationStyles.backImage, {opacity: 0}]}
+                  style={[profileCreationStyles.backImage]}
                 />
               </TouchableOpacity>
             </View>
@@ -109,6 +109,7 @@ const CustomerGender = () => {
                         selectedLetter={selectedLetter}
                         onChange={(item: string) => {
                           onChange(item);
+                          //TODO: Check if selected letter is changed based on onchange item
                           setSelectedLetter(item);
                         }}
                       />
