@@ -106,4 +106,21 @@ export const profileCreationStyles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 15,
   },
+  buttonInterestContainer: {
+    marginTop: 35,
+    flex: 1,
+    // flexDirection: 'column'
+  },
+  footerContainer: {
+    marginHorizontal: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  skipText: {
+    fontFamily: 'Montserrat-ExtraBold',
+    fontSize: 13,
+    letterSpacing: -0.4,
+    color: COLORS.black,
+  },
 });

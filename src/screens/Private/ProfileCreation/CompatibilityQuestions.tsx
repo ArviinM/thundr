@@ -28,7 +28,6 @@ import {COLORS} from '../../../constants/commons.ts';
 
 const CompatibilityQuestions = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const textInputRef = useRef<TextInput>(null);
 
   const [loading, isLoading] = useState(false);
 
@@ -63,12 +62,6 @@ const CompatibilityQuestions = () => {
   ]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  useEffect(() => {
-    if (textInputRef.current) {
-      textInputRef.current.focus();
-    }
-  }, []);
-
   const onSubmit = async () => {
     try {
       isLoading(true);
@@ -87,9 +80,7 @@ const CompatibilityQuestions = () => {
       // navigation.navigate('EmailVerification', result);
     } catch (error) {
       // Handle validation errors
-      if (error instanceof yup.ValidationError) {
-        console.error(error.message);
-      }
+      console.error(error);
     }
   };
 
@@ -112,8 +103,7 @@ const CompatibilityQuestions = () => {
     }, 300);
   };
 
-  const cardOpacity = useRef(new Animated.Value(0)).current; // For fade animation
-  const cardScale = useRef(new Animated.Value(1)).current;
+  const cardOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(cardOpacity, {
@@ -163,14 +153,11 @@ const CompatibilityQuestions = () => {
                 choose 🎉
               </Text>
               {/*  Card Container */}
-              {/*<View style={profileCreationStyles.cardContainer}>*/}
               <View style={profileCreationStyles.cardContainer}>
                 <Animated.View
                   style={{
                     opacity: cardOpacity,
-                    transform: [{scale: cardScale}],
                   }}>
-                  {/*<Text style={profileCreationStyles.questionText}>*/}
                   <Text
                     style={{
                       textAlign: 'center',
@@ -196,15 +183,12 @@ const CompatibilityQuestions = () => {
                             flexDirection: 'row',
                             alignItems: 'center',
                           },
-                          // profileCreationStyles.choiceButton,
-                          // profileCreationStyles.choiceButton,
-                          // questions[currentQuestionIndex].selected === choiceIndex && profileCreationStyles.selectedChoice
+
                           questions[currentQuestionIndex].selected ===
                             choiceIndex && {
                             backgroundColor: COLORS.secondary1,
                           },
                         ]}>
-                        {/*<Text style={profileCreationStyles.choiceText}>{choice}</Text>*/}
                         <Text
                           style={[
                             {

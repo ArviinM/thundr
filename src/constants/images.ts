@@ -8,4 +8,6 @@ export const IMAGES: Record<any, any> = {
   eyeHidden: require('../assets/images/eye-hidden.png'),
   dropdown: require('../assets/images/dropdown.png'),
   locNotif: require('../assets/images/loc-notif.png'),
+  nextCircle: require('../assets/images/next_circle_icon.png'),
+  nextCircleDisabled: require('../assets/images/next_circle_icon_disabled.png'),
 };
