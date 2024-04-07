@@ -109,6 +109,7 @@ export const profileCreationStyles = StyleSheet.create({
   buttonInterestContainer: {
     marginTop: 35,
     flex: 1,
+
     // flexDirection: 'column'
   },
   footerContainer: {

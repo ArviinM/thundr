@@ -23,7 +23,6 @@ import LetterGradientButton from '../../../components/shared/LetterGradientButto
 
 const CustomerGender = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const textInputRef = useRef<TextInput>(null);
 
   const [loading, isLoading] = useState(false);
   const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
@@ -42,12 +41,6 @@ const CustomerGender = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    if (textInputRef.current) {
-      textInputRef.current.focus();
-    }
-  }, []);
 
   const onSubmit = async (data: {selectedLetter: string}) => {
     try {

@@ -12,10 +12,11 @@ import CustomerRequestAccess from '../../screens/Private/ProfileCreation/Custome
 import CompatibilityQuestions from '../../screens/Private/ProfileCreation/CompatibilityQuestions.tsx';
 import CustomerInterests from '../../screens/Private/ProfileCreation/CustomerInterests.tsx';
 import CustomerAdditionalInfos from '../../screens/Private/ProfileCreation/CustomerAdditionalInfos.tsx';
+import CustomerPersonalityType from '../../screens/Private/ProfileCreation/CustomerPersonalityType.tsx';
 
 export const AuthenticatedStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'CustomerAdditionalInfos'}>
+    <Stack.Navigator initialRouteName={'CustomerPersonalityType'}>
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
@@ -43,8 +44,8 @@ export const AuthenticatedStack = () => {
           component={CustomerAdditionalInfos}
         />
         <Stack.Screen
-          name="CustomerPersonality"
-          component={WorkingInProgress}
+          name="CustomerPersonalityType"
+          component={CustomerPersonalityType}
         />
         <Stack.Screen
           name="CustomerAdditionalDetails2"

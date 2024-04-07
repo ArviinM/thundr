@@ -10,4 +10,14 @@ export const IMAGES: Record<any, any> = {
   locNotif: require('../assets/images/loc-notif.png'),
   nextCircle: require('../assets/images/next_circle_icon.png'),
   nextCircleDisabled: require('../assets/images/next_circle_icon_disabled.png'),
+
+  // Personality Types Icons
+  beaver: require('../assets/images/personality/beaver.png'),
+  beaverSelected: require('../assets/images/personality/beaver_selected.png'),
+  dog: require('../assets/images/personality/dog.png'),
+  dogSelected: require('../assets/images/personality/dog_selected.png'),
+  lion: require('../assets/images/personality/lion.png'),
+  lionSelected: require('../assets/images/personality/lion_selected.png'),
+  otter: require('../assets/images/personality/otter.png'),
+  otterSelected: require('../assets/images/personality/otter_selected.png'),
 };
