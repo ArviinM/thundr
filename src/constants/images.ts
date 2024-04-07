@@ -20,4 +20,15 @@ export const IMAGES: Record<any, any> = {
   lionSelected: require('../assets/images/personality/lion_selected.png'),
   otter: require('../assets/images/personality/otter.png'),
   otterSelected: require('../assets/images/personality/otter_selected.png'),
+
+  // add photo icons
+  addPhoto: require('../assets/images/add_photo.png'),
+
+  // onboarding images
+  welcomeThundr: require('../assets/images/onboarding/welcome_thundr.png'),
+  onboarding1: require('../assets/images/onboarding/onboarding_1.png'),
+  onboarding2: require('../assets/images/onboarding/onboarding_2.png'),
+  onboarding3: require('../assets/images/onboarding/onboarding_3.png'),
+  onboarding4: require('../assets/images/onboarding/onboarding_4.png'),
+  onboarding5: require('../assets/images/onboarding/onboarding_5.png'),
 };

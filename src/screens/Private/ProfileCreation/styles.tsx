@@ -145,4 +145,31 @@ export const profileCreationStyles = StyleSheet.create({
     letterSpacing: -0.4,
     color: COLORS.black,
   },
+  bodyPhotoContainer: {
+    marginTop: 35,
+    // marginBottom: 50,
+    flexDirection: 'column',
+  },
+  onboardingTitleContainer: {
+    marginHorizontal: 30,
+    marginTop: 10,
+    flexDirection: 'column',
+  },
+  onboardingImage: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // onboardingTextSubtitle: {
+  //   fontSize: SIZES.h4,
+  //
+  //   fontFamily: 'ClimateCrisis-Regular',
+  //   color: COLORS.primary1,
+  // },
+  // onboardingTextTitle: {
+  //   fontSize: SIZES.h1,
+  //   fontFamily: 'ClimateCrisis-Regular',
+  //   color: COLORS.primary1,
+  //
+  //   marginVertical: -12,
+  // },
 });

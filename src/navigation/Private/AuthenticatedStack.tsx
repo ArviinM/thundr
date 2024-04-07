@@ -13,10 +13,12 @@ import CompatibilityQuestions from '../../screens/Private/ProfileCreation/Compat
 import CustomerInterests from '../../screens/Private/ProfileCreation/CustomerInterests.tsx';
 import CustomerAdditionalInfos from '../../screens/Private/ProfileCreation/CustomerAdditionalInfos.tsx';
 import CustomerPersonalityType from '../../screens/Private/ProfileCreation/CustomerPersonalityType.tsx';
+import CustomerPhotoBio from '../../screens/Private/ProfileCreation/CustomerPhotoBio.tsx';
+import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
 
 export const AuthenticatedStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'CustomerPersonalityType'}>
+    <Stack.Navigator initialRouteName={'Onboarding'}>
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
@@ -47,10 +49,8 @@ export const AuthenticatedStack = () => {
           name="CustomerPersonalityType"
           component={CustomerPersonalityType}
         />
-        <Stack.Screen
-          name="CustomerAdditionalDetails2"
-          component={WorkingInProgress}
-        />
+        <Stack.Screen name="CustomerPhotoBio" component={CustomerPhotoBio} />
+        <Stack.Screen name="Onboarding" component={Onboarding} />
       </Stack.Group>
       {/*  Main Group for Home Swiping Page */}
       <Stack.Group>
