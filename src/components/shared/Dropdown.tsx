@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   textStyle: {
-    fontSize: 20,
-    fontFamily: 'Montserrat-Medium',
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     color: COLORS.black,
   },
   placeHolderStyle: {
-    fontSize: 20,
-    fontFamily: 'Montserrat-Medium',
+    fontSize: 18,
+    fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     color: COLORS.gray,
   },

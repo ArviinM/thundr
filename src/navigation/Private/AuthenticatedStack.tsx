@@ -10,10 +10,12 @@ import CustomerBirthday from '../../screens/Private/ProfileCreation/CustomerBirt
 import CustomerGender from '../../screens/Private/ProfileCreation/CustomerGender.tsx';
 import CustomerRequestAccess from '../../screens/Private/ProfileCreation/CustomerRequestAccess.tsx';
 import CompatibilityQuestions from '../../screens/Private/ProfileCreation/CompatibilityQuestions.tsx';
+import CustomerInterests from '../../screens/Private/ProfileCreation/CustomerInterests.tsx';
+import CustomerAdditionalInfos from '../../screens/Private/ProfileCreation/CustomerAdditionalInfos.tsx';
 
 export const AuthenticatedStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'CompatibilityQuestions'}>
+    <Stack.Navigator initialRouteName={'CustomerAdditionalInfos'}>
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
@@ -35,10 +37,10 @@ export const AuthenticatedStack = () => {
           name="CompatibilityQuestions"
           component={CompatibilityQuestions}
         />
-        <Stack.Screen name="Interests" component={WorkingInProgress} />
+        <Stack.Screen name="CustomerInterests" component={CustomerInterests} />
         <Stack.Screen
-          name="CustomerAdditionalDetails"
-          component={WorkingInProgress}
+          name="CustomerAdditionalInfos"
+          component={CustomerAdditionalInfos}
         />
         <Stack.Screen
           name="CustomerPersonality"

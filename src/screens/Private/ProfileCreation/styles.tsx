@@ -123,4 +123,25 @@ export const profileCreationStyles = StyleSheet.create({
     letterSpacing: -0.4,
     color: COLORS.black,
   },
+  bodyDropdownContainer: {
+    marginTop: 35,
+    marginBottom: 50,
+    flexDirection: 'column',
+    gap: 22,
+  },
+  dropdownContainer2: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    // borderWidth: 1,
+    gap: 6,
+  },
+  dropdownSection2: {
+    flex: 1,
+  },
+  dropdownTitle: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 16,
+    letterSpacing: -0.4,
+    color: COLORS.black,
+  },
 });
