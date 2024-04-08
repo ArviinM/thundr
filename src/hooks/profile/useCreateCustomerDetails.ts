@@ -8,6 +8,7 @@ import {
   CustomerDetailsRequest,
   CustomerDetailsResponse,
 } from '../../types/generated.ts';
+import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useCreateCustomerDetails() {
   const axiosInstance = useAxiosWithAuth();
@@ -21,12 +22,15 @@ export function useCreateCustomerDetails() {
         await axiosInstance.post('/customer/details', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useCreateCustomerDetails');
+        throw {
+          name: 'customer-create-details',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
 
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }

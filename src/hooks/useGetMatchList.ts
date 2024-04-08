@@ -1,6 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
-import {AxiosRequestConfig, AxiosResponse} from 'axios';
+import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from './api/useAxiosWithAuth.ts';
+import {showErrorToast} from '../utils/toast/errorToast.ts';
 
 export function useGetMatchList(props: any) {
   const axiosInstance = useAxiosWithAuth();
@@ -18,9 +19,12 @@ export function useGetMatchList(props: any) {
         config,
       );
 
-      if (response.data.error) {
-        console.error(response.data);
-        throw new Error('useGetMatchList encountered and error');
+      if (response.status !== HttpStatusCode.Ok) {
+        showErrorToast({
+          name: 'get-match-list',
+          status: response.data.status,
+          message: response.data.message,
+        });
       }
 
       return response.data.data;

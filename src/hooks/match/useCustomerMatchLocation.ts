@@ -6,6 +6,7 @@ import {
   CustomerMatchLocationRequest,
   CustomerMatchLocationResponse,
 } from '../../types/generated.ts';
+import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useCustomerMatchLocation() {
   const axiosInstance = useAxiosWithAuth();
@@ -20,13 +21,16 @@ export function useCustomerMatchLocation() {
       > = await axiosInstance.post('/match/match-location', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useCustomerMatchLocation');
+        throw {
+          name: 'customer-match-location',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
 
       console.log(response.data);
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }

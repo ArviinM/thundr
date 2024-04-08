@@ -6,6 +6,7 @@ import {
   CompatibilityAnswersRequest,
   CompatibilityAnswersResponse,
 } from '../../types/generated.ts';
+import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useSaveCompatibilityAnswers() {
   const axiosInstance = useAxiosWithAuth();
@@ -20,12 +21,15 @@ export function useSaveCompatibilityAnswers() {
       > = await axiosInstance.post('/customer/questions-answers', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useSaveCompatibilityAnswers');
+        throw {
+          name: 'customer-create-profile',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
 
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }

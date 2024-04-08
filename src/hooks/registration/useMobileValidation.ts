@@ -6,6 +6,7 @@ import {
   MobileValidationRequest,
   MobileValidationResponse,
 } from '../../types/generated.ts';
+import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useMobileValidation() {
   const axiosInstance = useAxiosWithAuth();
@@ -19,12 +20,15 @@ export function useMobileValidation() {
         await axiosInstance.post('/auth/cognito-create-user', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useMobileValidation');
+        throw {
+          name: 'mobile-validation',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
-      console.log(response.data);
+
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }

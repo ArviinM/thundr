@@ -6,6 +6,7 @@ import {
   CustomerCreateProfileRequest,
   CustomerCreateProfileResponse,
 } from '../../types/generated.ts';
+import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useCreateCustomerProfile() {
   const axiosInstance = useAxiosWithAuth();
@@ -20,13 +21,15 @@ export function useCreateCustomerProfile() {
       > = await axiosInstance.post('/customer/create-profile', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useCreateCustomerProfile');
+        throw {
+          name: 'customer-create-profile',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
 
-      console.log(response.data);
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }

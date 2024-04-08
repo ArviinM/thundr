@@ -10,7 +10,6 @@ export function useUploadProfilePhoto() {
   return useMutation({
     mutationKey: ['upload-profile-photo'],
     mutationFn: async (formData: FormData): Promise<BaseResponse<any>> => {
-      // Expect FormData
       const response: AxiosResponse<BaseResponse<any>> =
         await axiosInstance.post('/customer/photo-b64', formData, {
           headers: {
@@ -28,7 +27,7 @@ export function useUploadProfilePhoto() {
             'An error occurred in uploading your photo',
         } as Error;
       }
-      console.log(response.data);
+
       return response.data;
     },
     onError: showErrorToast,

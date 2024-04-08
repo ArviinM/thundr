@@ -6,6 +6,7 @@ import {
   EmailValidationRequest,
   EmailValidationResponse,
 } from '../../types/generated.ts';
+import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useEmailValidation() {
   const axiosInstance = useAxiosWithAuth();
@@ -19,12 +20,15 @@ export function useEmailValidation() {
         await axiosInstance.post('/auth/email-code', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useEmailValidation');
+        throw {
+          name: 'email-validation',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
-      console.log(response.data);
+
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }
