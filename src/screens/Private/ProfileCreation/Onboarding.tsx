@@ -30,6 +30,7 @@ import {profileCreationStyles} from './styles.tsx';
 import {IMAGES} from '../../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+import CircleButton from '../../../components/shared/CircleButton.tsx';
 
 const onboardingSteps = [
   {
@@ -225,30 +226,23 @@ const Onboarding = () => {
               </View>
             )}
 
-            {/*<View style={styles.footer}>*/}
-            {/*  <Animated.Text*/}
-            {/*    entering={SlideInRight}*/}
-            {/*    exiting={SlideOutLeft}*/}
-            {/*    style={styles.title}>*/}
-            {/*    {data.title}*/}
-            {/*  </Animated.Text>*/}
-            {/*  <Animated.Text*/}
-            {/*    entering={SlideInRight.delay(50)}*/}
-            {/*    exiting={SlideOutLeft}*/}
-            {/*    style={styles.description}>*/}
-            {/*    {data.description}*/}
-            {/*  </Animated.Text>*/}
+            <View style={styles.footer}>
+              {/*<View style={styles.buttonsRow}>*/}
+              {/*  <Text onPress={endOnboarding} style={styles.buttonText}>*/}
+              {/*    Skip*/}
+              {/*  </Text>*/}
 
-            {/*  /!*<View style={styles.buttonsRow}>*!/*/}
-            {/*  /!*  <Text onPress={endOnboarding} style={styles.buttonText}>*!/*/}
-            {/*  /!*    Skip*!/*/}
-            {/*  /!*  </Text>*!/*/}
-
-            {/*  /!*  <Pressable onPress={onContinue} style={styles.button}>*!/*/}
-            {/*  /!*    <Text style={styles.buttonText}>Continue</Text>*!/*/}
-            {/*  /!*  </Pressable>*!/*/}
-            {/*  /!*</View>*!/*/}
-            {/*</View>*/}
+              {/*  <Pressable onPress={onContinue} style={styles.button}>*/}
+              {/*    <Text style={styles.buttonText}>Continue</Text>*/}
+              {/*  </Pressable>*/}
+              {/*</View>*/}
+              <View style={styles.buttonsRow}>
+                <CircleButton
+                  onPress={onContinue}
+                  // disabled={isSelectedPersonality}
+                />
+              </View>
+            </View>
           </View>
         </GestureDetector>
       </View>
@@ -308,7 +302,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
+    // gap: 20,
+    justifyContent: 'flex-end',
+    marginHorizontal: 35,
   },
   button: {
     backgroundColor: '#302E38',
