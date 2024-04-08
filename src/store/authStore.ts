@@ -3,6 +3,7 @@ import {persist, createJSONStorage} from 'zustand/middleware';
 import {AuthDataResponse, AuthStoreState} from '../types/generated.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+//TODO: FOR REMOVAL
 export const useAuthStore = create<AuthStoreState>()(
   persist(
     set => ({

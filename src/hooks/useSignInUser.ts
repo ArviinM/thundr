@@ -6,6 +6,7 @@ import {
   AuthDataResponse,
   BaseResponse,
 } from '../types/generated.ts';
+import {showErrorToast} from '../utils/toast/errorToast.ts';
 
 export function useSignInUser() {
   const axiosInstance = useAxiosWithAuth();
@@ -17,12 +18,15 @@ export function useSignInUser() {
         await axiosInstance.post('/auth/login', data);
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.error(response.data);
-        throw new Error('An error occurred with useSignInUser');
+        throw {
+          name: 'user-registration',
+          status: response.data.status,
+          message: response.data.message,
+        } as Error;
       }
 
       return response.data.data;
     },
-    onError: e => console.error(e),
+    onError: showErrorToast,
   });
 }

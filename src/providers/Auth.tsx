@@ -85,7 +85,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       setAuthData(undefined);
       // reset all cache
       await queryClient.resetQueries({
-        queryKey: ['get-match-list'],
+        queryKey: ['get-match-list', 'customer-compatibility-questions'],
         type: 'all',
       });
       await AsyncStorage.removeItem('@AuthData');

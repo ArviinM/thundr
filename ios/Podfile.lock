@@ -888,6 +888,10 @@ PODS:
   - React-Mapbuffer (0.73.6):
     - glog
     - React-debug
+  - react-native-geolocation (3.2.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-keyboard-controller (1.11.5):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1075,6 +1079,17 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - RNImageCropPicker (0.40.3):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.40.3)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.40.3):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
+  - RNPermissions (4.1.5):
+    - React-Core
   - RNReanimated (3.8.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1087,6 +1102,7 @@ PODS:
   - RNSVG (15.1.0):
     - React-Core
   - SocketRocket (0.6.1)
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1121,6 +1137,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1148,6 +1165,8 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1158,6 +1177,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - SocketRocket
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   boost:
@@ -1217,6 +1237,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-keyboard-controller:
     :path: "../node_modules/react-native-keyboard-controller"
   react-native-safe-area-context:
@@ -1271,6 +1293,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1311,6 +1337,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 85583ef014ce53d731a98c66a0e24496f7a83066
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
+  react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
   react-native-keyboard-controller: 27a2f1da4a1fedf9f01bf49e2dcabba700daa284
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-webview: 9395e82c917d81407deb9b1fe53158dd6c8880ff
@@ -1338,12 +1365,15 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNGestureHandler: bc2cdb2dc42facdf34992ae364b8a728e19a3686
+  RNImageCropPicker: e7ab6fb43d2fc3e84651e786ef4a080d63b0ed3d
+  RNPermissions: 6265c45ed75c1b793e421f56b0efae1e648fc64f
   RNReanimated: 8a4d86eb951a4a99d8e86266dc71d7735c0c30a9
   RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f
   RNSVG: 50cf2c7018e57cf5d3522d98d0a3a4dd6bf9d093
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
-PODFILE CHECKSUM: 49d91578f6c14c48eab9144027068e024a56fecb
+PODFILE CHECKSUM: 24d574b71a5c6d86e29fbf311fa90ecc060cf244
 
 COCOAPODS: 1.15.2

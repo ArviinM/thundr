@@ -5,7 +5,7 @@ import {navigationRef} from '../constants/navigator.ts';
 import {useAuth} from '../providers/Auth.tsx';
 import {Loading} from '../components/shared/Loading.tsx';
 import {LoginStack} from './Public/LoginStack.tsx';
-import {HomeTab} from './Private/Home/Tab/HomeTab.tsx';
+import {AuthenticatedStack} from './Private/AuthenticatedStack.tsx';
 
 const RootNavigation = () => {
   const {authData, loading} = useAuth();
@@ -20,7 +20,7 @@ const RootNavigation = () => {
       onReady={() => {
         BootSplash.hide({fade: true});
       }}>
-      {authData ? <HomeTab /> : <LoginStack />}
+      {authData ? <AuthenticatedStack /> : <LoginStack />}
     </NavigationContainer>
   );
 };
