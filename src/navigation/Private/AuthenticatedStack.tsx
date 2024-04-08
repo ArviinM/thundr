@@ -15,10 +15,20 @@ import CustomerAdditionalInfos from '../../screens/Private/ProfileCreation/Custo
 import CustomerPersonalityType from '../../screens/Private/ProfileCreation/CustomerPersonalityType.tsx';
 import CustomerPhotoBio from '../../screens/Private/ProfileCreation/CustomerPhotoBio.tsx';
 import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
+import {useAuth} from '../../providers/Auth.tsx';
 
 export const AuthenticatedStack = () => {
+  const auth = useAuth();
+  let initialRouteName;
+
+  if (auth.authData?.forProfileCreation) {
+    initialRouteName = 'CustomerRequestAccess';
+  } else {
+    initialRouteName = 'HomeTab';
+  }
+
   return (
-    <Stack.Navigator initialRouteName={'Onboarding'}>
+    <Stack.Navigator initialRouteName={initialRouteName}>
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
@@ -53,7 +63,15 @@ export const AuthenticatedStack = () => {
         <Stack.Screen name="Onboarding" component={Onboarding} />
       </Stack.Group>
       {/*  Main Group for Home Swiping Page */}
-      <Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          // presentation: 'm',
+          headerShown: false,
+          statusBarColor: COLORS.white,
+          // statusBarStyle: 'dark',
+          statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
+          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
+        }}>
         <Stack.Screen name="HomeTab" component={HomeTab} />
       </Stack.Group>
     </Stack.Navigator>

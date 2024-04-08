@@ -29,12 +29,15 @@ import {
   request,
   requestNotifications,
 } from 'react-native-permissions';
+import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
+import {queryClient} from '../../../utils/queryClient.ts';
 
 const CustomerRequestAccess = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const [loading, isLoading] = useState(false);
-
+  const auth = useAuth();
   const onSubmit = () => {
     try {
       isLoading(true);
@@ -46,13 +49,17 @@ const CustomerRequestAccess = () => {
   };
 
   const getCurrentLocation = () => {
-    Geolocation.getCurrentPosition(
-      pos => {
-        console.log(pos);
-      },
-      error => Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
-      {enableHighAccuracy: true},
-    );
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        pos => {
+          resolve(pos);
+        },
+        error => {
+          reject(error);
+        },
+        {enableHighAccuracy: true},
+      );
+    });
   };
 
   const requestLocationPermission = async () => {
@@ -68,11 +75,14 @@ const CustomerRequestAccess = () => {
       //   console.log('Notification permission denied on iOS');
       // }
 
+      //TODO: Save match location to server - will work on it in Sprint 2
       const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
       if (result === 'granted') {
-        getCurrentLocation();
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        console.log('Current position:', position.coords.longitude);
       } else if (result === 'blocked') {
-        getCurrentLocation();
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        console.log('Current position:', position.coords.longitude);
       } else {
         console.log('Location permission denied on iOS');
       }
@@ -83,6 +93,14 @@ const CustomerRequestAccess = () => {
       } else {
         console.log('user notification is not blocked');
       }
+
+      if (auth.authData?.sub) {
+        console.log(auth.authData?.sub);
+        await queryClient.refetchQueries({
+          queryKey: ['customer-compatibility-questions', auth.authData.sub],
+        });
+        navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
+      }
     }
 
     if (Platform.OS === 'android') {
@@ -90,15 +108,28 @@ const CustomerRequestAccess = () => {
       const result2 = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
 
       if (result === 'granted') {
-        getCurrentLocation();
+        const position = await getCurrentLocation();
+        console.log('Current position:', position);
       } else {
         console.log('Location permission denied on Android');
       }
 
       if (result2 === 'granted') {
-        getCurrentLocation();
+        const position = await getCurrentLocation();
+        console.log('Current position:', position);
       } else {
         console.log('Location permission denied on Android');
+      }
+
+      const notificationResult = await requestNotifications(['alert', 'sound']);
+      if (notificationResult.status === 'granted') {
+        console.log('user allowed notification');
+      } else {
+        console.log('user notification is not blocked');
+      }
+
+      if (auth.authData?.sub) {
+        navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
       }
     }
   };
@@ -159,7 +190,6 @@ const CustomerRequestAccess = () => {
               onPress={requestLocationPermission}
               text="Next"
               loading={loading}
-              // disabled={!isValid}
               buttonStyle={profileCreationStyles.buttonStyle}
               textStyle={profileCreationStyles.buttonTextStyle}
             />

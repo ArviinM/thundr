@@ -48,3 +48,21 @@ export const generateYearData = (
 
   return yearData;
 };
+
+const abbreviationToWord: Record<string, string> = {
+  L: 'Lesbian',
+  G: 'Gay',
+  B: 'Bisexual',
+  T: 'Transgender',
+  Q: 'Queer',
+  I: 'Intersex',
+  A: 'Asexual',
+  '+': 'Plus',
+};
+
+export function convertAbbreviationToWord(abbreviation: string) {
+  let words = abbreviation
+    .split('')
+    .map(letter => abbreviationToWord[letter] || letter);
+  return words.join('');
+}

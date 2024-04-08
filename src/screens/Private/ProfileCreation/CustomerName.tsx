@@ -20,11 +20,16 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import {profileCreationStyles} from './styles.tsx';
+import useCustomerProfileStore from '../../../store/profileStore.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 const CustomerName = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const textInputRef = useRef<TextInput>(null);
-
+  const auth = useAuth();
+  const updateCustomerProfile = useCustomerProfileStore(
+    state => state.updateCustomerProfile,
+  );
   const [loading, isLoading] = useState(false);
 
   const schema = yup.object().shape({
@@ -50,20 +55,15 @@ const CustomerName = () => {
       await schema.validate(data);
       isLoading(true);
 
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+      updateCustomerProfile({
+        sub: auth.authData?.sub,
+        name: data.name,
+      });
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('CustomerBirthday');
     } catch (error) {
-      // Handle validation errors
-      if (error instanceof yup.ValidationError) {
-        console.error(error.message);
-      }
+      console.error(error);
     }
   };
 

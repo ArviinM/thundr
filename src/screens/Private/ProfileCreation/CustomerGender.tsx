@@ -20,6 +20,8 @@ import {
 } from 'react-native-keyboard-controller';
 import {profileCreationStyles} from './styles.tsx';
 import LetterGradientButton from '../../../components/shared/LetterGradientButton.tsx';
+import useCustomerProfileStore from '../../../store/profileStore.ts';
+import {convertAbbreviationToWord} from '../../../utils/utils.ts';
 
 const CustomerGender = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -34,6 +36,10 @@ const CustomerGender = () => {
       .required('Nako mars, we need your chosen gender po!'),
   });
 
+  const updateCustomerProfile = useCustomerProfileStore(
+    state => state.updateCustomerProfile,
+  );
+
   const {
     control,
     handleSubmit,
@@ -46,16 +52,14 @@ const CustomerGender = () => {
     try {
       await schema.validate(data);
       isLoading(true);
-      console.log(selectedLetter);
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+      const gender = convertAbbreviationToWord(selectedLetter);
+
+      updateCustomerProfile({
+        gender: gender,
+      });
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('CustomerRequestAccess');
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {

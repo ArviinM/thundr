@@ -1,3 +1,5 @@
+import {bool} from 'yup';
+
 export type BaseResponse<T> = {
   data: T;
   message: string;
@@ -17,6 +19,7 @@ export type AuthDataResponse = {
   refreshToken: string;
   sub: string;
   loginDeactivated: boolean;
+  forProfileCreation: boolean;
   session?: string;
 };
 
@@ -106,4 +109,78 @@ export type PasswordCreationResponse = {
   sub: string;
   forProfileCreation: boolean;
   loginDeactivated: boolean;
+};
+
+// Customer Profile Types
+export type CustomerCreateProfileRequest = {
+  sub: string;
+  name: string;
+  gender: string;
+  birthday: string;
+  hometown: string;
+};
+
+export type CustomerCreateProfileResponse = {
+  sub: string;
+  name: string;
+  gender: string;
+  birthday: string;
+  hometown: string;
+  created: string;
+  deactivateDate: string | null;
+  activated: boolean;
+};
+
+// Customer
+export type CustomerMatchLocationRequest = {
+  sub: string;
+  longitude: string;
+  latitude: string;
+};
+
+export type CustomerMatchLocationResponse = {
+  sub: string;
+  longitude: string;
+  latitude: string;
+  lastUpdate: string;
+};
+
+// Compatibility Questions
+export type CompatibilityQuestionsRequest = {
+  sub: string;
+};
+
+export type CompatibilityChoice = {
+  id: number;
+  answer: string;
+  sequence: string;
+  updateDate: string | null;
+};
+
+export type CompatibilityQuestion = {
+  id: number;
+  category: string;
+  question: string;
+  updateDate: string;
+  compatibilityAnswer: CompatibilityChoice[];
+  selected?: number;
+};
+
+//Compatibility POST Questions
+export type CompatibilityAnswer = {
+  questionId: string;
+  answerId: number;
+};
+
+export type CompatibilityAnswersRequest = {
+  sub: string;
+  compatibilities: CompatibilityAnswer[];
+};
+
+export type CompatibilityAnswersResponse = {
+  id: number;
+  sub: null;
+  questionId: number;
+  answerId: number;
+  createDate: string;
 };

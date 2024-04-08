@@ -25,6 +25,7 @@ import {
   generateMonthData,
   generateYearData,
 } from '../../../utils/utils.ts';
+import useCustomerProfileStore from '../../../store/profileStore.ts';
 
 const CustomerBirthday = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -34,6 +35,10 @@ const CustomerBirthday = () => {
   const monthData = generateMonthData();
   const dayData = generateDayData();
   const yearData = generateYearData();
+
+  const updateCustomerProfile = useCustomerProfileStore(
+    state => state.updateCustomerProfile,
+  );
 
   const schema = yup.object().shape({
     month: yup.string().required('Nako mars, we need your birth month po!'),
@@ -60,15 +65,13 @@ const CustomerBirthday = () => {
       await schema.validate(data);
       isLoading(true);
       console.log(data);
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+
+      updateCustomerProfile({
+        birthday: `${data.year}-${data.month}-${data.day}`,
+      });
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('CustomerGender');
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {

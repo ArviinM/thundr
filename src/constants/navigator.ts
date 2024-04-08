@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {
+  CompatibilityQuestionsRequest,
   EmailValidationResponse,
   EmailVerificationResponse,
   MobileValidationResponse,
@@ -27,4 +28,13 @@ export type RootNavigationParams = {
   LoginValidation: undefined;
   Terms: {uri: string};
   // Profile Creation
+  CustomerName: undefined;
+  CustomerBirthday: undefined;
+  CustomerGender: undefined;
+  CustomerRequestAccess: undefined;
+  CompatibilityQuestions: CompatibilityQuestionsRequest;
+  CustomerInterests: undefined;
+  CustomerAdditionalInfos: undefined;
+  CustomerPhotoBio: undefined;
+  Onboarding: undefined;
 };

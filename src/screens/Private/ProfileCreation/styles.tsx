@@ -172,4 +172,34 @@ export const profileCreationStyles = StyleSheet.create({
   //
   //   marginVertical: -12,
   // },
+  questionTitle: {
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 20,
+    marginBottom: 14,
+  },
+  questionButton: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+    marginBottom: 8,
+    borderRadius: 30,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  letterChoice: {
+    paddingHorizontal: 20,
+    fontFamily: 'ClimateCrisis-Regular',
+    fontSize: 32,
+    color: COLORS.secondary1,
+  },
+  answerText: {
+    color: COLORS.gray3,
+    fontSize: 15,
+    letterSpacing: -0.4,
+    fontFamily: 'Montserrat-Medium',
+    flex: 1,
+  },
 });
