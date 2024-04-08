@@ -21,12 +21,14 @@ import {
 import {profileCreationStyles} from './styles.tsx';
 
 import CircleButton from '../../../components/shared/CircleButton.tsx';
-import {COLORS} from '../../../constants/commons.ts';
+import {COLORS, height} from '../../../constants/commons.ts';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
 import useCustomerProfileStore from '../../../store/profileStore.ts';
 import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
 import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
 import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
+import {MAX_IMAGE_SIZE_BYTES} from '../../../utils/utils.ts';
+import Toast from 'react-native-toast-message';
 
 const CustomerPhotoBio = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -67,8 +69,19 @@ const CustomerPhotoBio = () => {
         mediaType: 'photo',
         includeBase64: true,
       });
-      console.log(image.mime);
-      console.log(image.data);
+
+      if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+        Toast.show({
+          type: 'THNRError',
+          props: {title: 'Limit upload up to 8mb per photo'},
+          position: 'top',
+          topOffset: 80,
+        });
+        throw new Error(
+          'Image exceeds maximum size limit. Please select a smaller image.',
+        );
+      }
+
       setImageData(image);
 
       const formData = new FormData();
@@ -77,16 +90,18 @@ const CustomerPhotoBio = () => {
         formData.append('isPrimary', 'true');
         formData.append('fileContentB64', image?.data);
         formData.append('filename', image?.path);
-      }
 
-      try {
         await mutateAsync(formData);
-      } catch (error) {
-        console.error('Upload Error:', error);
-        // Handle upload error
+        Toast.show({
+          type: 'THNRSuccess',
+          props: {title: 'Photo Upload Success! ✅'},
+          position: 'top',
+          topOffset: 80,
+        });
       }
     } catch (e) {
       console.error(e);
+      throw e;
     }
   };
 

@@ -54,7 +54,7 @@ const CustomToast: React.FC<CustomToastProps> = ({
 );
 
 const toastConfig = {
-  THNRError: ({text1, props}: ToastConfigParams<any>) => (
+  THNRError: ({props}: ToastConfigParams<any>) => (
     <CustomToast
       backgroundColor={COLORS.primary1}
       title={props.title}
