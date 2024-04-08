@@ -31,11 +31,16 @@ import {
   starSignOptions,
 } from '../../../utils/dropdownOptions.ts';
 import CircleButton from '../../../components/shared/CircleButton.tsx';
+import useCustomerDetailsStore from '../../../store/detailsStore.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 const CustomerAdditionalInfos = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const [loading, isLoading] = useState(false);
+  const updateCustomerDetails = useCustomerDetailsStore(
+    state => state.updateCustomerDetails,
+  );
 
   const schema = yup.object().shape({
     feet: yup.string(),
@@ -71,16 +76,22 @@ const CustomerAdditionalInfos = () => {
     try {
       await schema.validate(data);
       isLoading(true);
+
       console.log(data);
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+
+      updateCustomerDetails({
+        height: `${data.feet} ${data.inches}`,
+        starSign: data.starSign,
+        education: data.education,
+        drinking: data.drinking,
+        smoking: data.smoking,
+        religion: data.religion,
+        pet: data.pet,
+        politics: data.politics,
+      });
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('CustomerPhotoBio');
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
@@ -94,7 +105,7 @@ const CustomerAdditionalInfos = () => {
       <SafeAreaView
         edges={['top', 'bottom']}
         style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={3} totalSteps={6} />
+        <StepProgressBar currentStep={7} totalSteps={10} />
         <KeyboardAwareScrollView
           bottomOffset={220}
           style={profileCreationStyles.flex}>
@@ -452,7 +463,8 @@ const CustomerAdditionalInfos = () => {
         <KeyboardStickyView offset={{closed: -20, opened: 0}}>
           <View style={profileCreationStyles.footerContainer}>
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('CustomerPhotoBio')}>
                 <Text style={profileCreationStyles.skipText}>Skip</Text>
               </TouchableOpacity>
             </View>

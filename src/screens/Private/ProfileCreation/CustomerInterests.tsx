@@ -28,6 +28,8 @@ import {COLORS} from '../../../constants/commons.ts';
 import InterestButtonContainer from '../../../components/CustomerInterest/InterestButtonContainer.tsx';
 import {interestOptions} from '../../../components/CustomerInterest/options.ts';
 import CircleButton from '../../../components/shared/CircleButton.tsx';
+import useCustomerDetailsStore from '../../../store/detailsStore.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 const CustomerInterests = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -35,7 +37,11 @@ const CustomerInterests = () => {
   const [loading, isLoading] = useState(false);
 
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const updateCustomerDetails = useCustomerDetailsStore(
+    state => state.updateCustomerDetails,
+  );
 
+  const auth = useAuth();
   const handleSelectionChange = (newSelectedOptions: string[]) => {
     setSelectedInterests(newSelectedOptions);
   };
@@ -43,18 +49,15 @@ const CustomerInterests = () => {
   const onSubmit = async () => {
     try {
       isLoading(true);
-      console.log(selectedInterests);
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+
+      updateCustomerDetails({
+        sub: auth.authData?.sub,
+        hobbies: selectedInterests.toString(),
+      });
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('CustomerAdditionalInfos');
     } catch (error) {
-      // Handle validation errors
       console.error(error);
     }
   };
@@ -66,7 +69,7 @@ const CustomerInterests = () => {
       <SafeAreaView
         edges={['top', 'bottom']}
         style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={3} totalSteps={6} />
+        <StepProgressBar currentStep={6} totalSteps={10} />
         <KeyboardAwareScrollView
           bottomOffset={220}
           style={profileCreationStyles.flex}>
@@ -101,7 +104,8 @@ const CustomerInterests = () => {
         <KeyboardStickyView offset={{closed: -20, opened: 0}}>
           <View style={profileCreationStyles.footerContainer}>
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('CustomerAdditionalInfos')}>
                 <Text style={profileCreationStyles.skipText}>Skip</Text>
               </TouchableOpacity>
             </View>

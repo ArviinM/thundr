@@ -1,5 +1,4 @@
 import React from 'react';
-import LinearGradient from 'react-native-linear-gradient';
 import {
   ActivityIndicator,
   Image,
@@ -16,6 +15,7 @@ interface CircleButtonProps {
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 const CircleButton: React.FC<CircleButtonProps> = ({
@@ -23,10 +23,19 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   buttonStyle,
   textStyle,
   disabled = false,
+  loading = false,
 }) => {
+  const handlePress = () => {
+    if (!loading) {
+      onPress();
+    }
+  };
+
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled}>
-      {disabled ? (
+    <TouchableOpacity onPress={handlePress} disabled={disabled || loading}>
+      {loading ? (
+        <ActivityIndicator color={COLORS.primary1} />
+      ) : disabled ? (
         <Image source={IMAGES.nextCircleDisabled} />
       ) : (
         <Image source={IMAGES.nextCircle} />

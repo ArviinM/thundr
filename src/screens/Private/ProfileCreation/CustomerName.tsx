@@ -58,6 +58,7 @@ const CustomerName = () => {
       updateCustomerProfile({
         sub: auth.authData?.sub,
         name: data.name,
+        hometown: 'None',
       });
 
       isLoading(false);
@@ -72,7 +73,7 @@ const CustomerName = () => {
       <SafeAreaView
         edges={['top', 'bottom']}
         style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={3} totalSteps={6} />
+        <StepProgressBar currentStep={1} totalSteps={10} />
         <KeyboardAwareScrollView
           bottomOffset={220}
           style={profileCreationStyles.flex}>

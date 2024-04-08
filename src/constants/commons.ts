@@ -13,6 +13,7 @@ export const COLORS = {
   primary2: '#EF9D47',
   secondary1: '#F05570',
   secondary2: '#FFBD28',
+  inverted: '#a7e330',
 };
 
 export const SIZES = {

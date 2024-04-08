@@ -13,6 +13,7 @@ export const Tab = createBottomTabNavigator();
 export const navigationRef = createNavigationContainerRef();
 
 export type RootNavigationParams = {
+  HomeTab: undefined;
   Home: undefined;
   // Registration
   // Mobile Process

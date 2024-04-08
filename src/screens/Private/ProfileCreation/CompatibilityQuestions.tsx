@@ -67,11 +67,11 @@ const CompatibilityQuestions = ({route}: CompatibilityProps) => {
   const [isAllQuestionsAnswered, setIsAllQuestionsAnswered] = useState(false);
 
   const saveCompatibilityAnswers = useSaveCompatibilityAnswers();
-
+  // console.log(compatibilityQuestion.data);
   const onSubmit = async () => {
     try {
       isLoading(true);
-
+      console.log(selectedAnswers);
       await saveCompatibilityAnswers.mutateAsync({
         sub: sub,
         compatibilities: selectedAnswers,
@@ -136,16 +136,12 @@ const CompatibilityQuestions = ({route}: CompatibilityProps) => {
     }).start();
   }, [currentQuestionIndex]);
 
-  const allQuestionsAnswered = questions.every(
-    question => question.selected !== null,
-  );
-
   return (
     <SafeAreaProvider>
       <SafeAreaView
         edges={['top', 'bottom']}
         style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={3} totalSteps={6} />
+        <StepProgressBar currentStep={5} totalSteps={10} />
         <KeyboardAwareScrollView
           bottomOffset={220}
           style={profileCreationStyles.flex}>

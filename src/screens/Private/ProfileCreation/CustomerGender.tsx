@@ -73,7 +73,7 @@ const CustomerGender = () => {
       <SafeAreaView
         edges={['top', 'bottom']}
         style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={3} totalSteps={6} />
+        <StepProgressBar currentStep={3} totalSteps={10} />
         <KeyboardAwareScrollView
           bottomOffset={220}
           style={profileCreationStyles.flex}>

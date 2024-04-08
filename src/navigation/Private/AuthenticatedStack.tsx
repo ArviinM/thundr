@@ -22,7 +22,7 @@ export const AuthenticatedStack = () => {
   let initialRouteName;
 
   if (auth.authData?.forProfileCreation) {
-    initialRouteName = 'CustomerRequestAccess';
+    initialRouteName = 'CustomerName';
   } else {
     initialRouteName = 'HomeTab';
   }
@@ -34,9 +34,9 @@ export const AuthenticatedStack = () => {
         screenOptions={{
           // presentation: 'm',
           headerShown: false,
-          statusBarColor: COLORS.white,
+          statusBarColor: 'white',
           // statusBarStyle: 'dark',
-          statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
+          // statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
           statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="CustomerName" component={CustomerName} />

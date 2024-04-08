@@ -26,6 +26,7 @@ import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
+import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
 
 const MobileValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -110,7 +111,11 @@ const MobileValidation = () => {
                     )}
                     name="phoneNumber"
                   />
-                  {errors.phoneNumber && <Text>This is required.</Text>}
+                  {errors.phoneNumber && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.phoneNumber.message}
+                    </Text>
+                  )}
                 </View>
               </View>
               <View style={styles.bodyContainer}>

@@ -32,8 +32,10 @@ import {
 import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {queryClient} from '../../../utils/queryClient.ts';
+import {useQueryClient} from '@tanstack/react-query';
 
 const CustomerRequestAccess = () => {
+  const queryClient1 = useQueryClient(queryClient);
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const [loading, isLoading] = useState(false);
@@ -96,8 +98,14 @@ const CustomerRequestAccess = () => {
 
       if (auth.authData?.sub) {
         console.log(auth.authData?.sub);
-        await queryClient.refetchQueries({
-          queryKey: ['customer-compatibility-questions', auth.authData.sub],
+        // await queryClient.refetchQueries({
+        //   queryKey: ['customer-compatibility-questions', auth.authData.sub],
+        // });
+        await queryClient1.refetchQueries({
+          queryKey: [
+            'customer-compatibility-questions',
+            {sub: auth.authData.sub},
+          ],
         });
         navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
       }
@@ -129,6 +137,9 @@ const CustomerRequestAccess = () => {
       }
 
       if (auth.authData?.sub) {
+        await queryClient.refetchQueries({
+          queryKey: ['customer-compatibility-questions'],
+        });
         navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
       }
     }
@@ -139,7 +150,7 @@ const CustomerRequestAccess = () => {
       <SafeAreaView
         edges={['top', 'bottom']}
         style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={3} totalSteps={6} />
+        <StepProgressBar currentStep={4} totalSteps={10} />
         <KeyboardAwareScrollView
           bottomOffset={220}
           style={profileCreationStyles.flex}>

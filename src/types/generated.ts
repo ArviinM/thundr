@@ -184,3 +184,39 @@ export type CompatibilityAnswersResponse = {
   answerId: number;
   createDate: string;
 };
+
+// Customer Details
+export type CustomerDetailsRequest = {
+  sub: string;
+  bio: string;
+  work: string;
+  location: string;
+  hobbies: string;
+  height: string;
+  starSign: string;
+  education: string;
+  drinking: string;
+  smoking: string;
+  religion: string;
+  pet: string;
+  politics: string;
+  personalityType: string;
+};
+
+export type CustomerDetailsResponse = {
+  id: number;
+  sub: string;
+  bio: string;
+  work: string;
+  location: string;
+  hobbies: string;
+  height: string;
+  starSign: string;
+  education: string;
+  drinking: string;
+  smoking: string;
+  religion: string;
+  pet: string;
+  politics: string;
+  personalityType: string;
+};

@@ -91,8 +91,7 @@ const Onboarding = () => {
   };
 
   const endOnboarding = () => {
-    setScreenIndex(0);
-    console.log('going back');
+    navigation.navigate('HomeTab');
     // router.back();
   };
 
@@ -104,7 +103,7 @@ const Onboarding = () => {
   return (
     <SafeAreaView style={styles.page}>
       {/*<StatusBar style="light" />*/}
-      <StepProgressBar currentStep={10} totalSteps={10} />
+      <StepProgressBar currentStep={11} totalSteps={11} />
       <View style={profileCreationStyles.container}>
         <View style={profileCreationStyles.backButtonContainer}>
           <TouchableOpacity

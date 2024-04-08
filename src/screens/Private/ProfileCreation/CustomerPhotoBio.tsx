@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
+import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
 
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
@@ -21,11 +22,30 @@ import {profileCreationStyles} from './styles.tsx';
 
 import CircleButton from '../../../components/shared/CircleButton.tsx';
 import {COLORS} from '../../../constants/commons.ts';
+import useCustomerDetailsStore from '../../../store/detailsStore.ts';
+import useCustomerProfileStore from '../../../store/profileStore.ts';
+import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
+import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
+import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
 
 const CustomerPhotoBio = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const [loading, isLoading] = useState(false);
+  const [imageData, setImageData] = useState<ImageType | null>(null);
+  const updateCustomerDetails = useCustomerDetailsStore(
+    state => state.updateCustomerDetails,
+  );
+  const customerDetails = useCustomerDetailsStore(
+    state => state.customerDetails,
+  );
+  const customerProfile = useCustomerProfileStore(
+    state => state.customerProfile,
+  );
+  const {mutateAsync} = useUploadProfilePhoto();
+
+  const createProfile = useCreateCustomerProfile();
+  const createDetails = useCreateCustomerDetails();
 
   const schema = yup.object().shape({
     bio: yup.string().required('Mars, we need your bio!'),
@@ -41,6 +61,35 @@ const CustomerPhotoBio = () => {
     resolver: yupResolver(schema),
   });
 
+  const handlePhotoUpload = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        includeBase64: true,
+      });
+      console.log(image.mime);
+      console.log(image.data);
+      setImageData(image);
+
+      const formData = new FormData();
+      if (customerProfile && customerDetails) {
+        formData.append('sub', customerProfile.sub);
+        formData.append('isPrimary', 'true');
+        formData.append('fileContentB64', image?.data);
+        formData.append('filename', image?.path);
+      }
+
+      try {
+        await mutateAsync(formData);
+      } catch (error) {
+        console.error('Upload Error:', error);
+        // Handle upload error
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const onSubmit = async (data: {
     bio: string;
     work: string;
@@ -50,15 +99,23 @@ const CustomerPhotoBio = () => {
       await schema.validate(data);
       isLoading(true);
       console.log(data);
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+
+      updateCustomerDetails({
+        bio: data.bio,
+        work: data.work,
+        location: data.location,
+      });
+
+      console.log(customerProfile);
+      console.log(customerDetails);
+
+      if (customerProfile && customerDetails) {
+        await createProfile.mutateAsync(customerProfile);
+        await createDetails.mutateAsync(customerDetails);
+      }
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('Onboarding');
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
@@ -71,9 +128,9 @@ const CustomerPhotoBio = () => {
     <SafeAreaView
       edges={['top', 'bottom']}
       style={profileCreationStyles.container}>
-      <StepProgressBar currentStep={3} totalSteps={6} />
+      <StepProgressBar currentStep={9} totalSteps={10} />
       <KeyboardAwareScrollView
-        bottomOffset={220}
+        bottomOffset={100}
         style={profileCreationStyles.flex}>
         <View style={profileCreationStyles.container}>
           <View style={profileCreationStyles.backButtonContainer}>
@@ -94,9 +151,19 @@ const CustomerPhotoBio = () => {
 
             <View style={profileCreationStyles.bodyPhotoContainer}>
               {/* Photo Adding Container */}
-              <View style={{alignItems: 'center', gap: 3}}>
-                <TouchableOpacity>
-                  <Image source={IMAGES.addPhoto} />
+              <View style={{alignItems: 'center', gap: 3, marginBottom: 20}}>
+                <TouchableOpacity onPress={handlePhotoUpload}>
+                  {/*<Image source={IMAGES.addPhoto} />*/}
+                  {!imageData ? (
+                    <Image source={IMAGES.addPhoto} />
+                  ) : (
+                    <Image
+                      source={{
+                        uri: `data:${imageData.mime};base64,${imageData.data}`,
+                      }}
+                      style={{width: 148, height: 148, borderRadius: 15}} // Set width and height as per your requirement
+                    />
+                  )}
                 </TouchableOpacity>
                 <Text
                   style={{
@@ -109,7 +176,7 @@ const CustomerPhotoBio = () => {
               </View>
 
               {/* text input container for bio */}
-              <View style={{marginVertical: 16}}>
+              <View style={{marginVertical: 6}}>
                 <Controller
                   control={control}
                   rules={{
@@ -118,12 +185,9 @@ const CustomerPhotoBio = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <TextInput
                       // ref={textInputRef}
-                      style={[
-                        profileCreationStyles.textInput,
-                        {minHeight: 120, maxHeight: 120},
-                      ]}
+                      style={[profileCreationStyles.textInputBio]}
                       keyboardType="default"
-                      placeholder="Enter more about you!"
+                      placeholder="Enter more about you"
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -132,6 +196,8 @@ const CustomerPhotoBio = () => {
                       selectionColor={COLORS.primary1}
                       multiline={true}
                       maxLength={255}
+                      // verticalAlign={'top'}
+                      textAlignVertical={'top'}
                     />
                   )}
                   name="bio"
@@ -142,7 +208,7 @@ const CustomerPhotoBio = () => {
                   </Text>
                 )}
               </View>
-              <View style={{marginVertical: 20}}>
+              <View style={{marginVertical: 6}}>
                 <Controller
                   control={control}
                   rules={{
@@ -151,7 +217,7 @@ const CustomerPhotoBio = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <TextInput
                       // ref={textInputRef}
-                      style={[profileCreationStyles.textInput]}
+                      style={[profileCreationStyles.textInputBioWork]}
                       keyboardType="default"
                       placeholder="Add your work"
                       inputMode={'text'}
@@ -171,7 +237,7 @@ const CustomerPhotoBio = () => {
                   </Text>
                 )}
               </View>
-              <View style={{marginVertical: 20}}>
+              <View style={{marginVertical: 6}}>
                 <Controller
                   control={control}
                   rules={{
@@ -180,7 +246,7 @@ const CustomerPhotoBio = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <TextInput
                       // ref={textInputRef}
-                      style={[profileCreationStyles.textInput]}
+                      style={[profileCreationStyles.textInputBioWork]}
                       keyboardType="default"
                       placeholder="Location"
                       inputMode={'text'}
@@ -214,6 +280,7 @@ const CustomerPhotoBio = () => {
             <CircleButton
               onPress={handleSubmit(onSubmit)}
               disabled={!isValid}
+              loading={loading}
             />
           </View>
         </View>

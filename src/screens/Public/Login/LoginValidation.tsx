@@ -3,6 +3,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -28,6 +29,7 @@ import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 import {AuthDataRequest} from '../../../types/generated.ts';
+import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
 
 const LoginValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -81,119 +83,122 @@ const LoginValidation = () => {
   // const isPhoneNumberIncomplete = phoneNumber.length < 10;
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView edges={['top']} style={styles.container}>
-        <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
-          {/*Container*/}
-          <View style={styles.container}>
-            {/* Back Button */}
-            <View style={styles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={styles.backButton}>
-                <Image source={IMAGES.back} style={styles.backImage} />
-              </TouchableOpacity>
-            </View>
-            {/* Title Container */}
-            <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Welcome back!</Text>
-              <Text style={styles.textSubtitle}>
-                Login to Continue to Thundr! ⚡
-              </Text>
+    <SafeAreaView edges={['top']} style={[styles.container]}>
+      {/*<StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />*/}
+      <KeyboardAwareScrollView bottomOffset={220} style={[styles.flex]}>
+        {/*Container*/}
+        <View style={styles.container}>
+          {/* Back Button */}
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Image source={IMAGES.back} style={styles.backImage} />
+            </TouchableOpacity>
+          </View>
+          {/* Title Container */}
+          <View style={styles.titleContainer}>
+            <Text style={styles.textTitle}>Welcome back!</Text>
+            <Text style={styles.textSubtitle}>
+              Login to Continue to Thundr! ⚡
+            </Text>
 
-              <View style={styles.numberContainer}>
-                <View style={styles.numberCodeContainer}>
-                  <Text style={styles.textNumberCode}>+63</Text>
-                </View>
-                <View style={styles.textInputContainer}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={textInputRef}
-                        style={styles.textInputNumber}
-                        maxLength={10}
-                        placeholder="XXX XXXX XXX"
-                        inputMode={'numeric'}
-                        autoComplete={'tel'}
-                        onBlur={onBlur}
-                        onChangeText={text => onChange(text)}
-                        value={value}
-                        selectionColor={COLORS.primary1}
-                      />
-                    )}
-                    name="phoneNumber"
-                  />
-                  {errors.phoneNumber && <Text>This is required.</Text>}
-                </View>
+            <View style={styles.numberContainer}>
+              <View style={styles.numberCodeContainer}>
+                <Text style={styles.textNumberCode}>+63</Text>
               </View>
-
-              {/*Password Container*/}
-
-              <View style={styles.passwordContainer}>
-                <View style={styles.textInputPasswordContainer}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={passwordRef}
-                        style={styles.textInputPassword}
-                        placeholder="Enter your password"
-                        secureTextEntry={!showPassword}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        autoCapitalize="none"
-                        selectionColor={COLORS.primary1}
-                      />
-                    )}
-                    name="password"
-                  />
-
-                  {/* Show/hide icon */}
-                  <TouchableOpacity
-                    style={styles.showPasswordIcon}
-                    onPress={() => setShowPassword(!showPassword)}>
-                    <Image
-                      source={showPassword ? IMAGES.eye : IMAGES.eyeHidden}
-                      style={styles.showPasswordImage}
+              <View style={styles.textInputContainer}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      ref={textInputRef}
+                      style={styles.textInputNumber}
+                      maxLength={10}
+                      placeholder="XXX XXXX XXX"
+                      inputMode={'numeric'}
+                      autoComplete={'tel'}
+                      onBlur={onBlur}
+                      onChangeText={text => onChange(text)}
+                      value={value}
+                      selectionColor={COLORS.primary1}
                     />
-                  </TouchableOpacity>
-
-                  {errors.password && (
-                    <Text style={styles.errorText}>
-                      {errors.password.message}
-                    </Text>
                   )}
-                </View>
-              </View>
-              <View style={styles.bodyContainer}>
-                <Text style={styles.textBody}>Trouble signing in?</Text>
+                  name="phoneNumber"
+                />
+                {errors.phoneNumber && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.phoneNumber.message}
+                  </Text>
+                )}
               </View>
             </View>
+
+            {/*Password Container*/}
+
+            <View style={styles.passwordContainer}>
+              <View style={styles.textInputPasswordContainer}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      ref={passwordRef}
+                      style={styles.textInputPassword}
+                      placeholder="Enter your password"
+                      secureTextEntry={!showPassword}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      selectionColor={COLORS.primary1}
+                    />
+                  )}
+                  name="password"
+                />
+
+                {/* Show/hide icon */}
+                <TouchableOpacity
+                  style={styles.showPasswordIcon}
+                  onPress={() => setShowPassword(!showPassword)}>
+                  <Image
+                    source={showPassword ? IMAGES.eye : IMAGES.eyeHidden}
+                    style={styles.showPasswordImage}
+                  />
+                </TouchableOpacity>
+
+                {errors.password && (
+                  <Text style={styles.errorText}>
+                    {errors.password.message}
+                  </Text>
+                )}
+              </View>
+            </View>
+            <View style={styles.bodyContainer}>
+              <Text style={styles.textBody}>Trouble signing in?</Text>
+            </View>
           </View>
-        </KeyboardAwareScrollView>
-        {/* sticky footer container*/}
-        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
-          <View style={styles.buttonContainer}>
-            <GradientButton
-              onPress={handleSubmit(onSubmit)}
-              text="Login"
-              loading={loading}
-              disabled={!isValid}
-              buttonStyle={styles.buttonStyle}
-              textStyle={styles.buttonTextStyle}
-            />
-          </View>
-        </KeyboardStickyView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </View>
+      </KeyboardAwareScrollView>
+      {/* sticky footer container*/}
+      <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+        <View style={styles.buttonContainer}>
+          <GradientButton
+            onPress={handleSubmit(onSubmit)}
+            text="Login"
+            loading={loading}
+            disabled={!isValid}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.buttonTextStyle}
+          />
+        </View>
+      </KeyboardStickyView>
+    </SafeAreaView>
   );
 };
 
