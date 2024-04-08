@@ -76,6 +76,8 @@
 	<string>This app collects usage data to help us understand how people use it and make it better for everyone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires to access your photo library to pick your desired image in choosing your profile pictures.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app requires to access your music usage.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ClimateCrisis-Regular.ttf</string>
