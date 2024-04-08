@@ -26,6 +26,7 @@ import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
+import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
 
 const MobileValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -56,7 +57,6 @@ const MobileValidation = () => {
     const withNumberCode = `+63${data.phoneNumber}`;
     isLoading(true);
 
-    // Temporary Comment to Bypass
     const result = await mobileValidation.mutateAsync({
       phoneNumber: withNumberCode,
     } as MobileValidationRequest);
@@ -111,7 +111,11 @@ const MobileValidation = () => {
                     )}
                     name="phoneNumber"
                   />
-                  {errors.phoneNumber && <Text>This is required.</Text>}
+                  {errors.phoneNumber && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.phoneNumber.message}
+                    </Text>
+                  )}
                 </View>
               </View>
               <View style={styles.bodyContainer}>
@@ -150,7 +154,6 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',
-    letterSpacing: -0.6,
     color: COLORS.primary1,
   },
   textSubtitle: {

@@ -84,6 +84,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode project.properties["BUILD_NUMBER"]?BUILD_NUMBER as int :1
         versionName project.properties["BUILD_NAME"]?BUILD_NAME:"1.0"
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         debug {

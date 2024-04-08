@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {
+  CompatibilityQuestionsRequest,
   EmailValidationResponse,
   EmailVerificationResponse,
   MobileValidationResponse,
@@ -12,6 +13,7 @@ export const Tab = createBottomTabNavigator();
 export const navigationRef = createNavigationContainerRef();
 
 export type RootNavigationParams = {
+  HomeTab: undefined;
   Home: undefined;
   // Registration
   // Mobile Process
@@ -26,4 +28,14 @@ export type RootNavigationParams = {
   Login: undefined;
   LoginValidation: undefined;
   Terms: {uri: string};
+  // Profile Creation
+  CustomerName: undefined;
+  CustomerBirthday: undefined;
+  CustomerGender: undefined;
+  CustomerRequestAccess: undefined;
+  CompatibilityQuestions: CompatibilityQuestionsRequest;
+  CustomerInterests: undefined;
+  CustomerAdditionalInfos: undefined;
+  CustomerPhotoBio: undefined;
+  Onboarding: undefined;
 };
