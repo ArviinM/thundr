@@ -1,6 +1,6 @@
 import axios, {AxiosInstance} from 'axios';
 import {useAuthStore} from '../../store/authStore.ts';
-
+import {API_BASE_URL} from '@env';
 const AXIOS_TIMEOUT = 30000;
 
 function getCurrentAccessToken() {
@@ -10,7 +10,7 @@ function getCurrentAccessToken() {
 export function useAxiosWithAuth(): AxiosInstance {
   const token = getCurrentAccessToken();
   const axiosInstance = axios.create({
-    baseURL: 'https://dev-api.thundr.ph/',
+    baseURL: API_BASE_URL,
     timeout: AXIOS_TIMEOUT,
     validateStatus: () => true,
     headers: {

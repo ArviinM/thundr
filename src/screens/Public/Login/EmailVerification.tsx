@@ -62,21 +62,25 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
   };
 
   const onSubmit = async (emailCode: string) => {
-    console.log(emailCode);
+    try {
+      console.log(emailCode);
 
-    isLoading(true);
+      isLoading(true);
 
-    const result = await emailVerification.mutateAsync({
-      phoneNumber: username,
-      session: session,
-      email: email,
-      challengeName: challengeName,
-      challengeAnswer: emailCode,
-    } as EmailVerificationRequest);
+      const result = await emailVerification.mutateAsync({
+        phoneNumber: username,
+        session: session,
+        email: email,
+        challengeName: challengeName,
+        challengeAnswer: emailCode,
+      } as EmailVerificationRequest);
 
-    isLoading(false);
+      isLoading(false);
 
-    navigation.navigate('PasswordCreation', result);
+      navigation.navigate('PasswordCreation', result);
+    } catch (e) {
+      isLoading(false);
+    }
   };
 
   const isEmailCodeComplete = emailCodeInput.length < 6;

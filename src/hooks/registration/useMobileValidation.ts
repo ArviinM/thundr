@@ -24,6 +24,7 @@ export function useMobileValidation() {
           name: 'mobile-validation',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         } as Error;
       }
 

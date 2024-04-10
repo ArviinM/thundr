@@ -24,6 +24,7 @@ export function usePasswordCreation() {
           name: 'password-creation',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         } as Error;
       }
 
