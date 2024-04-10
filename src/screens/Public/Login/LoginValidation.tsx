@@ -1,9 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -11,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -24,7 +21,7 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 
-import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
+import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 

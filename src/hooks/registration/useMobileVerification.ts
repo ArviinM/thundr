@@ -24,6 +24,7 @@ export function useMobileVerification() {
           name: 'mobile-verification',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         } as Error;
       }
 

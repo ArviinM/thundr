@@ -1,5 +1,3 @@
-import {bool} from 'yup';
-
 export type BaseResponse<T> = {
   data: T;
   message: string;
@@ -26,6 +24,15 @@ export type AuthDataResponse = {
 export type AuthStoreState = {
   authData?: AuthDataResponse;
   setAuthData: (data: AuthDataResponse) => void;
+};
+
+export type AuthRefreshTokenRequest = {
+  refreshToken: string;
+};
+
+export type AuthRefreshTokenResponse = {
+  accessToken: string;
+  idToken: string;
 };
 
 // Mobile Validation Types

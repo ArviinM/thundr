@@ -1,13 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
@@ -62,20 +54,22 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
   };
 
   const onSubmit = async (otp: string) => {
-    console.log(otp);
+    try {
+      isLoading(true);
 
-    isLoading(true);
+      const result = await mobileVerification.mutateAsync({
+        phoneNumber: username,
+        session: session,
+        challengeName: challengeName,
+        challengeAnswer: otp,
+      } as MobileVerificationRequest);
 
-    const result = await mobileVerification.mutateAsync({
-      phoneNumber: username,
-      session: session,
-      challengeName: challengeName,
-      challengeAnswer: otp,
-    } as MobileVerificationRequest);
+      isLoading(false);
 
-    isLoading(false);
-
-    navigation.navigate('EmailValidation', result);
+      navigation.navigate('EmailValidation', result);
+    } catch (e) {
+      isLoading(false);
+    }
   };
 
   const isOtpComplete = otpInput.length < 6;

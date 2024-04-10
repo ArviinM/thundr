@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -54,15 +52,18 @@ const MobileValidation = () => {
   }, []);
 
   const onSubmit = async (data: {phoneNumber: string}) => {
-    const withNumberCode = `+63${data.phoneNumber}`;
-    isLoading(true);
+    try {
+      const withNumberCode = `+63${data.phoneNumber}`;
+      isLoading(true);
 
-    const result = await mobileValidation.mutateAsync({
-      phoneNumber: withNumberCode,
-    } as MobileValidationRequest);
+      const result = await mobileValidation.mutateAsync({
+        phoneNumber: withNumberCode,
+      } as MobileValidationRequest);
 
-    navigation.navigate('MobileVerification', result);
-    isLoading(false);
+      navigation.navigate('MobileVerification', result);
+    } catch (e) {
+      isLoading(false);
+    }
   };
 
   const isPhoneNumberIncomplete = phoneNumber.length < 10;

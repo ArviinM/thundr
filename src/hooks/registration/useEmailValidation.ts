@@ -24,6 +24,7 @@ export function useEmailValidation() {
           name: 'email-validation',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         } as Error;
       }
 
