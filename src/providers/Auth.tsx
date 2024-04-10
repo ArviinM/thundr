@@ -16,6 +16,7 @@ import {
 import {useAuthStore} from '../store/authStore.ts';
 import {queryClient} from '../utils/queryClient.ts';
 import {usePasswordCreation} from '../hooks/registration/usePasswordCreation.ts';
+import {useRefreshToken} from '../hooks/useRefreshToken.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -40,6 +41,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   const signInUser = useSignInUser();
   const passwordCreation = usePasswordCreation();
+  const refreshToken = useRefreshToken();
 
   useEffect(() => {
     loadStorageData();
@@ -50,8 +52,25 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       const authDataSerialized = await AsyncStorage.getItem('@AuthData');
       if (authDataSerialized) {
         const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
-        setAuthData(_authData);
-        // Start refetch of get match list when user opens the app if already logged in.
+        console.log('OLD', _authData.accessToken);
+        const result = await refreshToken.mutateAsync({
+          refreshToken: _authData.refreshToken,
+        });
+
+        // Update the access token and ID token in the auth data
+        const updatedAuthData = {
+          ..._authData,
+          accessToken: result.accessToken,
+          idToken: result.idToken,
+        };
+        console.log('NEW', result.accessToken);
+
+        setAuthData(updatedAuthData);
+
+        await AsyncStorage.setItem(
+          '@AuthData',
+          JSON.stringify(updatedAuthData),
+        );
         await queryClient.refetchQueries({
           queryKey: ['get-match-list'],
         });
@@ -69,7 +88,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
       setAuthData(result);
 
-      // Start fetch of get match list depending on the sub (user)
       await AsyncStorage.setItem('@AuthData', JSON.stringify(result));
       await queryClient.refetchQueries({
         queryKey: ['get-match-list', result.sub],
