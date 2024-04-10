@@ -24,6 +24,7 @@ export function useGetMatchList(props: any) {
           name: 'get-match-list',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         });
       }
 

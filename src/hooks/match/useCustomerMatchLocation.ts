@@ -25,6 +25,7 @@ export function useCustomerMatchLocation() {
           name: 'customer-match-location',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         } as Error;
       }
 

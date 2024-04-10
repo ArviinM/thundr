@@ -29,6 +29,7 @@ export function useGetCompatibilityQuestions(
           name: 'customer-compatibility-questions',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         });
       }
 

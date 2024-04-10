@@ -25,6 +25,7 @@ export function useCreateCustomerProfile() {
           name: 'customer-create-profile',
           status: response.data.status,
           message: response.data.message,
+          data: response.data.data,
         } as Error;
       }
 
