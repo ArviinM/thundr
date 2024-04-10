@@ -1,19 +1,19 @@
 import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ActivityIndicator, StatusBar, Text, View} from 'react-native';
-import {useAuth} from '../../../providers/Auth.tsx';
+import {StatusBar, Text, View} from 'react-native';
+
 import {COLORS} from '../../../constants/commons.ts';
-import {useGetMatchList} from '../../../hooks/useGetMatchList.ts';
+
 import {useEffect, useState} from 'react';
 import {
   runOnJS,
   useAnimatedReaction,
   useSharedValue,
-  withSpring,
 } from 'react-native-reanimated';
 import Card from '../../../components/Home/Card.tsx';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import Swiping from '../../../components/Home/Swiping.tsx';
+import GenericModal from '../../../components/shared/GenericModal.tsx';
 
 const dummuUsers = [
   {
@@ -92,6 +92,8 @@ const Home = () => {
   const activeIndex = useSharedValue(0);
   const mareTranslations = useSharedValue<number[]>(new Array(6).fill(0));
 
+  const [visible, isVisible] = useState(true);
+
   useAnimatedReaction(
     () => activeIndex.value,
     (value, prevValue) => {
@@ -158,6 +160,24 @@ const Home = () => {
       style={{flex: 1, backgroundColor: 'yellow'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
+      <GenericModal
+        isVisible={visible}
+        title="Page Underconstruction"
+        content={
+          <Text style={{fontFamily: 'Montserrat-Regular'}}>
+            G'day, testers! {'\n\n'}The Home/Swiping Page behind this modal is
+            subject to change and will not be the final user interface.
+            {'\n\n'}
+            Your feedback encourage us to do better. Please share your thoughts
+            on respected channels. Thank you!
+            {'\n\n'}
+            Tanders, Inc
+          </Text>
+          // <TextInput multiline style={styles.feedbackInput} />
+        }
+        buttonText="Close"
+        onClose={() => isVisible(false)}
+      />
       <View
         style={{
           flex: 1,

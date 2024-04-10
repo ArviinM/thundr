@@ -52,18 +52,15 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       const authDataSerialized = await AsyncStorage.getItem('@AuthData');
       if (authDataSerialized) {
         const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
-        console.log('OLD', _authData.accessToken);
         const result = await refreshToken.mutateAsync({
           refreshToken: _authData.refreshToken,
         });
 
-        // Update the access token and ID token in the auth data
         const updatedAuthData = {
           ..._authData,
           accessToken: result.accessToken,
           idToken: result.idToken,
         };
-        console.log('NEW', result.accessToken);
 
         setAuthData(updatedAuthData);
 
