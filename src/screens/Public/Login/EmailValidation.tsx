@@ -92,6 +92,7 @@ const EmailValidation = ({route}: EmailValidationProps) => {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
         console.error(error.message);
+        isLoading(false);
       }
     }
   };
