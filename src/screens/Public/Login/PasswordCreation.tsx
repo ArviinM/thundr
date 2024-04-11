@@ -135,9 +135,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
         <KeyboardAwareScrollView bottomOffset={50}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => handleExit}
-                style={styles.backButton}>
+              <TouchableOpacity onPress={handleExit} style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>
             </View>
