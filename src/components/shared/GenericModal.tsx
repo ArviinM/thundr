@@ -36,7 +36,7 @@ const GenericModal: React.FC<GenericModalProps> = ({
       duration: 200,
       useNativeDriver: false,
     }).start();
-  }, [isVisible]);
+  }, [animation, isVisible]);
 
   const opacity = animation.interpolate({
     inputRange: [0, 1],
@@ -59,7 +59,7 @@ const GenericModal: React.FC<GenericModalProps> = ({
           ]}>
           <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <LottieView
-              source={require('../../assets/animations/under_construction.json')}
+              source={require('../../assets/animations/rawr_shark.json')}
               style={{
                 width: 200,
                 height: 200,

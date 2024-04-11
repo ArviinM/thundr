@@ -34,6 +34,7 @@ import {
 import {usePasswordCreation} from '../../../hooks/registration/usePasswordCreation.ts';
 import {PasswordCreationRequest} from '../../../types/generated.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
+import useConfirmationAlert from '../../../components/shared/Alert.tsx';
 
 type PasswordCreationScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -116,18 +117,26 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
     }
   };
 
+  const {showConfirmationAlert} = useConfirmationAlert();
+  const handleExit = () => {
+    showConfirmationAlert({
+      title: 'Uy, exit na agad?',
+      message:
+        'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
+      onConfirm: () => navigation.navigate('Login'),
+    });
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
         <StepProgressBar currentStep={5} totalSteps={6} />
-        {/*<KeyboardAvoidingView*/}
-        {/*  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}*/}
-        {/*  style={styles.flex}>*/}
+
         <KeyboardAwareScrollView bottomOffset={50}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
               <TouchableOpacity
-                onPress={() => navigation.goBack()}
+                onPress={() => handleExit}
                 style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>

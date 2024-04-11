@@ -2,7 +2,11 @@ import React, {useRef, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import OTPTextView from 'react-native-otp-textinput';
 
 import {
@@ -23,6 +27,8 @@ import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
+import {useMobileResendOTP} from '../../../hooks/registration/useMobileResendOTP.ts';
+import Toast from 'react-native-toast-message';
 
 type MobileVerificationScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -42,7 +48,14 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
   const [loading, isLoading] = useState(false);
   const [otpInput, setOtpInput] = useState<string>('');
 
+  const [countdownTimer, setCountdownTimer] = useState(0);
+  const [resendDisabled, setResendDisabled] = useState(false); // Initially disable
+  const [resendAttempts, setResendAttempts] = useState(0);
+
   const mobileVerification = useMobileVerification();
+  const mobileResendOTP = useMobileResendOTP();
+
+  const inset = useSafeAreaInsets();
 
   const handleCellTextChange = async (text: string, i: number) => {
     if (i === 0) {
@@ -74,6 +87,63 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
 
   const isOtpComplete = otpInput.length < 6;
 
+  const startTimer = () => {
+    let duration = 45; // Adjust as needed based on attempt times
+    if (resendAttempts === 1) {
+      duration = 90;
+    } else if (resendAttempts === 2) {
+      duration = 180;
+    }
+
+    setCountdownTimer(duration);
+    setResendDisabled(true);
+
+    const timerId = setInterval(() => {
+      setCountdownTimer(prev => {
+        if (prev <= 1) {
+          clearInterval(timerId);
+          setResendDisabled(false);
+          return 0;
+        } else {
+          return prev - 1;
+        }
+      });
+    }, 1000);
+  };
+
+  const handleResendOtp = async () => {
+    if (resendAttempts >= 3) {
+      setResendDisabled(true);
+      // Handle what happens if limit is reached
+      Toast.show({
+        type: 'THNRWaring',
+        props: {title: 'Maximum OTP Resend Attempts Reached!'},
+        position: 'top',
+        topOffset: inset.top + 20,
+      });
+      return;
+    }
+
+    startTimer();
+    if (username && session) {
+      try {
+        await mobileResendOTP.mutateAsync({
+          phoneNumber: username,
+          session: session,
+        });
+        Toast.show({
+          type: 'THNRSuccess',
+          props: {title: 'Your OTP has been resent!'},
+          position: 'top',
+          topOffset: inset.top + 20,
+        });
+        setResendAttempts(resendAttempts + 1);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top']} style={styles.container}>
@@ -104,9 +174,20 @@ const MobileVerification = ({route}: MobileVerificationProps) => {
                   keyboardType="numeric"
                 />
               </View>
-              <View style={styles.bodyContainer}>
-                <Text style={styles.textBody}>
-                  Wala pa rin text, mars? RESEND OTP
+              <View style={[styles.bodyContainer]}>
+                {/*Add OTP Resend in RESEND OTP TEXT*/}
+                <Text style={[styles.textBody]}>
+                  Wala pa rin text, mars?{' '}
+                  <Text
+                    style={[
+                      styles.resendText,
+                      resendDisabled
+                        ? styles.resendDisabled
+                        : styles.resendEnabled,
+                    ]}
+                    onPress={handleResendOtp}>
+                    RESEND OTP {countdownTimer > 0 && `(${countdownTimer})`}
+                  </Text>
                 </Text>
               </View>
             </View>
@@ -177,7 +258,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     borderBottomWidth: 1,
   },
-  bodyContainer: {},
+  bodyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textBody: {
     fontSize: SIZES.h5,
     fontFamily: 'Montserrat-SemiBold',
@@ -199,6 +283,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.white,
     fontSize: SIZES.h5,
+  },
+  resendText: {
+    color: COLORS.primary1, // Color when enabled
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  resendEnabled: {
+    color: COLORS.primary1,
+  },
+  resendDisabled: {
+    color: COLORS.gray,
   },
 });
 

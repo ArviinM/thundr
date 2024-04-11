@@ -33,6 +33,7 @@ import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
+import useConfirmationAlert from '../../../components/shared/Alert.tsx';
 
 type EmailValidationScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -97,6 +98,16 @@ const EmailValidation = ({route}: EmailValidationProps) => {
     }
   };
 
+  const {showConfirmationAlert} = useConfirmationAlert();
+  const handleExit = () => {
+    showConfirmationAlert({
+      title: 'Uy, exit na agad?',
+      message:
+        'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
+      onConfirm: () => navigation.navigate('Login'),
+    });
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
@@ -105,7 +116,7 @@ const EmailValidation = ({route}: EmailValidationProps) => {
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
               <TouchableOpacity
-                onPress={() => navigation.goBack()}
+                onPress={() => handleExit}
                 style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>
