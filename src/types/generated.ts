@@ -56,6 +56,11 @@ export type MobileVerificationRequest = {
   challengeAnswer: string;
 };
 
+export type MobileResendOTPRequest = {
+  phoneNumber: string;
+  session: string;
+};
+
 export type MobileVerificationResponse = {
   username: string;
   session: string;
@@ -88,6 +93,12 @@ export type EmailVerificationRequest = {
   session: string;
   challengeName: string;
   challengeAnswer: string;
+};
+
+export type EmailCodeResendRequest = {
+  phoneNumber: string;
+  session: string;
+  email: string;
 };
 
 export type EmailVerificationResponse = {
