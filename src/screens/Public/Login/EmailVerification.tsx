@@ -1,12 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import {

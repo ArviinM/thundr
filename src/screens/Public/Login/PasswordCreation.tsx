@@ -56,7 +56,6 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
   const [loading, isLoading] = useState(false);
 
   const auth = useAuth();
-  const passwordCreation = usePasswordCreation();
 
   const schema = yup.object().shape({
     password: yup

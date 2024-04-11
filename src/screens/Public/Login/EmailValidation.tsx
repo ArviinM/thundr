@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
