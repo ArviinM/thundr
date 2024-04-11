@@ -162,18 +162,17 @@ const Home = () => {
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
       <GenericModal
         isVisible={visible}
-        title="Page Underconstruction"
+        title="Dev Log Sprint #1"
         content={
           <Text style={{fontFamily: 'Montserrat-Regular'}}>
-            G'day, testers! {'\n\n'}The Home/Swiping Page behind this modal is
-            subject to change and will not be the final user interface.
+            Rawr Testers! 🦈 {'\n\n'}
+            Here's our new build for Sprint 1! If you made it here it means you
+            finished signing up or you signed in! {'\n\n'}I hope you saw that
+            dang rainbow animations that was not easy to make xD {'\n\n'}
+            Do keep testing it out and I, shark awaits for your feedback.
             {'\n\n'}
-            Your feedback encourage us to do better. Please share your thoughts
-            on respected channels. Thank you!
-            {'\n\n'}
-            Tanders, Inc
+            Big Sharky Dev, {'\n'}Tanders, Inc
           </Text>
-          // <TextInput multiline style={styles.feedbackInput} />
         }
         buttonText="Close"
         onClose={() => isVisible(false)}
