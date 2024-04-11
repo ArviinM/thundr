@@ -46,7 +46,7 @@ type PasswordCreationProps = {
 };
 
 const PasswordCreation = ({route}: PasswordCreationProps) => {
-  const {username, challengeName, session} = route?.params || {};
+  const {username, challengeName, session, email} = route?.params || {};
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +56,6 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
   const [loading, isLoading] = useState(false);
 
   const auth = useAuth();
-  const passwordCreation = usePasswordCreation();
 
   const schema = yup.object().shape({
     password: yup
@@ -100,7 +99,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
 
       const passwordData = {
         phoneNumber: username,
-        email: 'test8@thundr.ph',
+        email: email,
         session: session,
         challengeName: challengeName,
         password: data.confirmPassword,
@@ -135,9 +134,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
         <KeyboardAwareScrollView bottomOffset={50}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => handleExit}
-                style={styles.backButton}>
+              <TouchableOpacity onPress={handleExit} style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>
             </View>
