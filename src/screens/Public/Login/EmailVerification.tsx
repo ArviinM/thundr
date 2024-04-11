@@ -1,12 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import {
@@ -171,9 +164,7 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
         <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => handleExit}
-                style={styles.backButton}>
+              <TouchableOpacity onPress={handleExit} style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>
             </View>
