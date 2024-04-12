@@ -22,9 +22,18 @@ import {profileCreationStyles} from './styles.tsx';
 import LetterGradientButton from '../../../components/shared/LetterGradientButton.tsx';
 import useCustomerProfileStore from '../../../store/profileStore.ts';
 import {convertAbbreviationToWord} from '../../../utils/utils.ts';
+import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
 
 const CustomerGender = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  const updateCustomerProfile = useCustomerProfileStore(
+    state => state.updateCustomerProfile,
+  );
+  const customerProfile = useCustomerProfileStore(
+    state => state.customerProfile,
+  );
+  const createProfile = useCreateCustomerProfile();
 
   const [loading, isLoading] = useState(false);
   const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
@@ -35,10 +44,6 @@ const CustomerGender = () => {
       .string()
       .required('Nako mars, we need your chosen gender po!'),
   });
-
-  const updateCustomerProfile = useCustomerProfileStore(
-    state => state.updateCustomerProfile,
-  );
 
   const {
     control,
@@ -58,13 +63,17 @@ const CustomerGender = () => {
         gender: gender,
       });
 
-      isLoading(false);
-      navigation.navigate('CustomerRequestAccess');
+      if (customerProfile) {
+        await createProfile.mutateAsync({...customerProfile, gender: gender});
+        isLoading(false);
+        navigation.navigate('CustomerRequestAccess');
+      }
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
         console.error(error.message);
       }
+      isLoading(false);
     }
   };
 
@@ -81,7 +90,6 @@ const CustomerGender = () => {
             <View style={profileCreationStyles.backButtonContainer}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
-                disabled={true}
                 style={profileCreationStyles.backButton}>
                 <Image
                   source={IMAGES.back}

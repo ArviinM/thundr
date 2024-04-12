@@ -31,7 +31,6 @@ import CircleButton from '../../../components/shared/CircleButton.tsx';
 import {COLORS} from '../../../constants/commons.ts';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
 import useCustomerProfileStore from '../../../store/profileStore.ts';
-import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
 import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
 import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
 import {MAX_IMAGE_SIZE_BYTES} from '../../../utils/utils.ts';
@@ -54,7 +53,6 @@ const CustomerPhotoBio = () => {
   );
   const {mutateAsync} = useUploadProfilePhoto();
 
-  const createProfile = useCreateCustomerProfile();
   const createDetails = useCreateCustomerDetails();
 
   const schema = yup.object().shape({
@@ -133,21 +131,22 @@ const CustomerPhotoBio = () => {
         location: data.location,
       });
 
-      console.log(customerProfile);
-      console.log(customerDetails);
-
-      if (customerProfile && customerDetails) {
-        await createProfile.mutateAsync(customerProfile);
-        await createDetails.mutateAsync(customerDetails);
+      if (customerDetails) {
+        await createDetails.mutateAsync({
+          ...customerDetails,
+          bio: data.bio,
+          work: data.work,
+          location: data.location,
+        });
+        isLoading(false);
+        navigation.navigate('Onboarding');
       }
-
-      isLoading(false);
-      navigation.navigate('Onboarding');
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
         console.error(error.message);
       }
+      isLoading(false);
     }
   };
 
@@ -324,7 +323,7 @@ const CustomerPhotoBio = () => {
           <View>
             <CircleButton
               onPress={handleSubmit(onSubmit)}
-              disabled={!isValid}
+              disabled={!isValid || !imageData}
               loading={loading}
             />
           </View>
