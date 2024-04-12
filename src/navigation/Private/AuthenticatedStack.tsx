@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Stack} from '../../constants/navigator.ts';
 import {HomeTab} from './Home/Tab/HomeTab.tsx';
-import WorkingInProgress from '../../screens/shared/WorkingInProgress.tsx';
+
 import CustomerName from '../../screens/Private/ProfileCreation/CustomerName.tsx';
 import {COLORS} from '../../constants/commons.ts';
 import {Platform} from 'react-native';
@@ -32,11 +32,8 @@ export const AuthenticatedStack = () => {
       {/*  Stack for Profile Creation*/}
       <Stack.Group
         screenOptions={{
-          // presentation: 'm',
           headerShown: false,
           statusBarColor: 'white',
-          // statusBarStyle: 'dark',
-          // statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
           statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="CustomerName" component={CustomerName} />
