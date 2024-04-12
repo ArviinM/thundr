@@ -103,6 +103,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         queryKey: ['get-match-list', 'customer-compatibility-questions'],
         type: 'all',
       });
+      queryClient.clear();
       await AsyncStorage.removeItem('@AuthData');
     } catch (error) {
       console.error('Error signing out:', error);
