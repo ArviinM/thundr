@@ -32,10 +32,11 @@ import {
 } from '../../../utils/dropdownOptions.ts';
 import CircleButton from '../../../components/shared/CircleButton.tsx';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 const CustomerAdditionalInfos = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-
+  const auth = useAuth();
   const [loading, isLoading] = useState(false);
   const updateCustomerDetails = useCustomerDetailsStore(
     state => state.updateCustomerDetails,
@@ -458,7 +459,12 @@ const CustomerAdditionalInfos = () => {
         <View style={profileCreationStyles.footerContainer}>
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('CustomerPhotoBio')}>
+              onPress={() => {
+                navigation.navigate('CustomerPhotoBio');
+                updateCustomerDetails({
+                  sub: auth.authData?.sub,
+                });
+              }}>
               <Text style={profileCreationStyles.skipText}>Skip</Text>
             </TouchableOpacity>
           </View>

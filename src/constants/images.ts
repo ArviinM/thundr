@@ -31,4 +31,21 @@ export const IMAGES: Record<any, any> = {
   onboarding3: require('../assets/images/onboarding/onboarding_3.png'),
   onboarding4: require('../assets/images/onboarding/onboarding_4.png'),
   onboarding5: require('../assets/images/onboarding/onboarding_5.png'),
+
+  //tab icons
+  chatOn: require('../assets/images/tab_icons/chatOn.png'),
+  chatOff: require('../assets/images/tab_icons/chatOff.png'),
+  lightningOn: require('../assets/images/tab_icons/lightningOn.png'),
+  lightningOff: require('../assets/images/tab_icons/lightningOff.png'),
+  lightningRoundOn: require('../assets/images/tab_icons/lightningRoundOn.png'),
+  lightningRoundOff: require('../assets/images/tab_icons/lightningRoundOff.png'),
+  possiblesOn: require('../assets/images/tab_icons/possiblesOn.png'),
+  possiblesOff: require('../assets/images/tab_icons/possiblesOff.png'),
+  profileOn: require('../assets/images/tab_icons/profileOn.png'),
+  profileOff: require('../assets/images/tab_icons/profileOff.png'),
+
+  //header icons
+  headerLogo: require('../assets/images/header_icons/thundrHeader.png'),
+  bell: require('../assets/images/header_icons/bell.png'),
+  filter: require('../assets/images/header_icons/filterMenu.png'),
 };

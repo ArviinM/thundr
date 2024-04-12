@@ -193,7 +193,7 @@ const Onboarding = () => {
               exiting={FadeOut}
               style={[
                 profileCreationStyles.onboardingImage,
-                {transform: [{scale: 0.96}]},
+                {transform: [{scale: 1}]},
               ]}>
               <Image source={data.onboardingImage} />
             </Animated.View>
