@@ -91,10 +91,10 @@ const CustomerPhotoBio = () => {
       setImageData(image);
       isUploadingImage(true);
 
-      if (customerProfile) {
+      if (customerDetails) {
         const formData = new FormData();
 
-        formData.append('sub', customerProfile.sub);
+        formData.append('sub', customerDetails.sub);
         formData.append('isPrimary', 'true');
         formData.append('fileContentB64', image?.data);
         formData.append('filename', image?.path);
