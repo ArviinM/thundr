@@ -71,17 +71,6 @@ const dummuUsers2 = [
 
 // TODO: In Development - Probably will change the card - but this is a preview only but subject to change!
 const Home = () => {
-  // const auth = useAuth();
-  // if (auth.loading) {
-  //   console.log('auth is loading');
-  // }
-  //
-  // const match = useGetMatchList(auth.authData?.sub);
-  //
-  // if (match.isLoading) {
-  //   console.log('match is loading');
-  // }
-
   const bottomTabHeight = useBottomTabBarHeight();
 
   const [users, setUsers] = useState(dummuUsers);
@@ -131,18 +120,6 @@ const Home = () => {
     users,
     users.length,
   ]);
-
-  // useEffect(() => {
-  //   if (index > users.length - 7) {
-  //     console.warn('Last 2 cards remaining. Fetch more!');
-  //     setUsers();
-  //     mareTranslations.modify(value => {
-  //       'worklet';
-  //       value = value.slice(0, users.length);
-  //       return value;
-  //     });
-  //   }
-  // }, [users.length]);
 
   console.log({index});
   const onResponse = (

@@ -112,13 +112,9 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   const signUp = async (data: PasswordCreationRequest) => {
     try {
-      console.log(data);
-
       const result = await passwordCreation.mutateAsync(data);
-
       setAuthData(result);
-
-      await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
+      await AsyncStorage.setItem('@AuthData', JSON.stringify(result));
     } catch (error) {
       console.error('Error signing up:', error);
     }

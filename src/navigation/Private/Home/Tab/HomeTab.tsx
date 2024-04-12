@@ -3,8 +3,38 @@ import {Tab} from '../../../../constants/navigator.ts';
 import Home from '../../../../screens/Private/Home/Home.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
+import {Button, Image, TouchableOpacity, View} from 'react-native';
+import {IMAGES} from '../../../../constants/images.ts';
+import alert from '../../../../components/shared/Alert.tsx';
 
 export const HomeTab = () => {
+  function Header() {
+    return (
+      <Image style={{transform: [{scale: 0.85}]}} source={IMAGES.headerLogo} />
+    );
+  }
+
+  function HomeRightHeader() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: 10,
+
+          // borderWidth: 1,
+        }}>
+        {/* Center icons vertically */}
+        <TouchableOpacity style={{paddingHorizontal: 10}}>
+          <Image source={IMAGES.bell} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={IMAGES.filter} />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <Tab.Navigator
       initialRouteName={'Home'}
@@ -17,19 +47,74 @@ export const HomeTab = () => {
           fontFamily: 'ClimateCrisis-Regular',
           fontWeight: '500',
         },
-        headerTitleAlign: 'center',
+        tabBarStyle: {
+          height: 100,
+        },
       }}>
-      <Tab.Screen name="Lightning Round" component={WorkingInProgress} />
-      <Tab.Screen name="Profile" component={WorkingInProgress} />
+      <Tab.Screen
+        name="Profile"
+        component={WorkingInProgress}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) => (
+            <Image source={focused ? IMAGES.profileOn : IMAGES.profileOff} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Lightning Round"
+        component={WorkingInProgress}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) => (
+            <Image
+              source={
+                focused ? IMAGES.lightningRoundOn : IMAGES.lightningRoundOff
+              }
+            />
+          ),
+        }}
+      />
+
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          headerTitle: 'THUNDR',
+          headerTitle: () => <Header />,
+          headerRight: () => <HomeRightHeader />,
+          tabBarShowLabel: false,
+
+          tabBarIcon: ({focused}) => (
+            <Image
+              source={focused ? IMAGES.lightningOn : IMAGES.lightningOff}
+            />
+          ),
         }}
       />
-      <Tab.Screen name="Possibles" component={WorkingInProgress} />
-      <Tab.Screen name="Chat" component={WorkingInProgress} />
+
+      <Tab.Screen
+        name="Possibles"
+        component={WorkingInProgress}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) => (
+            <Image
+              source={focused ? IMAGES.possiblesOn : IMAGES.possiblesOff}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Chat"
+        component={WorkingInProgress}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({focused}) => (
+            <Image source={focused ? IMAGES.chatOn : IMAGES.chatOff} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

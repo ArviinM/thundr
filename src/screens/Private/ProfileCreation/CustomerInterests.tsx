@@ -96,7 +96,12 @@ const CustomerInterests = () => {
           <View style={profileCreationStyles.footerContainer}>
             <View>
               <TouchableOpacity
-                onPress={() => navigation.navigate('CustomerAdditionalInfos')}>
+                onPress={() => {
+                  navigation.navigate('CustomerAdditionalInfos');
+                  updateCustomerDetails({
+                    sub: auth.authData?.sub,
+                  });
+                }}>
                 <Text style={profileCreationStyles.skipText}>Skip</Text>
               </TouchableOpacity>
             </View>
