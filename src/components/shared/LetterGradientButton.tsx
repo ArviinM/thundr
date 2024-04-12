@@ -2,6 +2,7 @@ import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
+import {moderateScale, scale} from '../../utils/utils.ts';
 
 type LetterGradientButtonProps = {
   letter: string;
@@ -27,8 +28,8 @@ const LetterGradientButton = ({
         start={{x: 1, y: 1}}
         end={{x: 0, y: 0.2}}
         style={{
-          width: 72,
-          height: 72,
+          width: scale(78),
+          height: moderateScale(78),
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: 16,
@@ -37,7 +38,7 @@ const LetterGradientButton = ({
         <Text
           style={{
             fontFamily: 'ClimateCrisis-Regular',
-            fontSize: 48,
+            fontSize: moderateScale(48),
             lineHeight: 0,
             color: COLORS.white,
           }}>

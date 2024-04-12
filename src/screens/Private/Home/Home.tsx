@@ -118,6 +118,7 @@ const Home = () => {
         value.push(0, 0, 0, 0);
         return value;
       });
+      runOnJS(setUsers)(prevState => [...prevState, ...mockData]);
       // let test = [...users, ...mockData];
 
       // mareTranslations.value = [...mareTranslations.value, 0];
