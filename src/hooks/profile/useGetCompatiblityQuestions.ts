@@ -15,6 +15,7 @@ export function useGetCompatibilityQuestions(
 
   return useQuery({
     queryKey: ['customer-compatibility-questions', props],
+    staleTime: Infinity,
     enabled: false,
     queryFn: async (): Promise<CompatibilityQuestion[]> => {
       const config: AxiosRequestConfig<CompatibilityQuestionsRequest> = {
@@ -30,6 +31,7 @@ export function useGetCompatibilityQuestions(
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,
+          statusCode: response.status,
         });
       }
 

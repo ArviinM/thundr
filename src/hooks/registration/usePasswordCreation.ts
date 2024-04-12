@@ -25,6 +25,7 @@ export function usePasswordCreation() {
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,
+          statusCode: response.status,
         } as Error;
       }
 

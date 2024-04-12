@@ -6,6 +6,7 @@ import {
   View,
   Animated,
   ActivityIndicator,
+  Button,
 } from 'react-native';
 
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
@@ -43,20 +44,11 @@ type CompatibilityProps = {
 };
 
 const CompatibilityQuestions = ({route}: CompatibilityProps) => {
-  const {sub} = route?.params || {};
+  const {sub} = route?.params || {sub: ''};
+
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
-  if (!sub) {
-    // Handle the case where sub is undefined
-    console.error('Sub is undefined');
-    return null; // or show an error message
-  }
-
   const [loading, isLoading] = useState(false);
-  const auth = useAuth();
-
-  const compatibilityQuestion = useGetCompatibilityQuestions({sub: sub});
-  const [questions, setQuestions] = useState<CompatibilityQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<
     {questionId: string; answerId: number}[]
@@ -65,9 +57,21 @@ const CompatibilityQuestions = ({route}: CompatibilityProps) => {
     null,
   );
   const [isAllQuestionsAnswered, setIsAllQuestionsAnswered] = useState(false);
-
   const saveCompatibilityAnswers = useSaveCompatibilityAnswers();
-  // console.log(compatibilityQuestion.data);
+  const compatibilityQuestion = useGetCompatibilityQuestions({
+    sub: sub,
+  });
+
+  const fetchData = async () => {
+    await compatibilityQuestion.refetch();
+  };
+
+  useEffect(() => {
+    if (compatibilityQuestion.isPending) {
+      fetchData();
+    }
+  }, [compatibilityQuestion.isPending]);
+
   const onSubmit = async () => {
     try {
       isLoading(true);
@@ -84,49 +88,46 @@ const CompatibilityQuestions = ({route}: CompatibilityProps) => {
     }
   };
 
-  useEffect(() => {
-    if (compatibilityQuestion.data) {
-      setQuestions(compatibilityQuestion.data);
-    }
-  }, []);
+  const cardOpacity = useRef(new Animated.Value(0)).current;
 
   const handleChoiceSelection = (choiceIndex: number, answerId: number) => {
     setSelectedChoiceIndex(choiceIndex);
-    const updatedQuestions = questions.map((question, index) =>
-      index === currentQuestionIndex
-        ? {...question, selected: choiceIndex}
-        : question,
-    );
+    if (compatibilityQuestion.data) {
+      const updatedQuestions = compatibilityQuestion.data.map(
+        (question, index) =>
+          index === currentQuestionIndex
+            ? {...question, selected: choiceIndex}
+            : question,
+      );
 
-    setQuestions(updatedQuestions);
-    setSelectedAnswers(
-      prevSelectedAnswers =>
-        [
-          ...prevSelectedAnswers,
-          {
-            questionId: updatedQuestions[currentQuestionIndex].id,
-            answerId: answerId,
-          },
-        ] as Array<{questionId: string; answerId: number}>,
-    );
+      // setQuestions(updatedQuestions);
+      setSelectedAnswers(
+        prevSelectedAnswers =>
+          [
+            ...prevSelectedAnswers,
+            {
+              questionId: updatedQuestions[currentQuestionIndex].id,
+              answerId: answerId,
+            },
+          ] as Array<{questionId: string; answerId: number}>,
+      );
 
-    if (currentQuestionIndex < updatedQuestions.length - 1) {
-      setTimeout(() => {
-        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-        setSelectedChoiceIndex(null);
-      }, 600);
-      Animated.timing(cardOpacity, {
-        toValue: 0,
-        duration: 600,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      console.log('All questions answered');
-      setIsAllQuestionsAnswered(true);
+      if (currentQuestionIndex < updatedQuestions.length - 1) {
+        setTimeout(() => {
+          setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+          setSelectedChoiceIndex(null);
+        }, 600);
+        Animated.timing(cardOpacity, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        console.log('All questions answered');
+        setIsAllQuestionsAnswered(true);
+      }
     }
   };
-
-  const cardOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(cardOpacity, {
@@ -134,7 +135,7 @@ const CompatibilityQuestions = ({route}: CompatibilityProps) => {
       duration: 600,
       useNativeDriver: true,
     }).start();
-  }, [currentQuestionIndex]);
+  }, [cardOpacity, currentQuestionIndex]);
 
   return (
     <SafeAreaProvider>
@@ -167,58 +168,57 @@ const CompatibilityQuestions = ({route}: CompatibilityProps) => {
               </Text>
               {/*  Card Container */}
               <View style={profileCreationStyles.cardContainer}>
-                {compatibilityQuestion.isLoading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <Animated.View
-                    style={{
-                      opacity: cardOpacity,
-                    }}>
-                    <Text style={profileCreationStyles.questionTitle}>
+                <View>
+                  {compatibilityQuestion.isPending ||
+                  compatibilityQuestion.isLoading ? (
+                    <ActivityIndicator animating={true} size="large" />
+                  ) : (
+                    <Animated.View style={{opacity: cardOpacity}}>
+                      <Text style={profileCreationStyles.questionTitle}>
+                        {compatibilityQuestion.data &&
+                          compatibilityQuestion.data[currentQuestionIndex]
+                            .question}
+                      </Text>
                       {compatibilityQuestion.data &&
-                        compatibilityQuestion.data[currentQuestionIndex]
-                          .question}
-                    </Text>
-                    {compatibilityQuestion.data &&
-                      compatibilityQuestion.data[
-                        currentQuestionIndex
-                      ].compatibilityAnswer.map((choice, choiceIndex) => (
-                        <TouchableOpacity
-                          key={choiceIndex}
-                          onPress={() =>
-                            handleChoiceSelection(choiceIndex, choice.id)
-                          }
-                          disabled={isAllQuestionsAnswered}
-                          style={[
-                            profileCreationStyles.questionButton,
-
-                            selectedChoiceIndex === choiceIndex && {
-                              backgroundColor: COLORS.secondary1,
-                            },
-                          ]}>
-                          <Text
+                        compatibilityQuestion.data[
+                          currentQuestionIndex
+                        ].compatibilityAnswer.map((choice, choiceIndex) => (
+                          <TouchableOpacity
+                            key={choiceIndex}
+                            onPress={() =>
+                              handleChoiceSelection(choiceIndex, choice.id)
+                            }
+                            disabled={isAllQuestionsAnswered}
                             style={[
-                              profileCreationStyles.letterChoice,
+                              profileCreationStyles.questionButton,
                               selectedChoiceIndex === choiceIndex && {
-                                color: 'white',
+                                backgroundColor: COLORS.secondary1,
                               },
                             ]}>
-                            {choiceIndex === 0 && 'A'}
-                            {choiceIndex === 1 && 'B'}
-                          </Text>
-                          <Text
-                            style={[
-                              profileCreationStyles.answerText,
-                              selectedChoiceIndex === choiceIndex && {
-                                color: 'white',
-                              },
-                            ]}>
-                            {choice.answer}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                  </Animated.View>
-                )}
+                            <Text
+                              style={[
+                                profileCreationStyles.letterChoice,
+                                selectedChoiceIndex === choiceIndex && {
+                                  color: 'white',
+                                },
+                              ]}>
+                              {choiceIndex === 0 && 'A'}
+                              {choiceIndex === 1 && 'B'}
+                            </Text>
+                            <Text
+                              style={[
+                                profileCreationStyles.answerText,
+                                selectedChoiceIndex === choiceIndex && {
+                                  color: 'white',
+                                },
+                              ]}>
+                              {choice.answer}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                    </Animated.View>
+                  )}
+                </View>
               </View>
             </View>
           </View>

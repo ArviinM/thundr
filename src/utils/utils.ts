@@ -67,4 +67,17 @@ export function convertAbbreviationToWord(abbreviation: string) {
   return words.join('');
 }
 
+const guidelineBaseWidth = 375;
+const guidelineBaseHeight = 680;
+
 export const MAX_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
+
+import {Dimensions} from 'react-native';
+
+const {width, height} = Dimensions.get('window');
+
+export const scale = (size: number) => (width / guidelineBaseWidth) * size;
+export const verticalScale = (size: number) =>
+  (height / guidelineBaseHeight) * size;
+export const moderateScale = (size: number, factor = 0.5) =>
+  size + (scale(size) - size) * factor;

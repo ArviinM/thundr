@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
@@ -21,7 +28,7 @@ import {
 import {profileCreationStyles} from './styles.tsx';
 
 import CircleButton from '../../../components/shared/CircleButton.tsx';
-import {COLORS, height} from '../../../constants/commons.ts';
+import {COLORS} from '../../../constants/commons.ts';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
 import useCustomerProfileStore from '../../../store/profileStore.ts';
 import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
@@ -34,6 +41,7 @@ const CustomerPhotoBio = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const [loading, isLoading] = useState(false);
+  const [imageUploaded, isUploadingImage] = useState(false);
   const [imageData, setImageData] = useState<ImageType | null>(null);
   const updateCustomerDetails = useCustomerDetailsStore(
     state => state.updateCustomerDetails,
@@ -83,9 +91,11 @@ const CustomerPhotoBio = () => {
       }
 
       setImageData(image);
+      isUploadingImage(true);
 
-      const formData = new FormData();
-      if (customerProfile && customerDetails) {
+      if (customerProfile) {
+        const formData = new FormData();
+
         formData.append('sub', customerProfile.sub);
         formData.append('isPrimary', 'true');
         formData.append('fileContentB64', image?.data);
@@ -98,9 +108,11 @@ const CustomerPhotoBio = () => {
           position: 'top',
           topOffset: 80,
         });
+        isUploadingImage(false);
       }
     } catch (e) {
       console.error(e);
+      isUploadingImage(false);
       throw e;
     }
   };
@@ -169,15 +181,33 @@ const CustomerPhotoBio = () => {
               <View style={{alignItems: 'center', gap: 3, marginBottom: 20}}>
                 <TouchableOpacity onPress={handlePhotoUpload}>
                   {/*<Image source={IMAGES.addPhoto} />*/}
-                  {!imageData ? (
-                    <Image source={IMAGES.addPhoto} />
+                  {imageData ? (
+                    <View style={{position: 'relative'}}>
+                      <Image
+                        source={{
+                          uri: `data:${imageData.mime};base64,${imageData.data}`,
+                        }}
+                        style={{width: 148, height: 148, borderRadius: 15}}
+                      />
+                      {imageUploaded && (
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 15,
+                          }}>
+                          <ActivityIndicator size="small" color="white" />
+                        </View>
+                      )}
+                    </View>
                   ) : (
-                    <Image
-                      source={{
-                        uri: `data:${imageData.mime};base64,${imageData.data}`,
-                      }}
-                      style={{width: 148, height: 148, borderRadius: 15}} // Set width and height as per your requirement
-                    />
+                    <Image source={IMAGES.addPhoto} />
                   )}
                 </TouchableOpacity>
                 <Text

@@ -1,4 +1,5 @@
 import {Dimensions} from 'react-native';
+import {moderateScale} from '../utils/utils.ts';
 
 export const {width, height} = Dimensions.get('window');
 
@@ -17,10 +18,10 @@ export const COLORS = {
 };
 
 export const SIZES = {
-  h1: 36,
-  h2: 28,
-  h3: 22,
-  h4: 18,
-  h5: 13,
-  h6: 12,
+  h1: moderateScale(36),
+  h2: moderateScale(28),
+  h3: moderateScale(22),
+  h4: moderateScale(18),
+  h5: moderateScale(13),
+  h6: moderateScale(12),
 };

@@ -1,19 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  Image,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  Animated,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import * as yup from 'yup';
 
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
-import GradientButton from '../../../components/shared/GradientButton.tsx';
 import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 
 import {IMAGES} from '../../../constants/images.ts';
@@ -24,7 +15,7 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import {profileCreationStyles} from './styles.tsx';
-import {COLORS} from '../../../constants/commons.ts';
+
 import InterestButtonContainer from '../../../components/CustomerInterest/InterestButtonContainer.tsx';
 import {interestOptions} from '../../../components/CustomerInterest/options.ts';
 import CircleButton from '../../../components/shared/CircleButton.tsx';

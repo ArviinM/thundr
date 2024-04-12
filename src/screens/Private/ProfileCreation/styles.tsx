@@ -1,11 +1,12 @@
 import {StyleSheet} from 'react-native';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
+import {moderateScale, scale} from '../../../utils/utils.ts';
 
 export const profileCreationStyles = StyleSheet.create({
   flex: {flex: 1},
   container: {backgroundColor: COLORS.white, flex: 1},
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
-  backButton: {width: 30, alignItems: 'flex-start'},
+  backButton: {width: scale(30), alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
   titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
   textTitle: {
@@ -85,6 +86,8 @@ export const profileCreationStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    // width: '100%', // Ensure the grid takes up the full width
+    // aspectRatio: 2 / 4, // Set the aspect ratio to 2:4 (height:width
   },
   textImage: {
     fontSize: SIZES.h2,
@@ -120,7 +123,7 @@ export const profileCreationStyles = StyleSheet.create({
   },
   skipText: {
     fontFamily: 'Montserrat-ExtraBold',
-    fontSize: 13,
+    fontSize: moderateScale(13),
     letterSpacing: -0.4,
     color: COLORS.black,
   },
@@ -175,7 +178,7 @@ export const profileCreationStyles = StyleSheet.create({
   questionTitle: {
     textAlign: 'center',
     fontFamily: 'Montserrat-Bold',
-    fontSize: 20,
+    fontSize: moderateScale(20),
     marginBottom: 14,
   },
   questionButton: {
