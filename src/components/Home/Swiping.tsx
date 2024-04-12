@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, View} from 'react-native';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 
@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
+import {MockDataItem} from '../../screens/Private/Home/mock.ts';
 
 type User = {
   image: string;
@@ -21,20 +22,16 @@ type User = {
 type Swiping = {
   activeIndex: SharedValue<number>;
   mareTranslation: SharedValue<any[]>;
+  jowaTranslation: SharedValue<any[]>;
   index: number;
-  onResponse: (
-    a: boolean,
-    b: {
-      image: string;
-      name: string;
-    },
-  ) => void;
-  user: User[];
+  onResponse: (a: boolean, b: MockDataItem) => void;
+  user: MockDataItem[];
 };
 
 const Swiping = ({
   activeIndex,
   mareTranslation,
+  jowaTranslation,
   index,
   onResponse,
   user,
@@ -54,32 +51,35 @@ const Swiping = ({
     };
   });
 
+  const [mareTapped, setMareTapped] = useState(false);
+  const [jowaTapped, setJowaTapped] = useState(false);
+
   const mareGesture = Gesture.Pan()
     .onChange(event => {
       translationXMare.value = Math.max(
         -width / 2,
         Math.min(width / 3, event.translationX),
       );
-
       mareTranslation.value[index] = Math.max(
         -width / 2,
         Math.min(width / 3, translationXMare.value),
       );
-
       activeIndex.value = interpolate(
         Math.abs(mareTranslation.value[index]),
         [0, 500],
         [index, index + 0.8],
       );
+
+      if (event.translationX) {
+        runOnJS(setMareTapped)(true);
+      }
     })
     .onEnd(event => {
       const distanceFromCenter = Math.abs(event.translationX);
       const threshold = width / 4;
 
       if (distanceFromCenter < threshold) {
-        console.log('false', mareTranslation.value);
         mareTranslation.value[index] = withSpring(0);
-        console.log('false after', mareTranslation.value);
         mareTranslation.modify(value => {
           'worklet';
           value[index] = withSpring(0);
@@ -98,8 +98,11 @@ const Swiping = ({
         runOnJS(onResponse)(event.velocityX > 0, user[index]);
         console.log(true);
       }
-      // mareTranslation.value[index] = withSpring(0);
+
       translationXMare.value = withSpring(0);
+      if (translationXMare.value >= 0) {
+        runOnJS(setMareTapped)(false);
+      }
     });
 
   const jowaGesture = Gesture.Pan()
@@ -108,19 +111,49 @@ const Swiping = ({
         -width / 3,
         Math.min(width / 2, event.translationX),
       );
+
+      jowaTranslation.value[index] = Math.max(
+        -width / 2,
+        Math.min(width / 3, translationXJowa.value),
+      );
+      activeIndex.value = interpolate(
+        Math.abs(jowaTranslation.value[index]),
+        [0, 500],
+        [index, index + 0.8],
+      );
+
+      if (event.translationX) {
+        runOnJS(setJowaTapped)(true);
+      }
     })
     .onEnd(event => {
       const distanceFromCenter = Math.abs(event.translationX);
       const threshold = width / 4;
 
       if (distanceFromCenter < threshold) {
-        console.log(activeIndex.value);
+        jowaTranslation.value[index] = withSpring(0);
+        jowaTranslation.modify(value => {
+          'worklet';
+          value[index] = withSpring(0);
+          return value;
+        });
         console.log(false);
       } else {
-        console.log(activeIndex.value);
+        jowaTranslation.value[index] = withSpring(
+          Math.sign(event.velocityX) * 600,
+          {
+            velocity: event.velocityX,
+          },
+        );
+
+        activeIndex.value = withSpring(index + 1);
+        runOnJS(onResponse)(event.velocityX > 0, user[index]);
         console.log(true);
       }
       translationXJowa.value = withSpring(0);
+      if (translationXJowa.value <= 0) {
+        runOnJS(setJowaTapped)(false);
+      }
     });
 
   return (
@@ -134,21 +167,37 @@ const Swiping = ({
       <GestureDetector gesture={mareGesture}>
         <Animated.View
           style={[animateSwipeMare, {position: 'absolute', left: -80}]}>
-          <Image
-            source={IMAGES.mareHome}
-            style={{width: 150, height: 150}}
-            resizeMode={'contain'}
-          />
+          {mareTapped ? ( // Conditionally render 'mareTapped' image
+            <Image
+              source={IMAGES.mareTapped} // Use 'mareTapped' image source
+              style={{width: 163, height: 163}}
+              resizeMode={'contain'}
+            />
+          ) : (
+            <Image
+              source={IMAGES.mareHome}
+              style={{width: 150, height: 150}}
+              resizeMode={'contain'}
+            />
+          )}
         </Animated.View>
       </GestureDetector>
       <GestureDetector gesture={jowaGesture}>
         <Animated.View
           style={[animateSwipeJowa, {position: 'absolute', right: -80}]}>
-          <Image
-            source={IMAGES.jowaHome}
-            style={{width: 150, height: 150}}
-            resizeMode={'contain'}
-          />
+          {jowaTapped ? ( // Conditionally render 'mareTapped' image
+            <Image
+              source={IMAGES.jowaTapped} // Use 'mareTapped' image source
+              style={{width: 163, height: 163}}
+              resizeMode={'contain'}
+            />
+          ) : (
+            <Image
+              source={IMAGES.jowaHome}
+              style={{width: 150, height: 150}}
+              resizeMode={'contain'}
+            />
+          )}
         </Animated.View>
       </GestureDetector>
       <View>

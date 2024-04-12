@@ -37,7 +37,12 @@ export const CustomDropdown = ({
       placeholder={placeholder}
       value={value}
       renderRightIcon={() => (
-        <Image source={IMAGES.dropdown} height={16} width={16} />
+        <Image
+          source={IMAGES.dropdown}
+          height={16}
+          width={16}
+          style={{width: 16, height: 16}}
+        />
       )}
     />
   );

@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+} from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
@@ -9,26 +15,23 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import {COLORS} from '../../constants/commons.ts';
+import {MockDataItem} from '../../screens/Private/Home/mock.ts';
+import {moderateScale} from '../../utils/utils.ts';
+import {calculateAge} from './utils.ts';
 
 const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
 export const cardWidth = screenWidth * 0.97;
+export const cardHeight = screenHeight * 0.97;
 
 type Card = {
-  user: {
-    image: string;
-    name: string;
-  };
+  user: MockDataItem;
   numOfCards: number;
   index: number;
   activeIndex: SharedValue<number>;
-  onResponse: (
-    a: boolean,
-    b: {
-      image: string;
-      name: string;
-    },
-  ) => void;
+  onResponse: (a: boolean, b: MockDataItem) => void;
   mareTranslation: SharedValue<number[]>;
+  jowaTranslation: SharedValue<number[]>;
 };
 
 const Card = ({
@@ -37,14 +40,17 @@ const Card = ({
   index,
   activeIndex,
   mareTranslation,
+  jowaTranslation,
 }: Card) => {
+  const firstName = user.customerData.name.split(' ')[0] || '✨';
+
+  // TODO: For Investigation
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
       activeIndex.value,
       [index - 1, index, index + 1],
       [1 - 1 / 5, 1, 1],
     ),
-    // opacity: 0.2,
     transform: [
       {
         scale: interpolate(
@@ -54,13 +60,14 @@ const Card = ({
         ),
       },
       {
-        translateX: mareTranslation.value[index],
+        translateX:
+          mareTranslation.value[index] || jowaTranslation.value[index],
       },
     ],
   }));
 
   return (
-    <Animated.View
+    <Animated.ScrollView
       style={[
         styles.card,
         animatedCard,
@@ -68,51 +75,78 @@ const Card = ({
           zIndex: numOfCards - index,
         },
       ]}>
-      <Image
-        style={[StyleSheet.absoluteFillObject, styles.image]}
-        source={{uri: user.image}}
-      />
+      <ImageBackground
+        style={[styles.image]}
+        source={{uri: user.customerData.customerPhoto[0].photoUrl}}>
+        <LinearGradient
+          colors={['transparent', 'rgba(17,17,17,0.36)']}
+          start={{x: 0.5, y: 0}} // Start from the center top
+          end={{x: 0.5, y: 1}} // End at the center bottom
+          style={[StyleSheet.absoluteFillObject, styles.overlay]}
+        />
+        <View style={styles.overlay}>
+          <Text style={styles.name}>
+            {firstName}, {calculateAge(user.customerData.birthday)}
+          </Text>
+          <Text style={styles.work}>
+            {user.customerData.customerDetails.work}
+          </Text>
+          <Text style={styles.compatibilityScore}>
+            Compatibility Score {user.percent}
+          </Text>
+        </View>
+      </ImageBackground>
 
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.29)']}
-        style={[StyleSheet.absoluteFillObject, styles.overlay]}
-      />
-
-      <View style={styles.footer}>
-        <Text style={styles.name}>{user.name}</Text>
-      </View>
-    </Animated.View>
+      {/*<View style={styles.footer}>*/}
+      {/*  <Text style={styles.name}>{user.name}</Text>*/}
+      {/*</View>*/}
+    </Animated.ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
     width: cardWidth,
+    height: cardHeight / 1.67,
     aspectRatio: 1 / 1.32,
     borderRadius: 15,
-    justifyContent: 'flex-end',
     margin: 2,
-
     position: 'absolute',
-
+    backgroundColor: 'white',
     elevation: 3,
   },
   image: {
     borderRadius: 30,
+    height: cardHeight / 1.67,
   },
   overlay: {
-    top: '50%',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
   },
   footer: {
     padding: 10,
     alignItems: 'center',
+    borderWidth: 1,
   },
   name: {
-    fontSize: 24,
-    color: COLORS.primary1,
-    fontFamily: 'Montserrat-Bold',
+    fontSize: moderateScale(24),
+    color: COLORS.white,
+    fontFamily: 'Montserrat-ExtraBold',
+  },
+  work: {
+    fontSize: moderateScale(16),
+    color: COLORS.white,
+    fontFamily: 'Montserrat-Medium',
+  },
+  compatibilityScore: {
+    fontSize: moderateScale(13),
+    color: COLORS.white,
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

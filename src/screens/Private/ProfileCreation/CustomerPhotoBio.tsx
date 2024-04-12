@@ -232,6 +232,7 @@ const CustomerPhotoBio = () => {
                       style={[profileCreationStyles.textInputBio]}
                       keyboardType="default"
                       placeholder="Enter more about you"
+                      placeholderTextColor={COLORS.gray3}
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -264,6 +265,7 @@ const CustomerPhotoBio = () => {
                       style={[profileCreationStyles.textInputBioWork]}
                       keyboardType="default"
                       placeholder="Add your work"
+                      placeholderTextColor={COLORS.gray3}
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -293,6 +295,7 @@ const CustomerPhotoBio = () => {
                       style={[profileCreationStyles.textInputBioWork]}
                       keyboardType="default"
                       placeholder="Location"
+                      placeholderTextColor={COLORS.gray3}
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
