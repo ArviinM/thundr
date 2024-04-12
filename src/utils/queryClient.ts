@@ -1,7 +1,6 @@
 import {createAsyncStoragePersister} from '@tanstack/query-async-storage-persister';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {QueryCache, QueryClient} from '@tanstack/react-query';
-import {err} from 'react-native-svg';
 
 export const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
@@ -12,12 +11,9 @@ export const asyncStoragePersister = createAsyncStoragePersister({
 });
 
 export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // @ts-ignore
-      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
-    },
-  },
+  // defaultOptions: {
+  //   queries: {},
+  // },
   queryCache: new QueryCache({
     onError: error => console.error(error),
   }),
