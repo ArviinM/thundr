@@ -22,9 +22,8 @@ export function useUploadProfilePhoto() {
         throw {
           name: 'upload-profile-photo',
           status: response.data.status,
-          message:
-            response.data.message ||
-            'An error occurred in uploading your photo',
+          message: response.data.message,
+          statusCode: response.status,
         } as Error;
       }
 

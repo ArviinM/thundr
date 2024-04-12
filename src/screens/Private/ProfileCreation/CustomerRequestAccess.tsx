@@ -63,7 +63,6 @@ const CustomerRequestAccess = () => {
       );
     });
   };
-
   const requestLocationPermission = async () => {
     // iOS Part:
     if (Platform.OS === 'ios') {
@@ -95,20 +94,6 @@ const CustomerRequestAccess = () => {
       } else {
         console.log('user notification is not blocked');
       }
-
-      if (auth.authData?.sub) {
-        console.log(auth.authData?.sub);
-        // await queryClient.refetchQueries({
-        //   queryKey: ['customer-compatibility-questions', auth.authData.sub],
-        // });
-        await queryClient1.refetchQueries({
-          queryKey: [
-            'customer-compatibility-questions',
-            {sub: auth.authData.sub},
-          ],
-        });
-        navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
-      }
     }
 
     if (Platform.OS === 'android') {
@@ -135,79 +120,67 @@ const CustomerRequestAccess = () => {
       } else {
         console.log('user notification is not blocked');
       }
-
-      if (auth.authData?.sub) {
-        await queryClient.refetchQueries({
-          queryKey: ['customer-compatibility-questions'],
-        });
-        navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
-      }
+    }
+    if (auth.authData?.sub) {
+      navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
     }
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView
-        edges={['top', 'bottom']}
-        style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={4} totalSteps={10} />
-        <KeyboardAwareScrollView
-          bottomOffset={220}
-          style={profileCreationStyles.flex}>
-          <View style={profileCreationStyles.container}>
-            <View style={profileCreationStyles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={profileCreationStyles.backButton}>
-                <Image
-                  source={IMAGES.back}
-                  style={profileCreationStyles.backImage}
-                />
-              </TouchableOpacity>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={profileCreationStyles.container}>
+      <StepProgressBar currentStep={4} totalSteps={10} />
+      <KeyboardAwareScrollView
+        bottomOffset={220}
+        style={profileCreationStyles.flex}>
+        <View style={profileCreationStyles.container}>
+          <View style={profileCreationStyles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={profileCreationStyles.backButton}>
+              <Image
+                source={IMAGES.back}
+                style={profileCreationStyles.backImage}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={profileCreationStyles.titleContainer}>
+            <View style={profileCreationStyles.imageContainer}>
+              <Image
+                source={IMAGES.locNotif}
+                resizeMode={'contain'}
+                style={{width: 300, height: 220}}
+              />
             </View>
-            <View style={profileCreationStyles.titleContainer}>
-              <View style={profileCreationStyles.imageContainer}>
-                <Image
-                  source={IMAGES.locNotif}
-                  resizeMode={'contain'}
-                  style={{width: 300, height: 220}}
-                />
-              </View>
+            <Text
+              style={[profileCreationStyles.textImage, {textAlign: 'center'}]}>
+              Location & Notification
+            </Text>
+            <View style={profileCreationStyles.bodyContainer}>
               <Text
-                style={[
-                  profileCreationStyles.textImage,
-                  {textAlign: 'center'},
-                ]}>
-                Location & Notification
+                style={[profileCreationStyles.textBody, {textAlign: 'center'}]}>
+                Better matching experience? Turn this on to track your potential
+                mare and jowa. {'\n\n'}Plus, receive push and in-app
+                notifications para updated ka sa latest news and chika from
+                Thundr.
               </Text>
-              <View style={profileCreationStyles.bodyContainer}>
-                <Text
-                  style={[
-                    profileCreationStyles.textBody,
-                    {textAlign: 'center'},
-                  ]}>
-                  Better matching experience? Turn this on to track your
-                  potential mare and jowa. {'\n\n'}Plus, receive push and in-app
-                  notifications para updated ka sa latest news and chika from
-                  Thundr.
-                </Text>
-              </View>
             </View>
           </View>
-        </KeyboardAwareScrollView>
-        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
-          <View style={profileCreationStyles.buttonContainer}>
-            <GradientButton
-              onPress={requestLocationPermission}
-              text="Next"
-              loading={loading}
-              buttonStyle={profileCreationStyles.buttonStyle}
-              textStyle={profileCreationStyles.buttonTextStyle}
-            />
-          </View>
-        </KeyboardStickyView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </View>
+      </KeyboardAwareScrollView>
+      <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+        <View style={profileCreationStyles.buttonContainer}>
+          <GradientButton
+            onPress={requestLocationPermission}
+            text="Next"
+            loading={loading}
+            buttonStyle={profileCreationStyles.buttonStyle}
+            textStyle={profileCreationStyles.buttonTextStyle}
+          />
+        </View>
+      </KeyboardStickyView>
+    </SafeAreaView>
   );
 };
 

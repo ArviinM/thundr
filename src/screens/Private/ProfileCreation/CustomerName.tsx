@@ -69,85 +69,82 @@ const CustomerName = () => {
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView
-        edges={['top', 'bottom']}
-        style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={1} totalSteps={10} />
-        <KeyboardAwareScrollView
-          bottomOffset={220}
-          style={profileCreationStyles.flex}>
-          <View style={profileCreationStyles.container}>
-            <View style={profileCreationStyles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                disabled={true}
-                style={profileCreationStyles.backButton}>
-                <Image
-                  source={IMAGES.back}
-                  style={[profileCreationStyles.backImage, {opacity: 0}]}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={profileCreationStyles.titleContainer}>
-              <Text style={profileCreationStyles.textTitle}>
-                What's your name, mars?
-              </Text>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={profileCreationStyles.container}>
+      <StepProgressBar currentStep={1} totalSteps={10} />
+      <KeyboardAwareScrollView
+        bottomOffset={220}
+        style={profileCreationStyles.flex}>
+        <View style={profileCreationStyles.container}>
+          <View style={profileCreationStyles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              disabled={true}
+              style={profileCreationStyles.backButton}>
+              <Image
+                source={IMAGES.back}
+                style={[profileCreationStyles.backImage, {opacity: 0}]}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={profileCreationStyles.titleContainer}>
+            <Text style={profileCreationStyles.textTitle}>
+              What's your name, mars?
+            </Text>
 
-              <View style={profileCreationStyles.textInputContainer}>
-                <View style={profileCreationStyles.textInputStyle}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={textInputRef}
-                        style={profileCreationStyles.textInput}
-                        autoComplete="name"
-                        keyboardType="default"
-                        placeholder=""
-                        inputMode={'text'}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        autoCapitalize="none"
-                        selectionColor={COLORS.primary1}
-                      />
-                    )}
-                    name="name"
-                  />
-                  {errors.name && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.name.message}
-                    </Text>
+            <View style={profileCreationStyles.textInputContainer}>
+              <View style={profileCreationStyles.textInputStyle}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      ref={textInputRef}
+                      style={profileCreationStyles.textInput}
+                      autoComplete="name"
+                      keyboardType="default"
+                      placeholder=""
+                      inputMode={'text'}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      selectionColor={COLORS.primary1}
+                    />
                   )}
-                </View>
-              </View>
-              <View style={profileCreationStyles.bodyContainer}>
-                <Text style={profileCreationStyles.textBody}>
-                  This is what appears on your profile. Let's make it official!
-                  ✨
-                </Text>
+                  name="name"
+                />
+                {errors.name && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.name.message}
+                  </Text>
+                )}
               </View>
             </View>
+            <View style={profileCreationStyles.bodyContainer}>
+              <Text style={profileCreationStyles.textBody}>
+                This is what appears on your profile. Let's make it official! ✨
+              </Text>
+            </View>
           </View>
-        </KeyboardAwareScrollView>
-        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
-          <View style={profileCreationStyles.buttonContainer}>
-            <GradientButton
-              onPress={handleSubmit(onSubmit)}
-              text="Next"
-              loading={loading}
-              disabled={!isValid}
-              buttonStyle={profileCreationStyles.buttonStyle}
-              textStyle={profileCreationStyles.buttonTextStyle}
-            />
-          </View>
-        </KeyboardStickyView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </View>
+      </KeyboardAwareScrollView>
+      <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+        <View style={profileCreationStyles.buttonContainer}>
+          <GradientButton
+            onPress={handleSubmit(onSubmit)}
+            text="Next"
+            loading={loading}
+            disabled={!isValid}
+            buttonStyle={profileCreationStyles.buttonStyle}
+            textStyle={profileCreationStyles.buttonTextStyle}
+          />
+        </View>
+      </KeyboardStickyView>
+    </SafeAreaView>
   );
 };
 

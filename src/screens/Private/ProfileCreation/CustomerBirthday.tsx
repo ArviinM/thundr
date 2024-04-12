@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -81,126 +81,124 @@ const CustomerBirthday = () => {
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView
-        edges={['top', 'bottom']}
-        style={profileCreationStyles.container}>
-        <StepProgressBar currentStep={2} totalSteps={10} />
-        <KeyboardAwareScrollView
-          bottomOffset={220}
-          style={profileCreationStyles.flex}>
-          <View style={profileCreationStyles.container}>
-            <View style={profileCreationStyles.backButtonContainer}>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={profileCreationStyles.backButton}>
-                <Image
-                  source={IMAGES.back}
-                  style={profileCreationStyles.backImage}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={profileCreationStyles.titleContainer}>
-              <Text style={profileCreationStyles.textTitle}>
-                Enter your birthday
-              </Text>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={profileCreationStyles.container}>
+      <StepProgressBar currentStep={2} totalSteps={10} />
+      <KeyboardAwareScrollView
+        bottomOffset={220}
+        style={profileCreationStyles.flex}>
+        <View style={profileCreationStyles.container}>
+          <View style={profileCreationStyles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={profileCreationStyles.backButton}>
+              <Image
+                source={IMAGES.back}
+                style={profileCreationStyles.backImage}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={profileCreationStyles.titleContainer}>
+            <Text style={profileCreationStyles.textTitle}>
+              Enter your birthday
+            </Text>
 
-              <View style={profileCreationStyles.dropdownContainer}>
-                <View style={profileCreationStyles.dropdownSection}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <CustomDropdown
-                        data={monthData}
-                        placeholder="MM"
-                        value={value}
-                        onChange={item => {
-                          onChange(item.value);
-                        }}
-                      />
-                    )}
-                    name="month"
-                  />
-                  {errors.month && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.month.message}
-                    </Text>
+            <View style={profileCreationStyles.dropdownContainer}>
+              <View style={profileCreationStyles.dropdownSection}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, value}}) => (
+                    <CustomDropdown
+                      data={monthData}
+                      placeholder="MM"
+                      value={value}
+                      onChange={item => {
+                        onChange(item.value);
+                      }}
+                    />
                   )}
-                </View>
-                <View style={profileCreationStyles.dropdownSection}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <CustomDropdown
-                        data={dayData}
-                        placeholder="DD"
-                        value={value}
-                        onChange={item => {
-                          onChange(item.value);
-                        }}
-                      />
-                    )}
-                    name="day"
-                  />
-                  {errors.day && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.day.message}
-                    </Text>
-                  )}
-                </View>
-                <View style={profileCreationStyles.dropdownSection}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <CustomDropdown
-                        data={yearData}
-                        placeholder="YYYY"
-                        value={value}
-                        onChange={item => {
-                          onChange(item.value);
-                        }}
-                      />
-                    )}
-                    name="year"
-                  />
-                  {errors.year && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.year.message}
-                    </Text>
-                  )}
-                </View>
+                  name="month"
+                />
+                {errors.month && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.month.message}
+                  </Text>
+                )}
               </View>
-              <View style={profileCreationStyles.bodyContainer}>
-                <Text style={profileCreationStyles.textBody}>
-                  Oh bongga. Welcome to Thundr! ⚡️
-                </Text>
+              <View style={profileCreationStyles.dropdownSection}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, value}}) => (
+                    <CustomDropdown
+                      data={dayData}
+                      placeholder="DD"
+                      value={value}
+                      onChange={item => {
+                        onChange(item.value);
+                      }}
+                    />
+                  )}
+                  name="day"
+                />
+                {errors.day && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.day.message}
+                  </Text>
+                )}
+              </View>
+              <View style={profileCreationStyles.dropdownSection}>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, value}}) => (
+                    <CustomDropdown
+                      data={yearData}
+                      placeholder="YYYY"
+                      value={value}
+                      onChange={item => {
+                        onChange(item.value);
+                      }}
+                    />
+                  )}
+                  name="year"
+                />
+                {errors.year && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.year.message}
+                  </Text>
+                )}
               </View>
             </View>
+            <View style={profileCreationStyles.bodyContainer}>
+              <Text style={profileCreationStyles.textBody}>
+                Oh bongga. Welcome to Thundr! ⚡️
+              </Text>
+            </View>
           </View>
-        </KeyboardAwareScrollView>
-        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
-          <View style={profileCreationStyles.buttonContainer}>
-            <GradientButton
-              onPress={handleSubmit(onSubmit)}
-              text="Next"
-              loading={loading}
-              disabled={!isValid}
-              buttonStyle={profileCreationStyles.buttonStyle}
-              textStyle={profileCreationStyles.buttonTextStyle}
-            />
-          </View>
-        </KeyboardStickyView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </View>
+      </KeyboardAwareScrollView>
+      <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+        <View style={profileCreationStyles.buttonContainer}>
+          <GradientButton
+            onPress={handleSubmit(onSubmit)}
+            text="Next"
+            loading={loading}
+            disabled={!isValid}
+            buttonStyle={profileCreationStyles.buttonStyle}
+            textStyle={profileCreationStyles.buttonTextStyle}
+          />
+        </View>
+      </KeyboardStickyView>
+    </SafeAreaView>
   );
 };
 

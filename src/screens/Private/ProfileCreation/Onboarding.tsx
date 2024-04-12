@@ -4,8 +4,6 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
-  Pressable,
-  StatusBar,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -19,12 +17,10 @@ import {
 import Animated, {
   FadeIn,
   FadeOut,
-  BounceInRight,
   SlideOutLeft,
-  BounceOutLeft,
   SlideInRight,
 } from 'react-native-reanimated';
-import {COLORS, height, SIZES} from '../../../constants/commons.ts';
+import {COLORS, SIZES} from '../../../constants/commons.ts';
 import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 import {profileCreationStyles} from './styles.tsx';
 import {IMAGES} from '../../../constants/images.ts';

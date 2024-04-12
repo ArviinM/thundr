@@ -27,6 +27,7 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 import {AuthDataRequest} from '../../../types/generated.ts';
 import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
+import {scale, verticalScale} from '../../../utils/utils.ts';
 
 const LoginValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
   flex: {flex: 1},
   container: {backgroundColor: COLORS.white, flex: 1},
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
-  backButton: {width: 30, alignItems: 'flex-start'},
+  backButton: {width: scale(30), alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
   titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
   textTitle: {
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     maxWidth: width,
     width: width - 64,
-    height: 50,
+    height: verticalScale(50),
     justifyContent: 'center',
     borderRadius: 30,
     marginVertical: 10,
