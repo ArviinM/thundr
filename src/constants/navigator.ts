@@ -36,6 +36,7 @@ export type RootNavigationParams = {
   CompatibilityQuestions: CompatibilityQuestionsRequest;
   CustomerInterests: undefined;
   CustomerAdditionalInfos: undefined;
+  CustomerPersonalityType: undefined;
   CustomerPhotoBio: undefined;
   Onboarding: undefined;
 };

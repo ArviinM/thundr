@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -17,62 +17,23 @@ import {
 import {profileCreationStyles} from './styles.tsx';
 
 import CircleButton from '../../../components/shared/CircleButton.tsx';
-import SelectableButton, {
-  ButtonData,
-} from '../../../components/CustomerPersonalityType/SelectableButton.tsx';
+import SelectableButton from '../../../components/CustomerPersonalityType/SelectableButton.tsx';
+import useCustomerDetailsStore from '../../../store/detailsStore.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
+import {personalityData} from '../../../components/CustomerPersonalityType/personalityData.ts';
 
 const CustomerPersonalityType = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-
   const [loading, isLoading] = useState(false);
-
+  const auth = useAuth();
   const [selectedPersonality, setSelectedPersonality] = useState<{
     index: number;
     text: string;
   }>();
 
-  const buttonData: ButtonData[] = [
-    {
-      title: 'Lion',
-      body:
-        'Takes charge, Determined,\n' +
-        'Assertive, Competitive,\n' +
-        'Leader, Goal-driven,\n' +
-        'Self-reliant, Adventurous.',
-      defaultImage: IMAGES.lion,
-      selectedImage: IMAGES.lionSelected,
-    },
-    {
-      title: 'Otter',
-      body:
-        'Takes risks, Visionary,\n' +
-        'Energetic, Promoter, \n' +
-        'Fun-loving, Enjoys change,\n' +
-        'Creative, Optimistic.',
-      defaultImage: IMAGES.otter,
-      selectedImage: IMAGES.otterSelected,
-    },
-    {
-      title: 'Dog',
-      body:
-        'Loyal, Deep relationships,\n' +
-        'Adaptable, Sympathetic,\n' +
-        'Thoughtful, Nurturing,\n' +
-        'Tolerant, Good listener.\n',
-      defaultImage: IMAGES.dog,
-      selectedImage: IMAGES.dogSelected,
-    },
-    {
-      title: 'Beaver',
-      body:
-        'Deliberate, Controlled,\n' +
-        'Reserved, Practical, Factual,\n' +
-        'Analytical, Inquisitive,\n' +
-        'Persistent.',
-      defaultImage: IMAGES.beaver,
-      selectedImage: IMAGES.beaverSelected,
-    },
-  ];
+  const updateCustomerDetails = useCustomerDetailsStore(
+    state => state.updateCustomerDetails,
+  );
 
   const handleSelectedPersonality = (index: number, text: string) => {
     setSelectedPersonality({index, text});
@@ -81,23 +42,20 @@ const CustomerPersonalityType = () => {
   const onSubmit = async () => {
     try {
       isLoading(true);
-      console.log(selectedPersonality);
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+      console.log(selectedPersonality?.text);
+
+      updateCustomerDetails({
+        personalityType: selectedPersonality?.text,
+      });
 
       isLoading(false);
-      // navigation.navigate('EmailVerification', result);
+      navigation.navigate('CustomerPhotoBio');
     } catch (error) {
-      // Handle validation errors
       console.error(error);
     }
   };
 
-  // const isSelectedPersonality = selectedPersonality !== undefined;
+  const isSelectedPersonality = selectedPersonality !== undefined;
 
   return (
     <SafeAreaView
@@ -111,7 +69,6 @@ const CustomerPersonalityType = () => {
           <View style={profileCreationStyles.backButtonContainer}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-              disabled={true}
               style={profileCreationStyles.backButton}>
               <Image
                 source={IMAGES.back}
@@ -130,7 +87,7 @@ const CustomerPersonalityType = () => {
             <View style={profileCreationStyles.buttonInterestContainer}>
               {/*  Buttons here*/}
               <SelectableButton
-                buttonData={buttonData}
+                buttonData={personalityData}
                 onPress={handleSelectedPersonality}
               />
             </View>
@@ -140,14 +97,21 @@ const CustomerPersonalityType = () => {
       <KeyboardStickyView offset={{closed: -20, opened: 0}}>
         <View style={profileCreationStyles.footerContainer}>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('CustomerPhotoBio');
+                updateCustomerDetails({
+                  sub: auth.authData?.sub,
+                });
+              }}>
               <Text style={profileCreationStyles.skipText}>Skip</Text>
             </TouchableOpacity>
           </View>
           <View>
             <CircleButton
               onPress={onSubmit}
-              // disabled={isSelectedPersonality}
+              disabled={!isSelectedPersonality}
+              loading={loading}
             />
           </View>
         </View>
