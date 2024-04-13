@@ -48,9 +48,6 @@ const CustomerPhotoBio = () => {
   const customerDetails = useCustomerDetailsStore(
     state => state.customerDetails,
   );
-  const customerProfile = useCustomerProfileStore(
-    state => state.customerProfile,
-  );
   const {mutateAsync} = useUploadProfilePhoto();
 
   const createDetails = useCreateCustomerDetails();
