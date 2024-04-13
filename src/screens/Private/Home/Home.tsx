@@ -79,7 +79,7 @@ const Home = () => {
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
       <GenericModal
         isVisible={visible}
-        title="Dev Log Sprint #1"
+        title="Dev Log Sprint #2"
         content={
           <Text style={{fontFamily: 'Montserrat-Regular'}}>
             Welcome Testers! 🦈 {'\n\n'}
