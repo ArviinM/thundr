@@ -18,7 +18,7 @@ export interface ButtonData {
 
 interface SelectableButtonProps {
   buttonData: ButtonData[];
-  onPress: (index: number, text: string) => void;
+  onPress?: (index: number, text: string) => void;
   disabledIndex?: number;
 }
 
@@ -27,12 +27,16 @@ const SelectableButton = ({
   onPress,
   disabledIndex,
 }: SelectableButtonProps) => {
-  const [selectedButton, setSelectedButton] = useState(0);
+  const [selectedButton, setSelectedButton] = useState<number | null>(
+    buttonData.length === 1 ? 0 : null,
+  );
 
   const handleButtonPress = (index: number, text: string) => {
     if (disabledIndex !== index) {
       setSelectedButton(index);
-      onPress(index, text);
+      if (onPress) {
+        onPress(index, text);
+      }
     }
   };
 
