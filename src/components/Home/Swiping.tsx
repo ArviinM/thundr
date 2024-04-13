@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Image, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, View} from 'react-native';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 
 import Animated, {
@@ -13,6 +13,7 @@ import Animated, {
 import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
+import useSwipingStore from '../../store/swipingStore.ts';
 
 type User = {
   image: string;
@@ -38,6 +39,8 @@ const Swiping = ({
 }: Swiping) => {
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
+  const setSwiping = useSwipingStore(state => state.setSwiping);
+  const [currentImage, setCurrentImage] = useState('thundrHome');
 
   const animateSwipeMare = useAnimatedStyle(() => {
     return {
@@ -72,6 +75,8 @@ const Swiping = ({
 
       if (event.translationX) {
         runOnJS(setMareTapped)(true);
+        runOnJS(setCurrentImage)('thundrMareGlow');
+        runOnJS(setSwiping)({isMare: true, activeIndex: index});
       }
     })
     .onEnd(event => {
@@ -94,14 +99,24 @@ const Swiping = ({
           },
         );
 
+        jowaTranslation.value[index] = withSpring(
+          Math.sign(event.velocityX) * 600,
+          {
+            velocity: event.velocityX,
+          },
+        );
+
         activeIndex.value = withSpring(index + 1);
         runOnJS(onResponse)(event.velocityX > 0, user[index]);
         console.log(true);
       }
 
       translationXMare.value = withSpring(0);
+      // runOnJS(setSwiping)({isMare: false});
       if (translationXMare.value >= 0) {
         runOnJS(setMareTapped)(false);
+        // runOnJS(setSwiping)({isMare: false});
+        runOnJS(setCurrentImage)('thundrHome');
       }
     });
 
@@ -111,7 +126,6 @@ const Swiping = ({
         -width / 3,
         Math.min(width / 2, event.translationX),
       );
-
       jowaTranslation.value[index] = Math.max(
         -width / 2,
         Math.min(width / 3, translationXJowa.value),
@@ -124,6 +138,8 @@ const Swiping = ({
 
       if (event.translationX) {
         runOnJS(setJowaTapped)(true);
+        runOnJS(setCurrentImage)('thundrJowaGlow');
+        runOnJS(setSwiping)({isMare: false, activeIndex: index});
       }
     })
     .onEnd(event => {
@@ -137,9 +153,16 @@ const Swiping = ({
           value[index] = withSpring(0);
           return value;
         });
+
         console.log(false);
       } else {
         jowaTranslation.value[index] = withSpring(
+          Math.sign(event.velocityX) * 600,
+          {
+            velocity: event.velocityX,
+          },
+        );
+        mareTranslation.value[index] = withSpring(
           Math.sign(event.velocityX) * 600,
           {
             velocity: event.velocityX,
@@ -151,8 +174,11 @@ const Swiping = ({
         console.log(true);
       }
       translationXJowa.value = withSpring(0);
+      // runOnJS(setSwiping)({isMare: true});
+      // runOnJS(setSwiping)({isMare: true});
       if (translationXJowa.value <= 0) {
         runOnJS(setJowaTapped)(false);
+        runOnJS(setCurrentImage)('thundrHome');
       }
     });
 
@@ -200,15 +226,44 @@ const Swiping = ({
           )}
         </Animated.View>
       </GestureDetector>
+      {/*  Investigate this if there are any other ways to simplify it and make it not flicker*/}
+
       <View>
-        <Image
-          source={IMAGES.thundrHome}
-          style={{width: 80, height: 80}}
-          resizeMode={'contain'}
-        />
+        {currentImage === 'thundrHome' && (
+          <Image
+            source={IMAGES.thundrHome}
+            style={styles.thundrImage}
+            resizeMode={'contain'}
+          />
+        )}
+        {currentImage === 'thundrJowaGlow' && (
+          <Image
+            source={IMAGES.thundrJowaGlow}
+            style={styles.glowImage}
+            resizeMode={'contain'}
+          />
+        )}
+        {currentImage === 'thundrMareGlow' && (
+          <Image
+            source={IMAGES.thundrMareGlow}
+            style={styles.glowImage}
+            resizeMode={'contain'}
+          />
+        )}
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  glowImage: {
+    width: 118,
+    height: 118,
+  },
+  thundrImage: {
+    width: 80,
+    height: 80,
+  },
+});
 
 export default Swiping;

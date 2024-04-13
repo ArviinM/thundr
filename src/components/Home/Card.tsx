@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import {COLORS} from '../../constants/commons.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
 import {moderateScale} from '../../utils/utils.ts';
 import {calculateAge} from './utils.ts';
+import useSwipingStore from '../../store/swipingStore.ts';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -43,7 +44,12 @@ const Card = ({
   jowaTranslation,
 }: Card) => {
   const firstName = user.customerData.name.split(' ')[0] || '✨';
+  const swipingStore = useSwipingStore(state => state.swiping);
 
+  // const translationX = swipingStore.isMare
+  //   ? mareTranslation.value[index]
+  //   : jowaTranslation.value[index];
+  // console.log(translationX);
   // TODO: For Investigation
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -60,8 +66,9 @@ const Card = ({
         ),
       },
       {
-        translateX:
-          mareTranslation.value[index] || jowaTranslation.value[index],
+        translateX: swipingStore.isMare
+          ? mareTranslation.value[index]
+          : jowaTranslation.value[index],
       },
     ],
   }));
