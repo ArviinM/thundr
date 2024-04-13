@@ -1,7 +1,7 @@
 export const IMAGES: Record<any, any> = {
   thundrLogo: require('../assets/images/thundr-logo-w-text.png'),
   back: require('../assets/images/back.png'),
-  thundrHome: require('../assets/images/thundr.png'),
+
   eye: require('../assets/images/eye.png'),
   eyeHidden: require('../assets/images/eye-hidden.png'),
   dropdown: require('../assets/images/dropdown.png'),
@@ -15,6 +15,10 @@ export const IMAGES: Record<any, any> = {
 
   mareTapped: require('../assets/images/swiping/mare_tapped.png'),
   jowaTapped: require('../assets/images/swiping/jowa_tapped.png'),
+
+  thundrHome: require('../assets/images/swiping/thundr.png'),
+  thundrMareGlow: require('../assets/images/swiping/thundr_glow_mare.png'),
+  thundrJowaGlow: require('../assets/images/swiping/thundr_glow_jowa.png'),
 
   // Personality Types Icons
   beaver: require('../assets/images/personality/beaver.png'),
