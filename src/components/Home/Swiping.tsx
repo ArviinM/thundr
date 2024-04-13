@@ -112,12 +112,9 @@ const Swiping = ({
       }
 
       translationXMare.value = withSpring(0);
-      // runOnJS(setSwiping)({isMare: false});
-      if (translationXMare.value >= 0) {
-        runOnJS(setMareTapped)(false);
-        // runOnJS(setSwiping)({isMare: false});
-        runOnJS(setCurrentImage)('thundrHome');
-      }
+
+      runOnJS(setMareTapped)(false);
+      runOnJS(setCurrentImage)('thundrHome');
     });
 
   const jowaGesture = Gesture.Pan()
@@ -174,12 +171,8 @@ const Swiping = ({
         console.log(true);
       }
       translationXJowa.value = withSpring(0);
-      // runOnJS(setSwiping)({isMare: true});
-      // runOnJS(setSwiping)({isMare: true});
-      if (translationXJowa.value <= 0) {
-        runOnJS(setJowaTapped)(false);
-        runOnJS(setCurrentImage)('thundrHome');
-      }
+      runOnJS(setJowaTapped)(false);
+      runOnJS(setCurrentImage)('thundrHome');
     });
 
   return (
@@ -192,17 +185,17 @@ const Swiping = ({
       }}>
       <GestureDetector gesture={mareGesture}>
         <Animated.View
-          style={[animateSwipeMare, {position: 'absolute', left: -80}]}>
+          style={[animateSwipeMare, {position: 'absolute', left: -95}]}>
           {mareTapped ? ( // Conditionally render 'mareTapped' image
             <Image
               source={IMAGES.mareTapped} // Use 'mareTapped' image source
-              style={{width: 163, height: 163}}
+              style={styles.swipeImageOn}
               resizeMode={'contain'}
             />
           ) : (
             <Image
               source={IMAGES.mareHome}
-              style={{width: 150, height: 150}}
+              style={styles.swipeImageOff}
               resizeMode={'contain'}
             />
           )}
@@ -210,17 +203,17 @@ const Swiping = ({
       </GestureDetector>
       <GestureDetector gesture={jowaGesture}>
         <Animated.View
-          style={[animateSwipeJowa, {position: 'absolute', right: -80}]}>
+          style={[animateSwipeJowa, {position: 'absolute', right: -95}]}>
           {jowaTapped ? ( // Conditionally render 'mareTapped' image
             <Image
               source={IMAGES.jowaTapped} // Use 'mareTapped' image source
-              style={{width: 163, height: 163}}
+              style={styles.swipeImageOn}
               resizeMode={'contain'}
             />
           ) : (
             <Image
               source={IMAGES.jowaHome}
-              style={{width: 150, height: 150}}
+              style={styles.swipeImageOff}
               resizeMode={'contain'}
             />
           )}
@@ -264,6 +257,8 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
   },
+  swipeImageOff: {width: 170, height: 170},
+  swipeImageOn: {width: 193, height: 193},
 });
 
 export default Swiping;

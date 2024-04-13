@@ -76,23 +76,23 @@ const Home = () => {
       style={{flex: 1, backgroundColor: 'yellow'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
-      <GenericModal
-        isVisible={visible}
-        title="Dev Log Sprint #1"
-        content={
-          <Text style={{fontFamily: 'Montserrat-Regular'}}>
-            Rawr Testers! 🦈 {'\n\n'}
-            Here's our new build for Sprint 1! If you made it here it means you
-            finished signing up or you signed in! {'\n\n'}I hope you saw that
-            dang rainbow animations that was not easy to make xD {'\n\n'}
-            Do keep testing it out and I, shark awaits for your feedback.
-            {'\n\n'}
-            Big Sharky Dev, {'\n'}Tanders, Inc
-          </Text>
-        }
-        buttonText="Close"
-        onClose={() => isVisible(false)}
-      />
+      {/*<GenericModal*/}
+      {/*  isVisible={visible}*/}
+      {/*  title="Dev Log Sprint #1"*/}
+      {/*  content={*/}
+      {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
+      {/*      Rawr Testers! 🦈 {'\n\n'}*/}
+      {/*      Here's our new build for Sprint 1! If you made it here it means you*/}
+      {/*      finished signing up or you signed in! {'\n\n'}I hope you saw that*/}
+      {/*      dang rainbow animations that was not easy to make xD {'\n\n'}*/}
+      {/*      Do keep testing it out and I, shark awaits for your feedback.*/}
+      {/*      {'\n\n'}*/}
+      {/*      Big Sharky Dev, {'\n'}Tanders, Inc*/}
+      {/*    </Text>*/}
+      {/*  }*/}
+      {/*  buttonText="Close"*/}
+      {/*  onClose={() => isVisible(false)}*/}
+      {/*/>*/}
       <View
         style={{
           flex: 1,

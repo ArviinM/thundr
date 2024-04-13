@@ -76,28 +76,23 @@ const styles = StyleSheet.create({
     // margin: 20,
   },
   button: {
-    backgroundColor: COLORS.secondary1, // Initial button color (red)
+    backgroundColor: COLORS.secondary1,
     padding: 12,
     borderRadius: 25,
     flexDirection: 'row',
     height: 'auto',
-    // transform: []
   },
   selectedButton: {
-    backgroundColor: COLORS.secondary2, // Selected button color (yellow)
+    backgroundColor: COLORS.secondary2,
   },
   disabledButton: {
-    backgroundColor: '#DDD', // Disabled button color (gray)
-    opacity: 0.5, // Reduce opacity to indicate disabled state
+    backgroundColor: '#DDD',
+    opacity: 0.5,
   },
   imageContainer: {
     backgroundColor: COLORS.white2,
     borderRadius: 25,
-    // borderWidth: 1,
-    // padding: 20,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // padding: 3,
+
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -106,7 +101,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 2,
     marginHorizontal: 7,
-    // borderWidth: 1,
     paddingHorizontal: 3,
   },
   textTitle: {
