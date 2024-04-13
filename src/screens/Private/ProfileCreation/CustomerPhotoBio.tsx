@@ -30,7 +30,6 @@ import {profileCreationStyles} from './styles.tsx';
 import CircleButton from '../../../components/shared/CircleButton.tsx';
 import {COLORS} from '../../../constants/commons.ts';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
-import useCustomerProfileStore from '../../../store/profileStore.ts';
 import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
 import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
 import {MAX_IMAGE_SIZE_BYTES} from '../../../utils/utils.ts';
@@ -47,9 +46,6 @@ const CustomerPhotoBio = () => {
   );
   const customerDetails = useCustomerDetailsStore(
     state => state.customerDetails,
-  );
-  const customerProfile = useCustomerProfileStore(
-    state => state.customerProfile,
   );
   const {mutateAsync} = useUploadProfilePhoto();
 
@@ -91,10 +87,10 @@ const CustomerPhotoBio = () => {
       setImageData(image);
       isUploadingImage(true);
 
-      if (customerProfile) {
+      if (customerDetails) {
         const formData = new FormData();
 
-        formData.append('sub', customerProfile.sub);
+        formData.append('sub', customerDetails.sub);
         formData.append('isPrimary', 'true');
         formData.append('fileContentB64', image?.data);
         formData.append('filename', image?.path);
@@ -232,6 +228,7 @@ const CustomerPhotoBio = () => {
                       style={[profileCreationStyles.textInputBio]}
                       keyboardType="default"
                       placeholder="Enter more about you"
+                      placeholderTextColor={COLORS.gray3}
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -264,6 +261,7 @@ const CustomerPhotoBio = () => {
                       style={[profileCreationStyles.textInputBioWork]}
                       keyboardType="default"
                       placeholder="Add your work"
+                      placeholderTextColor={COLORS.gray3}
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -293,6 +291,7 @@ const CustomerPhotoBio = () => {
                       style={[profileCreationStyles.textInputBioWork]}
                       keyboardType="default"
                       placeholder="Location"
+                      placeholderTextColor={COLORS.gray3}
                       inputMode={'text'}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -323,7 +322,7 @@ const CustomerPhotoBio = () => {
           <View>
             <CircleButton
               onPress={handleSubmit(onSubmit)}
-              disabled={!isValid || !imageData}
+              disabled={!isValid || imageUploaded}
               loading={loading}
             />
           </View>

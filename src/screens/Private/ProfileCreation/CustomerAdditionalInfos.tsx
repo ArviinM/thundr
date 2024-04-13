@@ -33,6 +33,7 @@ import {
 import CircleButton from '../../../components/shared/CircleButton.tsx';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
+import {CustomerDetailsRequest} from '../../../types/generated.ts';
 
 const CustomerAdditionalInfos = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -57,7 +58,7 @@ const CustomerAdditionalInfos = () => {
   const {
     control,
     handleSubmit,
-    formState: {errors, isValid},
+    formState: {isValid},
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -77,19 +78,37 @@ const CustomerAdditionalInfos = () => {
       await schema.validate(data);
       isLoading(true);
 
-      updateCustomerDetails({
-        height: `${data.feet} ${data.inches}`,
-        starSign: data.starSign,
-        education: data.education,
-        drinking: data.drinking,
-        smoking: data.smoking,
-        religion: data.religion,
-        pet: data.pet,
-        politics: data.politics,
-      });
+      const updatedData: Partial<CustomerDetailsRequest> = {};
+
+      if (data.feet) {
+        updatedData.height = `${data.feet} ${data.inches}`;
+      }
+      if (data.starSign) {
+        updatedData.starSign = data.starSign;
+      }
+      if (data.education) {
+        updatedData.education = data.education;
+      }
+      if (data.drinking) {
+        updatedData.drinking = data.drinking;
+      }
+      if (data.smoking) {
+        updatedData.smoking = data.smoking;
+      }
+      if (data.religion) {
+        updatedData.religion = data.religion;
+      }
+      if (data.pet) {
+        updatedData.pet = data.pet;
+      }
+      if (data.politics) {
+        updatedData.politics = data.politics;
+      }
+
+      updateCustomerDetails(updatedData);
 
       isLoading(false);
-      navigation.navigate('CustomerPhotoBio');
+      navigation.navigate('CustomerPersonalityType');
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
@@ -460,7 +479,7 @@ const CustomerAdditionalInfos = () => {
           <View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('CustomerPhotoBio');
+                navigation.navigate('CustomerPersonalityType');
                 updateCustomerDetails({
                   sub: auth.authData?.sub,
                 });
@@ -472,6 +491,7 @@ const CustomerAdditionalInfos = () => {
             <CircleButton
               onPress={handleSubmit(onSubmit)}
               disabled={!isValid}
+              loading={loading}
             />
           </View>
         </View>

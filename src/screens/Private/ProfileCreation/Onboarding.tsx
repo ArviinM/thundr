@@ -222,15 +222,6 @@ const Onboarding = () => {
             )}
 
             <View style={styles.footer}>
-              {/*<View style={styles.buttonsRow}>*/}
-              {/*  <Text onPress={endOnboarding} style={styles.buttonText}>*/}
-              {/*    Skip*/}
-              {/*  </Text>*/}
-
-              {/*  <Pressable onPress={onContinue} style={styles.button}>*/}
-              {/*    <Text style={styles.buttonText}>Continue</Text>*/}
-              {/*  </Pressable>*/}
-              {/*</View>*/}
               <View style={styles.buttonsRow}>
                 <CircleButton
                   onPress={onContinue}
