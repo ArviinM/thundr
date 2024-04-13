@@ -49,24 +49,24 @@ export interface MockDataItem {
 export const MockData: MockDataItem[] = [
   {
     sub: 'cd9001a6-5f4f-47f9-bf6b-887ff8d727db',
-    percent: '30%',
+    percent: '100%',
     customerData: {
       sub: 'cd9001a6-5f4f-47f9-bf6b-887ff8d727db',
       name: 'Michelina Makeswell',
-      gender: 'Transgender Man',
-      birthday: '1966-10-03',
+      gender: 'Lesbian',
+      birthday: '1988-10-03',
       hometown: 'Salamanca',
       deactivateDate: null,
       customerDetails: {
-        bio: 'mi sit amet lobortis sapien sapien non mi integer ac neque duis bibendum morbi non quam nec dui luctus rutrum nulla tellus in sagittis dui vel',
-        work: 'Automation Specialist IV',
+        bio: 'Here lang for fun',
+        work: 'Fashion',
         location: 'Salamanca',
-        height: '7ft 7in',
+        height: '5ft 7in',
         starSign: 'Taurus',
-        education: 'Highschool',
+        education: 'Doctorate',
         drinking: 'Regular',
         smoking: 'Never',
-        religion: 'Muslim',
+        religion: 'Christian',
         pet: 'Bird',
         politics: 'Apolitical',
         personalityType: 'Beaver',
@@ -79,7 +79,35 @@ export const MockData: MockDataItem[] = [
           id: 1888,
           primary: true,
           photoUrl:
-            'https://images.unsplash.com/photo-1557053910-d9eadeed1c58?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1557053910-d9eadeed1c58?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          index: null,
+        },
+        {
+          id: 1300,
+          primary: false,
+          photoUrl:
+            'https://images.unsplash.com/photo-1557053908-94f31a224f8f?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          index: null,
+        },
+        {
+          id: 1301,
+          primary: false,
+          photoUrl:
+            'https://images.unsplash.com/photo-1580893472150-a988de76980a?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          index: null,
+        },
+        {
+          id: 1302,
+          primary: false,
+          photoUrl:
+            'https://images.unsplash.com/photo-1580893472116-044ec81000a6?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          index: null,
+        },
+        {
+          id: 1303,
+          primary: false,
+          photoUrl:
+            'https://images.unsplash.com/photo-1578432133819-d2ef4bb97cf5?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           index: null,
         },
       ],

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,11 @@ import Animated, {
   SharedValue,
   interpolate,
   useAnimatedStyle,
+  runOnJS,
+  SlideInRight,
+  SlideOutLeft,
+  FadeIn,
+  FadeOut,
 } from 'react-native-reanimated';
 
 import {COLORS} from '../../constants/commons.ts';
@@ -21,11 +26,14 @@ import {moderateScale} from '../../utils/utils.ts';
 import {calculateAge} from './utils.ts';
 import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 export const cardWidth = screenWidth * 0.97;
 export const cardHeight = screenHeight * 0.97;
+
+const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 
 type Card = {
   user: MockDataItem;
@@ -47,7 +55,10 @@ const Card = ({
   jowaTranslation,
   isMare,
 }: Card) => {
+  // const imageIndex = useSharedValue(0);
+  const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
+  const customerImages = user.customerData.customerPhoto[imageIndex];
 
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -75,6 +86,25 @@ const Card = ({
     data => data.title === user.customerData.customerDetails.personalityType,
   );
 
+  const handleTap = (event: any) => {
+    const isFirstScreen = imageIndex === 0;
+    const isLastScreen =
+      imageIndex === user.customerData.customerPhoto.length - 1;
+    const tapX = event.absoluteX;
+
+    if (tapX < cardWidth / 2) {
+      if (!isFirstScreen) {
+        runOnJS(setImageIndex)(imageIndex - 1);
+      }
+    } else {
+      if (!isLastScreen) {
+        runOnJS(setImageIndex)(imageIndex + 1);
+      }
+    }
+  };
+
+  const tapGesture = Gesture.Tap().onEnd(handleTap);
+
   return (
     <Animated.ScrollView
       style={[
@@ -84,29 +114,48 @@ const Card = ({
           zIndex: numOfCards - index,
         },
       ]}>
-      <View style={styles.imageContainer}>
-        <ImageBackground
-          style={[styles.image]}
-          source={{uri: user.customerData.customerPhoto[0].photoUrl}}>
-          <LinearGradient
-            colors={['transparent', 'transparent', 'rgba(17,17,17,0.88)']}
-            start={{x: 0.5, y: 0}} // Start from the center top
-            end={{x: 0.5, y: 1}} // End at the center bottom
-            style={[StyleSheet.absoluteFillObject, styles.overlay]}
-          />
-          <View style={styles.overlay}>
-            <Text style={styles.name}>
-              {firstName}, {calculateAge(user.customerData.birthday)}
-            </Text>
-            <Text style={styles.work}>
-              {user.customerData.customerDetails.work}
-            </Text>
-            <Text style={styles.compatibilityScore}>
-              Compatibility Score {user.percent}
-            </Text>
+      <GestureDetector gesture={tapGesture}>
+        <View style={styles.imageContainer}>
+          <View style={styles.stepIndicatorContainer}>
+            {user.customerData.customerPhoto.map((step, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.stepIndicator,
+                  {
+                    backgroundColor:
+                      index === imageIndex ? COLORS.secondary1 : 'grey',
+                  },
+                ]}
+              />
+            ))}
           </View>
-        </ImageBackground>
-      </View>
+          <AnimatedImage
+            style={[styles.image]}
+            entering={FadeIn}
+            exiting={FadeOut}
+            key={imageIndex}
+            source={{uri: customerImages.photoUrl}}>
+            <LinearGradient
+              colors={['transparent', 'transparent', 'rgba(17,17,17,0.68)']}
+              start={{x: 0.5, y: 0}} // Start from the center top
+              end={{x: 0.5, y: 1}} // End at the center bottom
+              style={[StyleSheet.absoluteFillObject, styles.overlay]}
+            />
+            <View style={styles.overlay}>
+              <Text style={styles.name}>
+                {firstName}, {calculateAge(user.customerData.birthday)}
+              </Text>
+              <Text style={styles.work}>
+                {user.customerData.customerDetails.work}
+              </Text>
+              <Text style={styles.compatibilityScore}>
+                Compatibility Score {user.percent}
+              </Text>
+            </View>
+          </AnimatedImage>
+        </View>
+      </GestureDetector>
 
       <View style={styles.belowSection}>
         <View style={styles.container}>
@@ -263,9 +312,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 2,
     position: 'absolute',
-
     elevation: 3,
-    backgroundColor: '#DADADA',
+    backgroundColor: COLORS.gray2,
   },
   imageContainer: {
     borderRadius: 20, // Apply border radius here
@@ -275,6 +323,7 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 30,
     height: cardHeight / 1.67,
+    backgroundColor: COLORS.gray2,
   },
   overlay: {
     position: 'absolute',
@@ -283,7 +332,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
+    paddingVertical: 20,
   },
   name: {
     fontSize: moderateScale(24),
@@ -306,7 +355,6 @@ const styles = StyleSheet.create({
   belowSection: {
     padding: 6,
     alignItems: 'stretch',
-
     gap: 4,
     flex: 1,
     backgroundColor: '#DADADA',
@@ -343,6 +391,22 @@ const styles = StyleSheet.create({
   reportContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  // steps
+  stepIndicatorContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    marginHorizontal: 15,
+    marginVertical: 10,
+    position: 'absolute',
+    zIndex: 10,
+  },
+  stepIndicator: {
+    flex: 1,
+    height: 3,
+    backgroundColor: 'black',
+    opacity: 0.6,
+    borderRadius: 10,
   },
 });
 

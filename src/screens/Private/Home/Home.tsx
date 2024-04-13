@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, View} from 'react-native';
+import {StatusBar, Text, View} from 'react-native';
 
 import {COLORS} from '../../../constants/commons.ts';
 
@@ -77,23 +77,24 @@ const Home = () => {
       style={{flex: 1, backgroundColor: 'yellow'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
-      {/*<GenericModal*/}
-      {/*  isVisible={visible}*/}
-      {/*  title="Dev Log Sprint #1"*/}
-      {/*  content={*/}
-      {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
-      {/*      Rawr Testers! 🦈 {'\n\n'}*/}
-      {/*      Here's our new build for Sprint 1! If you made it here it means you*/}
-      {/*      finished signing up or you signed in! {'\n\n'}I hope you saw that*/}
-      {/*      dang rainbow animations that was not easy to make xD {'\n\n'}*/}
-      {/*      Do keep testing it out and I, shark awaits for your feedback.*/}
-      {/*      {'\n\n'}*/}
-      {/*      Big Sharky Dev, {'\n'}Tanders, Inc*/}
-      {/*    </Text>*/}
-      {/*  }*/}
-      {/*  buttonText="Close"*/}
-      {/*  onClose={() => isVisible(false)}*/}
-      {/*/>*/}
+      <GenericModal
+        isVisible={visible}
+        title="Dev Log Sprint #1"
+        content={
+          <Text style={{fontFamily: 'Montserrat-Regular'}}>
+            Welcome Testers! 🦈 {'\n\n'}
+            Here's a work in progress of Sprint 2! {'\n\n'}I have made a good
+            progress with the swiping animations and also adding the instagram
+            story like feature. {'\n\n'}I have missed out to include the
+            Customer Personality Type last Sprint. I added it now for this
+            build, kindly test and confirm.
+            {'\n\n'}
+            Big Sharky Dev, {'\n'}Tanders, Inc
+          </Text>
+        }
+        buttonText="Close"
+        onClose={() => isVisible(false)}
+      />
       <View
         style={{
           flex: 1,
