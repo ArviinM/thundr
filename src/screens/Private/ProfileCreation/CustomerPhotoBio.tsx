@@ -30,7 +30,6 @@ import {profileCreationStyles} from './styles.tsx';
 import CircleButton from '../../../components/shared/CircleButton.tsx';
 import {COLORS} from '../../../constants/commons.ts';
 import useCustomerDetailsStore from '../../../store/detailsStore.ts';
-import useCustomerProfileStore from '../../../store/profileStore.ts';
 import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
 import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
 import {MAX_IMAGE_SIZE_BYTES} from '../../../utils/utils.ts';
@@ -323,7 +322,7 @@ const CustomerPhotoBio = () => {
           <View>
             <CircleButton
               onPress={handleSubmit(onSubmit)}
-              disabled={!isValid || !imageData}
+              disabled={!isValid || imageUploaded}
               loading={loading}
             />
           </View>
