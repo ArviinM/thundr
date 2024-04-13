@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,8 @@ import {MockDataItem} from '../../screens/Private/Home/mock.ts';
 import {moderateScale} from '../../utils/utils.ts';
 import {calculateAge} from './utils.ts';
 import useSwipingStore from '../../store/swipingStore.ts';
+import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
+import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -67,6 +69,10 @@ const Card = ({
       },
     ],
   }));
+
+  const selectedPersonality = personalityData.find(
+    data => data.title === user.customerData.customerDetails.personalityType,
+  );
 
   return (
     <Animated.ScrollView
@@ -218,6 +224,14 @@ const Card = ({
             </View>
           )}
         </View>
+        <View style={styles.container}>
+          <Text style={styles.title}>Personality Type</Text>
+          <View style={styles.personalityTypeContainer}>
+            {selectedPersonality && (
+              <SelectableButton buttonData={[selectedPersonality]} />
+            )}
+          </View>
+        </View>
       </View>
     </Animated.ScrollView>
   );
@@ -304,6 +318,9 @@ const styles = StyleSheet.create({
     color: COLORS.gray4,
     letterSpacing: -0.8,
     fontFamily: 'Montserrat-Regular',
+  },
+  personalityTypeContainer: {
+    marginVertical: 6,
   },
 });
 

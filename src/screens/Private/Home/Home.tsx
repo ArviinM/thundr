@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, Text, View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 
 import {COLORS} from '../../../constants/commons.ts';
 
@@ -129,7 +129,6 @@ const Home = () => {
           user={users}
         />
       </View>
-      {/*<View style={{backgroundColor: 'black', flex: 0.0}} />*/}
     </SafeAreaView>
   );
 };

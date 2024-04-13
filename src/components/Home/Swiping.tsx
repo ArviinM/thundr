@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 
@@ -14,11 +14,6 @@ import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
 import useSwipingStore from '../../store/swipingStore.ts';
-
-type User = {
-  image: string;
-  name: string;
-};
 
 type Swiping = {
   activeIndex: SharedValue<number>;
