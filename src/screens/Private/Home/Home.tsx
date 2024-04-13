@@ -28,6 +28,7 @@ const Home = () => {
   const jowaTranslations = useSharedValue<number[]>(
     new Array(MockData.length).fill(0),
   );
+  const isMare = useSharedValue<boolean>(false);
 
   const [visible, isVisible] = useState(true);
 
@@ -109,6 +110,7 @@ const Home = () => {
             onResponse={onResponse}
             mareTranslation={mareTranslations}
             jowaTranslation={jowaTranslations}
+            isMare={isMare}
           />
         ))}
       </View>
@@ -127,6 +129,7 @@ const Home = () => {
           index={index}
           onResponse={onResponse}
           user={users}
+          isMare={isMare}
         />
       </View>
     </SafeAreaView>

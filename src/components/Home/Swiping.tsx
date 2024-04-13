@@ -13,7 +13,6 @@ import Animated, {
 import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
-import useSwipingStore from '../../store/swipingStore.ts';
 
 type Swiping = {
   activeIndex: SharedValue<number>;
@@ -22,8 +21,9 @@ type Swiping = {
   index: number;
   onResponse: (a: boolean, b: MockDataItem) => void;
   user: MockDataItem[];
+  isMare: SharedValue<boolean>;
 };
-
+//TODO: Mare Gesture and Jowa Gesture check later
 const Swiping = ({
   activeIndex,
   mareTranslation,
@@ -31,11 +31,15 @@ const Swiping = ({
   index,
   onResponse,
   user,
+  isMare,
 }: Swiping) => {
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
-  const setSwiping = useSwipingStore(state => state.setSwiping);
+  const pressed = useSharedValue(false);
+
   const [currentImage, setCurrentImage] = useState('thundrHome');
+  const [mareTapped, setMareTapped] = useState(false);
+  const [jowaTapped, setJowaTapped] = useState(false);
 
   const animateSwipeMare = useAnimatedStyle(() => {
     return {
@@ -49,125 +53,159 @@ const Swiping = ({
     };
   });
 
-  const [mareTapped, setMareTapped] = useState(false);
-  const [jowaTapped, setJowaTapped] = useState(false);
-
   const mareGesture = Gesture.Pan()
+    .onBegin(event => {
+      if (!pressed.value) {
+        pressed.value = true;
+      }
+    })
     .onChange(event => {
-      translationXMare.value = Math.max(
-        -width / 2,
-        Math.min(width / 3, event.translationX),
-      );
-      mareTranslation.value[index] = Math.max(
-        -width / 2,
-        Math.min(width / 3, translationXMare.value),
-      );
-      activeIndex.value = interpolate(
-        Math.abs(mareTranslation.value[index]),
-        [0, 500],
-        [index, index + 0.8],
-      );
+      if (pressed.value) {
+        translationXMare.value = Math.max(
+          -width / 2,
+          Math.min(width / 3, event.translationX),
+        );
+        mareTranslation.value[index] = Math.max(
+          -width / 2,
+          Math.min(width / 3, translationXMare.value),
+        );
+        activeIndex.value = interpolate(
+          Math.abs(mareTranslation.value[index]),
+          [0, 500],
+          [index, index + 0.8],
+        );
 
-      if (event.translationX) {
-        runOnJS(setMareTapped)(true);
-        runOnJS(setCurrentImage)('thundrMareGlow');
-        runOnJS(setSwiping)({isMare: true, activeIndex: index});
+        if (event.translationX) {
+          runOnJS(setMareTapped)(true);
+          runOnJS(setCurrentImage)('thundrMareGlow');
+          // runOnJS(setSwiping)({isMare: true, activeIndex: index});
+          isMare.value = true;
+        }
       }
     })
     .onEnd(event => {
-      const distanceFromCenter = Math.abs(event.translationX);
-      const threshold = width / 4;
+      if (pressed.value) {
+        const distanceFromCenter = Math.abs(event.translationX);
+        const threshold = width / 4;
 
-      if (distanceFromCenter < threshold) {
-        mareTranslation.value[index] = withSpring(0);
-        mareTranslation.modify(value => {
-          'worklet';
-          value[index] = withSpring(0);
-          return value;
-        });
-        console.log(false);
-      } else {
-        mareTranslation.value[index] = withSpring(
-          Math.sign(event.velocityX) * 600,
-          {
-            velocity: event.velocityX,
-          },
-        );
+        if (distanceFromCenter < threshold) {
+          mareTranslation.value[index] = withSpring(0);
+          mareTranslation.modify(value => {
+            'worklet';
+            value[index] = withSpring(0);
+            return value;
+          });
+          jowaTranslation.modify(value => {
+            'worklet';
+            value[index] = withSpring(0);
+            return value;
+          });
+          console.log(false);
+        } else {
+          mareTranslation.value[index] = withSpring(
+            Math.sign(event.velocityX) * 600,
+            {
+              velocity: event.velocityX,
+            },
+          );
 
-        jowaTranslation.value[index] = withSpring(
-          Math.sign(event.velocityX) * 600,
-          {
-            velocity: event.velocityX,
-          },
-        );
+          jowaTranslation.value[index] = withSpring(
+            Math.sign(event.velocityX) * 600,
+            {
+              velocity: event.velocityX,
+            },
+          );
 
-        activeIndex.value = withSpring(index + 1);
-        runOnJS(onResponse)(event.velocityX > 0, user[index]);
-        console.log(true);
+          activeIndex.value = withSpring(index + 1);
+          runOnJS(onResponse)(event.velocityX > 0, user[index]);
+          console.log(true);
+        }
+
+        translationXMare.value = withSpring(0);
+
+        runOnJS(setMareTapped)(false);
+        runOnJS(setCurrentImage)('thundrHome');
       }
-
-      translationXMare.value = withSpring(0);
-
-      runOnJS(setMareTapped)(false);
-      runOnJS(setCurrentImage)('thundrHome');
+    })
+    .onFinalize(event => {
+      pressed.value = false;
     });
 
   const jowaGesture = Gesture.Pan()
+    .onBegin(event => {
+      if (!pressed.value) {
+        pressed.value = true;
+      }
+    })
     .onChange(event => {
-      translationXJowa.value = Math.max(
-        -width / 3,
-        Math.min(width / 2, event.translationX),
-      );
-      jowaTranslation.value[index] = Math.max(
-        -width / 2,
-        Math.min(width / 3, translationXJowa.value),
-      );
-      activeIndex.value = interpolate(
-        Math.abs(jowaTranslation.value[index]),
-        [0, 500],
-        [index, index + 0.8],
-      );
+      if (pressed.value) {
+        translationXJowa.value = Math.max(
+          -width / 3,
+          Math.min(width / 2, event.translationX),
+        );
+        jowaTranslation.value[index] = Math.max(
+          -width / 2,
+          Math.min(width / 3, translationXJowa.value),
+        );
+        activeIndex.value = interpolate(
+          Math.abs(jowaTranslation.value[index]),
+          [0, 500],
+          [index, index + 0.8],
+        );
 
-      if (event.translationX) {
-        runOnJS(setJowaTapped)(true);
-        runOnJS(setCurrentImage)('thundrJowaGlow');
-        runOnJS(setSwiping)({isMare: false, activeIndex: index});
+        if (event.translationX) {
+          runOnJS(setJowaTapped)(true);
+          runOnJS(setCurrentImage)('thundrJowaGlow');
+          // runOnJS(setSwiping)({isMare: false, activeIndex: index});
+          isMare.value = false;
+        }
       }
     })
     .onEnd(event => {
-      const distanceFromCenter = Math.abs(event.translationX);
-      const threshold = width / 4;
+      if (pressed.value) {
+        const distanceFromCenter = Math.abs(event.translationX);
+        const threshold = width / 4;
 
-      if (distanceFromCenter < threshold) {
-        jowaTranslation.value[index] = withSpring(0);
-        jowaTranslation.modify(value => {
-          'worklet';
-          value[index] = withSpring(0);
-          return value;
-        });
+        if (distanceFromCenter < threshold) {
+          jowaTranslation.value[index] = withSpring(0);
+          jowaTranslation.modify(value => {
+            'worklet';
+            value[index] = withSpring(0);
+            return value;
+          });
+          mareTranslation.modify(value => {
+            'worklet';
+            value[index] = withSpring(0);
+            return value;
+          });
 
-        console.log(false);
-      } else {
-        jowaTranslation.value[index] = withSpring(
-          Math.sign(event.velocityX) * 600,
-          {
-            velocity: event.velocityX,
-          },
-        );
-        mareTranslation.value[index] = withSpring(
-          Math.sign(event.velocityX) * 600,
-          {
-            velocity: event.velocityX,
-          },
-        );
+          console.log(false);
+        } else {
+          jowaTranslation.value[index] = withSpring(
+            Math.sign(event.velocityX) * 600,
+            {
+              velocity: event.velocityX,
+            },
+          );
+          mareTranslation.value[index] = withSpring(
+            Math.sign(event.velocityX) * 600,
+            {
+              velocity: event.velocityX,
+            },
+          );
 
-        activeIndex.value = withSpring(index + 1);
-        runOnJS(onResponse)(event.velocityX > 0, user[index]);
-        console.log(true);
+          activeIndex.value = withSpring(index + 1);
+          runOnJS(onResponse)(event.velocityX > 0, user[index]);
+          console.log(true);
+        }
+
+        translationXJowa.value = withSpring(0);
+        runOnJS(setJowaTapped)(false);
+        runOnJS(setCurrentImage)('thundrHome');
       }
-      translationXJowa.value = withSpring(0);
-      runOnJS(setJowaTapped)(false);
-      runOnJS(setCurrentImage)('thundrHome');
+    })
+    .onFinalize(event => {
+      pressed.value = false;
     });
 
   return (
@@ -181,9 +219,9 @@ const Swiping = ({
       <GestureDetector gesture={mareGesture}>
         <Animated.View
           style={[animateSwipeMare, {position: 'absolute', left: -95}]}>
-          {mareTapped ? ( // Conditionally render 'mareTapped' image
+          {mareTapped ? (
             <Image
-              source={IMAGES.mareTapped} // Use 'mareTapped' image source
+              source={IMAGES.mareTapped}
               style={styles.swipeImageOn}
               resizeMode={'contain'}
             />
@@ -199,9 +237,9 @@ const Swiping = ({
       <GestureDetector gesture={jowaGesture}>
         <Animated.View
           style={[animateSwipeJowa, {position: 'absolute', right: -95}]}>
-          {jowaTapped ? ( // Conditionally render 'mareTapped' image
+          {jowaTapped ? (
             <Image
-              source={IMAGES.jowaTapped} // Use 'mareTapped' image source
+              source={IMAGES.jowaTapped}
               style={styles.swipeImageOn}
               resizeMode={'contain'}
             />

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,7 +19,6 @@ import {COLORS} from '../../constants/commons.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
 import {moderateScale} from '../../utils/utils.ts';
 import {calculateAge} from './utils.ts';
-import useSwipingStore from '../../store/swipingStore.ts';
 import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
 
@@ -35,6 +35,7 @@ type Card = {
   onResponse: (a: boolean, b: MockDataItem) => void;
   mareTranslation: SharedValue<number[]>;
   jowaTranslation: SharedValue<number[]>;
+  isMare: SharedValue<boolean>;
 };
 
 const Card = ({
@@ -44,9 +45,9 @@ const Card = ({
   activeIndex,
   mareTranslation,
   jowaTranslation,
+  isMare,
 }: Card) => {
   const firstName = user.customerData.name.split(' ')[0] || '✨';
-  const swipingStore = useSwipingStore(state => state.swiping);
 
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -63,7 +64,7 @@ const Card = ({
         ),
       },
       {
-        translateX: swipingStore.isMare
+        translateX: isMare.value
           ? mareTranslation.value[index]
           : jowaTranslation.value[index],
       },
@@ -231,6 +232,23 @@ const Card = ({
               <SelectableButton buttonData={[selectedPersonality]} />
             )}
           </View>
+          <View style={styles.reportContainer}>
+            <TouchableOpacity
+              style={{
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                marginVertical: 6,
+                borderRadius: 20,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: moderateScale(14),
+                }}>
+                Report
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Animated.ScrollView>
@@ -321,6 +339,10 @@ const styles = StyleSheet.create({
   },
   personalityTypeContainer: {
     marginVertical: 6,
+  },
+  reportContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
