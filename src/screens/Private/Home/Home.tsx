@@ -15,8 +15,10 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import Swiping from '../../../components/Home/Swiping.tsx';
 import GenericModal from '../../../components/shared/GenericModal.tsx';
 import {MockData, MockDataItem} from './mock.ts';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
+  const navigation = useNavigation();
   const bottomTabHeight = useBottomTabBarHeight();
   const [users, setUsers] = useState(MockData);
   const [index, setIndex] = useState(0);
@@ -55,7 +57,7 @@ const Home = () => {
         value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         return value;
       });
-      // runOnJS(setUsers)(prevState => [...prevState, ...dummuUsers2]);
+      runOnJS(setUsers)(prevState => [...prevState, ...MockData]);
     }
   }, [
     index,
