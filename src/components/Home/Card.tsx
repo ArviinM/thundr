@@ -304,7 +304,12 @@ const Card = ({
           </View>
         </View>
       </View>
-      <ReportBottomSheetModal ref={bottomSheetRef} />
+      <ReportBottomSheetModal
+        ref={bottomSheetRef}
+        sub={user.sub}
+        category={'MATCH'}
+        name={user.customerData.name}
+      />
     </Animated.ScrollView>
   );
 };
