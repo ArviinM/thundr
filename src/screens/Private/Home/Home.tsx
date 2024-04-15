@@ -15,10 +15,8 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import Swiping from '../../../components/Home/Swiping.tsx';
 import GenericModal from '../../../components/shared/GenericModal.tsx';
 import {MockData, MockDataItem} from './mock.ts';
-import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
-  const navigation = useNavigation();
   const bottomTabHeight = useBottomTabBarHeight();
   const [users, setUsers] = useState(MockData);
   const [index, setIndex] = useState(0);
@@ -76,7 +74,7 @@ const Home = () => {
 
   return (
     <SafeAreaView
-      style={{flex: 1, backgroundColor: 'yellow'}}
+      style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
       <GenericModal
