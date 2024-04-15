@@ -39,4 +39,7 @@ export type RootNavigationParams = {
   CustomerPersonalityType: undefined;
   CustomerPhotoBio: undefined;
   Onboarding: undefined;
+
+  //Match Found
+  MatchFound: {sub?: string; isMare: boolean};
 };

@@ -32,8 +32,6 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 const AuthProvider = ({children}: AuthProviderProps) => {
-  // const [authData, setAuthData] = useState<AuthDataResponse>();
-  // Applying Zustand Auth Store
   const setAuthData = useAuthStore(state => state.setAuthData);
   const authData = useAuthStore(state => state.authData);
 
@@ -68,9 +66,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
           '@AuthData',
           JSON.stringify(updatedAuthData),
         );
-        await queryClient.refetchQueries({
-          queryKey: ['get-match-list'],
-        });
+
+        //TODO: Investigate
+        // await queryClient.invalidateQueries({
+        //   queryKey: ['get-match-list', updatedAuthData],
+        // });
       }
     } catch (error) {
       console.error('Error loading data from AsyncStorage:', error);

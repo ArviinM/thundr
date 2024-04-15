@@ -23,7 +23,7 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import {profileCreationStyles} from './styles.tsx';
-import Geolocation from '@react-native-community/geolocation';
+
 import {
   PERMISSIONS,
   request,
@@ -33,6 +33,7 @@ import {GeolocationResponse} from '@react-native-community/geolocation/js/Native
 import {useAuth} from '../../../providers/Auth.tsx';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
+import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
 
 const CustomerRequestAccess = () => {
   const queryClient1 = useQueryClient(queryClient);
@@ -50,19 +51,6 @@ const CustomerRequestAccess = () => {
     }
   };
 
-  const getCurrentLocation = () => {
-    return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(
-        pos => {
-          resolve(pos);
-        },
-        error => {
-          reject(error);
-        },
-        {enableHighAccuracy: true},
-      );
-    });
-  };
   const requestLocationPermission = async () => {
     // iOS Part:
     if (Platform.OS === 'ios') {

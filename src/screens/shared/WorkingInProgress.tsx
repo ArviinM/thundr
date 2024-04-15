@@ -3,6 +3,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ActivityIndicator, Button, StatusBar, Text, View} from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
 import {useAuth} from '../../providers/Auth.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../constants/navigator.ts';
 
 const WorkingInProgress = () => {
   const [loading, isLoading] = useState(false);
@@ -12,6 +14,8 @@ const WorkingInProgress = () => {
     isLoading(true);
     auth.signOut();
   };
+
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   return (
     <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
@@ -31,6 +35,14 @@ const WorkingInProgress = () => {
           ) : (
             <Button title="Sign Out" onPress={signOut} />
           )}
+          <Button
+            title="Match Found Trigger - Mare"
+            onPress={() => navigation.navigate('MatchFound', {isMare: true})}
+          />
+          <Button
+            title="Match Found Trigger - Jowa"
+            onPress={() => navigation.navigate('MatchFound', {isMare: false})}
+          />
         </View>
       </View>
     </SafeAreaView>

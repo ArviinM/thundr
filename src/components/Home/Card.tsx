@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,6 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   runOnJS,
-  SlideInRight,
-  SlideOutLeft,
   FadeIn,
   FadeOut,
 } from 'react-native-reanimated';
@@ -27,6 +25,8 @@ import {calculateAge} from './utils.ts';
 import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -55,10 +55,13 @@ const Card = ({
   jowaTranslation,
   isMare,
 }: Card) => {
-  // const imageIndex = useSharedValue(0);
   const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
   const customerImages = user.customerData.customerPhoto[imageIndex];
+
+  // for bottom sheet
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalPress = () => bottomSheetRef.current?.present();
 
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -288,7 +291,8 @@ const Card = ({
                 paddingVertical: 10,
                 marginVertical: 6,
                 borderRadius: 20,
-              }}>
+              }}
+              onPress={handlePresentModalPress}>
               <Text
                 style={{
                   fontFamily: 'Montserrat-Medium',
@@ -300,6 +304,12 @@ const Card = ({
           </View>
         </View>
       </View>
+      <ReportBottomSheetModal
+        ref={bottomSheetRef}
+        sub={user.sub}
+        category={'MATCH'}
+        name={user.customerData.name}
+      />
     </Animated.ScrollView>
   );
 };

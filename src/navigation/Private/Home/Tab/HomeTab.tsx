@@ -3,11 +3,13 @@ import {Tab} from '../../../../constants/navigator.ts';
 import Home from '../../../../screens/Private/Home/Home.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
-import {Button, Image, TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
-import alert from '../../../../components/shared/Alert.tsx';
+
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const HomeTab = () => {
+  const insets = useSafeAreaInsets();
   function Header() {
     return (
       <Image style={{transform: [{scale: 0.85}]}} source={IMAGES.headerLogo} />
@@ -48,7 +50,7 @@ export const HomeTab = () => {
           fontWeight: '500',
         },
         tabBarStyle: {
-          height: 100,
+          height: insets.bottom + 70,
         },
       }}>
       <Tab.Screen
