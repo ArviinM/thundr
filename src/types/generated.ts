@@ -289,3 +289,7 @@ export type CustomerData = {
   withCustomerPhoto: boolean;
   activated: boolean;
 };
+
+export type CustomerProfileRequest = {
+  sub: string;
+};

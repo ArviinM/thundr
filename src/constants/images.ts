@@ -63,4 +63,7 @@ export const IMAGES: Record<any, any> = {
 
   // mare match icon
   matchThundr: require('../assets/images/match_found/match_thundr.png'),
+
+  //profile icons
+  editIcon: require('../assets/images/profile_icons/edit_icon.png'),
 };
