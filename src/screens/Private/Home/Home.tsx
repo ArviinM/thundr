@@ -30,10 +30,6 @@ const Home = () => {
   const matchList = useGetMatchList({sub: auth.authData?.sub || ''});
 
   useEffect(() => {
-    requestLocationPermission();
-  }, []);
-
-  useEffect(() => {
     if (matchList.isPending) {
       matchList.refetch();
     }
@@ -98,10 +94,6 @@ const Home = () => {
     }
   }, [matchList.data, matchList.isLoading, matchList.isPending]);
 
-  if (matchList.isPending) {
-    return <Loading />;
-  }
-
   const onResponse = (res: boolean, swipedUser: MockDataItem) => {
     console.log('on Response: ', res);
     console.log(swipedUser);
@@ -165,6 +157,10 @@ const Home = () => {
       }
     }
   };
+
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
 
   return (
     <SafeAreaView
