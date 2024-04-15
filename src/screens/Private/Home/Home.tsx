@@ -2,7 +2,7 @@ import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Platform, StatusBar, Text, View} from 'react-native';
 
-import {COLORS, height} from '../../../constants/commons.ts';
+import {COLORS, height, width} from '../../../constants/commons.ts';
 
 import {useEffect, useState} from 'react';
 import {
@@ -28,6 +28,7 @@ const Home = () => {
   const auth = useAuth();
   const matchLocation = useCustomerMatchLocation();
   const matchList = useGetMatchList({sub: auth.authData?.sub || ''});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (matchList.isPending) {
@@ -60,20 +61,35 @@ const Home = () => {
   );
 
   useEffect(() => {
-    if (index > users.length - 3) {
-      console.log('Last 2 cards remaining. Fetch more!');
-      // setUsers(prevUser => [...prevUser, ...mockData]);
-      mareTranslations.modify(value => {
-        'worklet';
-        value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        return value;
-      });
-      jowaTranslations.modify(value => {
-        'worklet';
-        value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        return value;
-      });
-      runOnJS(setUsers)(prevState => [...prevState, ...MockData]);
+    if (matchList.isPending && matchList.isLoading) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+      setUsers(matchList.data as CustomerMatchResponse[]);
+    }
+  }, [matchList.data, matchList.isLoading, matchList.isPending]);
+
+  useEffect(() => {
+    if (
+      users &&
+      matchList.isSuccess &&
+      !matchList.isError &&
+      !matchList.isPending
+    ) {
+      if (index > users?.length - 3) {
+        console.log('Last 2 cards remaining. Fetch more!');
+        mareTranslations.modify(value => {
+          'worklet';
+          value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+          return value;
+        });
+        jowaTranslations.modify(value => {
+          'worklet';
+          value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+          return value;
+        });
+        runOnJS(setUsers)(prevState => [...prevState, ...MockData]);
+      }
     }
   }, [
     index,
@@ -82,17 +98,8 @@ const Home = () => {
     jowaTranslations,
     jowaTranslations.value,
     users,
-    users.length,
+    users?.length,
   ]);
-
-  useEffect(() => {
-    if (matchList.isPending && matchList.isLoading) {
-      console.log('isPending', matchList.isPending);
-      console.log('isLoading', matchList.isLoading);
-    } else {
-      setUsers(matchList.data as CustomerMatchResponse[]);
-    }
-  }, [matchList.data, matchList.isLoading, matchList.isPending]);
 
   const onResponse = (res: boolean, swipedUser: MockDataItem) => {
     console.log('on Response: ', res);
@@ -191,19 +198,24 @@ const Home = () => {
           alignItems: 'center',
           backgroundColor: COLORS.white,
         }}>
-        {users.map((user, index) => (
-          <Card
-            key={`${user.sub}-${index}-`}
-            user={user}
-            numOfCards={users.length}
-            index={index}
-            activeIndex={activeIndex}
-            onResponse={onResponse}
-            mareTranslation={mareTranslations}
-            jowaTranslation={jowaTranslations}
-            isMare={isMare}
-          />
-        ))}
+        {loading ? (
+          // TODO: Temporary Loading Screen - will add lazy loading here
+          <Loading />
+        ) : (
+          users?.map((user, index) => (
+            <Card
+              key={`${user.sub}-${index}-`}
+              user={user}
+              numOfCards={users.length}
+              index={index}
+              activeIndex={activeIndex}
+              onResponse={onResponse}
+              mareTranslation={mareTranslations}
+              jowaTranslation={jowaTranslations}
+              isMare={isMare}
+            />
+          ))
+        )}
       </View>
       <View
         style={{
@@ -211,7 +223,6 @@ const Home = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          // height: bottomTabHeight * 1.97,
         }}>
         <Swiping
           activeIndex={activeIndex}

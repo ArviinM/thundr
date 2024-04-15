@@ -13,7 +13,7 @@ export function useGetMatchList(props: CustomerMatchRequest) {
 
   return useQuery({
     queryKey: ['get-match-list', props.sub],
-    enabled: true,
+    enabled: false,
     queryFn: async (): Promise<CustomerMatchResponse[]> => {
       const config: AxiosRequestConfig<CustomerMatchRequest> = {
         params: {sub: props.sub},
