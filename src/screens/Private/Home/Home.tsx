@@ -20,13 +20,27 @@ import {GeolocationResponse} from '@react-native-community/geolocation/js/Native
 import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {useCustomerMatchLocation} from '../../../hooks/match/useCustomerMatchLocation.ts';
+import {useGetMatchList} from '../../../hooks/match/useGetMatchList.ts';
+import {Loading} from '../../../components/shared/Loading.tsx';
+import {CustomerMatchResponse} from '../../../types/generated.ts';
 
 const Home = () => {
   const auth = useAuth();
   const matchLocation = useCustomerMatchLocation();
+  const matchList = useGetMatchList({sub: auth.authData?.sub || ''});
+
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
+  useEffect(() => {
+    if (matchList.isPending) {
+      matchList.refetch();
+    }
+  }, []);
 
   const bottomTabHeight = useBottomTabBarHeight();
-  const [users, setUsers] = useState(MockData);
+  const [users, setUsers] = useState<CustomerMatchResponse[]>([]);
   const [index, setIndex] = useState(0);
 
   const activeIndex = useSharedValue(0);
@@ -74,6 +88,19 @@ const Home = () => {
     users,
     users.length,
   ]);
+
+  useEffect(() => {
+    if (matchList.isPending && matchList.isLoading) {
+      console.log('isPending', matchList.isPending);
+      console.log('isLoading', matchList.isLoading);
+    } else {
+      setUsers(matchList.data as CustomerMatchResponse[]);
+    }
+  }, [matchList.data, matchList.isLoading, matchList.isPending]);
+
+  if (matchList.isPending) {
+    return <Loading />;
+  }
 
   const onResponse = (res: boolean, swipedUser: MockDataItem) => {
     console.log('on Response: ', res);
@@ -138,10 +165,6 @@ const Home = () => {
       }
     }
   };
-
-  useEffect(() => {
-    requestLocationPermission();
-  }, []);
 
   return (
     <SafeAreaView

@@ -238,3 +238,54 @@ export type CustomerDetailsResponse = {
   politics: string;
   personalityType: string;
 };
+
+// Match Details
+export type CustomerMatchRequest = {
+  sub: string;
+};
+
+export type CustomerMatchResponse = {
+  sub: string;
+  percent: string;
+  customerData: CustomerData;
+};
+
+export type CustomerDetails = {
+  bio: string;
+  work: string;
+  location: string;
+  height: string;
+  starSign: string;
+  education: string;
+  drinking: string;
+  smoking: string;
+  religion: string;
+  pet: string;
+  politics: string;
+  personalityType: string;
+  hobbies: string;
+};
+
+// Define interface for customer photo
+export type CustomerPhoto = {
+  id: number;
+  primary: boolean;
+  photoUrl: string;
+  index: number | null;
+};
+
+// Define interface for customer data
+export type CustomerData = {
+  sub: string;
+  name: string;
+  gender: string;
+  birthday: string;
+  hometown: string;
+  deactivateDate: string | null;
+  customerDetails: CustomerDetails;
+  withCustomerDetails: boolean;
+  withCustomerCompatibilities: boolean;
+  customerPhoto: CustomerPhoto[];
+  withCustomerPhoto: boolean;
+  activated: boolean;
+};

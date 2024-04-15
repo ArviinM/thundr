@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {IMAGES} from '../../../constants/images.ts';
-import {moderateScale, verticalScale} from '../../../utils/utils.ts';
+import {moderateScale, scale, verticalScale} from '../../../utils/utils.ts';
 import {MockData, MockDataItem} from '../Home/mock.ts';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {StrokeText} from '@charmy.tech/react-native-stroke-text';
@@ -39,7 +39,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
 
   return (
     <SafeAreaView
-      style={{flex: 1, backgroundColor: 'white'}}
+      style={{flex: 1, backgroundColor: COLORS.primary1}}
       edges={['right', 'left']}>
       <LinearGradient
         colors={isMare ? MARE_GRADIENT_COLORS : JOWA_GRADIENT_COLORS}
@@ -87,7 +87,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
                   textShadowColor: 'rgba(99,65,0,0.68)',
                   textShadowOffset: {width: 6, height: 6},
                   textShadowRadius: 7,
-                  paddingBottom: 10,
+                  // paddingBottom: scale(1),
                   paddingHorizontal: 6,
                 }}>
                 {isMare ? DETAILS[0] : DETAILS[1]}
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mainImage: {
-    width: 340,
-    height: 340,
+    width: scale(300),
+    height: scale(300),
     borderRadius: 999,
     borderWidth: 10,
     borderColor: '#F8F8F8',

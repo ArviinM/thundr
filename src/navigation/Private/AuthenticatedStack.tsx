@@ -73,8 +73,10 @@ export const AuthenticatedStack = () => {
           name="MatchFound"
           component={MatchFound}
           options={{
-            // statusBarColor: COLORS.white,
-            statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
+            statusBarColor: COLORS.primary1,
+            statusBarTranslucent: true,
+            animation: 'slide_from_bottom',
+            statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}
         />

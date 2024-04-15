@@ -24,7 +24,7 @@ type Swiping = {
   user: MockDataItem[];
   isMare: SharedValue<boolean>;
 };
-//TODO: Mare Gesture and Jowa Gesture check later
+
 const Swiping = ({
   activeIndex,
   mareTranslation,
