@@ -8,7 +8,11 @@ import {MockData, MockDataItem} from '../Home/mock.ts';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {StrokeText} from '@charmy.tech/react-native-stroke-text';
 import Button from '../../../components/shared/Button.tsx';
-import {RouteProp} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 const START_DEFAULT = {x: 0, y: 0}; // Updated start position
@@ -29,7 +33,8 @@ type MatchFoundProps = {
 
 const MatchFound = ({route}: MatchFoundProps) => {
   const {sub, isMare} = route?.params || {};
-  const [user, users] = useState<MockDataItem>(MockData[0]);
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const [user, setUser] = useState<MockDataItem>(MockData[0]);
   const insets = useSafeAreaInsets();
 
   return (
@@ -103,7 +108,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
                 textStyle={styles.text1}
               />
               <Button
-                onPress={() => console.log('Pressed')}
+                onPress={() => navigation.navigate('HomeTab')}
                 text="Keep Sighting"
                 buttonStyle={styles.button2}
                 textStyle={styles.text2}

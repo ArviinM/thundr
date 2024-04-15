@@ -30,7 +30,6 @@ export function useCustomerMatchLocation() {
         } as Error;
       }
 
-      console.log(response.data);
       return response.data.data;
     },
     onError: showErrorToast,

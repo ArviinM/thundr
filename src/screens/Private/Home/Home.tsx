@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, Text, View} from 'react-native';
+import {Platform, StatusBar, Text, View} from 'react-native';
 
-import {COLORS} from '../../../constants/commons.ts';
+import {COLORS, height} from '../../../constants/commons.ts';
 
 import {useEffect, useState} from 'react';
 import {
@@ -15,8 +15,16 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import Swiping from '../../../components/Home/Swiping.tsx';
 import GenericModal from '../../../components/shared/GenericModal.tsx';
 import {MockData, MockDataItem} from './mock.ts';
+import {PERMISSIONS, request} from 'react-native-permissions';
+import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
+import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
+import {useCustomerMatchLocation} from '../../../hooks/match/useCustomerMatchLocation.ts';
 
 const Home = () => {
+  const auth = useAuth();
+  const matchLocation = useCustomerMatchLocation();
+
   const bottomTabHeight = useBottomTabBarHeight();
   const [users, setUsers] = useState(MockData);
   const [index, setIndex] = useState(0);
@@ -72,29 +80,92 @@ const Home = () => {
     console.log(swipedUser);
   };
 
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'ios') {
+      const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
+      if (result === 'granted') {
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
+      } else if (result === 'blocked') {
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
+      } else {
+        console.log('Location permission denied on iOS');
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      const result2 = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
+
+      if (result === 'granted') {
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
+      } else {
+        console.log('Location permission denied on Android');
+      }
+
+      if (result2 === 'granted') {
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
+      } else {
+        console.log('Location permission denied on Android');
+      }
+    }
+  };
+
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
-      <GenericModal
-        isVisible={visible}
-        title="Dev Log Sprint #2"
-        content={
-          <Text style={{fontFamily: 'Montserrat-Regular'}}>
-            Welcome Testers! 🦈 {'\n\n'}
-            Here's a work in progress of Sprint 2! {'\n\n'}I have made a good
-            progress with the swiping animations and also adding the instagram
-            story like feature. {'\n\n'}I have missed out to include the
-            Customer Personality Type last Sprint. I added it now for this
-            build, kindly test and confirm.
-            {'\n\n'}
-            Big Sharky Dev, {'\n'}Tanders, Inc
-          </Text>
-        }
-        buttonText="Close"
-        onClose={() => isVisible(false)}
-      />
+      {/*<GenericModal*/}
+      {/*  isVisible={visible}*/}
+      {/*  title="Dev Log Sprint #2"*/}
+      {/*  content={*/}
+      {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
+      {/*      Welcome Testers! 🦈 {'\n\n'}*/}
+      {/*      Here's a work in progress of Sprint 2! {'\n\n'}I have made a good*/}
+      {/*      progress with the swiping animations and also adding the instagram*/}
+      {/*      story like feature. {'\n\n'}I have missed out to include the*/}
+      {/*      Customer Personality Type last Sprint. I added it now for this*/}
+      {/*      build, kindly test and confirm.*/}
+      {/*      {'\n\n'}*/}
+      {/*      Big Sharky Dev, {'\n'}Tanders, Inc*/}
+      {/*    </Text>*/}
+      {/*  }*/}
+      {/*  buttonText="Close"*/}
+      {/*  onClose={() => isVisible(false)}*/}
+      {/*/>*/}
       <View
         style={{
           flex: 1,
@@ -121,7 +192,7 @@ const Home = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          height: bottomTabHeight * 1.97,
+          // height: bottomTabHeight * 1.97,
         }}>
         <Swiping
           activeIndex={activeIndex}
