@@ -57,4 +57,10 @@ export const IMAGES: Record<any, any> = {
   headerLogo: require('../assets/images/header_icons/thundrHeader.png'),
   bell: require('../assets/images/header_icons/bell.png'),
   filter: require('../assets/images/header_icons/filterMenu.png'),
+
+  // report icon
+  forwardIcon: require('../assets/images/report/forward_icon_report.png'),
+
+  // mare match icon
+  matchThundr: require('../assets/images/match_found/match_thundr.png'),
 };

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Platform, StyleSheet, View} from 'react-native';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 
 import Animated, {
@@ -13,6 +13,7 @@ import Animated, {
 import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
+import {initialWindowMetrics} from 'react-native-safe-area-context';
 
 type Swiping = {
   activeIndex: SharedValue<number>;
@@ -23,7 +24,7 @@ type Swiping = {
   user: MockDataItem[];
   isMare: SharedValue<boolean>;
 };
-//TODO: Mare Gesture and Jowa Gesture check later
+
 const Swiping = ({
   activeIndex,
   mareTranslation,
@@ -86,7 +87,7 @@ const Swiping = ({
     .onEnd(event => {
       if (pressed.value) {
         const distanceFromCenter = Math.abs(event.translationX);
-        const threshold = width / 4;
+        const threshold = width / 3;
 
         if (distanceFromCenter < threshold) {
           mareTranslation.value[index] = withSpring(0);
@@ -100,24 +101,23 @@ const Swiping = ({
             value[index] = withSpring(0);
             return value;
           });
-          console.log(false);
         } else {
           mareTranslation.value[index] = withSpring(
-            Math.sign(event.velocityX) * 600,
+            Math.sign(event.translationX) * 600,
             {
-              velocity: event.velocityX,
+              velocity: event.translationX,
             },
           );
 
           jowaTranslation.value[index] = withSpring(
-            Math.sign(event.velocityX) * 600,
+            Math.sign(event.translationX) * 600,
             {
-              velocity: event.velocityX,
+              velocity: event.translationX,
             },
           );
 
           activeIndex.value = withSpring(index + 1);
-          runOnJS(onResponse)(event.velocityX > 0, user[index]);
+          runOnJS(onResponse)(event.translationX > 0, user[index]);
           console.log(true);
         }
 
@@ -164,7 +164,7 @@ const Swiping = ({
     .onEnd(event => {
       if (pressed.value) {
         const distanceFromCenter = Math.abs(event.translationX);
-        const threshold = width / 4;
+        const threshold = width / 3;
 
         if (distanceFromCenter < threshold) {
           jowaTranslation.value[index] = withSpring(0);
@@ -182,20 +182,20 @@ const Swiping = ({
           console.log(false);
         } else {
           jowaTranslation.value[index] = withSpring(
-            Math.sign(event.velocityX) * 600,
+            Math.sign(event.translationX) * 600,
             {
-              velocity: event.velocityX,
+              velocity: event.translationX,
             },
           );
           mareTranslation.value[index] = withSpring(
-            Math.sign(event.velocityX) * 600,
+            Math.sign(event.translationX) * 600,
             {
-              velocity: event.velocityX,
+              velocity: event.translationX,
             },
           );
 
           activeIndex.value = withSpring(index + 1);
-          runOnJS(onResponse)(event.velocityX > 0, user[index]);
+          runOnJS(onResponse)(event.translationX > 0, user[index]);
           console.log(true);
         }
 
@@ -236,7 +236,7 @@ const Swiping = ({
       </GestureDetector>
       <GestureDetector gesture={jowaGesture}>
         <Animated.View
-          style={[animateSwipeJowa, {position: 'absolute', right: -95}]}>
+          style={[animateSwipeJowa, {position: 'absolute', right: -90}]}>
           {jowaTapped ? (
             <Image
               source={IMAGES.jowaTapped}
@@ -281,14 +281,20 @@ const Swiping = ({
   );
 };
 
+const bottomHeight = initialWindowMetrics?.insets.bottom || 20;
+
 const styles = StyleSheet.create({
   glowImage: {
     width: 118,
     height: 118,
+    paddingVertical:
+      Platform.OS === 'ios' ? bottomHeight * 2.8 : bottomHeight * 3.6,
   },
   thundrImage: {
     width: 80,
     height: 80,
+    paddingVertical:
+      Platform.OS === 'ios' ? bottomHeight * 2.8 : bottomHeight * 3.6,
   },
   swipeImageOff: {width: 170, height: 170},
   swipeImageOn: {width: 193, height: 193},

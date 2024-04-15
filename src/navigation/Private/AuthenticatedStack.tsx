@@ -16,6 +16,7 @@ import CustomerPersonalityType from '../../screens/Private/ProfileCreation/Custo
 import CustomerPhotoBio from '../../screens/Private/ProfileCreation/CustomerPhotoBio.tsx';
 import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
+import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -62,15 +63,25 @@ export const AuthenticatedStack = () => {
       {/*  Main Group for Home Swiping Page */}
       <Stack.Group
         screenOptions={{
-          // presentation: 'm',
           headerShown: false,
           statusBarColor: COLORS.white,
-          // statusBarStyle: 'dark',
           statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
           statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="HomeTab" component={HomeTab} />
+        <Stack.Screen
+          name="MatchFound"
+          component={MatchFound}
+          options={{
+            statusBarColor: COLORS.primary1,
+            statusBarTranslucent: true,
+            animation: 'slide_from_bottom',
+            statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
+            statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
+          }}
+        />
       </Stack.Group>
+      {/*<Stack.Group />*/}
     </Stack.Navigator>
   );
 };
