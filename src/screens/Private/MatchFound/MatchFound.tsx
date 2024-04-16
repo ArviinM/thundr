@@ -50,7 +50,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
         <View style={styles.container}>
           <View
             style={{
-              marginTop: verticalScale(90),
+              marginTop: verticalScale(80),
               marginHorizontal: 30,
               alignItems: 'center',
             }}>
