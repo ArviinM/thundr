@@ -42,4 +42,9 @@ export type RootNavigationParams = {
 
   //Match Found
   MatchFound: {sub?: string; isMare: boolean};
+
+  // Profile
+  ProfileStack: undefined;
+  Profile: undefined;
+  EditProfile: undefined;
 };

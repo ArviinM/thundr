@@ -19,7 +19,11 @@ const Profile = () => {
     } else {
       console.log(customerProfile.data);
     }
-  }, []);
+  }, [
+    customerProfile.data,
+    customerProfile.isLoading,
+    customerProfile.isPending,
+  ]);
 
   return (
     <SafeAreaView

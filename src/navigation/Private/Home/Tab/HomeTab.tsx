@@ -7,8 +7,8 @@ import {Image, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Profile from '../../../../screens/Private/Profile/Profile.tsx';
 import {moderateScale} from '../../../../utils/utils.ts';
+import {ProfileStack} from '../Stack/ProfileStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -55,9 +55,10 @@ export const HomeTab = () => {
         },
       }}>
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
+          headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
             <Image source={focused ? IMAGES.profileOn : IMAGES.profileOff} />

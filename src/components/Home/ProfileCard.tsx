@@ -22,6 +22,8 @@ import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
 import {MockDataItem} from '../../screens/Private/Home/mock.ts';
 import {CustomerData, CustomerMatchResponse} from '../../types/generated.ts';
 import {IMAGES} from '../../constants/images.ts';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../constants/navigator.ts';
 
 const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 
@@ -34,6 +36,8 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
   const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
   const customerImages = user.customerData.customerPhoto[imageIndex];
+
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   // for bottom sheet
   const bottomSheetRef = useRef<BottomSheetModal>(null);
@@ -67,7 +71,7 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
         <View style={[cardStyles.editIconContainer, {zIndex: 100}]}>
           <TouchableOpacity
             onPress={() => {
-              console.log('Pressed');
+              navigation.navigate('EditProfile');
             }}>
             <Image
               source={IMAGES.editIcon}
