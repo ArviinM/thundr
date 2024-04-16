@@ -1,26 +1,40 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+
+import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {
-  ActivityIndicator,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image as ImageType} from 'react-native-image-crop-picker';
+
 import CircleButton from '../../../components/shared/CircleButton.tsx';
-import {IMAGES} from '../../../constants/images.ts';
-import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
-import {MAX_IMAGE_SIZE_BYTES} from '../../../utils/utils.ts';
-import Toast from 'react-native-toast-message';
+import * as yup from 'yup';
+import {Controller, useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useQueryClient} from '@tanstack/react-query';
+
+import PhotoUpload from '../../../components/shared/PhotoUpload.tsx';
+import {profileCreationStyles} from '../ProfileCreation/styles.tsx';
+import InterestButtonContainer from '../../../components/CustomerInterest/InterestButtonContainer.tsx';
+import CustomDropdown from '../../../components/shared/Dropdown.tsx';
+import SelectableButton from '../../../components/CustomerPersonalityType/SelectableButton.tsx';
+
 import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
 import {RouteProp} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {width} from '../../../constants/commons.ts';
-import {useQueryClient} from '@tanstack/react-query';
+import {COLORS, width} from '../../../constants/commons.ts';
+import {personalityData} from '../../../components/CustomerPersonalityType/personalityData.ts';
+import {interestOptions} from '../../../components/CustomerInterest/options.ts';
+import {
+  drinkingAndSmokingOptions,
+  educationOptions,
+  feetOptions,
+  inchesOptions,
+  petsOptions,
+  politicsOptions,
+  religionOptions,
+  starSignOptions,
+} from '../../../utils/dropdownOptions.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
-import PhotoUpload from '../../../components/shared/PhotoUpload.tsx';
+import {moderateScale, parseFeetAndInches} from '../../../utils/utils.ts';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -33,11 +47,29 @@ type EditProfileProps = {
 
 const EditProfile = ({route}: EditProfileProps) => {
   const {sub, customerPhoto, customerDetails} = route?.params || {};
-  const [imageUploaded, isUploadingImage] = useState(false);
-  const [imageData, setImageData] = useState<ImageType | null>(null);
   const {mutateAsync} = useUploadProfilePhoto();
 
   const query = useQueryClient(queryClient);
+  const currentCustomerInterest = customerDetails?.hobbies || '';
+  const interestsArray = currentCustomerInterest.split(',');
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [selectedPersonality, setSelectedPersonality] = useState<{
+    index: number;
+    text: string;
+  }>();
+  useEffect(() => {
+    setSelectedInterests(interestsArray);
+  }, [currentCustomerInterest]);
+
+  const handleSelectionChange = (newSelectedOptions: string[]) => {
+    setSelectedInterests(newSelectedOptions);
+  };
+  const handleSelectedPersonality = (index: number, text: string) => {
+    setSelectedPersonality({index, text});
+  };
+
+  const isSelectedInterest = selectedInterests.length < 1;
+  const isSelectedPersonality = selectedPersonality !== undefined;
 
   const handlePhotoUpload = async (
     image: ImageType,
@@ -61,11 +93,50 @@ const EditProfile = ({route}: EditProfileProps) => {
     }
   };
 
+  const schema = yup.object().shape({
+    bio: yup.string().required('Mars, we need your bio!'),
+    work: yup.string().required('Mars, any work will do!'),
+    location: yup.string().required('Nako mars! We need your location po!'),
+    feet: yup.string(),
+    inches: yup.string(),
+    starSign: yup.string(),
+    education: yup.string(),
+    drinking: yup.string(),
+    smoking: yup.string(),
+    religion: yup.string(),
+    pet: yup.string(),
+    politics: yup.string(),
+  });
+
+  const {feet, inches} = parseFeetAndInches(customerDetails?.height || '');
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValid},
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      bio: customerDetails?.bio || '',
+      work: customerDetails?.work || '',
+      location: customerDetails?.location || '',
+      feet: feet || '',
+      inches: inches || '',
+      starSign: customerDetails?.starSign || '',
+      education: customerDetails?.education || '',
+      drinking: customerDetails?.drinking || '',
+      smoking: customerDetails?.smoking || '',
+      religion: customerDetails?.religion || '',
+      pet: customerDetails?.pet || '',
+      politics: customerDetails?.politics || '',
+    },
+  });
+
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{flex: 1, backgroundColor: COLORS.white}}>
         <View>
           <View style={styles.container}>
             <View>
@@ -93,13 +164,446 @@ const EditProfile = ({route}: EditProfileProps) => {
                   key={index}
                   photoData={customerPhoto && customerPhoto[index + 1]}
                   onPhotoUpload={image =>
-                    handlePhotoUpload(image, true, customerPhoto?.[index]?.id)
+                    handlePhotoUpload(
+                      image,
+                      false,
+                      customerPhoto?.[index + 1]?.id,
+                    )
                   }
                   imageWidth={117}
                   imageHeight={117}
                   isSubPhoto
                 />
               ))}
+            </View>
+          </View>
+          <View style={styles.mainContainer}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTextStyle}>About Me</Text>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    style={[profileCreationStyles.textInputBio]}
+                    keyboardType="default"
+                    placeholder="Enter more about you"
+                    placeholderTextColor={COLORS.gray3}
+                    inputMode={'text'}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    selectionColor={COLORS.primary1}
+                    multiline={true}
+                    maxLength={255}
+                    textAlignVertical={'top'}
+                  />
+                )}
+                name="bio"
+              />
+              {errors.bio && (
+                <Text style={profileCreationStyles.errorText}>
+                  {errors.bio.message}
+                </Text>
+              )}
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTextStyle}>Work</Text>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    // ref={textInputRef}
+                    style={[profileCreationStyles.textInputBioWork]}
+                    keyboardType="default"
+                    placeholder="Add your work"
+                    placeholderTextColor={COLORS.gray3}
+                    inputMode={'text'}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    selectionColor={COLORS.primary1}
+                    maxLength={255}
+                  />
+                )}
+                name="work"
+              />
+              {errors.work && (
+                <Text style={profileCreationStyles.errorText}>
+                  {errors.work.message}
+                </Text>
+              )}
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTextStyle}>Location</Text>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    // ref={textInputRef}
+                    style={[profileCreationStyles.textInputBioWork]}
+                    keyboardType="default"
+                    placeholder="Location"
+                    placeholderTextColor={COLORS.gray3}
+                    inputMode={'text'}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    selectionColor={COLORS.primary1}
+                    maxLength={255}
+                  />
+                )}
+                name="location"
+              />
+              {errors.location && (
+                <Text style={profileCreationStyles.errorText}>
+                  {errors.location.message}
+                </Text>
+              )}
+            </View>
+            <View>
+              <Text style={styles.inputTextStyle}>My Interest</Text>
+              <View>
+                <InterestButtonContainer
+                  options={interestOptions}
+                  onSelectionChange={handleSelectionChange}
+                  selectedOptions={selectedInterests}
+                />
+              </View>
+            </View>
+            <View style={styles.bodyDropdownContainer}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                  gap: 6,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                  }}>
+                  <View
+                    style={[
+                      profileCreationStyles.flex,
+                      {flexDirection: 'column', gap: 3},
+                    ]}>
+                    <Text style={styles.inputTextStyle}>Height</Text>
+                    <View style={profileCreationStyles.dropdownContainer2}>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={feetOptions}
+                              placeholder="5'"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="feet"
+                        />
+                      </View>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={inchesOptions}
+                              placeholder="11'"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="inches"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={[
+                    profileCreationStyles.flex,
+                    {flexDirection: 'column', gap: 3},
+                  ]}>
+                  <Text style={styles.inputTextStyle}>Star Sign</Text>
+                  <View style={profileCreationStyles.dropdownContainer2}>
+                    <View style={profileCreationStyles.dropdownSection}>
+                      <Controller
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({field: {onChange, value}}) => (
+                          <CustomDropdown
+                            data={starSignOptions}
+                            placeholder="Sagitarrius"
+                            value={value}
+                            onChange={item => {
+                              onChange(item.value);
+                            }}
+                          />
+                        )}
+                        name="starSign"
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                  gap: 6,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                  }}>
+                  <View
+                    style={[
+                      profileCreationStyles.flex,
+                      {flexDirection: 'column', gap: 3},
+                    ]}>
+                    <Text style={styles.inputTextStyle}>Education</Text>
+                    <View style={profileCreationStyles.dropdownContainer2}>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={educationOptions}
+                              placeholder="Doctorate"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="education"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                  gap: 6,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                  }}>
+                  <View
+                    style={[
+                      profileCreationStyles.flex,
+                      {flexDirection: 'column', gap: 3},
+                    ]}>
+                    <Text style={styles.inputTextStyle}>Drinking</Text>
+                    <View style={profileCreationStyles.dropdownContainer2}>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={drinkingAndSmokingOptions}
+                              placeholder="Ocassional"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="drinking"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={[
+                    profileCreationStyles.flex,
+                    {flexDirection: 'column', gap: 3},
+                  ]}>
+                  <Text style={styles.inputTextStyle}>Smoking</Text>
+                  <View style={profileCreationStyles.dropdownContainer2}>
+                    <View style={profileCreationStyles.dropdownSection}>
+                      <Controller
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({field: {onChange, value}}) => (
+                          <CustomDropdown
+                            data={drinkingAndSmokingOptions}
+                            placeholder="Ocassional"
+                            value={value}
+                            onChange={item => {
+                              onChange(item.value);
+                            }}
+                          />
+                        )}
+                        name="smoking"
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                  gap: 6,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                  }}>
+                  <View
+                    style={[
+                      profileCreationStyles.flex,
+                      {flexDirection: 'column', gap: 3},
+                    ]}>
+                    <Text style={styles.inputTextStyle}>Religion</Text>
+                    <View style={profileCreationStyles.dropdownContainer2}>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={religionOptions}
+                              placeholder="Christian"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="religion"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                  gap: 6,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                  }}>
+                  <View
+                    style={[
+                      profileCreationStyles.flex,
+                      {flexDirection: 'column', gap: 3},
+                    ]}>
+                    <Text style={styles.inputTextStyle}>Pet</Text>
+                    <View style={profileCreationStyles.dropdownContainer2}>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={petsOptions}
+                              placeholder="Dog"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="pet"
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={[
+                    profileCreationStyles.flex,
+                    {flexDirection: 'column', gap: 3},
+                  ]}>
+                  <Text style={styles.inputTextStyle}>Politics</Text>
+                  <View style={profileCreationStyles.dropdownContainer2}>
+                    <View style={profileCreationStyles.dropdownSection}>
+                      <Controller
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({field: {onChange, value}}) => (
+                          <CustomDropdown
+                            data={politicsOptions}
+                            placeholder="Conservative"
+                            value={value}
+                            onChange={item => {
+                              onChange(item.value);
+                            }}
+                          />
+                        )}
+                        name="politics"
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={{gap: 10}}>
+              <Text style={styles.inputTextStyle}>Personality Type</Text>
+              <SelectableButton
+                buttonData={personalityData}
+                onPress={handleSelectedPersonality}
+                customerPersonality={customerDetails?.personalityType || ''}
+              />
             </View>
           </View>
         </View>
@@ -157,6 +661,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  mainContainer: {marginHorizontal: 40, gap: 10},
+  inputContainer: {},
+  inputTextStyle: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: moderateScale(20),
+    color: COLORS.primary1,
+    letterSpacing: -0.4,
+  },
+  bodyDropdownContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    flexDirection: 'column',
+    gap: 22,
   },
 });
 

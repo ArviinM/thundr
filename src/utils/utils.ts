@@ -81,3 +81,15 @@ export const verticalScale = (size: number) =>
   (height / guidelineBaseHeight) * size;
 export const moderateScale = (size: number, factor = 0.5) =>
   size + (scale(size) - size) * factor;
+
+interface FeetAndInches {
+  feet: string;
+  inches: string;
+}
+
+export const parseFeetAndInches = (inputString: string): FeetAndInches => {
+  const [feetPart, inchesPart] = inputString.split(' ');
+  const feet = feetPart + "'";
+  const inches = inchesPart + "''";
+  return {feet, inches};
+};

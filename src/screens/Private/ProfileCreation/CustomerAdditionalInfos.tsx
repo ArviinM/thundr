@@ -254,7 +254,7 @@ const CustomerAdditionalInfos = () => {
                       {flexDirection: 'column', gap: 3},
                     ]}>
                     <Text style={profileCreationStyles.dropdownTitle}>
-                      Height
+                      Education
                     </Text>
                     <View style={profileCreationStyles.dropdownContainer2}>
                       <View style={profileCreationStyles.dropdownSection}>

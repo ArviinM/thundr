@@ -32,6 +32,8 @@ export function useGetMatchList(props: CustomerMatchRequest) {
         });
       }
 
+      console.log(response.data.data);
+
       return response.data.data;
     },
   });

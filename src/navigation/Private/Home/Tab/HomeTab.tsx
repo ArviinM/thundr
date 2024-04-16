@@ -52,6 +52,7 @@ export const HomeTab = () => {
         },
         tabBarStyle: {
           height: insets.bottom + 70,
+          backgroundColor: COLORS.white,
         },
       }}>
       <Tab.Screen
