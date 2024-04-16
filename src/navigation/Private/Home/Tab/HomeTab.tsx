@@ -7,6 +7,8 @@ import {Image, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {moderateScale} from '../../../../utils/utils.ts';
+import {ProfileStack} from '../Stack/ProfileStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -23,8 +25,6 @@ export const HomeTab = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginHorizontal: 10,
-
-          // borderWidth: 1,
         }}>
         {/* Center icons vertically */}
         <TouchableOpacity style={{paddingHorizontal: 10}}>
@@ -48,15 +48,18 @@ export const HomeTab = () => {
         headerTitleStyle: {
           fontFamily: 'ClimateCrisis-Regular',
           fontWeight: '500',
+          fontSize: moderateScale(20),
         },
         tabBarStyle: {
           height: insets.bottom + 70,
+          backgroundColor: COLORS.white,
         },
       }}>
       <Tab.Screen
-        name="Profile"
-        component={WorkingInProgress}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
+          headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
             <Image source={focused ? IMAGES.profileOn : IMAGES.profileOff} />

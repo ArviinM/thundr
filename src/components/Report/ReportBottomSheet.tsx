@@ -25,7 +25,7 @@ interface ReportBottomSheetModalProps {
 
 const ReportBottomSheetModal = forwardRef<Ref, ReportBottomSheetModalProps>(
   (props, ref) => {
-    const snapPoints = useMemo(() => ['65%'], []);
+    const snapPoints = useMemo(() => ['78%'], []);
     const renderBackdrop = useCallback(
       (props: any) => (
         <BottomSheetBackdrop
