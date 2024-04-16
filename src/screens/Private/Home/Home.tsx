@@ -76,8 +76,9 @@ const Home = () => {
       !matchList.isError &&
       !matchList.isPending
     ) {
-      if (index > users?.length - 3) {
+      if (index > ((users && users.length) || 0) - 3) {
         console.log('Last 2 cards remaining. Fetch more!');
+
         mareTranslations.modify(value => {
           'worklet';
           value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -88,7 +89,7 @@ const Home = () => {
           value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
           return value;
         });
-        runOnJS(setUsers)(prevState => [...prevState, ...MockData]);
+        // runOnJS(setUsers)(prevState => [...(prevState || []), ...MockData]);
       }
     }
   }, [

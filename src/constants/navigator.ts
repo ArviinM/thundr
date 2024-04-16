@@ -3,6 +3,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {
   CompatibilityQuestionsRequest,
+  CustomerData,
+  CustomerMatchResponse,
   EmailValidationResponse,
   EmailVerificationResponse,
   MobileValidationResponse,
@@ -46,5 +48,5 @@ export type RootNavigationParams = {
   // Profile
   ProfileStack: undefined;
   Profile: undefined;
-  EditProfile: undefined;
+  EditProfile: CustomerData;
 };

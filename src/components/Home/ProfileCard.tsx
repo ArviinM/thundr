@@ -71,7 +71,7 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
         <View style={[cardStyles.editIconContainer, {zIndex: 100}]}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('EditProfile');
+              navigation.navigate('EditProfile', user.customerData);
             }}>
             <Image
               source={IMAGES.editIcon}
