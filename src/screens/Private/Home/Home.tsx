@@ -89,7 +89,15 @@ const Home = () => {
           value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
           return value;
         });
-        // runOnJS(setUsers)(prevState => [...(prevState || []), ...MockData]);
+
+        // matchList.refetch();
+        //
+        // if (index < users.length) {
+        //   runOnJS(setUsers)(prevState => [
+        //     ...(prevState || []),
+        //     ...matchList.data,
+        //   ]);
+        // }
       }
     }
   }, [
@@ -100,6 +108,9 @@ const Home = () => {
     jowaTranslations.value,
     users,
     users?.length,
+    matchList.isSuccess,
+    matchList.isError,
+    matchList.isPending,
   ]);
 
   const onResponse = (res: boolean, swipedUser: MockDataItem) => {

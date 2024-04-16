@@ -1,20 +1,17 @@
 import React from 'react';
 
-import {Stack} from '../../../../constants/navigator.ts';
+import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 import Profile from '../../../../screens/Private/Profile/Profile.tsx';
-import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
+
 import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale} from '../../../../utils/utils.ts';
 import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
-import {Image, Text, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {Image, TouchableOpacity} from 'react-native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {IMAGES} from '../../../../constants/images.ts';
 export const ProfileStack = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
-  const handleEditProfileSave = () => {
-    // how do i get the data to save it???
-  };
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -49,7 +46,7 @@ export const ProfileStack = () => {
             fontSize: moderateScale(20),
           },
           headerLeft: props => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
               <Image
                 source={IMAGES.back}
                 style={{width: 20, height: 20}}

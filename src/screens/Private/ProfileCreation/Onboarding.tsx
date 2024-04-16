@@ -133,6 +133,7 @@ const Onboarding = () => {
                   entering={SlideInRight}
                   exiting={SlideOutLeft}
                   source={data.titleImage}
+                  style={{zIndex: 100}}
                 />
               )}
               {data.newTitle && (
@@ -193,7 +194,10 @@ const Onboarding = () => {
               exiting={FadeOut}
               style={[
                 profileCreationStyles.onboardingImage,
-                {transform: [{scale: 1}]},
+                {
+                  transform: [{scale: 1}],
+                  zIndex: -10,
+                },
               ]}>
               <Image source={data.onboardingImage} />
             </Animated.View>
