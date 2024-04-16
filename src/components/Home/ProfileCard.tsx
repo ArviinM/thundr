@@ -191,7 +191,7 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
           <Text style={cardStyles.title}>Interests</Text>
           {user.customerData.customerDetails.hobbies && (
             <Text style={cardStyles.body}>
-              {user.customerData.customerDetails.hobbies}
+              {user.customerData.customerDetails.hobbies.split(',').join(', ')}
             </Text>
           )}
 

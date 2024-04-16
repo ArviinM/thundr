@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Image as ImageType} from 'react-native-image-crop-picker';
 
 import CircleButton from '../../../components/shared/CircleButton.tsx';
@@ -35,6 +35,11 @@ import {
 } from '../../../utils/dropdownOptions.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {moderateScale, parseFeetAndInches} from '../../../utils/utils.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
+import {CustomerDetailsRequest} from '../../../types/generated.ts';
+import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
+import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
+import Toast from 'react-native-toast-message';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -46,7 +51,17 @@ type EditProfileProps = {
 };
 
 const EditProfile = ({route}: EditProfileProps) => {
-  const {sub, customerPhoto, customerDetails} = route?.params || {};
+  const inset = useSafeAreaInsets();
+
+  const {
+    sub,
+    customerPhoto,
+    customerDetails,
+    name,
+    hometown,
+    gender,
+    birthday,
+  } = route?.params || {};
   const {mutateAsync} = useUploadProfilePhoto();
 
   const query = useQueryClient(queryClient);
@@ -56,7 +71,13 @@ const EditProfile = ({route}: EditProfileProps) => {
   const [selectedPersonality, setSelectedPersonality] = useState<{
     index: number;
     text: string;
-  }>();
+  }>({index: 0, text: customerDetails?.personalityType || ''});
+
+  const [loading, isLoading] = useState(false);
+
+  const updateDetails = useCreateCustomerDetails();
+  const updateProfile = useCreateCustomerProfile();
+
   useEffect(() => {
     setSelectedInterests(interestsArray);
   }, [currentCustomerInterest]);
@@ -67,9 +88,6 @@ const EditProfile = ({route}: EditProfileProps) => {
   const handleSelectedPersonality = (index: number, text: string) => {
     setSelectedPersonality({index, text});
   };
-
-  const isSelectedInterest = selectedInterests.length < 1;
-  const isSelectedPersonality = selectedPersonality !== undefined;
 
   const handlePhotoUpload = async (
     image: ImageType,
@@ -94,6 +112,7 @@ const EditProfile = ({route}: EditProfileProps) => {
   };
 
   const schema = yup.object().shape({
+    name: yup.string().required('Mars, we need your name!'),
     bio: yup.string().required('Mars, we need your bio!'),
     work: yup.string().required('Mars, any work will do!'),
     location: yup.string().required('Nako mars! We need your location po!'),
@@ -108,7 +127,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     politics: yup.string(),
   });
 
-  const {feet, inches} = parseFeetAndInches(customerDetails?.height || '');
+  const {feet, inches} = parseFeetAndInches(customerDetails?.height);
 
   const {
     control,
@@ -117,6 +136,7 @@ const EditProfile = ({route}: EditProfileProps) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
+      name: name,
       bio: customerDetails?.bio || '',
       work: customerDetails?.work || '',
       location: customerDetails?.location || '',
@@ -131,6 +151,91 @@ const EditProfile = ({route}: EditProfileProps) => {
       politics: customerDetails?.politics || '',
     },
   });
+
+  const onSubmit = async (data: {
+    bio: string;
+    work: string;
+    location: string;
+    name: string;
+    feet?: string;
+    inches?: string;
+    starSign?: string;
+    education?: string;
+    drinking?: string;
+    smoking?: string;
+    religion?: string;
+    pet?: string;
+    politics?: string;
+  }) => {
+    try {
+      isLoading(true);
+      const updatedData: Partial<CustomerDetailsRequest> = {};
+
+      if (data.feet && data.inches) {
+        updatedData.height = `${data.feet} ${data.inches}`;
+      }
+      if (data.starSign) {
+        updatedData.starSign = data.starSign;
+      }
+      if (data.education) {
+        updatedData.education = data.education;
+      }
+      if (data.drinking) {
+        updatedData.drinking = data.drinking;
+      }
+      if (data.smoking) {
+        updatedData.smoking = data.smoking;
+      }
+      if (data.religion) {
+        updatedData.religion = data.religion;
+      }
+      if (data.pet) {
+        updatedData.pet = data.pet;
+      }
+      if (data.politics) {
+        updatedData.politics = data.politics;
+      }
+      if (selectedInterests) {
+        updatedData.hobbies = selectedInterests.toString();
+      }
+      if (selectedPersonality) {
+        updatedData.personalityType = selectedPersonality?.text;
+      }
+
+      if (sub) {
+        await updateDetails.mutateAsync({
+          ...updatedData,
+          sub: sub,
+          work: data.work,
+          location: data.location,
+          bio: data.bio,
+        });
+      }
+
+      if (sub && gender && birthday) {
+        await updateProfile.mutateAsync({
+          sub: sub,
+          name: data.name,
+          gender: gender,
+          hometown: 'None',
+          birthday: birthday,
+        });
+      }
+
+      await query.invalidateQueries({queryKey: ['get-customer-profile']});
+
+      Toast.show({
+        type: 'THNRSuccess',
+        props: {title: 'Your profile has been successfully updated!'},
+        position: 'top',
+        topOffset: inset.top + 10,
+      });
+
+      isLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -177,7 +282,40 @@ const EditProfile = ({route}: EditProfileProps) => {
               ))}
             </View>
           </View>
+
           <View style={styles.mainContainer}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTextStyle}>Name</Text>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <TextInput
+                    // ref={textInputRef}
+                    style={[profileCreationStyles.textInputBioWork]}
+                    keyboardType="default"
+                    placeholder="Name"
+                    placeholderTextColor={COLORS.gray3}
+                    inputMode={'text'}
+                    autoComplete={'name'}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    selectionColor={COLORS.primary1}
+                    maxLength={255}
+                  />
+                )}
+                name="name"
+              />
+              {errors.name && (
+                <Text style={profileCreationStyles.errorText}>
+                  {errors.name.message}
+                </Text>
+              )}
+            </View>
             <View style={styles.inputContainer}>
               <Text style={styles.inputTextStyle}>About Me</Text>
               <Controller
@@ -609,7 +747,11 @@ const EditProfile = ({route}: EditProfileProps) => {
         </View>
       </ScrollView>
       <View style={styles.fabContainer}>
-        <CircleButton onPress={() => console.log('Pressed')} isCheck />
+        <CircleButton
+          onPress={handleSubmit(onSubmit)}
+          isCheck
+          loading={loading}
+        />
       </View>
     </SafeAreaView>
   );

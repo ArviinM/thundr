@@ -209,16 +209,16 @@ export type CustomerDetailsRequest = {
   bio: string;
   work: string;
   location: string;
-  hobbies: string;
-  height: string;
-  starSign: string;
-  education: string;
-  drinking: string;
-  smoking: string;
-  religion: string;
-  pet: string;
-  politics: string;
-  personalityType: string;
+  hobbies?: string;
+  height?: string;
+  starSign?: string;
+  education?: string;
+  drinking?: string;
+  smoking?: string;
+  religion?: string;
+  pet?: string;
+  politics?: string;
+  personalityType?: string;
 };
 
 export type CustomerDetailsResponse = {

@@ -192,7 +192,7 @@ const CustomerAdditionalInfos = () => {
                           render={({field: {onChange, value}}) => (
                             <CustomDropdown
                               data={inchesOptions}
-                              placeholder="11'"
+                              placeholder="11''"
                               value={value}
                               onChange={item => {
                                 onChange(item.value);

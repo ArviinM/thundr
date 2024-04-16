@@ -87,9 +87,20 @@ interface FeetAndInches {
   inches: string;
 }
 
-export const parseFeetAndInches = (inputString: string): FeetAndInches => {
-  const [feetPart, inchesPart] = inputString.split(' ');
-  const feet = feetPart + "'";
-  const inches = inchesPart + "''";
+export const parseFeetAndInches = (inputString?: string): FeetAndInches => {
+  if (!inputString) {
+    return {feet: '', inches: ''};
+  }
+
+  const regex = /(\d+)'\s*(\d+)"/;
+  const match = inputString.match(regex);
+
+  if (!match) {
+    return {feet: '', inches: ''};
+  }
+
+  const feet = match[1] + "'";
+  const inches = match[2] + '"';
+
   return {feet, inches};
 };
