@@ -16,6 +16,7 @@ interface CircleButtonProps {
   textStyle?: TextStyle;
   disabled?: boolean;
   loading?: boolean;
+  isCheck?: boolean;
 }
 
 const CircleButton: React.FC<CircleButtonProps> = ({
@@ -24,6 +25,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   textStyle,
   disabled = false,
   loading = false,
+  isCheck = false,
 }) => {
   const handlePress = () => {
     if (!loading) {
@@ -36,9 +38,13 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       {loading ? (
         <ActivityIndicator color={COLORS.primary1} />
       ) : disabled ? (
-        <Image source={IMAGES.nextCircleDisabled} />
+        <Image
+          source={
+            isCheck ? IMAGES.checkIconDisabled : IMAGES.nextCircleDisabled
+          }
+        />
       ) : (
-        <Image source={IMAGES.nextCircle} />
+        <Image source={isCheck ? IMAGES.checkIcon : IMAGES.nextCircle} />
       )}
     </TouchableOpacity>
   );

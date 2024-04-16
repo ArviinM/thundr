@@ -1,17 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import Button from './InterestButton.tsx';
 
 interface ButtonContainerProps {
   options: string[];
   onSelectionChange: (selectedOptions: string[]) => void;
+  selectedOptions?: string[]; // Add selectedOptions prop
 }
 
 const InterestButtonContainer: React.FC<ButtonContainerProps> = ({
   options,
   onSelectionChange,
+  selectedOptions: propSelectedOptions,
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+    propSelectedOptions || [],
+  );
+
+  useEffect(() => {
+    if (propSelectedOptions) {
+      setSelectedOptions(propSelectedOptions);
+    }
+  }, [propSelectedOptions]);
 
   const handleSelect = (option: string) => {
     const isSelected = selectedOptions.includes(option);

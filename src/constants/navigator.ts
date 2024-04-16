@@ -3,6 +3,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {
   CompatibilityQuestionsRequest,
+  CustomerData,
+  CustomerMatchResponse,
   EmailValidationResponse,
   EmailVerificationResponse,
   MobileValidationResponse,
@@ -42,4 +44,9 @@ export type RootNavigationParams = {
 
   //Match Found
   MatchFound: {sub?: string; isMare: boolean};
+
+  // Profile
+  ProfileStack: undefined;
+  Profile: undefined;
+  EditProfile: CustomerData;
 };

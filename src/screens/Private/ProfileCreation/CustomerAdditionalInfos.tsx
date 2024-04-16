@@ -192,7 +192,7 @@ const CustomerAdditionalInfos = () => {
                           render={({field: {onChange, value}}) => (
                             <CustomDropdown
                               data={inchesOptions}
-                              placeholder="11'"
+                              placeholder="11''"
                               value={value}
                               onChange={item => {
                                 onChange(item.value);
@@ -254,7 +254,7 @@ const CustomerAdditionalInfos = () => {
                       {flexDirection: 'column', gap: 3},
                     ]}>
                     <Text style={profileCreationStyles.dropdownTitle}>
-                      Height
+                      Education
                     </Text>
                     <View style={profileCreationStyles.dropdownContainer2}>
                       <View style={profileCreationStyles.dropdownSection}>

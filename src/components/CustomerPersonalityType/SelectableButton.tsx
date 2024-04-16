@@ -20,15 +20,21 @@ interface SelectableButtonProps {
   buttonData: ButtonData[];
   onPress?: (index: number, text: string) => void;
   disabledIndex?: number;
+  customerPersonality?: string;
 }
 
 const SelectableButton = ({
   buttonData,
   onPress,
   disabledIndex,
+  customerPersonality,
 }: SelectableButtonProps) => {
   const [selectedButton, setSelectedButton] = useState<number | null>(
-    buttonData.length === 1 ? 0 : null,
+    customerPersonality
+      ? buttonData.findIndex(button => button.title === customerPersonality)
+      : buttonData.length === 1
+      ? 0
+      : null,
   );
 
   const handleButtonPress = (index: number, text: string) => {
