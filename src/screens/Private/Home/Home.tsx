@@ -9,7 +9,11 @@ import {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
-import {PERMISSIONS, request} from 'react-native-permissions';
+import {
+  PERMISSIONS,
+  request,
+  requestNotifications,
+} from 'react-native-permissions';
 import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
 
 import Card, {cardHeight, cardWidth} from '../../../components/Home/Card.tsx';
@@ -27,6 +31,12 @@ import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {scale} from '../../../utils/utils.ts';
 import {COLORS} from '../../../constants/commons.ts';
+import {
+  getDeviceToken,
+  registerDeviceForRemoteMessages,
+  unregisterDeviceForRemoteMessages,
+} from '../../../utils/notificationUtils.ts';
+import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
 
 const Home = () => {
   const auth = useAuth();
@@ -43,6 +53,8 @@ const Home = () => {
   const jowaTranslations = useSharedValue<number[]>(new Array(10).fill(0));
   const isMare = useSharedValue<boolean>(false);
   const [isLoadingNewData, setIsLoadingNewData] = useState(false);
+
+  const registerToken = useRegisterToken();
 
   const [visible, isVisible] = useState(true);
 
@@ -135,6 +147,21 @@ const Home = () => {
       } else {
         console.log('Location permission denied on iOS');
       }
+
+      const notificationResult = await requestNotifications(['alert', 'sound']);
+      if (notificationResult.status === 'granted') {
+        const fcm = await getDeviceToken();
+
+        if (auth.authData?.sub && fcm) {
+          await registerToken.mutateAsync({
+            subId: auth.authData.sub,
+            token: fcm,
+          });
+        }
+      } else {
+        await unregisterDeviceForRemoteMessages();
+        console.log('user notification is not blocked');
+      }
     }
 
     if (Platform.OS === 'android') {
@@ -165,6 +192,22 @@ const Home = () => {
         }
       } else {
         console.log('Location permission denied on Android');
+      }
+
+      const notificationResult = await requestNotifications(['alert', 'sound']);
+      if (notificationResult.status === 'granted') {
+        await registerDeviceForRemoteMessages();
+        const fcm = await getDeviceToken();
+
+        if (auth.authData?.sub && fcm) {
+          await registerToken.mutateAsync({
+            subId: auth.authData.sub,
+            token: fcm,
+          });
+        }
+        console.log(fcm);
+      } else {
+        console.log('user notification is not blocked');
       }
     }
   };

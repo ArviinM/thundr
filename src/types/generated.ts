@@ -310,3 +310,9 @@ export type CustomerData = {
 export type CustomerProfileRequest = {
   sub: string;
 };
+
+// Save FCM Token
+export type CustomerFCMTokenRequest = {
+  subId: string;
+  token: string;
+};

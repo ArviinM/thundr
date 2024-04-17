@@ -23,20 +23,20 @@ export const HomeTab = () => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginHorizontal: 10,
+          justifyContent: 'space-between',
+          marginHorizontal: 12,
         }}>
         {/* Center icons vertically */}
         <TouchableOpacity>
           <Image
             source={IMAGES.bell}
-            style={{height: scale(40), width: scale(40)}}
+            style={{height: scale(36), width: scale(36)}}
           />
         </TouchableOpacity>
         <TouchableOpacity>
           <Image
             source={IMAGES.filter}
-            style={{height: scale(40), width: scale(40)}}
+            style={{height: scale(36), width: scale(36)}}
           />
         </TouchableOpacity>
       </View>
