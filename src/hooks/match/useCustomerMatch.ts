@@ -28,7 +28,7 @@ export function useCustomerMatch() {
           statusCode: response.status,
         } as Error;
       }
-
+      console.log(response.data.data);
       return response.data.data;
     },
     onError: showErrorToast,

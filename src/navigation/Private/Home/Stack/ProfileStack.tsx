@@ -13,7 +13,7 @@ export const ProfileStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
       <Stack.Screen
         name="Profile"
         component={Profile}
