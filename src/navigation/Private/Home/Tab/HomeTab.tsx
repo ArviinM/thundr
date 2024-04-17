@@ -7,7 +7,7 @@ import {Image, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {moderateScale} from '../../../../utils/utils.ts';
+import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {ProfileStack} from '../Stack/ProfileStack.tsx';
 
 export const HomeTab = () => {
@@ -23,15 +23,21 @@ export const HomeTab = () => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'space-evenly',
           marginHorizontal: 10,
         }}>
         {/* Center icons vertically */}
-        <TouchableOpacity style={{paddingHorizontal: 10}}>
-          <Image source={IMAGES.bell} />
+        <TouchableOpacity>
+          <Image
+            source={IMAGES.bell}
+            style={{height: scale(40), width: scale(40)}}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={IMAGES.filter} />
+          <Image
+            source={IMAGES.filter}
+            style={{height: scale(40), width: scale(40)}}
+          />
         </TouchableOpacity>
       </View>
     );
@@ -41,6 +47,7 @@ export const HomeTab = () => {
     <Tab.Navigator
       initialRouteName={'Home'}
       screenOptions={{
+        headerTitleAlign: 'center',
         headerStyle: {
           backgroundColor: COLORS.white,
         },
@@ -62,7 +69,11 @@ export const HomeTab = () => {
           headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
-            <Image source={focused ? IMAGES.profileOn : IMAGES.profileOff} />
+            <Image
+              source={focused ? IMAGES.profileOn : IMAGES.profileOff}
+              style={{height: scale(28), width: scale(28)}}
+              resizeMode="contain"
+            />
           ),
         }}
       />
@@ -76,6 +87,8 @@ export const HomeTab = () => {
               source={
                 focused ? IMAGES.lightningRoundOn : IMAGES.lightningRoundOff
               }
+              style={{height: scale(38), width: scale(38)}}
+              resizeMode="contain"
             />
           ),
         }}
@@ -88,10 +101,11 @@ export const HomeTab = () => {
           headerTitle: () => <Header />,
           headerRight: () => <HomeRightHeader />,
           tabBarShowLabel: false,
-
           tabBarIcon: ({focused}) => (
             <Image
               source={focused ? IMAGES.lightningOn : IMAGES.lightningOff}
+              style={{height: scale(30), width: scale(30)}}
+              resizeMode="contain"
             />
           ),
         }}
@@ -105,6 +119,8 @@ export const HomeTab = () => {
           tabBarIcon: ({focused}) => (
             <Image
               source={focused ? IMAGES.possiblesOn : IMAGES.possiblesOff}
+              style={{height: scale(30), width: scale(30)}}
+              resizeMode="contain"
             />
           ),
         }}
@@ -116,7 +132,11 @@ export const HomeTab = () => {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
-            <Image source={focused ? IMAGES.chatOn : IMAGES.chatOff} />
+            <Image
+              source={focused ? IMAGES.chatOn : IMAGES.chatOff}
+              style={{height: scale(30), width: scale(30)}}
+              resizeMode="contain"
+            />
           ),
         }}
       />

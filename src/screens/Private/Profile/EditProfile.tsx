@@ -34,8 +34,13 @@ import {
   starSignOptions,
 } from '../../../utils/dropdownOptions.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
-import {moderateScale, parseFeetAndInches} from '../../../utils/utils.ts';
-import {useAuth} from '../../../providers/Auth.tsx';
+import {
+  moderateScale,
+  parseFeetAndInches,
+  scale,
+  verticalScale,
+} from '../../../utils/utils.ts';
+
 import {CustomerDetailsRequest} from '../../../types/generated.ts';
 import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
 import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
@@ -251,15 +256,15 @@ const EditProfile = ({route}: EditProfileProps) => {
                   onPhotoUpload={image =>
                     handlePhotoUpload(image, true, customerPhoto[0]?.id)
                   }
-                  imageWidth={157}
-                  imageHeight={244}
+                  imageWidth={scale(140)}
+                  imageHeight={scale(200)}
                 />
               ) : (
                 <PhotoUpload
                   photoData={null}
                   onPhotoUpload={image => handlePhotoUpload(image, true)}
-                  imageWidth={157}
-                  imageHeight={244}
+                  imageWidth={scale(140)}
+                  imageHeight={verticalScale(170)}
                 />
               )}
             </View>
@@ -275,8 +280,8 @@ const EditProfile = ({route}: EditProfileProps) => {
                       customerPhoto?.[index + 1]?.id,
                     )
                   }
-                  imageWidth={117}
-                  imageHeight={117}
+                  imageWidth={scale(90)}
+                  imageHeight={scale(90)}
                   isSubPhoto
                 />
               ))}
@@ -735,7 +740,7 @@ const EditProfile = ({route}: EditProfileProps) => {
                 </View>
               </View>
             </View>
-            <View style={{gap: 10}}>
+            <View style={{gap: 10, marginBottom: 100}}>
               <Text style={styles.inputTextStyle}>Personality Type</Text>
               <SelectableButton
                 buttonData={personalityData}
@@ -784,7 +789,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: width / 1.77,
     marginHorizontal: 6,
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     // flexWrap: 'wrap',
     // justifyContent: 'space-between',
   },
@@ -804,13 +809,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
-  mainContainer: {marginHorizontal: 40, gap: 10},
+  mainContainer: {marginHorizontal: 20, gap: 10},
   inputContainer: {},
   inputTextStyle: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: moderateScale(20),
     color: COLORS.primary1,
     letterSpacing: -0.4,
+    marginBottom: 6,
   },
   bodyDropdownContainer: {
     marginTop: 20,

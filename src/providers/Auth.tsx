@@ -86,9 +86,9 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       setAuthData(result);
 
       await AsyncStorage.setItem('@AuthData', JSON.stringify(result));
-      await queryClient.refetchQueries({
-        queryKey: ['get-match-list', result.sub],
-      });
+      // await queryClient.refetchQueries({
+      //   queryKey: ['get-match-list', result.sub],
+      // });
     } catch (error) {
       console.error('Error signing in:', error);
     }
