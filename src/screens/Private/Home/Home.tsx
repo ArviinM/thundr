@@ -9,7 +9,6 @@ import {
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
 
@@ -33,13 +32,10 @@ const Home = () => {
   const auth = useAuth();
   const matchLocation = useCustomerMatchLocation();
   const matchList = useGetMatchList({sub: auth.authData?.sub || ''});
-  const [loading, setLoading] = useState(false);
 
   const swipeMatch = useCustomerMatch();
   const query = useQueryClient(queryClient);
 
-  const bottomTabHeight = useBottomTabBarHeight();
-  const [users, setUsers] = useState<CustomerMatchResponse[]>([]);
   const [index, setIndex] = useState(0);
 
   const activeIndex = useSharedValue(0);
@@ -81,7 +77,6 @@ const Home = () => {
 
         jowaTranslations.modify(value => {
           'worklet';
-          // Reset all values to 0
           for (let i = 0; i < value.length; i++) {
             value[i] = 0;
           }
@@ -89,7 +84,6 @@ const Home = () => {
         });
         mareTranslations.modify(value => {
           'worklet';
-          // Reset all values to 0
           for (let i = 0; i < value.length; i++) {
             value[i] = 0;
           }
@@ -184,24 +178,24 @@ const Home = () => {
       style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
-      <GenericModal
-        isVisible={visible}
-        title="Dev Log Sprint #2"
-        content={
-          <Text style={{fontFamily: 'Montserrat-Regular'}}>
-            Welcome Testers! 🦈 {'\n\n'}
-            Here's a work in progress of Sprint 2! {'\n\n'}I have made a good
-            progress with the swiping animations and also adding the instagram
-            story like feature. {'\n\n'}I have missed out to include the
-            Customer Personality Type last Sprint. I added it now for this
-            build, kindly test and confirm.
-            {'\n\n'}
-            Big Sharky Dev, {'\n'}Tanders, Inc
-          </Text>
-        }
-        buttonText="Close"
-        onClose={() => isVisible(false)}
-      />
+      {/*<GenericModal*/}
+      {/*  isVisible={visible}*/}
+      {/*  title="Dev Log Sprint #2 & #3"*/}
+      {/*  content={*/}
+      {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
+      {/*      Welcome Testers! 🦈 {'\n\n'}*/}
+      {/*      Here's a work in progress of Sprint 2! {'\n\n'}I have made a good*/}
+      {/*      progress with the swiping animations and also adding the instagram*/}
+      {/*      story like feature. {'\n\n'}I have missed out to include the*/}
+      {/*      Customer Personality Type last Sprint. I added it now for this*/}
+      {/*      build, kindly test and confirm.*/}
+      {/*      {'\n\n'}*/}
+      {/*      Big Sharky Dev, {'\n'}Tanders, Inc*/}
+      {/*    </Text>*/}
+      {/*  }*/}
+      {/*  buttonText="Close"*/}
+      {/*  onClose={() => isVisible(false)}*/}
+      {/*/>*/}
       <View
         style={{
           flex: 1,
