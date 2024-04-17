@@ -250,6 +250,23 @@ export type CustomerMatchResponse = {
   customerData: CustomerData;
 };
 
+export type CustomerMatchPostRequest = {
+  sub: string;
+  target: string;
+  tag: 'Mare' | 'Jowa';
+};
+
+export type CustomerMatchPostResponse = {
+  sub: string;
+  target: string;
+  tag: 'MARE' | 'JOWA';
+  dateTime: string;
+  ttl: string;
+  match: boolean;
+  chatUUID: string;
+  compatibilityScore: string;
+};
+
 export type CustomerDetails = {
   bio: string;
   work: string;

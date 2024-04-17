@@ -24,7 +24,6 @@ type Card = {
   numOfCards: number;
   index: number;
   activeIndex: SharedValue<number>;
-  onResponse: (a: boolean, b: CustomerMatchResponse) => void;
   mareTranslation: SharedValue<number[]>;
   jowaTranslation: SharedValue<number[]>;
   isMare: SharedValue<boolean>;

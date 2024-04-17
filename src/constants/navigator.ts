@@ -10,8 +10,11 @@ import {
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 export const Stack = createNativeStackNavigator();
 export const Tab = createBottomTabNavigator();
+export const Drawer = createDrawerNavigator();
+
 export const navigationRef = createNavigationContainerRef();
 
 export type RootNavigationParams = {

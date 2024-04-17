@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {Image, Platform, StyleSheet, View} from 'react-native';
-import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 
+import {GestureDetector, Gesture} from 'react-native-gesture-handler';
+import {initialWindowMetrics} from 'react-native-safe-area-context';
 import Animated, {
   interpolate,
   runOnJS,
@@ -10,18 +11,18 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+
 import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
-import {MockDataItem} from '../../screens/Private/Home/mock.ts';
-import {initialWindowMetrics} from 'react-native-safe-area-context';
+import {CustomerMatchResponse} from '../../types/generated.ts';
 
 type Swiping = {
   activeIndex: SharedValue<number>;
   mareTranslation: SharedValue<any[]>;
   jowaTranslation: SharedValue<any[]>;
   index: number;
-  onResponse: (a: boolean, b: MockDataItem) => void;
-  user: MockDataItem[];
+  onResponse: (a: 'Mare' | 'Jowa', b: CustomerMatchResponse) => void;
+  user: CustomerMatchResponse[];
   isMare: SharedValue<boolean>;
 };
 
@@ -79,7 +80,6 @@ const Swiping = ({
         if (event.translationX) {
           runOnJS(setMareTapped)(true);
           runOnJS(setCurrentImage)('thundrMareGlow');
-          // runOnJS(setSwiping)({isMare: true, activeIndex: index});
           isMare.value = true;
         }
       }
@@ -90,7 +90,6 @@ const Swiping = ({
         const threshold = width / 3;
 
         if (distanceFromCenter < threshold) {
-          mareTranslation.value[index] = withSpring(0);
           mareTranslation.modify(value => {
             'worklet';
             value[index] = withSpring(0);
@@ -108,7 +107,6 @@ const Swiping = ({
               velocity: event.translationX,
             },
           );
-
           jowaTranslation.value[index] = withSpring(
             Math.sign(event.translationX) * 600,
             {
@@ -117,8 +115,7 @@ const Swiping = ({
           );
 
           activeIndex.value = withSpring(index + 1);
-          runOnJS(onResponse)(event.translationX > 0, user[index]);
-          console.log(true);
+          runOnJS(onResponse)('Mare', user[index]);
         }
 
         translationXMare.value = withSpring(0);
@@ -156,18 +153,17 @@ const Swiping = ({
         if (event.translationX) {
           runOnJS(setJowaTapped)(true);
           runOnJS(setCurrentImage)('thundrJowaGlow');
-          // runOnJS(setSwiping)({isMare: false, activeIndex: index});
           isMare.value = false;
         }
       }
     })
     .onEnd(event => {
+      console.log(event.translationX);
       if (pressed.value) {
         const distanceFromCenter = Math.abs(event.translationX);
         const threshold = width / 3;
 
         if (distanceFromCenter < threshold) {
-          jowaTranslation.value[index] = withSpring(0);
           jowaTranslation.modify(value => {
             'worklet';
             value[index] = withSpring(0);
@@ -178,8 +174,6 @@ const Swiping = ({
             value[index] = withSpring(0);
             return value;
           });
-
-          console.log(false);
         } else {
           jowaTranslation.value[index] = withSpring(
             Math.sign(event.translationX) * 600,
@@ -195,8 +189,7 @@ const Swiping = ({
           );
 
           activeIndex.value = withSpring(index + 1);
-          runOnJS(onResponse)(event.translationX > 0, user[index]);
-          console.log(true);
+          runOnJS(onResponse)('Jowa', user[index]);
         }
 
         translationXJowa.value = withSpring(0);
@@ -209,7 +202,7 @@ const Swiping = ({
     });
 
   return (
-    <View
+    <Animated.View
       style={{
         flexDirection: 'row',
         flex: 1,
@@ -252,7 +245,6 @@ const Swiping = ({
           )}
         </Animated.View>
       </GestureDetector>
-      {/*  Investigate this if there are any other ways to simplify it and make it not flicker*/}
 
       <View>
         {currentImage === 'thundrHome' && (
@@ -277,7 +269,7 @@ const Swiping = ({
           />
         )}
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

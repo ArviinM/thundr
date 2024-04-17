@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Platform, StatusBar, Text, View} from 'react-native';
-
-import {COLORS, height, width} from '../../../constants/commons.ts';
+import {Platform, StatusBar, StyleSheet, Text, View} from 'react-native';
 
 import {useEffect, useState} from 'react';
 import {
@@ -10,46 +7,50 @@ import {
   useAnimatedReaction,
   useSharedValue,
 } from 'react-native-reanimated';
-import Card from '../../../components/Home/Card.tsx';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import Swiping from '../../../components/Home/Swiping.tsx';
-import GenericModal from '../../../components/shared/GenericModal.tsx';
-import {MockData, MockDataItem} from './mock.ts';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import LottieView from 'lottie-react-native';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
-import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
+
+import Card, {cardHeight, cardWidth} from '../../../components/Home/Card.tsx';
+import Swiping from '../../../components/Home/Swiping.tsx';
+import GenericModal from '../../../components/shared/GenericModal.tsx';
 import {useAuth} from '../../../providers/Auth.tsx';
+import {Loading} from '../../../components/shared/Loading.tsx';
+
+import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
 import {useCustomerMatchLocation} from '../../../hooks/match/useCustomerMatchLocation.ts';
 import {useGetMatchList} from '../../../hooks/match/useGetMatchList.ts';
-import {Loading} from '../../../components/shared/Loading.tsx';
 import {CustomerMatchResponse} from '../../../types/generated.ts';
+import {useCustomerMatch} from '../../../hooks/match/useCustomerMatch.ts';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryClient} from '../../../utils/queryClient.ts';
+import {scale} from '../../../utils/utils.ts';
+import {COLORS} from '../../../constants/commons.ts';
 
 const Home = () => {
   const auth = useAuth();
   const matchLocation = useCustomerMatchLocation();
   const matchList = useGetMatchList({sub: auth.authData?.sub || ''});
-  const [loading, setLoading] = useState(true);
+
+  const swipeMatch = useCustomerMatch();
+  const query = useQueryClient(queryClient);
+
+  const [index, setIndex] = useState(0);
+
+  const activeIndex = useSharedValue(0);
+  const mareTranslations = useSharedValue<number[]>(new Array(10).fill(0));
+  const jowaTranslations = useSharedValue<number[]>(new Array(10).fill(0));
+  const isMare = useSharedValue<boolean>(false);
+  const [isLoadingNewData, setIsLoadingNewData] = useState(false);
+
+  const [visible, isVisible] = useState(true);
 
   useEffect(() => {
     if (matchList.isPending) {
       matchList.refetch();
     }
   }, []);
-
-  const bottomTabHeight = useBottomTabBarHeight();
-  const [users, setUsers] = useState<CustomerMatchResponse[]>([]);
-  const [index, setIndex] = useState(0);
-
-  const activeIndex = useSharedValue(0);
-  const mareTranslations = useSharedValue<number[]>(
-    new Array(MockData.length).fill(0),
-  );
-  const jowaTranslations = useSharedValue<number[]>(
-    new Array(MockData.length).fill(0),
-  );
-  const isMare = useSharedValue<boolean>(false);
-
-  const [visible, isVisible] = useState(true);
 
   useAnimatedReaction(
     () => activeIndex.value,
@@ -61,50 +62,52 @@ const Home = () => {
   );
 
   useEffect(() => {
-    if (matchList.isPending && matchList.isLoading) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-      setUsers(matchList.data as CustomerMatchResponse[]);
-    }
-  }, [matchList.data, matchList.isLoading, matchList.isPending]);
+    if (index && matchList.data) {
+      if (index > matchList.data.length - 1) {
+        console.log('Fetching Matches 🚀');
 
-  useEffect(() => {
-    if (
-      users &&
-      matchList.isSuccess &&
-      !matchList.isError &&
-      !matchList.isPending
-    ) {
-      if (index > ((users && users.length) || 0) - 3) {
-        console.log('Last 2 cards remaining. Fetch more!');
+        setIsLoadingNewData(true); // Start Loading Indicator
+        query.invalidateQueries({queryKey: ['get-match-list']});
 
-        mareTranslations.modify(value => {
-          'worklet';
-          value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-          return value;
+        matchList.refetch().finally(() => {
+          setIsLoadingNewData(false); // Stop Loading Indicator
+          runOnJS(setIndex)(0);
+          activeIndex.value = 0;
         });
+
         jowaTranslations.modify(value => {
           'worklet';
-          value.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+          for (let i = 0; i < value.length; i++) {
+            value[i] = 0;
+          }
           return value;
         });
-        // runOnJS(setUsers)(prevState => [...(prevState || []), ...MockData]);
+        mareTranslations.modify(value => {
+          'worklet';
+          for (let i = 0; i < value.length; i++) {
+            value[i] = 0;
+          }
+          return value;
+        });
       }
     }
-  }, [
-    index,
-    mareTranslations,
-    mareTranslations.value,
-    jowaTranslations,
-    jowaTranslations.value,
-    users,
-    users?.length,
-  ]);
+  }, [index]);
 
-  const onResponse = (res: boolean, swipedUser: MockDataItem) => {
-    console.log('on Response: ', res);
-    console.log(swipedUser);
+  const onResponse = async (
+    tag: 'Mare' | 'Jowa',
+    swipedUser: CustomerMatchResponse,
+  ) => {
+    try {
+      if (auth.authData?.sub) {
+        await swipeMatch.mutateAsync({
+          sub: auth.authData.sub,
+          target: swipedUser.sub,
+          tag: tag,
+        });
+      }
+    } catch (error) {
+      console.warn('Error updating swipe match:', error);
+    }
   };
 
   const requestLocationPermission = async () => {
@@ -177,7 +180,7 @@ const Home = () => {
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
       {/*<GenericModal*/}
       {/*  isVisible={visible}*/}
-      {/*  title="Dev Log Sprint #2"*/}
+      {/*  title="Dev Log Sprint #2 & #3"*/}
       {/*  content={*/}
       {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
       {/*      Welcome Testers! 🦈 {'\n\n'}*/}
@@ -199,23 +202,60 @@ const Home = () => {
           alignItems: 'center',
           backgroundColor: COLORS.white,
         }}>
-        {loading ? (
+        {isLoadingNewData ? (
+          <Loading />
+        ) : (mareTranslations.value.length && jowaTranslations.value.length) ===
+          0 ? (
+          <Loading />
+        ) : matchList.isLoading && matchList.isRefetching && !matchList.data ? (
           // TODO: Temporary Loading Screen - will add lazy loading here
           <Loading />
         ) : (
-          users?.map((user, index) => (
+          matchList.data?.map((user, index) => (
             <Card
-              key={`${user.sub}-${index}-`}
+              key={`${user.sub}-${index}-${user.customerData.name}`}
               user={user}
-              numOfCards={users.length}
+              numOfCards={matchList.data?.length}
               index={index}
               activeIndex={activeIndex}
-              onResponse={onResponse}
               mareTranslation={mareTranslations}
               jowaTranslation={jowaTranslations}
               isMare={isMare}
             />
           ))
+        )}
+        {matchList.data?.length === 0 && !isLoadingNewData && (
+          <View style={styles.noMatchesContainer}>
+            {/*<Image*/}
+            {/*  source={require('../../../assets/empty_matches.png')}*/}
+            {/*  style={styles.noMatchesImage}*/}
+            {/*/>*/}
+            <LottieView
+              source={require('../../../assets/animations/looking_test.json')}
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              autoPlay
+              loop
+            />
+            <Text style={styles.noMatchesTitle}>Looking for Matches...</Text>
+            <Text style={styles.noMatchesSubtitle}>
+              It seems like there's no one new around you. How about trying
+              these?
+            </Text>
+            <Text style={styles.noMatchesSubtitle}>
+              {'\n'}- Try adjusting your filters to discover more people
+            </Text>
+            <Text style={styles.noMatchesSubtitle}>
+              - Complete your profile to increase your visibility
+            </Text>
+            <Text style={styles.noMatchesSubtitle}>
+              - Get more matches by inviting your friends
+            </Text>
+
+            {/* Suggestions Section - See Below */}
+          </View>
         )}
       </View>
       <View
@@ -225,18 +265,58 @@ const Home = () => {
           left: 0,
           right: 0,
         }}>
-        <Swiping
-          activeIndex={activeIndex}
-          mareTranslation={mareTranslations}
-          jowaTranslation={jowaTranslations}
-          index={index}
-          onResponse={onResponse}
-          user={users}
-          isMare={isMare}
-        />
+        {(mareTranslations.value.length && jowaTranslations.value.length) ===
+        0 ? (
+          <Loading />
+        ) : matchList.isLoading && !matchList.data ? (
+          <Loading />
+        ) : (
+          <Swiping
+            activeIndex={activeIndex}
+            mareTranslation={mareTranslations}
+            jowaTranslation={jowaTranslations}
+            index={index}
+            onResponse={onResponse}
+            user={matchList?.data || []}
+            isMare={isMare}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  noMatchesContainer: {
+    backgroundColor: '#efe6e6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    aspectRatio: 1 / 1.32,
+    borderRadius: 15,
+    margin: 2,
+    elevation: 3,
+    height: cardHeight / 1.67,
+    width: cardWidth,
+    paddingHorizontal: scale(30),
+  },
+  noMatchesImage: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+  },
+  noMatchesTitle: {
+    fontSize: 20,
+    fontFamily: 'ClimateCrisis-Regular',
+    marginBottom: 10,
+    letterSpacing: 0.2,
+    color: COLORS.primary2,
+  },
+  noMatchesSubtitle: {
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Medium',
+    color: 'gray',
+    letterSpacing: -0.4,
+  },
+});
 
 export default Home;
