@@ -18,7 +18,6 @@ const RootNavigation = () => {
   useEffect(() => {
     //background state
     messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(JSON.stringify(remoteMessage, 0, 2));
       if (remoteMessage) {
         const notificationData = remoteMessage.data as RemoteData;
         if (notificationData) {
@@ -36,7 +35,6 @@ const RootNavigation = () => {
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
-        console.log(JSON.stringify(remoteMessage, 0, 2));
         if (remoteMessage) {
           const notificationData = remoteMessage.data as RemoteData;
           if (notificationData) {
@@ -68,7 +66,7 @@ const RootNavigation = () => {
               sub: '',
               isMare: notificationData.data.matchType === 'MARE',
               matchPhoto: notificationData.data.matchPhoto,
-            } as RootNavigationParams['MatchFound']); // Type assertion to ensure correct parameters
+            } as RootNavigationParams['MatchFound']);
           }
           break;
       }
