@@ -20,9 +20,10 @@ import messaging from '@react-native-firebase/messaging';
 import {onMessageReceived} from './src/utils/notificationUtils.ts';
 
 function App(): React.JSX.Element {
-  useEffect(() => {
-    return messaging().onMessage(onMessageReceived);
-  }, []);
+
+  // useEffect(() => {
+  //   return messaging().onMessage(onMessageReceived as any);
+  // }, []);
 
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
