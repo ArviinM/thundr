@@ -5,6 +5,7 @@ import {COLORS} from '../../constants/commons.ts';
 import {useAuth} from '../../providers/Auth.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
+import LottieView from 'lottie-react-native';
 
 const WorkingInProgress = () => {
   const [loading, isLoading] = useState(false);
@@ -26,8 +27,26 @@ const WorkingInProgress = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={{fontFamily: 'Montserrat-Bold', color: COLORS.black}}>
-          Working in Progress by Tanders Team
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <LottieView
+            source={require('../../assets/animations/rawr_shark.json')}
+            style={{
+              width: 400,
+              height: 400,
+            }}
+            autoPlay
+            loop
+          />
+        </View>
+        <Text
+          style={{
+            fontFamily: 'Montserrat-Bold',
+            color: COLORS.black,
+            fontSize: 20,
+            marginHorizontal: 50,
+            textAlign: 'center',
+          }}>
+          Working in Progress{'\n'}Tanders, Inc.⚡️
         </Text>
         <View style={{margin: 20}}>
           {loading ? (
@@ -35,14 +54,6 @@ const WorkingInProgress = () => {
           ) : (
             <Button title="Sign Out" onPress={signOut} />
           )}
-          <Button
-            title="Match Found Trigger - Mare"
-            onPress={() => navigation.navigate('MatchFound', {isMare: true})}
-          />
-          <Button
-            title="Match Found Trigger - Jowa"
-            onPress={() => navigation.navigate('MatchFound', {isMare: false})}
-          />
         </View>
       </View>
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
   initialWindowMetrics,
@@ -15,8 +15,14 @@ import {AuthProvider} from './src/providers/Auth.tsx';
 import toastConfig from './src/utils/toast/toastConfig.tsx';
 import RootNavigation from './src/navigation';
 import {asyncStoragePersister, queryClient} from './src/utils/queryClient.ts';
+import messaging from '@react-native-firebase/messaging';
+import {onMessageReceived} from './src/utils/notificationUtils.ts';
 
 function App(): React.JSX.Element {
+  useEffect(() => {
+    return messaging().onMessage(onMessageReceived);
+  }, []);
+
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <PersistQueryClientProvider

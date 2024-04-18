@@ -310,3 +310,35 @@ export type CustomerData = {
 export type CustomerProfileRequest = {
   sub: string;
 };
+
+// Save FCM Token
+export type CustomerFCMTokenRequest = {
+  subId: string;
+  token: string;
+};
+
+// Notification Data
+
+export type RemoteData = {
+  sentTime: string;
+  matchType: string;
+  channelType: string;
+  targetSub: string;
+  matchPhoto?: string;
+};
+
+export type NotificationData = {
+  body: string;
+  remote: {
+    senderId: string;
+    messageId: string;
+  };
+  title: string;
+  id: string;
+  data: RemoteData;
+  ios: {
+    threadId: string;
+    launchImageName: string;
+    categoryId: string;
+  };
+};

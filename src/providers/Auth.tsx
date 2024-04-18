@@ -17,6 +17,7 @@ import {useAuthStore} from '../store/authStore.ts';
 import {queryClient} from '../utils/queryClient.ts';
 import {usePasswordCreation} from '../hooks/registration/usePasswordCreation.ts';
 import {useRefreshToken} from '../hooks/useRefreshToken.ts';
+import {useRegisterToken} from '../hooks/notification/useRegisterToken.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -40,6 +41,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   const signInUser = useSignInUser();
   const passwordCreation = usePasswordCreation();
   const refreshToken = useRefreshToken();
+  const registerToken = useRegisterToken();
 
   useEffect(() => {
     loadStorageData();
@@ -96,6 +98,9 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   const signOut = async () => {
     try {
+      if (authData?.sub) {
+        await registerToken.mutateAsync({subId: authData.sub, token: ''});
+      }
       // @ts-ignore
       setAuthData(undefined);
       // reset all cache
@@ -103,6 +108,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         queryKey: ['get-match-list', 'customer-compatibility-questions'],
         type: 'all',
       });
+
       queryClient.clear();
       await AsyncStorage.removeItem('@AuthData');
     } catch (error) {

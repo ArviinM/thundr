@@ -17,6 +17,7 @@ import CustomerPhotoBio from '../../screens/Private/ProfileCreation/CustomerPhot
 import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
 import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
+import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -25,7 +26,7 @@ export const AuthenticatedStack = () => {
   if (auth.authData?.forProfileCreation) {
     initialRouteName = 'CustomerName';
   } else {
-    initialRouteName = 'HomeTab';
+    initialRouteName = 'HomeDrawer';
   }
 
   return (
@@ -68,7 +69,11 @@ export const AuthenticatedStack = () => {
           statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
           statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
-        <Stack.Screen name="HomeTab" component={HomeTab} />
+        <Stack.Screen
+          name="HomeDrawer"
+          component={HomeDrawer}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="MatchFound"
           component={MatchFound}

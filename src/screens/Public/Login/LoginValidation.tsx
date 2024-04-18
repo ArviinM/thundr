@@ -27,7 +27,7 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 import {AuthDataRequest} from '../../../types/generated.ts';
 import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
-import {scale, verticalScale} from '../../../utils/utils.ts';
+import {scale} from '../../../utils/utils.ts';
 
 const LoginValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -178,7 +178,10 @@ const LoginValidation = () => {
               </View>
             </View>
             <View style={styles.bodyContainer}>
-              <Text style={styles.textBody}>Trouble signing in?</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ForgetPasswordValidation')}>
+                <Text style={styles.textBody}>Trouble signing in?</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

@@ -34,10 +34,12 @@ import {useAuth} from '../../../providers/Auth.tsx';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
+import {useCustomerMatchLocation} from '../../../hooks/match/useCustomerMatchLocation.ts';
 
 const CustomerRequestAccess = () => {
   const queryClient1 = useQueryClient(queryClient);
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const matchLocation = useCustomerMatchLocation();
 
   const [loading, isLoading] = useState(false);
   const auth = useAuth();
@@ -68,10 +70,22 @@ const CustomerRequestAccess = () => {
       const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
       if (result === 'granted') {
         const position = (await getCurrentLocation()) as GeolocationResponse;
-        console.log('Current position:', position.coords.longitude);
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
       } else if (result === 'blocked') {
         const position = (await getCurrentLocation()) as GeolocationResponse;
-        console.log('Current position:', position.coords.longitude);
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
       } else {
         console.log('Location permission denied on iOS');
       }
@@ -89,15 +103,27 @@ const CustomerRequestAccess = () => {
       const result2 = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
 
       if (result === 'granted') {
-        const position = await getCurrentLocation();
-        console.log('Current position:', position);
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
       } else {
         console.log('Location permission denied on Android');
       }
 
       if (result2 === 'granted') {
-        const position = await getCurrentLocation();
-        console.log('Current position:', position);
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        if (auth.authData?.sub) {
+          await matchLocation.mutateAsync({
+            sub: auth.authData.sub,
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          });
+        }
       } else {
         console.log('Location permission denied on Android');
       }
