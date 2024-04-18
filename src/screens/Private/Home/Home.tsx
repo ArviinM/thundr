@@ -205,7 +205,6 @@ const Home = () => {
             token: fcm,
           });
         }
-        console.log(fcm);
       } else {
         console.log('user notification is not blocked');
       }
@@ -267,6 +266,8 @@ const Home = () => {
             />
           ))
         )}
+
+        {/*TODO: Investigate here why its now being in the buttom */}
         {matchList.data?.length === 0 && !isLoadingNewData && (
           <View style={styles.noMatchesContainer}>
             {/*<Image*/}
@@ -308,10 +309,7 @@ const Home = () => {
           left: 0,
           right: 0,
         }}>
-        {(mareTranslations.value.length && jowaTranslations.value.length) ===
-        0 ? (
-          <Loading />
-        ) : matchList.isLoading && !matchList.data ? (
+        {matchList.isLoading && !matchList.data ? (
           <Loading />
         ) : (
           <Swiping
@@ -341,6 +339,7 @@ const styles = StyleSheet.create({
     height: cardHeight / 1.67,
     width: cardWidth,
     paddingHorizontal: scale(30),
+    position: 'absolute',
   },
   noMatchesImage: {
     width: 150,

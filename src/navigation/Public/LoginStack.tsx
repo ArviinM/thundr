@@ -12,6 +12,7 @@ import {Platform} from 'react-native';
 import EmailValidation from '../../screens/Public/Login/EmailValidation.tsx';
 import EmailVerification from '../../screens/Public/Login/EmailVerification.tsx';
 import PasswordCreation from '../../screens/Public/Login/PasswordCreation.tsx';
+import ForgetPasswordValidation from '../../screens/Public/Login/ForgetPasswordValidation.tsx';
 
 export const LoginStack = () => {
   return (
@@ -25,6 +26,11 @@ export const LoginStack = () => {
       }}>
       <Stack.Group screenOptions={{statusBarColor: COLORS.primary1}}>
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="ForgetPasswordValidation"
+          component={ForgetPasswordValidation}
+          options={{animation: 'fade'}}
+        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{

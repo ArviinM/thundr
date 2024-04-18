@@ -15,7 +15,18 @@ export const Stack = createNativeStackNavigator();
 export const Tab = createBottomTabNavigator();
 export const Drawer = createDrawerNavigator();
 
-export const navigationRef = createNavigationContainerRef();
+export const navigationRef =
+  createNavigationContainerRef<RootNavigationParams>();
+
+export function navigate<RouteName extends keyof RootNavigationParams>(
+  name: RouteName,
+  params?: RootNavigationParams[RouteName],
+) {
+  if (navigationRef.isReady()) {
+    // @ts-ignore
+    navigationRef.navigate(name, params);
+  }
+}
 
 export type RootNavigationParams = {
   HomeTab: undefined;
@@ -33,6 +44,7 @@ export type RootNavigationParams = {
   Login: undefined;
   LoginValidation: undefined;
   Terms: {uri: string};
+  ForgetPasswordValidation: undefined;
   // Profile Creation
   CustomerName: undefined;
   CustomerBirthday: undefined;
@@ -46,7 +58,7 @@ export type RootNavigationParams = {
   Onboarding: undefined;
 
   //Match Found
-  MatchFound: {sub?: string; isMare: boolean};
+  MatchFound: {sub?: string; isMare: boolean; matchPhoto: string};
 
   // Profile
   ProfileStack: undefined;

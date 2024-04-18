@@ -1,29 +1,10 @@
 import messaging from '@react-native-firebase/messaging';
-import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
+import notifee from '@notifee/react-native';
 import {Platform} from 'react-native';
-import {PERMISSIONS, request} from 'react-native-permissions';
-
-// async function onMessageReceived(message: {
-//   notification: {title: any; body: any};
-// }) {
-//   // Create a local notification based on the message data
-//   await notifee.displayNotification({
-//     title: message.notification?.title, // Optional chaining for safety
-//     body: message.notification?.body, // Optional chaining for safety
-//     android: {
-//       channelId: 'default',
-//       importance: AndroidImportance.HIGH,
-//     },
-//   });
-// }
-
-// async function onDisplayNotification(message) {
-//   const channelId = await notifee.createChannel({
-//     id: 'default',
-//     name: 'Default Channel',
-//     sound: 'thundr',
-//   });
-// }
+import {navigationRef, RootNavigationParams} from '../constants/navigator.ts';
+import {NotificationData} from '../types/generated.ts';
+import {useAuth} from '../providers/Auth.tsx';
+import {useAuthStore} from '../store/authStore.ts';
 
 export async function registerDeviceForRemoteMessages() {
   await messaging().registerDeviceForRemoteMessages();
@@ -46,36 +27,28 @@ export async function getDeviceToken(): Promise<string | undefined> {
   }
 }
 
-export async function onMessageReceived(message: any) {
+export async function onMessageReceived(message: NotificationData) {
   await onDisplayNotification(message);
 }
 
-async function onDisplayNotification(message: {data: {channelType: string}}) {
+async function onDisplayNotification(message: NotificationData) {
   if (Platform.OS === 'ios') {
     await notifee.requestPermission();
   }
-  //
-  // const channelId = await notifee.createChannel({
-  //   id: 'default',
-  //   name: 'Default Channel',
-  //   sound: 'thundr',
-  // });
+  const notificationData: NotificationData = message;
+  const authData = useAuthStore.getState().authData;
 
-  if (message.data.channelType === 'MATCH') {
+  if (authData && notificationData.data.channelType === 'MATCH') {
     console.log('MATCHED');
     console.log(message.data);
-    // store.dispatch({
-    //   type: UPDATE_NOTIFICATION_STATE,
-    //   newState: {
-    //     notificationData: {
-    //       isMare: message.data.matchType === 'MARE',
-    //       matchPhoto: message.data.matchPhoto,
-    //     },
-    //   },
-    // });
-    // RootNavigation.navigate('MatchFound');
+
+    navigationRef.navigate('MatchFound', {
+      sub: '',
+      isMare: notificationData.data.matchType === 'MARE',
+      matchPhoto: notificationData.data.matchPhoto,
+    } as RootNavigationParams['MatchFound']);
   }
-  //
+
   // const state = store.getState();
   // const {chatRoomID} = state.persistedState;
   //
