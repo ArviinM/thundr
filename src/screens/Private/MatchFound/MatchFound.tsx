@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {IMAGES} from '../../../constants/images.ts';
 import {moderateScale, scale, verticalScale} from '../../../utils/utils.ts';
-import {MockData, MockDataItem} from '../Home/mock.ts';
+
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {StrokeText} from '@charmy.tech/react-native-stroke-text';
 import Button from '../../../components/shared/Button.tsx';
@@ -32,9 +32,8 @@ type MatchFoundProps = {
 };
 
 const MatchFound = ({route}: MatchFoundProps) => {
-  const {sub, isMare} = route?.params || {};
+  const {isMare, matchPhoto} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const [user, setUser] = useState<MockDataItem>(MockData[0]);
   const insets = useSafeAreaInsets();
 
   return (
@@ -54,11 +53,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
               marginHorizontal: 30,
               alignItems: 'center',
             }}>
-            <Image
-              source={{uri: user.customerData.customerPhoto[0].photoUrl}}
-              style={styles.mainImage}
-            />
-
+            <Image source={{uri: matchPhoto}} style={styles.mainImage} />
             <View style={{marginTop: -66}}>
               <StrokeText
                 text={isMare ? 'You got MARE!' : 'You got JOWA!'}

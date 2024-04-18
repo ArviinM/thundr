@@ -57,6 +57,7 @@ export const IMAGES: Record<any, any> = {
   headerLogo: require('../assets/images/header_icons/thundrHeader.png'),
   bell: require('../assets/images/header_icons/bell.png'),
   filter: require('../assets/images/header_icons/filterMenu.png'),
+  menu: require('../assets/images/header_icons/drawer_icon.png'),
 
   // report icon
   forwardIcon: require('../assets/images/report/forward_icon_report.png'),
@@ -69,4 +70,15 @@ export const IMAGES: Record<any, any> = {
   checkIcon: require('../assets/images/profile_icons/check_icon.png'),
   checkIconDisabled: require('../assets/images/profile_icons/check_icon_disabled.png'),
   minusIcon: require('../assets/images/profile_icons/minus_icon.png'),
+
+  //password assets
+  passwordReset: require('../assets/images/password_reset.png'),
+  passwordResetConfirmed: require('../assets/images/password_reset_confirmed.png'),
+
+  //drawer
+  thundrHorizontal: require('../assets/images/drawer/thundr_horizontal.png'),
+  thundrHomeDrawer: require('../assets/images/drawer/thundr_drawer.png'),
+  thundrBoltDrawer: require('../assets/images/drawer/thundrbolt_drawer.png'),
+  thundrMachiDrawer: require('../assets/images/drawer/thundrmachi_drawer.png'),
+  settings: require('../assets/images/drawer/settings_drawer.png'),
 };

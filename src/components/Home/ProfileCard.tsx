@@ -234,11 +234,11 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
             </View>
           )}
 
-          {user.customerData.customerDetails.politics && (
+          {user.customerData.customerDetails.pet && (
             <View>
-              <Text style={cardStyles.subtitle}>Politics</Text>
+              <Text style={cardStyles.subtitle}>Pet</Text>
               <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.politics}
+                {user.customerData.customerDetails.pet}
               </Text>
             </View>
           )}

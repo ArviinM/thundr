@@ -9,9 +9,11 @@ import {IMAGES} from '../../../../constants/images.ts';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {ProfileStack} from '../Stack/ProfileStack.tsx';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   function Header() {
     return (
       <Image style={{transform: [{scale: 0.85}]}} source={IMAGES.headerLogo} />
@@ -23,20 +25,40 @@ export const HomeTab = () => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginHorizontal: 10,
+          justifyContent: 'space-between',
+          marginHorizontal: 12,
         }}>
         {/* Center icons vertically */}
         <TouchableOpacity>
           <Image
             source={IMAGES.bell}
-            style={{height: scale(40), width: scale(40)}}
+            style={{height: scale(36), width: scale(36)}}
           />
         </TouchableOpacity>
         <TouchableOpacity>
           <Image
             source={IMAGES.filter}
-            style={{height: scale(40), width: scale(40)}}
+            style={{height: scale(36), width: scale(36)}}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  function HomeLeftHeader() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: 12,
+        }}>
+        {/* Center icons vertically */}
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
+          <Image
+            source={IMAGES.menu}
+            style={{height: scale(24), width: scale(24)}}
           />
         </TouchableOpacity>
       </View>
@@ -66,6 +88,7 @@ export const HomeTab = () => {
         name="ProfileStack"
         component={ProfileStack}
         options={{
+          headerLeft: () => <HomeLeftHeader />,
           headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
@@ -81,6 +104,7 @@ export const HomeTab = () => {
         name="Lightning Round"
         component={WorkingInProgress}
         options={{
+          headerLeft: () => <HomeLeftHeader />,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
             <Image
@@ -98,6 +122,7 @@ export const HomeTab = () => {
         name="Home"
         component={Home}
         options={{
+          headerLeft: () => <HomeLeftHeader />,
           headerTitle: () => <Header />,
           headerRight: () => <HomeRightHeader />,
           tabBarShowLabel: false,
@@ -115,6 +140,7 @@ export const HomeTab = () => {
         name="Possibles"
         component={WorkingInProgress}
         options={{
+          headerLeft: () => <HomeLeftHeader />,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
             <Image
@@ -130,6 +156,7 @@ export const HomeTab = () => {
         name="Chat"
         component={WorkingInProgress}
         options={{
+          headerLeft: () => <HomeLeftHeader />,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
             <Image
