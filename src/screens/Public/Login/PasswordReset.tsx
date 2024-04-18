@@ -32,39 +32,15 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import useConfirmationAlert from '../../../components/shared/Alert.tsx';
+import {opacity} from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
+import {scale} from '../../../utils/utils.ts';
 
-const ForgetPasswordValidation = () => {
+const PasswordReset = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const textInputRef = useRef<TextInput>(null);
-
   const [loading, isLoading] = useState(false);
 
-  const emailValidation = useEmailValidation();
-
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Your email address sis is invalid!')
-      .required('Nako mars, we need your email po to send you a verification!'),
-  });
-
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  useEffect(() => {
-    if (textInputRef.current) {
-      textInputRef.current.focus();
-    }
-  }, []);
-
-  const onSubmit = async (data: {email: string}) => {
+  const onSubmit = async () => {
     try {
-      await schema.validate(data);
       isLoading(true);
 
       // const result = await emailValidation.mutateAsync({
@@ -75,24 +51,13 @@ const ForgetPasswordValidation = () => {
       // } as EmailValidationRequest);
 
       isLoading(false);
-      navigation.navigate('ForgetPasswordVerification', {email: data.email});
+      navigation.navigate('PasswordNewValidation');
     } catch (error) {
       // Handle validation errors
-      if (error instanceof yup.ValidationError) {
-        console.error(error.message);
-        isLoading(false);
-      }
-    }
-  };
 
-  const {showConfirmationAlert} = useConfirmationAlert();
-  const handleExit = () => {
-    showConfirmationAlert({
-      title: 'Uy, exit na agad?',
-      message:
-        'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
-      onConfirm: () => navigation.navigate('Login'),
-    });
+      console.error(error);
+      isLoading(false);
+    }
   };
 
   return (
@@ -101,59 +66,31 @@ const ForgetPasswordValidation = () => {
         <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity onPress={handleExit} style={styles.backButton}>
-                <Image source={IMAGES.back} style={styles.backImage} />
+              <TouchableOpacity disabled style={styles.backButton}>
+                <Image
+                  source={IMAGES.back}
+                  style={[styles.backImage, {opacity: 0}]}
+                />
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Forget Password</Text>
+              <Text style={styles.textTitle}>Password Reset</Text>
               <Text style={styles.textSubtitle}>
-                Enter the email address associated with your account.
+                Your password has been successfully reset. Click confirm to set
+                a new password.
               </Text>
-              <View style={styles.numberContainer}>
-                <View style={styles.textInputContainer}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={textInputRef}
-                        style={styles.textInputEmail}
-                        autoComplete="email"
-                        keyboardType="email-address"
-                        placeholder="example@thundr.ph"
-                        inputMode={'email'}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        autoCapitalize="none"
-                        selectionColor={COLORS.primary1}
-                      />
-                    )}
-                    name="email"
-                  />
-                  {errors.email && (
-                    <Text style={styles.errorText}>{errors.email.message}</Text>
-                  )}
-                </View>
-              </View>
-              <View style={styles.bodyContainer}>
-                <Text style={styles.textBody}>
-                  We will email you a code to verify and reset your password.
-                </Text>
-              </View>
+            </View>
+            <View style={{flex: 1, marginTop: scale(40)}}>
+              <Image source={IMAGES.passwordReset} />
             </View>
           </View>
         </KeyboardAwareScrollView>
         <KeyboardStickyView offset={{closed: -20, opened: 0}}>
           <View style={styles.buttonContainer}>
             <GradientButton
-              onPress={handleSubmit(onSubmit)}
+              onPress={onSubmit}
               text="Continue"
               loading={loading}
-              disabled={!isValid}
               buttonStyle={styles.buttonStyle}
               textStyle={styles.buttonTextStyle}
             />
@@ -247,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgetPasswordValidation;
+export default PasswordReset;

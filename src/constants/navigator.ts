@@ -45,6 +45,10 @@ export type RootNavigationParams = {
   LoginValidation: undefined;
   Terms: {uri: string};
   ForgetPasswordValidation: undefined;
+  ForgetPasswordVerification: {email: string};
+  PasswordReset: undefined;
+  PasswordNewValidation: undefined;
+  PasswordResetConfirmed: undefined;
   // Profile Creation
   CustomerName: undefined;
   CustomerBirthday: undefined;

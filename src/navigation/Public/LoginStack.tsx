@@ -13,6 +13,10 @@ import EmailValidation from '../../screens/Public/Login/EmailValidation.tsx';
 import EmailVerification from '../../screens/Public/Login/EmailVerification.tsx';
 import PasswordCreation from '../../screens/Public/Login/PasswordCreation.tsx';
 import ForgetPasswordValidation from '../../screens/Public/Login/ForgetPasswordValidation.tsx';
+import ForgetPasswordVerification from '../../screens/Public/Login/ForgetPasswordVerification.tsx';
+import PasswordReset from '../../screens/Public/Login/PasswordReset.tsx';
+import PasswordNewValidation from '../../screens/Public/Login/PasswordNewValidation.tsx';
+import PasswordResetConfirmed from '../../screens/Public/Login/PasswordResetConfirmed.tsx';
 
 export const LoginStack = () => {
   return (
@@ -26,11 +30,6 @@ export const LoginStack = () => {
       }}>
       <Stack.Group screenOptions={{statusBarColor: COLORS.primary1}}>
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
-          name="ForgetPasswordValidation"
-          component={ForgetPasswordValidation}
-          options={{animation: 'fade'}}
-        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -42,6 +41,31 @@ export const LoginStack = () => {
           statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="LoginValidation" component={LoginValidation} />
+        <Stack.Screen
+          name="ForgetPasswordValidation"
+          component={ForgetPasswordValidation}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="ForgetPasswordVerification"
+          component={ForgetPasswordVerification}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="PasswordReset"
+          component={PasswordReset}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="PasswordNewValidation"
+          component={PasswordNewValidation}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="PasswordResetConfirmed"
+          component={PasswordResetConfirmed}
+          options={{animation: 'fade'}}
+        />
         <Stack.Screen
           name="MobileValidation"
           component={MobileValidation}

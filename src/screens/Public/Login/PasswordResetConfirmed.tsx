@@ -21,7 +21,7 @@ import {
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 
-import {COLORS, SIZES, width} from '../../../constants/commons.ts';
+import {COLORS, height, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {EmailValidationRequest} from '../../../types/generated.ts';
@@ -32,67 +32,23 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import useConfirmationAlert from '../../../components/shared/Alert.tsx';
+import {opacity} from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
+import {scale} from '../../../utils/utils.ts';
 
-const ForgetPasswordValidation = () => {
+const PasswordResetConfirmed = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const textInputRef = useRef<TextInput>(null);
-
   const [loading, isLoading] = useState(false);
 
-  const emailValidation = useEmailValidation();
-
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Your email address sis is invalid!')
-      .required('Nako mars, we need your email po to send you a verification!'),
-  });
-
-  const {
-    control,
-    handleSubmit,
-    formState: {errors, isValid},
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  useEffect(() => {
-    if (textInputRef.current) {
-      textInputRef.current.focus();
-    }
-  }, []);
-
-  const onSubmit = async (data: {email: string}) => {
+  const onSubmit = async () => {
     try {
-      await schema.validate(data);
       isLoading(true);
 
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
-
       isLoading(false);
-      navigation.navigate('ForgetPasswordVerification', {email: data.email});
+      navigation.navigate('LoginValidation');
     } catch (error) {
-      // Handle validation errors
-      if (error instanceof yup.ValidationError) {
-        console.error(error.message);
-        isLoading(false);
-      }
+      console.error(error);
+      isLoading(false);
     }
-  };
-
-  const {showConfirmationAlert} = useConfirmationAlert();
-  const handleExit = () => {
-    showConfirmationAlert({
-      title: 'Uy, exit na agad?',
-      message:
-        'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
-      onConfirm: () => navigation.navigate('Login'),
-    });
   };
 
   return (
@@ -101,59 +57,36 @@ const ForgetPasswordValidation = () => {
         <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity onPress={handleExit} style={styles.backButton}>
-                <Image source={IMAGES.back} style={styles.backImage} />
+              <TouchableOpacity disabled style={styles.backButton}>
+                <Image
+                  source={IMAGES.back}
+                  style={[styles.backImage, {opacity: 0}]}
+                />
               </TouchableOpacity>
             </View>
+            <View style={{flex: 1, marginTop: -60}}>
+              <Image
+                source={IMAGES.passwordResetConfirmed}
+                // style={{width: scale(width / 3), height: scale(height / 3)}}
+                resizeMode={'contain'}
+              />
+            </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Forget Password</Text>
+              <Text style={styles.textTitle}>Success</Text>
               <Text style={styles.textSubtitle}>
-                Enter the email address associated with your account.
+                Hi Mare! Your password has been changed na. Click {'\n'}
+                "Continue" na para maka-login and maka-start swiping for your
+                next Mare or Jowa!
               </Text>
-              <View style={styles.numberContainer}>
-                <View style={styles.textInputContainer}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={textInputRef}
-                        style={styles.textInputEmail}
-                        autoComplete="email"
-                        keyboardType="email-address"
-                        placeholder="example@thundr.ph"
-                        inputMode={'email'}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        autoCapitalize="none"
-                        selectionColor={COLORS.primary1}
-                      />
-                    )}
-                    name="email"
-                  />
-                  {errors.email && (
-                    <Text style={styles.errorText}>{errors.email.message}</Text>
-                  )}
-                </View>
-              </View>
-              <View style={styles.bodyContainer}>
-                <Text style={styles.textBody}>
-                  We will email you a code to verify and reset your password.
-                </Text>
-              </View>
             </View>
           </View>
         </KeyboardAwareScrollView>
         <KeyboardStickyView offset={{closed: -20, opened: 0}}>
           <View style={styles.buttonContainer}>
             <GradientButton
-              onPress={handleSubmit(onSubmit)}
+              onPress={onSubmit}
               text="Continue"
               loading={loading}
-              disabled={!isValid}
               buttonStyle={styles.buttonStyle}
               textStyle={styles.buttonTextStyle}
             />
@@ -170,17 +103,19 @@ const styles = StyleSheet.create({
   backButtonContainer: {flex: 0.1, marginTop: 32, marginLeft: 14},
   backButton: {width: 30, alignItems: 'flex-start'},
   backImage: {alignSelf: 'flex-start'},
-  titleContainer: {flex: 0.9, marginHorizontal: 30, marginTop: 30},
+  titleContainer: {flex: 0.9, marginHorizontal: 30},
   textTitle: {
     fontSize: SIZES.h2,
     fontFamily: 'ClimateCrisis-Regular',
     color: COLORS.primary1,
+    textAlign: 'center',
   },
   textSubtitle: {
     fontSize: SIZES.h5,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.gray,
     letterSpacing: -0.6,
+    textAlign: 'center',
   },
   numberContainer: {
     marginTop: 100,
@@ -247,4 +182,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgetPasswordValidation;
+export default PasswordResetConfirmed;
