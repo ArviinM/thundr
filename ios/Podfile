@@ -43,7 +43,7 @@ if linkage != nil
 end
 
 
-target 'Thundr' do
+target 'ThundrDev' do
   config = use_native_modules!
   
   pod 'Firebase', :modular_headers => true
@@ -67,7 +67,7 @@ target 'Thundr' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'ThundrTests' do
+  target 'ThundrDevTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -79,5 +79,6 @@ target 'Thundr' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+
   end
 end

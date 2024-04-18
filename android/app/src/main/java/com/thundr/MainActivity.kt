@@ -1,4 +1,4 @@
-package ph.thundr.app
+package ph.thundr.app.dev
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
