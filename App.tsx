@@ -1,4 +1,3 @@
-import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 
 import {
@@ -21,7 +20,7 @@ import {onMessageReceived} from './src/utils/notificationUtils.ts';
 
 function App(): React.JSX.Element {
   useEffect(() => {
-    return messaging().onMessage(onMessageReceived as any);
+    return messaging().onMessage(onMessageReceived);
   }, []);
 
   return (
