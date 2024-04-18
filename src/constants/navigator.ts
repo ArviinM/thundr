@@ -68,4 +68,9 @@ export type RootNavigationParams = {
   ProfileStack: undefined;
   Profile: undefined;
   EditProfile: CustomerData;
+
+  // Drawer
+  ThundrBolt: undefined;
+  ThundrMachi: undefined;
+  Settings: undefined;
 };

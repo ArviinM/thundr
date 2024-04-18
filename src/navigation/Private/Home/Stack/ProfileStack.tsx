@@ -4,13 +4,37 @@ import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 import Profile from '../../../../screens/Private/Profile/Profile.tsx';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale} from '../../../../utils/utils.ts';
+import {moderateScale, scale} from '../../../../utils/utils.ts';
 import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
-import {Image, TouchableOpacity} from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {Image, TouchableOpacity, View} from 'react-native';
+import {
+  DrawerActions,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {IMAGES} from '../../../../constants/images.ts';
 export const ProfileStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  function HomeLeftHeader() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: -8,
+        }}>
+        {/* Center icons vertically */}
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
+          <Image
+            source={IMAGES.menu}
+            style={{height: scale(24), width: scale(24)}}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
@@ -18,6 +42,7 @@ export const ProfileStack = () => {
         name="Profile"
         component={Profile}
         options={{
+          headerLeft: () => <HomeLeftHeader />,
           headerShown: true,
           headerStyle: {
             backgroundColor: COLORS.white,
