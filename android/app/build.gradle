@@ -4,7 +4,7 @@ apply plugin: "com.facebook.react"
 apply plugin: "com.github.triplet.play"
 apply plugin: "com.google.gms.google-services"
 
-/**`
+/**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
@@ -76,11 +76,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "ph.thundr.app.dev"
-
-
+    namespace "ph.thundr.app"
     defaultConfig {
-        applicationId "ph.thundr.app.dev"
+        applicationId "ph.thundr.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode project.properties["BUILD_NUMBER"]?BUILD_NUMBER as int :1

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>ThundrDev</string>
+	<string>Thundr</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>ph.thundr.app.dev</string>
+			<string>ph.thundr.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>ph.thundr.app.dev</string>
+				<string>ph.thundr.app</string>
 			</array>
 		</dict>
 		<dict>

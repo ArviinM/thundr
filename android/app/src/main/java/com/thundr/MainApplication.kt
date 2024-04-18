@@ -1,4 +1,4 @@
-package ph.thundr.app.dev
+package ph.thundr.app
 
 import android.app.Application
 import com.facebook.react.PackageList

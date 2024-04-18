@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "ThundrDev.app"
-               BlueprintName = "ThundrDev"
-               ReferencedContainer = "container:ThundrDev.xcodeproj">
+               BuildableName = "Thundr.app"
+               BlueprintName = "Thundr"
+               ReferencedContainer = "container:Thundr.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "ThundrDevTests.xctest"
-               BlueprintName = "ThundrDevTests"
-               ReferencedContainer = "container:ThundrDev.xcodeproj">
+               BuildableName = "ThundrTests.xctest"
+               BlueprintName = "ThundrTests"
+               ReferencedContainer = "container:Thundr.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ThundrDev.app"
-            BlueprintName = "ThundrDev"
-            ReferencedContainer = "container:ThundrDev.xcodeproj">
+            BuildableName = "Thundr.app"
+            BlueprintName = "Thundr"
+            ReferencedContainer = "container:Thundr.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ThundrDev.app"
-            BlueprintName = "ThundrDev"
-            ReferencedContainer = "container:ThundrDev.xcodeproj">
+            BuildableName = "Thundr.app"
+            BlueprintName = "Thundr"
+            ReferencedContainer = "container:Thundr.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
@@ -83,7 +83,6 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
-      customArchiveName = "ThundrDev"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

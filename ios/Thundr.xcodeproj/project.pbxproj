@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* ThundrDevTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ThundrDevTests.m */; };
+		00E356F31AD99517003FC87E /* ThundrTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ThundrTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -30,7 +30,7 @@
 		BDEEC63B36CB41F7BF19DF58 /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 647CB1428D27439084A25D9F /* Montserrat-MediumItalic.ttf */; };
 		C0A69D2D0A094DDE99D821EA /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F639B57B11442FCA9E185A3 /* Montserrat-ExtraBold.ttf */; };
 		C26603FEADC1496083D2DC9E /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7CBDBC525BF4677B6C646D9 /* Montserrat-Medium.ttf */; };
-		C8823F3A38F7B3FEDBCA1F6F /* Pods_Thundr_ThundrDevTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A819D0D306883C00BE147FC8 /* Pods_Thundr_ThundrDevTests.framework */; };
+		C8823F3A38F7B3FEDBCA1F6F /* Pods_Thundr_ThundrTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A819D0D306883C00BE147FC8 /* Pods_Thundr_ThundrTests.framework */; };
 		C9EA084423BDB1E00A3587FF /* Pods_Thundr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0477691671569BA930E60C6B /* Pods_Thundr.framework */; };
 		DBC0F0FB1CDD4E39A7569270 /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE6F322C8C43437DB1047809 /* Montserrat-Light.ttf */; };
 		DFE9BD6255954B8F97FF85AB /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CD315049CF34F11936D3D23 /* Montserrat-ThinItalic.ttf */; };
@@ -44,45 +44,44 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = ThundrDev;
+			remoteInfo = Thundr;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* ThundrDevTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThundrDevTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* ThundrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThundrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* ThundrDevTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThundrDevTests.m; sourceTree = "<group>"; };
-		0477691671569BA930E60C6B /* Pods_ThundrDev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ThundrDev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07F961A680F5B00A75B9A /* ThundrDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThundrDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ThundrDev/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ThundrDev/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ThundrDev/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ThundrDev/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ThundrDev/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-ThundrDev-ThundrDevTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ThundrDev-ThundrDevTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A1D6CF12BBAE74E00D38D4F /* thundr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = thundr.wav; path = ThundrDev/media/thundr.wav; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* ThundrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThundrTests.m; sourceTree = "<group>"; };
+		0477691671569BA930E60C6B /* Pods_Thundr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Thundr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Thundr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Thundr.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Thundr/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Thundr/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Thundr/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Thundr/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Thundr/main.m; sourceTree = "<group>"; };
+		1A1D6CF12BBAE74E00D38D4F /* thundr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = thundr.wav; path = Thundr/media/thundr.wav; sourceTree = "<group>"; };
 		1A2DA0502BCF71E100508B25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Thundr/GoogleService-Info.plist"; sourceTree = "<group>"; };
-        1A2E006B2BCF9CE400625691 /* ThundrRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ThundrRelease.entitlements; sourceTree = SOURCE_ROOT; };
-        1A2E006C2BCF9D3300625691 /* ThundrDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ThundrDebug.entitlements; path = Thundr/ThundrDebug.entitlements; sourceTree = "<group>"; };
+		1A2E006B2BCF9CE400625691 /* ThundrRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ThundrRelease.entitlements; sourceTree = SOURCE_ROOT; };
+		1A2E006C2BCF9D3300625691 /* ThundrDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ThundrDebug.entitlements; path = Thundr/ThundrDebug.entitlements; sourceTree = "<group>"; };
 		21C5E7A8CEB9419099A22190 /* Montserrat-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Black.ttf"; path = "../assets/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; };
 		228E25DD9DA34ACDB3F6721B /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLight.ttf"; path = "../assets/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
-		229A3AD8701641E9995C43A3 /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = ThundrDev/BootSplash.storyboard; sourceTree = "<group>"; };
+		229A3AD8701641E9995C43A3 /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = Thundr/BootSplash.storyboard; sourceTree = "<group>"; };
 		3622241F479D480DA4D6AA04 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Regular.ttf"; path = "../assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		3A92D0EDA6794B8380AFA034 /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-LightItalic.ttf"; path = "../assets/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; };
-		3B4392A12AC88292D35C810B /* Pods-ThundrDev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThundrDev.debug.xcconfig"; path = "Target Support Files/Pods-ThundrDev/Pods-ThundrDev.debug.xcconfig"; sourceTree = "<group>"; };
+		3B4392A12AC88292D35C810B /* Pods-Thundr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Thundr.debug.xcconfig"; path = "Target Support Files/Pods-Thundr/Pods-Thundr.debug.xcconfig"; sourceTree = "<group>"; };
 		46D5B6B0E07842C391DD04D2 /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-SemiBoldItalic.ttf"; path = "../assets/fonts/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		4CD315049CF34F11936D3D23 /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ThinItalic.ttf"; path = "../assets/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
 		4F639B57B11442FCA9E185A3 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBold.ttf"; path = "../assets/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-ThundrDev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThundrDev.release.xcconfig"; path = "Target Support Files/Pods-ThundrDev/Pods-ThundrDev.release.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-Thundr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Thundr.release.xcconfig"; path = "Target Support Files/Pods-Thundr/Pods-Thundr.release.xcconfig"; sourceTree = "<group>"; };
 		5750D3A629E6413490C10B12 /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Italic.ttf"; path = "../assets/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-ThundrDev-ThundrDevTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThundrDev-ThundrDevTests.debug.xcconfig"; path = "Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-Thundr-ThundrTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Thundr-ThundrTests.debug.xcconfig"; path = "Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests.debug.xcconfig"; sourceTree = "<group>"; };
 		647CB1428D27439084A25D9F /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-MediumItalic.ttf"; path = "../assets/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
 		6CA7B37EBF8647F4B6F5CCF7 /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-BoldItalic.ttf"; path = "../assets/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ThundrDev/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-ThundrDev-ThundrDevTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThundrDev-ThundrDevTests.release.xcconfig"; path = "Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests.release.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Thundr/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-Thundr-ThundrTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Thundr-ThundrTests.release.xcconfig"; path = "Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests.release.xcconfig"; sourceTree = "<group>"; };
 		9E9B4F65451F4626889F4A2B /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-SemiBold.ttf"; path = "../assets/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		A7CBDBC525BF4677B6C646D9 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Medium.ttf"; path = "../assets/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; };
-		A819D0D306883C00BE147FC8 /* Pods_ThundrDev_ThundrDevTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ThundrDev_ThundrDevTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A819D0D306883C00BE147FC8 /* Pods_Thundr_ThundrTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Thundr_ThundrTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFEA834E48284F86836F24C7 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		B28DC0EC46854CB0889D67FA /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../assets/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		BC393D55EBC74D438A135141 /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-BlackItalic.ttf"; path = "../assets/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; };
@@ -98,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8823F3A38F7B3FEDBCA1F6F /* Pods_ThundrDev_ThundrDevTests.framework in Frameworks */,
+				C8823F3A38F7B3FEDBCA1F6F /* Pods_Thundr_ThundrTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,20 +105,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9EA084423BDB1E00A3587FF /* Pods_ThundrDev.framework in Frameworks */,
+				C9EA084423BDB1E00A3587FF /* Pods_Thundr.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* ThundrDevTests */ = {
+		00E356EF1AD99517003FC87E /* ThundrTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* ThundrDevTests.m */,
+				00E356F21AD99517003FC87E /* ThundrTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = ThundrDevTests;
+			path = ThundrTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -130,7 +129,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* ThundrDev */ = {
+		13B07FAE1A68108700A75B9A /* Thundr */ = {
 			isa = PBXGroup;
 			children = (
 				1A2E006C2BCF9D3300625691 /* ThundrDebug.entitlements */,
@@ -145,7 +144,7 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				229A3AD8701641E9995C43A3 /* BootSplash.storyboard */,
 			);
-			name = ThundrDev;
+			name = Thundr;
 			sourceTree = "<group>";
 		};
 		1BD44C2CFBEA4954AE1B0F6A /* Resources */ = {
@@ -178,8 +177,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				0477691671569BA930E60C6B /* Pods_ThundrDev.framework */,
-				A819D0D306883C00BE147FC8 /* Pods_ThundrDev_ThundrDevTests.framework */,
+				0477691671569BA930E60C6B /* Pods_Thundr.framework */,
+				A819D0D306883C00BE147FC8 /* Pods_Thundr_ThundrTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -194,9 +193,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* ThundrDev */,
+				13B07FAE1A68108700A75B9A /* Thundr */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* ThundrDevTests */,
+				00E356EF1AD99517003FC87E /* ThundrTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -210,8 +209,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* ThundrDev.app */,
-				00E356EE1AD99517003FC87E /* ThundrDevTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Thundr.app */,
+				00E356EE1AD99517003FC87E /* ThundrTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -219,10 +218,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-ThundrDev.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-ThundrDev.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-ThundrDev-ThundrDevTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-ThundrDev-ThundrDevTests.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-Thundr.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-Thundr.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-Thundr-ThundrTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-Thundr-ThundrTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -230,9 +229,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* ThundrDevTests */ = {
+		00E356ED1AD99517003FC87E /* ThundrTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ThundrDevTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ThundrTests" */;
 			buildPhases = (
 				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -246,13 +245,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = ThundrDevTests;
-			productReference = 00E356EE1AD99517003FC87E /* ThundrDevTests.xctest */;
+			name = ThundrTests;
+			productName = ThundrTests;
+			productReference = 00E356EE1AD99517003FC87E /* ThundrTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* ThundrDev */ = {
+		13B07F861A680F5B00A75B9A /* Thundr */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ThundrDev" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Thundr" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
@@ -267,9 +267,9 @@
 			);
 			dependencies = (
 			);
-			name = ThundrDev;
-			productName = ThundrDev;
-			productReference = 13B07F961A680F5B00A75B9A /* ThundrDev.app */;
+			name = Thundr;
+			productName = Thundr;
+			productReference = 13B07F961A680F5B00A75B9A /* Thundr.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -289,7 +289,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ThundrDev" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Thundr" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -302,8 +302,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* ThundrDev */,
-				00E356ED1AD99517003FC87E /* ThundrDevTests */,
+				13B07F861A680F5B00A75B9A /* Thundr */,
+				00E356ED1AD99517003FC87E /* ThundrTests */,
 			);
 		};
 /* End PBXProject section */
@@ -376,11 +376,11 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev/Pods-ThundrDev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr/Pods-Thundr-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ThundrDev/Pods-ThundrDev-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Thundr/Pods-Thundr-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
@@ -398,7 +398,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ThundrDev-ThundrDevTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Thundr-ThundrTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -420,7 +420,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ThundrDev-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Thundr-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -433,15 +433,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D53E0EC4FE38A66072331516 /* [CP-User] [RNFB] Core Configuration */ = {
@@ -463,15 +463,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev/Pods-ThundrDev-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr/Pods-Thundr-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev/Pods-ThundrDev-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr/Pods-Thundr-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ThundrDev/Pods-ThundrDev-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Thundr/Pods-Thundr-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
@@ -480,15 +480,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ThundrDev-ThundrDevTests/Pods-ThundrDev-ThundrDevTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Thundr-ThundrTests/Pods-Thundr-ThundrTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -498,7 +498,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* ThundrDevTests.m in Sources */,
+				00E356F31AD99517003FC87E /* ThundrTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,7 +516,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* ThundrDev */;
+			target = 13B07F861A680F5B00A75B9A /* Thundr */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -524,14 +524,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-ThundrDev-ThundrDevTests.debug.xcconfig */;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-Thundr-ThundrTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = ThundrDevTests/Info.plist;
+				INFOPLIST_FILE = ThundrTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -543,19 +543,19 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ph.thundr.app.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThundrDev.app/ThundrDev";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Thundr.app/Thundr";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-ThundrDev-ThundrDevTests.release.xcconfig */;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-Thundr-ThundrTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = ThundrDevTests/Info.plist;
+				INFOPLIST_FILE = ThundrTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -567,24 +567,24 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ph.thundr.app.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThundrDev.app/ThundrDev";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Thundr.app/Thundr";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-ThundrDev.debug.xcconfig */;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-Thundr.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ThundrDev/ThundrDebug.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Thundr/ThundrDebug.entitlements;
 				CURRENT_PROJECT_VERSION = 200;
 				DEVELOPMENT_TEAM = 862H5N7G25;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = ThundrDev/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ThundrDev;
+				INFOPLIST_FILE = Thundr/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Thundr;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -596,8 +596,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ph.thundr.app.dev;
-				PRODUCT_NAME = ThundrDev;
+				PRODUCT_BUNDLE_IDENTIFIER = ph.thundr.app;
+				PRODUCT_NAME = Thundr;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -606,17 +606,17 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-ThundrDev.release.xcconfig */;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-Thundr.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ThundrDev/ThundrRelease.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Thundr/ThundrRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 200;
 				DEVELOPMENT_TEAM = 862H5N7G25;
-				INFOPLIST_FILE = ThundrDev/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ThundrDev;
+				INFOPLIST_FILE = Thundr/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Thundr;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -628,8 +628,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ph.thundr.app.dev;
-				PRODUCT_NAME = ThundrDev;
+				PRODUCT_BUNDLE_IDENTIFIER = ph.thundr.app;
+				PRODUCT_NAME = Thundr;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -805,7 +806,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ThundrDevTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ThundrTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -814,7 +815,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ThundrDev" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Thundr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -823,7 +824,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ThundrDev" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Thundr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
