@@ -62,8 +62,8 @@
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-ThundrDev-ThundrDevTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ThundrDev-ThundrDevTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A1D6CF12BBAE74E00D38D4F /* thundr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = thundr.wav; path = ThundrDev/media/thundr.wav; sourceTree = "<group>"; };
 		1A2DA0502BCF71E100508B25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Thundr/GoogleService-Info.plist"; sourceTree = "<group>"; };
-        1A2E006B2BCF9CE400625691 /* ThundrDevRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ThundrRelease.entitlements; sourceTree = SOURCE_ROOT; };
-        1A2E006C2BCF9D3300625691 /* ThundrDevDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ThundrDebug.entitlements; path = Thundr/ThundrDebug.entitlements; sourceTree = "<group>"; };
+        1A2E006B2BCF9CE400625691 /* ThundrRelease.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ThundrRelease.entitlements; sourceTree = SOURCE_ROOT; };
+        1A2E006C2BCF9D3300625691 /* ThundrDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ThundrDebug.entitlements; path = Thundr/ThundrDebug.entitlements; sourceTree = "<group>"; };
 		21C5E7A8CEB9419099A22190 /* Montserrat-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Black.ttf"; path = "../assets/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; };
 		228E25DD9DA34ACDB3F6721B /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLight.ttf"; path = "../assets/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
 		229A3AD8701641E9995C43A3 /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = ThundrDev/BootSplash.storyboard; sourceTree = "<group>"; };
@@ -133,8 +133,8 @@
 		13B07FAE1A68108700A75B9A /* ThundrDev */ = {
 			isa = PBXGroup;
 			children = (
-				1A2E006C2BCF9D3300625691 /* ThundrDevDebug.entitlements */,
-				1A2E006B2BCF9CE400625691 /* ThundrDevRelease.entitlements */,
+				1A2E006C2BCF9D3300625691 /* ThundrDebug.entitlements */,
+				1A2E006B2BCF9CE400625691 /* ThundrRelease.entitlements */,
 				1A2DA0502BCF71E100508B25 /* GoogleService-Info.plist */,
 				1A1D6CF12BBAE74E00D38D4F /* thundr.wav */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -579,7 +579,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ThundrDev/ThundrDevDebug.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ThundrDev/ThundrDebug.entitlements;
 				CURRENT_PROJECT_VERSION = 200;
 				DEVELOPMENT_TEAM = 862H5N7G25;
 				ENABLE_BITCODE = NO;
@@ -610,7 +610,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = ThundrDev/ThundrDevRelease.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ThundrDev/ThundrRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 200;
