@@ -73,4 +73,5 @@ export type RootNavigationParams = {
   ThundrBolt: undefined;
   ThundrMachi: undefined;
   Settings: undefined;
+  HomeDrawer: undefined;
 };
