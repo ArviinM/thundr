@@ -16,7 +16,11 @@ export const HomeTab = () => {
   const navigation = useNavigation();
   function Header() {
     return (
-      <Image style={{transform: [{scale: 0.85}]}} source={IMAGES.headerLogo} />
+      <Image
+        source={IMAGES.headerLogo}
+        resizeMode={'contain'}
+        style={{width: scale(130), height: scale(20)}}
+      />
     );
   }
 

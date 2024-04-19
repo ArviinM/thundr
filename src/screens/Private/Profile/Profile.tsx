@@ -7,6 +7,7 @@ import {useGetCustomerProfile} from '../../../hooks/profile/useGetCustomerProfil
 
 import {useEffect} from 'react';
 import ProfileCard from '../../../components/Home/ProfileCard.tsx';
+import {COLORS} from '../../../constants/commons.ts';
 
 const Profile = () => {
   const auth = useAuth();
@@ -16,17 +17,23 @@ const Profile = () => {
 
   return (
     <SafeAreaView
-      style={{flex: 1, backgroundColor: 'white'}}
+      style={{flex: 1, backgroundColor: COLORS.white}}
       edges={['right', 'left']}>
-      <View style={{flex: 1, margin: 6}}>
+      <View style={{flex: 1, margin: 6, backgroundColor: COLORS.white}}>
         {customerProfile.isPending && customerProfile.isLoading ? (
           <ActivityIndicator animating={true} size={'small'} />
         ) : (
           customerProfile.data && (
-            <ProfileCard
-              user={{sub: '', percent: '', customerData: customerProfile.data}}
-              isUser={true}
-            />
+            <View style={{borderRadius: 15, backgroundColor: COLORS.gray2}}>
+              <ProfileCard
+                user={{
+                  sub: '',
+                  percent: '',
+                  customerData: customerProfile.data,
+                }}
+                isUser={true}
+              />
+            </View>
           )
         )}
       </View>
