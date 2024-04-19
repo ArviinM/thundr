@@ -230,7 +230,7 @@ const PasswordNewValidation = () => {
         </KeyboardAwareScrollView>
 
         {/* Footer Container */}
-        <KeyboardStickyView>
+        <KeyboardStickyView offset={{closed: 0, opened: 30}}>
           <View style={styles.buttonContainer}>
             <GradientButton
               onPress={handleSubmit(onSubmit)}

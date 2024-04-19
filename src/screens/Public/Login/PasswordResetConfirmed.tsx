@@ -68,7 +68,8 @@ const PasswordResetConfirmed = () => {
               <Image
                 source={IMAGES.passwordResetConfirmed}
                 // style={{width: scale(width / 3), height: scale(height / 3)}}
-                resizeMode={'contain'}
+                style={{width: scale(360), height: scale(490)}}
+                resizeMode="contain"
               />
             </View>
             <View style={styles.titleContainer}>

@@ -84,16 +84,16 @@ const ForgetPasswordValidation = () => {
       }
     }
   };
-
-  const {showConfirmationAlert} = useConfirmationAlert();
-  const handleExit = () => {
-    showConfirmationAlert({
-      title: 'Uy, exit na agad?',
-      message:
-        'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
-      onConfirm: () => navigation.navigate('Login'),
-    });
-  };
+  //
+  // const {showConfirmationAlert} = useConfirmationAlert();
+  // const handleExit = () => {
+  //   showConfirmationAlert({
+  //     title: 'Uy, exit na agad?',
+  //     message:
+  //       'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
+  //     onConfirm: () => navigation.navigate('Login'),
+  //   });
+  // };
 
   return (
     <SafeAreaProvider>
@@ -101,7 +101,9 @@ const ForgetPasswordValidation = () => {
         <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity onPress={handleExit} style={styles.backButton}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('LoginValidation')}
+                style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>
             </View>
@@ -147,7 +149,7 @@ const ForgetPasswordValidation = () => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+        <KeyboardStickyView offset={{closed: 0, opened: 30}}>
           <View style={styles.buttonContainer}>
             <GradientButton
               onPress={handleSubmit(onSubmit)}
@@ -230,7 +232,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     borderRadius: 30,
-    marginBottom: 12,
+    marginVertical: 10,
   },
   buttonTextStyle: {
     letterSpacing: -0.4,
