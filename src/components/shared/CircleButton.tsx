@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
 import {IMAGES} from '../../constants/images.ts';
+import {scale} from '../../utils/utils.ts';
 
 interface CircleButtonProps {
   onPress: () => void;
@@ -44,7 +45,11 @@ const CircleButton: React.FC<CircleButtonProps> = ({
           }
         />
       ) : (
-        <Image source={isCheck ? IMAGES.checkIcon : IMAGES.nextCircle} />
+        <Image
+          source={isCheck ? IMAGES.checkIcon : IMAGES.nextCircle}
+          style={{width: scale(60), height: scale(60)}}
+          resizeMode="contain"
+        />
       )}
     </TouchableOpacity>
   );

@@ -1,6 +1,9 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
 import {
   CompatibilityQuestionsRequest,
   CustomerData,
@@ -10,10 +13,11 @@ import {
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+
 export const Stack = createNativeStackNavigator();
 export const Tab = createBottomTabNavigator();
 export const Drawer = createDrawerNavigator();
+export const Top = createMaterialTopTabNavigator();
 
 export const navigationRef =
   createNavigationContainerRef<RootNavigationParams>();
@@ -74,4 +78,7 @@ export type RootNavigationParams = {
   ThundrMachi: undefined;
   Settings: undefined;
   HomeDrawer: undefined;
+
+  // The Possibles
+  Possibles: undefined;
 };

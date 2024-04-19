@@ -17,6 +17,7 @@ const WorkingInProgress = () => {
   };
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
   return (
     <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
