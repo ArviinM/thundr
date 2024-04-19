@@ -80,8 +80,17 @@ const PasswordReset = () => {
                 a new password.
               </Text>
             </View>
-            <View style={{flex: 1, marginTop: scale(40)}}>
-              <Image source={IMAGES.passwordReset} />
+            <View
+              style={{
+                flex: 1,
+                marginTop: scale(40),
+                alignItems: 'flex-end',
+              }}>
+              <Image
+                source={IMAGES.passwordReset}
+                style={{width: scale(380), height: scale(400)}}
+                resizeMode="contain"
+              />
             </View>
           </View>
         </KeyboardAwareScrollView>

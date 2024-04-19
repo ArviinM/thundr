@@ -1,33 +1,77 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Text, View} from 'react-native';
+import {Button, Text, View} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
-import LinearGradient from 'react-native-linear-gradient';
-import {width} from '../../../constants/commons.ts';
 
-const START_DEFAULT = {x: 0, y: 0}; // Updated start position
-const END_DEFAULT = {x: 1, y: 1}; // Updated end position
-const MARE_GRADIENT_COLORS = ['#FFDA6E', '#FFAC19'];
-const JOWA_GRADIENT_COLORS = ['#FFE381', '#ff7300', '#BA0A2C'];
+import Svg, {Defs, Ellipse, LinearGradient, Stop} from 'react-native-svg';
 
 const Possibles = () => {
   const inset = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
+
+  const [isMare, setIsMare] = useState<boolean>(true);
+
+  const LinearBackgrond = (props: {isMare: boolean}) => (
+    <Svg width={430} height={314} fill="none" {...props}>
+      <Ellipse cx={213} cy={111} fill="url(#a)" rx={363} ry={203} />
+      {props.isMare ? (
+        <Defs>
+          <LinearGradient
+            id="a"
+            x1={-220.067}
+            x2={-151.722}
+            y1={-137.523}
+            y2={435.017}
+            gradientUnits="userSpaceOnUse">
+            <Stop stopColor="#FF9E00" />
+            <Stop offset={0.193} stopColor="#FFE37E" />
+            <Stop offset={0.584} stopColor="#FF9E00" />
+          </LinearGradient>
+        </Defs>
+      ) : (
+        <Defs>
+          <LinearGradient
+            id="a"
+            x1={-150}
+            x2={-86.932}
+            y1={-92}
+            y2={428.571}
+            gradientUnits="userSpaceOnUse">
+            <Stop stopColor="#FFE381" />
+            <Stop offset={0.301} stopColor="#FF9E00" />
+            <Stop offset={0.414} stopColor="#FF5847" />
+            <Stop offset={0.818} stopColor="#BA0A2C" />
+          </LinearGradient>
+        </Defs>
+      )}
+    </Svg>
+  );
+
   return (
     <SafeAreaView edges={['left', 'right']}>
-      <View style={{flex: 1}}>
-        <LinearGradient
-          colors={MARE_GRADIENT_COLORS}
-          start={START_DEFAULT}
-          end={END_DEFAULT}
-          style={{width: width, height: 200}}
-        />
+      <View style={{flex: 1, alignItems: 'center'}}>
+        <LinearBackgrond isMare={isMare} />
       </View>
       <View style={{marginTop: headerHeight}}>
-        <Text style={{fontFamily: 'Montserrat-Regular', padding: 20}}>
+        <Text
+          style={{
+            fontFamily: 'Montserrat-Regular',
+            padding: 20,
+            color: 'white',
+          }}>
           This is working in progress, please wait for the upcoming builds for
           The Possibles Update. {'\n\n'}Thank you!
         </Text>
+        <Button
+          onPress={() => setIsMare(false)}
+          title="Toggle Jowa"
+          color="white"
+        />
+        <Button
+          onPress={() => setIsMare(true)}
+          title="Toggle Mare"
+          color="white"
+        />
       </View>
     </SafeAreaView>
   );

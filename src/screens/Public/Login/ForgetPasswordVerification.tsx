@@ -203,7 +203,7 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+        <KeyboardStickyView offset={{closed: 0, opened: 30}}>
           <View style={styles.buttonContainer}>
             <GradientButton
               onPress={() => onSubmit(emailCodeInput)}
