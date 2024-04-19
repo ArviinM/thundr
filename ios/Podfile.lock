@@ -1028,6 +1028,10 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - react-native-pager-view (6.3.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
   - react-native-stroke-text (1.0.6):
@@ -1297,6 +1301,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-stroke-text (from `../node_modules/@charmy.tech/react-native-stroke-text`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1419,6 +1424,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-keyboard-controller:
     :path: "../node_modules/react-native-keyboard-controller"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-stroke-text:
@@ -1541,6 +1548,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: d81d930c1b7f4db284e1d721fe7fdc99230ca108
   react-native-geolocation: fff5fb51dd294e845aa203c2e747958421425087
   react-native-keyboard-controller: f9633273f608756bbe5bfbd040f8de0d3e545067
+  react-native-pager-view: 571ecf3212955c0f81314163d690af153d67f527
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-stroke-text: 0add13c67de1ee187508de324970dbf3a727af5a
   react-native-webview: 3bfbca2a3ae90e753573e5cc4c64d3ba4b5eec59

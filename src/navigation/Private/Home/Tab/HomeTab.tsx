@@ -10,6 +10,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {ProfileStack} from '../Stack/ProfileStack.tsx';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
+import {ChatTop} from '../Top/ChatTop.tsx';
+import Possibles from '../../../../screens/Private/Possibles/Possibles.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -49,7 +51,7 @@ export const HomeTab = () => {
     );
   }
 
-  function HomeLeftHeader() {
+  function HomeLeftHeader({isTint}: {isTint?: boolean}) {
     return (
       <View
         style={{
@@ -62,7 +64,11 @@ export const HomeTab = () => {
           onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
           <Image
             source={IMAGES.menu}
-            style={{height: scale(24), width: scale(24)}}
+            style={{
+              height: scale(24),
+              width: scale(24),
+              tintColor: isTint ? COLORS.white2 : undefined,
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -141,10 +147,12 @@ export const HomeTab = () => {
       />
 
       <Tab.Screen
-        name="Possibles"
-        component={WorkingInProgress}
+        name="The Possibles"
+        component={Possibles}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
+          headerTintColor: COLORS.white2,
+          headerTransparent: true,
+          headerLeft: () => <HomeLeftHeader isTint />,
           tabBarShowLabel: false,
           tabBarIcon: ({focused}) => (
             <Image
@@ -157,8 +165,8 @@ export const HomeTab = () => {
       />
 
       <Tab.Screen
-        name="Chat"
-        component={WorkingInProgress}
+        name="Messages"
+        component={ChatTop}
         options={{
           headerLeft: () => <HomeLeftHeader />,
           tabBarShowLabel: false,
