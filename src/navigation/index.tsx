@@ -14,64 +14,64 @@ import messaging from '@react-native-firebase/messaging';
 const RootNavigation = () => {
   const {authData, loading} = useAuth();
 
-  // // For android notifications
-  // useEffect(() => {
-  //   //background state
-  //   messaging().onNotificationOpenedApp(remoteMessage => {
-  //     if (remoteMessage) {
-  //       const notificationData = remoteMessage.data as RemoteData;
-  //       if (notificationData) {
-  //         if (notificationData.channelType === 'MATCH') {
-  //           navigationRef.navigate('MatchFound', {
-  //             sub: '',
-  //             isMare: notificationData.matchType === 'MARE',
-  //             matchPhoto: notificationData.matchPhoto,
-  //           } as RootNavigationParams['MatchFound']);
-  //         }
-  //       }
-  //     }
-  //   });
-  //   //closed state
-  //   messaging()
-  //     .getInitialNotification()
-  //     .then(remoteMessage => {
-  //       if (remoteMessage) {
-  //         const notificationData = remoteMessage.data as RemoteData;
-  //         if (notificationData) {
-  //           if (notificationData.channelType === 'MATCH') {
-  //             navigationRef.navigate('MatchFound', {
-  //               sub: '',
-  //               isMare: notificationData.matchType === 'MARE',
-  //               matchPhoto: notificationData.matchPhoto,
-  //             } as RootNavigationParams['MatchFound']);
-  //           }
-  //         }
-  //       }
-  //     });
-  // }, []);
-  //
-  // // For iOS notifications
-  // useEffect(() => {
-  //   return notifee.onForegroundEvent(({type, detail}) => {
-  //     switch (type) {
-  //       case EventType.DISMISSED:
-  //         // console.log('User dismissed notification.');
-  //         break;
-  //       case EventType.PRESS:
-  //         const notificationData: NotificationData =
-  //           detail.notification as NotificationData;
-  //
-  //         if (notificationData.data.channelType === 'MATCH') {
-  //           navigationRef.navigate('MatchFound', {
-  //             sub: '',
-  //             isMare: notificationData.data.matchType === 'MARE',
-  //             matchPhoto: notificationData.data.matchPhoto,
-  //           } as RootNavigationParams['MatchFound']);
-  //         }
-  //         break;
-  //     }
-  //   });
-  // }, []);
+  // For android notifications
+  useEffect(() => {
+    //background state
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      if (remoteMessage) {
+        const notificationData = remoteMessage.data as RemoteData;
+        if (notificationData) {
+          if (notificationData.channelType === 'MATCH') {
+            navigationRef.navigate('MatchFound', {
+              sub: '',
+              isMare: notificationData.matchType === 'MARE',
+              matchPhoto: notificationData.matchPhoto,
+            } as RootNavigationParams['MatchFound']);
+          }
+        }
+      }
+    });
+    //closed state
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          const notificationData = remoteMessage.data as RemoteData;
+          if (notificationData) {
+            if (notificationData.channelType === 'MATCH') {
+              navigationRef.navigate('MatchFound', {
+                sub: '',
+                isMare: notificationData.matchType === 'MARE',
+                matchPhoto: notificationData.matchPhoto,
+              } as RootNavigationParams['MatchFound']);
+            }
+          }
+        }
+      });
+  }, []);
+
+  // For iOS notifications
+  useEffect(() => {
+    return notifee.onForegroundEvent(({type, detail}) => {
+      switch (type) {
+        case EventType.DISMISSED:
+          // console.log('User dismissed notification.');
+          break;
+        case EventType.PRESS:
+          const notificationData: NotificationData =
+            detail.notification as NotificationData;
+
+          if (notificationData.data.channelType === 'MATCH') {
+            navigationRef.navigate('MatchFound', {
+              sub: '',
+              isMare: notificationData.data.matchType === 'MARE',
+              matchPhoto: notificationData.data.matchPhoto,
+            } as RootNavigationParams['MatchFound']);
+          }
+          break;
+      }
+    });
+  }, []);
 
   if (loading) {
     return <Loading />;

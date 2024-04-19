@@ -3,7 +3,7 @@ import {create} from 'zustand';
 
 type CustomerStore = {
   customerProfile: CustomerCreateProfileRequest | null; // Initially null
-  setCustomerProfile: (profile: CustomerCreateProfileRequest) => void;
+  setCustomerProfile: (profile: CustomerCreateProfileRequest | null) => void;
   updateCustomerProfile: (
     updates: Partial<CustomerCreateProfileRequest>,
   ) => void;

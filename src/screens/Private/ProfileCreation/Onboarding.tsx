@@ -87,7 +87,7 @@ const Onboarding = () => {
   };
 
   const endOnboarding = () => {
-    navigation.navigate('HomeTab');
+    navigation.navigate('HomeDrawer');
     // router.back();
   };
 

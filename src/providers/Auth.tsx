@@ -18,6 +18,8 @@ import {queryClient} from '../utils/queryClient.ts';
 import {usePasswordCreation} from '../hooks/registration/usePasswordCreation.ts';
 import {useRefreshToken} from '../hooks/useRefreshToken.ts';
 import {useRegisterToken} from '../hooks/notification/useRegisterToken.ts';
+import useCustomerProfileStore from '../store/profileStore.ts';
+import useCustomerDetailsStore from '../store/detailsStore.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -42,6 +44,13 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   const passwordCreation = usePasswordCreation();
   const refreshToken = useRefreshToken();
   const registerToken = useRegisterToken();
+
+  const setCustomerProfile = useCustomerProfileStore(
+    state => state.setCustomerProfile,
+  );
+  const setCustomerDetails = useCustomerDetailsStore(
+    state => state.setCustomerDetails,
+  );
 
   useEffect(() => {
     loadStorageData();
@@ -101,6 +110,10 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       if (authData?.sub) {
         await registerToken.mutateAsync({subId: authData.sub, token: ''});
       }
+
+      setCustomerProfile(null);
+      setCustomerDetails(null);
+
       // @ts-ignore
       setAuthData(undefined);
       // reset all cache
