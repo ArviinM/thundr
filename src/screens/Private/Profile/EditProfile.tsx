@@ -18,7 +18,11 @@ import CustomDropdown from '../../../components/shared/Dropdown.tsx';
 import SelectableButton from '../../../components/CustomerPersonalityType/SelectableButton.tsx';
 
 import {useUploadProfilePhoto} from '../../../hooks/profile/useUploadProfilePhoto.ts';
-import {RouteProp} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {COLORS, width} from '../../../constants/commons.ts';
 import {personalityData} from '../../../components/CustomerPersonalityType/personalityData.ts';
@@ -68,7 +72,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     birthday,
   } = route?.params || {};
   const {mutateAsync} = useUploadProfilePhoto();
-
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const query = useQueryClient(queryClient);
   const currentCustomerInterest = customerDetails?.hobbies || '';
   const interestsArray = currentCustomerInterest.split(',');
@@ -235,6 +239,7 @@ const EditProfile = ({route}: EditProfileProps) => {
         position: 'top',
         topOffset: inset.top + 10,
       });
+      navigation.navigate('Profile');
 
       isLoading(false);
     } catch (error) {
