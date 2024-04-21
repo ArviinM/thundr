@@ -40,6 +40,7 @@ const Swiping = ({
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
   const pressed = useSharedValue(false);
+  const [isGestureActive, setIsGestureActive] = useState(false);
 
   const [currentImage, setCurrentImage] = useState('thundrHome');
   const [mareTapped, setMareTapped] = useState(false);
@@ -58,9 +59,10 @@ const Swiping = ({
   });
 
   const mareGesture = Gesture.Pan()
-    .onBegin(event => {
-      if (!pressed.value) {
+    .onBegin(() => {
+      if (!pressed.value && !isGestureActive) {
         pressed.value = true;
+        runOnJS(setIsGestureActive)(true);
       }
     })
     .onChange(event => {
@@ -126,14 +128,16 @@ const Swiping = ({
         runOnJS(setCurrentImage)('thundrHome');
       }
     })
-    .onFinalize(event => {
+    .onFinalize(() => {
       pressed.value = false;
+      runOnJS(setIsGestureActive)(false);
     });
 
   const jowaGesture = Gesture.Pan()
-    .onBegin(event => {
-      if (!pressed.value) {
+    .onBegin(() => {
+      if (!pressed.value && !isGestureActive) {
         pressed.value = true;
+        runOnJS(setIsGestureActive)(true);
       }
     })
     .onChange(event => {
@@ -199,8 +203,9 @@ const Swiping = ({
         runOnJS(setCurrentImage)('thundrHome');
       }
     })
-    .onFinalize(event => {
+    .onFinalize(() => {
       pressed.value = false;
+      runOnJS(setIsGestureActive)(false);
     });
 
   return (
