@@ -12,7 +12,7 @@ import {ProfileStack} from '../Stack/ProfileStack.tsx';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {ChatTop} from '../Top/ChatTop.tsx';
 import Possibles from '../../../../screens/Private/Possibles/Possibles.tsx';
-import {LightningIcon} from '../../../../assets/images/tab_icons/lightning_icon.tsx';
+import {LightningIcon} from '../../../../assets/images/tab_icons/LightningIcon.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();

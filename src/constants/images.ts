@@ -9,13 +9,6 @@ export const IMAGES: Record<any, any> = {
   nextCircle: require('../assets/images/next_circle_icon.png'),
   nextCircleDisabled: require('../assets/images/next_circle_icon_disabled.png'),
 
-  //swiping
-  mareHome: require('../assets/images/swiping/mare.png'),
-  jowaHome: require('../assets/images/swiping/jowa.png'),
-
-  mareTapped: require('../assets/images/swiping/mare_tapped.png'),
-  jowaTapped: require('../assets/images/swiping/jowa_tapped.png'),
-
   thundrHome: require('../assets/images/swiping/thundr.png'),
   thundrMareGlow: require('../assets/images/swiping/thundr_glow_mare.png'),
   thundrJowaGlow: require('../assets/images/swiping/thundr_glow_jowa.png'),
