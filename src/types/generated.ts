@@ -342,3 +342,37 @@ export type NotificationData = {
     categoryId: string;
   };
 };
+
+// Forget Password
+export type ForgetPasswordValidationRequest = {
+  email: string;
+};
+
+export type ForgetPasswordVerificationRequest = {
+  email: string;
+  code: string;
+};
+
+export type ForgetPasswordVerificationResponse = {
+  step: number;
+  done: boolean;
+  newHash: string;
+  stepCount: number;
+};
+
+export type ForgetPasswordChangePasswordRequest = {
+  email: string;
+  code: string;
+  newPassword: string;
+};
+
+export type ForgetPasswordChangePasswordResponse = {
+  step: number;
+  done: boolean;
+  stepCount: number;
+};
+
+export type ChangePasswordRequest = {
+  oldPassword: string;
+  newPassword: string;
+};
