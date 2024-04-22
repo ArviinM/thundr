@@ -10,6 +10,7 @@ import {
   CustomerMatchResponse,
   EmailValidationResponse,
   EmailVerificationResponse,
+  ForgetPasswordChangePasswordRequest,
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
@@ -50,8 +51,8 @@ export type RootNavigationParams = {
   Terms: {uri: string};
   ForgetPasswordValidation: undefined;
   ForgetPasswordVerification: {email: string};
-  PasswordReset: undefined;
-  PasswordNewValidation: undefined;
+  PasswordReset: {email: string; code: string};
+  PasswordNewValidation: {email: string; code: string};
   PasswordResetConfirmed: undefined;
   // Profile Creation
   CustomerName: undefined;

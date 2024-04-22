@@ -35,18 +35,19 @@ import {usePasswordCreation} from '../../../hooks/registration/usePasswordCreati
 import {PasswordCreationRequest} from '../../../types/generated.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import useConfirmationAlert from '../../../components/shared/Alert.tsx';
+import {useForgetPasswordChangePassword} from '../../../hooks/forget-password/useForgetPasswordChangePassword.ts';
 
-// type PasswordCreationScreenRouteProp = RouteProp<
-//   RootNavigationParams,
-//   'PasswordCreation'
-// >;
-//
-// type PasswordCreationProps = {
-//   route?: PasswordCreationScreenRouteProp;
-// };
+type PasswordNewValidationScreenRouteProp = RouteProp<
+  RootNavigationParams,
+  'PasswordNewValidation'
+>;
 
-const PasswordNewValidation = () => {
-  // const {username, challengeName, session, email} = route?.params || {};
+type PasswordNewValidationProps = {
+  route?: PasswordNewValidationScreenRouteProp;
+};
+
+const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
+  const {email, code} = route?.params || {};
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [showPassword, setShowPassword] = useState(false);
@@ -54,8 +55,7 @@ const PasswordNewValidation = () => {
   const confirmPasswordRef = useRef<TextInput>(null); // Ref for password input
 
   const [loading, isLoading] = useState(false);
-
-  const auth = useAuth();
+  const passwordChange = useForgetPasswordChangePassword();
 
   const schema = yup.object().shape({
     password: yup
@@ -97,22 +97,21 @@ const PasswordNewValidation = () => {
       await schema.validate(data);
       isLoading(true);
 
-      // const passwordData = {
-      //   phoneNumber: username,
-      //   email: email,
-      //   session: session,
-      //   challengeName: challengeName,
-      //   password: data.confirmPassword,
-      // } as PasswordCreationRequest;
+      if (email && code) {
+        const result = await passwordChange.mutateAsync({
+          email: email,
+          code: code,
+          newPassword: data.confirmPassword,
+        });
+        if (result.done) {
+          navigation.navigate('PasswordResetConfirmed');
+        }
+      }
 
-      // await auth.signUp(passwordData);
-      navigation.navigate('PasswordResetConfirmed');
       isLoading(false);
     } catch (error) {
-      // Handle validation errors
-      // if (error instanceof yup.ValidationError) {
       console.error(error);
-      // }
+      isLoading(false);
     }
   };
 

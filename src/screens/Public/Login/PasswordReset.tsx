@@ -35,26 +35,30 @@ import useConfirmationAlert from '../../../components/shared/Alert.tsx';
 import {opacity} from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
 import {scale} from '../../../utils/utils.ts';
 
-const PasswordReset = () => {
+type PasswordResetScreenRouteProp = RouteProp<
+  RootNavigationParams,
+  'PasswordReset'
+>;
+
+type PasswordResetProps = {
+  route?: PasswordResetScreenRouteProp;
+};
+const PasswordReset = ({route}: PasswordResetProps) => {
+  const {email, code} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [loading, isLoading] = useState(false);
 
   const onSubmit = async () => {
     try {
       isLoading(true);
-
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
-
       isLoading(false);
-      navigation.navigate('PasswordNewValidation');
+      if (email && code) {
+        navigation.navigate('PasswordNewValidation', {
+          email: email,
+          code: code,
+        });
+      }
     } catch (error) {
-      // Handle validation errors
-
       console.error(error);
       isLoading(false);
     }

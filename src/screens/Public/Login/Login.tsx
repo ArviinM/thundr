@@ -70,8 +70,9 @@ const Login = () => {
               buttonStyle={styles.button2}
               textStyle={styles.text2}
             />
-            <TouchableOpacity onPress={() => console.log('Trouble Signing In')}>
-              <Text style={styles.text3}>Trouble Signing In?</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgetPasswordValidation')}>
+              <Text style={styles.text3}>Trouble signing in?</Text>
             </TouchableOpacity>
           </View>
         </View>
