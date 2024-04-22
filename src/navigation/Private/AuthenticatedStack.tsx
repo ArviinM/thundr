@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {Stack} from '../../constants/navigator.ts';
-import {HomeTab} from './Home/Tab/HomeTab.tsx';
 
 import CustomerName from '../../screens/Private/ProfileCreation/CustomerName.tsx';
 import {COLORS} from '../../constants/commons.ts';
