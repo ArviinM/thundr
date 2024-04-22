@@ -3,7 +3,12 @@ import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button, Text, View} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 
-import Svg, {Defs, Ellipse, LinearGradient, Stop} from 'react-native-svg';
+import {LinearBackground} from '../../../assets/images/possibles/LinearBackground.tsx';
+import {COLORS} from '../../../constants/commons.ts';
+import {Loading} from '../../../components/shared/Loading.tsx';
+import Swiping from '../../../components/Home/Swiping.tsx';
+import {useSharedValue} from 'react-native-reanimated';
+import {CustomerMatchResponse} from '../../../types/generated.ts';
 
 const Possibles = () => {
   const inset = useSafeAreaInsets();
@@ -11,67 +16,78 @@ const Possibles = () => {
 
   const [isMare, setIsMare] = useState<boolean>(true);
 
-  const LinearBackgrond = (props: {isMare: boolean}) => (
-    <Svg width={430} height={314} fill="none" {...props}>
-      <Ellipse cx={213} cy={111} fill="url(#a)" rx={363} ry={203} />
-      {props.isMare ? (
-        <Defs>
-          <LinearGradient
-            id="a"
-            x1={-220.067}
-            x2={-151.722}
-            y1={-137.523}
-            y2={435.017}
-            gradientUnits="userSpaceOnUse">
-            <Stop stopColor="#FF9E00" />
-            <Stop offset={0.193} stopColor="#FFE37E" />
-            <Stop offset={0.584} stopColor="#FF9E00" />
-          </LinearGradient>
-        </Defs>
-      ) : (
-        <Defs>
-          <LinearGradient
-            id="a"
-            x1={-150}
-            x2={-86.932}
-            y1={-92}
-            y2={428.571}
-            gradientUnits="userSpaceOnUse">
-            <Stop stopColor="#FFE381" />
-            <Stop offset={0.301} stopColor="#FF9E00" />
-            <Stop offset={0.414} stopColor="#FF5847" />
-            <Stop offset={0.818} stopColor="#BA0A2C" />
-          </LinearGradient>
-        </Defs>
-      )}
-    </Svg>
-  );
+  const [index, setIndex] = useState(0);
+
+  const activeIndex = useSharedValue(0);
+  const mareTranslations = useSharedValue<number[]>(new Array(10).fill(0));
+  const jowaTranslations = useSharedValue<number[]>(new Array(10).fill(0));
+  const sharedIsMare = useSharedValue<boolean>(false);
+
+  const onResponse = async (
+    tag: 'Mare' | 'Jowa',
+    swipedUser: CustomerMatchResponse,
+  ) => {
+    try {
+      // if (auth.authData?.sub) {
+      //     await swipeMatch.mutateAsync({
+      //         sub: auth.authData.sub,
+      //         target: swipedUser.sub,
+      //         tag: tag,
+      //     });
+      // }
+      console.log('Test');
+    } catch (error) {
+      console.warn('Error updating swipe match:', error);
+    }
+  };
 
   return (
-    <SafeAreaView edges={['left', 'right']}>
+    <SafeAreaView
+      edges={['left', 'right']}
+      style={{backgroundColor: COLORS.white, flex: 1}}>
       <View style={{flex: 1, alignItems: 'center'}}>
-        <LinearBackgrond isMare={isMare} />
-      </View>
-      <View style={{marginTop: headerHeight}}>
-        <Text
+        <View style={{position: 'absolute'}}>
+          <LinearBackground isMare={isMare} />
+        </View>
+        <View style={{flex: 1, marginTop: headerHeight}}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Regular',
+              padding: 20,
+              color: 'white',
+            }}>
+            This is working in progress, please wait for the upcoming builds for
+            The Possibles Update. {'\n\n'}Thank you!
+          </Text>
+          <Button
+            onPress={() => setIsMare(false)}
+            title="Toggle Jowa"
+            color="white"
+          />
+          <Button
+            onPress={() => setIsMare(true)}
+            title="Toggle Mare"
+            color="white"
+          />
+          {/*<View style={{borderWidth: 1, flex: 1}} />*/}
+        </View>
+        <View
           style={{
-            fontFamily: 'Montserrat-Regular',
-            padding: 20,
-            color: 'white',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
           }}>
-          This is working in progress, please wait for the upcoming builds for
-          The Possibles Update. {'\n\n'}Thank you!
-        </Text>
-        <Button
-          onPress={() => setIsMare(false)}
-          title="Toggle Jowa"
-          color="white"
-        />
-        <Button
-          onPress={() => setIsMare(true)}
-          title="Toggle Mare"
-          color="white"
-        />
+          <Swiping
+            activeIndex={activeIndex}
+            mareTranslation={mareTranslations}
+            jowaTranslation={jowaTranslations}
+            index={index}
+            onResponse={onResponse}
+            user={[]}
+            isMare={sharedIsMare}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
