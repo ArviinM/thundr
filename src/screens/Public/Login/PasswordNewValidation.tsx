@@ -20,7 +20,6 @@ import {
 } from '@react-navigation/native';
 
 import GradientButton from '../../../components/shared/GradientButton.tsx';
-import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
@@ -31,10 +30,7 @@ import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import {usePasswordCreation} from '../../../hooks/registration/usePasswordCreation.ts';
-import {PasswordCreationRequest} from '../../../types/generated.ts';
-import {useAuth} from '../../../providers/Auth.tsx';
-import useConfirmationAlert from '../../../components/shared/Alert.tsx';
+
 import {useForgetPasswordChangePassword} from '../../../hooks/forget-password/useForgetPasswordChangePassword.ts';
 
 type PasswordNewValidationScreenRouteProp = RouteProp<
