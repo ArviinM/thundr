@@ -11,27 +11,19 @@ import {
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
-
-import {
-  NavigationProp,
-  RouteProp,
-  useNavigation,
-} from '@react-navigation/native';
-
-import GradientButton from '../../../components/shared/GradientButton.tsx';
-import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
-
-import {COLORS, SIZES, width} from '../../../constants/commons.ts';
-import {IMAGES} from '../../../constants/images.ts';
-import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {EmailValidationRequest} from '../../../types/generated.ts';
-import {useEmailValidation} from '../../../hooks/registration/useEmailValidation.ts';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import useConfirmationAlert from '../../../components/shared/Alert.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+
+import GradientButton from '../../../components/shared/GradientButton.tsx';
+
+import {COLORS, SIZES, width} from '../../../constants/commons.ts';
+import {IMAGES} from '../../../constants/images.ts';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {useForgetPasswordValidation} from '../../../hooks/forget-password/useForgetPasswordValidation.ts';
 
 const ForgetPasswordValidation = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -39,7 +31,7 @@ const ForgetPasswordValidation = () => {
 
   const [loading, isLoading] = useState(false);
 
-  const emailValidation = useEmailValidation();
+  const emailValidation = useForgetPasswordValidation();
 
   const schema = yup.object().shape({
     email: yup
@@ -67,33 +59,17 @@ const ForgetPasswordValidation = () => {
       await schema.validate(data);
       isLoading(true);
 
-      // const result = await emailValidation.mutateAsync({
-      //   phoneNumber: username,
-      //   email: data.email,
-      //   session: session,
-      //   challengeName: challengeName,
-      // } as EmailValidationRequest);
+      await emailValidation.mutateAsync({
+        email: data.email,
+      });
 
       isLoading(false);
       navigation.navigate('ForgetPasswordVerification', {email: data.email});
     } catch (error) {
-      // Handle validation errors
-      if (error instanceof yup.ValidationError) {
-        console.error(error.message);
-        isLoading(false);
-      }
+      console.error(error);
+      isLoading(false);
     }
   };
-  //
-  // const {showConfirmationAlert} = useConfirmationAlert();
-  // const handleExit = () => {
-  //   showConfirmationAlert({
-  //     title: 'Uy, exit na agad?',
-  //     message:
-  //       'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
-  //     onConfirm: () => navigation.navigate('Login'),
-  //   });
-  // };
 
   return (
     <SafeAreaProvider>
@@ -102,7 +78,7 @@ const ForgetPasswordValidation = () => {
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('LoginValidation')}
+                onPress={() => navigation.goBack()}
                 style={styles.backButton}>
                 <Image source={IMAGES.back} style={styles.backImage} />
               </TouchableOpacity>

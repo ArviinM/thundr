@@ -16,20 +16,19 @@ import {
 } from '@react-navigation/native';
 
 import GradientButton from '../../../components/shared/GradientButton.tsx';
-import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {useEmailVerification} from '../../../hooks/registration/useEmailVerification.ts';
-import {EmailVerificationRequest} from '../../../types/generated.ts';
+import {ForgetPasswordVerificationRequest} from '../../../types/generated.ts';
 import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import {useEmailCodeResend} from '../../../hooks/registration/useEmailCodeResend.ts';
 import Toast from 'react-native-toast-message';
 import useConfirmationAlert from '../../../components/shared/Alert.tsx';
+import {useForgetPasswordVerification} from '../../../hooks/forget-password/useForgetPasswordVerification.ts';
+import {useForgetPasswordValidation} from '../../../hooks/forget-password/useForgetPasswordValidation.ts';
 
 type ForgetPasswordValidationScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -52,8 +51,9 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
   const [resendDisabled, setResendDisabled] = useState(false); // Initially disable
   const [resendAttempts, setResendAttempts] = useState(0);
 
-  const emailVerification = useEmailVerification();
-  const emailCodeResend = useEmailCodeResend();
+  const emailValidation = useForgetPasswordValidation();
+  const passwordVerification = useForgetPasswordVerification();
+  // const emailCodeResend = useEmailCodeResend();
   const inset = useSafeAreaInsets();
 
   const handleCellTextChange = async (text: string, i: number) => {
@@ -67,21 +67,20 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
 
   const onSubmit = async (emailCode: string) => {
     try {
-      console.log(emailCode);
-
       isLoading(true);
-
-      // const result = await emailVerification.mutateAsync({
-      //   phoneNumber: username,
-      //   session: session,
-      //   email: email,
-      //   challengeName: challengeName,
-      //   challengeAnswer: emailCode,
-      // } as EmailVerificationRequest);
+      const result = await passwordVerification.mutateAsync({
+        email: email,
+        code: emailCode,
+      } as ForgetPasswordVerificationRequest);
 
       isLoading(false);
-      //
-      navigation.navigate('PasswordReset');
+
+      if (email) {
+        navigation.navigate('PasswordReset', {
+          email: email,
+          code: result.newHash,
+        });
+      }
     } catch (e) {
       isLoading(false);
     }
@@ -129,11 +128,9 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
     startTimer();
     if (email) {
       try {
-        // await emailCodeResend.mutateAsync({
-        //   phoneNumber: username,
-        //   session: session,
-        //   email: email,
-        // });
+        await emailValidation.mutateAsync({
+          email: email,
+        });
         Toast.show({
           type: 'THNRSuccess',
           props: {title: 'Your OTP has been resent!'},
@@ -167,10 +164,10 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Check your email</Text>
+              <Text style={styles.textTitle}>Enter your code</Text>
               <Text style={styles.textSubtitle}>
-                We sent a code to {email}.{'\n'}Enter the verification code we
-                sent to you on your email address.
+                We sent a verification code to your email address. {'\n'}
+                {email}
               </Text>
               <View style={styles.numberContainer}>
                 <OTPTextView

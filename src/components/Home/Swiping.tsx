@@ -15,6 +15,8 @@ import Animated, {
 import {IMAGES} from '../../constants/images.ts';
 import {width} from '../../constants/commons.ts';
 import {CustomerMatchResponse} from '../../types/generated.ts';
+import {MareSwiping} from '../../assets/images/swiping/MareSwiping.tsx';
+import {JowaSwiping} from '../../assets/images/swiping/JowaSwiping.tsx';
 
 type Swiping = {
   activeIndex: SharedValue<number>;
@@ -38,6 +40,7 @@ const Swiping = ({
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
   const pressed = useSharedValue(false);
+  const [isGestureActive, setIsGestureActive] = useState(false);
 
   const [currentImage, setCurrentImage] = useState('thundrHome');
   const [mareTapped, setMareTapped] = useState(false);
@@ -56,9 +59,10 @@ const Swiping = ({
   });
 
   const mareGesture = Gesture.Pan()
-    .onBegin(event => {
-      if (!pressed.value) {
+    .onBegin(() => {
+      if (!pressed.value && !isGestureActive) {
         pressed.value = true;
+        runOnJS(setIsGestureActive)(true);
       }
     })
     .onChange(event => {
@@ -124,14 +128,16 @@ const Swiping = ({
         runOnJS(setCurrentImage)('thundrHome');
       }
     })
-    .onFinalize(event => {
+    .onFinalize(() => {
       pressed.value = false;
+      runOnJS(setIsGestureActive)(false);
     });
 
   const jowaGesture = Gesture.Pan()
-    .onBegin(event => {
-      if (!pressed.value) {
+    .onBegin(() => {
+      if (!pressed.value && !isGestureActive) {
         pressed.value = true;
+        runOnJS(setIsGestureActive)(true);
       }
     })
     .onChange(event => {
@@ -197,8 +203,9 @@ const Swiping = ({
         runOnJS(setCurrentImage)('thundrHome');
       }
     })
-    .onFinalize(event => {
+    .onFinalize(() => {
       pressed.value = false;
+      runOnJS(setIsGestureActive)(false);
     });
 
   return (
@@ -211,38 +218,30 @@ const Swiping = ({
       }}>
       <GestureDetector gesture={mareGesture}>
         <Animated.View
-          style={[animateSwipeMare, {position: 'absolute', left: -95}]}>
-          {mareTapped ? (
-            <Image
-              source={IMAGES.mareTapped}
-              style={styles.swipeImageOn}
-              resizeMode={'contain'}
-            />
-          ) : (
-            <Image
-              source={IMAGES.mareHome}
-              style={styles.swipeImageOff}
-              resizeMode={'contain'}
-            />
-          )}
+          style={[
+            animateSwipeMare,
+            {
+              position: 'absolute',
+              left: -105,
+              width: width / 2,
+              height: mareTapped ? 178 : 160,
+            },
+          ]}>
+          <MareSwiping isSwiping={mareTapped} />
         </Animated.View>
       </GestureDetector>
       <GestureDetector gesture={jowaGesture}>
         <Animated.View
-          style={[animateSwipeJowa, {position: 'absolute', right: -90}]}>
-          {jowaTapped ? (
-            <Image
-              source={IMAGES.jowaTapped}
-              style={styles.swipeImageOn}
-              resizeMode={'contain'}
-            />
-          ) : (
-            <Image
-              source={IMAGES.jowaHome}
-              style={styles.swipeImageOff}
-              resizeMode={'contain'}
-            />
-          )}
+          style={[
+            animateSwipeJowa,
+            {
+              position: 'absolute',
+              right: -105,
+              width: width / 2,
+              height: jowaTapped ? 178 : 160,
+            },
+          ]}>
+          <JowaSwiping isSwiping={jowaTapped} />
         </Animated.View>
       </GestureDetector>
 
