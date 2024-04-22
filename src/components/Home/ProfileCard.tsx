@@ -30,9 +30,10 @@ const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 type ProfileCardProps = {
   user: CustomerMatchResponse;
   isUser?: boolean;
+  possibles: boolean;
 };
 
-const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
+const ProfileCard = ({user, isUser = false, possibles}: ProfileCardProps) => {
   const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
   const customerImages = user.customerData.customerPhoto[imageIndex];
@@ -81,7 +82,12 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
         </View>
       )}
       <GestureDetector gesture={tapGesture}>
-        <View style={cardStyles.imageContainer}>
+        <View
+          style={[
+            possibles
+              ? cardStyles.possiblesImageContainer
+              : cardStyles.imageContainer,
+          ]}>
           <View style={cardStyles.stepIndicatorContainer}>
             {user.customerData.customerPhoto.map((step, index) => (
               <View
@@ -97,7 +103,7 @@ const ProfileCard = ({user, isUser = false}: ProfileCardProps) => {
             ))}
           </View>
           <AnimatedImage
-            style={[cardStyles.image]}
+            style={[possibles ? cardStyles.possiblesImage : cardStyles.image]}
             entering={FadeIn}
             exiting={FadeOut}
             key={imageIndex}
