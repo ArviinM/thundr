@@ -43,7 +43,7 @@ type PasswordNewValidationProps = {
 };
 
 const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
-  const {email, code} = route?.params || {};
+  const {phoneNumber, code} = route?.params || {};
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [showPassword, setShowPassword] = useState(false);
@@ -93,9 +93,9 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
       await schema.validate(data);
       isLoading(true);
 
-      if (email && code) {
+      if (phoneNumber && code) {
         const result = await passwordChange.mutateAsync({
-          email: email,
+          phoneNumber: phoneNumber,
           code: code,
           newPassword: data.confirmPassword,
         });

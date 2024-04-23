@@ -44,7 +44,7 @@ type PasswordResetProps = {
   route?: PasswordResetScreenRouteProp;
 };
 const PasswordReset = ({route}: PasswordResetProps) => {
-  const {email, code} = route?.params || {};
+  const {phoneNumber, code} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [loading, isLoading] = useState(false);
 
@@ -52,9 +52,9 @@ const PasswordReset = ({route}: PasswordResetProps) => {
     try {
       isLoading(true);
       isLoading(false);
-      if (email && code) {
+      if (phoneNumber && code) {
         navigation.navigate('PasswordNewValidation', {
-          email: email,
+          phoneNumber: phoneNumber,
           code: code,
         });
       }

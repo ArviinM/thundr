@@ -40,7 +40,7 @@ type ForgetPasswordValidationProps = {
 };
 
 const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
-  const {email} = route?.params || {};
+  const {phoneNumber} = route?.params || {};
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const emailCodeInputRef = useRef<OTPTextView>(null);
@@ -69,15 +69,15 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
     try {
       isLoading(true);
       const result = await passwordVerification.mutateAsync({
-        email: email,
+        phoneNumber: phoneNumber,
         code: emailCode,
       } as ForgetPasswordVerificationRequest);
 
       isLoading(false);
 
-      if (email) {
+      if (phoneNumber) {
         navigation.navigate('PasswordReset', {
-          email: email,
+          phoneNumber: phoneNumber,
           code: result.newHash,
         });
       }
@@ -126,10 +126,10 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
     }
 
     startTimer();
-    if (email) {
+    if (phoneNumber) {
       try {
         await emailValidation.mutateAsync({
-          email: email,
+          phoneNumber: phoneNumber,
         });
         Toast.show({
           type: 'THNRSuccess',
@@ -166,8 +166,7 @@ const ForgetPasswordVerification = ({route}: ForgetPasswordValidationProps) => {
             <View style={styles.titleContainer}>
               <Text style={styles.textTitle}>Enter your code</Text>
               <Text style={styles.textSubtitle}>
-                We sent a verification code to your email address. {'\n'}
-                {email}
+                We sent a verification code to your registered email address.
               </Text>
               <View style={styles.numberContainer}>
                 <OTPTextView

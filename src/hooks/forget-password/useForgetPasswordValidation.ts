@@ -16,7 +16,7 @@ export function useForgetPasswordValidation() {
       data: ForgetPasswordValidationRequest,
     ): Promise<BaseResponse<null>> => {
       const response: AxiosResponse<BaseResponse<null>> =
-        await axiosInstance.post('/auth/forget-password/validate-email', data);
+        await axiosInstance.post('/auth/forget-password/validate-number', data);
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {
