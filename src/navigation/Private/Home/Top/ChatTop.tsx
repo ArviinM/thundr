@@ -1,13 +1,12 @@
+import React from 'react';
 import {Top} from '../../../../constants/navigator.ts';
-import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
-import {scale} from '../../../../utils/utils.ts';
-import {COLORS} from '../../../../constants/commons.ts';
 import {CustomTabBar} from './CustomTabBar.tsx';
+import ChatList from '../../../../screens/Private/Chat/ChatList.tsx';
 export const ChatTop = () => {
   return (
     <Top.Navigator tabBar={props => <CustomTabBar {...props} />}>
-      <Top.Screen name="JOWA" component={WorkingInProgress} />
-      <Top.Screen name="MARE" component={WorkingInProgress} />
+      <Top.Screen name="JOWA">{() => <ChatList isMare={false} />}</Top.Screen>
+      <Top.Screen name="MARE">{() => <ChatList isMare={true} />}</Top.Screen>
     </Top.Navigator>
   );
 };

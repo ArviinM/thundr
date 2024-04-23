@@ -376,3 +376,12 @@ export type ChangePasswordRequest = {
   oldPassword: string;
   newPassword: string;
 };
+
+// Chat Types
+export type Chat = {
+  profile: CustomerData;
+  lastMessage: string;
+  lastActivity: number;
+  chatRoomUuid: string;
+  tag: 'MARE' | 'JOWA';
+};
