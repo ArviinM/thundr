@@ -10,12 +10,6 @@ import {
 
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Controller, useForm} from 'react-hook-form';
-import * as yup from 'yup';
-import {yupResolver} from '@hookform/resolvers/yup';
-import {
-  KeyboardAwareScrollView,
-  KeyboardStickyView,
-} from 'react-native-keyboard-controller';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 import GradientButton from '../../../components/shared/GradientButton.tsx';
@@ -23,6 +17,12 @@ import GradientButton from '../../../components/shared/GradientButton.tsx';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+
+import {
+  KeyboardAwareScrollView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
+import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
 import {useForgetPasswordValidation} from '../../../hooks/forget-password/useForgetPasswordValidation.ts';
 
 const ForgetPasswordValidation = () => {
@@ -30,22 +30,18 @@ const ForgetPasswordValidation = () => {
   const textInputRef = useRef<TextInput>(null);
 
   const [loading, isLoading] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
 
-  const emailValidation = useForgetPasswordValidation();
-
-  const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('Your email address sis is invalid!')
-      .required('Nako mars, we need your email po to send you a verification!'),
-  });
+  const forgetPasswordValidation = useForgetPasswordValidation();
 
   const {
     control,
     handleSubmit,
-    formState: {errors, isValid},
+    formState: {errors},
   } = useForm({
-    resolver: yupResolver(schema),
+    defaultValues: {
+      phoneNumber: '',
+    },
   });
 
   useEffect(() => {
@@ -54,26 +50,29 @@ const ForgetPasswordValidation = () => {
     }
   }, []);
 
-  const onSubmit = async (data: {email: string}) => {
+  const onSubmit = async (data: {phoneNumber: string}) => {
     try {
-      await schema.validate(data);
+      const withNumberCode = `+63${data.phoneNumber}`;
       isLoading(true);
 
-      await emailValidation.mutateAsync({
-        email: data.email,
+      await forgetPasswordValidation.mutateAsync({
+        phoneNumber: withNumberCode,
       });
 
-      isLoading(false);
-      navigation.navigate('ForgetPasswordVerification', {email: data.email});
-    } catch (error) {
-      console.error(error);
+      navigation.navigate('ForgetPasswordVerification', {
+        phoneNumber: withNumberCode,
+      });
+    } catch (e) {
       isLoading(false);
     }
   };
 
+  const isPhoneNumberIncomplete = phoneNumber.length < 10;
+
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
+      <SafeAreaView edges={['top']} style={styles.container}>
+        {/*<StepProgressBar currentStep={1} totalSteps={6} />*/}
         <KeyboardAwareScrollView bottomOffset={220} style={styles.flex}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
@@ -84,11 +83,14 @@ const ForgetPasswordValidation = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Forget Password</Text>
+              <Text style={styles.textTitle}>Forgot Password</Text>
               <Text style={styles.textSubtitle}>
-                Enter the email address associated with your account.
+                Halaaa, nalimutan mo sis?!
               </Text>
               <View style={styles.numberContainer}>
+                <View style={styles.numberCodeContainer}>
+                  <Text style={styles.textNumberCode}>+63</Text>
+                </View>
                 <View style={styles.textInputContainer}>
                   <Controller
                     control={control}
@@ -98,40 +100,45 @@ const ForgetPasswordValidation = () => {
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
                         ref={textInputRef}
-                        style={styles.textInputEmail}
-                        autoComplete="email"
-                        keyboardType="email-address"
-                        placeholder="example@thundr.ph"
-                        inputMode={'email'}
+                        style={styles.textInputNumber}
+                        maxLength={10}
+                        placeholder="XXX XXXX XXX"
+                        inputMode={'numeric'}
                         onBlur={onBlur}
-                        onChangeText={onChange}
+                        onChangeText={text => {
+                          setPhoneNumber(text);
+                          onChange(text);
+                        }}
                         value={value}
-                        autoCapitalize="none"
                         selectionColor={COLORS.primary1}
                       />
                     )}
-                    name="email"
+                    name="phoneNumber"
                   />
-                  {errors.email && (
-                    <Text style={styles.errorText}>{errors.email.message}</Text>
+                  {errors.phoneNumber && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.phoneNumber.message}
+                    </Text>
                   )}
                 </View>
               </View>
               <View style={styles.bodyContainer}>
                 <Text style={styles.textBody}>
-                  We will email you a code to verify and reset your password.
+                  Mag-email kami sa’yo sis to verify that you’re really you to
+                  your e-mail address. Paalala na huwag i-share ang iyong e-mail
+                  code.
                 </Text>
               </View>
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <KeyboardStickyView offset={{closed: 0, opened: 30}}>
+        <KeyboardStickyView offset={{closed: -20, opened: 0}}>
           <View style={styles.buttonContainer}>
             <GradientButton
               onPress={handleSubmit(onSubmit)}
-              text="Continue"
+              text="Next"
               loading={loading}
-              disabled={!isValid}
+              disabled={isPhoneNumberIncomplete}
               buttonStyle={styles.buttonStyle}
               textStyle={styles.buttonTextStyle}
             />
@@ -182,9 +189,10 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+    marginLeft: 16,
     flex: 1,
   },
-  textInputEmail: {
+  textInputNumber: {
     backgroundColor: COLORS.white,
     fontSize: SIZES.h3,
     fontFamily: 'Montserrat-Medium',
@@ -208,20 +216,13 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     borderRadius: 30,
-    marginVertical: 10,
+    marginBottom: 12,
   },
   buttonTextStyle: {
     letterSpacing: -0.4,
     fontFamily: 'Montserrat-SemiBold',
     color: COLORS.white,
     fontSize: SIZES.h5,
-  },
-  errorText: {
-    marginTop: 8,
-    color: COLORS.primary1,
-    fontFamily: 'Montserrat-Regular',
-    letterSpacing: -0.8,
-    fontSize: SIZES.h6,
   },
 });
 

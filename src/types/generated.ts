@@ -345,11 +345,11 @@ export type NotificationData = {
 
 // Forget Password
 export type ForgetPasswordValidationRequest = {
-  email: string;
+  phoneNumber: string;
 };
 
 export type ForgetPasswordVerificationRequest = {
-  email: string;
+  phoneNumber: string;
   code: string;
 };
 
@@ -361,7 +361,7 @@ export type ForgetPasswordVerificationResponse = {
 };
 
 export type ForgetPasswordChangePasswordRequest = {
-  email: string;
+  phoneNumber: string;
   code: string;
   newPassword: string;
 };

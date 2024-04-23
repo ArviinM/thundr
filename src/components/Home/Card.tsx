@@ -18,6 +18,7 @@ const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 export const cardWidth = screenWidth * 0.97;
 export const cardHeight = screenHeight * 0.97;
+export const cardWidthPossibles = screenWidth * 0.67;
 
 type Card = {
   user: CustomerMatchResponse;
@@ -27,6 +28,7 @@ type Card = {
   mareTranslation: SharedValue<number[]>;
   jowaTranslation: SharedValue<number[]>;
   isMare: SharedValue<boolean>;
+  possibles?: boolean;
 };
 
 const Card = ({
@@ -37,6 +39,7 @@ const Card = ({
   mareTranslation,
   jowaTranslation,
   isMare,
+  possibles = false,
 }: Card) => {
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -57,19 +60,32 @@ const Card = ({
           ? mareTranslation.value[index]
           : jowaTranslation.value[index],
       },
+      {
+        translateX: possibles
+          ? interpolate(
+              activeIndex.value,
+              [index - 1, index, index + 1],
+              [
+                index % 2 === 0 ? -20 : 20, // Alternate signs
+                0,
+                index % 2 === 0 ? 20 : -20, // Alternate signs
+              ],
+            )
+          : 0,
+      },
     ],
   }));
 
   return (
     <Animated.View
       style={[
-        cardStyles.card,
+        possibles ? cardStyles.possiblesCard : cardStyles.card,
         animatedCard,
         {
           zIndex: numOfCards - index,
         },
       ]}>
-      <ProfileCard user={user} />
+      <ProfileCard user={user} possibles={possibles} />
     </Animated.View>
   );
 };
@@ -85,14 +101,34 @@ export const cardStyles = StyleSheet.create({
     elevation: 3,
     backgroundColor: COLORS.gray2,
   },
+  possiblesCard: {
+    width: cardWidthPossibles,
+    height: cardHeight / 2.47,
+    aspectRatio: 1 / 1.32,
+    borderRadius: 15,
+    margin: 2,
+    position: 'absolute',
+    elevation: 3,
+    backgroundColor: COLORS.gray2,
+  },
   imageContainer: {
-    borderRadius: 20, // Apply border radius here
+    borderRadius: 15, // Apply border radius here
     overflow: 'hidden', // Ensure the image is clipped to the border radius
     height: cardHeight / 1.67,
   },
+  possiblesImageContainer: {
+    borderRadius: 15, // Apply border radius here
+    overflow: 'hidden', // Ensure the image is clipped to the border radius
+    height: cardHeight / 2.47,
+  },
   image: {
-    borderRadius: 30,
+    borderRadius: 15,
     height: cardHeight / 1.67,
+    backgroundColor: COLORS.gray2,
+  },
+  possiblesImage: {
+    borderRadius: 15,
+    height: cardHeight / 2.47,
     backgroundColor: COLORS.gray2,
   },
   overlay: {
