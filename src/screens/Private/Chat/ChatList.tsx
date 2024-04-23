@@ -1,0 +1,105 @@
+import React from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  FlatList,
+  Image,
+  ListRenderItem,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {COLORS} from '../../../constants/commons.ts';
+import {chatMockList} from './chatMockList.ts';
+import {Chat} from '../../../types/generated.ts';
+import {scale} from '../../../utils/utils.ts';
+import {calculateAge} from '../../../components/Home/utils.ts';
+import moment from 'moment';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+
+const ChatList = ({isMare}: {isMare: boolean}) => {
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  const filteredChatList = chatMockList.filter(chat =>
+    isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
+  );
+
+  const renderItem: ListRenderItem<Chat> = ({item, index}) => (
+    <TouchableOpacity
+      key={index}
+      onPress={() =>
+        navigation.navigate('ChatMessages', {user: item, isMare: isMare})
+      }>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginVertical: 8,
+        }}>
+        <View>
+          <Image
+            source={{uri: item.profile.customerPhoto[0].photoUrl}}
+            style={{width: scale(70), height: scale(70), borderRadius: 8}}
+            resizeMode="cover"
+          />
+        </View>
+        <View style={{justifyContent: 'center', paddingHorizontal: 10}}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-ExtraBold',
+              fontSize: scale(18),
+              color: isMare ? COLORS.secondary2 : COLORS.primary1,
+              letterSpacing: -0.4,
+            }}>
+            {item.profile.name.split(' ')[0] || '👻'},{' '}
+            {calculateAge(item.profile.birthday)}
+          </Text>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Regular',
+              fontSize: scale(14),
+              color: COLORS.black,
+              letterSpacing: -0.4,
+            }}>
+            Say hello to {item.profile.name.split(' ')[0] || '👻'} 👋
+          </Text>
+        </View>
+        <View style={{flex: 1}} />
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            paddingBottom: scale(16),
+          }}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Regular',
+              fontSize: scale(14),
+              color: COLORS.black,
+            }}>
+            {moment(item.lastActivity).utc().format('h:mm A')}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderContent = () => {
+    return (
+      <View style={{flex: 1}}>
+        <FlatList data={filteredChatList} renderItem={renderItem} />
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView edges={['left', 'right']} style={{flex: 1}}>
+      {/*Main View Container*/}
+      <View style={{flex: 1, padding: 6, backgroundColor: COLORS.white}}>
+        {/*Render Content*/}
+        {renderContent()}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default ChatList;

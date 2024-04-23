@@ -1,4 +1,5 @@
-import {Animated, View, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {View, TouchableOpacity, Text} from 'react-native';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {scale} from '../../../../utils/utils.ts';
 
@@ -43,19 +44,6 @@ export const CustomTabBar = ({
           }
         };
 
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
-
-        const inputRange = state.routes.map((_, i) => i);
-        const opacity = position.interpolate({
-          inputRange,
-          outputRange: inputRange.map(i => (i === index ? 1 : 1)),
-        });
-
         const isMare = route.name === 'MARE';
 
         return (
@@ -66,7 +54,6 @@ export const CustomTabBar = ({
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
             onPress={onPress}
-            onLongPress={onLongPress}
             style={{
               flex: 1,
               borderWidth: 1,
@@ -81,10 +68,9 @@ export const CustomTabBar = ({
                   : COLORS.primary1
                 : COLORS.gray5,
             }}>
-            <Animated.Text
+            <Text
               style={[
                 {
-                  opacity,
                   fontFamily: 'Montserrat-Black',
                   fontSize: scale(18),
                   color: isFocused
@@ -95,7 +81,7 @@ export const CustomTabBar = ({
                 },
               ]}>
               {typeof label === 'string' ? label : ''}
-            </Animated.Text>
+            </Text>
           </TouchableOpacity>
         );
       })}

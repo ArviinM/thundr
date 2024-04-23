@@ -17,6 +17,7 @@ import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
 import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
 import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
+import ChatMessages from '../../screens/Private/Chat/ChatMessages.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -80,6 +81,17 @@ export const AuthenticatedStack = () => {
             statusBarColor: COLORS.primary1,
             statusBarTranslucent: true,
             animation: 'slide_from_bottom',
+            statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
+            statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
+          }}
+        />
+        <Stack.Screen
+          name="ChatMessages"
+          component={ChatMessages}
+          options={{
+            statusBarColor: COLORS.white,
+            statusBarTranslucent: true,
+            animation: 'slide_from_right',
             statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}

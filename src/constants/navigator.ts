@@ -5,6 +5,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {
+  Chat,
   CompatibilityQuestionsRequest,
   CustomerData,
   CustomerMatchResponse,
@@ -82,4 +83,7 @@ export type RootNavigationParams = {
 
   // The Possibles
   Possibles: undefined;
+
+  // chats
+  ChatMessages: {user: Chat; isMare: boolean};
 };
