@@ -63,7 +63,7 @@ export const SendIcon = (props: {isMare: boolean; disabled: boolean}) => {
           ry={18.5}
           fill={
             props.disabled
-              ? COLORS.gray
+              ? COLORS.gray2
               : props.isMare
               ? COLORS.secondary2
               : COLORS.primary1

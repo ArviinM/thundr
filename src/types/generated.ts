@@ -417,3 +417,11 @@ export type ChatMessageRequest = {
   limit: number;
   beforeId?: number;
 };
+
+export type ChatSendMessageRequest = {
+  senderSub: string;
+  message: string;
+  read: string;
+  targetSub: string;
+  attachments?: string[] | null;
+};

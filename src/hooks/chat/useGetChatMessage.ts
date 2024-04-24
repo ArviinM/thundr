@@ -13,7 +13,7 @@ export function useGetChatMessage(props: ChatMessageRequest) {
 
   return useQuery({
     queryKey: ['get-chat-message', props],
-    enabled: true,
+    staleTime: Infinity,
     queryFn: async (): Promise<ChatMessage[]> => {
       const config: AxiosRequestConfig<ChatMessageRequest> = {
         params: {

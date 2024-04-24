@@ -4,6 +4,7 @@ import {
   FlatList,
   Image,
   ListRenderItem,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
@@ -17,14 +18,19 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
-import {Loading} from '../../../components/shared/Loading.tsx';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const [refreshing, setRefreshing] = useState(false);
 
   const auth = useAuth();
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getChatList.refetch().then(() => setRefreshing(false)); // Refetch data
+  }, [getChatList]);
 
   const renderItem: ListRenderItem<Chat> = ({item, index}) => (
     <TouchableOpacity
@@ -98,6 +104,9 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
               isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
             )}
             renderItem={renderItem}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
         )}
       </View>

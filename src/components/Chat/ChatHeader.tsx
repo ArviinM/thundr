@@ -16,8 +16,9 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
     <View
       style={{
         flexDirection: 'row',
-
-        marginHorizontal: 20,
+        borderColor: COLORS.gray2,
+        borderBottomWidth: 1,
+        paddingHorizontal: 20,
         paddingVertical: 10,
         alignItems: 'center',
         gap: 20,

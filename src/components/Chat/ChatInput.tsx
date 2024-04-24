@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Image,
   Platform,
   StyleSheet,
   TextInput,
@@ -11,7 +10,13 @@ import {COLORS} from '../../constants/commons.ts';
 import {SendIcon} from '../../assets/images/chat/SendIcon.tsx';
 import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
 
-const ChatInput = ({isMare}: {isMare: boolean}) => {
+const ChatInput = ({
+  isMare,
+  onPressSend,
+}: {
+  isMare: boolean;
+  onPressSend: (message: string) => void;
+}) => {
   const [inputText, setInputText] = useState<string>('');
 
   return (
@@ -40,7 +45,10 @@ const ChatInput = ({isMare}: {isMare: boolean}) => {
       <TouchableOpacity
         disabled={!inputText}
         style={styles.buttonContainer}
-        onPress={() => console.log('handling send')}>
+        onPress={() => {
+          onPressSend(inputText.trim()); // Pass message to callback
+          setInputText(''); // Clear input
+        }}>
         <SendIcon isMare={isMare} disabled={!inputText} />
       </TouchableOpacity>
     </View>

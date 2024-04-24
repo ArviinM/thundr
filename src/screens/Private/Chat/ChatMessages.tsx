@@ -14,6 +14,9 @@ import {
 } from 'react-native-keyboard-controller';
 import {scale} from '../../../utils/utils.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
+import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
+import {queryClient} from '../../../utils/queryClient.ts';
+import {useQueryClient} from '@tanstack/react-query';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -26,12 +29,30 @@ type ChatMessagesProps = {
 
 const ChatMessages = ({route}: ChatMessagesProps) => {
   const {user, isMare = false} = route?.params || {};
+  const query = useQueryClient(queryClient);
 
   const chatMessage = useGetChatMessage({
     sub: user?.sub || '',
     chatRoomID: user?.chatRoomUuid || '',
     limit: 50,
   });
+
+  const sendMessage = useSendChatMessage();
+
+  const handleSendMessage = async (message: string) => {
+    // TODO: Implement your logic to send the message
+    if (user) {
+      await sendMessage.mutateAsync({
+        senderSub: user.sub,
+        targetSub: user.profile.sub,
+        message: message,
+        read: '',
+        attachments: null,
+      });
+      await query.invalidateQueries({queryKey: ['get-chat-message']});
+      await query.invalidateQueries({queryKey: ['get-chat-list']});
+    }
+  };
 
   return (
     <SafeAreaView
@@ -59,7 +80,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           {/*Chat Text Input*/}
           <KeyboardStickyView
             offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
-            <ChatInput isMare={isMare} />
+            <ChatInput isMare={isMare} onPressSend={handleSendMessage} />
           </KeyboardStickyView>
         </View>
       ) : (

@@ -2,7 +2,6 @@ import React from 'react';
 import {FlatList, View, Text, StyleSheet} from 'react-native';
 import {ChatMessage, Chat} from '../../types/generated.ts';
 import moment from 'moment';
-import {chatMockMessage} from '../../screens/Private/Chat/chatMockMessage.ts';
 import {COLORS} from '../../constants/commons.ts';
 import {scale} from '../../utils/utils.ts';
 
@@ -21,7 +20,7 @@ const ChatBubbles = ({
   };
 
   const isMessageFromSelf = (message: ChatMessage) => {
-    return message.senderSub === user.profile.sub;
+    return message.senderSub === user.sub;
   };
 
   const renderItem = ({item: message}: {item: ChatMessage}) => (
