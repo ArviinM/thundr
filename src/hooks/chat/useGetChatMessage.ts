@@ -3,28 +3,33 @@ import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
-  CustomerData,
-  CustomerProfileRequest,
+  ChatMessage,
+  ChatMessageRequest,
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
-export function useGetCustomerProfile(props: CustomerProfileRequest) {
+export function useGetChatMessage(props: ChatMessageRequest) {
   const axiosInstance = useAxiosWithAuth();
 
   return useQuery({
-    queryKey: ['get-customer-profile', props],
-    enabled: true,
-    queryFn: async (): Promise<CustomerData> => {
-      const config: AxiosRequestConfig<CustomerProfileRequest> = {
-        params: {sub: props.sub},
+    queryKey: ['get-chat-message', props],
+    refetchInterval: 3000,
+    queryFn: async (): Promise<ChatMessage[]> => {
+      const config: AxiosRequestConfig<ChatMessageRequest> = {
+        params: {
+          sub: props.sub,
+          chatRoomID: props.chatRoomID,
+          limit: props.limit,
+          beforeId: props.beforeId || null,
+        },
       };
 
-      const response: AxiosResponse<BaseResponse<CustomerData>> =
-        await axiosInstance.get('/customer/profile', config);
+      const response: AxiosResponse<BaseResponse<ChatMessage[]>> =
+        await axiosInstance.get('/chat/v2/message', config);
 
       if (response.status !== HttpStatusCode.Ok) {
         showErrorToast({
-          name: 'get-customer-profile',
+          name: 'get-chat-message',
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,

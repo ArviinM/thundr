@@ -89,10 +89,7 @@ export const AuthenticatedStack = () => {
           name="ChatMessages"
           component={ChatMessages}
           options={{
-            statusBarColor: COLORS.white,
-            statusBarTranslucent: true,
             animation: 'slide_from_right',
-            statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}
         />

@@ -1,28 +1,36 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   FlatList,
   Image,
   ListRenderItem,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {COLORS} from '../../../constants/commons.ts';
-import {chatMockList} from './chatMockList.ts';
 import {Chat} from '../../../types/generated.ts';
 import {scale} from '../../../utils/utils.ts';
 import {calculateAge} from '../../../components/Home/utils.ts';
 import moment from 'moment';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const [refreshing, setRefreshing] = useState(false);
 
-  const filteredChatList = chatMockList.filter(chat =>
-    isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
-  );
+  const auth = useAuth();
+
+  const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getChatList.refetch().then(() => setRefreshing(false)); // Refetch data
+  }, [getChatList]);
 
   const renderItem: ListRenderItem<Chat> = ({item, index}) => (
     <TouchableOpacity
@@ -60,7 +68,11 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
               color: COLORS.black,
               letterSpacing: -0.4,
             }}>
-            Say hello to {item.profile.name.split(' ')[0] || '👻'} 👋
+            {item.latestChat
+              ? item.latestChat.message
+                ? item.latestChat.message
+                : '[Image]'
+              : `Say hello to ${item.profile.name.split(' ')[0] || '👻'} 👋`}
           </Text>
         </View>
         <View style={{flex: 1}} />
@@ -76,7 +88,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
               fontSize: scale(14),
               color: COLORS.black,
             }}>
-            {moment(item.lastActivity).utc().format('h:mm A')}
+            {moment(item.lastActivity).format('h:mm A')}
           </Text>
         </View>
       </View>
@@ -86,7 +98,17 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
   const renderContent = () => {
     return (
       <View style={{flex: 1}}>
-        <FlatList data={filteredChatList} renderItem={renderItem} />
+        {getChatList.data && (
+          <FlatList
+            data={getChatList.data.filter(chat =>
+              isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
+            )}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+        )}
       </View>
     );
   };
