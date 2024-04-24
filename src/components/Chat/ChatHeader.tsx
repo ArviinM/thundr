@@ -7,6 +7,7 @@ import {RootNavigationParams} from '../../constants/navigator.ts';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
 import {calculateAge} from '../Home/utils.ts';
+import {ChatReportIcons} from '../../assets/images/report/ChatReportIcons.tsx';
 
 const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -65,7 +66,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}>
-          <Text>Report</Text>
+          <ChatReportIcons isMare={isMare} />
         </TouchableOpacity>
       </View>
     </View>

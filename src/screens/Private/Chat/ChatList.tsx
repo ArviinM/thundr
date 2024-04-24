@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   FlatList,
@@ -16,9 +16,11 @@ import {calculateAge} from '../../../components/Home/utils.ts';
 import moment from 'moment';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+import GenericModal from '../../../components/shared/GenericModal.tsx';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const [visible, isVisible] = useState(true);
 
   const filteredChatList = chatMockList.filter(chat =>
     isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
@@ -93,6 +95,20 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
 
   return (
     <SafeAreaView edges={['left', 'right']} style={{flex: 1}}>
+      <GenericModal
+        isVisible={visible}
+        title="Dev Log Sprint #4 & #5"
+        content={
+          <Text style={{fontFamily: 'Montserrat-Regular'}}>
+            Welcome Testers! 🦈 {'\n\n'}
+            Chat and The Possibles are still working in progress!
+            {'\n\n'}
+            Big Sharky Dev, {'\n'}Tanders, Inc
+          </Text>
+        }
+        buttonText="Close"
+        onClose={() => isVisible(false)}
+      />
       {/*Main View Container*/}
       <View style={{flex: 1, padding: 6, backgroundColor: COLORS.white}}>
         {/*Render Content*/}

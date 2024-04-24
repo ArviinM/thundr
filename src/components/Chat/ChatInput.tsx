@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
+import {SendIcon} from '../../assets/images/chat/SendIcon.tsx';
+import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
 
 const ChatInput = ({isMare}: {isMare: boolean}) => {
   const [inputText, setInputText] = useState<string>('');
@@ -28,28 +30,17 @@ const ChatInput = ({isMare}: {isMare: boolean}) => {
           placeholderTextColor={'#ffffff'}
           maxLength={255}
         />
-        {/*<TouchableOpacity*/}
-        {/*  onPress={() => openImageLibrary(false)}*/}
-        {/*  style={{paddingRight: 6}}>*/}
-        {/*  <Image*/}
-        {/*    source={MESSAGES_ASSET_URI.GALLERY_ICON}*/}
-        {/*    height={25}*/}
-        {/*    width={25}*/}
-        {/*  />*/}
-        {/*</TouchableOpacity>*/}
+        <TouchableOpacity
+          onPress={() => console.log('add me the rn image picker :< ')}
+          style={{paddingRight: 16}}>
+          <ImagesIcon />
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
+        disabled={!inputText}
         style={styles.buttonContainer}
         onPress={() => console.log('handling send')}>
-        {/*<Image*/}
-        {/*  source={*/}
-        {/*    isMare*/}
-        {/*      ? MESSAGES_ASSET_URI.MARE_SEND_ICON*/}
-        {/*      : MESSAGES_ASSET_URI.SEND_ICON*/}
-        {/*  }*/}
-        {/*  height={45}*/}
-        {/*  width={45}*/}
-        {/*/>*/}
+        <SendIcon isMare={isMare} disabled={!inputText} />
       </TouchableOpacity>
     </View>
   );
@@ -67,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 5,
     borderRadius: 25,
-    width: '85%',
+    width: '87%',
   },
   buttonContainer: {
     padding: 5,
