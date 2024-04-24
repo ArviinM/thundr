@@ -380,8 +380,40 @@ export type ChangePasswordRequest = {
 // Chat Types
 export type Chat = {
   profile: CustomerData;
-  lastMessage: string;
   lastActivity: number;
   chatRoomUuid: string;
   tag: 'MARE' | 'JOWA';
+  ttl: number;
+  matchDate: number;
+  compatibilityScore: string;
+  latestChat: ChatMessage;
+  sub: string;
+  userLastActive: string;
+};
+
+// Define a type for the attachment URLs
+export type Attachment = string;
+
+// Define a type for a single chat message
+export type ChatMessage = {
+  id: number;
+  chatRoomID: string;
+  senderSub: string;
+  message: string;
+  created: string;
+  isRead: number;
+  attachments: Attachment[];
+  targetSub: string;
+};
+
+export type ChatListRequest = {
+  sub: string;
+  beforeLastActivity?: number;
+};
+
+export type ChatMessageRequest = {
+  sub: string;
+  chatRoomID: string;
+  limit: number;
+  beforeId?: number;
 };

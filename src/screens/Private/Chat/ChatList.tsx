@@ -9,22 +9,22 @@ import {
   View,
 } from 'react-native';
 import {COLORS} from '../../../constants/commons.ts';
-import {chatMockList} from './chatMockList.ts';
 import {Chat} from '../../../types/generated.ts';
 import {scale} from '../../../utils/utils.ts';
 import {calculateAge} from '../../../components/Home/utils.ts';
 import moment from 'moment';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import GenericModal from '../../../components/shared/GenericModal.tsx';
+import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
+import {Loading} from '../../../components/shared/Loading.tsx';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const [visible, isVisible] = useState(true);
 
-  const filteredChatList = chatMockList.filter(chat =>
-    isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
-  );
+  const auth = useAuth();
+
+  const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
 
   const renderItem: ListRenderItem<Chat> = ({item, index}) => (
     <TouchableOpacity
@@ -62,7 +62,11 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
               color: COLORS.black,
               letterSpacing: -0.4,
             }}>
-            Say hello to {item.profile.name.split(' ')[0] || '👻'} 👋
+            {item.latestChat
+              ? item.latestChat.message
+                ? item.latestChat.message
+                : '[Image]'
+              : `Say hello to ${item.profile.name.split(' ')[0] || '👻'} 👋`}
           </Text>
         </View>
         <View style={{flex: 1}} />
@@ -78,7 +82,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
               fontSize: scale(14),
               color: COLORS.black,
             }}>
-            {moment(item.lastActivity).utc().format('h:mm A')}
+            {moment(item.lastActivity).format('h:mm A')}
           </Text>
         </View>
       </View>
@@ -88,27 +92,20 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
   const renderContent = () => {
     return (
       <View style={{flex: 1}}>
-        <FlatList data={filteredChatList} renderItem={renderItem} />
+        {getChatList.data && (
+          <FlatList
+            data={getChatList.data.filter(chat =>
+              isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
+            )}
+            renderItem={renderItem}
+          />
+        )}
       </View>
     );
   };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={{flex: 1}}>
-      <GenericModal
-        isVisible={visible}
-        title="Dev Log Sprint #4 & #5"
-        content={
-          <Text style={{fontFamily: 'Montserrat-Regular'}}>
-            Welcome Testers! 🦈 {'\n\n'}
-            Chat and The Possibles are still working in progress!
-            {'\n\n'}
-            Big Sharky Dev, {'\n'}Tanders, Inc
-          </Text>
-        }
-        buttonText="Close"
-        onClose={() => isVisible(false)}
-      />
       {/*Main View Container*/}
       <View style={{flex: 1, padding: 6, backgroundColor: COLORS.white}}>
         {/*Render Content*/}

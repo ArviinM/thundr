@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   Image,
+  Platform,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -48,10 +49,12 @@ const ChatInput = ({isMare}: {isMare: boolean}) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: Platform.OS === 'ios' ? 0 : 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: COLORS.white,
   },
   inputTextContainer: {
     flexDirection: 'row',
