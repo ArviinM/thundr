@@ -73,13 +73,21 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       const imageData: Base64Attachments[] = [];
       for (const image of images) {
         if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+          // Toast.show({
+          //   type: 'warning',
+          //   text1: 'Hala, ang laki!',
+          //   text2: 'Limit upload up to 8mb per photo',
+          //   position: 'bottom',
+          //   bottomOffset: height + 55,
+          // });
+
           Toast.show({
-            type: 'warning',
-            text1: 'Hala, ang laki!',
-            text2: 'Limit upload up to 8mb per photo',
+            type: 'THNRError',
+            props: {title: 'Hala, ang laki!'},
             position: 'bottom',
             bottomOffset: height + 55,
           });
+
           throw new Error(
             'Image exceeds maximum size limit. Please select a smaller image.',
           );
@@ -92,10 +100,16 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       }
 
       if (Platform.OS === 'android' && imageData.length >= 5) {
+        // Toast.show({
+        //   type: 'warning',
+        //   text1: 'Hala, ang dami!',
+        //   text2: 'Limit of 4 photos per sending',
+        //   position: 'bottom',
+        //   bottomOffset: height + 55,
+        // });
         Toast.show({
-          type: 'warning',
-          text1: 'Hala, ang dami!',
-          text2: 'Limit of 4 photos per sending',
+          type: 'THNRError',
+          props: {title: 'Hala, ang dami!'},
           position: 'bottom',
           bottomOffset: height + 55,
         });

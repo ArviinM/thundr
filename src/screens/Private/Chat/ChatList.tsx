@@ -71,7 +71,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
             {item.latestChat
               ? item.latestChat.message
                 ? item.latestChat.message
-                : '[Image]'
+                : '[Image] 🌠'
               : `Say hello to ${item.profile.name.split(' ')[0] || '👻'} 👋`}
           </Text>
         </View>
