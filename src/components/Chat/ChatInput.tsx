@@ -13,9 +13,11 @@ import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
 const ChatInput = ({
   isMare,
   onPressSend,
+  onPressImage,
 }: {
   isMare: boolean;
   onPressSend: (message: string) => void;
+  onPressImage: () => void;
 }) => {
   const [inputText, setInputText] = useState<string>('');
 
@@ -36,9 +38,7 @@ const ChatInput = ({
           placeholderTextColor={'#ffffff'}
           maxLength={255}
         />
-        <TouchableOpacity
-          onPress={() => console.log('add me the rn image picker :< ')}
-          style={{paddingRight: 16}}>
+        <TouchableOpacity onPress={onPressImage} style={{paddingRight: 16}}>
           <ImagesIcon />
         </TouchableOpacity>
       </View>

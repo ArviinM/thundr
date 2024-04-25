@@ -1,22 +1,25 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Platform, Text, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {Loading} from '../../../components/shared/Loading.tsx';
 import ChatHeader from '../../../components/Chat/ChatHeader.tsx';
-import {COLORS} from '../../../constants/commons.ts';
+import {COLORS, height} from '../../../constants/commons.ts';
 import ChatInput from '../../../components/Chat/ChatInput.tsx';
 import ChatBubbles from '../../../components/Chat/ChatBubbles.tsx';
 import {
   KeyboardAvoidingView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import {scale} from '../../../utils/utils.ts';
+import {MAX_IMAGE_SIZE_BYTES, scale} from '../../../utils/utils.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
 import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
+import ImagePicker from 'react-native-image-crop-picker';
+import Toast from 'react-native-toast-message';
+import {Base64Attachments} from '../../../types/generated.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -52,6 +55,76 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
+  const handleImageUpload = async () => {
+    console.log('i am being now developed by arvv');
+    try {
+      let images = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        multiple: true,
+        includeBase64: true,
+        forceJpg: true,
+        maxFiles: 4,
+      });
+
+      if (!images || images.length === 0) {
+        return null;
+      }
+
+      const imageData: Base64Attachments[] = [];
+      for (const image of images) {
+        if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+          Toast.show({
+            type: 'warning',
+            text1: 'Hala, ang laki!',
+            text2: 'Limit upload up to 8mb per photo',
+            position: 'bottom',
+            bottomOffset: height + 55,
+          });
+          throw new Error(
+            'Image exceeds maximum size limit. Please select a smaller image.',
+          );
+        }
+
+        imageData.push({
+          fileName: image.filename,
+          fileContentBase64: image.data,
+        });
+      }
+
+      if (Platform.OS === 'android' && imageData.length >= 5) {
+        Toast.show({
+          type: 'warning',
+          text1: 'Hala, ang dami!',
+          text2: 'Limit of 4 photos per sending',
+          position: 'bottom',
+          bottomOffset: height + 55,
+        });
+        throw new Error('Image selection exceeds the limit of 5 images.');
+      }
+
+      if (user && imageData) {
+        console.log({
+          senderSub: user.sub,
+          targetSub: user.profile.sub,
+          message: '',
+          read: '',
+          base64Attachments: imageData,
+        });
+        await sendMessage.mutateAsync({
+          senderSub: user.sub,
+          targetSub: user.profile.sub,
+          message: '',
+          read: '',
+          base64Files: imageData,
+        });
+        await query.invalidateQueries({queryKey: ['get-chat-message']});
+        await query.invalidateQueries({queryKey: ['get-chat-list']});
+      }
+    } catch (error) {
+      console.error('An error occurred in handling image', error);
+    }
+  };
+
   return (
     <SafeAreaView
       edges={['left', 'right', 'top', 'bottom']}
@@ -78,7 +151,11 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           {/*Chat Text Input*/}
           <KeyboardStickyView
             offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
-            <ChatInput isMare={isMare} onPressSend={handleSendMessage} />
+            <ChatInput
+              isMare={isMare}
+              onPressSend={handleSendMessage}
+              onPressImage={handleImageUpload}
+            />
           </KeyboardStickyView>
         </View>
       ) : (
