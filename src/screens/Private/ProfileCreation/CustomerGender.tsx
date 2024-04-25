@@ -114,7 +114,6 @@ const CustomerGender = () => {
                         selectedLetter={selectedLetter}
                         onChange={(item: string) => {
                           onChange(item);
-                          //TODO: Check if selected letter is changed based on onchange item
                           setSelectedLetter(item);
                         }}
                       />
@@ -126,7 +125,6 @@ const CustomerGender = () => {
                     {errors.selectedLetter.message}
                   </Text>
                 )}
-                {/*</View>*/}
               </View>
               <View style={profileCreationStyles.bodyContainer}>
                 <Text style={profileCreationStyles.textBody}>

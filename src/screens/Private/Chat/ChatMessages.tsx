@@ -55,7 +55,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
       formData.append(
         'chat',
-        new Blob([JSON.stringify(chatData)], {
+        new File([JSON.stringify(chatData)], 'chat.json', {
           type: 'application/json',
           lastModified: Date.now(),
         }),

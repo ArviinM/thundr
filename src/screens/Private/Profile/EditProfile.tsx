@@ -39,6 +39,11 @@ import {
 } from '../../../utils/dropdownOptions.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {
+  convertAbbreviationToWord,
+  convertWordToAbbreviation,
+  generateDayData,
+  generateMonthData,
+  generateYearData,
   moderateScale,
   parseFeetAndInches,
   scale,
@@ -49,6 +54,7 @@ import {CustomerDetailsRequest} from '../../../types/generated.ts';
 import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomerDetails.ts';
 import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
 import Toast from 'react-native-toast-message';
+import LetterGradientButton from '../../../components/shared/LetterGradientButton.tsx';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -71,6 +77,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     gender,
     birthday,
   } = route?.params || {};
+
   const {mutateAsync} = useUploadProfilePhoto();
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const query = useQueryClient(queryClient);
@@ -122,9 +129,15 @@ const EditProfile = ({route}: EditProfileProps) => {
 
   const schema = yup.object().shape({
     name: yup.string().required('Mars, we need your name!'),
+    month: yup.string().required('Nako mars, we need your birth month po!'),
+    day: yup.string().required('Nako mars, we need your birth day po!'),
+    year: yup.string().required('Nako mars, we need your birth year po!'),
     bio: yup.string().required('Mars, we need your bio!'),
     work: yup.string().required('Mars, any work will do!'),
     location: yup.string().required('Nako mars! We need your location po!'),
+    selectedLetter: yup
+      .string()
+      .required('Nako mars, we need your chosen gender po!'),
     feet: yup.string(),
     inches: yup.string(),
     starSign: yup.string(),
@@ -137,6 +150,14 @@ const EditProfile = ({route}: EditProfileProps) => {
   });
 
   const {feet, inches} = parseFeetAndInches(customerDetails?.height);
+  const [year, month, day] = birthday ? birthday.split('-') : ['', '', ''];
+  const monthData = generateMonthData();
+  const dayData = generateDayData();
+  const yearData = generateYearData();
+  const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
+  const [selectedLetter, setSelectedLetter] = useState(
+    convertWordToAbbreviation(gender || ''),
+  );
 
   const {
     control,
@@ -146,6 +167,10 @@ const EditProfile = ({route}: EditProfileProps) => {
     resolver: yupResolver(schema),
     defaultValues: {
       name: name,
+      year: year,
+      month: month,
+      day: day,
+      selectedLetter: convertWordToAbbreviation(gender || ''),
       bio: customerDetails?.bio || '',
       work: customerDetails?.work || '',
       location: customerDetails?.location || '',
@@ -166,6 +191,10 @@ const EditProfile = ({route}: EditProfileProps) => {
     work: string;
     location: string;
     name: string;
+    year: string;
+    month: string;
+    day: string;
+    selectedLetter: string;
     feet?: string;
     inches?: string;
     starSign?: string;
@@ -179,6 +208,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     try {
       isLoading(true);
       const updatedData: Partial<CustomerDetailsRequest> = {};
+      // const gender = convertAbbreviationToWord(selectedLetter);
 
       if (data.feet && data.inches) {
         updatedData.height = `${data.feet} ${data.inches}`;
@@ -225,9 +255,9 @@ const EditProfile = ({route}: EditProfileProps) => {
         await updateProfile.mutateAsync({
           sub: sub,
           name: data.name,
-          gender: gender,
+          gender: convertAbbreviationToWord(selectedLetter),
           hometown: 'None',
-          birthday: birthday,
+          birthday: `${data.year}-${data.month}-${data.day}`,
         });
       }
 
@@ -326,6 +356,123 @@ const EditProfile = ({route}: EditProfileProps) => {
                 </Text>
               )}
             </View>
+
+            <View style={{paddingVertical: 10}}>
+              <Text style={styles.inputTextStyle}>Birthday</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  gap: 6,
+                }}>
+                <View style={profileCreationStyles.dropdownSection}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <CustomDropdown
+                        data={monthData}
+                        placeholder="MM"
+                        value={value}
+                        onChange={item => {
+                          onChange(item.value);
+                        }}
+                      />
+                    )}
+                    name="month"
+                  />
+                  {errors.month && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.month.message}
+                    </Text>
+                  )}
+                </View>
+                <View style={profileCreationStyles.dropdownSection}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <CustomDropdown
+                        data={dayData}
+                        placeholder="DD"
+                        value={value}
+                        onChange={item => {
+                          onChange(item.value);
+                        }}
+                      />
+                    )}
+                    name="day"
+                  />
+                  {errors.day && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.day.message}
+                    </Text>
+                  )}
+                </View>
+                <View style={profileCreationStyles.dropdownSection}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, value}}) => (
+                      <CustomDropdown
+                        data={yearData}
+                        placeholder="YYYY"
+                        value={value}
+                        onChange={item => {
+                          onChange(item.value);
+                        }}
+                      />
+                    )}
+                    name="year"
+                  />
+                  {errors.year && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.year.message}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </View>
+
+            <View style={{paddingVertical: 10}}>
+              <Text style={styles.inputTextStyle}>Gender</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-around',
+                }}>
+                {letters.map((letter, index) => (
+                  <Controller
+                    key={index}
+                    control={control}
+                    name="selectedLetter" // Use a single name
+                    render={({field: {onChange}}) => (
+                      <LetterGradientButton
+                        letter={letter}
+                        selectedLetter={selectedLetter}
+                        onChange={(item: string) => {
+                          onChange(item);
+                          setSelectedLetter(item);
+                        }}
+                      />
+                    )}
+                  />
+                ))}
+                {errors.selectedLetter && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.selectedLetter.message}
+                  </Text>
+                )}
+              </View>
+            </View>
+
             <View style={styles.inputContainer}>
               <Text style={styles.inputTextStyle}>About Me</Text>
               <Controller

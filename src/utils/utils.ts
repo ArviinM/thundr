@@ -60,11 +60,25 @@ const abbreviationToWord: Record<string, string> = {
   '+': 'Plus',
 };
 
-export function convertAbbreviationToWord(abbreviation: string) {
+export function convertAbbreviationToWord(abbreviation: string): string {
   let words = abbreviation
     .split('')
     .map(letter => abbreviationToWord[letter] || letter);
   return words.join('');
+}
+
+export function convertWordToAbbreviation(word: string): string {
+  const wordToAbbreviation = Object.keys(abbreviationToWord).reduce(
+    (map, key) => {
+      map[abbreviationToWord[key].toLowerCase()] = key; // Change here
+      return map;
+    },
+    {} as Record<string, string>,
+  );
+
+  return word.toLowerCase() in wordToAbbreviation
+    ? wordToAbbreviation[word.toLowerCase()]
+    : word;
 }
 
 const guidelineBaseWidth = 375;

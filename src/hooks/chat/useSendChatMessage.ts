@@ -1,11 +1,7 @@
 import {useMutation} from '@tanstack/react-query';
 import {AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
-import {
-  BaseResponse,
-  ChatMessage,
-  ChatSendMessageRequest,
-} from '../../types/generated.ts';
+import {BaseResponse, ChatMessage} from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
 export function useSendChatMessage() {
