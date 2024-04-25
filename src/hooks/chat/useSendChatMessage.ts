@@ -13,9 +13,13 @@ export function useSendChatMessage() {
 
   return useMutation({
     mutationKey: ['send-chat-message'],
-    mutationFn: async (data: ChatSendMessageRequest): Promise<ChatMessage> => {
+    mutationFn: async (formData: FormData): Promise<ChatMessage> => {
       const response: AxiosResponse<BaseResponse<ChatMessage>> =
-        await axiosInstance.post('/chat/message', data);
+        await axiosInstance.post('/chat/send-message', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {

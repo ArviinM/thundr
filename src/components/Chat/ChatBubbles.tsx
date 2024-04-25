@@ -1,6 +1,6 @@
 import React from 'react';
-import {FlatList, View, Text, StyleSheet} from 'react-native';
-import {ChatMessage, Chat} from '../../types/generated.ts';
+import {FlatList, View, Text, StyleSheet, Image} from 'react-native';
+import {ChatMessage, Chat, Attachment} from '../../types/generated.ts';
 import moment from 'moment';
 import {COLORS} from '../../constants/commons.ts';
 import {scale} from '../../utils/utils.ts';
@@ -14,13 +14,27 @@ const ChatBubbles = ({
   isMare: boolean;
   chatMessages: ChatMessage[];
 }) => {
-  // Function to format the timestamp
   const formatTimestamp = (timestamp: string) => {
-    return moment(timestamp).format('h:mm A'); // e.g., Apr 23, Wednesday
+    return moment(timestamp).format('h:mm A');
   };
 
   const isMessageFromSelf = (message: ChatMessage) => {
     return message.senderSub === user.sub;
+  };
+
+  const renderImage = ({item: attachments}: {item: Attachment[]}) => {
+    // console.log(attachments);
+    return (
+      <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+        {attachments.map((photo, index) => (
+          <Image
+            key={index}
+            source={{uri: photo}}
+            style={{aspectRatio: 1, height: 100, width: 100}}
+          />
+        ))}
+      </View>
+    );
   };
 
   const renderItem = ({item: message}: {item: ChatMessage}) => (
@@ -33,17 +47,21 @@ const ChatBubbles = ({
             : [styles.messageRight, {backgroundColor: COLORS.primary1}]
           : styles.messageLeft,
       ]}>
-      <Text
-        style={[
-          styles.messageText,
-          isMessageFromSelf(message)
-            ? isMare
-              ? [{color: COLORS.white}]
-              : [{color: COLORS.white}]
-            : styles.messageText,
-        ]}>
-        {message.message}
-      </Text>
+      {message.attachments.length !== 0 ? (
+        renderImage({item: message.attachments})
+      ) : (
+        <Text
+          style={[
+            styles.messageText,
+            isMessageFromSelf(message)
+              ? isMare
+                ? [{color: COLORS.white}]
+                : [{color: COLORS.white}]
+              : styles.messageText,
+          ]}>
+          {message.message}
+        </Text>
+      )}
       <Text
         style={[
           styles.timestamp,
@@ -55,7 +73,6 @@ const ChatBubbles = ({
         ]}>
         {formatTimestamp(message.created)}
       </Text>
-      {message.status === 'pending' && <Text>I am a pending text</Text>}
     </View>
   );
 
@@ -78,15 +95,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
-    maxWidth: '80%', // Limit message width
+    maxWidth: '80%',
   },
   messageRight: {
     alignSelf: 'flex-end',
-    marginRight: scale(10), // Adjust spacing as needed
+    marginRight: scale(10),
   },
   messageLeft: {
     alignSelf: 'flex-start',
-    marginLeft: scale(10), // Adjust spacing as needed
+    marginLeft: scale(10),
   },
   messageText: {
     fontSize: scale(14),
@@ -95,7 +112,7 @@ const styles = StyleSheet.create({
   timestamp: {
     fontSize: scale(10),
     color: '#888',
-    alignSelf: 'flex-end', // Align timestamp to the right
+    alignSelf: 'flex-end',
     fontFamily: 'Montserrat-Regular',
   },
 });
