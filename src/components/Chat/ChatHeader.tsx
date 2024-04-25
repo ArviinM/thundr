@@ -18,8 +18,6 @@ import {calculateAge} from '../Home/utils.ts';
 import {ChatReportIcons} from '../../assets/images/report/ChatReportIcons.tsx';
 import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import LottieView from 'lottie-react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import ProfileCard from '../Home/ProfileCard.tsx';
 
 const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {

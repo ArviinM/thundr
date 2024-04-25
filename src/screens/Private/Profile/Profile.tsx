@@ -5,7 +5,6 @@ import {ActivityIndicator, View} from 'react-native';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {useGetCustomerProfile} from '../../../hooks/profile/useGetCustomerProfile.ts';
 
-import {useEffect} from 'react';
 import ProfileCard from '../../../components/Home/ProfileCard.tsx';
 import {COLORS} from '../../../constants/commons.ts';
 
