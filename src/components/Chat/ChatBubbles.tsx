@@ -55,6 +55,7 @@ const ChatBubbles = ({
         ]}>
         {formatTimestamp(message.created)}
       </Text>
+      {message.status === 'pending' && <Text>I am a pending text</Text>}
     </View>
   );
 

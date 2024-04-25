@@ -404,6 +404,7 @@ export type ChatMessage = {
   isRead: number;
   attachments: Attachment[];
   targetSub: string;
+  status?: 'pending' | 'sent' | 'failed';
 };
 
 export type ChatListRequest = {
@@ -424,4 +425,5 @@ export type ChatSendMessageRequest = {
   read: string;
   targetSub: string;
   attachments?: string[] | null;
+  chatRoomID?: string;
 };

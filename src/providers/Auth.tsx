@@ -118,7 +118,12 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       setAuthData(undefined);
       // reset all cache
       await queryClient.resetQueries({
-        queryKey: ['get-match-list', 'customer-compatibility-questions'],
+        queryKey: [
+          'get-match-list',
+          'customer-compatibility-questions',
+          'get-chat-list',
+          'get-chat-message',
+        ],
         type: 'all',
       });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Chat} from '../../types/generated.ts';
 import {IMAGES} from '../../constants/images.ts';
@@ -8,9 +8,13 @@ import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
 import {calculateAge} from '../Home/utils.ts';
 import {ChatReportIcons} from '../../assets/images/report/ChatReportIcons.tsx';
+import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalPress = () => bottomSheetRef.current?.present();
 
   return (
     <View
@@ -65,11 +69,17 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
       <View style={{flex: 1}} />
       <View>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={handlePresentModalPress}
           style={styles.backButton}>
           <ChatReportIcons isMare={isMare} />
         </TouchableOpacity>
       </View>
+      <ReportBottomSheetModal
+        ref={bottomSheetRef}
+        sub={user.sub}
+        category={'CHAT'}
+        name={user.profile.name}
+      />
     </View>
   );
 };

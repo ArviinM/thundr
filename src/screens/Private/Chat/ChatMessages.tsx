@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Platform, Text, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
@@ -40,7 +40,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const sendMessage = useSendChatMessage();
 
   const handleSendMessage = async (message: string) => {
-    // TODO: Implement your logic to send the message
     if (user) {
       await sendMessage.mutateAsync({
         senderSub: user.sub,
@@ -48,6 +47,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         message: message,
         read: '',
         attachments: null,
+        chatRoomID: user.chatRoomUuid,
       });
       await query.invalidateQueries({queryKey: ['get-chat-message']});
       await query.invalidateQueries({queryKey: ['get-chat-list']});
