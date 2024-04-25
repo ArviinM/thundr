@@ -18,7 +18,6 @@ export function useUploadProfilePhoto() {
         });
 
       if (response.status !== HttpStatusCode.Ok) {
-        console.log(response.data);
         throw {
           name: 'upload-profile-photo',
           status: response.data.status,

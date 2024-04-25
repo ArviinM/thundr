@@ -164,6 +164,7 @@ export const cardStyles = StyleSheet.create({
     gap: 4,
     flex: 1,
     backgroundColor: '#DADADA',
+    borderRadius: 15,
   },
   container: {
     paddingHorizontal: 24,

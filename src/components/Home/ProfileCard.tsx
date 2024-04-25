@@ -30,7 +30,7 @@ const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 type ProfileCardProps = {
   user: CustomerMatchResponse;
   isUser?: boolean;
-  possibles: boolean;
+  possibles?: boolean;
 };
 
 const ProfileCard = ({user, isUser = false, possibles}: ProfileCardProps) => {

@@ -15,7 +15,7 @@ export function useSendChatMessage() {
     mutationKey: ['send-chat-message'],
     mutationFn: async (data: ChatSendMessageRequest): Promise<ChatMessage> => {
       const response: AxiosResponse<BaseResponse<ChatMessage>> =
-        await axiosInstance.post('/chat/message', data);
+        await axiosInstance.post('/chat/send-message', data);
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {

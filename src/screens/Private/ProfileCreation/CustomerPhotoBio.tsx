@@ -119,7 +119,6 @@ const CustomerPhotoBio = () => {
     try {
       await schema.validate(data);
       isLoading(true);
-      console.log(data);
 
       updateCustomerDetails({
         bio: data.bio,
