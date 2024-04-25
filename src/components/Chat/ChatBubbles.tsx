@@ -13,7 +13,6 @@ import {ChatMessage, Chat, Attachment} from '../../types/generated.ts';
 import moment from 'moment';
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {scale} from '../../utils/utils.ts';
-import {isVisible} from 'react-native-bootsplash';
 
 const ChatBubbles = ({
   user,

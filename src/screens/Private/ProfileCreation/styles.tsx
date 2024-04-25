@@ -86,8 +86,6 @@ export const profileCreationStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    // width: '100%', // Ensure the grid takes up the full width
-    // aspectRatio: 2 / 4, // Set the aspect ratio to 2:4 (height:width
   },
   textImage: {
     fontSize: SIZES.h2,

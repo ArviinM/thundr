@@ -56,7 +56,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   };
 
   const handleImageUpload = async () => {
-    console.log('i am being now developed by arvv');
     try {
       let images = await ImagePicker.openPicker({
         mediaType: 'photo',
@@ -117,13 +116,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       }
 
       if (user && imageData) {
-        console.log({
-          senderSub: user.sub,
-          targetSub: user.profile.sub,
-          message: '',
-          read: '',
-          base64Attachments: imageData,
-        });
         await sendMessage.mutateAsync({
           senderSub: user.sub,
           targetSub: user.profile.sub,
