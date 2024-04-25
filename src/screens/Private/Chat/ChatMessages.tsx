@@ -17,7 +17,6 @@ import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
 import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
-import {ChatMessageRequest} from '../../../types/generated.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -42,27 +41,12 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const handleSendMessage = async (message: string) => {
     if (user) {
-      const formData = new FormData();
-
-      const chatData = {
+      await sendMessage.mutateAsync({
         senderSub: user.sub,
         targetSub: user.profile.sub,
         message: message,
         read: '',
-        attachments: null,
-        chatRoomID: user.chatRoomUuid,
-      };
-
-      formData.append(
-        'chat',
-        new File([JSON.stringify(chatData)], 'chat.json', {
-          type: 'application/json',
-          lastModified: Date.now(),
-        }),
-      );
-
-      await sendMessage.mutateAsync(formData);
-
+      });
       await query.invalidateQueries({queryKey: ['get-chat-message']});
       await query.invalidateQueries({queryKey: ['get-chat-list']});
     }

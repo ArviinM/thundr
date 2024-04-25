@@ -424,6 +424,6 @@ export type ChatSendMessageRequest = {
   message: string;
   read: string;
   targetSub: string;
-  attachments?: string[] | null;
+  base64Attachments?: string[] | null;
   chatRoomID?: string;
 };
