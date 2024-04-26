@@ -4,8 +4,6 @@ import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 import {
   BaseResponse,
-  CustomerMatchRequest,
-  CustomerMatchResponse,
   GetCustomerFilterRequest,
   GetCustomerFiltersResponse,
 } from '../../types/generated.ts';

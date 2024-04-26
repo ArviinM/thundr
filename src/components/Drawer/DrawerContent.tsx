@@ -100,17 +100,18 @@ const DrawerContent = () => {
         />
       </View>
       <View style={{marginVertical: 40}}>
-        {loading && (
+        {loading ? (
           <ActivityIndicator color={'#000'} animating={true} size="small" />
+        ) : (
+          <DrawerItem
+            label="Log Out"
+            onPress={async () => {
+              await signOut();
+            }}
+            icon={'log-out'}
+            isSelected={isSelected === 'Settings'}
+          />
         )}
-        <DrawerItem
-          label="Log Out"
-          onPress={async () => {
-            await signOut();
-          }}
-          icon={'log-out'}
-          isSelected={isSelected === 'Settings'}
-        />
       </View>
     </View>
   );

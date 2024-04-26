@@ -1,5 +1,11 @@
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import React, {forwardRef, useCallback, useMemo, useState} from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
 import {
@@ -40,21 +46,13 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       [],
     );
 
-    const calculateAdjustedValue = (value: string | undefined): number => {
-      const parsedValue = parseInt(value || '0', 10);
-      return !isNaN(parsedValue)
-        ? parsedValue - 35
-        : value === undefined
-        ? 0
-        : 80;
-    };
-
     const [minValue, setMinValue] = useState<number>(
-      calculateAdjustedValue(getCustomerFilters.data?.ageMin),
+      (Number(getCustomerFilters.data?.ageMin) - 35) | 0,
     );
     const [maxValue, setMaxValue] = useState<number>(
-      calculateAdjustedValue(getCustomerFilters.data?.ageMax),
+      (Number(getCustomerFilters.data?.ageMax) - 35) | 45,
     );
+
     const [proximityValue, setProximityValue] = useState<number>(
       Number(getCustomerFilters.data?.proximity) || 2,
     );
@@ -95,7 +93,10 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         });
 
         await query.invalidateQueries({
-          queryKey: ['get-match-list', 'get-customer-filters'],
+          queryKey: ['get-match-list'],
+        });
+        await query.invalidateQueries({
+          queryKey: ['get-customer-filters'],
         });
 
         Toast.show({
@@ -112,6 +113,20 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         console.error('Error in filters bottom sheet!', error);
       }
     };
+
+    useEffect(() => {
+      if (getCustomerFilters.isSuccess) {
+        setMinValue(Number(getCustomerFilters.data?.ageMin) - 35);
+        setMaxValue(Number(getCustomerFilters.data?.ageMax) - 35);
+        setProximityValue(Number(getCustomerFilters.data?.proximity));
+        setSelectedLetters(
+          convertFullWordsToAbbreviations(
+            getCustomerFilters.data?.gender || '',
+          ),
+        );
+      }
+    }, [getCustomerFilters.isSuccess, getCustomerFilters.data]);
+
     return (
       <BottomSheetModal
         ref={ref}
@@ -159,8 +174,8 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                     trackHeight={12}
                     thumbTintColor={COLORS.white}
                     thumbStyle={{
-                      width: 28,
-                      height: 28,
+                      width: 32,
+                      height: 32,
                       borderRadius: 30,
                       borderColor: COLORS.primary1,
                       borderWidth: 5,
@@ -187,8 +202,8 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                     thumbTintColor={COLORS.white}
                     onValueChange={proximityValueChange}
                     thumbStyle={{
-                      width: 28,
-                      height: 28,
+                      width: 32,
+                      height: 32,
                       borderRadius: 30,
                       borderColor: COLORS.primary1,
                       borderWidth: 5,
