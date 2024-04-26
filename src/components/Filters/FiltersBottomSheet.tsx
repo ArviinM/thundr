@@ -2,10 +2,17 @@ import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import React, {forwardRef, useCallback, useMemo, useState} from 'react';
 import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
-import {scale} from '../../utils/utils.ts';
+import {
+  convertAbbreviationsToFullWords,
+  convertFullWordsToAbbreviations,
+  convertWordToAbbreviation,
+  scale,
+} from '../../utils/utils.ts';
 import Slider, {RangeSlider} from '@react-native-assets/slider';
 import LetterGradientButton from '../shared/LetterGradientButton.tsx';
 import Button from '../shared/Button.tsx';
+import {useGetCustomerFilters} from '../../hooks/filters/useGetCustomerFilters.ts';
+import {Loading} from '../shared/Loading.tsx';
 
 export type Ref = BottomSheetModal;
 interface FiltersBottomSheetModalProps {
@@ -14,6 +21,8 @@ interface FiltersBottomSheetModalProps {
 
 const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
   (props, ref) => {
+    const getCustomerFilters = useGetCustomerFilters({sub: props.sub});
+
     const snapPoints = useMemo(() => ['78%'], []);
     const renderBackdrop = useCallback(
       (props: any) => (
@@ -26,11 +35,28 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       [],
     );
 
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(45);
-    const [proximityValue, setProximityValue] = useState(2);
+    const calculateAdjustedValue = (value: string | undefined): number => {
+      const parsedValue = parseInt(value || '0', 10);
+      return !isNaN(parsedValue)
+        ? parsedValue - 35
+        : value === undefined
+        ? 0
+        : 80;
+    };
+
+    const [minValue, setMinValue] = useState<number>(
+      calculateAdjustedValue(getCustomerFilters.data?.ageMin),
+    );
+    const [maxValue, setMaxValue] = useState<number>(
+      calculateAdjustedValue(getCustomerFilters.data?.ageMax),
+    );
+    const [proximityValue, setProximityValue] = useState<number>(
+      Number(getCustomerFilters.data?.proximity) || 2,
+    );
     const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
-    const [selectedLetters, setSelectedLetters] = useState<string[]>([]); // Correct
+    const [selectedLetters, setSelectedLetters] = useState<string[]>(
+      convertFullWordsToAbbreviations(getCustomerFilters.data?.gender || ''),
+    );
 
     const ageSliderChange = (range: [number, number]) => {
       setMinValue(Math.round(range[0]));
@@ -51,7 +77,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         }
       });
     };
-
+    // console.log(convertAbbreviationsToFullWords(selectedLetters));
     return (
       <BottomSheetModal
         ref={ref}
@@ -61,103 +87,107 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         backdropComponent={renderBackdrop}
         enableContentPanningGesture={false}
         backgroundStyle={{backgroundColor: COLORS.white}}>
-        <View style={styles.container}>
-          <View style={styles.contentContainer}>
-            <Button
-              onPress={() => console.log('Pressed')}
-              text="Save"
-              buttonStyle={styles.buttonStyle}
-              textStyle={styles.buttonText}
-            />
-            <Text style={styles.containerHeadline}>Filters</Text>
-            <Text style={styles.containerSubTitle}>
-              There are plenty of fishes in the sea; make sure they are{'\n'}the
-              right age and location, mars
-            </Text>
-          </View>
-          <ScrollView style={styles.scrollViewContainer}>
-            <View style={styles.filterContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.titleFilterText}>Age Range</Text>
-                <Text style={styles.subTitleFilterText}>
-                  {minValue + 35}-{maxValue + 35}
-                </Text>
-              </View>
-              <View style={{margin: scale(10)}}>
-                {/* Slider Here */}
-                <RangeSlider
-                  range={[minValue, maxValue]} // Use minValue for the initial range
-                  minimumRange={1}
-                  maximumValue={45}
-                  onValueChange={ageSliderChange}
-                  minTrackStyle={{backgroundColor: COLORS.gray2}}
-                  midTrackStyle={{backgroundColor: COLORS.primary1}}
-                  maxTrackStyle={{backgroundColor: COLORS.gray2}}
-                  trackHeight={12}
-                  thumbTintColor={COLORS.white}
-                  thumbStyle={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 30,
-                    borderColor: COLORS.primary1,
-                    borderWidth: 5,
-                  }}
-                />
-              </View>
+        {getCustomerFilters.isLoading ? (
+          <Loading />
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.contentContainer}>
+              <Button
+                onPress={() => console.log('Pressed')}
+                text="Save"
+                buttonStyle={styles.buttonStyle}
+                textStyle={styles.buttonText}
+              />
+              <Text style={styles.containerHeadline}>Filters</Text>
+              <Text style={styles.containerSubTitle}>
+                There are plenty of fishes in the sea; make sure they are{'\n'}
+                the right age and location, mars
+              </Text>
             </View>
-            <View style={styles.filterContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.titleFilterText}>Proximity</Text>
-                <Text style={styles.subTitleFilterText}>
-                  up to {proximityValue}km away
-                </Text>
-              </View>
-              <View style={{margin: scale(10)}}>
-                {/* Slider Here */}
-                <Slider
-                  value={proximityValue}
-                  minimumValue={2}
-                  maximumValue={250}
-                  minTrackStyle={{backgroundColor: COLORS.primary1}}
-                  maxTrackStyle={{backgroundColor: COLORS.gray2}}
-                  trackHeight={12}
-                  thumbTintColor={COLORS.white}
-                  onValueChange={proximityValueChange}
-                  thumbStyle={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 30,
-                    borderColor: COLORS.primary1,
-                    borderWidth: 5,
-                  }}
-                />
-              </View>
-            </View>
-            <View style={styles.filterContainer}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.titleFilterText}>Gender</Text>
-                <Text style={styles.subTitleFilterText}>Choose up to 4</Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  justifyContent: 'space-around',
-                  marginVertical: 10,
-                }}>
-                {/* Selectable Genders Here */}
-                {letters.map((letter, index) => (
-                  <LetterGradientButton
-                    key={index}
-                    letter={letter}
-                    selectedLetters={selectedLetters}
-                    onChange={handleLetterChange}
+            <ScrollView style={styles.scrollViewContainer}>
+              <View style={styles.filterContainer}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleFilterText}>Age Range</Text>
+                  <Text style={styles.subTitleFilterText}>
+                    {minValue + 35}-{maxValue + 35}
+                  </Text>
+                </View>
+                <View style={{margin: scale(10)}}>
+                  {/* Slider Here */}
+                  <RangeSlider
+                    range={[minValue, maxValue]} // Use minValue for the initial range
+                    minimumRange={1}
+                    maximumValue={45}
+                    onValueChange={ageSliderChange}
+                    minTrackStyle={{backgroundColor: COLORS.gray2}}
+                    midTrackStyle={{backgroundColor: COLORS.primary1}}
+                    maxTrackStyle={{backgroundColor: COLORS.gray2}}
+                    trackHeight={12}
+                    thumbTintColor={COLORS.white}
+                    thumbStyle={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: 30,
+                      borderColor: COLORS.primary1,
+                      borderWidth: 5,
+                    }}
                   />
-                ))}
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        </View>
+              <View style={styles.filterContainer}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleFilterText}>Proximity</Text>
+                  <Text style={styles.subTitleFilterText}>
+                    up to {proximityValue}km away
+                  </Text>
+                </View>
+                <View style={{margin: scale(10)}}>
+                  {/* Slider Here */}
+                  <Slider
+                    value={proximityValue}
+                    minimumValue={2}
+                    maximumValue={250}
+                    minTrackStyle={{backgroundColor: COLORS.primary1}}
+                    maxTrackStyle={{backgroundColor: COLORS.gray2}}
+                    trackHeight={12}
+                    thumbTintColor={COLORS.white}
+                    onValueChange={proximityValueChange}
+                    thumbStyle={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: 30,
+                      borderColor: COLORS.primary1,
+                      borderWidth: 5,
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={styles.filterContainer}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleFilterText}>Gender</Text>
+                  <Text style={styles.subTitleFilterText}>Choose up to 4</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-around',
+                    marginVertical: 10,
+                  }}>
+                  {/* Selectable Genders Here */}
+                  {letters.map((letter, index) => (
+                    <LetterGradientButton
+                      key={index}
+                      letter={letter}
+                      selectedLetters={selectedLetters}
+                      onChange={handleLetterChange}
+                    />
+                  ))}
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        )}
       </BottomSheetModal>
     );
   },

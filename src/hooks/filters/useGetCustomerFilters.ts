@@ -6,32 +6,34 @@ import {
   BaseResponse,
   CustomerMatchRequest,
   CustomerMatchResponse,
+  GetCustomerFilterRequest,
+  GetCustomerFiltersResponse,
 } from '../../types/generated.ts';
 
-export function useGetMatchList(props: CustomerMatchRequest) {
+export function useGetCustomerFilters(props: GetCustomerFilterRequest) {
   const axiosInstance = useAxiosWithAuth();
 
   return useQuery({
-    queryKey: ['get-match-list', props.sub],
-    enabled: false,
-    staleTime: 2 * 60 * 60 * 1000,
-    queryFn: async (): Promise<CustomerMatchResponse[]> => {
-      const config: AxiosRequestConfig<CustomerMatchRequest> = {
+    queryKey: ['get-customer-filters', props.sub],
+    queryFn: async (): Promise<GetCustomerFiltersResponse> => {
+      const config: AxiosRequestConfig<GetCustomerFilterRequest> = {
         params: {sub: props.sub},
       };
 
-      const response: AxiosResponse<BaseResponse<CustomerMatchResponse[]>> =
-        await axiosInstance.get('/match/match', config);
+      const response: AxiosResponse<BaseResponse<GetCustomerFiltersResponse>> =
+        await axiosInstance.get('/customer/filter', config);
 
       if (response.status !== HttpStatusCode.Ok) {
         showErrorToast({
-          name: 'get-match-list',
+          name: 'get-customer-filters',
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,
           statusCode: response.status,
         });
       }
+
+      console.log(response.data.data);
 
       return response.data.data;
     },

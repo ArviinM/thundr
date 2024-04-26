@@ -81,6 +81,19 @@ export function convertWordToAbbreviation(word: string): string {
     : word;
 }
 
+export function convertFullWordsToAbbreviations(fullWords: string): string[] {
+  const individualWords = fullWords.split(',');
+  return individualWords.map(word => convertWordToAbbreviation(word));
+}
+
+export function convertAbbreviationsToFullWords(
+  abbreviations: string[],
+): string {
+  return abbreviations
+    .map(abbreviation => convertAbbreviationToWord(abbreviation))
+    .join(',');
+}
+
 const guidelineBaseWidth = 375;
 const guidelineBaseHeight = 680;
 
