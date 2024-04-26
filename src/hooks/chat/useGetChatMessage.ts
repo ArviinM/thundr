@@ -30,7 +30,7 @@ export function useGetChatMessage(props: ChatMessageRequest) {
           sub: props.sub,
           chatRoomID: props.chatRoomID,
           limit: props.limit,
-          beforeId: pageParam || null,
+          // beforeId: pageParam || null,
         },
       };
 

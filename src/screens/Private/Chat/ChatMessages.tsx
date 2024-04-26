@@ -131,16 +131,16 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
-  const loadMore = async () => {
-    console.log('Hoy mag load ka pa ng madami bweiset');
-    if (
-      !chatMessage.isFetchingNextPage &&
-      chatMessage.data?.pages.some(page => page)
-    ) {
-      await chatMessage.fetchNextPage();
-      console.log('new data was fetched');
-    }
-  };
+  // const loadMore = async () => {
+  //   console.log('Hoy mag load ka pa ng madami bweiset');
+  //   if (
+  //     !chatMessage.isFetchingNextPage &&
+  //     chatMessage.data?.pages.some(page => page)
+  //   ) {
+  //     await chatMessage.fetchNextPage();
+  //     console.log('new data was fetched');
+  //   }
+  // };
 
   return (
     <SafeAreaView
@@ -163,7 +163,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               user={user}
               isMare={isMare}
               chatMessages={chatMessage.data?.pages.flatMap(page => page) || []}
-              loadMore={loadMore}
+              // loadMore={loadMore}
             />
           </KeyboardAvoidingView>
           {/*Chat Text Input*/}
