@@ -1641,6 +1641,11 @@
   resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-7.8.2.tgz#72d3199ae830b4128ddaef3c1c2f11604759c9c4"
   integrity sha512-VG4IkWJIlOKqXwa3aExC3WFCVCGCC9BA55Ivg0SMRfEs+ruvYy/zlLANcrVGiPtgkUEryXDhA8SXx9+JcO8oLA==
 
+"@react-native-assets/slider@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@react-native-assets/slider/-/slider-7.1.2.tgz#a425903d126683424ee7b4260a74df74fbb951a9"
+  integrity sha512-qNEQkipwE+FPVED/cEOymLDiZ6IuswkvQ9gkzYS9QsOM6DYvYPsaiIRO6DNU65D9r/InsGlK0rYfEHeC9b54ew==
+
 "@react-native-async-storage/async-storage@^1.23.1":
   version "1.23.1"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.23.1.tgz#cad3cd4fab7dacfe9838dce6ecb352f79150c883"

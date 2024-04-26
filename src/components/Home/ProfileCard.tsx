@@ -19,8 +19,8 @@ import React, {useRef, useState} from 'react';
 import {cardStyles, cardWidth} from './Card.tsx';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
-import {MockDataItem} from '../../screens/Private/Home/mock.ts';
-import {CustomerData, CustomerMatchResponse} from '../../types/generated.ts';
+
+import {CustomerMatchResponse} from '../../types/generated.ts';
 import {IMAGES} from '../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';

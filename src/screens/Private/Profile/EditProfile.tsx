@@ -155,9 +155,10 @@ const EditProfile = ({route}: EditProfileProps) => {
   const dayData = generateDayData();
   const yearData = generateYearData();
   const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
-  const [selectedLetter, setSelectedLetter] = useState(
+  const [selectedLetter, setSelectedLetter] = useState<string>(
     convertWordToAbbreviation(gender || ''),
   );
+  const [forceUpdate, setForceUpdate] = useState(0); // State for re-render
 
   const {
     control,
@@ -251,7 +252,7 @@ const EditProfile = ({route}: EditProfileProps) => {
         });
       }
 
-      if (sub && gender && birthday) {
+      if (sub && gender && birthday && selectedLetter) {
         await updateProfile.mutateAsync({
           sub: sub,
           name: data.name,
@@ -455,11 +456,16 @@ const EditProfile = ({route}: EditProfileProps) => {
                     name="selectedLetter" // Use a single name
                     render={({field: {onChange}}) => (
                       <LetterGradientButton
+                        key={forceUpdate}
                         letter={letter}
-                        selectedLetter={selectedLetter}
-                        onChange={(item: string) => {
-                          onChange(item);
-                          setSelectedLetter(item);
+                        selectedLetters={[selectedLetter || '']}
+                        allowSingleSelection
+                        onChange={(letter: string, isSelected: boolean) => {
+                          if (isSelected) {
+                            onChange(letter);
+                            setSelectedLetter(letter);
+                            setForceUpdate(forceUpdate + 1); // Trigger re-render
+                          }
                         }}
                       />
                     )}

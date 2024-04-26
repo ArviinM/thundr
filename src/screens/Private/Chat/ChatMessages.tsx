@@ -131,6 +131,17 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
+  const loadMore = async () => {
+    console.log('Hoy mag load ka pa ng madami bweiset');
+    if (
+      !chatMessage.isFetchingNextPage &&
+      chatMessage.data?.pages.some(page => page)
+    ) {
+      await chatMessage.fetchNextPage();
+      console.log('new data was fetched');
+    }
+  };
+
   return (
     <SafeAreaView
       edges={['left', 'right', 'top', 'bottom']}
@@ -151,7 +162,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             <ChatBubbles
               user={user}
               isMare={isMare}
-              chatMessages={chatMessage.data}
+              chatMessages={chatMessage.data?.pages.flatMap(page => page) || []}
+              loadMore={loadMore}
             />
           </KeyboardAvoidingView>
           {/*Chat Text Input*/}
