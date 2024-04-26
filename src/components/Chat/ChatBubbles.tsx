@@ -18,10 +18,12 @@ const ChatBubbles = ({
   user,
   isMare,
   chatMessages,
+  loadMore,
 }: {
   user: Chat;
   isMare: boolean;
   chatMessages: ChatMessage[];
+  loadMore?: () => void;
 }) => {
   const formatTimestamp = (timestamp: string) => {
     return moment(timestamp).format('h:mm A');
@@ -194,6 +196,8 @@ const ChatBubbles = ({
         renderItem={renderItem}
         inverted
         keyboardShouldPersistTaps="handled"
+        // onEndReached={loadMore}
+        // onEndReachedThreshold={0.2}
       />
       {imageModal()}
     </>

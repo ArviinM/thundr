@@ -432,3 +432,32 @@ export type ChatSendMessageRequest = {
   base64Files?: Base64Attachments[];
   chatRoomID?: string;
 };
+
+// Filters
+export type GetCustomerFilterRequest = {
+  sub: string;
+};
+
+export type GetCustomerFiltersResponse = {
+  sub: string;
+  ageMin: string;
+  ageMax: string;
+  proximity: string;
+  gender: string;
+  hobbies: string;
+  starSign: string;
+  personalityType: string;
+  updateDate: string;
+};
+
+export type CustomerFilter = {
+  sub: string;
+  ageMin?: string;
+  ageMax?: string;
+  proximity?: string;
+  gender?: string;
+  hobbies?: string;
+  starSign?: string;
+  personalityType?: string;
+  updateDate: string;
+};

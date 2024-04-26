@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {View, Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {
   DrawerActions,
   NavigationProp,
@@ -11,12 +11,21 @@ import DrawerItem from './DrawerItem.tsx';
 import {IMAGES} from '../../constants/images.ts';
 import {scale} from '../../utils/utils.ts';
 import useDrawerStore from '../../store/drawerStore.ts';
+import {useAuth} from '../../providers/Auth.tsx';
 
 const DrawerContent = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const insets = useSafeAreaInsets();
   const isSelected = useDrawerStore(state => state.isSelected);
   const setIsSelected = useDrawerStore(state => state.setIsSelected);
+
+  const [loading, isLoading] = useState(false);
+  const auth = useAuth();
+
+  const signOut = async () => {
+    isLoading(true);
+    auth.signOut();
+  };
 
   const handleDrawerItemClick = (label: string) => {
     setIsSelected(label === isSelected ? false : label);
@@ -50,7 +59,7 @@ const DrawerContent = () => {
           resizeMode={'contain'}
         />
       </View>
-      <View style={{flexDirection: 'column', gap: 14}}>
+      <View style={{flexDirection: 'column', gap: 14, flex: 1}}>
         <View style={{marginTop: scale(30)}}>
           <DrawerItem
             label="Home"
@@ -87,6 +96,19 @@ const DrawerContent = () => {
             navigation.navigate('Settings');
           }}
           icon={'settings'}
+          isSelected={isSelected === 'Settings'}
+        />
+      </View>
+      <View style={{marginVertical: 40}}>
+        {loading && (
+          <ActivityIndicator color={'#000'} animating={true} size="small" />
+        )}
+        <DrawerItem
+          label="Log Out"
+          onPress={async () => {
+            await signOut();
+          }}
+          icon={'log-out'}
           isSelected={isSelected === 'Settings'}
         />
       </View>

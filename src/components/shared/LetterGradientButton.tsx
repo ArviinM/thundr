@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
@@ -6,23 +6,37 @@ import {moderateScale, scale} from '../../utils/utils.ts';
 
 type LetterGradientButtonProps = {
   letter: string;
-  onChange: (item: string) => void;
-  selectedLetter: string;
+  onChange: (item: string, b: boolean) => void;
+  selectedLetters: string[];
+  allowSingleSelection?: boolean;
 };
 
 const LetterGradientButton = ({
   letter,
-  selectedLetter,
+  selectedLetters,
   onChange,
+  allowSingleSelection,
 }: LetterGradientButtonProps) => {
-  const isSelected = selectedLetter === letter;
+  const [isSelected, setIsSelected] = useState(
+    selectedLetters.includes(letter),
+  );
 
   const handlePress = () => {
-    onChange(letter);
+    if (allowSingleSelection) {
+      const newIsSelected = !isSelected;
+      setIsSelected(newIsSelected);
+      onChange(letter, newIsSelected);
+    } else {
+      const newIsSelected = !isSelected;
+      setIsSelected(newIsSelected);
+      onChange(letter, newIsSelected);
+    }
   };
 
   return (
-    <TouchableOpacity onPress={handlePress}>
+    <TouchableOpacity
+      onPress={handlePress}
+      disabled={selectedLetters.length >= 4 && !isSelected}>
       <LinearGradient
         colors={!isSelected ? ['#CCCCCC', '#CCCCCC'] : ['#EF9D47', '#E33051']}
         start={{x: 1, y: 1}}

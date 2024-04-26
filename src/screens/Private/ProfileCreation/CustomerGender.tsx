@@ -37,7 +37,8 @@ const CustomerGender = () => {
 
   const [loading, isLoading] = useState(false);
   const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
-  const [selectedLetter, setSelectedLetter] = useState('');
+  const [selectedLetter, setSelectedLetter] = useState<string>('');
+  const [forceUpdate, setForceUpdate] = useState(0); // State for re-render
 
   const schema = yup.object().shape({
     selectedLetter: yup
@@ -57,7 +58,7 @@ const CustomerGender = () => {
     try {
       await schema.validate(data);
       isLoading(true);
-      const gender = convertAbbreviationToWord(selectedLetter);
+      const gender = convertAbbreviationToWord(selectedLetter || '');
 
       updateCustomerProfile({
         gender: gender,
@@ -110,11 +111,16 @@ const CustomerGender = () => {
                     name="selectedLetter" // Use a single name
                     render={({field: {onChange}}) => (
                       <LetterGradientButton
+                        key={forceUpdate}
                         letter={letter}
-                        selectedLetter={selectedLetter}
-                        onChange={(item: string) => {
-                          onChange(item);
-                          setSelectedLetter(item);
+                        selectedLetters={[selectedLetter || '']}
+                        allowSingleSelection
+                        onChange={(letter: string, isSelected: boolean) => {
+                          if (isSelected) {
+                            onChange(letter);
+                            setSelectedLetter(letter);
+                            setForceUpdate(forceUpdate + 1); // Trigger re-render
+                          }
                         }}
                       />
                     )}

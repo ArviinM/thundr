@@ -6,6 +6,7 @@ import {
   runOnJS,
   useAnimatedReaction,
   useSharedValue,
+  withSpring,
 } from 'react-native-reanimated';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
@@ -49,6 +50,7 @@ const Home = () => {
   const [index, setIndex] = useState(0);
 
   const activeIndex = useSharedValue(0);
+  const [previousValue, setPreviousValue] = useState(0);
   const mareTranslations = useSharedValue<number[]>(new Array(10).fill(0));
   const jowaTranslations = useSharedValue<number[]>(new Array(10).fill(0));
   const isMare = useSharedValue<boolean>(false);
@@ -69,6 +71,9 @@ const Home = () => {
     (value, prevValue) => {
       if (Math.floor(value) !== index) {
         runOnJS(setIndex)(Math.floor(value));
+      }
+      if (prevValue) {
+        runOnJS(setPreviousValue)(Math.floor(prevValue));
       }
     },
   );
@@ -117,8 +122,24 @@ const Home = () => {
           tag: tag,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn('Error updating swipe match:', error);
+      if (error.status === 'MAX_SWIPES') {
+        runOnJS(setIndex)(previousValue); // Revert to the previous card
+        activeIndex.value = withSpring(previousValue);
+
+        mareTranslations.modify(value => {
+          'worklet';
+          value[previousValue] = withSpring(0);
+          return value;
+        });
+
+        jowaTranslations.modify(value => {
+          'worklet';
+          value[previousValue] = withSpring(0);
+          return value;
+        });
+      }
     }
   };
 
@@ -215,6 +236,8 @@ const Home = () => {
     requestLocationPermission();
   }, []);
 
+  console.log(matchList.isRefetching);
+
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
@@ -249,7 +272,7 @@ const Home = () => {
         ) : (mareTranslations.value.length && jowaTranslations.value.length) ===
           0 ? (
           <Loading />
-        ) : matchList.isLoading && matchList.isRefetching && !matchList.data ? (
+        ) : matchList.isLoading || matchList.isRefetching || !matchList.data ? (
           // TODO: Temporary Loading Screen - will add lazy loading here
           <Loading />
         ) : (

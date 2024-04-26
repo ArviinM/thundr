@@ -74,4 +74,5 @@ export const IMAGES: Record<any, any> = {
   thundrBoltDrawer: require('../assets/images/drawer/thundrbolt_drawer.png'),
   thundrMachiDrawer: require('../assets/images/drawer/thundrmachi_drawer.png'),
   settings: require('../assets/images/drawer/settings_drawer.png'),
+  logout: require('../assets/images/drawer/log-out.png'),
 };

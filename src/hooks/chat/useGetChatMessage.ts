@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
 import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
@@ -11,16 +11,26 @@ import {showErrorToast} from '../../utils/toast/errorToast.ts';
 export function useGetChatMessage(props: ChatMessageRequest) {
   const axiosInstance = useAxiosWithAuth();
 
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ['get-chat-message', props],
-    refetchInterval: 15000,
-    queryFn: async (): Promise<ChatMessage[]> => {
+    // refetchInterval: 3000,
+    initialPageParam: 20,
+    getNextPageParam: (lastPage: ChatMessage[]) => {
+      if (lastPage.length !== 0) {
+        const lastMessageId = lastPage[lastPage.length - 1].id;
+        console.log({lastMessageId});
+        return lastMessageId;
+      }
+      return undefined;
+    },
+    queryFn: async ({pageParam = null}): Promise<ChatMessage[]> => {
+      console.log({pageParam});
       const config: AxiosRequestConfig<ChatMessageRequest> = {
         params: {
           sub: props.sub,
           chatRoomID: props.chatRoomID,
           limit: props.limit,
-          beforeId: props.beforeId || null,
+          // beforeId: pageParam || null,
         },
       };
 
