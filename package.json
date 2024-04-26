@@ -14,7 +14,7 @@
     "@gorhom/bottom-sheet": "^4",
     "@hookform/resolvers": "^3.3.4",
     "@notifee/react-native": "^7.8.2",
-    "@react-native-assets/slider": "^7.1.2",
+    "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-clipboard/clipboard": "^1.13.2",
     "@react-native-community/geolocation": "^3.2.1",
