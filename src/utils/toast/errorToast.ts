@@ -6,6 +6,10 @@ export function showErrorToast(error: any) {
   // @ts-ignore
   console.error(error);
 
+  // if (error.status === 'MAX_SWIPES') {
+  //   return;
+  // }
+
   const statusBarHeight = initialWindowMetrics?.insets.top || 20; // Get the status bar height
   //TODO: Add Status Code Translations
   Toast.show({
