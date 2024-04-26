@@ -11,10 +11,9 @@ import {COLORS, SIZES, width} from '../../constants/commons.ts';
 import {
   convertAbbreviationsToFullWords,
   convertFullWordsToAbbreviations,
-  convertWordToAbbreviation,
   scale,
 } from '../../utils/utils.ts';
-import Slider, {RangeSlider} from '@react-native-assets/slider';
+
 import LetterGradientButton from '../shared/LetterGradientButton.tsx';
 import Button from '../shared/Button.tsx';
 import {useGetCustomerFilters} from '../../hooks/filters/useGetCustomerFilters.ts';
@@ -23,6 +22,7 @@ import {useCustomerFilters} from '../../hooks/filters/useCustomerFilters.ts';
 import Toast from 'react-native-toast-message';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../utils/queryClient.ts';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 export type Ref = BottomSheetModal;
 interface FiltersBottomSheetModalProps {
@@ -31,6 +31,7 @@ interface FiltersBottomSheetModalProps {
 
 const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
   (props, ref) => {
+    const [loading, isLoading] = useState<boolean>(false);
     const getCustomerFilters = useGetCustomerFilters({sub: props.sub});
     const customerFilters = useCustomerFilters();
     const query = useQueryClient(queryClient);
@@ -53,21 +54,23 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       (Number(getCustomerFilters.data?.ageMax) - 35) | 45,
     );
 
-    const [proximityValue, setProximityValue] = useState<number>(
+    const [proximityValue, setProximityValue] = useState<number[]>([
       Number(getCustomerFilters.data?.proximity) || 2,
-    );
+    ]);
     const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
     const [selectedLetters, setSelectedLetters] = useState<string[]>(
       convertFullWordsToAbbreviations(getCustomerFilters.data?.gender || ''),
     );
 
-    const ageSliderChange = (range: [number, number]) => {
-      setMinValue(Math.round(range[0]));
-      setMaxValue(Math.round(range[1]));
+    const ageSliderChange = (range: number[]) => {
+      // setMinValue(Math.round(range[0]));
+      // setMaxValue(Math.round(range[1]));
+      setMinValue(range[0]);
+      setMaxValue(range[1]);
     };
 
-    const proximityValueChange = (value: number) => {
-      setProximityValue(Math.round(value));
+    const proximityValueChange = (value: number[]) => {
+      setProximityValue(value);
     };
 
     const handleLetterChange = (letter: string, isSelected: boolean) => {
@@ -83,6 +86,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
 
     const handleSubmit = async () => {
       try {
+        isLoading(true);
         await customerFilters.mutateAsync({
           sub: props.sub,
           updateDate: Date.now().toString(),
@@ -105,6 +109,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
           position: 'top',
           topOffset: 80,
         });
+        isLoading(false);
         // if (customerFilters.isSuccess && ref) {
         //@ts-ignore
         ref.current.close();
@@ -116,9 +121,9 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
 
     useEffect(() => {
       if (getCustomerFilters.isSuccess) {
-        setMinValue(Number(getCustomerFilters.data?.ageMin) - 35);
-        setMaxValue(Number(getCustomerFilters.data?.ageMax) - 35);
-        setProximityValue(Number(getCustomerFilters.data?.proximity));
+        setMinValue(Number(getCustomerFilters.data?.ageMin) - 35 || 0);
+        setMaxValue(Number(getCustomerFilters.data?.ageMax) - 35 || 45);
+        setProximityValue([Number(getCustomerFilters.data?.proximity || 10)]);
         setSelectedLetters(
           convertFullWordsToAbbreviations(
             getCustomerFilters.data?.gender || '',
@@ -146,6 +151,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                 text="Save"
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonText}
+                loading={loading}
               />
               <Text style={styles.containerHeadline}>Filters</Text>
               <Text style={styles.containerSubTitle}>
@@ -161,24 +167,50 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                     {minValue + 35}-{maxValue + 35}
                   </Text>
                 </View>
-                <View style={{margin: scale(10)}}>
+                <View
+                  style={{
+                    padding: scale(10),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   {/* Slider Here */}
-                  <RangeSlider
-                    range={[minValue, maxValue]} // Use minValue for the initial range
-                    minimumRange={1}
-                    maximumValue={45}
-                    onValueChange={ageSliderChange}
-                    minTrackStyle={{backgroundColor: COLORS.gray2}}
-                    midTrackStyle={{backgroundColor: COLORS.primary1}}
-                    maxTrackStyle={{backgroundColor: COLORS.gray2}}
-                    trackHeight={12}
-                    thumbTintColor={COLORS.white}
-                    thumbStyle={{
+                  <MultiSlider
+                    values={[minValue, maxValue]}
+                    onValuesChange={ageSliderChange}
+                    sliderLength={width / 1.27}
+                    min={0}
+                    max={45}
+                    step={1}
+                    snapped
+                    containerStyle={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      // borderWidth: 1,
+                      height: 40,
+                    }}
+                    selectedStyle={{
+                      backgroundColor: COLORS.primary1,
+                      // height: 10,
+                      borderRadius: 20,
+                    }}
+                    unselectedStyle={{
+                      backgroundColor: COLORS.gray2,
+                      // height: 10,
+                      borderRadius: 20,
+                    }}
+                    markerStyle={{
+                      backgroundColor: COLORS.white,
                       width: 32,
                       height: 32,
                       borderRadius: 30,
                       borderColor: COLORS.primary1,
                       borderWidth: 5,
+                    }}
+                    touchDimensions={{
+                      height: 40,
+                      width: 40,
+                      borderRadius: 20,
+                      slipDisplacement: 40,
                     }}
                   />
                 </View>
@@ -192,21 +224,43 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                 </View>
                 <View style={{margin: scale(10)}}>
                   {/* Slider Here */}
-                  <Slider
-                    value={proximityValue}
-                    minimumValue={2}
-                    maximumValue={250}
-                    minTrackStyle={{backgroundColor: COLORS.primary1}}
-                    maxTrackStyle={{backgroundColor: COLORS.gray2}}
-                    trackHeight={12}
-                    thumbTintColor={COLORS.white}
-                    onValueChange={proximityValueChange}
-                    thumbStyle={{
+                  <MultiSlider
+                    values={proximityValue}
+                    onValuesChange={proximityValueChange}
+                    sliderLength={width / 1.27}
+                    min={0}
+                    max={45}
+                    step={1}
+                    snapped
+                    containerStyle={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      // borderWidth: 1,
+                      height: 40,
+                    }}
+                    selectedStyle={{
+                      backgroundColor: COLORS.primary1,
+                      // height: 10,
+                      borderRadius: 20,
+                    }}
+                    unselectedStyle={{
+                      backgroundColor: COLORS.gray2,
+                      // height: 10,
+                      borderRadius: 20,
+                    }}
+                    markerStyle={{
+                      backgroundColor: COLORS.white,
                       width: 32,
                       height: 32,
                       borderRadius: 30,
                       borderColor: COLORS.primary1,
                       borderWidth: 5,
+                    }}
+                    touchDimensions={{
+                      height: 40,
+                      width: 40,
+                      borderRadius: 20,
+                      slipDisplacement: 40,
                     }}
                   />
                 </View>
