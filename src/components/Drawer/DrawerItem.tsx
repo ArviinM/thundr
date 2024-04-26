@@ -33,6 +33,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
         return IMAGES.thundrMachiDrawer;
       case 'settings':
         return IMAGES.settings;
+      case 'log-out':
+        return IMAGES.logout;
       default:
         return IMAGES.thundrHomeDrawer;
     }
