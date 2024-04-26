@@ -236,6 +236,8 @@ const Home = () => {
     requestLocationPermission();
   }, []);
 
+  console.log(matchList.isRefetching);
+
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
@@ -270,7 +272,7 @@ const Home = () => {
         ) : (mareTranslations.value.length && jowaTranslations.value.length) ===
           0 ? (
           <Loading />
-        ) : matchList.isLoading && matchList.isRefetching && !matchList.data ? (
+        ) : matchList.isLoading || matchList.isRefetching || !matchList.data ? (
           // TODO: Temporary Loading Screen - will add lazy loading here
           <Loading />
         ) : (

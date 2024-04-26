@@ -13,6 +13,10 @@ import LetterGradientButton from '../shared/LetterGradientButton.tsx';
 import Button from '../shared/Button.tsx';
 import {useGetCustomerFilters} from '../../hooks/filters/useGetCustomerFilters.ts';
 import {Loading} from '../shared/Loading.tsx';
+import {useCustomerFilters} from '../../hooks/filters/useCustomerFilters.ts';
+import Toast from 'react-native-toast-message';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryClient} from '../../utils/queryClient.ts';
 
 export type Ref = BottomSheetModal;
 interface FiltersBottomSheetModalProps {
@@ -22,14 +26,15 @@ interface FiltersBottomSheetModalProps {
 const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
   (props, ref) => {
     const getCustomerFilters = useGetCustomerFilters({sub: props.sub});
-
+    const customerFilters = useCustomerFilters();
+    const query = useQueryClient(queryClient);
     const snapPoints = useMemo(() => ['78%'], []);
     const renderBackdrop = useCallback(
-      (props: any) => (
+      (propsBottomSheet: any) => (
         <BottomSheetBackdrop
           appearsOnIndex={0}
           disappearsOnIndex={-1}
-          {...props}
+          {...propsBottomSheet}
         />
       ),
       [],
@@ -77,7 +82,36 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         }
       });
     };
-    // console.log(convertAbbreviationsToFullWords(selectedLetters));
+
+    const handleSubmit = async () => {
+      try {
+        await customerFilters.mutateAsync({
+          sub: props.sub,
+          updateDate: Date.now().toString(),
+          proximity: proximityValue.toString(),
+          ageMax: (maxValue + 35).toString(),
+          ageMin: (minValue + 35).toString(),
+          gender: convertAbbreviationsToFullWords(selectedLetters),
+        });
+
+        await query.invalidateQueries({
+          queryKey: ['get-match-list', 'get-customer-filters'],
+        });
+
+        Toast.show({
+          type: 'THNRSuccess',
+          props: {title: 'Filters Updated! ✅'},
+          position: 'top',
+          topOffset: 80,
+        });
+        // if (customerFilters.isSuccess && ref) {
+        //@ts-ignore
+        ref.current.close();
+        // }
+      } catch (error) {
+        console.error('Error in filters bottom sheet!', error);
+      }
+    };
     return (
       <BottomSheetModal
         ref={ref}
@@ -93,7 +127,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
           <View style={styles.container}>
             <View style={styles.contentContainer}>
               <Button
-                onPress={() => console.log('Pressed')}
+                onPress={handleSubmit}
                 text="Save"
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonText}
