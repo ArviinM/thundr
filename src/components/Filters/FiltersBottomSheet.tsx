@@ -6,7 +6,11 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
 import {
   convertAbbreviationsToFullWords,
@@ -144,7 +148,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         {getCustomerFilters.isLoading ? (
           <Loading />
         ) : (
-          <View style={styles.container}>
+          <BottomSheetScrollView>
             <View style={styles.contentContainer}>
               <Button
                 onPress={handleSubmit}
@@ -159,7 +163,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                 the right age and location, mars
               </Text>
             </View>
-            <ScrollView style={styles.scrollViewContainer}>
+            <View style={styles.scrollViewContainer}>
               <View style={styles.filterContainer}>
                 <View style={styles.titleContainer}>
                   <Text style={styles.titleFilterText}>Age Range</Text>
@@ -228,19 +232,17 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                     values={proximityValue}
                     onValuesChange={proximityValueChange}
                     sliderLength={width / 1.27}
-                    min={0}
-                    max={45}
+                    min={2}
+                    max={250}
                     step={1}
                     snapped
                     containerStyle={{
                       justifyContent: 'center',
                       alignItems: 'center',
-                      // borderWidth: 1,
                       height: 40,
                     }}
                     selectedStyle={{
                       backgroundColor: COLORS.primary1,
-                      // height: 10,
                       borderRadius: 20,
                     }}
                     unselectedStyle={{
@@ -288,8 +290,8 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                   ))}
                 </View>
               </View>
-            </ScrollView>
-          </View>
+            </View>
+          </BottomSheetScrollView>
         )}
       </BottomSheetModal>
     );
