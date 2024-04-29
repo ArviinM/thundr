@@ -16,6 +16,8 @@ import {LightningIcon} from '../../../../assets/images/tab_icons/LightningIcon.t
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAuth} from '../../../../providers/Auth.tsx';
 import FiltersBottomSheetModal from '../../../../components/Filters/FiltersBottomSheet.tsx';
+import {AdvocacyIcon} from '../../../../assets/images/tab_icons/AdvocacyIcon.tsx';
+import Advocacy from '../../../../screens/Private/Advocacy/Advocacy.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -121,20 +123,12 @@ export const HomeTab = () => {
           }}
         />
         <Tab.Screen
-          name="Lightning Round"
-          component={WorkingInProgress}
+          name="Advocacy"
+          component={Advocacy}
           options={{
             headerLeft: () => <HomeLeftHeader />,
             tabBarShowLabel: false,
-            tabBarIcon: ({focused}) => (
-              <Image
-                source={
-                  focused ? IMAGES.lightningRoundOn : IMAGES.lightningRoundOff
-                }
-                style={{height: scale(38), width: scale(38)}}
-                resizeMode="contain"
-              />
-            ),
+            tabBarIcon: ({focused}) => <AdvocacyIcon focused={focused} />,
           }}
         />
 

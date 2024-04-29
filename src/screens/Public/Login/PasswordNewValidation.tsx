@@ -32,6 +32,7 @@ import {
 } from 'react-native-keyboard-controller';
 
 import {useForgetPasswordChangePassword} from '../../../hooks/forget-password/useForgetPasswordChangePassword.ts';
+import {useChangePassword} from '../../../hooks/forget-password/useChangePassword.ts';
 
 type PasswordNewValidationScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -43,7 +44,7 @@ type PasswordNewValidationProps = {
 };
 
 const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
-  const {phoneNumber, code} = route?.params || {};
+  const {phoneNumber, code, isAuthenticated} = route?.params || {};
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [showPassword, setShowPassword] = useState(false);
@@ -52,8 +53,31 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
 
   const [loading, isLoading] = useState(false);
   const passwordChange = useForgetPasswordChangePassword();
+  const passwordChangeOld = useChangePassword();
 
   const schema = yup.object().shape({
+    oldPassword: yup.string(),
+    password: yup
+      .string()
+      .required('Nako mars, we need your password!')
+      .min(8, 'Password must be at least 8 characters.')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+        'Must contain one uppercase, lowercase, number, and special character.',
+      ),
+    confirmPassword: yup
+      .string()
+      .required('Please confirm your password.')
+      .oneOf(
+        [yup.ref('password') as Reference<string>, ''],
+        'Passwords must match.',
+      ),
+  });
+
+  const schemaAuthenticated = yup.object().shape({
+    oldPassword: yup
+      .string()
+      .required('Mars, we need your old password, paano namin papalitan yan?'),
     password: yup
       .string()
       .required('Nako mars, we need your password!')
@@ -76,7 +100,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
     handleSubmit,
     formState: {errors, isValid},
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(isAuthenticated ? schemaAuthenticated : schema),
   });
 
   useEffect(() => {
@@ -88,23 +112,46 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
   const onSubmit = async (data: {
     password: string;
     confirmPassword: string;
+    oldPassword?: string;
   }) => {
     try {
-      await schema.validate(data);
-      isLoading(true);
+      if (!isAuthenticated) {
+        await schema.validate(data);
+        isLoading(true);
 
-      if (phoneNumber && code) {
-        const result = await passwordChange.mutateAsync({
-          phoneNumber: phoneNumber,
-          code: code,
-          newPassword: data.confirmPassword,
-        });
-        if (result.done) {
-          navigation.navigate('PasswordResetConfirmed');
+        if (phoneNumber && code) {
+          const result = await passwordChange.mutateAsync({
+            phoneNumber: phoneNumber,
+            code: code,
+            newPassword: data.confirmPassword,
+          });
+          if (result.done) {
+            navigation.navigate('PasswordResetConfirmed', {
+              isAuthenticated: false,
+            });
+          }
         }
+
+        isLoading(false);
       }
 
-      isLoading(false);
+      if (isAuthenticated) {
+        await schemaAuthenticated.validate(data);
+        isLoading(true);
+
+        if (data.oldPassword) {
+          await passwordChangeOld.mutateAsync({
+            oldPassword: data.oldPassword,
+            newPassword: data.confirmPassword,
+          });
+
+          navigation.navigate('PasswordResetConfirmed', {
+            isAuthenticated: true,
+          });
+        }
+
+        isLoading(false);
+      }
     } catch (error) {
       console.error(error);
       isLoading(false);
@@ -117,20 +164,35 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
         <KeyboardAwareScrollView bottomOffset={50}>
           <View style={styles.container}>
             <View style={styles.backButtonContainer}>
-              <TouchableOpacity disabled style={styles.backButton}>
+              <TouchableOpacity
+                disabled={!isAuthenticated}
+                style={styles.backButton}
+                onPress={() => navigation.navigate('Settings')}>
                 <Image
                   source={IMAGES.back}
-                  style={[styles.backImage, {opacity: 0}]}
+                  style={[
+                    styles.backImage,
+                    isAuthenticated ? {opacity: 1} : {opacity: 0},
+                  ]}
                 />
               </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-              <Text style={styles.textTitle}>Set a new password</Text>
-              <Text style={styles.textSubtitle}>
-                Create a new password. Ensure it differs from the previous ones
-                for security
+              <Text style={styles.textTitle}>
+                {isAuthenticated ? 'Set a new password' : 'Set a new password'}
               </Text>
-              {/* Password Input Section */}
+              <Text
+                style={[
+                  isAuthenticated
+                    ? [styles.textSubtitle, {color: COLORS.gray}]
+                    : styles.textSubtitle,
+                ]}>
+                {isAuthenticated
+                  ? 'Please provide your old password and your new password for verification purposes.'
+                  : 'Create a new password. Ensure it differs from the previous ones for security'}
+              </Text>
+
+              {/*Old Password */}
               <View style={styles.passwordContainer}>
                 <View style={styles.textInputContainer}>
                   <Controller
@@ -142,6 +204,49 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                       <TextInput
                         ref={passwordRef} // Assign the ref
                         style={styles.textInputPassword}
+                        placeholder="Enter your old password"
+                        secureTextEntry={!showPassword} // Control visibility
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        maxLength={16}
+                        autoCapitalize="none"
+                        selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
+                      />
+                    )}
+                    name="oldPassword"
+                  />
+
+                  {/* Show/hide icon */}
+                  <TouchableOpacity
+                    style={styles.showPasswordIcon}
+                    onPress={() => setShowPassword(!showPassword)}>
+                    <Image
+                      source={showPassword ? IMAGES.eye : IMAGES.eyeHidden}
+                      style={styles.showPasswordImage}
+                    />
+                  </TouchableOpacity>
+
+                  {errors.password && (
+                    <Text style={styles.errorText}>
+                      {errors.password.message}
+                    </Text>
+                  )}
+                </View>
+              </View>
+              {/* Password Input Section */}
+              <View style={styles.passwordContainer2}>
+                <View style={styles.textInputContainer}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <TextInput
+                        // ref={passwordRef} // Assign the ref
+                        style={styles.textInputPassword}
                         placeholder="Enter your password"
                         secureTextEntry={!showPassword} // Control visibility
                         onBlur={onBlur}
@@ -150,6 +255,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                         maxLength={16}
                         autoCapitalize="none"
                         selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
                       />
                     )}
                     name="password"
@@ -192,6 +298,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                         value={value}
                         autoCapitalize="none"
                         selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
                       />
                     )}
                     name="confirmPassword"
@@ -269,7 +376,7 @@ const styles = StyleSheet.create({
   },
   passwordContainer2: {
     marginTop: 10,
-    marginBottom: 50,
+    marginBottom: 30,
     alignItems: 'flex-start',
     flexDirection: 'row',
   },

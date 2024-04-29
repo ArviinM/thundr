@@ -19,13 +19,18 @@ type TermsProps = {
 const Terms = ({route}: TermsProps) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const uri = route?.params?.uri;
+  const authenticated = route?.params?.isAuthenticated;
   const webViewRef = useRef<WebView>(null);
 
   const goBack = () => {
     // if (webViewRef.current) {
     //   webViewRef.current.goBack();
     // }
-    navigation.navigate('Login');
+    if (authenticated) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('Login');
+    }
   };
 
   // const goForward = () => {

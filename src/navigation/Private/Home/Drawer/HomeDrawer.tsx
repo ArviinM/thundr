@@ -12,6 +12,8 @@ import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
+import Settings from '../../../../screens/Private/Settings/Settings.tsx';
+import {SettingsStack} from '../Stack/SettingsStack.tsx';
 
 export const HomeDrawer = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -62,7 +64,11 @@ export const HomeDrawer = () => {
       />
       <Drawer.Screen name={'ThundrBolt'} component={WorkingInProgress} />
       <Drawer.Screen name={'ThundrMachi'} component={WorkingInProgress} />
-      <Drawer.Screen name={'Settings'} component={WorkingInProgress} />
+      <Drawer.Screen
+        name={'SettingsStack'}
+        component={SettingsStack}
+        options={{headerShown: false}}
+      />
     </Drawer.Navigator>
   );
 };
