@@ -123,32 +123,6 @@ export const SettingsStack = () => {
           },
         }}
       />
-      {/*<Stack.Screen*/}
-      {/*  name="Terms&Conditions"*/}
-      {/*  component={EditProfile}*/}
-      {/*  options={{*/}
-      {/*    headerTitle: 'Edit Profile',*/}
-      {/*    headerShown: true,*/}
-      {/*    headerStyle: {*/}
-      {/*      backgroundColor: COLORS.white,*/}
-      {/*    },*/}
-      {/*    headerTintColor: COLORS.primary1,*/}
-      {/*    headerTitleStyle: {*/}
-      {/*      fontFamily: 'ClimateCrisis-Regular',*/}
-      {/*      fontWeight: '500',*/}
-      {/*      fontSize: moderateScale(20),*/}
-      {/*    },*/}
-      {/*    headerLeft: props => (*/}
-      {/*      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>*/}
-      {/*        <Image*/}
-      {/*          source={IMAGES.back}*/}
-      {/*          style={{width: 20, height: 20}}*/}
-      {/*          resizeMode={'contain'}*/}
-      {/*        />*/}
-      {/*      </TouchableOpacity>*/}
-      {/*    ),*/}
-      {/*  }}*/}
-      {/*/>*/}
     </Stack.Navigator>
   );
 };
