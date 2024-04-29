@@ -24,6 +24,7 @@ import {CustomerMatchResponse} from '../../types/generated.ts';
 import {IMAGES} from '../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
+import moment from 'moment';
 
 const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 
@@ -139,6 +140,22 @@ const ProfileCard = ({user, isUser = false, possibles}: ProfileCardProps) => {
               <Text style={cardStyles.title}>About Me</Text>
               <Text style={cardStyles.body}>
                 {user.customerData.customerDetails.bio}
+              </Text>
+            </View>
+          )}
+
+          {user.customerData.gender && (
+            <View>
+              <Text style={cardStyles.subtitle}>Gender</Text>
+              <Text style={cardStyles.body}>{user.customerData.gender}</Text>
+            </View>
+          )}
+
+          {user.customerData.birthday && (
+            <View>
+              <Text style={cardStyles.subtitle}>Birthday</Text>
+              <Text style={cardStyles.body}>
+                {moment(user.customerData.birthday).format('MMMM DD, YYYY')}
               </Text>
             </View>
           )}

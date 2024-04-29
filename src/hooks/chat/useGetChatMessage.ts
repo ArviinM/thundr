@@ -15,19 +15,15 @@ export function useGetChatMessage(props: ChatMessageRequest) {
 
   return useInfiniteQuery({
     queryKey: ['get-chat-message', props],
-    // refetchInterval: 3000,
+    refetchInterval: 3000,
     initialPageParam: props.beforeId,
     getNextPageParam: (lastPage: IMessage[]) => {
       if (lastPage.length !== 0) {
-        const lastMessageId = lastPage[lastPage.length - 1]._id;
-        console.log({lastMessageId});
-        return lastMessageId;
+        return lastPage[lastPage.length - 1]._id;
       }
       return undefined;
     },
     queryFn: async ({pageParam = null}): Promise<IMessage[]> => {
-      // console.log(props.beforeId);
-      console.log({pageParam});
       const config: AxiosRequestConfig<ChatMessageRequest> = {
         params: {
           sub: props.sub,

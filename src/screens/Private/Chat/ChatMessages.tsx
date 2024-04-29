@@ -43,13 +43,10 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const {user, isMare = false} = route?.params || {};
   const query = useQueryClient(queryClient);
 
-  const beforeId = user?.latestChat?.id ? user.latestChat.id + 1 : undefined;
-
   const chatMessage = useGetChatMessage({
     sub: user?.sub || '',
     chatRoomID: user?.chatRoomUuid || '',
     limit: 50,
-    beforeId: beforeId,
   });
 
   const sendMessage = useSendChatMessage();
@@ -62,8 +59,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         message: message,
         read: '',
       });
-      await query.invalidateQueries({queryKey: ['get-chat-message']});
       await query.invalidateQueries({queryKey: ['get-chat-list']});
+      await query.invalidateQueries({queryKey: ['get-chat-message']});
     }
   };
 
