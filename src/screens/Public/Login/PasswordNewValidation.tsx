@@ -50,6 +50,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const passwordRef = useRef<TextInput>(null); // Ref for password input
   const confirmPasswordRef = useRef<TextInput>(null); // Ref for password input
+  const oldPasswordRef = useRef<TextInput>(null); // Ref for password input
 
   const [loading, isLoading] = useState(false);
   const passwordChange = useForgetPasswordChangePassword();
@@ -202,7 +203,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                     }}
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
-                        ref={passwordRef} // Assign the ref
+                        ref={oldPasswordRef} // Assign the ref
                         style={styles.textInputPassword}
                         placeholder="Enter your old password"
                         secureTextEntry={!showPassword} // Control visibility
@@ -245,7 +246,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                     }}
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
-                        // ref={passwordRef} // Assign the ref
+                        ref={passwordRef} // Assign the ref
                         style={styles.textInputPassword}
                         placeholder="Enter your password"
                         secureTextEntry={!showPassword} // Control visibility
