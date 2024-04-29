@@ -1,0 +1,128 @@
+import React from 'react';
+
+import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
+import Profile from '../../../../screens/Private/Profile/Profile.tsx';
+
+import {COLORS} from '../../../../constants/commons.ts';
+import {moderateScale, scale} from '../../../../utils/utils.ts';
+import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
+import {Image, Platform, TouchableOpacity, View} from 'react-native';
+import {
+  DrawerActions,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import {IMAGES} from '../../../../constants/images.ts';
+import Settings from '../../../../screens/Private/Settings/Settings.tsx';
+import Terms from '../../../../screens/Public/Login/Terms.tsx';
+import PasswordNewValidation from '../../../../screens/Public/Login/PasswordNewValidation.tsx';
+import PasswordResetConfirmed from '../../../../screens/Public/Login/PasswordResetConfirmed.tsx';
+export const SettingsStack = () => {
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  function HomeLeftHeader() {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: -8,
+        }}>
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
+          <Image
+            source={IMAGES.menu}
+            style={{height: scale(24), width: scale(24)}}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  return (
+    <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerLeft: () => <HomeLeftHeader />,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+          headerTintColor: COLORS.primary1,
+          headerTitleStyle: {
+            fontFamily: 'ClimateCrisis-Regular',
+            fontWeight: '500',
+            fontSize: moderateScale(20),
+          },
+        }}
+      />
+      <Stack.Group
+        screenOptions={{
+          presentation: 'modal',
+          headerShown: false,
+          statusBarColor: COLORS.white,
+          statusBarStyle: 'dark',
+          gestureEnabled: true,
+          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
+        }}>
+        <Stack.Screen name="Terms" component={Terms} />
+      </Stack.Group>
+      <Stack.Screen
+        name="PasswordNewValidation"
+        component={PasswordNewValidation}
+        options={{
+          headerTitle: '',
+          animation: 'slide_from_right',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+              <Image
+                source={IMAGES.back}
+                style={{width: 20, height: 20}}
+                resizeMode={'contain'}
+              />
+            </TouchableOpacity>
+          ),
+          headerShown: false,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+          headerTintColor: COLORS.primary1,
+          headerTitleStyle: {
+            fontFamily: 'ClimateCrisis-Regular',
+            fontWeight: '500',
+            fontSize: moderateScale(20),
+          },
+        }}
+      />
+      <Stack.Screen
+        name="PasswordResetConfirmed"
+        component={PasswordResetConfirmed}
+        options={{
+          headerTitle: '',
+          animation: 'slide_from_right',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+              <Image
+                source={IMAGES.back}
+                style={{width: 20, height: 20}}
+                resizeMode={'contain'}
+              />
+            </TouchableOpacity>
+          ),
+          headerShown: false,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+          headerTintColor: COLORS.primary1,
+          headerTitleStyle: {
+            fontFamily: 'ClimateCrisis-Regular',
+            fontWeight: '500',
+            fontSize: moderateScale(20),
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};

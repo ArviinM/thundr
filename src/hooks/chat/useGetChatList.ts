@@ -28,6 +28,8 @@ export function useGetChatList(props: ChatListRequest) {
         });
       }
 
+      // console.log(JSON.stringify(response.data.data, 0, 2));
+
       return response.data.data;
     },
   });

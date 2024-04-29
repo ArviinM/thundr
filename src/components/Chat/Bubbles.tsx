@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  FlatList,
   View,
   Text,
   StyleSheet,
@@ -9,29 +8,23 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import {ChatMessage, Chat, Attachment} from '../../types/generated.ts';
-import moment from 'moment';
-import {COLORS, height, width} from '../../constants/commons.ts';
-import {scale} from '../../utils/utils.ts';
+import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 
-// WARNING: THIS CHAT BBULES IS NOT CURRENTLY USED AND WILL BE REMOVED LATER
-const ChatBubbles = ({
+import {COLORS, height, width} from '../../constants/commons.ts';
+import {formatTimestamp, scale} from '../../utils/utils.ts';
+import {BubbleProps} from 'react-native-gifted-chat';
+
+const Bubbles = ({
+  props,
   user,
   isMare,
-  chatMessages,
-  loadMore,
 }: {
-  user: Chat;
+  props: BubbleProps<IMessage>;
   isMare: boolean;
-  chatMessages: ChatMessage[];
-  loadMore?: () => void;
+  user: Chat;
 }) => {
-  const formatTimestamp = (timestamp: string) => {
-    return moment(timestamp).format('h:mm A');
-  };
-
-  const isMessageFromSelf = (message: ChatMessage) => {
-    return message.senderSub === user.sub;
+  const isMessageFromSelf = (message: IMessage) => {
+    return message.user._id === user.sub;
   };
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -68,19 +61,23 @@ const ChatBubbles = ({
         onRequestClose={() => setIsVisible(false)}>
         <Animated.View
           style={[
-            stylesBubbles.container,
+            styles.container,
             {opacity, transform: [{scale: scaleAnim}]},
           ]}>
-          <View style={[stylesBubbles.bodyContainer, {marginBottom: 20}]}>
+          <View
+            style={[
+              styles.bodyContainer,
+              {marginBottom: 20, borderRadius: 10},
+            ]}>
             <TouchableOpacity
               style={[
-                stylesBubbles.button,
+                styles.button,
                 {
                   backgroundColor: isMare ? COLORS.secondary2 : COLORS.primary1,
                 },
               ]}
               onPress={() => setIsVisible(false)}>
-              <Text style={[stylesBubbles.buttonText]}>Close</Text>
+              <Text style={[styles.buttonText]}>Close</Text>
             </TouchableOpacity>
 
             {/* Display Selected Image */}
@@ -116,10 +113,7 @@ const ChatBubbles = ({
                 setSelectedImage(photo);
                 setIsVisible(true); // Trigger animation and modal
               }}>
-              <Image
-                source={{uri: photo}}
-                style={[stylesBubbles.messageImage]}
-              />
+              <Image source={{uri: photo}} style={[styles.messageImage]} />
             </TouchableOpacity>
           ))}
         </View>
@@ -140,10 +134,7 @@ const ChatBubbles = ({
                 setSelectedImage(photo);
                 setIsVisible(true); // Trigger animation and modal
               }}>
-              <Image
-                source={{uri: photo}}
-                style={[stylesBubbles.messageImage]}
-              />
+              <Image source={{uri: photo}} style={[styles.messageImage]} />
             </TouchableOpacity>
           ))}
         </View>
@@ -151,74 +142,75 @@ const ChatBubbles = ({
     }
   };
 
-  const renderItem = ({item: message}: {item: ChatMessage}) =>
-    message.attachments.length !== 0 ? (
-      <View
-        style={[
-          stylesBubbles.messageImageContainer,
-          isMessageFromSelf(message)
-            ? stylesBubbles.messageRight
-            : stylesBubbles.messageLeft,
-        ]}>
-        {renderImage({item: message.attachments})}
-      </View>
-    ) : (
-      <View
-        style={[
-          stylesBubbles.messageContainer,
-          isMessageFromSelf(message)
-            ? isMare
-              ? [
-                  stylesBubbles.messageRight,
-                  {backgroundColor: COLORS.secondary2},
-                ]
-              : [stylesBubbles.messageRight, {backgroundColor: COLORS.primary1}]
-            : stylesBubbles.messageLeft,
-        ]}>
-        <Text
-          style={[
-            stylesBubbles.messageText,
-            isMessageFromSelf(message)
-              ? isMare
-                ? [{color: COLORS.white}]
-                : [{color: COLORS.white}]
-              : stylesBubbles.messageText,
-          ]}>
-          {message.message}
-        </Text>
-        <Text
-          style={[
-            stylesBubbles.timestamp,
-            isMessageFromSelf(message)
-              ? isMare
-                ? [{color: COLORS.white}]
-                : [{color: COLORS.white}]
-              : stylesBubbles.timestamp,
-          ]}>
-          {formatTimestamp(message.created)}
-        </Text>
-      </View>
+  const renderItem = ({item: item}: {item: BubbleProps<IMessage>}) => {
+    const message = item.currentMessage;
+
+    return (
+      <>
+        {message && message.attachments && message.attachments.length !== 0 ? (
+          <View
+            style={[
+              styles.messageImageContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            {renderImage({item: message.attachments})}
+          </View>
+        ) : (
+          message && (
+            <View
+              style={[
+                styles.messageContainer,
+                isMessageFromSelf(message)
+                  ? isMare
+                    ? [
+                        styles.messageRight,
+                        {backgroundColor: COLORS.secondary2},
+                      ]
+                    : [styles.messageRight, {backgroundColor: COLORS.primary1}]
+                  : styles.messageLeft,
+              ]}>
+              <Text
+                style={[
+                  styles.messageText,
+                  isMessageFromSelf(message)
+                    ? isMare
+                      ? {color: COLORS.white}
+                      : {color: COLORS.white}
+                    : styles.messageText,
+                ]}>
+                {message.text}
+              </Text>
+              <Text
+                style={[
+                  styles.timestamp,
+                  isMessageFromSelf(message)
+                    ? isMare
+                      ? {color: COLORS.white}
+                      : {color: COLORS.white}
+                    : styles.timestamp,
+                ]}>
+                {formatTimestamp(message.createdAt)}
+              </Text>
+            </View>
+          )
+        )}
+      </>
     );
+  };
 
   return (
     <>
-      <FlatList
-        data={chatMessages} // Assuming 'messages' array exists within the 'user' object
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
-        inverted
-        keyboardShouldPersistTaps="handled"
-        // onEndReached={loadMore}
-        // onEndReachedThreshold={0.2}
-      />
+      {renderItem({item: props})}
       {imageModal()}
     </>
   );
 };
 
-export default ChatBubbles;
+export default Bubbles;
 
-export const stylesBubbles = StyleSheet.create({
+const styles = StyleSheet.create({
   messageContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,

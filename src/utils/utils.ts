@@ -131,3 +131,7 @@ export const parseFeetAndInches = (inputString?: string): FeetAndInches => {
 
   return {feet, inches};
 };
+
+export const formatTimestamp = (timestamp: number | Date) => {
+  return moment(timestamp).format('h:mm A');
+};

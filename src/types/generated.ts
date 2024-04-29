@@ -1,3 +1,5 @@
+import {QuickReplies, User} from 'react-native-gifted-chat';
+
 export type BaseResponse<T> = {
   data: T;
   message: string;
@@ -432,6 +434,23 @@ export type ChatSendMessageRequest = {
   base64Files?: Base64Attachments[];
   chatRoomID?: string;
 };
+
+// Transform Chat Messages for Gifted Chat
+export interface IMessage {
+  _id: string | number;
+  text: string;
+  createdAt: Date | number;
+  user: User;
+  image?: string;
+  video?: string;
+  audio?: string;
+  system?: boolean;
+  sent?: boolean;
+  received?: boolean;
+  pending?: boolean;
+  quickReplies?: QuickReplies;
+  attachments?: string[]; // Array to hold attachment URLs
+}
 
 // Filters
 export type GetCustomerFilterRequest = {

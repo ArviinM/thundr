@@ -6,7 +6,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import DrawerItem from './DrawerItem.tsx';
 import {IMAGES} from '../../constants/images.ts';
 import {scale} from '../../utils/utils.ts';
@@ -93,7 +93,7 @@ const DrawerContent = () => {
           label="Settings"
           onPress={() => {
             handleDrawerItemClick('Settings');
-            navigation.navigate('Settings');
+            navigation.navigate('SettingsStack');
           }}
           icon={'settings'}
           isSelected={isSelected === 'Settings'}
@@ -109,7 +109,7 @@ const DrawerContent = () => {
               await signOut();
             }}
             icon={'log-out'}
-            isSelected={isSelected === 'Settings'}
+            isSelected={isSelected === 'Log Out'}
           />
         )}
       </View>

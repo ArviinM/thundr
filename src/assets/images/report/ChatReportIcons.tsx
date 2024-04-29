@@ -8,7 +8,7 @@ export const ChatReportIcons = (props: {isMare: boolean}) => {
         <Svg width={39} height={39}>
           <Path
             fill={COLORS.secondary2}
-            d="m19.5 0 16.888 29.25H2.611L19.5 0Z"
+            d="m19.5 0 16.888   29.25H2.611L19.5 0Z"
           />
           <Path
             fill="#fff"

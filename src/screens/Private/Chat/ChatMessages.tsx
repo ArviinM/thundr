@@ -1,25 +1,34 @@
+// React Libraries
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Platform, Text, View} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
-import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {Loading} from '../../../components/shared/Loading.tsx';
-import ChatHeader from '../../../components/Chat/ChatHeader.tsx';
-import {COLORS, height} from '../../../constants/commons.ts';
-import ChatInput from '../../../components/Chat/ChatInput.tsx';
-import ChatBubbles from '../../../components/Chat/ChatBubbles.tsx';
+
+// Other Custom Libraries
 import {
   KeyboardAvoidingView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
+import ImagePicker from 'react-native-image-crop-picker';
+import Toast from 'react-native-toast-message';
+
+// Components
+import {Loading} from '../../../components/shared/Loading.tsx';
+import ChatHeader from '../../../components/Chat/ChatHeader.tsx';
+import ChatInput from '../../../components/Chat/ChatInput.tsx';
+import {GiftedChat, BubbleProps} from 'react-native-gifted-chat';
+import {Day} from '../../../components/Chat/Day.tsx';
+import Bubbles from '../../../components/Chat/Bubbles.tsx';
+
+// Utils
+import {Platform, Text, View} from 'react-native';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {COLORS, height} from '../../../constants/commons.ts';
 import {MAX_IMAGE_SIZE_BYTES, scale} from '../../../utils/utils.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
 import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
-import ImagePicker from 'react-native-image-crop-picker';
-import Toast from 'react-native-toast-message';
-import {Base64Attachments} from '../../../types/generated.ts';
+import {Base64Attachments, IMessage} from '../../../types/generated.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -34,10 +43,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const {user, isMare = false} = route?.params || {};
   const query = useQueryClient(queryClient);
 
+  const beforeId = user?.latestChat?.id ? user.latestChat.id + 1 : undefined;
+
   const chatMessage = useGetChatMessage({
     sub: user?.sub || '',
     chatRoomID: user?.chatRoomUuid || '',
     limit: 50,
+    beforeId: beforeId,
   });
 
   const sendMessage = useSendChatMessage();
@@ -131,17 +143,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
-  // const loadMore = async () => {
-  //   console.log('Hoy mag load ka pa ng madami bweiset');
-  //   if (
-  //     !chatMessage.isFetchingNextPage &&
-  //     chatMessage.data?.pages.some(page => page)
-  //   ) {
-  //     await chatMessage.fetchNextPage();
-  //     console.log('new data was fetched');
-  //   }
-  // };
-
   return (
     <SafeAreaView
       edges={['left', 'right', 'top', 'bottom']}
@@ -159,11 +160,30 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             keyboardVerticalOffset={
               Platform.OS === 'ios' ? scale(120) : scale(100)
             }>
-            <ChatBubbles
-              user={user}
-              isMare={isMare}
-              chatMessages={chatMessage.data?.pages.flatMap(page => page) || []}
-              // loadMore={loadMore}
+            <GiftedChat
+              messages={chatMessage.data?.pages.flatMap(page => page) || []}
+              renderAvatar={null}
+              user={{_id: user.sub}}
+              minComposerHeight={0}
+              maxComposerHeight={0}
+              minInputToolbarHeight={0}
+              infiniteScroll
+              loadEarlier
+              onLoadEarlier={async () => {
+                if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
+                  return;
+                }
+                await chatMessage.fetchNextPage();
+              }}
+              scrollToBottom
+              bottomOffset={0}
+              isKeyboardInternallyHandled={false}
+              isLoadingEarlier={chatMessage.isFetchingNextPage}
+              renderInputToolbar={() => null}
+              renderDay={props => <Day {...props} />}
+              renderBubble={(props: Readonly<BubbleProps<IMessage>>) => (
+                <Bubbles props={props} user={user} isMare={isMare} />
+              )}
             />
           </KeyboardAvoidingView>
           {/*Chat Text Input*/}

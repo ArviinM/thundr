@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {Controller, useForm} from 'react-hook-form';
-import * as yup from 'yup';
 
 import {
   NavigationProp,
@@ -19,20 +17,16 @@ import {
 } from '@react-navigation/native';
 
 import GradientButton from '../../../components/shared/GradientButton.tsx';
-import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {EmailValidationRequest} from '../../../types/generated.ts';
-import {useEmailValidation} from '../../../hooks/registration/useEmailValidation.ts';
-import {yupResolver} from '@hookform/resolvers/yup';
+
 import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import useConfirmationAlert from '../../../components/shared/Alert.tsx';
-import {opacity} from 'react-native-reanimated/lib/typescript/reanimated2/Colors';
+
 import {scale} from '../../../utils/utils.ts';
 
 type PasswordResetScreenRouteProp = RouteProp<

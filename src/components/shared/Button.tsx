@@ -14,6 +14,7 @@ interface ButtonProps {
   text: string;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,12 +23,13 @@ const Button: React.FC<ButtonProps> = ({
   text,
   buttonStyle,
   textStyle,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
       style={[buttonStyle]}
       onPress={onPress}
-      disabled={loading}>
+      disabled={loading || disabled}>
       {loading ? (
         <ActivityIndicator
           color={COLORS.white}

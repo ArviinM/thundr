@@ -49,12 +49,16 @@ export type RootNavigationParams = {
   // Login
   Login: undefined;
   LoginValidation: undefined;
-  Terms: {uri: string};
+  Terms: {uri: string; isAuthenticated?: boolean};
   ForgetPasswordValidation: undefined;
   ForgetPasswordVerification: {phoneNumber: string};
   PasswordReset: {phoneNumber: string; code: string};
-  PasswordNewValidation: {phoneNumber: string; code: string};
-  PasswordResetConfirmed: undefined;
+  PasswordNewValidation: {
+    phoneNumber?: string;
+    code?: string;
+    isAuthenticated?: boolean;
+  };
+  PasswordResetConfirmed: {isAuthenticated?: boolean};
   // Profile Creation
   CustomerName: undefined;
   CustomerBirthday: undefined;
@@ -86,4 +90,6 @@ export type RootNavigationParams = {
 
   // chats
   ChatMessages: {user: Chat; isMare: boolean};
+
+  SettingsStack: undefined;
 };
