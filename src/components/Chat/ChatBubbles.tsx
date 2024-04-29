@@ -14,6 +14,7 @@ import moment from 'moment';
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {scale} from '../../utils/utils.ts';
 
+// WARNING: THIS CHAT BBULES IS NOT CURRENTLY USED AND WILL BE REMOVED LATER
 const ChatBubbles = ({
   user,
   isMare,
@@ -67,19 +68,19 @@ const ChatBubbles = ({
         onRequestClose={() => setIsVisible(false)}>
         <Animated.View
           style={[
-            styles.container,
+            stylesBubbles.container,
             {opacity, transform: [{scale: scaleAnim}]},
           ]}>
-          <View style={[styles.bodyContainer, {marginBottom: 20}]}>
+          <View style={[stylesBubbles.bodyContainer, {marginBottom: 20}]}>
             <TouchableOpacity
               style={[
-                styles.button,
+                stylesBubbles.button,
                 {
                   backgroundColor: isMare ? COLORS.secondary2 : COLORS.primary1,
                 },
               ]}
               onPress={() => setIsVisible(false)}>
-              <Text style={[styles.buttonText]}>Close</Text>
+              <Text style={[stylesBubbles.buttonText]}>Close</Text>
             </TouchableOpacity>
 
             {/* Display Selected Image */}
@@ -115,7 +116,10 @@ const ChatBubbles = ({
                 setSelectedImage(photo);
                 setIsVisible(true); // Trigger animation and modal
               }}>
-              <Image source={{uri: photo}} style={[styles.messageImage]} />
+              <Image
+                source={{uri: photo}}
+                style={[stylesBubbles.messageImage]}
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -136,7 +140,10 @@ const ChatBubbles = ({
                 setSelectedImage(photo);
                 setIsVisible(true); // Trigger animation and modal
               }}>
-              <Image source={{uri: photo}} style={[styles.messageImage]} />
+              <Image
+                source={{uri: photo}}
+                style={[stylesBubbles.messageImage]}
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -148,40 +155,45 @@ const ChatBubbles = ({
     message.attachments.length !== 0 ? (
       <View
         style={[
-          styles.messageImageContainer,
-          isMessageFromSelf(message) ? styles.messageRight : styles.messageLeft,
+          stylesBubbles.messageImageContainer,
+          isMessageFromSelf(message)
+            ? stylesBubbles.messageRight
+            : stylesBubbles.messageLeft,
         ]}>
         {renderImage({item: message.attachments})}
       </View>
     ) : (
       <View
         style={[
-          styles.messageContainer,
+          stylesBubbles.messageContainer,
           isMessageFromSelf(message)
             ? isMare
-              ? [styles.messageRight, {backgroundColor: COLORS.secondary2}]
-              : [styles.messageRight, {backgroundColor: COLORS.primary1}]
-            : styles.messageLeft,
+              ? [
+                  stylesBubbles.messageRight,
+                  {backgroundColor: COLORS.secondary2},
+                ]
+              : [stylesBubbles.messageRight, {backgroundColor: COLORS.primary1}]
+            : stylesBubbles.messageLeft,
         ]}>
         <Text
           style={[
-            styles.messageText,
+            stylesBubbles.messageText,
             isMessageFromSelf(message)
               ? isMare
                 ? [{color: COLORS.white}]
                 : [{color: COLORS.white}]
-              : styles.messageText,
+              : stylesBubbles.messageText,
           ]}>
           {message.message}
         </Text>
         <Text
           style={[
-            styles.timestamp,
+            stylesBubbles.timestamp,
             isMessageFromSelf(message)
               ? isMare
                 ? [{color: COLORS.white}]
                 : [{color: COLORS.white}]
-              : styles.timestamp,
+              : stylesBubbles.timestamp,
           ]}>
           {formatTimestamp(message.created)}
         </Text>
@@ -206,7 +218,7 @@ const ChatBubbles = ({
 
 export default ChatBubbles;
 
-const styles = StyleSheet.create({
+export const stylesBubbles = StyleSheet.create({
   messageContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,
