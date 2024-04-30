@@ -248,7 +248,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                       <TextInput
                         ref={passwordRef} // Assign the ref
                         style={styles.textInputPassword}
-                        placeholder="Enter your password"
+                        placeholder="Enter your new password"
                         secureTextEntry={!showPassword} // Control visibility
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -292,7 +292,7 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
                       <TextInput
                         ref={confirmPasswordRef}
                         style={styles.textInputPassword}
-                        placeholder="Confirm your password"
+                        placeholder="Confirm your new password"
                         secureTextEntry={!showPassword}
                         onBlur={onBlur}
                         onChangeText={onChange}
