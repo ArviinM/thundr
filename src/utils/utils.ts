@@ -135,3 +135,19 @@ export const parseFeetAndInches = (inputString?: string): FeetAndInches => {
 export const formatTimestamp = (timestamp: number | Date) => {
   return moment(timestamp).format('h:mm A');
 };
+
+export const calculateCountdown = (nextAction: number | undefined) => {
+  if (!nextAction) {
+    return null;
+  } // Handle if nextAction is not provided
+
+  const now = moment();
+  const targetTime = moment.unix(nextAction);
+  const duration = moment.duration(targetTime.diff(now));
+
+  return {
+    hours: duration.hours(),
+    minutes: duration.minutes(),
+    seconds: duration.seconds(),
+  };
+};
