@@ -13,12 +13,39 @@ import {scale} from '../../../utils/utils.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import LinearGradient from 'react-native-linear-gradient';
 import FeatureLists from '../../../components/ThundrBolt/FeatureLists.tsx';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {CloseIcon} from '../../../assets/images/CloseIcon.tsx';
 
-const ThundrBolt = () => {
+type ThundrBoltRouteProp = RouteProp<RootNavigationParams, 'ThundrBoltModal'>;
+
+type ThundrBoltProps = {
+  route?: ThundrBoltRouteProp;
+};
+
+const ThundrBolt = ({route}: ThundrBoltProps) => {
+  const {isModal} = route?.params || {};
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
   return (
     <SafeAreaView
-      edges={['left', 'right', 'bottom']}
+      edges={
+        isModal
+          ? ['left', 'right', 'bottom', 'top']
+          : ['left', 'right', 'bottom']
+      }
       style={{flex: 1, backgroundColor: COLORS.white}}>
+      {isModal && (
+        <View style={{paddingHorizontal: 20}}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <CloseIcon />
+          </TouchableOpacity>
+        </View>
+      )}
       <ScrollView
         style={{
           flex: 1,

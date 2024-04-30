@@ -18,6 +18,7 @@ import {useAuth} from '../../providers/Auth.tsx';
 import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
 import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
 import ChatMessages from '../../screens/Private/Chat/ChatMessages.tsx';
+import ThundrBolt from '../../screens/Private/ThundrBolt/ThundrBolt.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -90,6 +91,17 @@ export const AuthenticatedStack = () => {
           component={ChatMessages}
           options={{
             animation: 'slide_from_right',
+            statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
+          }}
+        />
+        <Stack.Screen
+          name="ThundrBoltModal"
+          component={ThundrBolt}
+          options={{
+            statusBarColor: COLORS.primary1,
+            statusBarTranslucent: true,
+            animation: 'slide_from_bottom',
+            statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}
         />
