@@ -18,6 +18,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
+import {ThundrJuice} from '../../../assets/images/chat/ThundrJuice.tsx';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -32,68 +33,117 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
     getChatList.refetch().then(() => setRefreshing(false)); // Refetch data
   }, [getChatList]);
 
-  const renderItem: ListRenderItem<Chat> = ({item, index}) => (
-    <TouchableOpacity
-      key={index}
-      onPress={() =>
-        navigation.navigate('ChatMessages', {user: item, isMare: isMare})
-      }>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginVertical: 8,
-        }}>
-        <View>
-          <Image
-            source={{uri: item.profile.customerPhoto[0].photoUrl}}
-            style={{width: scale(70), height: scale(70), borderRadius: 8}}
-            resizeMode="cover"
-          />
-        </View>
-        <View style={{justifyContent: 'center', paddingHorizontal: 10}}>
-          <Text
-            style={{
-              fontFamily: 'Montserrat-ExtraBold',
-              fontSize: scale(18),
-              color: isMare ? COLORS.secondary2 : COLORS.primary1,
-              letterSpacing: -0.4,
-            }}>
-            {item.profile.name.split(' ')[0] || '👻'},{' '}
-            {calculateAge(item.profile.birthday)}
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'Montserrat-Regular',
-              fontSize: scale(14),
-              color: COLORS.black,
-              letterSpacing: -0.4,
-            }}>
-            {item.latestChat
-              ? item.latestChat.message
-                ? item.latestChat.message
-                : '[Image] 🌠'
-              : `Say hello to ${item.profile.name.split(' ')[0] || '👻'} 👋`}
-          </Text>
-        </View>
-        <View style={{flex: 1}} />
+  const renderItem: ListRenderItem<Chat> = ({item, index}) => {
+    let thundrJuice;
+
+    const currentTime = moment().valueOf() / 1000;
+    const secondsRemaining = item.ttl - currentTime;
+    const segmentSize = secondsRemaining / 5;
+
+    switch (Math.floor(secondsRemaining / segmentSize)) {
+      case 5:
+        thundrJuice = <ThundrJuice count={5} />;
+        break;
+      case 4:
+        thundrJuice = <ThundrJuice count={4} />;
+        break;
+      case 3:
+        thundrJuice = <ThundrJuice count={3} />;
+        break;
+      case 2:
+        thundrJuice = <ThundrJuice count={2} />;
+        break;
+      case 1:
+        thundrJuice = <ThundrJuice count={1} />;
+        break;
+      case 0:
+        thundrJuice = <ThundrJuice count={0} />;
+        break;
+      default:
+        thundrJuice = <ThundrJuice count={5} />;
+    }
+
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() =>
+          navigation.navigate('ChatMessages', {user: item, isMare: isMare})
+        }>
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            paddingBottom: scale(16),
+            flexDirection: 'row',
+            marginVertical: 8,
           }}>
-          <Text
-            style={{
-              fontFamily: 'Montserrat-Regular',
-              fontSize: scale(14),
-              color: COLORS.black,
-            }}>
-            {moment(item.lastActivity).format('h:mm A')}
-          </Text>
+          <View>
+            <Image
+              source={{uri: item.profile.customerPhoto[0].photoUrl}}
+              style={{width: scale(70), height: scale(70), borderRadius: 8}}
+              resizeMode="cover"
+            />
+          </View>
+          <View style={{justifyContent: 'center', paddingHorizontal: 10}}>
+            <Text
+              style={{
+                fontFamily: 'Montserrat-ExtraBold',
+                fontSize: scale(18),
+                color: isMare ? COLORS.secondary2 : COLORS.primary1,
+                letterSpacing: -0.4,
+              }}>
+              {item.profile.name.split(' ')[0] || '👻'},{' '}
+              {calculateAge(item.profile.birthday)}
+            </Text>
+            <Text
+              style={{
+                fontFamily: 'Montserrat-Regular',
+                fontSize: scale(14),
+                color: COLORS.black,
+                letterSpacing: -0.4,
+              }}>
+              {item.latestChat
+                ? item.latestChat.message
+                  ? item.latestChat.message
+                  : '[Image] 🌠'
+                : `Say hello to ${item.profile.name.split(' ')[0] || '👻'} 👋`}
+            </Text>
+          </View>
+          <View style={{flex: 1}} />
+          {!item.latestChat && (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: scale(14),
+                  color: COLORS.black,
+                }}>
+                {thundrJuice}
+              </Text>
+            </View>
+          )}
+          {item.latestChat && (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                paddingBottom: scale(16),
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: scale(14),
+                  color: COLORS.black,
+                }}>
+                {moment(item.lastActivity).format('h:mm A')}
+              </Text>
+            </View>
+          )}
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   const renderContent = () => {
     return (

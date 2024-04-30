@@ -38,6 +38,9 @@ import {
   unregisterDeviceForRemoteMessages,
 } from '../../../utils/notificationUtils.ts';
 import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
+import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 const Home = () => {
   const auth = useAuth();
@@ -58,7 +61,7 @@ const Home = () => {
 
   const registerToken = useRegisterToken();
 
-  const [visible, isVisible] = useState(true);
+  const [visible, isVisible] = useState(false);
 
   useEffect(() => {
     if (matchList.isPending) {
@@ -125,6 +128,7 @@ const Home = () => {
     } catch (error: any) {
       console.warn('Error updating swipe match:', error);
       if (error.status === 'MAX_SWIPES') {
+        isVisible(true);
         runOnJS(setIndex)(previousValue); // Revert to the previous card
         activeIndex.value = withSpring(previousValue);
 
@@ -236,8 +240,6 @@ const Home = () => {
     requestLocationPermission();
   }, []);
 
-  console.log(matchList.isRefetching);
-
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
@@ -261,6 +263,7 @@ const Home = () => {
       {/*  buttonText="Close"*/}
       {/*  onClose={() => isVisible(false)}*/}
       {/*/>*/}
+      <CountdownCooldown isVisible={visible} onClose={() => isVisible(false)} />
       <View
         style={{
           flex: 1,
@@ -370,17 +373,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   noMatchesTitle: {
-    fontSize: 20,
+    fontSize: scale(20),
     fontFamily: 'ClimateCrisis-Regular',
     marginBottom: 10,
     letterSpacing: 0.2,
     color: COLORS.primary2,
+    textAlign: 'center',
   },
   noMatchesSubtitle: {
     textAlign: 'center',
     fontFamily: 'Montserrat-Medium',
     color: 'gray',
     letterSpacing: -0.4,
+    fontSize: scale(12),
   },
 });
 

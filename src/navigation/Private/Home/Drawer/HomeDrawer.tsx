@@ -14,6 +14,7 @@ import {Image, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
 import Settings from '../../../../screens/Private/Settings/Settings.tsx';
 import {SettingsStack} from '../Stack/SettingsStack.tsx';
+import ThundrBolt from '../../../../screens/Private/ThundrBolt/ThundrBolt.tsx';
 
 export const HomeDrawer = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -62,7 +63,11 @@ export const HomeDrawer = () => {
         component={HomeTab}
         options={{headerShown: false}}
       />
-      <Drawer.Screen name={'ThundrBolt'} component={WorkingInProgress} />
+      <Drawer.Screen
+        name={'ThundrBolt'}
+        component={ThundrBolt}
+        options={{title: 'Thundr Bolt'}}
+      />
       <Drawer.Screen name={'ThundrMachi'} component={WorkingInProgress} />
       <Drawer.Screen
         name={'SettingsStack'}

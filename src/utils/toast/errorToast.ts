@@ -6,9 +6,12 @@ export function showErrorToast(error: any) {
   // @ts-ignore
   console.error(error);
 
-  // if (error.status === 'MAX_SWIPES') {
-  //   return;
-  // }
+  if (
+    error.status === 'MAX_SWIPES' ||
+    error.status === 'POSSIBLES_COOLDOWN_EXCEPTION'
+  ) {
+    return;
+  }
 
   const statusBarHeight = initialWindowMetrics?.insets.top || 20; // Get the status bar height
   //TODO: Add Status Code Translations

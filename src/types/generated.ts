@@ -257,6 +257,7 @@ export type CustomerMatchPostRequest = {
   sub: string;
   target: string;
   tag: 'Mare' | 'Jowa';
+  possibleTag?: 'Mare' | 'Jowa';
 };
 
 export type CustomerMatchPostResponse = {

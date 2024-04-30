@@ -81,6 +81,7 @@ export type RootNavigationParams = {
 
   // Drawer
   ThundrBolt: undefined;
+
   ThundrMachi: undefined;
   Settings: undefined;
   HomeDrawer: undefined;
@@ -92,4 +93,5 @@ export type RootNavigationParams = {
   ChatMessages: {user: Chat; isMare: boolean};
 
   SettingsStack: undefined;
+  ThundrBoltModal: {isModal: boolean};
 };
