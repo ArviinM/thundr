@@ -142,6 +142,22 @@ export const calculateCountdown = (nextAction: number | undefined) => {
   } // Handle if nextAction is not provided
 
   const now = moment();
+  const targetTime = moment(nextAction);
+  const duration = moment.duration(targetTime.diff(now));
+
+  return {
+    hours: duration.hours(),
+    minutes: duration.minutes(),
+    seconds: duration.seconds(),
+  };
+};
+
+export const calculateCountdownSwipes = (nextAction: number | undefined) => {
+  if (!nextAction) {
+    return null;
+  } // Handle if nextAction is not provided
+
+  const now = moment();
   const targetTime = moment.unix(nextAction);
   const duration = moment.duration(targetTime.diff(now));
 

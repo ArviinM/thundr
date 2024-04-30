@@ -11,10 +11,16 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
 import LottieView from 'lottie-react-native';
 import {cardHeight} from './Card.tsx';
-import {calculateCountdown, scale} from '../../utils/utils.ts';
+import {
+  calculateCountdown,
+  calculateCountdownSwipes,
+  scale,
+} from '../../utils/utils.ts';
 import {useEffect, useState} from 'react';
 import moment from 'moment';
 import GradientButton from '../shared/GradientButton.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../constants/navigator.ts';
 
 interface CountdownCooldownProps {
   isVisible: boolean;
@@ -25,6 +31,8 @@ const CountdownCooldown: React.FC<CountdownCooldownProps> = ({
   isVisible,
   onClose,
 }) => {
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
   const [animation] = React.useState(new Animated.Value(0));
   const [countdownTime, setCountdownTime] = useState<{
     hours: number;
@@ -40,7 +48,7 @@ const CountdownCooldown: React.FC<CountdownCooldownProps> = ({
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const newCountdown = calculateCountdown(midnight);
+      const newCountdown = calculateCountdownSwipes(midnight);
       setCountdownTime(newCountdown);
     }, 1000); // Update every second
 
@@ -257,7 +265,10 @@ const CountdownCooldown: React.FC<CountdownCooldownProps> = ({
             Thundr Bolt now!
           </Text>
           <GradientButton
-            onPress={() => console.log('go to subscribe thundr')}
+            onPress={() => {
+              navigation.navigate('ThundrBoltModal', {isModal: true});
+              onClose();
+            }}
             text="SUBSCRIBE NOW"
             buttonStyle={styles.buttonStyle}
             textStyle={styles.buttonTextStyle}
