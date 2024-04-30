@@ -75,8 +75,7 @@ const ProfileCard = ({
 
   const tapGesture = Gesture.Tap().onEnd(handleTap);
 
-  const nextActionTimer = moment(nextAction) || 0;
-  console.log(nextActionTimer);
+  // const nextActionTimer = moment(nextAction) || 0;
 
   return (
     <ScrollView>

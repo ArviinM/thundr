@@ -1,3 +1,4 @@
+require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 def node_require(script)
     require Pod::Executable.execute_command('node', ['-p',
       "require.resolve(
@@ -44,6 +45,14 @@ end
 
 
 target 'Thundr' do
+  use_expo_modules!
+  post_integrate do |installer|
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+  end
   config = use_native_modules!
   
   pod 'Firebase', :modular_headers => true
