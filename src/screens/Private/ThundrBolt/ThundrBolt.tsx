@@ -1,24 +1,31 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {BoltLogo} from '../../../assets/images/thundrbolt_icons/BoltLogo.tsx';
 import {scale} from '../../../utils/utils.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import LinearGradient from 'react-native-linear-gradient';
+import FeatureLists from '../../../components/ThundrBolt/FeatureLists.tsx';
 
 const ThundrBolt = () => {
   return (
     <SafeAreaView
       edges={['left', 'right', 'bottom']}
       style={{flex: 1, backgroundColor: COLORS.white}}>
-      <View
+      <ScrollView
         style={{
           flex: 1,
           backgroundColor: COLORS.white,
           paddingHorizontal: 20,
-          paddingVertical: 30,
-          alignItems: 'center',
+          paddingVertical: 20,
+          // alignItems: 'center',
         }}>
         <View style={{flexDirection: 'column', alignItems: 'center'}}>
           <BoltLogo />
@@ -30,15 +37,15 @@ const ThundrBolt = () => {
               fontFamily: 'Montserrat-Medium',
               fontSize: scale(11),
             }}>
-            Paid subscription para sa mga{'\n'}kabog. Unlock exclusive access
-            {'\n'}to all features.
+            Paid subscription para sa mga{'\n'}kabog. Unlock exclusive access to
+            all features.
           </Text>
         </View>
-        <View style={{paddingVertical: 20, alignItems: 'center'}}>
+        <View style={{paddingVertical: 10, alignItems: 'center'}}>
           <Text
             style={{
               textAlign: 'center',
-              marginVertical: 10,
+              marginVertical: 4,
               color: COLORS.primary1,
               fontFamily: 'Montserrat-Black',
               fontSize: scale(18),
@@ -47,7 +54,10 @@ const ThundrBolt = () => {
           </Text>
         </View>
         {/* Gestures Here Swipe */}
-      </View>
+        <View style={{paddingBottom: 60, flex: 1}}>
+          <FeatureLists />
+        </View>
+      </ScrollView>
       <View style={{alignItems: 'center', width: '100%'}}>
         {/* Set width to 100% */}
         <View
