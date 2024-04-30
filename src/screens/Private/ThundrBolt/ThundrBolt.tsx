@@ -5,6 +5,7 @@ import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {BoltLogo} from '../../../assets/images/thundrbolt_icons/BoltLogo.tsx';
 import {scale} from '../../../utils/utils.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
+import LinearGradient from 'react-native-linear-gradient';
 
 const ThundrBolt = () => {
   return (
@@ -60,14 +61,15 @@ const ThundrBolt = () => {
               flex: 1,
               borderWidth: 1.5,
               margin: scale(13),
-              paddingHorizontal: scale(20),
+              paddingHorizontal: scale(18),
               paddingVertical: scale(12),
               borderRadius: 10,
               borderColor: COLORS.primary1,
             }}>
             {/*yearly*/}
             <View>
-              <View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text
                   style={{
                     color: COLORS.primary1,
@@ -77,6 +79,22 @@ const ThundrBolt = () => {
                   }}>
                   Yearly
                 </Text>
+                <LinearGradient
+                  colors={['#ffce69', '#E43C59']}
+                  start={{x: 1, y: 1}}
+                  end={{x: 0, y: 0.2}}
+                  style={{paddingHorizontal: 8, borderRadius: 10}}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: scale(10),
+                      color: COLORS.white,
+                      padding: 3,
+                      fontFamily: 'Montserrat-Bold',
+                    }}>
+                    SAVE{'\n'}P600!
+                  </Text>
+                </LinearGradient>
               </View>
               <Text
                 style={{
@@ -94,7 +112,7 @@ const ThundrBolt = () => {
               flex: 1,
               // borderWidth: 1.5,
               margin: scale(13),
-              paddingHorizontal: scale(20),
+              paddingHorizontal: scale(18),
               paddingVertical: scale(12),
               borderRadius: 10,
               // borderColor: COLORS.primary1,
