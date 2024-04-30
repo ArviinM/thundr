@@ -480,3 +480,16 @@ export type CustomerFilter = {
   personalityType?: string;
   updateDate: string;
 };
+
+// Possibles
+export type PossiblesRequest = {
+  sub: string;
+  tag: 'MARE' | 'JOWA';
+};
+
+export type PossiblesResponse = {
+  profiles: CustomerMatchResponse[];
+  isBlurred: boolean;
+  tag: 'MARE' | 'JOWA';
+  nextActionTime: string;
+};
