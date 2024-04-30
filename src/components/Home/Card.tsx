@@ -29,6 +29,7 @@ type Card = {
   jowaTranslation: SharedValue<number[]>;
   isMare: SharedValue<boolean>;
   possibles?: boolean;
+  nextAction?: number;
 };
 
 const Card = ({
@@ -40,6 +41,7 @@ const Card = ({
   jowaTranslation,
   isMare,
   possibles = false,
+  nextAction = 0,
 }: Card) => {
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -85,7 +87,7 @@ const Card = ({
           zIndex: numOfCards - index,
         },
       ]}>
-      <ProfileCard user={user} possibles={possibles} />
+      <ProfileCard user={user} possibles={possibles} nextAction={nextAction} />
     </Animated.View>
   );
 };

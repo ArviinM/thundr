@@ -85,6 +85,8 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       }
     } catch (error) {
       console.error('Error loading data from AsyncStorage:', error);
+      setLoading(false);
+      await signOut();
     } finally {
       setLoading(false);
     }
@@ -131,6 +133,10 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       await AsyncStorage.removeItem('@AuthData');
     } catch (error) {
       console.error('Error signing out:', error);
+      // @ts-ignore
+      setAuthData(undefined);
+      queryClient.clear();
+      await AsyncStorage.removeItem('@AuthData');
     }
   };
 

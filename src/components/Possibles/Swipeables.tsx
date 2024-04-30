@@ -92,8 +92,6 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     }
   };
 
-  console.log(customerPossibles.isRefetching);
-
   return (
     <View style={{flex: 1}}>
       <Text
@@ -105,7 +103,9 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           textAlign: 'center',
           letterSpacing: -0.4,
         }}>
-        See the {isMare ? '8' : '69'} users who {isMare ? 'MARE' : 'JOWA'} you!
+        See the {customerPossibles.data?.count}{' '}
+        {(customerPossibles.data?.count === 1 && 'user') || 'users'} who{' '}
+        {isMare ? 'MARE' : 'JOWA'} you!
       </Text>
 
       <Text
@@ -127,20 +127,6 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           alignItems: 'center',
           marginTop: 10,
         }}>
-        {/*{users?.map((user, index) => (*/}
-        {/*  <Card*/}
-        {/*    key={`${user.sub}-${index}-${user.customerData.name}`}*/}
-        {/*    user={user}*/}
-        {/*    numOfCards={users?.length}*/}
-        {/*    index={index}*/}
-        {/*    activeIndex={activeIndex}*/}
-        {/*    mareTranslation={mareTranslations}*/}
-        {/*    jowaTranslation={jowaTranslations}*/}
-        {/*    isMare={sharedIsMare}*/}
-        {/*    possibles*/}
-        {/*  />*/}
-        {/*))}*/}
-
         {isLoadingNewData ? (
           <Loading />
         ) : (mareTranslations.value.length && jowaTranslations.value.length) ===
@@ -163,6 +149,8 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
               jowaTranslation={jowaTranslations}
               isMare={sharedIsMare}
               possibles
+              nextAction={customerPossibles.data.nextActionTime}
+              // isBlurred={customerPossibles.data.isBlurred}
             />
           ))
         )}

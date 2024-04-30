@@ -25,6 +25,7 @@ import {IMAGES} from '../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import moment from 'moment';
+import {BlurView} from '@react-native-community/blur';
 
 const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 
@@ -32,9 +33,15 @@ type ProfileCardProps = {
   user: CustomerMatchResponse;
   isUser?: boolean;
   possibles?: boolean;
+  nextAction?: number;
 };
 
-const ProfileCard = ({user, isUser = false, possibles}: ProfileCardProps) => {
+const ProfileCard = ({
+  user,
+  isUser = false,
+  possibles,
+  nextAction,
+}: ProfileCardProps) => {
   const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
   const customerImages = user.customerData.customerPhoto[imageIndex];
@@ -67,6 +74,10 @@ const ProfileCard = ({user, isUser = false, possibles}: ProfileCardProps) => {
   };
 
   const tapGesture = Gesture.Tap().onEnd(handleTap);
+
+  const nextActionTimer = moment(nextAction) || 0;
+  console.log(nextActionTimer);
+
   return (
     <ScrollView>
       {isUser && (
@@ -295,6 +306,20 @@ const ProfileCard = ({user, isUser = false, possibles}: ProfileCardProps) => {
           )}
         </View>
       </View>
+      {possibles && user.isBlurred && (
+        <BlurView
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            borderRadius: 15,
+          }}
+          blurType="light"
+          blurAmount={35}
+        />
+      )}
       {!isUser && (
         <ReportBottomSheetModal
           ref={bottomSheetRef}

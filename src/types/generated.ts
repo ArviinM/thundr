@@ -250,6 +250,7 @@ export type CustomerMatchResponse = {
   sub: string;
   percent: string;
   customerData: CustomerData;
+  isBlurred?: boolean;
 };
 
 export type CustomerMatchPostRequest = {
@@ -291,6 +292,7 @@ export type CustomerPhoto = {
   primary: boolean;
   photoUrl: string;
   index: number | null;
+  blurHash: string;
 };
 
 // Define interface for customer data
@@ -491,5 +493,6 @@ export type PossiblesResponse = {
   profiles: CustomerMatchResponse[];
   isBlurred: boolean;
   tag: 'MARE' | 'JOWA';
-  nextActionTime: string;
+  nextActionTime: number;
+  count: number;
 };
