@@ -4,8 +4,8 @@ import {
   runOnJS,
   useAnimatedReaction,
   useSharedValue,
+  withSpring,
 } from 'react-native-reanimated';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {scale} from '../../utils/utils.ts';
 import Swiping from '../Home/Swiping.tsx';
 import Card from '../Home/Card.tsx';
@@ -15,6 +15,8 @@ import {useAuth} from '../../providers/Auth.tsx';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../utils/queryClient.ts';
 import {Loading} from '../shared/Loading.tsx';
+import {usePossiblesMatch} from '../../hooks/possibles/usePossiblesMatch.ts';
+import useCountdownStore from '../../store/countdownStore.ts';
 
 const Swipeables = ({isMare}: {isMare: boolean}) => {
   const auth = useAuth();
@@ -27,7 +29,6 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
   const mareTranslations = useSharedValue<number[]>(new Array(20).fill(0));
   const jowaTranslations = useSharedValue<number[]>(new Array(20).fill(0));
   const sharedIsMare = useSharedValue<boolean>(false);
-  const bottomHeight = useBottomTabBarHeight();
 
   const [isLoadingNewData, setIsLoadingNewData] = useState(false);
 
@@ -36,6 +37,9 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     sub: auth.authData?.sub || '',
     tag: tag,
   });
+
+  const matchPossibles = usePossiblesMatch();
+  const setStartTimer = useCountdownStore(state => state.setStartTimer);
 
   useAnimatedReaction(
     () => activeIndex.value,
@@ -52,10 +56,10 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
   useEffect(() => {
     if (index && customerPossibles.data) {
       if (index > customerPossibles.data.profiles.length - 1) {
-        console.log('Fetching Matches 🚀');
+        console.log('Fetching Possible Matches 🚀');
 
         setIsLoadingNewData(true); // Start Loading Indicator
-        query.invalidateQueries({queryKey: ['get-match-list']});
+        // query.invalidateQueries({queryKey: ['get-customer-possibles']});
 
         customerPossibles.refetch().finally(() => {
           setIsLoadingNewData(false); // Stop Loading Indicator
@@ -86,9 +90,67 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     swipedUser: CustomerMatchResponse,
   ) => {
     try {
-      console.log({swipedUser});
-    } catch (error) {
+      if (auth.authData?.sub) {
+        await matchPossibles.mutateAsync({
+          sub: auth.authData.sub,
+          target: swipedUser.sub,
+          tag: tag,
+          possibleTag: isMare ? 'Mare' : 'Jowa',
+        });
+
+        setStartTimer(true);
+      }
+
+      // setIsLoadingNewData(true); // Start Loading Indicator
+      //
+      // await query.invalidateQueries({queryKey: ['get-customer-possibles']});
+      //
+      // customerPossibles.refetch().finally(() => {
+      //   setIsLoadingNewData(false); // Stop Loading Indicator
+      //   runOnJS(setIndex)(0);
+      //   activeIndex.value = 0;
+      // });
+      //
+      // jowaTranslations.modify(value => {
+      //   'worklet';
+      //   for (let i = 0; i < value.length; i++) {
+      //     value[i] = 0;
+      //   }
+      //   return value;
+      // });
+      // mareTranslations.modify(value => {
+      //   'worklet';
+      //   for (let i = 0; i < value.length; i++) {
+      //     value[i] = 0;
+      //   }
+      //   return value;
+      // });
+
+      // setIsLoadingNewData(true); // Start Loading Indicator
+      // await query.invalidateQueries({queryKey: ['get-customer-possibles']});
+    } catch (error: any) {
+      console.log({
+        target: swipedUser.sub,
+        tag: tag,
+        possibleTag: isMare ? 'Mare' : 'Jowa',
+      });
       console.warn('Error updating swipe match:', error);
+      if (error.status === 'POSSIBLES_COOLDOWN_EXCEPTION') {
+        runOnJS(setIndex)(previousValue); // Revert to the previous card
+        activeIndex.value = withSpring(previousValue);
+
+        mareTranslations.modify(value => {
+          'worklet';
+          value[previousValue] = withSpring(0);
+          return value;
+        });
+
+        jowaTranslations.modify(value => {
+          'worklet';
+          value[previousValue] = withSpring(0);
+          return value;
+        });
+      }
     }
   };
 

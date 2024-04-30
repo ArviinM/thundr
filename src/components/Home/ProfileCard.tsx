@@ -1,7 +1,6 @@
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {
   Image,
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,10 +12,10 @@ import Animated, {FadeIn, FadeOut, runOnJS} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import {calculateAge} from './utils.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
-import {moderateScale, scale} from '../../utils/utils.ts';
+import {calculateCountdown, moderateScale, scale} from '../../utils/utils.ts';
 import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
-import React, {useRef, useState} from 'react';
-import {cardStyles, cardWidth} from './Card.tsx';
+import React, {useEffect, useRef, useState} from 'react';
+import {cardHeight, cardStyles, cardWidth} from './Card.tsx';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
 
@@ -27,6 +26,8 @@ import {RootNavigationParams} from '../../constants/navigator.ts';
 import moment from 'moment';
 import {BlurView} from '@react-native-community/blur';
 
+import {Image as ImageBackground} from 'expo-image';
+
 const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 
 type ProfileCardProps = {
@@ -34,6 +35,7 @@ type ProfileCardProps = {
   isUser?: boolean;
   possibles?: boolean;
   nextAction?: number;
+  isCountdownTimer?: boolean;
 };
 
 const ProfileCard = ({
@@ -41,12 +43,18 @@ const ProfileCard = ({
   isUser = false,
   possibles,
   nextAction,
+  isCountdownTimer = false,
 }: ProfileCardProps) => {
   const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
   const customerImages = user.customerData.customerPhoto[imageIndex];
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const [countdownTime, setCountdownTime] = useState<{
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
   // for bottom sheet
   const bottomSheetRef = useRef<BottomSheetModal>(null);
@@ -76,6 +84,17 @@ const ProfileCard = ({
   const tapGesture = Gesture.Tap().onEnd(handleTap);
 
   // const nextActionTimer = moment(nextAction) || 0;
+
+  useEffect(() => {
+    if (user.isBlurred) {
+      const intervalId = setInterval(() => {
+        const newCountdown = calculateCountdown(nextAction);
+        setCountdownTime(newCountdown);
+      }, 1000); // Update every second
+
+      return () => clearInterval(intervalId); // Cleanup function
+    }
+  }, [nextAction, user.isBlurred]);
 
   return (
     <ScrollView>
@@ -115,6 +134,8 @@ const ProfileCard = ({
           </View>
           <AnimatedImage
             style={[possibles ? cardStyles.possiblesImage : cardStyles.image]}
+            placeholder={customerImages.blurHash}
+            transition={1000}
             entering={FadeIn}
             exiting={FadeOut}
             key={imageIndex}
@@ -318,6 +339,191 @@ const ProfileCard = ({
           blurType="light"
           blurAmount={35}
         />
+      )}
+      {possibles && user.isBlurred && countdownTime && (
+        <View
+          style={{
+            position: 'absolute',
+            top: cardHeight / 6,
+            left: 0,
+            right: 0,
+            justifyContent: 'center',
+            width: '100%', // Take full width horizontally
+            alignItems: 'center',
+            borderRadius: 15,
+            flexDirection: 'row',
+            gap: 10,
+          }}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: COLORS.secondary2,
+                width: scale(60),
+                height: scale(30),
+                borderTopStartRadius: 10,
+                borderTopEndRadius: 10,
+              }}
+            />
+            <View
+              style={{
+                backgroundColor: '#FFB100',
+                width: scale(60),
+                height: scale(30),
+                borderBottomStartRadius: 10,
+                borderBottomEndRadius: 10,
+              }}
+            />
+            <Text
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontFamily: 'ClimateCrisis-Regular',
+                fontSize: scale(26),
+                color: COLORS.white,
+              }}>
+              {countdownTime.hours}
+            </Text>
+
+            <Text
+              style={{
+                position: 'absolute',
+                top: scale(-20),
+                left: 0,
+                right: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontSize: scale(10),
+                fontFamily: 'Montserrat-Bold',
+                color: COLORS.white,
+              }}>
+              hours
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: COLORS.secondary2,
+                width: scale(60),
+                height: scale(30),
+                borderTopStartRadius: 10,
+                borderTopEndRadius: 10,
+              }}
+            />
+            <View
+              style={{
+                backgroundColor: '#FFB100',
+                width: scale(60),
+                height: scale(30),
+                borderBottomStartRadius: 10,
+                borderBottomEndRadius: 10,
+              }}
+            />
+            <Text
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontFamily: 'ClimateCrisis-Regular',
+                fontSize: scale(26),
+                color: COLORS.white,
+              }}>
+              {countdownTime.minutes}
+            </Text>
+
+            <Text
+              style={{
+                position: 'absolute',
+                top: scale(-20),
+                left: 0,
+                right: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontSize: scale(10),
+                fontFamily: 'Montserrat-Bold',
+                color: COLORS.white,
+              }}>
+              minutes
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: COLORS.secondary2,
+                width: scale(60),
+                height: scale(30),
+                borderTopStartRadius: 10,
+                borderTopEndRadius: 10,
+              }}
+            />
+            <View
+              style={{
+                backgroundColor: '#FFB100',
+                width: scale(60),
+                height: scale(30),
+                borderBottomStartRadius: 10,
+                borderBottomEndRadius: 10,
+              }}
+            />
+            <Text
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontFamily: 'ClimateCrisis-Regular',
+                fontSize: scale(26),
+                color: COLORS.white,
+              }}>
+              {countdownTime.seconds}
+            </Text>
+
+            <Text
+              style={{
+                position: 'absolute',
+                top: scale(-20),
+                left: 0,
+                right: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                fontSize: scale(10),
+                fontFamily: 'Montserrat-Bold',
+                color: COLORS.white,
+              }}>
+              seconds
+            </Text>
+          </View>
+
+          {/*<Text>*/}
+          {/*  Time until next action: {countdownTime.hours}:*/}
+          {/*  {countdownTime.minutes}:{countdownTime.seconds}*/}
+          {/*</Text>*/}
+        </View>
       )}
       {!isUser && (
         <ReportBottomSheetModal
