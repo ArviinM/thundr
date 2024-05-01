@@ -1,8 +1,14 @@
 import {useQuery} from '@tanstack/react-query';
 import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
-import {BaseResponse, Chat, ChatListRequest} from '../../types/generated.ts';
+import {
+  BaseResponse,
+  Chat,
+  ChatListRequest,
+  ChatListResponse,
+} from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
+import useUnreadStore from '../../store/unreadStore.ts';
 
 export function useGetChatList(props: ChatListRequest) {
   const axiosInstance = useAxiosWithAuth();
@@ -10,12 +16,14 @@ export function useGetChatList(props: ChatListRequest) {
   return useQuery({
     queryKey: ['get-chat-list', props],
     enabled: true,
-    queryFn: async (): Promise<Chat[]> => {
+    queryFn: async (): Promise<ChatListResponse> => {
       const config: AxiosRequestConfig<ChatListRequest> = {
         params: {sub: props.sub},
       };
 
-      const response: AxiosResponse<BaseResponse<Chat[]>> =
+      const setIsUnreads = useUnreadStore.getState().setIsUnreads;
+
+      const response: AxiosResponse<BaseResponse<ChatListResponse>> =
         await axiosInstance.get('/match/v2/customer-match', config);
 
       if (response.status !== HttpStatusCode.Ok) {
@@ -28,7 +36,11 @@ export function useGetChatList(props: ChatListRequest) {
         });
       }
 
-      // console.log(JSON.stringify(response.data.data, 0, 2));
+      if (response.data.data.unreads > 0) {
+        setIsUnreads(true);
+      } else {
+        setIsUnreads(false);
+      }
 
       return response.data.data;
     },

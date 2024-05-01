@@ -72,7 +72,14 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
         <View
           style={{
             flexDirection: 'row',
-            marginVertical: 8,
+            paddingVertical: 8,
+            // borderWidth: item.latestChat?.isRead !== 0 ? 0 : 1,
+            backgroundColor:
+              item.latestChat?.senderSub === item.sub
+                ? ''
+                : item.latestChat?.isRead !== 0
+                ? COLORS.white
+                : '#faeeec',
           }}>
           <View>
             <Image
@@ -151,7 +158,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
       <View style={{flex: 1}}>
         {getChatList.data && (
           <FlatList
-            data={getChatList.data.filter(chat =>
+            data={getChatList.data.customerChatAndMatches.filter(chat =>
               isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
             )}
             renderItem={renderItem}

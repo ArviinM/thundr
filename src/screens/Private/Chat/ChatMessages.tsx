@@ -64,6 +64,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
       if (messageIdsToRead?.length !== 0) {
         readMessage.mutateAsync(messageIdsToRead);
+        query.invalidateQueries({queryKey: ['get-chat-list']});
+        query.invalidateQueries({queryKey: ['get-chat-message']});
       }
     }
   }, [user, chatMessage.isSuccess, chatMessage.data, readMessage]);

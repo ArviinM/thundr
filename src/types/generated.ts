@@ -394,9 +394,10 @@ export type Chat = {
   ttl: number;
   matchDate: number;
   compatibilityScore: string;
-  latestChat: ChatMessage;
+  latestChat: ChatMessage | null;
   sub: string;
   userLastActive: string;
+  target: string;
 };
 
 // Define a type for the attachment URLs
@@ -418,6 +419,11 @@ export type ChatMessage = {
 export type ChatListRequest = {
   sub: string;
   beforeLastActivity?: number;
+};
+
+export type ChatListResponse = {
+  customerChatAndMatches: Chat[];
+  unreads: number;
 };
 
 export type ChatMessageRequest = {
