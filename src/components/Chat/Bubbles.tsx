@@ -32,8 +32,6 @@ const Bubbles = ({
   const [selectedImage, setSelectedImage] = useState<string>(
     'https://placehold.co/400',
   );
-  // const [selectedImagePlaceholder, setSelectedImagePlacehold] =
-  //   useState<string>('https://placehold.co/400');
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -117,7 +115,11 @@ const Bubbles = ({
                 // setSelectedImagePlacehold(photo)
                 setIsVisible(true); // Trigger animation and modal
               }}>
-              <Image source={{uri: photo}} style={[styles.messageImage]} />
+              <Image
+                source={{uri: photo}}
+                style={[styles.messageImage]}
+                transition={1000}
+              />
             </TouchableOpacity>
           ))}
         </View>
