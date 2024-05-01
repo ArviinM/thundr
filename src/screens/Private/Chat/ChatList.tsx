@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   FlatList,
-  Image,
   ListRenderItem,
   RefreshControl,
   Text,
@@ -19,6 +18,7 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {ThundrJuice} from '../../../assets/images/chat/ThundrJuice.tsx';
+import {Image} from 'expo-image';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -78,7 +78,8 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
             <Image
               source={{uri: item.profile.customerPhoto[0].photoUrl}}
               style={{width: scale(70), height: scale(70), borderRadius: 8}}
-              resizeMode="cover"
+              placeholder={item.profile.customerPhoto[0].blurHash}
+              transition={1000}
             />
           </View>
           <View style={{justifyContent: 'center', paddingHorizontal: 10}}>
