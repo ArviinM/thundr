@@ -12,7 +12,12 @@ import Animated, {FadeIn, FadeOut, runOnJS} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import {calculateAge} from './utils.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
-import {calculateCountdown, moderateScale, scale} from '../../utils/utils.ts';
+import {
+  calculateCountdown,
+  moderateScale,
+  scale,
+  twelveHoursTime,
+} from '../../utils/utils.ts';
 import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 import React, {useEffect, useRef, useState} from 'react';
 import {cardHeight, cardStyles, cardWidth} from './Card.tsx';
@@ -27,6 +32,7 @@ import moment from 'moment';
 import {BlurView} from '@react-native-community/blur';
 
 import {Image as ImageBackground} from 'expo-image';
+import useCountdownStore from '../../store/countdownStore.ts';
 
 const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 
@@ -43,11 +49,14 @@ const ProfileCard = ({
   isUser = false,
   possibles,
   nextAction,
-  isCountdownTimer = false,
+  isCountdownTimer,
 }: ProfileCardProps) => {
   const [imageIndex, setImageIndex] = useState(0);
   const firstName = user.customerData.name.split(' ')[0] || '✨';
   const customerImages = user.customerData.customerPhoto[imageIndex];
+
+  const isStartTimer = useCountdownStore(state => state.isStartTimer);
+  // const isStartTimer2 = useCountdownStore2(state => state.isStartTimer2);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [countdownTime, setCountdownTime] = useState<{
@@ -83,18 +92,23 @@ const ProfileCard = ({
 
   const tapGesture = Gesture.Tap().onEnd(handleTap);
 
-  // const nextActionTimer = moment(nextAction) || 0;
-
   useEffect(() => {
-    if (user.isBlurred) {
+    if (user.isBlurred && isStartTimer) {
       const intervalId = setInterval(() => {
-        const newCountdown = calculateCountdown(nextAction);
-        setCountdownTime(newCountdown);
-      }, 1000); // Update every second
+        const newCountdown = calculateCountdown(
+          !isCountdownTimer
+            ? twelveHoursTime
+            : isCountdownTimer
+            ? nextAction
+            : undefined,
+        );
 
-      return () => clearInterval(intervalId); // Cleanup function
+        setCountdownTime(newCountdown);
+      }, 1000);
+
+      return () => clearInterval(intervalId);
     }
-  }, [nextAction, user.isBlurred]);
+  }, [nextAction, user.isBlurred, isStartTimer]);
 
   return (
     <ScrollView>
@@ -340,6 +354,7 @@ const ProfileCard = ({
           blurAmount={35}
         />
       )}
+
       {possibles && user.isBlurred && countdownTime && (
         <View
           style={{
