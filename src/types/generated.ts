@@ -540,3 +540,10 @@ export type NotificationResponse = {
   matchPhoto: string | null;
   isRead: boolean;
 };
+
+export type ReportCustomerRequest = {
+  sub: string;
+  targetSub: string;
+  reportCategory: {type: string; category: string};
+  remark: string;
+};

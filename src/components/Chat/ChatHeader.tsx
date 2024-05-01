@@ -150,7 +150,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
       </View>
       <ReportBottomSheetModal
         ref={bottomSheetRef}
-        sub={user.sub}
+        sub={user.target}
         category={'CHAT'}
         name={user.profile.name}
       />

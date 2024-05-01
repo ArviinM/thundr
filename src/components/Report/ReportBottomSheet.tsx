@@ -6,7 +6,7 @@ import {
   BottomSheetTextInput,
 } from '@gorhom/bottom-sheet';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
-import {moderateScale, scale, verticalScale} from '../../utils/utils.ts';
+import {moderateScale} from '../../utils/utils.ts';
 import {
   harrasment,
   involvesChild,
@@ -16,6 +16,10 @@ import {
 } from './reportUtilts.ts';
 import {IMAGES} from '../../constants/images.ts';
 import Button from '../shared/Button.tsx';
+import {useReportCategory} from '../../hooks/report/useReportCategory.ts';
+import {useAuth} from '../../providers/Auth.tsx';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../constants/navigator.ts';
 export type Ref = BottomSheetModal;
 interface ReportBottomSheetModalProps {
   sub: string;
@@ -25,6 +29,8 @@ interface ReportBottomSheetModalProps {
 
 const ReportBottomSheetModal = forwardRef<Ref, ReportBottomSheetModalProps>(
   (props, ref) => {
+    const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
     const snapPoints = useMemo(() => ['78%'], []);
     const renderBackdrop = useCallback(
       (props: any) => (
@@ -41,8 +47,26 @@ const ReportBottomSheetModal = forwardRef<Ref, ReportBottomSheetModalProps>(
     const [remarks, setRemarks] = useState('');
     const isExpandedDetailsVisible = expandedDetails !== '';
 
-    const submitReport = () => {
-      console.log(props);
+    const report = useReportCategory();
+    const auth = useAuth();
+
+    const submitReport = async () => {
+      try {
+        if (auth.authData) {
+          await report.mutateAsync({
+            sub: auth.authData.sub,
+            targetSub: props.sub,
+            reportCategory: {type: props.category, category: expandedDetails},
+            remark: remarks,
+          });
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'HomeDrawer'}],
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     const selectAProblem = () => {
@@ -133,6 +157,7 @@ const ReportBottomSheetModal = forwardRef<Ref, ReportBottomSheetModalProps>(
               autoCapitalize="none"
               multiline={true}
               style={styles.input}
+              onChangeText={e => setRemarks(e)}
             />
             <Text style={styles.containerRemarksText}>
               We won't tell {props.name} you reported them.
