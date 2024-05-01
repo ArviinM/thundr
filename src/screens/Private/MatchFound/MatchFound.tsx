@@ -97,7 +97,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
                 gap: 20,
               }}>
               <Button
-                onPress={() => console.log('Chat Now')}
+                onPress={() => navigation.navigate('Messages')}
                 text="Chat Now"
                 buttonStyle={styles.button1}
                 textStyle={styles.text1}

@@ -24,7 +24,7 @@ const Settings = () => {
   const userProfile = useGetCustomerProfile({sub: auth.authData?.sub || ''});
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
-  const [inAppNotification, setInAppNotification] = useState(false);
+  const [inAppNotification, setInAppNotification] = useState(true);
   const [emailNotification, setEmailNotification] = useState(false);
 
   if (userProfile.isLoading && auth.loading) {
