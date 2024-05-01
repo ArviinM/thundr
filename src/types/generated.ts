@@ -427,6 +427,10 @@ export type ChatMessageRequest = {
   beforeId?: number;
 };
 
+export type ChatReadRequest = {
+  id: string;
+};
+
 export type Base64Attachments = {
   fileName?: string;
   fileContentBase64?: string | null;
@@ -456,6 +460,7 @@ export interface IMessage {
   pending?: boolean;
   quickReplies?: QuickReplies;
   attachments?: string[]; // Array to hold attachment URLs
+  isRead?: number;
 }
 
 // Filters
