@@ -55,6 +55,10 @@ import {useCreateCustomerDetails} from '../../../hooks/profile/useCreateCustomer
 import {useCreateCustomerProfile} from '../../../hooks/profile/useCreateCustomerProfile.ts';
 import Toast from 'react-native-toast-message';
 import LetterGradientButton from '../../../components/shared/LetterGradientButton.tsx';
+import {
+  KeyboardAwareScrollView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -282,7 +286,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
-      <ScrollView style={{flex: 1, backgroundColor: COLORS.white}}>
+      <KeyboardAwareScrollView style={{flex: 1, backgroundColor: COLORS.white}}>
         <View>
           <View style={styles.container}>
             <View>
@@ -908,14 +912,16 @@ const EditProfile = ({route}: EditProfileProps) => {
             </View>
           </View>
         </View>
-      </ScrollView>
-      <View style={styles.fabContainer}>
-        <CircleButton
-          onPress={handleSubmit(onSubmit)}
-          isCheck
-          loading={loading}
-        />
-      </View>
+      </KeyboardAwareScrollView>
+      <KeyboardStickyView offset={{closed: 0, opened: scale(100)}}>
+        <View style={styles.fabContainer}>
+          <CircleButton
+            onPress={handleSubmit(onSubmit)}
+            isCheck
+            loading={loading}
+          />
+        </View>
+      </KeyboardStickyView>
     </SafeAreaView>
   );
 };

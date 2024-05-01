@@ -543,8 +543,8 @@ const ProfileCard = ({
       {!isUser && (
         <ReportBottomSheetModal
           ref={bottomSheetRef}
-          sub={user.sub}
-          category={'MATCH'}
+          sub={user.customerData.sub}
+          category={'PROFILE'}
           name={user.customerData.name}
         />
       )}

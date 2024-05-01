@@ -511,3 +511,39 @@ export type PossiblesResponse = {
   nextActionTime: number;
   count: number;
 };
+
+export type NotificationRequest = {
+  sub: string;
+  beforeId?: number;
+};
+
+export type NotificationReadDeleteRequest = {
+  sub: string;
+  notificationId: number;
+};
+
+export type NotificationReadAll = {
+  sub: string;
+};
+
+export type NotificationResponse = {
+  id: number;
+  subId: string;
+  title: string;
+  body: string;
+  channelType: string;
+  sentTime: string;
+  matchType: string;
+  notificationMethod: string;
+  chatRoomUuid: string;
+  targetSub: string;
+  matchPhoto: string | null;
+  isRead: boolean;
+};
+
+export type ReportCustomerRequest = {
+  sub: string;
+  targetSub: string;
+  reportCategory: {type: string; category: string};
+  remark: string;
+};
