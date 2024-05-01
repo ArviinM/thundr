@@ -9,6 +9,7 @@ export function transformChatMessageForGiftedChat(
     createdAt: new Date(message.created),
     user: {_id: message.senderSub},
     attachments: message.attachments,
+    isRead: message.isRead,
     // sent: true,
   };
 }

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   FlatList,
-  Image,
   ListRenderItem,
   RefreshControl,
   Text,
@@ -19,6 +18,7 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {ThundrJuice} from '../../../assets/images/chat/ThundrJuice.tsx';
+import {Image} from 'expo-image';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -72,13 +72,21 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
         <View
           style={{
             flexDirection: 'row',
-            marginVertical: 8,
+            paddingVertical: 8,
+            // borderWidth: item.latestChat?.isRead !== 0 ? 0 : 1,
+            backgroundColor:
+              item.latestChat?.senderSub === item.sub
+                ? ''
+                : item.latestChat?.isRead !== 0
+                ? COLORS.white
+                : '#faeeec',
           }}>
           <View>
             <Image
               source={{uri: item.profile.customerPhoto[0].photoUrl}}
               style={{width: scale(70), height: scale(70), borderRadius: 8}}
-              resizeMode="cover"
+              placeholder={item.profile.customerPhoto[0].blurHash}
+              transition={1000}
             />
           </View>
           <View style={{justifyContent: 'center', paddingHorizontal: 10}}>
@@ -150,7 +158,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
       <View style={{flex: 1}}>
         {getChatList.data && (
           <FlatList
-            data={getChatList.data.filter(chat =>
+            data={getChatList.data.customerChatAndMatches.filter(chat =>
               isMare ? chat.tag === 'MARE' : chat.tag === 'JOWA',
             )}
             renderItem={renderItem}

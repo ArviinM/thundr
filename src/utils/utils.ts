@@ -136,6 +136,10 @@ export const formatTimestamp = (timestamp: number | Date) => {
   return moment(timestamp).format('h:mm A');
 };
 
+const now = Date.now();
+const twelveHoursInMs = 12 * 60 * 60 * 1000;
+export const twelveHoursTime = now + twelveHoursInMs;
+
 export const calculateCountdown = (nextAction: number | undefined) => {
   if (!nextAction) {
     return null;

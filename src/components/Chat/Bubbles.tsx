@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   Animated,
   TouchableOpacity,
   Modal,
@@ -13,6 +12,7 @@ import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {formatTimestamp, scale} from '../../utils/utils.ts';
 import {BubbleProps} from 'react-native-gifted-chat';
+import {Image} from 'expo-image';
 
 const Bubbles = ({
   props,
@@ -85,7 +85,8 @@ const Bubbles = ({
               <Image
                 source={{uri: selectedImage}}
                 style={{width: '100%', height: '90%'}}
-                resizeMode="contain"
+                transition={1000}
+                // placeholder={selectedImagePlaceholder}
               />
             )}
           </View>
@@ -111,9 +112,14 @@ const Bubbles = ({
               key={index}
               onPress={() => {
                 setSelectedImage(photo);
+                // setSelectedImagePlacehold(photo)
                 setIsVisible(true); // Trigger animation and modal
               }}>
-              <Image source={{uri: photo}} style={[styles.messageImage]} />
+              <Image
+                source={{uri: photo}}
+                style={[styles.messageImage]}
+                transition={1000}
+              />
             </TouchableOpacity>
           ))}
         </View>

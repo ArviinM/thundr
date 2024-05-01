@@ -1,5 +1,5 @@
 // React Libraries
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RouteProp} from '@react-navigation/native';
 
@@ -29,6 +29,7 @@ import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {Base64Attachments, IMessage} from '../../../types/generated.ts';
+import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -50,6 +51,24 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   });
 
   const sendMessage = useSendChatMessage();
+  const readMessage = useReadMessage();
+
+  useEffect(() => {
+    if (user && chatMessage.isSuccess) {
+      const messageIdsToRead = chatMessage.data?.pages
+        .flatMap(page => page)
+        .filter(
+          message => message.user._id !== user.sub && message.isRead === 0,
+        )
+        .map(message => ({id: message._id}));
+
+      if (messageIdsToRead?.length !== 0) {
+        readMessage.mutateAsync(messageIdsToRead);
+        query.invalidateQueries({queryKey: ['get-chat-list']});
+        query.invalidateQueries({queryKey: ['get-chat-message']});
+      }
+    }
+  }, [user, chatMessage.isSuccess, chatMessage.data, readMessage]);
 
   const handleSendMessage = async (message: string) => {
     if (user) {

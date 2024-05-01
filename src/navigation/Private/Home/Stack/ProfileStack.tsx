@@ -22,7 +22,7 @@ export const ProfileStack = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginHorizontal: -8,
+          marginHorizontal: scale(-4),
         }}>
         {/* Center icons vertically */}
         <TouchableOpacity

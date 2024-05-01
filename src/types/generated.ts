@@ -30,11 +30,14 @@ export type AuthStoreState = {
 
 export type AuthRefreshTokenRequest = {
   refreshToken: string;
+  sub: string;
+  username: string;
 };
 
 export type AuthRefreshTokenResponse = {
   accessToken: string;
   idToken: string;
+  forProfileCreation: boolean;
 };
 
 // Mobile Validation Types
@@ -391,9 +394,10 @@ export type Chat = {
   ttl: number;
   matchDate: number;
   compatibilityScore: string;
-  latestChat: ChatMessage;
+  latestChat: ChatMessage | null;
   sub: string;
   userLastActive: string;
+  target: string;
 };
 
 // Define a type for the attachment URLs
@@ -417,11 +421,20 @@ export type ChatListRequest = {
   beforeLastActivity?: number;
 };
 
+export type ChatListResponse = {
+  customerChatAndMatches: Chat[];
+  unreads: number;
+};
+
 export type ChatMessageRequest = {
   sub: string;
   chatRoomID: string;
   limit: number;
   beforeId?: number;
+};
+
+export type ChatReadRequest = {
+  id: string;
 };
 
 export type Base64Attachments = {
@@ -453,6 +466,7 @@ export interface IMessage {
   pending?: boolean;
   quickReplies?: QuickReplies;
   attachments?: string[]; // Array to hold attachment URLs
+  isRead?: number;
 }
 
 // Filters

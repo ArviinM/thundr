@@ -63,12 +63,15 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
         const result = await refreshToken.mutateAsync({
           refreshToken: _authData.refreshToken,
+          sub: _authData.sub,
+          username: _authData.username,
         });
 
         const updatedAuthData = {
           ..._authData,
           accessToken: result.accessToken,
           idToken: result.idToken,
+          forProfileCreation: result.forProfileCreation,
         };
 
         setAuthData(updatedAuthData);

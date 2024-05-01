@@ -30,6 +30,7 @@ type Card = {
   isMare: SharedValue<boolean>;
   possibles?: boolean;
   nextAction?: number;
+  isCountdownTimer?: boolean;
 };
 
 const Card = ({
@@ -42,6 +43,7 @@ const Card = ({
   isMare,
   possibles = false,
   nextAction = 0,
+  isCountdownTimer,
 }: Card) => {
   const animatedCard = useAnimatedStyle(() => ({
     opacity: interpolate(
@@ -87,7 +89,12 @@ const Card = ({
           zIndex: numOfCards - index,
         },
       ]}>
-      <ProfileCard user={user} possibles={possibles} nextAction={nextAction} />
+      <ProfileCard
+        user={user}
+        possibles={possibles}
+        nextAction={nextAction}
+        isCountdownTimer={isCountdownTimer}
+      />
     </Animated.View>
   );
 };

@@ -20,6 +20,8 @@ import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import ProfileCard from '../Home/ProfileCard.tsx';
 
+import {Image as ImageExpo} from 'expo-image';
+
 const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -103,16 +105,17 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
           <Image
             source={IMAGES.back}
             style={styles.backImage}
-            resizeMode="contain"
+            resizeMode={'contain'}
           />
         </TouchableOpacity>
       </View>
       <View style={{flexDirection: 'row', gap: 10}}>
         <TouchableOpacity onPress={() => setIsVisible(true)}>
-          <Image
+          <ImageExpo
             source={{uri: user.profile.customerPhoto[0].photoUrl}}
             style={{width: scale(42), height: scale(42), borderRadius: 8}}
-            resizeMode="cover"
+            transition={1000}
+            placeholder={user.profile.customerPhoto[0].blurHash}
           />
         </TouchableOpacity>
         <View style={{justifyContent: 'center'}}>

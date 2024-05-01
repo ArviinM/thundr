@@ -1,15 +1,19 @@
 import React, {useRef} from 'react';
-import {Tab} from '../../../../constants/navigator.ts';
+import {RootNavigationParams, Tab} from '../../../../constants/navigator.ts';
 import Home from '../../../../screens/Private/Home/Home.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
-import {Image, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {ProfileStack} from '../Stack/ProfileStack.tsx';
-import {DrawerActions, useNavigation} from '@react-navigation/native';
+import {
+  DrawerActions,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {ChatTop} from '../Top/ChatTop.tsx';
 import Possibles from '../../../../screens/Private/Possibles/Possibles.tsx';
 import {LightningIcon} from '../../../../assets/images/tab_icons/LightningIcon.tsx';
@@ -18,14 +22,17 @@ import {useAuth} from '../../../../providers/Auth.tsx';
 import FiltersBottomSheetModal from '../../../../components/Filters/FiltersBottomSheet.tsx';
 import {AdvocacyIcon} from '../../../../assets/images/tab_icons/AdvocacyIcon.tsx';
 import Advocacy from '../../../../screens/Private/Advocacy/Advocacy.tsx';
+import useUnreadStore from '../../../../store/unreadStore.ts';
+import {HomeStack} from '../Stack/HomeStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
   const auth = useAuth();
+  const isUnread = useUnreadStore(state => state.isUnreads);
 
   function Header() {
     return (
@@ -46,7 +53,7 @@ export const HomeTab = () => {
           marginHorizontal: 12,
         }}>
         {/* Center icons vertically */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
           <Image
             source={IMAGES.bell}
             style={{height: scale(36), width: scale(36)}}
@@ -89,7 +96,7 @@ export const HomeTab = () => {
   return (
     <>
       <Tab.Navigator
-        initialRouteName={'Home'}
+        initialRouteName={'HomeStack'}
         screenOptions={{
           headerTitleAlign: 'center',
           headerStyle: {
@@ -133,12 +140,10 @@ export const HomeTab = () => {
         />
 
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="HomeStack"
+          component={HomeStack}
           options={{
-            headerLeft: () => <HomeLeftHeader />,
-            headerTitle: () => <Header />,
-            headerRight: () => <HomeRightHeader />,
+            headerShown: false,
             tabBarShowLabel: false,
             tabBarIcon: ({focused}) => <LightningIcon focused={focused} />,
           }}
@@ -169,11 +174,14 @@ export const HomeTab = () => {
             headerLeft: () => <HomeLeftHeader />,
             tabBarShowLabel: false,
             tabBarIcon: ({focused}) => (
-              <Image
-                source={focused ? IMAGES.chatOn : IMAGES.chatOff}
-                style={{height: scale(30), width: scale(30)}}
-                resizeMode="contain"
-              />
+              <>
+                <Image
+                  source={focused ? IMAGES.chatOn : IMAGES.chatOff}
+                  style={{height: scale(30), width: scale(30)}}
+                  resizeMode="contain"
+                />
+                {isUnread && <View style={styles.indicator} />}
+              </>
             ),
           }}
         />
@@ -184,3 +192,15 @@ export const HomeTab = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    backgroundColor: COLORS.primary1,
+    width: 14,
+    height: 14,
+    borderRadius: 10, // Make it a circle
+    position: 'absolute',
+    top: scale(18), // Adjust positioning as needed
+    right: scale(18),
+  },
+});

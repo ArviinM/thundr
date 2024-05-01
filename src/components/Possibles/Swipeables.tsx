@@ -98,36 +98,15 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           possibleTag: isMare ? 'Mare' : 'Jowa',
         });
 
-        setStartTimer(true);
+        if (!customerPossibles.data?.isBlurred) {
+          console.log('swiped here');
+          setStartTimer(true);
+          //   setStartTimer2(false);
+        } else {
+          setStartTimer(false);
+          //   setStartTimer2(true);
+        }
       }
-
-      // setIsLoadingNewData(true); // Start Loading Indicator
-      //
-      // await query.invalidateQueries({queryKey: ['get-customer-possibles']});
-      //
-      // customerPossibles.refetch().finally(() => {
-      //   setIsLoadingNewData(false); // Stop Loading Indicator
-      //   runOnJS(setIndex)(0);
-      //   activeIndex.value = 0;
-      // });
-      //
-      // jowaTranslations.modify(value => {
-      //   'worklet';
-      //   for (let i = 0; i < value.length; i++) {
-      //     value[i] = 0;
-      //   }
-      //   return value;
-      // });
-      // mareTranslations.modify(value => {
-      //   'worklet';
-      //   for (let i = 0; i < value.length; i++) {
-      //     value[i] = 0;
-      //   }
-      //   return value;
-      // });
-
-      // setIsLoadingNewData(true); // Start Loading Indicator
-      // await query.invalidateQueries({queryKey: ['get-customer-possibles']});
     } catch (error: any) {
       console.log({
         target: swipedUser.sub,
@@ -153,6 +132,14 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (customerPossibles.data) {
+      setStartTimer(customerPossibles.data.isBlurred);
+    } else {
+      setStartTimer(false);
+    }
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -212,6 +199,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
               isMare={sharedIsMare}
               possibles
               nextAction={customerPossibles.data.nextActionTime}
+              isCountdownTimer={customerPossibles.data.isBlurred}
               // isBlurred={customerPossibles.data.isBlurred}
             />
           ))
