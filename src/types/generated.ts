@@ -30,11 +30,14 @@ export type AuthStoreState = {
 
 export type AuthRefreshTokenRequest = {
   refreshToken: string;
+  sub: string;
+  username: string;
 };
 
 export type AuthRefreshTokenResponse = {
   accessToken: string;
   idToken: string;
+  forProfileCreation: boolean;
 };
 
 // Mobile Validation Types
