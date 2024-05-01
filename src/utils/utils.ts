@@ -100,6 +100,7 @@ const guidelineBaseHeight = 680;
 export const MAX_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
 
 import {Dimensions} from 'react-native';
+import {NotificationResponse} from '../types/generated.ts';
 
 const {width, height} = Dimensions.get('window');
 
@@ -171,3 +172,55 @@ export const calculateCountdownSwipes = (nextAction: number | undefined) => {
     seconds: duration.seconds(),
   };
 };
+
+// type Notification = {
+//   id: number;
+//   subId: string;
+//   title: string;
+//   body: string;
+//   channelType: string;
+//   sentTime: string;
+//   matchType: string;
+//   notificationMethod: string;
+//   chatRoomUuid: string;
+//   targetSub: string;
+//   matchPhoto: string | null;
+//   isRead: boolean;
+// };
+
+export type Section = {
+  title: string;
+  data: NotificationResponse[];
+};
+
+export function transformNotifications(
+  notifications: NotificationResponse[],
+): Section[] {
+  const sections: Section[] = [];
+  const today = moment().startOf('day');
+  const yesterday = moment().subtract(1, 'day').startOf('day');
+
+  notifications.forEach(notification => {
+    const sentDate = moment(notification.sentTime);
+    let sectionTitle: string;
+
+    if (sentDate.isSameOrAfter(today)) {
+      sectionTitle = 'Today';
+    } else if (sentDate.isSameOrAfter(yesterday)) {
+      sectionTitle = 'Yesterday';
+    } else {
+      sectionTitle = 'Last 7 Days';
+    }
+
+    // Find existing section
+    let section = sections.find(s => s.title === sectionTitle);
+    if (!section) {
+      section = {title: sectionTitle, data: []};
+      sections.push(section);
+    }
+
+    section.data.push(notification);
+  });
+
+  return sections;
+}

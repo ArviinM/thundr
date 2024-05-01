@@ -92,6 +92,7 @@ export type RootNavigationParams = {
 
   // chats
   ChatMessages: {user: Chat; isMare: boolean};
+  Messages: undefined;
 
   SettingsStack: undefined;
   ThundrBoltModal: {isModal: boolean};
