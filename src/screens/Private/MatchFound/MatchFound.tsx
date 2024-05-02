@@ -15,6 +15,8 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryClient} from '../../../utils/queryClient.ts';
 
 const START_DEFAULT = {x: 0, y: 0}; // Updated start position
 const END_DEFAULT = {x: 1, y: 1}; // Updated end position
@@ -36,6 +38,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
   const {isMare, matchPhoto} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const insets = useSafeAreaInsets();
+  const query = useQueryClient(queryClient);
 
   return (
     <SafeAreaView
@@ -102,13 +105,25 @@ const MatchFound = ({route}: MatchFoundProps) => {
                 gap: 20,
               }}>
               <Button
-                onPress={() => navigation.navigate('Messages')}
+                onPress={async () => {
+                  navigation.navigate('Messages');
+                  await query.invalidateQueries({queryKey: ['get-chat-list']});
+                  await query.invalidateQueries({
+                    queryKey: ['get-customer-possibles'],
+                  });
+                }}
                 text="Chat Now"
                 buttonStyle={styles.button1}
                 textStyle={styles.text1}
               />
               <Button
-                onPress={() => navigation.navigate('HomeTab')}
+                onPress={async () => {
+                  navigation.navigate('HomeTab');
+                  await query.invalidateQueries({queryKey: ['get-chat-list']});
+                  await query.invalidateQueries({
+                    queryKey: ['get-customer-possibles'],
+                  });
+                }}
                 text="Keep Sighting"
                 buttonStyle={styles.button2}
                 textStyle={styles.text2}

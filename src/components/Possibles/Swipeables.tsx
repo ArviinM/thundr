@@ -135,6 +135,36 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     }
   }, [customerPossibles.data, setStartTimer]);
 
+  useEffect(() => {
+    if (customerPossibles.isRefetching) {
+      setIsLoadingNewData(true); // Start Loading Indicator
+
+      setIsLoadingNewData(false); // Stop Loading Indicator
+      runOnJS(setIndex)(0);
+      activeIndex.value = 0;
+
+      jowaTranslations.modify(value => {
+        'worklet';
+        for (let i = 0; i < value.length; i++) {
+          value[i] = 0;
+        }
+        return value;
+      });
+      mareTranslations.modify(value => {
+        'worklet';
+        for (let i = 0; i < value.length; i++) {
+          value[i] = 0;
+        }
+        return value;
+      });
+    }
+  }, [
+    activeIndex,
+    customerPossibles.isRefetching,
+    jowaTranslations,
+    mareTranslations,
+  ]);
+
   return (
     <View style={{flex: 1}}>
       <Text
