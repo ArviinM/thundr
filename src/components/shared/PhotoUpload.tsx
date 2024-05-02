@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   ActivityIndicator,
-  Image,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -11,6 +10,7 @@ import Toast from 'react-native-toast-message';
 import {MAX_IMAGE_SIZE_BYTES} from '../../utils/utils.ts';
 import {IMAGES} from '../../constants/images.ts';
 import {CustomerPhoto} from '../../types/generated.ts';
+import {Image} from 'expo-image';
 
 interface Props {
   photoData?: CustomerPhoto | null;
@@ -92,6 +92,7 @@ const PhotoUpload: React.FC<Props> = ({
             marginBottom: isSubPhoto ? 8 : 0,
             borderRadius: 10,
           }}
+          transition={1000}
         />
       ) : photoData ? (
         <Image
@@ -102,6 +103,7 @@ const PhotoUpload: React.FC<Props> = ({
             marginBottom: isSubPhoto ? 8 : 0,
             borderRadius: 10,
           }}
+          transition={1000}
         />
       ) : (
         <Image
@@ -112,6 +114,7 @@ const PhotoUpload: React.FC<Props> = ({
             marginBottom: isSubPhoto ? 8 : 0,
             borderRadius: 10,
           }}
+          transition={1000}
         />
       )}
     </TouchableOpacity>

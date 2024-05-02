@@ -1,11 +1,13 @@
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ImageBackground,
 } from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
 import Animated, {FadeIn, FadeOut, runOnJS} from 'react-native-reanimated';
@@ -31,10 +33,13 @@ import {RootNavigationParams} from '../../constants/navigator.ts';
 import moment from 'moment';
 import {BlurView} from '@react-native-community/blur';
 
-import {Image as ImageBackground} from 'expo-image';
+import {Image as ExpoImage} from 'expo-image';
 import useCountdownStore from '../../store/countdownStore.ts';
 
-const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
+const AnimatedImage =
+  Platform.OS === 'android'
+    ? Animated.createAnimatedComponent(ImageBackground)
+    : Animated.createAnimatedComponent(ExpoImage);
 
 type ProfileCardProps = {
   user: CustomerMatchResponse;
