@@ -8,14 +8,12 @@ import {
   View,
 } from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
-import {Google} from '../../assets/images/socials/Google.tsx';
-import {Facebook} from '../../assets/images/socials/Facebook.tsx';
 
 interface ButtonProps {
   onPress: () => void;
   loading?: boolean;
   text: string;
-  buttonStyle?: ViewStyle;
+  buttonStyle?: ViewStyle | ViewStyle[];
   textStyle?: TextStyle;
   disabled?: boolean;
   isSSO?: boolean;
