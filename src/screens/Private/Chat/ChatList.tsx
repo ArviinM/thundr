@@ -123,14 +123,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
                 alignItems: 'center',
                 justifyContent: 'flex-end',
               }}>
-              <Text
-                style={{
-                  fontFamily: 'Montserrat-Regular',
-                  fontSize: scale(14),
-                  color: COLORS.black,
-                }}>
-                {thundrJuice}
-              </Text>
+              {thundrJuice}
             </View>
           )}
           {item.latestChat && (

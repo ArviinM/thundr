@@ -22,7 +22,7 @@ import Bubbles from '../../../components/Chat/Bubbles.tsx';
 // Utils
 import {Platform, Text, View} from 'react-native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {COLORS, height} from '../../../constants/commons.ts';
+import {COLORS} from '../../../constants/commons.ts';
 import {MAX_IMAGE_SIZE_BYTES, scale} from '../../../utils/utils.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
 import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
@@ -112,7 +112,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             type: 'THNRError',
             props: {title: 'Hala, ang laki!'},
             position: 'bottom',
-            bottomOffset: height + 55,
+            bottomOffset: 60,
           });
 
           throw new Error(
@@ -138,7 +138,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           type: 'THNRError',
           props: {title: 'Hala, ang dami!'},
           position: 'bottom',
-          bottomOffset: height + 55,
+          bottomOffset: 60,
         });
         throw new Error('Image selection exceeds the limit of 5 images.');
       }
