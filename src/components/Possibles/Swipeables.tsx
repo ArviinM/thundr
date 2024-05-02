@@ -99,20 +99,13 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
         });
 
         if (!customerPossibles.data?.isBlurred) {
-          console.log('swiped here');
           setStartTimer(true);
-          //   setStartTimer2(false);
         } else {
           setStartTimer(false);
-          //   setStartTimer2(true);
         }
+        query.refetchQueries({queryKey: ['get-customer-possibles']});
       }
     } catch (error: any) {
-      console.log({
-        target: swipedUser.sub,
-        tag: tag,
-        possibleTag: isMare ? 'Mare' : 'Jowa',
-      });
       console.warn('Error updating swipe match:', error);
       if (error.status === 'POSSIBLES_COOLDOWN_EXCEPTION') {
         runOnJS(setIndex)(previousValue); // Revert to the previous card

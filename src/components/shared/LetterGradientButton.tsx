@@ -36,7 +36,7 @@ const LetterGradientButton = ({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      disabled={selectedLetters.length >= 4 && !isSelected}>
+      disabled={selectedLetters.length >= 5 && !isSelected}>
       <LinearGradient
         colors={!isSelected ? ['#CCCCCC', '#CCCCCC'] : ['#EF9D47', '#E33051']}
         start={{x: 1, y: 1}}

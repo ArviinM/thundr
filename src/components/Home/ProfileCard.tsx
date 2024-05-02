@@ -35,6 +35,8 @@ import {BlurView} from '@react-native-community/blur';
 
 import {Image as ExpoImage} from 'expo-image';
 import useCountdownStore from '../../store/countdownStore.ts';
+import {queryClient} from '../../utils/queryClient.ts';
+import {useQueryClient} from '@tanstack/react-query';
 
 const AnimatedImage =
   Platform.OS === 'android'
@@ -61,7 +63,7 @@ const ProfileCard = ({
   const customerImages = user.customerData.customerPhoto[imageIndex];
 
   const isStartTimer = useCountdownStore(state => state.isStartTimer);
-  // const isStartTimer2 = useCountdownStore2(state => state.isStartTimer2);
+  const query = useQueryClient(queryClient);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [countdownTime, setCountdownTime] = useState<{
@@ -98,17 +100,21 @@ const ProfileCard = ({
   const tapGesture = Gesture.Tap().onEnd(handleTap);
 
   useEffect(() => {
-    if (user.isBlurred && isStartTimer) {
+    if (user.isBlurred && isStartTimer && nextAction) {
       const intervalId = setInterval(() => {
         const newCountdown = calculateCountdown(
           !isCountdownTimer
             ? twelveHoursTime
             : isCountdownTimer
-            ? nextAction
+            ? nextAction + 180000
             : undefined,
         );
 
         setCountdownTime(newCountdown);
+
+        if (nextAction + 180000 <= Date.now()) {
+          query.refetchQueries({queryKey: ['get-customer-possibles']});
+        }
       }, 1000);
 
       return () => clearInterval(intervalId);
