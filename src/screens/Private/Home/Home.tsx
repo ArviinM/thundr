@@ -19,7 +19,6 @@ import {GeolocationResponse} from '@react-native-community/geolocation/js/Native
 
 import Card, {cardHeight, cardWidth} from '../../../components/Home/Card.tsx';
 import Swiping from '../../../components/Home/Swiping.tsx';
-import GenericModal from '../../../components/shared/GenericModal.tsx';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {Loading} from '../../../components/shared/Loading.tsx';
 
@@ -39,8 +38,6 @@ import {
 } from '../../../utils/notificationUtils.ts';
 import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
 import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 const Home = () => {
   const auth = useAuth();
