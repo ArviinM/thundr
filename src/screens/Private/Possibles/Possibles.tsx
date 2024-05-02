@@ -1,18 +1,11 @@
-import React, {useState} from 'react';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import React from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text, View} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 
 import {LinearBackground} from '../../../assets/images/possibles/LinearBackground.tsx';
 import {COLORS} from '../../../constants/commons.ts';
-import {Loading} from '../../../components/shared/Loading.tsx';
-import Swiping from '../../../components/Home/Swiping.tsx';
-import {useSharedValue} from 'react-native-reanimated';
-import {CustomerMatchResponse} from '../../../types/generated.ts';
 import {scale} from '../../../utils/utils.ts';
-import Button from '../../../components/shared/Button.tsx';
-import Card from '../../../components/Home/Card.tsx';
-import {MockData, MockDataItem} from '../Home/mock.ts';
 import {PossiblesTop} from '../../../navigation/Private/Home/Top/PossiblesTop.tsx';
 import useMareblesStore from '../../../store/mareblesStore.ts';
 
@@ -37,7 +30,6 @@ const Possibles = () => {
           <Text
             style={{
               fontFamily: 'Montserrat-Regular',
-
               color: 'white',
               textAlign: 'center',
               fontSize: scale(12),
