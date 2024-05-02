@@ -7,15 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
-import LottieView from 'lottie-react-native';
-import {cardHeight} from './Card.tsx';
-import {
-  calculateCountdown,
-  calculateCountdownSwipes,
-  scale,
-} from '../../utils/utils.ts';
+
+import {calculateCountdownSwipes, scale} from '../../utils/utils.ts';
 import {useEffect, useState} from 'react';
 import moment from 'moment';
 import GradientButton from '../shared/GradientButton.tsx';
@@ -304,8 +298,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: scale(20),
     marginTop: 16,
     marginBottom: 4,
     textAlign: 'center',

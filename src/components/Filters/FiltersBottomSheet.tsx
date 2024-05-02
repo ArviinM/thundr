@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import React, {
   forwardRef,
   useCallback,
@@ -117,6 +117,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
           topOffset: 55,
         });
         isLoading(false);
+
         //@ts-ignore
         ref.current.close();
       } catch (error) {
