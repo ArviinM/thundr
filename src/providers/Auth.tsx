@@ -27,6 +27,7 @@ type AuthContextData = {
   signIn(data: AuthDataRequest): Promise<void>;
   signOut(): void;
   signUp(data: PasswordCreationRequest): Promise<void>;
+  signInSSO(data: AuthDataResponse): Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -153,8 +154,18 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     }
   };
 
+  const signInSSO = async (data: AuthDataResponse) => {
+    try {
+      setAuthData(data);
+      await AsyncStorage.setItem('@AuthData', JSON.stringify(data));
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{authData, loading, signIn, signOut, signUp}}>
+    <AuthContext.Provider
+      value={{authData, loading, signIn, signOut, signUp, signInSSO}}>
       {children}
     </AuthContext.Provider>
   );

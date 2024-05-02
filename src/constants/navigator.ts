@@ -8,10 +8,8 @@ import {
   Chat,
   CompatibilityQuestionsRequest,
   CustomerData,
-  CustomerMatchResponse,
   EmailValidationResponse,
   EmailVerificationResponse,
-  ForgetPasswordChangePasswordRequest,
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
@@ -48,7 +46,7 @@ export type RootNavigationParams = {
   // Password Creation
   PasswordCreation: EmailVerificationResponse;
   // Login
-  Login: undefined;
+  Login: {payload?: any};
   LoginValidation: undefined;
   Terms: {uri: string; isAuthenticated?: boolean};
   ForgetPasswordValidation: undefined;
