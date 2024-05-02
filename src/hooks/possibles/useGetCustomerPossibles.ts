@@ -13,7 +13,6 @@ export function useGetCustomerPossibles(props: PossiblesRequest) {
 
   return useQuery({
     queryKey: ['get-customer-possibles', props],
-    enabled: true,
     queryFn: async (): Promise<PossiblesResponse> => {
       const config: AxiosRequestConfig<PossiblesRequest> = {
         params: {sub: props.sub, tag: props.tag},

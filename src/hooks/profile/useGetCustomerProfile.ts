@@ -13,7 +13,6 @@ export function useGetCustomerProfile(props: CustomerProfileRequest) {
 
   return useQuery({
     queryKey: ['get-customer-profile', props],
-    enabled: true,
     queryFn: async (): Promise<CustomerData> => {
       const config: AxiosRequestConfig<CustomerProfileRequest> = {
         params: {sub: props.sub},
