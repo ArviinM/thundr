@@ -53,7 +53,6 @@ const LetterGradientButton = ({
           style={{
             fontFamily: 'ClimateCrisis-Regular',
             fontSize: moderateScale(48),
-            lineHeight: 0,
             color: COLORS.white,
           }}>
           {letter}

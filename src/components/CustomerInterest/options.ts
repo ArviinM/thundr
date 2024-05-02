@@ -23,4 +23,5 @@ export const interestOptions = [
   'Music',
   'Reading',
   'Food & Drinks',
+  'Sports & Games',
 ];

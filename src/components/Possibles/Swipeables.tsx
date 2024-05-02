@@ -17,6 +17,7 @@ import {queryClient} from '../../utils/queryClient.ts';
 import {Loading} from '../shared/Loading.tsx';
 import {usePossiblesMatch} from '../../hooks/possibles/usePossiblesMatch.ts';
 import useCountdownStore from '../../store/countdownStore.ts';
+import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 
 const Swipeables = ({isMare}: {isMare: boolean}) => {
   const auth = useAuth();
@@ -198,7 +199,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           ))
         )}
       </View>
-      <View
+      <KeyboardAvoidingView
         style={{
           position: 'absolute',
           bottom: 0,
@@ -218,7 +219,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
             isMare={sharedIsMare}
           />
         )}
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };

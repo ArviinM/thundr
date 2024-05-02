@@ -38,6 +38,7 @@ import {
 } from '../../../utils/notificationUtils.ts';
 import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
 import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
+import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 
 const Home = () => {
   const auth = useAuth();
@@ -325,7 +326,7 @@ const Home = () => {
           </View>
         )}
       </View>
-      <View
+      <KeyboardAvoidingView
         style={{
           position: 'absolute',
           bottom: 0,
@@ -345,7 +346,7 @@ const Home = () => {
             isMare={isMare}
           />
         )}
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
