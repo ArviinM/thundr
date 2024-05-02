@@ -238,29 +238,36 @@ const Home = () => {
     requestLocationPermission();
   }, []);
 
+  useEffect(() => {
+    if (matchList.isRefetching) {
+      setIsLoadingNewData(true); // Start Loading Indicator
+
+      setIsLoadingNewData(false); // Stop Loading Indicator
+      runOnJS(setIndex)(0);
+      activeIndex.value = 0;
+
+      jowaTranslations.modify(value => {
+        'worklet';
+        for (let i = 0; i < value.length; i++) {
+          value[i] = 0;
+        }
+        return value;
+      });
+      mareTranslations.modify(value => {
+        'worklet';
+        for (let i = 0; i < value.length; i++) {
+          value[i] = 0;
+        }
+        return value;
+      });
+    }
+  }, [activeIndex, jowaTranslations, mareTranslations, matchList.isRefetching]);
+
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
-      {/*<GenericModal*/}
-      {/*  isVisible={visible}*/}
-      {/*  title="Dev Log Sprint #2 & #3"*/}
-      {/*  content={*/}
-      {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
-      {/*      Welcome Testers! 🦈 {'\n\n'}*/}
-      {/*      Here's a work in progress of Sprint 2! {'\n\n'}I have made a good*/}
-      {/*      progress with the swiping animations and also adding the instagram*/}
-      {/*      story like feature. {'\n\n'}I have missed out to include the*/}
-      {/*      Customer Personality Type last Sprint. I added it now for this*/}
-      {/*      build, kindly test and confirm.*/}
-      {/*      {'\n\n'}*/}
-      {/*      Big Sharky Dev, {'\n'}Tanders, Inc*/}
-      {/*    </Text>*/}
-      {/*  }*/}
-      {/*  buttonText="Close"*/}
-      {/*  onClose={() => isVisible(false)}*/}
-      {/*/>*/}
       <CountdownCooldown isVisible={visible} onClose={() => isVisible(false)} />
       <View
         style={{
