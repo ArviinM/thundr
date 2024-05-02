@@ -20,6 +20,7 @@ import {
 } from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {CloseIcon} from '../../../assets/images/CloseIcon.tsx';
+import Toast from 'react-native-toast-message';
 
 type ThundrBoltRouteProp = RouteProp<RootNavigationParams, 'ThundrBoltModal'>;
 
@@ -182,7 +183,17 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
         <View>
           {/*Subscribe Button Here*/}
           <GradientButton
-            onPress={() => console.log('Open navigation')}
+            onPress={() => {
+              Toast.show({
+                type: 'THNRInfo',
+                props: {
+                  title: 'Wait lang mga bakla!',
+                  subtitle: 'Subscribing to ThundrBolt, coming soon na!',
+                },
+                position: 'top',
+                topOffset: 80,
+              });
+            }}
             text="SUBSCRIBE"
             buttonStyle={styles.buttonStyle}
             textStyle={styles.buttonTextStyle}

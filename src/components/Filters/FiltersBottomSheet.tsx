@@ -111,7 +111,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
           type: 'THNRSuccess',
           props: {title: 'Filters Updated! ✅'},
           position: 'top',
-          topOffset: 80,
+          topOffset: 55,
         });
         isLoading(false);
         // if (customerFilters.isSuccess && ref) {

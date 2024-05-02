@@ -17,7 +17,7 @@ export function showErrorToast(error: any) {
   //TODO: Add Status Code Translations
   Toast.show({
     type: 'THNRError',
-    props: {title: error.message},
+    props: {subtitle: error.message},
     position: 'top',
     topOffset: statusBarHeight / 1.8,
   });

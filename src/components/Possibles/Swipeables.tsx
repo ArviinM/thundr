@@ -139,7 +139,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     } else {
       setStartTimer(false);
     }
-  }, []);
+  }, [customerPossibles.data, setStartTimer]);
 
   return (
     <View style={{flex: 1}}>
