@@ -133,7 +133,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     } else {
       setStartTimer(false);
     }
-  }, [customerPossibles.data, setStartTimer]);
+  }, [customerPossibles.data, setStartTimer, customerPossibles.isRefetching]);
 
   useEffect(() => {
     if (customerPossibles.isRefetching) {

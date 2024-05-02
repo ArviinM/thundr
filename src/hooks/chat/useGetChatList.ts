@@ -15,7 +15,6 @@ export function useGetChatList(props: ChatListRequest) {
 
   return useQuery({
     queryKey: ['get-chat-list', props],
-    enabled: true,
     queryFn: async (): Promise<ChatListResponse> => {
       const config: AxiosRequestConfig<ChatListRequest> = {
         params: {sub: props.sub},
