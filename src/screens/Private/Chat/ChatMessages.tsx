@@ -22,7 +22,7 @@ import Bubbles from '../../../components/Chat/Bubbles.tsx';
 // Utils
 import {Platform, Text, View} from 'react-native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {COLORS, height} from '../../../constants/commons.ts';
+import {COLORS} from '../../../constants/commons.ts';
 import {MAX_IMAGE_SIZE_BYTES, scale} from '../../../utils/utils.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
 import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
@@ -30,6 +30,7 @@ import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {Base64Attachments, IMessage} from '../../../types/generated.ts';
 import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
+import {ScrollBottom} from '../../../assets/images/ScrollBottom.tsx';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -68,7 +69,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         query.invalidateQueries({queryKey: ['get-chat-message']});
       }
     }
-  }, [user, chatMessage.isSuccess, chatMessage.data, readMessage]);
+  }, [user, chatMessage.isSuccess]);
 
   const handleSendMessage = async (message: string) => {
     if (user) {
@@ -100,19 +101,14 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       const imageData: Base64Attachments[] = [];
       for (const image of images) {
         if (image.size >= MAX_IMAGE_SIZE_BYTES) {
-          // Toast.show({
-          //   type: 'warning',
-          //   text1: 'Hala, ang laki!',
-          //   text2: 'Limit upload up to 8mb per photo',
-          //   position: 'bottom',
-          //   bottomOffset: height + 55,
-          // });
-
           Toast.show({
-            type: 'THNRError',
-            props: {title: 'Hala, ang laki!'},
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang laki!',
+              subtitle: 'Limit upload up to 8mb per photo',
+            },
             position: 'bottom',
-            bottomOffset: height + 55,
+            bottomOffset: 60,
           });
 
           throw new Error(
@@ -127,18 +123,14 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       }
 
       if (Platform.OS === 'android' && imageData.length >= 5) {
-        // Toast.show({
-        //   type: 'warning',
-        //   text1: 'Hala, ang dami!',
-        //   text2: 'Limit of 4 photos per sending',
-        //   position: 'bottom',
-        //   bottomOffset: height + 55,
-        // });
         Toast.show({
-          type: 'THNRError',
-          props: {title: 'Hala, ang dami!'},
+          type: 'THNRWarning',
+          props: {
+            title: 'Hala, ang dami!',
+            subtitle: 'Limit of 4 photos per sending.',
+          },
           position: 'bottom',
-          bottomOffset: height + 55,
+          bottomOffset: 60,
         });
         throw new Error('Image selection exceeds the limit of 5 images.');
       }
@@ -200,6 +192,10 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               renderBubble={(props: Readonly<BubbleProps<IMessage>>) => (
                 <Bubbles props={props} user={user} isMare={isMare} />
               )}
+              scrollToBottomStyle={{
+                backgroundColor: 'rgba(0,0,0,0)',
+              }}
+              scrollToBottomComponent={() => <ScrollBottom />}
             />
           </KeyboardAvoidingView>
           {/*Chat Text Input*/}

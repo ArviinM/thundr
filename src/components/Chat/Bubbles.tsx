@@ -86,7 +86,6 @@ const Bubbles = ({
                 source={{uri: selectedImage}}
                 style={{width: '100%', height: '90%'}}
                 transition={1000}
-                // placeholder={selectedImagePlaceholder}
               />
             )}
           </View>
@@ -95,7 +94,13 @@ const Bubbles = ({
     );
   };
 
-  const renderImage = ({item: attachments}: {item: Attachment[]}) => {
+  const renderImage = ({
+    item: attachments,
+    isSelf: isSelf,
+  }: {
+    item: Attachment[];
+    isSelf: boolean;
+  }) => {
     // Check if there are exactly 4 attachments
     if (attachments.length === 4) {
       return (
@@ -103,8 +108,8 @@ const Bubbles = ({
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
-            alignItems: 'flex-end',
-            justifyContent: 'flex-end',
+            alignItems: isSelf ? 'flex-end' : 'flex-start',
+            justifyContent: isSelf ? 'flex-end' : 'flex-start',
             gap: scale(2),
           }}>
           {attachments.map((photo, index) => (
@@ -112,8 +117,7 @@ const Bubbles = ({
               key={index}
               onPress={() => {
                 setSelectedImage(photo);
-                // setSelectedImagePlacehold(photo)
-                setIsVisible(true); // Trigger animation and modal
+                setIsVisible(true);
               }}>
               <Image
                 source={{uri: photo}}
@@ -161,7 +165,10 @@ const Bubbles = ({
                 ? styles.messageRight
                 : styles.messageLeft,
             ]}>
-            {renderImage({item: message.attachments})}
+            {renderImage({
+              item: message.attachments,
+              isSelf: isMessageFromSelf(message),
+            })}
           </View>
         ) : (
           message && (
