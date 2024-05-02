@@ -109,15 +109,16 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
 
         Toast.show({
           type: 'THNRSuccess',
-          props: {title: 'Filters Updated! ✅'},
+          props: {
+            title: 'Tumpak Mare! ',
+            subtitle: 'Your filters are updated! ⚡️',
+          },
           position: 'top',
           topOffset: 55,
         });
         isLoading(false);
-        // if (customerFilters.isSuccess && ref) {
         //@ts-ignore
         ref.current.close();
-        // }
       } catch (error) {
         console.error('Error in filters bottom sheet!', error);
       }

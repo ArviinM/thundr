@@ -109,7 +109,9 @@ export const HomeStack = () => {
               fontSize: moderateScale(20),
             },
             headerLeft: props => (
-              <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Home')}
+                style={{width: 30, height: 30}}>
                 <Image
                   source={IMAGES.back}
                   style={{width: 20, height: 20}}
