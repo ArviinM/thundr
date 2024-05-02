@@ -1,18 +1,15 @@
-import {ChatMessage} from '../../../types/generated.ts';
-import moment from 'moment';
-
-type OrganizedMessages = {
-  [dateKey: string]: ChatMessage[];
-};
-
-export const organizeMessagesByDay = (
-  messages: ChatMessage[],
-): ChatMessage[][] => {
-  const organizedMessages: OrganizedMessages = {}; // Use defined type
-  for (const message of messages) {
-    const dateKey = moment(message.created).format('YYYY-MM-DD');
-    organizedMessages[dateKey] = organizedMessages[dateKey] || [];
-    organizedMessages[dateKey].push(message);
+export function truncateChatPreview(
+  message: string,
+  maxLength: number = 30,
+): string {
+  // If the message is shorter than the limit, return it unchanged
+  if (message.length <= maxLength) {
+    return message;
   }
-  return Object.values(organizedMessages);
-};
+
+  // Truncate to the desired length
+  const truncatedMessage = message.slice(0, maxLength - 3);
+
+  // Add the ellipsis
+  return `${truncatedMessage}...`;
+}

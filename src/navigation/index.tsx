@@ -73,6 +73,15 @@ const RootNavigation = () => {
     });
   }, []);
 
+  const config = {
+    screens: {Login: 'sso/:payload'},
+  };
+
+  const linking = {
+    prefixes: ['ph.thundr.app://'],
+    config,
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -80,6 +89,7 @@ const RootNavigation = () => {
   return (
     <NavigationContainer
       ref={navigationRef}
+      linking={linking}
       onReady={() => {
         BootSplash.hide({fade: true});
       }}>
