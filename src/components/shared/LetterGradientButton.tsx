@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
 import {moderateScale, scale} from '../../utils/utils.ts';
 
@@ -41,25 +41,27 @@ const LetterGradientButton = ({
         colors={!isSelected ? ['#CCCCCC', '#CCCCCC'] : ['#EF9D47', '#E33051']}
         start={{x: 1, y: 1}}
         end={{x: 0, y: 0.2}}
-        style={{
-          width: scale(78),
-          height: moderateScale(78),
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 16,
-          marginVertical: 2,
-        }}>
-        <Text
-          style={{
-            fontFamily: 'ClimateCrisis-Regular',
-            fontSize: moderateScale(48),
-            color: COLORS.white,
-          }}>
-          {letter}
-        </Text>
+        style={styles.buttons}>
+        <Text style={styles.text}>{letter}</Text>
       </LinearGradient>
     </TouchableOpacity>
   );
 };
 
 export default LetterGradientButton;
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'ClimateCrisis-Regular',
+    fontSize: moderateScale(48),
+    color: COLORS.white,
+  },
+  buttons: {
+    width: scale(78),
+    height: moderateScale(78),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    marginVertical: 2,
+  },
+});
