@@ -122,7 +122,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
       title: 'Uy, exit na agad?',
       message:
         'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
-      onConfirm: () => navigation.navigate('Login'),
+      onConfirm: () => navigation.navigate('Login', {payload: undefined}),
     });
   };
 
@@ -161,6 +161,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
                         maxLength={16}
                         autoCapitalize="none"
                         selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
                       />
                     )}
                     name="password"
@@ -203,6 +204,7 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
                         value={value}
                         autoCapitalize="none"
                         selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
                       />
                     )}
                     name="confirmPassword"

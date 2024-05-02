@@ -142,6 +142,7 @@ const EmailValidation = ({route}: EmailValidationProps) => {
                         value={value}
                         autoCapitalize="none"
                         selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
                       />
                     )}
                     name="email"

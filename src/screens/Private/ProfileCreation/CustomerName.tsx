@@ -113,6 +113,7 @@ const CustomerName = () => {
                       value={value}
                       autoCapitalize="none"
                       selectionColor={COLORS.primary1}
+                      placeholderTextColor={COLORS.gray}
                     />
                   )}
                   name="name"

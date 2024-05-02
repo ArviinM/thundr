@@ -111,6 +111,7 @@ const ForgetPasswordValidation = () => {
                         }}
                         value={value}
                         selectionColor={COLORS.primary1}
+                        placeholderTextColor={COLORS.gray}
                       />
                     )}
                     name="phoneNumber"

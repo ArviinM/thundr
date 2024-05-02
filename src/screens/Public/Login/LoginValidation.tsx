@@ -123,6 +123,7 @@ const LoginValidation = () => {
                       onChangeText={text => onChange(text)}
                       value={value}
                       selectionColor={COLORS.primary1}
+                      placeholderTextColor={COLORS.gray}
                     />
                   )}
                   name="phoneNumber"

@@ -153,7 +153,7 @@ const EmailVerification = ({route}: EmailVerificationProps) => {
       title: 'Uy, exit na agad?',
       message:
         'Cancelled na talaga registration mo ha? Lahat ng info mo mawawala, okay lang?',
-      onConfirm: () => navigation.navigate('Login'),
+      onConfirm: () => navigation.navigate('Login', {payload: undefined}),
     });
   };
 
