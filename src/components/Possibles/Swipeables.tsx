@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
+import {Platform, Text, View} from 'react-native';
 import {
   runOnJS,
   useAnimatedReaction,
@@ -104,7 +104,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
         } else {
           setStartTimer(false);
         }
-        query.refetchQueries({queryKey: ['get-customer-possibles']});
+        // query.refetchQueries({queryKey: ['get-customer-possibles']});
       }
     } catch (error: any) {
       console.warn('Error updating swipe match:', error);
@@ -200,6 +200,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
         )}
       </View>
       <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{
           position: 'absolute',
           bottom: 0,

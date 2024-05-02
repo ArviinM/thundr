@@ -69,7 +69,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         query.refetchQueries({queryKey: ['get-chat-message']});
       }
     }
-  }, []);
+  }, [user]);
 
   const handleSendMessage = async (message: string) => {
     if (user) {

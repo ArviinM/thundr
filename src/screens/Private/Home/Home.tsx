@@ -327,6 +327,7 @@ const Home = () => {
         )}
       </View>
       <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{
           position: 'absolute',
           bottom: 0,

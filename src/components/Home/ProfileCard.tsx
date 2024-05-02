@@ -66,11 +66,15 @@ const ProfileCard = ({
   const query = useQueryClient(queryClient);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const [countdownTime, setCountdownTime] = useState<{
-    hours: number;
-    minutes: number;
-    seconds: number;
-  } | null>(null);
+  const [countdownTime, setCountdownTime] = useState<
+    | {
+        hours: number;
+        minutes: number;
+        seconds: number;
+      }
+    | null
+    | undefined
+  >(null);
 
   // for bottom sheet
   const bottomSheetRef = useRef<BottomSheetModal>(null);
@@ -101,14 +105,23 @@ const ProfileCard = ({
 
   useEffect(() => {
     if (user.isBlurred && isStartTimer && nextAction) {
+      const now = Date.now();
+      const twelveHoursInMs = 12 * 60 * 60 * 1000;
+
       const intervalId = setInterval(() => {
-        const newCountdown = calculateCountdown(
-          !isCountdownTimer
-            ? twelveHoursTime
-            : isCountdownTimer
-            ? nextAction + 180000
-            : undefined,
-        );
+        if (!isStartTimer && !isCountdownTimer) {
+          return;
+        }
+
+        let newCountdown;
+
+        if (isCountdownTimer) {
+          newCountdown = calculateCountdown(nextAction + 180000);
+        }
+
+        if (!isCountdownTimer && isStartTimer) {
+          newCountdown = calculateCountdown(now + twelveHoursInMs);
+        }
 
         setCountdownTime(newCountdown);
 
