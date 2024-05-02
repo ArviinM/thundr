@@ -105,10 +105,16 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
   });
 
   useEffect(() => {
-    if (passwordRef.current) {
-      passwordRef.current.focus();
+    if (isAuthenticated) {
+      if (oldPasswordRef.current) {
+        oldPasswordRef.current.focus();
+      }
+    } else {
+      if (passwordRef.current) {
+        passwordRef.current.focus();
+      }
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const onSubmit = async (data: {
     password: string;
