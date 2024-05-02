@@ -1,9 +1,10 @@
 import React from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {IMAGES} from '../../../constants/images.ts';
 import {moderateScale, scale, verticalScale} from '../../../utils/utils.ts';
+import {Image} from 'expo-image';
 
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {StrokeText} from '@charmy.tech/react-native-stroke-text';
@@ -45,7 +46,11 @@ const MatchFound = ({route}: MatchFoundProps) => {
         start={START_DEFAULT}
         end={END_DEFAULT}
         style={{flex: 1, paddingTop: insets.top, paddingBottom: insets.bottom}}>
-        <Image source={IMAGES.matchThundr} style={[StyleSheet.absoluteFill]} />
+        <Image
+          source={IMAGES.matchThundr}
+          style={[StyleSheet.absoluteFill]}
+          transition={1000}
+        />
         <View style={styles.container}>
           <View
             style={{
