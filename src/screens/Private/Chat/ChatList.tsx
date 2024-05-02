@@ -35,12 +35,13 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
 
   const renderItem: ListRenderItem<Chat> = ({item, index}) => {
     let thundrJuice;
+    const timeRemainingInSeconds = item.ttl / 1000 - Date.now() / 1000;
+    const segmentsRemaining = Math.max(
+      0,
+      Math.floor(timeRemainingInSeconds / 17280),
+    );
 
-    const currentTime = moment().valueOf() / 1000;
-    const secondsRemaining = item.ttl - currentTime;
-    const segmentSize = secondsRemaining / 5;
-
-    switch (Math.floor(secondsRemaining / segmentSize)) {
+    switch (segmentsRemaining) {
       case 5:
         thundrJuice = <ThundrJuice count={5} />;
         break;

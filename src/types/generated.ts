@@ -40,6 +40,11 @@ export type AuthRefreshTokenResponse = {
   forProfileCreation: boolean;
 };
 
+// Auth SSO
+export type SSOUrlRequest = {
+  sso: 'Google' | 'Facebook';
+};
+
 // Mobile Validation Types
 export type MobileValidationRequest = {
   phoneNumber: string;
