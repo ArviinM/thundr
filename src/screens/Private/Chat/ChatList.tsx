@@ -59,7 +59,7 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
         thundrJuice = <ThundrJuice count={1} />;
         break;
       case 0:
-        thundrJuice = <ThundrJuice count={0} />;
+        thundrJuice = <ThundrJuice count={1} />;
         break;
       default:
         thundrJuice = <ThundrJuice count={5} />;

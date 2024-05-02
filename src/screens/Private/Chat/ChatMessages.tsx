@@ -62,7 +62,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           message => message.user._id !== user.sub && message.isRead === 0,
         )
         .map(message => ({id: message._id}));
-      console.log(messageIdsToRead);
+
       if (messageIdsToRead?.length !== 0) {
         readMessage.mutateAsync(messageIdsToRead);
         query.invalidateQueries({queryKey: ['get-chat-list']});
