@@ -7,12 +7,14 @@ import {useGetCustomerProfile} from '../../../hooks/profile/useGetCustomerProfil
 
 import ProfileCard from '../../../components/Home/ProfileCard.tsx';
 import {COLORS} from '../../../constants/commons.ts';
+import {Loading} from '../../../components/shared/Loading.tsx';
 
 const Profile = () => {
   const auth = useAuth();
-  const sub = auth.authData?.sub;
 
-  const customerProfile = useGetCustomerProfile({sub: sub || ''});
+  const customerProfile = useGetCustomerProfile({
+    sub: auth.authData?.sub || '',
+  });
 
   return (
     <SafeAreaView
@@ -21,6 +23,8 @@ const Profile = () => {
       <View style={{flex: 1, margin: 6, backgroundColor: COLORS.white}}>
         {customerProfile.isPending && customerProfile.isLoading ? (
           <ActivityIndicator animating={true} size={'small'} />
+        ) : customerProfile.isRefetching ? (
+          <Loading />
         ) : (
           customerProfile.data && (
             <View style={{borderRadius: 15, backgroundColor: COLORS.gray2}}>
