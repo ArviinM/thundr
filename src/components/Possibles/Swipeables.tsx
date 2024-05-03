@@ -229,8 +229,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           ))
         )}
       </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <View
         style={{
           position: 'absolute',
           bottom: 0,
@@ -250,7 +249,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
             isMare={sharedIsMare}
           />
         )}
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 };

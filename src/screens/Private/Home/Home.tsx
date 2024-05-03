@@ -333,8 +333,7 @@ const Home = () => {
           </View>
         )}
       </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <View
         style={{
           position: 'absolute',
           bottom: 0,
@@ -354,7 +353,7 @@ const Home = () => {
             isMare={isMare}
           />
         )}
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };

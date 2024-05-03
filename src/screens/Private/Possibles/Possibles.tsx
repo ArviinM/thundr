@@ -4,7 +4,7 @@ import {Text, View} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 
 import {LinearBackground} from '../../../assets/images/possibles/LinearBackground.tsx';
-import {COLORS} from '../../../constants/commons.ts';
+import {COLORS, width} from '../../../constants/commons.ts';
 import {scale} from '../../../utils/utils.ts';
 import {PossiblesTop} from '../../../navigation/Private/Home/Top/PossiblesTop.tsx';
 import useMareblesStore from '../../../store/mareblesStore.ts';
@@ -17,9 +17,17 @@ const Possibles = () => {
     <SafeAreaView
       edges={['left', 'right']}
       style={{backgroundColor: COLORS.white, flex: 1}}>
-      <View style={{flex: 1}}>
-        <View style={{position: 'absolute'}}>
-          <LinearBackground isMare={isMare} />
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}>
+        <View
+          style={{
+            position: 'absolute',
+          }}>
+          <LinearBackground isMare={isMare} width={width} />
         </View>
 
         <View
@@ -37,7 +45,7 @@ const Possibles = () => {
             }}>
             When we say "Walang tapon", we are serious about it.
           </Text>
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, width: width}}>
             <PossiblesTop />
           </View>
         </View>

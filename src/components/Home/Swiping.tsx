@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Image, Platform, StyleSheet, View} from 'react-native';
 
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
-import {initialWindowMetrics} from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Animated, {
   interpolate,
   runOnJS,
@@ -45,6 +45,8 @@ const Swiping = ({
   const [currentImage, setCurrentImage] = useState('thundrHome');
   const [mareTapped, setMareTapped] = useState(false);
   const [jowaTapped, setJowaTapped] = useState(false);
+
+  const insets = useSafeAreaInsets();
 
   const animateSwipeMare = useAnimatedStyle(() => {
     return {
@@ -249,21 +251,39 @@ const Swiping = ({
         {currentImage === 'thundrHome' && (
           <Image
             source={IMAGES.thundrHome}
-            style={styles.thundrImage}
+            style={[
+              styles.thundrImage,
+              {
+                paddingVertical:
+                  Platform.OS === 'ios' ? insets.bottom * 2.8 : 34 * 2.8,
+              },
+            ]}
             resizeMode={'contain'}
           />
         )}
         {currentImage === 'thundrJowaGlow' && (
           <Image
             source={IMAGES.thundrJowaGlow}
-            style={styles.glowImage}
+            style={[
+              styles.glowImage,
+              {
+                paddingVertical:
+                  Platform.OS === 'ios' ? insets.bottom * 2.8 : 34 * 2.8,
+              },
+            ]}
             resizeMode={'contain'}
           />
         )}
         {currentImage === 'thundrMareGlow' && (
           <Image
             source={IMAGES.thundrMareGlow}
-            style={styles.glowImage}
+            style={[
+              styles.glowImage,
+              {
+                paddingVertical:
+                  Platform.OS === 'ios' ? insets.bottom * 2.8 : 34 * 2.8,
+              },
+            ]}
             resizeMode={'contain'}
           />
         )}
@@ -272,20 +292,14 @@ const Swiping = ({
   );
 };
 
-const bottomHeight = initialWindowMetrics?.insets.bottom || 20;
-
 const styles = StyleSheet.create({
   glowImage: {
     width: 118,
     height: 118,
-    paddingVertical:
-      Platform.OS === 'ios' ? bottomHeight * 2.8 : bottomHeight * 3.6,
   },
   thundrImage: {
     width: 80,
     height: 80,
-    paddingVertical:
-      Platform.OS === 'ios' ? bottomHeight * 2.8 : bottomHeight * 3.6,
   },
   swipeImageOff: {width: 170, height: 170},
   swipeImageOn: {width: 193, height: 193},
