@@ -200,50 +200,56 @@ const PasswordNewValidation = ({route}: PasswordNewValidationProps) => {
               </Text>
 
               {/*Old Password */}
-              <View style={styles.passwordContainer}>
-                <View style={styles.textInputContainer}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        ref={oldPasswordRef} // Assign the ref
-                        style={styles.textInputPassword}
-                        placeholder="Enter your old password"
-                        secureTextEntry={!showPassword} // Control visibility
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        maxLength={16}
-                        autoCapitalize="none"
-                        selectionColor={COLORS.primary1}
-                        placeholderTextColor={COLORS.gray}
-                      />
-                    )}
-                    name="oldPassword"
-                  />
-
-                  {/* Show/hide icon */}
-                  <TouchableOpacity
-                    style={styles.showPasswordIcon}
-                    onPress={() => setShowPassword(!showPassword)}>
-                    <Image
-                      source={showPassword ? IMAGES.eye : IMAGES.eyeHidden}
-                      style={styles.showPasswordImage}
+              {isAuthenticated && (
+                <View style={styles.passwordContainer}>
+                  <View style={styles.textInputContainer}>
+                    <Controller
+                      control={control}
+                      rules={{
+                        required: true,
+                      }}
+                      render={({field: {onChange, onBlur, value}}) => (
+                        <TextInput
+                          ref={oldPasswordRef} // Assign the ref
+                          style={styles.textInputPassword}
+                          placeholder="Enter your old password"
+                          secureTextEntry={!showPassword} // Control visibility
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value}
+                          maxLength={16}
+                          autoCapitalize="none"
+                          selectionColor={COLORS.primary1}
+                          placeholderTextColor={COLORS.gray}
+                        />
+                      )}
+                      name="oldPassword"
                     />
-                  </TouchableOpacity>
 
-                  {errors.password && (
-                    <Text style={styles.errorText}>
-                      {errors.password.message}
-                    </Text>
-                  )}
+                    {/* Show/hide icon */}
+                    <TouchableOpacity
+                      style={styles.showPasswordIcon}
+                      onPress={() => setShowPassword(!showPassword)}>
+                      <Image
+                        source={showPassword ? IMAGES.eye : IMAGES.eyeHidden}
+                        style={styles.showPasswordImage}
+                      />
+                    </TouchableOpacity>
+
+                    {errors.password && (
+                      <Text style={styles.errorText}>
+                        {errors.password.message}
+                      </Text>
+                    )}
+                  </View>
                 </View>
-              </View>
+              )}
               {/* Password Input Section */}
-              <View style={styles.passwordContainer2}>
+              <View
+                style={[
+                  styles.passwordContainer2,
+                  !isAuthenticated && {marginTop: 100},
+                ]}>
                 <View style={styles.textInputContainer}>
                   <Controller
                     control={control}
