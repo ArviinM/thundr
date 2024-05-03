@@ -11,7 +11,7 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../../constants/commons.ts';
 import LottieView from 'lottie-react-native';
 
-interface GenericModalProps {
+interface DeactivateModalProps {
   isVisible: boolean;
   title: string;
   content?: React.ReactNode; // Allow for custom content
@@ -19,14 +19,14 @@ interface GenericModalProps {
   onClose: () => void;
 }
 
-const GenericModal: React.FC<GenericModalProps> = ({
+const DeactivateModal: React.FC<DeactivateModalProps> = ({
   isVisible,
   title,
   content,
   buttonText,
   onClose,
 }) => {
-  const bottomTabBarHeight = useBottomTabBarHeight();
+  // const bottomTabBarHeight = useBottomTabBarHeight();
 
   const [animation] = React.useState(new Animated.Value(0));
 
@@ -52,17 +52,13 @@ const GenericModal: React.FC<GenericModalProps> = ({
     <Modal transparent animationType="fade" visible={isVisible}>
       <Animated.View
         style={[styles.container, {opacity, transform: [{scale}]}]}>
-        <View
-          style={[
-            styles.bodyContainer,
-            {marginBottom: bottomTabBarHeight + 20},
-          ]}>
+        <View style={[styles.bodyContainer]}>
           <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <LottieView
-              source={require('../../assets/animations/rawr_shark.json')}
+              source={require('../../assets/animations/sad.json')}
               style={{
-                width: 200,
-                height: 200,
+                width: 100,
+                height: 100,
               }}
               autoPlay
               loop
@@ -88,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     borderRadius: 10,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   bodyContainer: {
     backgroundColor: COLORS.white,
@@ -98,10 +94,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    marginTop: 10,
     textAlign: 'center',
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'ClimateCrisis-Regular',
+    color: COLORS.black,
   },
   content: {
     marginBottom: 20,
@@ -122,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GenericModal;
+export default DeactivateModal;

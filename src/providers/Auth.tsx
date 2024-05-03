@@ -20,6 +20,7 @@ import {useRefreshToken} from '../hooks/useRefreshToken.ts';
 import {useRegisterToken} from '../hooks/notification/useRegisterToken.ts';
 import useCustomerProfileStore from '../store/profileStore.ts';
 import useCustomerDetailsStore from '../store/detailsStore.ts';
+import Toast from 'react-native-toast-message';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -99,6 +100,20 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   const signIn = async (data: AuthDataRequest) => {
     try {
       const result: AuthDataResponse = await signInUser.mutateAsync(data);
+
+      if (result.loginDeactivated) {
+        Toast.show({
+          type: 'THNRError',
+          props: {
+            title: 'Juskolord!',
+            subtitle:
+              'Mukhang na-deactivate ang account mo, mars. Kausapin mo support kung di mo bet.',
+          },
+          position: 'top',
+          topOffset: 30,
+        });
+        return;
+      }
 
       setAuthData(result);
 

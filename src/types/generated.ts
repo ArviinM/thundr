@@ -474,6 +474,11 @@ export interface IMessage {
   isRead?: number;
 }
 
+// Deactivate
+export type CustomerDeactivateRequest = {
+  sub: string;
+};
+
 // Filters
 export type GetCustomerFilterRequest = {
   sub: string;
