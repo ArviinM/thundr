@@ -27,6 +27,7 @@ import {IMAGES} from '../../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import CircleButton from '../../../components/shared/CircleButton.tsx';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 const onboardingSteps = [
   {
@@ -65,7 +66,7 @@ const onboardingSteps = [
 const Onboarding = () => {
   const [screenIndex, setScreenIndex] = useState(0);
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-
+  const auth = useAuth();
   const data = onboardingSteps[screenIndex];
 
   const onContinue = () => {
@@ -86,9 +87,9 @@ const Onboarding = () => {
     }
   };
 
-  const endOnboarding = () => {
+  const endOnboarding = async () => {
+    await auth.loadStorageData();
     navigation.navigate('HomeDrawer');
-    // router.back();
   };
 
   const swipes = Gesture.Simultaneous(

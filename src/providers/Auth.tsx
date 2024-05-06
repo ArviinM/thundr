@@ -29,6 +29,7 @@ type AuthContextData = {
   signOut(): void;
   signUp(data: PasswordCreationRequest): Promise<void>;
   signInSSO(data: AuthDataResponse): Promise<void>;
+  loadStorageData(): Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -44,7 +45,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   const signInUser = useSignInUser();
   const passwordCreation = usePasswordCreation();
-  const refreshToken = useRefreshToken();
+  const refreshTokenCustomer = useRefreshToken();
   const registerToken = useRegisterToken();
 
   const setCustomerProfile = useCustomerProfileStore(
@@ -63,7 +64,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       const authDataSerialized = await AsyncStorage.getItem('@AuthData');
       if (authDataSerialized) {
         const _authData: AuthDataResponse = JSON.parse(authDataSerialized);
-        const result = await refreshToken.mutateAsync({
+        const result = await refreshTokenCustomer.mutateAsync({
           refreshToken: _authData.refreshToken,
           sub: _authData.sub,
           username: _authData.username,
@@ -180,7 +181,15 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
   return (
     <AuthContext.Provider
-      value={{authData, loading, signIn, signOut, signUp, signInSSO}}>
+      value={{
+        authData,
+        loading,
+        signIn,
+        signOut,
+        signUp,
+        signInSSO,
+        loadStorageData,
+      }}>
       {children}
     </AuthContext.Provider>
   );

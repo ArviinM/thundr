@@ -40,6 +40,7 @@ const CustomerPhotoBio = () => {
 
   const [loading, isLoading] = useState(false);
   const [imageUploaded, isUploadingImage] = useState(false);
+  const [imageUploaded2, isUploadingImage2] = useState(false);
   const [imageData, setImageData] = useState<ImageType | null>(null);
   const updateCustomerDetails = useCustomerDetailsStore(
     state => state.updateCustomerDetails,
@@ -85,9 +86,9 @@ const CustomerPhotoBio = () => {
       }
 
       setImageData(image);
-      isUploadingImage(true);
 
       if (customerDetails) {
+        isUploadingImage(true);
         const formData = new FormData();
 
         formData.append('sub', customerDetails.sub);
@@ -103,10 +104,12 @@ const CustomerPhotoBio = () => {
           topOffset: 80,
         });
         isUploadingImage(false);
+        isUploadingImage2(true);
       }
     } catch (e) {
       console.error(e);
       isUploadingImage(false);
+      isUploadingImage2(false);
       throw e;
     }
   };
@@ -321,7 +324,7 @@ const CustomerPhotoBio = () => {
           <View>
             <CircleButton
               onPress={handleSubmit(onSubmit)}
-              disabled={!isValid || imageUploaded}
+              disabled={!isValid || !imageUploaded2}
               loading={loading}
             />
           </View>
