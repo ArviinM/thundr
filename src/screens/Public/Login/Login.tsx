@@ -30,7 +30,6 @@ import {PhoneIcon} from '../../../assets/images/socials/Phone.tsx';
 import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
 import {AuthDataResponse} from '../../../types/generated.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
-import {scale} from '../../../utils/utils.ts';
 
 type LoginScreenRouteProp = RouteProp<RootNavigationParams, 'Login'>;
 
