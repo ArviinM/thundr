@@ -83,7 +83,12 @@ export function convertWordToAbbreviation(word: string): string {
 
 export function convertFullWordsToAbbreviations(fullWords: string): string[] {
   const individualWords = fullWords.split(',');
-  return individualWords.map(word => convertWordToAbbreviation(word));
+
+  const cleanedIndividualWords = individualWords
+    .map((word: string) => word.trim()) // Trim each element
+    .filter((word: string) => word !== ''); // Filter empty elements
+
+  return cleanedIndividualWords.map(word => convertWordToAbbreviation(word));
 }
 
 export function convertAbbreviationsToFullWords(

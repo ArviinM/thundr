@@ -99,7 +99,11 @@ const EditProfile = ({route}: EditProfileProps) => {
   const updateProfile = useCreateCustomerProfile();
 
   useEffect(() => {
-    setSelectedInterests(interestsArray);
+    const cleanedInterests = interestsArray
+      .map((interest: string) => interest.trim()) // Trim each element
+      .filter((interest: string) => interest !== ''); // Filter empty elements
+
+    setSelectedInterests(cleanedInterests);
   }, [currentCustomerInterest]);
 
   const handleSelectionChange = (newSelectedOptions: string[]) => {
