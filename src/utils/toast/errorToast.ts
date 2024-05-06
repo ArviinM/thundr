@@ -1,10 +1,14 @@
 import Toast from 'react-native-toast-message';
 import {initialWindowMetrics} from 'react-native-safe-area-context';
+import {TREStatus} from '../../types/TREStatus.ts';
+import getTREsStatusMessage from '../getTREsStatusMessage.ts';
 
 export function showErrorToast(error: any) {
-  // const errorMessage = `${error.name} failed with status code ${error.statusCode} and message "${error.errorDetails.message}"`;
   // @ts-ignore
   console.error(error);
+
+  if (error.status === 'UNAUTHORIZED' || error.statusCode === 401) {
+  }
 
   if (
     error.status === 'MAX_SWIPES' ||
@@ -13,11 +17,15 @@ export function showErrorToast(error: any) {
     return;
   }
 
-  const statusBarHeight = initialWindowMetrics?.insets.top || 20; // Get the status bar height
-  //TODO: Add Status Code Translations
+  const statusBarHeight = initialWindowMetrics?.insets.top || 20;
+  const translatedError = getTREsStatusMessage(error.status as TREStatus);
+
   Toast.show({
     type: 'THNRError',
-    props: {subtitle: error.message},
+    props: {
+      title: translatedError.title || '',
+      subtitle: translatedError.body || error.message,
+    },
     position: 'top',
     topOffset: statusBarHeight / 1.8,
   });

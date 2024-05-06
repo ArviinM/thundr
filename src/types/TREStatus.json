@@ -1,0 +1,167 @@
+{
+  "APPLICATION_ERROR": {
+    "title": "Oops, Something Went Wrong",
+    "body": "We're experiencing a technical issue. Please try again later or contact support."
+  },
+  "BAD_PASSWORD": {
+    "title": "Incorrect Password",
+    "body": "The password you entered is incorrect. Please try again."
+  },
+  "CREATE_USER_SUCCESS": {
+    "title": "Account Created!",
+    "body": "Your account has been created successfully. You can now log in."
+  },
+  "EMAIL_CODE_REQUIRED": {
+    "title": "Email Verification Needed",
+    "body": "Please check your email for a verification code to complete your action."
+  },
+  "GENERIC_SUCCESS": {
+    "title": "Success!",
+    "body": "Your request was completed successfully."
+  },
+  "INVALID_ACCESS": {
+    "title": "Access Denied",
+    "body": "You don't have permission to perform this action."
+  },
+  "INVALID_OTP_CODE": {
+    "title": "Invalid Verification Code",
+    "body": "The verification code you entered is incorrect. Please try again."
+  },
+  "INVALID_PASSWORD": {
+    "title": "Invalid Password",
+    "body": "The password doesn't meet the requirements. Please review the password guidelines."
+  },
+  "LOGIN_SUCCESS": {
+    "title": "Welcome Back!",
+    "body": "You have successfully logged in."
+  },
+  "LOGOUT_SUCCESSFULLY": {
+    "title": "Logged Out",
+    "body": "You have successfully logged out."
+  },
+  "NEW_PASSWORD_REQUIRED": {
+    "title": "Password Update Required",
+    "body": "Please create a new password to continue."
+  },
+  "OTP_REQUIRED": {
+    "title": "Verification Code Needed",
+    "body": "Please enter the verification code sent to your email or phone."
+  },
+  "REFREH_TOKEN_SUCCESS": {
+    "title": "Session Refreshed",
+    "body": "Your session has been extended."
+  },
+  "REFRESH_TOKEN_FAIL": {
+    "title": "Session Expired",
+    "body": "Your session has expired. Please log in again."
+  },
+  "SERVER_ERROR": {
+    "title": "Server Error",
+    "body": "We're having some trouble on our end. Please try again later."
+  },
+  "UNAUTHORIZED": {
+    "title": "Authorization Required",
+    "body": "Please log in to access Thundr again."
+  },
+  "USERNAME_EXISTS": {
+    "title": "Username Unavailable",
+    "body": "This username is already taken. Please choose a different one."
+  },
+  "INCORRECT_USER_OR_PASSWORD": {
+    "title": "Incorrect user or password",
+    "body": "You user or password might be incorrect, please try again."
+  },
+  "UPSERT_COMPATIBILITY_ANSWER_SUCCESS": {
+    "title": "Compatibility Updated",
+    "body": "Your compatibility answers have been saved successfully."
+  },
+  "UPSERT_CUSTOMER_DETAILS_SUCCESS": {
+    "title": "Profile Updated",
+    "body": "Your profile information has been updated."
+  },
+  "GET_CUSTOMER_DETAILS_SUCCESS": {
+    "title": "Profile Information",
+    "body": "We've retrieved your profile details."
+  },
+  "GET_CUSTOMER_PHOTO_SUCCESS": {
+    "title": "Here's Your Photo",
+    "body": "We've retrieved your profile photo."
+  },
+  "GET_CUSTOMER_FIRST_PIC_SUCCESS": {
+    "title": "Here's Your Photo",
+    "body": "We've retrieved your profile photo."
+  },
+  "GET_CUSTOMER_SETTINGS_SUCCESS": {
+    "title": "Your Settings",
+    "body": "We've retrieved your account settings."
+  },
+  "UPLOAD_CUSTOMER_PHOTO_SUCCESS": {
+    "title": "Photo Uploaded",
+    "body": "Your profile photo has been uploaded successfully."
+  },
+  "UPDATE_CUSTOMER_FILTER_SUCCESS": {
+    "title": "Filters Updated",
+    "body": "Your search filters have been updated."
+  },
+  "UPDATE_CUSTOMER_SETTINGS_SUCCESS": {
+    "title": "Settings Saved",
+    "body": "Your account settings have been updated."
+  },
+  "UPSERT_CUSTOMER_SURVEY_SUCCESS": {
+    "title": "Survey Submitted",
+    "body": "Thank you for submitting your survey responses."
+  },
+  "GET_CUSTOMER_SURVEY_SUCCESS": {
+    "title": "Survey Results",
+    "body": "We've retrieved your survey responses."
+  },
+  "DEACTIVATE_CUSTOMER_SUCCESS": {
+    "title": "Account Deactivated",
+    "body": "Your account has been deactivated."
+  },
+  "ACTIVATE_CUSTOMER_SUCCESS": {
+    "title": "Account Reactivated",
+    "body": "Your account has been reactivated."
+  },
+  "DELETE_CUSTOMER_SUCCESS": {
+    "title": "Account Deleted",
+    "body": "Your account has been deleted."
+  },
+  "DELETE_NON_EXISTING_COGNITO_USER_SUCCESS": {
+    "title": "Account Status Updated",
+    "body": "The account status has been updated in our records."
+  },
+
+  "INVALID_QUESTION": {
+    "title": "Invalid Question",
+    "body": "There was a problem with the question format. Please try again or contact support."
+  },
+  "INVALID_ANSWER": {
+    "title": "Invalid Answer",
+    "body": "The provided answer is not in a valid format. Please review and try again."
+  },
+  "CUSTOMER_ERROR": {
+    "title": "Customer Error",
+    "body": "An error occurred with customer data. Please try again or contact support."
+  },
+  "INVALID_COMPATIBILITIES_EXCEPTION": {
+    "title": "Compatibility Error",
+    "body": "There was an issue processing compatibility settings. Please try again or contact support."
+  },
+  "MAX_PROFILE_PHOTO_EXCEEDED": {
+    "title": "Photo Limit Reached",
+    "body": "You've reached the maximum number of profile photos. Please delete some to add more."
+  },
+  "MATCH_EXCEPTION": {
+    "title": "Match Error",
+    "body": "We're having some trouble finding matches right now. Please try again later."
+  },
+  "MAX_SWIPES": {
+    "title": "Daily Swipes Reached",
+    "body": "You've reached your daily swipe limit. Come back tomorrow for more!"
+  },
+  "POSSIBLES_COOLDOWN_EXCEPTION": {
+    "title": "Take a Break",
+    "body": "You're viewing profiles a bit too quickly. Please slow down for a bit."
+  }
+}
