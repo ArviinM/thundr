@@ -14,12 +14,7 @@ import Animated, {FadeIn, FadeOut, runOnJS} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import {calculateAge} from './utils.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
-import {
-  calculateCountdown,
-  moderateScale,
-  scale,
-  twelveHoursTime,
-} from '../../utils/utils.ts';
+import {calculateCountdown, moderateScale, scale} from '../../utils/utils.ts';
 import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 import React, {useEffect, useRef, useState} from 'react';
 import {cardHeight, cardStyles, cardWidth} from './Card.tsx';
@@ -31,7 +26,7 @@ import {IMAGES} from '../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import moment from 'moment';
-import {BlurView} from '@react-native-community/blur';
+import {BlurView} from 'expo-blur';
 
 import {Image as ExpoImage} from 'expo-image';
 import useCountdownStore from '../../store/countdownStore.ts';
@@ -374,8 +369,10 @@ const ProfileCard = ({
             right: 0,
             borderRadius: 15,
           }}
-          blurType="light"
-          blurAmount={35}
+          experimentalBlurMethod="dimezisBlurView"
+          intensity={100}
+          blurReductionFactor={4}
+          tint="extraLight"
         />
       )}
 

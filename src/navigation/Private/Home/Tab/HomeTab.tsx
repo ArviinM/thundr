@@ -1,7 +1,5 @@
 import React, {useRef} from 'react';
 import {RootNavigationParams, Tab} from '../../../../constants/navigator.ts';
-import Home from '../../../../screens/Private/Home/Home.tsx';
-import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
@@ -150,9 +148,10 @@ export const HomeTab = () => {
         />
 
         <Tab.Screen
-          name="The Possibles"
+          name="Possibles"
           component={Possibles}
           options={{
+            headerTitleAlign: 'center',
             headerTintColor: COLORS.white2,
             headerTransparent: true,
             headerLeft: () => <HomeLeftHeader isTint />,
