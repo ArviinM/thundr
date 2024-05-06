@@ -30,6 +30,7 @@ import {PhoneIcon} from '../../../assets/images/socials/Phone.tsx';
 import {profileCreationStyles} from '../../Private/ProfileCreation/styles.tsx';
 import {AuthDataResponse} from '../../../types/generated.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
+import {scale} from '../../../utils/utils.ts';
 
 type LoginScreenRouteProp = RouteProp<RootNavigationParams, 'Login'>;
 
@@ -69,17 +70,11 @@ const Login = ({route}: LoginProps) => {
       end={{x: 0.1, y: 0.9}}>
       <SafeAreaView style={[styles.flexContainer]} edges={['bottom', 'top']}>
         {showSocialButtons && (
-          <View style={[{flex: 0.1, marginTop: 32, marginLeft: 14}]}>
+          <View style={[{position: 'absolute', top: 32, left: 14}]}>
             <TouchableOpacity
               onPress={() => setShowSocialButtons(false)}
               style={profileCreationStyles.backButton}>
-              <Image
-                source={IMAGES.back}
-                style={[
-                  profileCreationStyles.backImage,
-                  {tintColor: COLORS.white},
-                ]}
-              />
+              <Image source={IMAGES.back} style={[{tintColor: COLORS.white}]} />
             </TouchableOpacity>
           </View>
         )}
@@ -89,6 +84,8 @@ const Login = ({route}: LoginProps) => {
               source={IMAGES.thundrLogo}
               style={{
                 alignSelf: 'center',
+                // width: scale(200),
+                // height: scale(300),
               }}
               resizeMode={'contain'}
             />
