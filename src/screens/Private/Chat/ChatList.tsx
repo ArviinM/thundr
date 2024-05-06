@@ -41,28 +41,24 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
       0,
       Math.floor(timeRemainingInSeconds / 17280),
     );
-
     switch (segmentsRemaining) {
-      case 5:
+      case 4:
         thundrJuice = <ThundrJuice count={5} />;
         break;
-      case 4:
+      case 3:
         thundrJuice = <ThundrJuice count={4} />;
         break;
-      case 3:
+      case 2:
         thundrJuice = <ThundrJuice count={3} />;
         break;
-      case 2:
-        thundrJuice = <ThundrJuice count={2} />;
-        break;
       case 1:
-        thundrJuice = <ThundrJuice count={1} />;
+        thundrJuice = <ThundrJuice count={2} />;
         break;
       case 0:
         thundrJuice = <ThundrJuice count={1} />;
         break;
       default:
-        thundrJuice = <ThundrJuice count={5} />;
+        thundrJuice = <ThundrJuice count={0} />;
     }
 
     return (
@@ -75,7 +71,6 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
           style={{
             flexDirection: 'row',
             paddingVertical: 8,
-            // borderWidth: item.latestChat?.isRead !== 0 ? 0 : 1,
             backgroundColor:
               item.latestChat?.senderSub === item.sub
                 ? ''
