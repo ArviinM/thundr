@@ -59,6 +59,7 @@ const Home = () => {
   const registerToken = useRegisterToken();
 
   const [visible, isVisible] = useState(false);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Explicit type
 
   useEffect(() => {
     if (matchList.isPending) {
@@ -109,6 +110,20 @@ const Home = () => {
       }
     }
   }, [index]);
+
+  useEffect(() => {
+    const newIntervalId = setInterval(() => {
+      auth.loadStorageData();
+    }, 20 * 60 * 1000);
+
+    setIntervalId(newIntervalId);
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, []);
 
   const onResponse = async (
     tag: 'Mare' | 'Jowa',

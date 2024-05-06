@@ -7,8 +7,8 @@ export function showErrorToast(error: any) {
   // @ts-ignore
   console.error(error);
 
-  if (error.status === 'UNAUTHORIZED' || error.statusCode === 401) {
-  }
+  // if (error.status === 'UNAUTHORIZED') {
+  // }
 
   if (
     error.status === 'MAX_SWIPES' ||

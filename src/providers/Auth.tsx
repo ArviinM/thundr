@@ -83,11 +83,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
           '@AuthData',
           JSON.stringify(updatedAuthData),
         );
-
-        //TODO: Investigate
-        // await queryClient.invalidateQueries({
-        //   queryKey: ['get-match-list', updatedAuthData],
-        // });
       }
     } catch (error) {
       console.error('Error loading data from AsyncStorage:', error);
