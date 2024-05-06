@@ -65,11 +65,8 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
     const [selectedLetters, setSelectedLetters] = useState<string[]>(
       convertFullWordsToAbbreviations(getCustomerFilters.data?.gender || ''),
     );
-    console.log(getCustomerFilters.data?.gender);
-    console.log(selectedLetters);
+
     const ageSliderChange = (range: number[]) => {
-      // setMinValue(Math.round(range[0]));
-      // setMaxValue(Math.round(range[1]));
       setMinValue(range[0]);
       setMaxValue(range[1]);
     };
