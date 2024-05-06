@@ -28,6 +28,9 @@ const RootNavigation = () => {
               matchPhoto: notificationData.matchPhoto,
             } as RootNavigationParams['MatchFound']);
           }
+          if (notificationData.channelType === 'CHAT') {
+            navigationRef.navigate('Messages');
+          }
         }
       }
     });
@@ -45,6 +48,9 @@ const RootNavigation = () => {
                 matchPhoto: notificationData.matchPhoto,
               } as RootNavigationParams['MatchFound']);
             }
+            if (notificationData.channelType === 'CHAT') {
+              navigationRef.navigate('Messages');
+            }
           }
         }
       });
@@ -60,13 +66,16 @@ const RootNavigation = () => {
         case EventType.PRESS:
           const notificationData: NotificationData =
             detail.notification as NotificationData;
-
+          console.log(notificationData.data);
           if (notificationData.data.channelType === 'MATCH') {
             navigationRef.navigate('MatchFound', {
               sub: '',
               isMare: notificationData.data.matchType === 'MARE',
               matchPhoto: notificationData.data.matchPhoto,
             } as RootNavigationParams['MatchFound']);
+          }
+          if (notificationData.data.channelType === 'CHAT') {
+            navigationRef.navigate('Messages');
           }
           break;
       }

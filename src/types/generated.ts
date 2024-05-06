@@ -338,6 +338,7 @@ export type RemoteData = {
   channelType: string;
   targetSub: string;
   matchPhoto?: string;
+  chatRoomUuid: string;
 };
 
 export type NotificationData = {
@@ -354,6 +355,7 @@ export type NotificationData = {
     launchImageName: string;
     categoryId: string;
   };
+  notification: {title: string; body: string};
 };
 
 // Forget Password

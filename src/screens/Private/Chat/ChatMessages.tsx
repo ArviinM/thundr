@@ -1,7 +1,7 @@
 // React Libraries
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 
 // Other Custom Libraries
 import {
@@ -31,6 +31,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {Base64Attachments, IMessage} from '../../../types/generated.ts';
 import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
 import {ScrollBottom} from '../../../assets/images/ScrollBottom.tsx';
+import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -53,6 +54,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const sendMessage = useSendChatMessage();
   const readMessage = useReadMessage();
+
+  const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
 
   useEffect(() => {
     if (user && chatMessage.isSuccess) {
@@ -150,6 +153,15 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       console.error('An error occurred in handling image', error);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        setChatRoom(user.chatRoomUuid);
+      }
+      return setChatRoom('');
+    }, [setChatRoom, user]),
+  );
 
   return (
     <SafeAreaView

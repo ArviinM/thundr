@@ -5,6 +5,7 @@ import {navigationRef, RootNavigationParams} from '../constants/navigator.ts';
 import {NotificationData} from '../types/generated.ts';
 import {useAuth} from '../providers/Auth.tsx';
 import {useAuthStore} from '../store/authStore.ts';
+import useChatRoomIDStore from '../store/chatRoomIdStore.ts';
 
 export async function registerDeviceForRemoteMessages() {
   await messaging().registerDeviceForRemoteMessages();
@@ -49,27 +50,23 @@ async function onDisplayNotification(message: NotificationData) {
     } as RootNavigationParams['MatchFound']);
   }
 
-  // const state = store.getState();
-  // const {chatRoomID} = state.persistedState;
-  //
-  // if (chatRoomID !== message.data.chatRoomUuid) {
-  //   await notifee.displayNotification({
-  //     title: message.notification.title,
-  //     body: message.notification.body,
-  //     data: message.data,
-  //     android: {
-  //       channelId,
-  //       pressAction: {
-  //         id: 'default',
-  //       },
-  //     },
-  //     ios: {
-  //       channelId,
-  //       pressAction: {
-  //         id: 'default',
-  //       },
-  //       sound: 'thundr.wav',
-  //     },
-  //   });
-  // }
+  const chatRoom = useChatRoomIDStore.getState().chatRoom;
+
+  if (chatRoom !== message.data.chatRoomUuid) {
+    await notifee.displayNotification({
+      title: message.notification.title,
+      body: message.notification.body,
+      data: message.data,
+      android: {
+        channelId: 'Thundr',
+        pressAction: {
+          id: 'default',
+        },
+      },
+      ios: {
+        // channelId,
+        sound: 'thundr.wav',
+      },
+    });
+  }
 }
