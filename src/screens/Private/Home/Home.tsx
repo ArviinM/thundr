@@ -38,8 +38,7 @@ import {
 } from '../../../utils/notificationUtils.ts';
 import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
 import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
-import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
-
+````
 const Home = () => {
   const auth = useAuth();
   const matchLocation = useCustomerMatchLocation();
