@@ -10,7 +10,7 @@ function getCurrentAccessToken() {
 export function useAxiosWithAuth(): AxiosInstance {
   const token = getCurrentAccessToken();
   const axiosInstance = axios.create({
-    baseURL: 'https://prod-api.thundr.ph',
+    baseURL: API_BASE_URL,
     timeout: AXIOS_TIMEOUT,
     validateStatus: () => true,
     headers: {
