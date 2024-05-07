@@ -6,6 +6,7 @@ import {NotificationData} from '../types/generated.ts';
 import {useAuth} from '../providers/Auth.tsx';
 import {useAuthStore} from '../store/authStore.ts';
 import useChatRoomIDStore from '../store/chatRoomIdStore.ts';
+import useChatRoomIdNotifStore from '../store/chatRoomIdNotifStore.ts';
 
 export async function registerDeviceForRemoteMessages() {
   await messaging().registerDeviceForRemoteMessages();
@@ -40,13 +41,15 @@ async function onDisplayNotification(message: NotificationData) {
   const authData = useAuthStore.getState().authData;
 
   if (authData && notificationData.data.channelType === 'MATCH') {
-    console.log('MATCHED');
-    console.log(message.data);
+    const chatRoom = useChatRoomIdNotifStore.getState().setChatRoom;
+
+    chatRoom(notificationData.data.chatRoomUuid);
 
     navigationRef.navigate('MatchFound', {
       sub: '',
       isMare: notificationData.data.matchType === 'MARE',
       matchPhoto: notificationData.data.matchPhoto,
+      chatRoomId: notificationData.data.chatRoomUuid,
     } as RootNavigationParams['MatchFound']);
   }
 

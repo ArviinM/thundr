@@ -108,6 +108,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
               }}>
               <Button
                 onPress={async () => {
+                  console.log(chatRoomId);
                   if (chatRoomId && isMare) {
                     setChatRoom(chatRoomId);
                     navigation.reset({
@@ -121,13 +122,18 @@ const MatchFound = ({route}: MatchFoundProps) => {
                         },
                       ],
                     });
-                    await query.invalidateQueries({
-                      queryKey: ['get-chat-list'],
-                    });
-                    await query.invalidateQueries({
-                      queryKey: ['get-customer-possibles'],
+                  } else {
+                    navigation.navigate('Messages', {
+                      chatRoomId: '',
+                      isMare: isMare || false,
                     });
                   }
+                  await query.invalidateQueries({
+                    queryKey: ['get-chat-list'],
+                  });
+                  await query.invalidateQueries({
+                    queryKey: ['get-customer-possibles'],
+                  });
                 }}
                 text="Chat Now"
                 buttonStyle={styles.button1}
