@@ -108,9 +108,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
               }}>
               <Button
                 onPress={async () => {
-                  console.log(chatRoomId);
                   if (chatRoomId && isMare) {
-                    setChatRoom(chatRoomId);
                     navigation.reset({
                       index: 0, // Reset to the first screen in the stack
                       routes: [
