@@ -17,6 +17,7 @@ import {
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
+import useChatRoomIdNotifStore from '../../../store/chatRoomIdNotifStore.ts';
 
 const START_DEFAULT = {x: 0, y: 0}; // Updated start position
 const END_DEFAULT = {x: 1, y: 1}; // Updated end position
@@ -35,10 +36,11 @@ type MatchFoundProps = {
 };
 
 const MatchFound = ({route}: MatchFoundProps) => {
-  const {isMare, matchPhoto} = route?.params || {};
+  const {isMare, matchPhoto, chatRoomId} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const insets = useSafeAreaInsets();
   const query = useQueryClient(queryClient);
+  const setChatRoom = useChatRoomIdNotifStore(state => state.setChatRoom);
 
   return (
     <SafeAreaView
@@ -106,11 +108,26 @@ const MatchFound = ({route}: MatchFoundProps) => {
               }}>
               <Button
                 onPress={async () => {
-                  navigation.navigate('Messages');
-                  await query.invalidateQueries({queryKey: ['get-chat-list']});
-                  await query.invalidateQueries({
-                    queryKey: ['get-customer-possibles'],
-                  });
+                  if (chatRoomId && isMare) {
+                    setChatRoom(chatRoomId);
+                    navigation.reset({
+                      index: 0, // Reset to the first screen in the stack
+                      routes: [
+                        {
+                          name: 'Messages',
+                          params: {
+                            isMare: isMare,
+                          },
+                        },
+                      ],
+                    });
+                    await query.invalidateQueries({
+                      queryKey: ['get-chat-list'],
+                    });
+                    await query.invalidateQueries({
+                      queryKey: ['get-customer-possibles'],
+                    });
+                  }
                 }}
                 text="Chat Now"
                 buttonStyle={styles.button1}
