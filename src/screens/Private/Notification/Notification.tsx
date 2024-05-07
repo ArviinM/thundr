@@ -108,6 +108,7 @@ const Notification = () => {
                     queryKey: ['get-customer-notifications'],
                   });
                 }
+                //TODO: Will fix this later on
                 navigation.navigate('Messages');
               }}>
               <Text

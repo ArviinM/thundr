@@ -127,7 +127,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       if (getCustomerFilters.isSuccess) {
         setMinValue(Number(getCustomerFilters.data?.ageMin) - 35 || 0);
         setMaxValue(Number(getCustomerFilters.data?.ageMax) - 35 || 45);
-        setProximityValue([Number(getCustomerFilters.data?.proximity || 10)]);
+        setProximityValue([Number(getCustomerFilters.data?.proximity || 250)]);
         setSelectedLetters(
           convertFullWordsToAbbreviations(
             getCustomerFilters.data?.gender || '',
