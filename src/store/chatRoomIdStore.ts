@@ -2,11 +2,11 @@ import {create} from 'zustand';
 
 type ChatRoomStore = {
   chatRoom: string;
-  setChatRoom: (selected: string) => void;
+  setChatRoom: (chatRoom: string) => void;
 };
 
 const useChatRoomIDStore = create<ChatRoomStore>(set => ({
-  chatRoom: '',
+  chatRoom: '', // Default initial state
   setChatRoom: chatId => set({chatRoom: chatId}),
 }));
 

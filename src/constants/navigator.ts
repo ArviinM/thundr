@@ -71,7 +71,12 @@ export type RootNavigationParams = {
   Onboarding: undefined;
 
   //Match Found
-  MatchFound: {sub?: string; isMare: boolean; matchPhoto: string};
+  MatchFound: {
+    sub?: string;
+    isMare: boolean;
+    matchPhoto: string;
+    chatRoomId: string;
+  };
 
   // Profile
   ProfileStack: undefined;
@@ -90,7 +95,7 @@ export type RootNavigationParams = {
 
   // chats
   ChatMessages: {user: Chat; isMare: boolean};
-  Messages: undefined;
+  Messages: {chatRoomId: string; isMare: boolean};
 
   SettingsStack: undefined;
   ThundrBoltModal: {isModal: boolean};

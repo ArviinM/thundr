@@ -10,9 +10,11 @@ import notifee, {EventType} from '@notifee/react-native';
 import {useEffect} from 'react';
 import {NotificationData, RemoteData} from '../types/generated.ts';
 import messaging from '@react-native-firebase/messaging';
+import useChatRoomIdNotifStore from '../store/chatRoomIdNotifStore.ts';
 
 const RootNavigation = () => {
   const {authData, loading} = useAuth();
+  const setChatRoom = useChatRoomIdNotifStore(state => state.setChatRoom);
 
   // For android notifications
   useEffect(() => {
@@ -29,7 +31,18 @@ const RootNavigation = () => {
             } as RootNavigationParams['MatchFound']);
           }
           if (notificationData.channelType === 'CHAT') {
-            navigationRef.navigate('Messages');
+            setChatRoom(notificationData.chatRoomUuid);
+            navigationRef.reset({
+              index: 0, // Reset to the first screen in the stack
+              routes: [
+                {
+                  name: 'Messages',
+                  params: {
+                    isMare: notificationData.matchType.toLowerCase() === 'mare',
+                  },
+                },
+              ],
+            });
           }
         }
       }
@@ -49,7 +62,19 @@ const RootNavigation = () => {
               } as RootNavigationParams['MatchFound']);
             }
             if (notificationData.channelType === 'CHAT') {
-              navigationRef.navigate('Messages');
+              setChatRoom(notificationData.chatRoomUuid);
+              navigationRef.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'Messages',
+                    params: {
+                      isMare:
+                        notificationData.matchType.toLowerCase() === 'mare',
+                    },
+                  },
+                ],
+              });
             }
           }
         }
@@ -72,10 +97,23 @@ const RootNavigation = () => {
               sub: '',
               isMare: notificationData.data.matchType === 'MARE',
               matchPhoto: notificationData.data.matchPhoto,
+              chatRoomId: notificationData.data.chatRoomUuid,
             } as RootNavigationParams['MatchFound']);
           }
           if (notificationData.data.channelType === 'CHAT') {
-            navigationRef.navigate('Messages');
+            setChatRoom(notificationData.data.chatRoomUuid);
+            navigationRef.reset({
+              index: 0, // Reset to the first screen in the stack
+              routes: [
+                {
+                  name: 'Messages',
+                  params: {
+                    isMare:
+                      notificationData.data.matchType.toLowerCase() === 'mare',
+                  },
+                },
+              ],
+            });
           }
           break;
       }

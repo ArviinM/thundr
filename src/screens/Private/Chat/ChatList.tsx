@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   FlatList,
@@ -20,19 +20,34 @@ import {useAuth} from '../../../providers/Auth.tsx';
 import {ThundrJuice} from '../../../assets/images/chat/ThundrJuice.tsx';
 import {Image} from 'expo-image';
 import {truncateChatPreview} from './chatUtils.ts';
+import useChatRoomIdNotifStore from '../../../store/chatRoomIdNotifStore.ts';
 
 const ChatList = ({isMare}: {isMare: boolean}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [refreshing, setRefreshing] = useState(false);
-
   const auth = useAuth();
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
+
+  const chatRoom = useChatRoomIdNotifStore(state => state.chatRoom);
+  const setChatRoom = useChatRoomIdNotifStore(state => state.setChatRoom);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getChatList.refetch().then(() => setRefreshing(false)); // Refetch data
   }, [getChatList]);
+
+  useEffect(() => {
+    if (chatRoom && getChatList.isSuccess) {
+      const targetChat = getChatList.data.customerChatAndMatches.find(
+        chat => chat.chatRoomUuid === chatRoom,
+      );
+      if (targetChat) {
+        navigation.navigate('ChatMessages', {user: targetChat, isMare: isMare});
+        setChatRoom(null);
+      }
+    }
+  }, [chatRoom, isMare]);
 
   const renderItem: ListRenderItem<Chat> = ({item, index}) => {
     let thundrJuice;

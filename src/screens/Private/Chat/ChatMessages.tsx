@@ -159,8 +159,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       if (user) {
         setChatRoom(user.chatRoomUuid);
       }
-      return setChatRoom('');
-    }, [setChatRoom, user]),
+      return () => setChatRoom('');
+    }, [user, setChatRoom]),
   );
 
   return (
