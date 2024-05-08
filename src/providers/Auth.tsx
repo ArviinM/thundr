@@ -22,6 +22,9 @@ import useCustomerProfileStore from '../store/profileStore.ts';
 import useCustomerDetailsStore from '../store/detailsStore.ts';
 import Toast from 'react-native-toast-message';
 
+import {connectSocket, disconnectSocket, socket} from '../utils/socket.ts';
+import {WSStatus} from '../../thundr-shared/types/enum/WSStatus.ts';
+
 type AuthContextData = {
   authData?: AuthDataResponse;
   loading: boolean;
@@ -58,6 +61,39 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   useEffect(() => {
     loadStorageData();
   }, []);
+
+  useEffect(() => {
+    if (authData) {
+      connectSocket(authData);
+    }
+
+    return () => disconnectSocket();
+  }, [authData]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (authData && socket) {
+        console.log(intervalId);
+        socket?.emit(
+          'KEEPALIVE',
+          {
+            msgType: 'KEEPALIVE',
+            data: {
+              sub: authData.sub,
+              bearer: `Bearer ${authData.accessToken}`,
+              timestamp: Date.now(),
+            },
+            wsStatus: WSStatus.GENERIC_SUCCESS,
+          },
+          data => {
+            console.log(JSON.stringify(data, null, 2));
+          },
+        );
+      }
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [authData, socket]);
 
   async function loadStorageData(): Promise<void> {
     try {
@@ -130,6 +166,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
       setCustomerProfile(null);
       setCustomerDetails(null);
+      disconnectSocket();
 
       // @ts-ignore
       setAuthData(undefined);
