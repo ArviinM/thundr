@@ -25,6 +25,8 @@ import Toast from 'react-native-toast-message';
 import {connectSocket, disconnectSocket, socket} from '../utils/socket.ts';
 import {WSStatus} from '../../thundr-shared/types/enum/WSStatus.ts';
 
+import {navigationRef} from '../constants/navigator.ts';
+
 type AuthContextData = {
   authData?: AuthDataResponse;
   loading: boolean;
@@ -73,7 +75,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (authData && socket) {
-        console.log(intervalId);
         socket?.emit(
           'KEEPALIVE',
           {
@@ -93,6 +94,39 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     }, 60000);
 
     return () => clearInterval(intervalId);
+  }, [authData, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      console.log('now listening to chat');
+      socket.on('CHAT', event => {
+        console.log(event);
+      });
+    }
+
+    return () => {
+      socket?.off('CHAT');
+    };
+  }, [authData, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      console.log('now listening to push notif');
+      socket.on('PUSH_NOTIFICATION', event => {
+        if (event.data.matchPhoto && event.data.chatRoomUuid) {
+          navigationRef.navigate('MatchFound', {
+            matchPhoto: event.data.matchPhoto,
+            sub: event.data.subId,
+            isMare: event.data.matchType?.toLowerCase() === 'mare',
+            chatRoomId: event.data.chatRoomUuid,
+          });
+        }
+      });
+    }
+
+    return () => {
+      socket?.off('PUSH_NOTIFICATION');
+    };
   }, [authData, socket]);
 
   async function loadStorageData(): Promise<void> {

@@ -28,7 +28,7 @@ const onboardingSteps = [
   {
     image: <BoltPhoto />,
     title: 'Photo/video upload',
-    subtitle: 'Upload photos or videos para bongga{\nang chika.',
+    subtitle: 'Upload photos or videos para bongga\nang chika.',
   },
   {
     image: <BoltSwipes />,

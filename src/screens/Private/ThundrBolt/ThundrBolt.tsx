@@ -187,7 +187,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
               Toast.show({
                 type: 'THNRInfo',
                 props: {
-                  title: 'Wait lang mga bakla!',
+                  title: 'Wait lang mga mars!',
                   subtitle: 'Subscribing to ThundrBolt, coming soon na!',
                 },
                 position: 'top',
