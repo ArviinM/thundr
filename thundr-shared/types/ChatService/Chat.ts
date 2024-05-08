@@ -1,4 +1,4 @@
-import { ChatAttachment } from "./ChatAttachment.js";
+import {ChatAttachment} from './ChatAttachment.js';
 
 // TypeScript equivalent of the Chat class
 export interface Chat {
@@ -6,10 +6,9 @@ export interface Chat {
   chatRoomID: string;
   senderSub: string;
   message: string;
-  created: Date;
+  created: string;
   isRead: number;
   chatAttachments: ChatAttachment[];
   attachments?: string[]; // Transient field
   targetSub: string;
 }
-

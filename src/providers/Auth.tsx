@@ -26,6 +26,8 @@ import {connectSocket, disconnectSocket, socket} from '../utils/socket.ts';
 import {WSStatus} from '../../thundr-shared/types/enum/WSStatus.ts';
 
 import {navigationRef} from '../constants/navigator.ts';
+import {useQueryClient} from '@tanstack/react-query';
+import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -45,6 +47,8 @@ interface AuthProviderProps {
 const AuthProvider = ({children}: AuthProviderProps) => {
   const setAuthData = useAuthStore(state => state.setAuthData);
   const authData = useAuthStore(state => state.authData);
+
+  const query = useQueryClient(queryClient);
 
   const [loading, setLoading] = useState(true);
 
@@ -99,8 +103,37 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   useEffect(() => {
     if (socket) {
       console.log('now listening to chat');
+
+      // const chatCache = query.getQueryData(['get-chat-message']);
+
       socket.on('CHAT', event => {
-        console.log(event);
+        let newMessage = transformChatMessageForGiftedChat({
+          id: event.data.id,
+          message: event.data.message,
+          attachments: event.data.attachments || [],
+          created: event.data.created,
+          senderSub: event.data.senderSub,
+          targetSub: event.data.targetSub,
+          chatRoomID: event.data.chatRoomID,
+          isRead: event.data.isRead,
+        });
+        query.setQueriesData(
+          {queryKey: ['get-chat-message']},
+          (oldData: any) => {
+            if (oldData.pages) {
+              return {
+                ...oldData,
+                pages: [
+                  [newMessage, ...oldData.pages[0]],
+                  ...oldData.pages.slice(1),
+                ],
+              };
+            } else {
+              // Handle the case where there's no pagination if necessary
+              return [newMessage, ...oldData];
+            }
+          },
+        );
       });
     }
 

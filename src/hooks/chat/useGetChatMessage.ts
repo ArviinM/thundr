@@ -16,7 +16,6 @@ export function useGetChatMessage(props: ChatMessageRequest) {
 
   return useInfiniteQuery({
     queryKey: ['get-chat-message', props],
-    refetchInterval: 3000,
     initialPageParam: props.beforeId,
     getNextPageParam: (lastPage: IMessage[]) => {
       if (lastPage.length !== 0) {

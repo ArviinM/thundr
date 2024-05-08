@@ -450,6 +450,7 @@ export type Base64Attachments = {
 };
 
 export type ChatSendMessageRequest = {
+  id?: number;
   senderSub: string;
   message: string;
   read: string;

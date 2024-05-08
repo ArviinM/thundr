@@ -76,14 +76,19 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const handleSendMessage = async (message: string) => {
     if (user) {
+      const messageIds = chatMessage.data?.pages[0].flatMap(
+        page => page._id,
+      ) as number[] | undefined;
+
       await sendMessage.mutateAsync({
+        id: messageIds ? messageIds[0] + 10 : 0,
         senderSub: user.sub,
         targetSub: user.profile.sub,
         message: message,
         read: '',
       });
       await query.invalidateQueries({queryKey: ['get-chat-list']});
-      await query.invalidateQueries({queryKey: ['get-chat-message']});
+      // await query.invalidateQueries({queryKey: ['get-chat-message']});
     }
   };
 
@@ -146,7 +151,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           read: '',
           base64Files: imageData,
         });
-        await query.invalidateQueries({queryKey: ['get-chat-message']});
+        // await query.invalidateQueries({queryKey: ['get-chat-message']});
         await query.invalidateQueries({queryKey: ['get-chat-list']});
       }
     } catch (error) {
