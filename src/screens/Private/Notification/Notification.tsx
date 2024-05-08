@@ -108,8 +108,11 @@ const Notification = () => {
                     queryKey: ['get-customer-notifications'],
                   });
                 }
-                //TODO: Will fix this later on
-                navigation.navigate('Messages');
+                // TODO: Needs to redirect soon
+                navigation.navigate('Messages', {
+                  chatRoomId: '',
+                  isMare: item.matchType.toLowerCase() === 'mare',
+                });
               }}>
               <Text
                 style={[
