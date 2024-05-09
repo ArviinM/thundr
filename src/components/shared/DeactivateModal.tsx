@@ -16,6 +16,7 @@ interface DeactivateModalProps {
   title: string;
   content?: React.ReactNode; // Allow for custom content
   buttonText: string;
+  onDeactivate: () => void;
   onClose: () => void;
 }
 
@@ -24,6 +25,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
   title,
   content,
   buttonText,
+  onDeactivate,
   onClose,
 }) => {
   // const bottomTabBarHeight = useBottomTabBarHeight();
@@ -69,9 +71,14 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 
           {content && <View style={styles.content}>{content}</View>}
 
-          <TouchableOpacity style={styles.button} onPress={onClose}>
-            <Text style={styles.buttonText}>{buttonText}</Text>
-          </TouchableOpacity>
+          <View style={{gap: 10}}>
+            <TouchableOpacity style={styles.button} onPress={onDeactivate}>
+              <Text style={styles.buttonText}>{buttonText}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button2} onPress={onClose}>
+              <Text style={styles.buttonText}>Ay di muna!</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Animated.View>
     </Modal>
@@ -109,6 +116,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  button2: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.gray,
   },
   buttonText: {
     fontSize: 16,

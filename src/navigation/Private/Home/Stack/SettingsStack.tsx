@@ -17,6 +17,7 @@ import Settings from '../../../../screens/Private/Settings/Settings.tsx';
 import Terms from '../../../../screens/Public/Login/Terms.tsx';
 import PasswordNewValidation from '../../../../screens/Public/Login/PasswordNewValidation.tsx';
 import PasswordResetConfirmed from '../../../../screens/Public/Login/PasswordResetConfirmed.tsx';
+import CustomerDeactivate from '../../../../screens/Private/Deactivate/CustomerDeactivate.tsx';
 export const SettingsStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
@@ -85,15 +86,6 @@ export const SettingsStack = () => {
             </TouchableOpacity>
           ),
           headerShown: false,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-          headerTintColor: COLORS.primary1,
-          headerTitleStyle: {
-            fontFamily: 'ClimateCrisis-Regular',
-            fontWeight: '500',
-            fontSize: moderateScale(20),
-          },
         }}
       />
       <Stack.Screen
@@ -112,15 +104,24 @@ export const SettingsStack = () => {
             </TouchableOpacity>
           ),
           headerShown: false,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-          headerTintColor: COLORS.primary1,
-          headerTitleStyle: {
-            fontFamily: 'ClimateCrisis-Regular',
-            fontWeight: '500',
-            fontSize: moderateScale(20),
-          },
+        }}
+      />
+      <Stack.Screen
+        name="CustomerDeactivate"
+        component={CustomerDeactivate}
+        options={{
+          headerTitle: '',
+          animation: 'slide_from_right',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+              <Image
+                source={IMAGES.back}
+                style={{width: 20, height: 20}}
+                resizeMode={'contain'}
+              />
+            </TouchableOpacity>
+          ),
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

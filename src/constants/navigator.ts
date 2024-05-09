@@ -99,6 +99,7 @@ export type RootNavigationParams = {
 
   SettingsStack: undefined;
   ThundrBoltModal: {isModal: boolean};
+  CustomerDeactivate: undefined;
 
   //notif
 
