@@ -271,7 +271,7 @@ const CountdownCooldown: React.FC<CountdownCooldownProps> = ({
             <TouchableOpacity style={{paddingVertical: 10}} onPress={onClose}>
               <Text
                 style={{color: COLORS.gray, fontFamily: 'Montserrat-Medium'}}>
-                Ignore
+                Close
               </Text>
             </TouchableOpacity>
           </View>

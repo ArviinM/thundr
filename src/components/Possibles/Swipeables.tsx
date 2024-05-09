@@ -18,6 +18,7 @@ import {Loading} from '../shared/Loading.tsx';
 import {usePossiblesMatch} from '../../hooks/possibles/usePossiblesMatch.ts';
 import useCountdownStore from '../../store/countdownStore.ts';
 import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
+import PossiblesFYIModal from './PossiblesFYIModal.tsx';
 
 const Swipeables = ({isMare}: {isMare: boolean}) => {
   const auth = useAuth();
@@ -41,6 +42,8 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
 
   const matchPossibles = usePossiblesMatch();
   const setStartTimer = useCountdownStore(state => state.setStartTimer);
+
+  const [visible, isVisible] = useState(false);
 
   useAnimatedReaction(
     () => activeIndex.value,
@@ -109,6 +112,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     } catch (error: any) {
       console.warn('Error updating swipe match:', error);
       if (error.status === 'POSSIBLES_COOLDOWN_EXCEPTION') {
+        isVisible(true);
         runOnJS(setIndex)(previousValue); // Revert to the previous card
         activeIndex.value = withSpring(previousValue);
 
@@ -167,6 +171,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
 
   return (
     <View style={{flex: 1}}>
+      <PossiblesFYIModal isVisible={visible} onClose={() => isVisible(false)} />
       <Text
         style={{
           fontFamily: 'Montserrat-Bold',
