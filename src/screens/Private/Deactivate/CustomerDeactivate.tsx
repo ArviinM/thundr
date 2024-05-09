@@ -1,25 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Controller, useForm} from 'react-hook-form';
-import * as yup from 'yup';
 
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
-import GradientButton from '../../../components/shared/GradientButton.tsx';
-import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
-
-import {COLORS, SIZES} from '../../../constants/commons.ts';
+import {COLORS} from '../../../constants/commons.ts';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 
-import {yupResolver} from '@hookform/resolvers/yup';
 import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import useCustomerProfileStore from '../../../store/profileStore.ts';
+
 import {useAuth} from '../../../providers/Auth.tsx';
 import {profileCreationStyles} from '../ProfileCreation/styles.tsx';
 import {scale} from '../../../utils/utils.ts';
@@ -50,7 +44,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       alignItems: 'center',
       paddingHorizontal: 20,
       paddingVertical: 20,
-      borderBottomWidth: index !== 6 ? 1 : 0,
+      borderBottomWidth: index !== 5 && index !== 6 ? 1 : 0,
+      borderTopWidth: index !== 6 ? 0 : 1,
       borderColor: COLORS.gray2,
     }}>
     <View
@@ -130,7 +125,7 @@ const CustomerDeactivate = () => {
 
   const auth = useAuth();
 
-  const [loading, isLoading] = useState(false);
+  // const [loading, isLoading] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState<
     | 'found_a_match'
@@ -154,23 +149,6 @@ const CustomerDeactivate = () => {
     );
     if (value !== 'other') {
       setOtherValue('');
-    }
-  };
-
-  const onSubmit = async (data: {name: string}) => {
-    try {
-      // await schema.validate(data);
-      isLoading(true);
-
-      // updateCustomerProfile({
-      //   sub: auth.authData?.sub,
-      //   name: data.name,
-      //   hometown: 'None',
-      // });
-
-      isLoading(false);
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -314,7 +292,6 @@ const CustomerDeactivate = () => {
           <Button
             onPress={() => isVisible(true)}
             text="Deactivate My Account"
-            loading={loading}
             buttonStyle={[
               profileCreationStyles.buttonStyle,
               {backgroundColor: COLORS.primary1},
