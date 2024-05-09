@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import {API_BASE_URL} from '@env';
+import {API_WS_URL} from '@env';
 import {AuthDataResponse} from '../types/generated.ts';
 import {ThundrSocketClient} from '../../thundr-shared/types/RealtimeService/ThundrSocket.ts'; // Adjust if needed
 
@@ -10,7 +10,7 @@ const connectSocket = (authData: AuthDataResponse) => {
     return;
   }
 
-  socket = io('wss://dev-api.thundr.ph/', {
+  socket = io(API_WS_URL, {
     query: {sub: authData.sub},
     extraHeaders: {
       Authorization: `Bearer ${authData.accessToken}`,
