@@ -482,6 +482,21 @@ export type CustomerDeactivateRequest = {
   sub: string;
 };
 
+// Survey
+export type CustomerSurveyRequest = {
+  sub: string;
+  type: string;
+  value: string;
+};
+
+export type CustomerSurveyResponse = {
+  id: number;
+  sub: string;
+  type: string;
+  value: string;
+  created: string;
+};
+
 // Filters
 export type GetCustomerFilterRequest = {
   sub: string;

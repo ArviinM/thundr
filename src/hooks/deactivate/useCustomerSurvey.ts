@@ -3,28 +3,25 @@ import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
-  CustomerDeactivateRequest,
+  CustomerSurveyRequest,
+  CustomerSurveyResponse,
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
-export function useDeactivateAccount() {
+export function useCustomerSurvey() {
   const axiosInstance = useAxiosWithAuth();
 
   return useMutation({
-    mutationKey: ['customer-deactivate-account'],
-    mutationFn: async (data: CustomerDeactivateRequest): Promise<string> => {
-      const config: AxiosRequestConfig<any> = {
-        params: {
-          sub: data.sub,
-        },
-      };
-
-      const response: AxiosResponse<BaseResponse<any>> =
-        await axiosInstance.post('/customer/deactivate', null, config);
+    mutationKey: ['customer-survey'],
+    mutationFn: async (
+      data: CustomerSurveyRequest,
+    ): Promise<CustomerSurveyResponse[]> => {
+      const response: AxiosResponse<BaseResponse<CustomerSurveyResponse[]>> =
+        await axiosInstance.post('/customer/survey', [data]);
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {
-          name: 'customer-deactivate-account',
+          name: 'customer-survey',
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,

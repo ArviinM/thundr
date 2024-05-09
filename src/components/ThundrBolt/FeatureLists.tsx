@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     // flex: 1,
     flexDirection: 'column',
-    gap: 10,
+    gap: 50,
   },
   pageContent: {height: scale(230)},
   title: {
@@ -174,9 +174,6 @@ const styles = StyleSheet.create({
 
   // steps
   stepIndicatorContainer: {
-    // // position: 'absolute',
-    // left: 0,
-    // right: 0,
     flexDirection: 'row',
     gap: 8,
     marginHorizontal: 15,
