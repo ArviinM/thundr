@@ -10,6 +10,7 @@ export function transformChatMessageForGiftedChat(
     user: {_id: message.senderSub},
     attachments: message.attachments,
     isRead: message.isRead,
+    chatRoomID: message.chatRoomID,
     // sent: true,
   };
 }
