@@ -67,12 +67,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         .map(message => ({id: message._id}));
 
       if (messageIdsToRead?.length !== 0) {
-        readMessage.mutateAsync(messageIdsToRead);
-        query.invalidateQueries({queryKey: ['get-chat-list']});
-        query.invalidateQueries({queryKey: ['get-chat-message']});
+        readMessage.mutateAsync(messageIdsToRead).then(() => {
+          query.invalidateQueries({queryKey: ['get-chat-list']});
+          query.invalidateQueries({queryKey: ['get-chat-message']});
+        });
       }
     }
-  }, [user]);
+  }, [chatMessage.data?.pages[0]]);
 
   const handleSendMessage = async (message: string) => {
     if (user) {

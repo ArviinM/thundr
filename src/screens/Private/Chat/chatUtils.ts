@@ -1,6 +1,6 @@
 export function truncateChatPreview(
   message: string,
-  maxLength: number = 30,
+  maxLength: number = 26,
 ): string {
   // If the message is shorter than the limit, return it unchanged
   if (message.length <= maxLength) {

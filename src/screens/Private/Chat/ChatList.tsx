@@ -32,6 +32,8 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
   const chatRoom = useChatRoomIdNotifStore(state => state.chatRoom);
   const setChatRoom = useChatRoomIdNotifStore(state => state.setChatRoom);
 
+  const currentDate = moment();
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getChatList.refetch().then(() => setRefreshing(false)); // Refetch data
@@ -149,7 +151,12 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
                   fontSize: scale(14),
                   color: COLORS.black,
                 }}>
-                {moment(item.lastActivity).format('h:mm A')}
+                •{' '}
+                {currentDate.diff(item.lastActivity, 'days') === 1
+                  ? moment(item.lastActivity).format('ddd')
+                  : currentDate.diff(item.lastActivity, 'weeks') === 1
+                  ? moment(item.lastActivity).format('MM/DD')
+                  : moment(item.lastActivity).format('h:mm A')}
               </Text>
             </View>
           )}

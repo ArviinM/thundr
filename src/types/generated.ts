@@ -475,6 +475,7 @@ export interface IMessage {
   quickReplies?: QuickReplies;
   attachments?: string[]; // Array to hold attachment URLs
   isRead?: number;
+  chatRoomID?: string;
 }
 
 // Deactivate
