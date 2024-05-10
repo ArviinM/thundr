@@ -28,6 +28,7 @@ import {WSStatus} from '../../thundr-shared/types/enum/WSStatus.ts';
 import {navigationRef} from '../constants/navigator.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.ts';
+import {useGetStatus} from '../hooks/status/useGetStatus.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -56,6 +57,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   const passwordCreation = usePasswordCreation();
   const refreshTokenCustomer = useRefreshToken();
   const registerToken = useRegisterToken();
+  const status = useGetStatus();
 
   const setCustomerProfile = useCustomerProfileStore(
     state => state.setCustomerProfile,
@@ -63,6 +65,15 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   const setCustomerDetails = useCustomerDetailsStore(
     state => state.setCustomerDetails,
   );
+
+  useEffect(() => {
+    if (status.data) {
+      if (status.data.statusCode === 503) {
+        signOut();
+        navigationRef.navigate('Maintenance');
+      }
+    }
+  }, [status.data]);
 
   useEffect(() => {
     loadStorageData();

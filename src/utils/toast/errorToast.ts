@@ -7,8 +7,21 @@ export function showErrorToast(error: any) {
   // @ts-ignore
   console.error(error);
 
-  // if (error.status === 'UNAUTHORIZED') {
-  // }
+  const statusBarHeight = initialWindowMetrics?.insets.top || 20;
+  const translatedError = getTREsStatusMessage(error.status as TREStatus);
+
+  if (error.statusCode === 503) {
+    // Toast.show({
+    //   type: 'THNRInfo',
+    //   props: {
+    //     title: 'Thundr PH Maintenance',
+    //     subtitle: "We'll be right back!",
+    //   },
+    //   position: 'top',
+    //   topOffset: statusBarHeight / 1.8,
+    // });
+    return;
+  }
 
   if (
     error.status === 'MAX_SWIPES' ||
@@ -16,9 +29,6 @@ export function showErrorToast(error: any) {
   ) {
     return;
   }
-
-  const statusBarHeight = initialWindowMetrics?.insets.top || 20;
-  const translatedError = getTREsStatusMessage(error.status as TREStatus);
 
   Toast.show({
     type: 'THNRError',

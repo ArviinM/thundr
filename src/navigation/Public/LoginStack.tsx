@@ -17,6 +17,7 @@ import ForgetPasswordVerification from '../../screens/Public/Login/ForgetPasswor
 import PasswordReset from '../../screens/Public/Login/PasswordReset.tsx';
 import PasswordNewValidation from '../../screens/Public/Login/PasswordNewValidation.tsx';
 import PasswordResetConfirmed from '../../screens/Public/Login/PasswordResetConfirmed.tsx';
+import Maintenance from '../../screens/shared/Maintenance.tsx';
 
 export const LoginStack = () => {
   return (
@@ -94,6 +95,11 @@ export const LoginStack = () => {
         <Stack.Screen
           name="PasswordCreation"
           component={PasswordCreation}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="Maintenance"
+          component={Maintenance}
           options={{animation: 'fade'}}
         />
       </Stack.Group>

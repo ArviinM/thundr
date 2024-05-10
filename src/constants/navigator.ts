@@ -13,7 +13,6 @@ import {
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
-import Notification from '../screens/Private/Notification/Notification.tsx';
 
 export const Stack = createNativeStackNavigator();
 export const Tab = createBottomTabNavigator();
@@ -102,6 +101,8 @@ export type RootNavigationParams = {
   CustomerDeactivate: undefined;
 
   //notif
-
   Notification: undefined;
+
+  //maintenance
+  Maintenance: undefined;
 };
