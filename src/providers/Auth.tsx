@@ -104,8 +104,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
     if (socket) {
       console.log('now listening to chat');
 
-      // const chatCache = query.getQueryData(['get-chat-message']);
-
       socket.on('CHAT', event => {
         let newMessage = transformChatMessageForGiftedChat({
           id: event.data.id,
@@ -120,7 +118,10 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         query.setQueriesData(
           {queryKey: ['get-chat-message']},
           (oldData: any) => {
-            if (oldData.pages) {
+            if (
+              oldData.pages &&
+              oldData.pages[0][0].chatRoomID === event.data.chatRoomID
+            ) {
               return {
                 ...oldData,
                 pages: [
@@ -129,11 +130,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
                 ],
               };
             } else {
-              // Handle the case where there's no pagination if necessary
-              return [newMessage, ...oldData];
+              return oldData;
             }
           },
         );
+        query.refetchQueries({queryKey: ['get-chat-list']});
       });
     }
 
