@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {RootNavigationParams, Tab} from '../../../../constants/navigator.ts';
 import {COLORS} from '../../../../constants/commons.ts';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -22,6 +22,7 @@ import {AdvocacyIcon} from '../../../../assets/images/tab_icons/AdvocacyIcon.tsx
 import Advocacy from '../../../../screens/Private/Advocacy/Advocacy.tsx';
 import useUnreadStore from '../../../../store/unreadStore.ts';
 import {HomeStack} from '../Stack/HomeStack.tsx';
+import {useGetChatList} from '../../../../hooks/chat/useGetChatList.ts';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -31,6 +32,8 @@ export const HomeTab = () => {
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
   const auth = useAuth();
   const isUnread = useUnreadStore(state => state.isUnreads);
+
+  const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
 
   function Header() {
     return (
@@ -179,7 +182,13 @@ export const HomeTab = () => {
                   style={{height: scale(30), width: scale(30)}}
                   resizeMode="contain"
                 />
-                {isUnread && <View style={styles.indicator} />}
+                {isUnread && (
+                  <View style={styles.indicator}>
+                    <Text style={styles.indicatorText}>
+                      {getChatList.isSuccess && getChatList.data.unreads}
+                    </Text>
+                  </View>
+                )}
               </>
             ),
           }}
@@ -195,11 +204,18 @@ export const HomeTab = () => {
 const styles = StyleSheet.create({
   indicator: {
     backgroundColor: COLORS.primary1,
-    width: 14,
-    height: 14,
-    borderRadius: 10, // Make it a circle
+    width: 16,
+    height: 16,
+    borderRadius: 8, // Updated from 10 for a softer circle
     position: 'absolute',
-    top: scale(18), // Adjust positioning as needed
+    top: scale(18),
     right: scale(18),
+    justifyContent: 'center', // Center the text horizontally
+    alignItems: 'center', // Center the text vertically
+  },
+  indicatorText: {
+    color: 'white', // Ensure good contrast
+    fontSize: scale(10), // Adjust font size for readability
+    fontWeight: 'bold', // Consider bold for emphasis
   },
 });
