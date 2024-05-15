@@ -93,7 +93,6 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
               />
               <Button
                 onPress={() => {
-                  Add;
                   isVisible(false);
                 }}
                 text="Cancel"
