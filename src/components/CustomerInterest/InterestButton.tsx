@@ -6,14 +6,25 @@ interface ButtonProps {
   title: string;
   isSelected: boolean;
   onSelect: (title: string | any) => void;
+  isDisabled?: boolean;
 }
 
-const InterestButton = ({title, isSelected, onSelect}: ButtonProps) => {
+const InterestButton = ({
+  title,
+  isSelected,
+  onSelect,
+  isDisabled,
+}: ButtonProps) => {
   return (
     <TouchableOpacity
       style={[styles.button, isSelected && styles.selectedButton]}
+      disabled={isDisabled}
       onPress={onSelect}>
-      <Text style={isSelected ? styles.selectedText : styles.text}>
+      <Text
+        style={[
+          isSelected ? styles.selectedText : styles.text,
+          isDisabled && {color: COLORS.gray2},
+        ]}>
         {title}
       </Text>
     </TouchableOpacity>

@@ -6,12 +6,14 @@ interface ButtonContainerProps {
   options: string[];
   onSelectionChange: (selectedOptions: string[]) => void;
   selectedOptions?: string[]; // Add selectedOptions prop
+  isDisabled?: boolean;
 }
 
 const InterestButtonContainer: React.FC<ButtonContainerProps> = ({
   options,
   onSelectionChange,
   selectedOptions: propSelectedOptions,
+  isDisabled,
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     propSelectedOptions || [],
@@ -50,6 +52,7 @@ const InterestButtonContainer: React.FC<ButtonContainerProps> = ({
           title={option}
           isSelected={selectedOptions.includes(option)}
           onSelect={() => handleSelect(option)}
+          isDisabled={isDisabled}
         />
       ))}
     </View>

@@ -21,6 +21,7 @@ interface SelectableButtonProps {
   onPress: (selectedButtons: string[]) => void;
   maxSelections?: number; // New prop to control selection limit
   initialSelections?: string[]; // Prop for pre-selected values
+  isDisabled?: boolean;
 }
 
 const SelectableButton = ({
@@ -28,6 +29,7 @@ const SelectableButton = ({
   onPress,
   maxSelections = 1, // Default to single selection
   initialSelections = [],
+  isDisabled,
 }: SelectableButtonProps) => {
   const [selectedButtons, setSelectedButtons] =
     useState<string[]>(initialSelections);
@@ -61,14 +63,16 @@ const SelectableButton = ({
       {buttonData.map((button, index) => (
         <TouchableOpacity
           key={index}
+          disabled={isDisabled}
           style={[
             styles.button,
             selectedButtons.includes(button.title) && styles.selectedButton,
+            isDisabled && {backgroundColor: '#D9D9D9'},
           ]}
           onPress={() => handleSelect(button.title)}>
           <View style={styles.imageContainer}>
             <Image
-              style={styles.image}
+              style={[styles.image, isDisabled && {tintColor: COLORS.gray2}]}
               source={
                 selectedButtons.includes(button.title)
                   ? button.selectedImage
@@ -77,8 +81,14 @@ const SelectableButton = ({
             />
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.textTitle}>{button.title}</Text>
-            <Text style={styles.textBody}>{button.body}</Text>
+            <Text
+              style={[styles.textTitle, isDisabled && {color: COLORS.white}]}>
+              {button.title}
+            </Text>
+            <Text
+              style={[styles.textBody, isDisabled && {color: COLORS.white}]}>
+              {button.body}
+            </Text>
           </View>
         </TouchableOpacity>
       ))}

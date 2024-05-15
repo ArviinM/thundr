@@ -41,6 +41,7 @@ interface FiltersBottomSheetModalProps {
 
 const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
   (props, ref) => {
+    const disabled = true;
     const [loading, isLoading] = useState<boolean>(false);
     const getCustomerFilters = useGetCustomerFilters({sub: props.sub});
     const customerFilters = useCustomerFilters();
@@ -364,65 +365,113 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                   </View>
                 </View>
               </BottomSheetView>
-              <BottomSheetView style={styles.contentContainerAdvanced}>
-                <Text style={styles.containerHeadline}>Advanced Filters</Text>
-                <Text style={styles.containerSubTitle}>
-                  More filters, more fun. Gora na!
-                </Text>
-              </BottomSheetView>
-              <BottomSheetView style={styles.scrollViewContainer}>
-                <View style={styles.filterContainer}>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.titleFilterText}>Star Sign</Text>
-                    <Text style={styles.subTitleFilterText}>
-                      Choose up to 4
-                    </Text>
+              <BottomSheetView>
+                <BottomSheetView style={styles.contentContainerAdvanced}>
+                  <Text
+                    style={[
+                      styles.containerHeadline,
+                      disabled && {color: COLORS.gray2},
+                    ]}>
+                    Advanced Filters
+                  </Text>
+                  <Text
+                    style={[
+                      styles.containerSubTitle,
+                      {marginHorizontal: scale(16)},
+                    ]}>
+                    {disabled
+                      ? 'Available for Thunder Bolt users only.\n' +
+                        'More filters, more fun! Sign up now for an even more flexible customization.'
+                      : 'More filters, more fun. Gora na!'}
+                  </Text>
+                </BottomSheetView>
+                <BottomSheetView style={styles.scrollViewContainer}>
+                  <View style={styles.filterContainer}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.titleFilterText,
+                          disabled && {color: COLORS.gray2},
+                        ]}>
+                        Star Sign
+                      </Text>
+                      <Text
+                        style={[
+                          styles.subTitleFilterText,
+                          disabled && {color: COLORS.gray2},
+                        ]}>
+                        Choose up to 4
+                      </Text>
+                    </View>
+                    <View style={{marginVertical: scale(10)}}>
+                      {/*  Star Sign Filter Options */}
+                      <View>
+                        <InterestButtonContainer
+                          options={starSignOptions}
+                          onSelectionChange={handleSelectionChangeStarSign}
+                          selectedOptions={selectedStarSign}
+                          isDisabled={disabled}
+                        />
+                      </View>
+                    </View>
                   </View>
-                  <View style={{marginVertical: scale(6)}}>
-                    {/*  Star Sign Filter Options */}
-                    <View>
-                      <InterestButtonContainer
-                        options={starSignOptions}
-                        onSelectionChange={handleSelectionChangeStarSign}
-                        selectedOptions={selectedStarSign}
+                  <View style={styles.filterContainer}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.titleFilterText,
+                          disabled && {color: COLORS.gray2},
+                        ]}>
+                        Interest
+                      </Text>
+                      <Text
+                        style={[
+                          styles.subTitleFilterText,
+                          disabled && {color: COLORS.gray2},
+                        ]}>
+                        Choose up to 4
+                      </Text>
+                    </View>
+                    <View style={{marginVertical: scale(10)}}>
+                      {/*  Interest Filter Options */}
+                      <View>
+                        <InterestButtonContainer
+                          options={interestOptions}
+                          onSelectionChange={handleSelectionChange}
+                          selectedOptions={selectedInterests}
+                          isDisabled={true}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.filterContainer}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.titleFilterText,
+                          disabled && {color: COLORS.gray2},
+                        ]}>
+                        Personality Type
+                      </Text>
+                      <Text
+                        style={[
+                          styles.subTitleFilterText,
+                          disabled && {color: COLORS.gray2},
+                        ]}>
+                        Choose up to 2
+                      </Text>
+                    </View>
+                    <View style={{marginVertical: scale(10)}}>
+                      <SelectableButton
+                        buttonData={personalityData}
+                        onPress={handleSelectedPersonality}
+                        initialSelections={selectedPersonality}
+                        maxSelections={2}
+                        isDisabled={disabled}
                       />
                     </View>
                   </View>
-                </View>
-                <View style={styles.filterContainer}>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.titleFilterText}>Interest</Text>
-                    <Text style={styles.subTitleFilterText}>
-                      Choose up to 4
-                    </Text>
-                  </View>
-                  <View style={{marginVertical: scale(6)}}>
-                    {/*  Interest Filter Options */}
-                    <View>
-                      <InterestButtonContainer
-                        options={interestOptions}
-                        onSelectionChange={handleSelectionChange}
-                        selectedOptions={selectedInterests}
-                      />
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.filterContainer}>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.titleFilterText}>Personality Type</Text>
-                    <Text style={styles.subTitleFilterText}>
-                      Choose up to 2
-                    </Text>
-                  </View>
-                  <View>
-                    <SelectableButton
-                      buttonData={personalityData}
-                      onPress={handleSelectedPersonality}
-                      initialSelections={selectedPersonality}
-                      maxSelections={2}
-                    />
-                  </View>
-                </View>
+                </BottomSheetView>
               </BottomSheetView>
             </ScrollView>
           </>
