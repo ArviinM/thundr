@@ -20,17 +20,21 @@ import {useAuth} from '../../../providers/Auth.tsx';
 import {ThundrJuice} from '../../../assets/images/chat/ThundrJuice.tsx';
 import {Image} from 'expo-image';
 import {truncateChatPreview} from './chatUtils.ts';
-import useChatRoomIdNotifStore from '../../../store/chatRoomIdNotifStore.ts';
 
-const ChatList = ({isMare}: {isMare: boolean}) => {
+const ChatList = ({
+  isMare,
+  chatRoom,
+  notifIsMare,
+}: {
+  isMare: boolean;
+  chatRoom?: string;
+  notifIsMare?: boolean;
+}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [refreshing, setRefreshing] = useState(false);
   const auth = useAuth();
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
-
-  const chatRoom = useChatRoomIdNotifStore(state => state.chatRoom);
-  const setChatRoom = useChatRoomIdNotifStore(state => state.setChatRoom);
 
   const currentDate = moment();
 
@@ -45,11 +49,13 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
         chat => chat.chatRoomUuid === chatRoom,
       );
       if (targetChat) {
-        navigation.navigate('ChatMessages', {user: targetChat, isMare: isMare});
-        setChatRoom(null);
+        navigation.navigate('ChatMessages', {
+          user: targetChat,
+          isMare: notifIsMare || false,
+        });
       }
     }
-  }, [chatRoom, isMare]);
+  }, [chatRoom, notifIsMare]);
 
   const renderItem: ListRenderItem<Chat> = ({item, index}) => {
     let thundrJuice;
@@ -152,11 +158,11 @@ const ChatList = ({isMare}: {isMare: boolean}) => {
                   color: COLORS.black,
                 }}>
                 •{' '}
-                {currentDate.diff(item.lastActivity, 'days') === 1
+                {currentDate.diff(item.lastActivity, 'days') === 0
+                  ? moment(item.lastActivity).format('h:mm A')
+                  : currentDate.diff(item.lastActivity, 'days') <= 7
                   ? moment(item.lastActivity).format('ddd')
-                  : currentDate.diff(item.lastActivity, 'weeks') === 1
-                  ? moment(item.lastActivity).format('MM/DD')
-                  : moment(item.lastActivity).format('h:mm A')}
+                  : moment(item.lastActivity).format('MM/DD')}
               </Text>
             </View>
           )}

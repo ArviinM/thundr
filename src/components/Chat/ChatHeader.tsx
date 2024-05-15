@@ -100,7 +100,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
       }}>
       <View>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate('Messages', {isMare: isMare})}
           style={styles.backButton}>
           <Image
             source={IMAGES.back}

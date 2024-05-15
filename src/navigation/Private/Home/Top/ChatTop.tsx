@@ -11,14 +11,22 @@ type ChatTopProps = {
 };
 
 export const ChatTop = ({route}: ChatTopProps) => {
-  const {isMare} = route?.params || {};
+  const {isMare, chatRoomId} = route?.params || {};
 
   return (
     <Top.Navigator
       tabBar={props => <CustomTabBar {...props} />}
       initialRouteName={isMare ? 'MARE' : 'JOWA'}>
-      <Top.Screen name="JOWA">{() => <ChatList isMare={false} />}</Top.Screen>
-      <Top.Screen name="MARE">{() => <ChatList isMare={true} />}</Top.Screen>
+      <Top.Screen name="JOWA">
+        {() => (
+          <ChatList isMare={false} chatRoom={chatRoomId} notifIsMare={isMare} />
+        )}
+      </Top.Screen>
+      <Top.Screen name="MARE">
+        {() => (
+          <ChatList isMare={true} chatRoom={chatRoomId} notifIsMare={isMare} />
+        )}
+      </Top.Screen>
     </Top.Navigator>
   );
 };

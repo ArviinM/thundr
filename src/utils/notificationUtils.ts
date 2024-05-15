@@ -41,13 +41,13 @@ async function onDisplayNotification(message: NotificationData) {
   const authData = useAuthStore.getState().authData;
 
   if (authData && notificationData.data.channelType === 'MATCH') {
-    const chatRoom = useChatRoomIdNotifStore.getState().setChatRoom;
-
-    chatRoom(notificationData.data.chatRoomUuid);
+    // const chatRoom = useChatRoomIdNotifStore.getState().setChatRoom;
+    //
+    // chatRoom(notificationData.data.chatRoomUuid);
 
     navigationRef.navigate('MatchFound', {
       sub: '',
-      isMare: notificationData.data.matchType === 'MARE',
+      isMare: notificationData.data.matchType.toLowerCase() === 'mare',
       matchPhoto: notificationData.data.matchPhoto,
       chatRoomId: notificationData.data.chatRoomUuid,
     } as RootNavigationParams['MatchFound']);
