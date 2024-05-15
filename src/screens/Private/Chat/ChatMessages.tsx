@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker, {Image} from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
 
 // Components
@@ -93,67 +93,98 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
-  const handleImageUpload = async () => {
+  const handleImageUpload = async (isCamera?: boolean) => {
     try {
-      let images = await ImagePicker.openPicker({
-        mediaType: 'photo',
-        multiple: true,
-        includeBase64: true,
-        forceJpg: true,
-        maxFiles: 4,
-      });
+      let images: Image[];
 
-      if (!images || images.length === 0) {
-        return null;
-      }
+      if (isCamera) {
+        let cameraImage = await ImagePicker.openCamera({
+          mediaType: 'photo',
+          multiple: false,
+          includeBase64: true,
+          forceJpg: true,
+          maxFiles: 4,
+        });
+        const imageData: Base64Attachments = {
+          fileName: cameraImage.filename,
+          fileContentBase64: cameraImage.data,
+        };
 
-      const imageData: Base64Attachments[] = [];
-      for (const image of images) {
-        if (image.size >= MAX_IMAGE_SIZE_BYTES) {
-          Toast.show({
-            type: 'THNRWarning',
-            props: {
-              title: 'Hala, ang laki!',
-              subtitle: 'Limit upload up to 8mb per photo',
-            },
-            position: 'bottom',
-            bottomOffset: 60,
+        if (user && cameraImage) {
+          await sendMessage.mutateAsync({
+            senderSub: user.sub,
+            targetSub: user.profile.sub,
+            message: '',
+            read: '',
+            base64Files: [imageData],
           });
+          await query.invalidateQueries({queryKey: ['get-chat-list']});
+          return;
+        }
+      } else {
+        images = await ImagePicker.openPicker({
+          mediaType: 'photo',
+          multiple: true,
+          includeBase64: true,
+          forceJpg: true,
+          maxFiles: 4,
+        });
 
-          throw new Error(
-            'Image exceeds maximum size limit. Please select a smaller image.',
-          );
+        if (!images || images.length === 0) {
+          return null;
         }
 
-        imageData.push({
-          fileName: image.filename,
-          fileContentBase64: image.data,
-        });
-      }
+        if (images) {
+          const imageData: Base64Attachments[] = [];
 
-      if (Platform.OS === 'android' && imageData.length >= 5) {
-        Toast.show({
-          type: 'THNRWarning',
-          props: {
-            title: 'Hala, ang dami!',
-            subtitle: 'Limit of 4 photos per sending.',
-          },
-          position: 'bottom',
-          bottomOffset: 60,
-        });
-        throw new Error('Image selection exceeds the limit of 5 images.');
-      }
+          for (const image of images) {
+            if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+              Toast.show({
+                type: 'THNRWarning',
+                props: {
+                  title: 'Hala, ang laki!',
+                  subtitle: 'Limit upload up to 8mb per photo',
+                },
+                position: 'bottom',
+                bottomOffset: 60,
+              });
 
-      if (user && imageData) {
-        await sendMessage.mutateAsync({
-          senderSub: user.sub,
-          targetSub: user.profile.sub,
-          message: '',
-          read: '',
-          base64Files: imageData,
-        });
-        // await query.invalidateQueries({queryKey: ['get-chat-message']});
-        await query.invalidateQueries({queryKey: ['get-chat-list']});
+              throw new Error(
+                'Image exceeds maximum size limit. Please select a smaller image.',
+              );
+            }
+
+            imageData.push({
+              fileName: image.filename,
+              fileContentBase64: image.data,
+            });
+          }
+
+          if (Platform.OS === 'android' && imageData.length >= 5) {
+            Toast.show({
+              type: 'THNRWarning',
+              props: {
+                title: 'Hala, ang dami!',
+                subtitle: 'Limit of 4 photos per sending.',
+              },
+              position: 'bottom',
+              bottomOffset: 60,
+            });
+            throw new Error('Image selection exceeds the limit of 5 images.');
+          }
+
+          if (user && imageData) {
+            await sendMessage.mutateAsync({
+              senderSub: user.sub,
+              targetSub: user.profile.sub,
+              message: '',
+              read: '',
+              base64Files: imageData,
+            });
+            // await query.invalidateQueries({queryKey: ['get-chat-message']});
+            await query.invalidateQueries({queryKey: ['get-chat-list']});
+          }
+        }
       }
     } catch (error) {
       console.error('An error occurred in handling image', error);

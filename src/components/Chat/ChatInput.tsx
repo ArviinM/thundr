@@ -9,6 +9,7 @@ import {
 import {COLORS} from '../../constants/commons.ts';
 import {SendIcon} from '../../assets/images/chat/SendIcon.tsx';
 import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
+import {CameraIcon} from '../../assets/images/chat/CameraIcon.tsx';
 
 const ChatInput = ({
   isMare,
@@ -38,6 +39,9 @@ const ChatInput = ({
           placeholderTextColor={'#ffffff'}
           maxLength={255}
         />
+        <TouchableOpacity onPress={onPressImage} style={{paddingRight: 16}}>
+          <CameraIcon />
+        </TouchableOpacity>
         <TouchableOpacity onPress={onPressImage} style={{paddingRight: 16}}>
           <ImagesIcon />
         </TouchableOpacity>
