@@ -334,7 +334,11 @@ const ProfileCard = ({
           <Text style={cardStyles.title}>Personality Type</Text>
           <View style={cardStyles.personalityTypeContainer}>
             {selectedPersonality && (
-              <SelectableButton buttonData={[selectedPersonality]} />
+              <SelectableButton
+                buttonData={[selectedPersonality]}
+                initialSelections={[selectedPersonality.title]}
+                onPress={() => {}}
+              />
             )}
           </View>
           {!isUser && (

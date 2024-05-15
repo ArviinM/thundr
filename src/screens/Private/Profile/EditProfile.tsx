@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Image as ImageType} from 'react-native-image-crop-picker';
@@ -88,10 +88,9 @@ const EditProfile = ({route}: EditProfileProps) => {
   const currentCustomerInterest = customerDetails?.hobbies || '';
   const interestsArray = currentCustomerInterest.split(',');
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [selectedPersonality, setSelectedPersonality] = useState<{
-    index: number;
-    text: string;
-  }>({index: 0, text: customerDetails?.personalityType || ''});
+  const currentFilteredPersonality = customerDetails?.personalityType || '';
+  const filteredPersonalityArray = currentFilteredPersonality.split(',');
+  const [selectedPersonality, setSelectedPersonality] = useState<string[]>([]);
 
   const [loading, isLoading] = useState(false);
 
@@ -106,11 +105,20 @@ const EditProfile = ({route}: EditProfileProps) => {
     setSelectedInterests(cleanedInterests);
   }, [currentCustomerInterest]);
 
+  useEffect(() => {
+    const cleanedPersonality = filteredPersonalityArray
+      .map((personality: string) => personality.trim()) // Trim each element
+      .filter((personality: string) => personality !== ''); // Filter empty elements
+
+    setSelectedPersonality(cleanedPersonality);
+  }, [currentFilteredPersonality]);
+
   const handleSelectionChange = (newSelectedOptions: string[]) => {
     setSelectedInterests(newSelectedOptions);
   };
-  const handleSelectedPersonality = (index: number, text: string) => {
-    setSelectedPersonality({index, text});
+  const handleSelectedPersonality = (newSelectedOptions: string[]) => {
+    console.log(newSelectedOptions);
+    setSelectedPersonality(newSelectedOptions);
   };
 
   const handlePhotoUpload = async (
@@ -247,7 +255,7 @@ const EditProfile = ({route}: EditProfileProps) => {
         updatedData.hobbies = selectedInterests.toString();
       }
       if (selectedPersonality) {
-        updatedData.personalityType = selectedPersonality?.text;
+        updatedData.personalityType = selectedPersonality.toString();
       }
 
       if (sub) {
@@ -911,7 +919,7 @@ const EditProfile = ({route}: EditProfileProps) => {
               <SelectableButton
                 buttonData={personalityData}
                 onPress={handleSelectedPersonality}
-                customerPersonality={customerDetails?.personalityType || ''}
+                initialSelections={selectedPersonality}
               />
             </View>
           </View>

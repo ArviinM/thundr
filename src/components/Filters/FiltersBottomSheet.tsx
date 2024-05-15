@@ -9,7 +9,7 @@ import React, {
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
-  BottomSheetScrollView,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import {COLORS, SIZES, width} from '../../constants/commons.ts';
 import {
@@ -17,6 +17,8 @@ import {
   convertFullWordsToAbbreviations,
   scale,
 } from '../../utils/utils.ts';
+
+import {ScrollView} from 'react-native-gesture-handler';
 
 import LetterGradientButton from '../shared/LetterGradientButton.tsx';
 import Button from '../shared/Button.tsx';
@@ -27,6 +29,10 @@ import Toast from 'react-native-toast-message';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../utils/queryClient.ts';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import InterestButtonContainer from '../CustomerInterest/InterestButtonContainer.tsx';
+import {interestOptions, starSignOptions} from '../CustomerInterest/options.ts';
+import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
+import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
 
 export type Ref = BottomSheetModal;
 interface FiltersBottomSheetModalProps {
@@ -66,6 +72,45 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       convertFullWordsToAbbreviations(getCustomerFilters.data?.gender || ''),
     );
 
+    const currentFilteredStarSign = getCustomerFilters.data?.starSign || '';
+    const starSignArray = currentFilteredStarSign.split(',');
+    const [selectedStarSign, setSelectedStarSign] = useState<string[]>([]);
+
+    const currentCustomerInterest = getCustomerFilters.data?.hobbies || '';
+    const interestsArray = currentCustomerInterest.split(',');
+    const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+
+    const currentFilteredPersonality =
+      getCustomerFilters.data?.personalityType || '';
+    const filteredPersonalityArray = currentFilteredPersonality.split(',');
+    const [selectedPersonality, setSelectedPersonality] = useState<string[]>(
+      [],
+    );
+
+    useEffect(() => {
+      const cleanedInterests = interestsArray
+        .map((interest: string) => interest.trim()) // Trim each element
+        .filter((interest: string) => interest !== ''); // Filter empty elements
+
+      setSelectedInterests(cleanedInterests);
+    }, [currentCustomerInterest]);
+
+    useEffect(() => {
+      const cleanedStarSign = starSignArray
+        .map((starSign: string) => starSign.trim()) // Trim each element
+        .filter((starSign: string) => starSign !== ''); // Filter empty elements
+
+      setSelectedStarSign(cleanedStarSign);
+    }, [currentFilteredStarSign]);
+
+    useEffect(() => {
+      const cleanedPersonality = filteredPersonalityArray
+        .map((personality: string) => personality.trim()) // Trim each element
+        .filter((personality: string) => personality !== ''); // Filter empty elements
+
+      setSelectedPersonality(cleanedPersonality);
+    }, [currentFilteredPersonality]);
+
     const ageSliderChange = (range: number[]) => {
       setMinValue(range[0]);
       setMaxValue(range[1]);
@@ -86,9 +131,22 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       });
     };
 
+    const handleSelectionChangeStarSign = (newSelectedOptions: string[]) => {
+      setSelectedStarSign(newSelectedOptions);
+    };
+
+    const handleSelectionChange = (newSelectedOptions: string[]) => {
+      setSelectedInterests(newSelectedOptions);
+    };
+
+    const handleSelectedPersonality = (newSelectedOptions: string[]) => {
+      setSelectedPersonality(newSelectedOptions);
+    };
+
     const handleSubmit = async () => {
       try {
         isLoading(true);
+
         await customerFilters.mutateAsync({
           sub: props.sub,
           updateDate: Date.now().toString(),
@@ -96,6 +154,9 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
           ageMax: (maxValue + 35).toString(),
           ageMin: (minValue + 35).toString(),
           gender: convertAbbreviationsToFullWords(selectedLetters),
+          hobbies: selectedInterests.toString() || '',
+          starSign: selectedStarSign.toString() || '',
+          personalityType: selectedPersonality.toString() || '',
         });
 
         await query.invalidateQueries({
@@ -148,8 +209,14 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
         {getCustomerFilters.isLoading ? (
           <Loading />
         ) : (
-          <BottomSheetScrollView>
-            <View style={styles.contentContainer}>
+          <>
+            <View
+              style={{
+                backgroundColor: COLORS.white,
+                flex: 1,
+                zIndex: 1000,
+                padding: 20,
+              }}>
               <Button
                 onPress={handleSubmit}
                 text="Save"
@@ -157,141 +224,208 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                 textStyle={styles.buttonText}
                 loading={loading}
               />
-              <Text style={styles.containerHeadline}>Filters</Text>
-              <Text style={styles.containerSubTitle}>
-                There are plenty of fishes in the sea; make sure they are{'\n'}
-                the right age and location, mars
-              </Text>
             </View>
-            <View style={styles.scrollViewContainer}>
-              <View style={styles.filterContainer}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.titleFilterText}>Age Range</Text>
-                  <Text style={styles.subTitleFilterText}>
-                    {minValue + 35}-{maxValue + 35}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    padding: scale(10),
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  {/* Slider Here */}
-                  <MultiSlider
-                    values={[minValue, maxValue]}
-                    onValuesChange={ageSliderChange}
-                    sliderLength={width / 1.27}
-                    min={0}
-                    max={45}
-                    step={1}
-                    snapped
-                    containerStyle={{
+            <ScrollView>
+              <BottomSheetView style={styles.contentContainer}>
+                <Text style={styles.containerHeadline}>Filters</Text>
+                <Text style={styles.containerSubTitle}>
+                  There are plenty of fishes in the sea; make sure they are
+                  {'\n'}
+                  the right age and location, mars
+                </Text>
+              </BottomSheetView>
+              <BottomSheetView style={styles.scrollViewContainer}>
+                <View style={styles.filterContainer}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.titleFilterText}>Age Range</Text>
+                    <Text style={styles.subTitleFilterText}>
+                      {minValue + 35}-{maxValue + 35}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      padding: scale(10),
                       justifyContent: 'center',
                       alignItems: 'center',
-                      // borderWidth: 1,
-                      height: 40,
-                    }}
-                    selectedStyle={{
-                      backgroundColor: COLORS.primary1,
-                      // height: 10,
-                      borderRadius: 20,
-                    }}
-                    unselectedStyle={{
-                      backgroundColor: COLORS.gray2,
-                      // height: 10,
-                      borderRadius: 20,
-                    }}
-                    markerStyle={{
-                      backgroundColor: COLORS.white,
-                      width: 32,
-                      height: 32,
-                      borderRadius: 30,
-                      borderColor: COLORS.primary1,
-                      borderWidth: 5,
-                    }}
-                    touchDimensions={{
-                      height: 40,
-                      width: 40,
-                      borderRadius: 20,
-                      slipDisplacement: 40,
-                    }}
-                  />
-                </View>
-              </View>
-              <View style={styles.filterContainer}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.titleFilterText}>Proximity</Text>
-                  <Text style={styles.subTitleFilterText}>
-                    up to {proximityValue}km away
-                  </Text>
-                </View>
-                <View style={{margin: scale(10)}}>
-                  {/* Slider Here */}
-                  <MultiSlider
-                    values={proximityValue}
-                    onValuesChange={proximityValueChange}
-                    sliderLength={width / 1.27}
-                    min={2}
-                    max={250}
-                    step={1}
-                    snapped
-                    containerStyle={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: 40,
-                    }}
-                    selectedStyle={{
-                      backgroundColor: COLORS.primary1,
-                      borderRadius: 20,
-                    }}
-                    unselectedStyle={{
-                      backgroundColor: COLORS.gray2,
-                      // height: 10,
-                      borderRadius: 20,
-                    }}
-                    markerStyle={{
-                      backgroundColor: COLORS.white,
-                      width: 32,
-                      height: 32,
-                      borderRadius: 30,
-                      borderColor: COLORS.primary1,
-                      borderWidth: 5,
-                    }}
-                    touchDimensions={{
-                      height: 40,
-                      width: 40,
-                      borderRadius: 20,
-                      slipDisplacement: 40,
-                    }}
-                  />
-                </View>
-              </View>
-              <View style={styles.filterContainer}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.titleFilterText}>Gender</Text>
-                  <Text style={styles.subTitleFilterText}>Choose up to 4</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around',
-                    marginVertical: 10,
-                  }}>
-                  {/* Selectable Genders Here */}
-                  {letters.map((letter, index) => (
-                    <LetterGradientButton
-                      key={index}
-                      letter={letter}
-                      selectedLetters={selectedLetters}
-                      onChange={handleLetterChange}
+                    }}>
+                    {/* Slider Here */}
+                    <MultiSlider
+                      values={[minValue, maxValue]}
+                      onValuesChange={ageSliderChange}
+                      sliderLength={width / 1.27}
+                      min={0}
+                      max={45}
+                      step={1}
+                      snapped
+                      containerStyle={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        // borderWidth: 1,
+                        height: 40,
+                      }}
+                      selectedStyle={{
+                        backgroundColor: COLORS.primary1,
+                        // height: 10,
+                        borderRadius: 20,
+                      }}
+                      unselectedStyle={{
+                        backgroundColor: COLORS.gray2,
+                        // height: 10,
+                        borderRadius: 20,
+                      }}
+                      markerStyle={{
+                        backgroundColor: COLORS.white,
+                        width: 32,
+                        height: 32,
+                        borderRadius: 30,
+                        borderColor: COLORS.primary1,
+                        borderWidth: 5,
+                      }}
+                      touchDimensions={{
+                        height: 40,
+                        width: 40,
+                        borderRadius: 20,
+                        slipDisplacement: 40,
+                      }}
                     />
-                  ))}
+                  </View>
                 </View>
-              </View>
-            </View>
-          </BottomSheetScrollView>
+                <View style={styles.filterContainer}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.titleFilterText}>Proximity</Text>
+                    <Text style={styles.subTitleFilterText}>
+                      up to {proximityValue}km away
+                    </Text>
+                  </View>
+                  <View style={{margin: scale(10)}}>
+                    {/* Slider Here */}
+                    <MultiSlider
+                      values={proximityValue}
+                      onValuesChange={proximityValueChange}
+                      sliderLength={width / 1.27}
+                      min={2}
+                      max={250}
+                      step={1}
+                      snapped
+                      containerStyle={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 40,
+                      }}
+                      selectedStyle={{
+                        backgroundColor: COLORS.primary1,
+                        borderRadius: 20,
+                      }}
+                      unselectedStyle={{
+                        backgroundColor: COLORS.gray2,
+                        // height: 10,
+                        borderRadius: 20,
+                      }}
+                      markerStyle={{
+                        backgroundColor: COLORS.white,
+                        width: 32,
+                        height: 32,
+                        borderRadius: 30,
+                        borderColor: COLORS.primary1,
+                        borderWidth: 5,
+                      }}
+                      touchDimensions={{
+                        height: 40,
+                        width: 40,
+                        borderRadius: 20,
+                        slipDisplacement: 40,
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={styles.filterContainer}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.titleFilterText}>Gender</Text>
+                    <Text style={styles.subTitleFilterText}>
+                      Choose up to 4
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-around',
+                      marginVertical: 10,
+                    }}>
+                    {/* Selectable Genders Here */}
+                    {letters.map((letter, index) => (
+                      <LetterGradientButton
+                        key={index}
+                        letter={letter}
+                        selectedLetters={selectedLetters}
+                        onChange={handleLetterChange}
+                      />
+                    ))}
+                  </View>
+                </View>
+              </BottomSheetView>
+              <BottomSheetView style={styles.contentContainerAdvanced}>
+                <Text style={styles.containerHeadline}>Advanced Filters</Text>
+                <Text style={styles.containerSubTitle}>
+                  More filters, more fun. Gora na!
+                </Text>
+              </BottomSheetView>
+              <BottomSheetView style={styles.scrollViewContainer}>
+                <View style={styles.filterContainer}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.titleFilterText}>Star Sign</Text>
+                    <Text style={styles.subTitleFilterText}>
+                      Choose up to 4
+                    </Text>
+                  </View>
+                  <View style={{marginVertical: scale(6)}}>
+                    {/*  Star Sign Filter Options */}
+                    <View>
+                      <InterestButtonContainer
+                        options={starSignOptions}
+                        onSelectionChange={handleSelectionChangeStarSign}
+                        selectedOptions={selectedStarSign}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.filterContainer}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.titleFilterText}>Interest</Text>
+                    <Text style={styles.subTitleFilterText}>
+                      Choose up to 4
+                    </Text>
+                  </View>
+                  <View style={{marginVertical: scale(6)}}>
+                    {/*  Interest Filter Options */}
+                    <View>
+                      <InterestButtonContainer
+                        options={interestOptions}
+                        onSelectionChange={handleSelectionChange}
+                        selectedOptions={selectedInterests}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.filterContainer}>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.titleFilterText}>Personality Type</Text>
+                    <Text style={styles.subTitleFilterText}>
+                      Choose up to 2
+                    </Text>
+                  </View>
+                  <View>
+                    <SelectableButton
+                      buttonData={personalityData}
+                      onPress={handleSelectedPersonality}
+                      initialSelections={selectedPersonality}
+                      maxSelections={2}
+                    />
+                  </View>
+                </View>
+              </BottomSheetView>
+            </ScrollView>
+          </>
         )}
       </BottomSheetModal>
     );
@@ -307,6 +441,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray2,
+  },
+  contentContainerAdvanced: {
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.gray2,
   },
   containerHeadline: {
     fontSize: SIZES.h3,

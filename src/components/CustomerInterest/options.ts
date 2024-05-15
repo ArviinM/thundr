@@ -25,3 +25,18 @@ export const interestOptions = [
   'Food & Drinks',
   'Sports & Games',
 ];
+
+export const starSignOptions = [
+  'Aries',
+  'Taurus',
+  'Gemini',
+  'Cancer',
+  'Leo',
+  'Virgo',
+  'Scorpio',
+  'Sagittarius',
+  'Capricorn',
+  'Aquarius',
+  'Pisces',
+  'Libra',
+];

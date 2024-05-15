@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -18,31 +18,41 @@ export interface ButtonData {
 
 interface SelectableButtonProps {
   buttonData: ButtonData[];
-  onPress?: (index: number, text: string) => void;
-  disabledIndex?: number;
-  customerPersonality?: string;
+  onPress: (selectedButtons: string[]) => void;
+  maxSelections?: number; // New prop to control selection limit
+  initialSelections?: string[]; // Prop for pre-selected values
 }
 
 const SelectableButton = ({
   buttonData,
   onPress,
-  disabledIndex,
-  customerPersonality,
+  maxSelections = 1, // Default to single selection
+  initialSelections = [],
 }: SelectableButtonProps) => {
-  const [selectedButton, setSelectedButton] = useState<number | null>(
-    customerPersonality
-      ? buttonData.findIndex(button => button.title === customerPersonality)
-      : buttonData.length === 1
-      ? 0
-      : null,
-  );
+  const [selectedButtons, setSelectedButtons] =
+    useState<string[]>(initialSelections);
 
-  const handleButtonPress = (index: number, text: string) => {
-    if (disabledIndex !== index) {
-      setSelectedButton(index);
-      if (onPress) {
-        onPress(index, text);
-      }
+  useEffect(() => {
+    setSelectedButtons(initialSelections);
+  }, [initialSelections]);
+
+  const handleSelect = (buttonTitle: string) => {
+    const isSelected = selectedButtons.includes(buttonTitle);
+
+    if (isSelected) {
+      // Deselect the button
+      const newSelectedOptions = selectedButtons.filter(
+        item => item !== buttonTitle,
+      );
+      setSelectedButtons(newSelectedOptions);
+      onPress(newSelectedOptions);
+    } else if (selectedButtons.length >= maxSelections) {
+      return; // Prevent selection if limit is reached
+    } else {
+      // Select the button
+      const newSelectedOptions = [...selectedButtons, buttonTitle];
+      setSelectedButtons(newSelectedOptions);
+      onPress(newSelectedOptions);
     }
   };
 
@@ -53,17 +63,14 @@ const SelectableButton = ({
           key={index}
           style={[
             styles.button,
-            selectedButton === index && styles.selectedButton,
-            disabledIndex === index && styles.disabledButton,
+            selectedButtons.includes(button.title) && styles.selectedButton,
           ]}
-          onPress={() => handleButtonPress(index, button.title)}
-          disabled={disabledIndex === index}>
+          onPress={() => handleSelect(button.title)}>
           <View style={styles.imageContainer}>
             <Image
               style={styles.image}
-              // resizeMode="contain"
               source={
-                selectedButton === index
+                selectedButtons.includes(button.title)
                   ? button.selectedImage
                   : button.defaultImage
               }

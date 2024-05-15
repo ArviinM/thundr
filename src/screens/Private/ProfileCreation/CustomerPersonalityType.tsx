@@ -26,26 +26,22 @@ const CustomerPersonalityType = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [loading, isLoading] = useState(false);
   const auth = useAuth();
-  const [selectedPersonality, setSelectedPersonality] = useState<{
-    index: number;
-    text: string;
-  }>();
+  const [selectedPersonality, setSelectedPersonality] = useState<string[]>([]);
 
   const updateCustomerDetails = useCustomerDetailsStore(
     state => state.updateCustomerDetails,
   );
 
-  const handleSelectedPersonality = (index: number, text: string) => {
-    setSelectedPersonality({index, text});
+  const handleSelectedPersonality = (newSelectedOptions: string[]) => {
+    setSelectedPersonality(newSelectedOptions);
   };
 
   const onSubmit = async () => {
     try {
       isLoading(true);
-      console.log(selectedPersonality?.text);
 
       updateCustomerDetails({
-        personalityType: selectedPersonality?.text,
+        personalityType: selectedPersonality.toString(),
       });
 
       isLoading(false);
@@ -89,6 +85,7 @@ const CustomerPersonalityType = () => {
               <SelectableButton
                 buttonData={personalityData}
                 onPress={handleSelectedPersonality}
+                initialSelections={selectedPersonality}
               />
             </View>
           </View>
