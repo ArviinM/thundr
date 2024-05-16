@@ -253,7 +253,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             <ChatInput
               isMare={isMare}
               onPressSend={handleSendMessage}
-              onPressImage={handleImageUpload}
+              onPressImage={() => handleImageUpload(false)}
               onPressCamera={() => handleImageUpload(true)}
             />
           </KeyboardStickyView>
