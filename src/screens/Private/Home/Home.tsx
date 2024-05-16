@@ -64,26 +64,12 @@ const Home = () => {
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
 
-  useEffect(() => {
-    if (matchList.isPending) {
-      matchList.refetch();
+  const fetchMore = async () => {
+    if (matchList.isRefetching) {
+      return;
     }
-  }, []);
 
-  useAnimatedReaction(
-    () => activeIndex.value,
-    (value, prevValue) => {
-      if (Math.floor(value) !== index) {
-        runOnJS(setIndex)(Math.floor(value));
-      }
-      if (prevValue) {
-        runOnJS(setPreviousValue)(Math.floor(prevValue));
-      }
-    },
-  );
-
-  useEffect(() => {
-    if (index && matchList.data) {
+    if (matchList.data) {
       if (index > matchList.data.length - 1) {
         console.log('Fetching Matches 🚀');
 
@@ -111,6 +97,30 @@ const Home = () => {
           return value;
         });
       }
+    }
+  };
+
+  useEffect(() => {
+    if (matchList.isPending) {
+      matchList.refetch();
+    }
+  }, []);
+
+  useAnimatedReaction(
+    () => activeIndex.value,
+    (value, prevValue) => {
+      if (Math.floor(value) !== index) {
+        runOnJS(setIndex)(Math.floor(value));
+      }
+      if (prevValue) {
+        runOnJS(setPreviousValue)(Math.floor(prevValue));
+      }
+    },
+  );
+
+  useEffect(() => {
+    if (index && matchList.data) {
+      fetchMore();
     }
   }, [index]);
 

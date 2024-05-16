@@ -126,6 +126,8 @@ const AuthProvider = ({children}: AuthProviderProps) => {
           chatRoomID: event.data.chatRoomID,
           isRead: event.data.isRead,
         });
+        query.refetchQueries({queryKey: ['get-chat-list']});
+
         query.setQueriesData(
           {queryKey: ['get-chat-message']},
           (oldData: any) => {
@@ -145,6 +147,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
             }
           },
         );
+
         query.refetchQueries({queryKey: ['get-chat-list']});
       });
     }
