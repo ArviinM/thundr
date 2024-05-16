@@ -1,17 +1,14 @@
 import {create} from 'zustand';
-import {persist, createJSONStorage} from 'zustand/middleware';
-import {AuthDataResponse, AuthStoreState} from '../types/generated.ts';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthDataResponse} from '../types/generated.ts';
 
-export const useAuthStore = create<AuthStoreState>()(
-  persist(
-    set => ({
-      authData: undefined,
-      setAuthData: (data: AuthDataResponse) => set({authData: data}),
-    }),
-    {
-      name: 'auth-storage',
-      storage: createJSONStorage(() => AsyncStorage),
-    },
-  ),
-);
+// Define the type for your store state
+type AuthStoreState = {
+  authData: AuthDataResponse | undefined;
+  setAuthData: (data: AuthDataResponse) => void;
+};
+
+// Define the initial state and actions for the store
+export const useAuthStore = create<AuthStoreState>(set => ({
+  authData: undefined,
+  setAuthData: (data: AuthDataResponse) => set({authData: data}),
+}));
