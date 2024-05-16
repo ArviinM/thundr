@@ -80,7 +80,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
                 customerData: user.profile,
               }}
               possibles={false}
-              isUser
+              isReport={true}
             />
           </View>
         </Animated.View>

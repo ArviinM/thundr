@@ -41,6 +41,7 @@ const AnimatedImage =
 type ProfileCardProps = {
   user: CustomerMatchResponse;
   isUser?: boolean;
+  isReport?: boolean;
   possibles?: boolean;
   nextAction?: number;
   isCountdownTimer?: boolean;
@@ -49,6 +50,7 @@ type ProfileCardProps = {
 const ProfileCard = ({
   user,
   isUser = false,
+  isReport = false,
   possibles,
   nextAction,
   isCountdownTimer,
@@ -341,7 +343,7 @@ const ProfileCard = ({
               />
             )}
           </View>
-          {!isUser && (
+          {!isReport && (
             <View style={cardStyles.reportContainer}>
               <TouchableOpacity
                 style={{

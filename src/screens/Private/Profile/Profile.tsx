@@ -35,6 +35,7 @@ const Profile = () => {
                   customerData: customerProfile.data,
                 }}
                 isUser={true}
+                isReport={true}
               />
             </View>
           )
