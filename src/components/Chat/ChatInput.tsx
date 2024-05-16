@@ -15,10 +15,12 @@ const ChatInput = ({
   isMare,
   onPressSend,
   onPressImage,
+  onPressCamera,
 }: {
   isMare: boolean;
   onPressSend: (message: string) => void;
   onPressImage: () => void;
+  onPressCamera: () => void;
 }) => {
   const [inputText, setInputText] = useState<string>('');
 
@@ -39,7 +41,7 @@ const ChatInput = ({
           placeholderTextColor={'#ffffff'}
           maxLength={255}
         />
-        <TouchableOpacity onPress={onPressImage} style={{paddingRight: 16}}>
+        <TouchableOpacity onPress={onPressCamera} style={{paddingRight: 16}}>
           <CameraIcon />
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressImage} style={{paddingRight: 16}}>
