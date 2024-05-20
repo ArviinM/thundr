@@ -140,7 +140,10 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
             </View>
             <View style={styles.titleContainer}>
               <Text style={styles.textTitle}>Last na. Promise!</Text>
-              <Text style={styles.textSubtitle}>Create your password</Text>
+              <Text style={styles.textSubtitle}>
+                Create a password with uppercase and lowercase letters, numbers,
+                and special characters.
+              </Text>
               {/* Password Input Section */}
               <View style={styles.passwordContainer}>
                 <View style={styles.textInputContainer}>
