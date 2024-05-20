@@ -69,7 +69,7 @@
   },
   "INCORRECT_USER_OR_PASSWORD": {
     "title": "Incorrect user or password",
-    "body": "You user or password might be incorrect, please try again."
+    "body": "Your user or password might be incorrect, please try again."
   },
   "UPSERT_COMPATIBILITY_ANSWER_SUCCESS": {
     "title": "Compatibility Updated",
