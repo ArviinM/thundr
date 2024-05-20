@@ -20,7 +20,7 @@ import {Day} from '../../../components/Chat/Day.tsx';
 import Bubbles from '../../../components/Chat/Bubbles.tsx';
 
 // Utils
-import {Platform, Text, View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {COLORS} from '../../../constants/commons.ts';
 import {MAX_IMAGE_SIZE_BYTES, scale} from '../../../utils/utils.ts';
@@ -206,60 +206,61 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       style={{flex: 1, backgroundColor: COLORS.white}}>
       {chatMessage.isLoading ? (
         <Loading />
-      ) : chatMessage.isSuccess && user ? (
-        <View style={{flex: 1, backgroundColor: COLORS.white}}>
-          {/*Chat Message Header*/}
-          <ChatHeader user={user} isMare={isMare} />
-          {/*Chat Message Bubbles*/}
-          <KeyboardAvoidingView
-            style={{flex: 1}}
-            behavior={'padding'}
-            keyboardVerticalOffset={
-              Platform.OS === 'ios' ? scale(120) : scale(100)
-            }>
-            <GiftedChat
-              messages={chatMessage.data?.pages.flatMap(page => page) || []}
-              renderAvatar={null}
-              user={{_id: user.sub}}
-              minComposerHeight={0}
-              maxComposerHeight={0}
-              minInputToolbarHeight={0}
-              infiniteScroll
-              loadEarlier
-              onLoadEarlier={async () => {
-                if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
-                  return;
-                }
-                await chatMessage.fetchNextPage();
-              }}
-              scrollToBottom
-              bottomOffset={0}
-              isKeyboardInternallyHandled={false}
-              isLoadingEarlier={chatMessage.isFetchingNextPage}
-              renderInputToolbar={() => null}
-              renderDay={props => <Day {...props} />}
-              renderBubble={(props: Readonly<BubbleProps<IMessage>>) => (
-                <Bubbles props={props} user={user} isMare={isMare} />
-              )}
-              scrollToBottomStyle={{
-                backgroundColor: 'rgba(0,0,0,0)',
-              }}
-              scrollToBottomComponent={() => <ScrollBottom />}
-            />
-          </KeyboardAvoidingView>
-          {/*Chat Text Input*/}
-          <KeyboardStickyView
-            offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
-            <ChatInput
-              isMare={isMare}
-              onPressSend={handleSendMessage}
-              onPressImage={() => handleImageUpload(false)}
-              onPressCamera={() => handleImageUpload(true)}
-            />
-          </KeyboardStickyView>
-        </View>
       ) : (
-        <Text>If you saw me, please do report.</Text>
+        chatMessage.isSuccess &&
+        user && (
+          <View style={{flex: 1, backgroundColor: COLORS.white}}>
+            {/*Chat Message Header*/}
+            <ChatHeader user={user} isMare={isMare} />
+            {/*Chat Message Bubbles*/}
+            <KeyboardAvoidingView
+              style={{flex: 1}}
+              behavior={'padding'}
+              keyboardVerticalOffset={
+                Platform.OS === 'ios' ? scale(120) : scale(100)
+              }>
+              <GiftedChat
+                messages={chatMessage.data?.pages.flatMap(page => page) || []}
+                renderAvatar={null}
+                user={{_id: user.sub}}
+                minComposerHeight={0}
+                maxComposerHeight={0}
+                minInputToolbarHeight={0}
+                infiniteScroll
+                loadEarlier
+                onLoadEarlier={async () => {
+                  if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
+                    return;
+                  }
+                  await chatMessage.fetchNextPage();
+                }}
+                scrollToBottom
+                bottomOffset={0}
+                isKeyboardInternallyHandled={false}
+                isLoadingEarlier={chatMessage.isFetchingNextPage}
+                renderInputToolbar={() => null}
+                renderDay={props => <Day {...props} />}
+                renderBubble={(props: Readonly<BubbleProps<IMessage>>) => (
+                  <Bubbles props={props} user={user} isMare={isMare} />
+                )}
+                scrollToBottomStyle={{
+                  backgroundColor: 'rgba(0,0,0,0)',
+                }}
+                scrollToBottomComponent={() => <ScrollBottom />}
+              />
+            </KeyboardAvoidingView>
+            {/*Chat Text Input*/}
+            <KeyboardStickyView
+              offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
+              <ChatInput
+                isMare={isMare}
+                onPressSend={handleSendMessage}
+                onPressImage={() => handleImageUpload(false)}
+                onPressCamera={() => handleImageUpload(true)}
+              />
+            </KeyboardStickyView>
+          </View>
+        )
       )}
     </SafeAreaView>
   );
