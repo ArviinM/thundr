@@ -576,3 +576,15 @@ export type ReportCustomerRequest = {
   reportCategory: {type: string; category: string};
   remark: string;
 };
+
+// Handoff Session for Payment to External
+export type HandoffSessionRequest = {
+  sub: string;
+  session: string;
+};
+
+export type HandoffSessionResponse = {
+  sub: string;
+  key: string;
+  session: string;
+};

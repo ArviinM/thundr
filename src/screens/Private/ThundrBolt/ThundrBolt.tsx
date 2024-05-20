@@ -25,6 +25,8 @@ import Toast from 'react-native-toast-message';
 import GenericModal from '../../../components/shared/GenericModal.tsx';
 import Button from '../../../components/shared/Button.tsx';
 import {API_PAYMENT_URL} from '@env';
+import {useHandoffSession} from '../../../hooks/auth/useHandoffSession.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 type ThundrBoltRouteProp = RouteProp<RootNavigationParams, 'ThundrBoltModal'>;
 
@@ -36,6 +38,13 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
   const {isModal} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const [visible, isVisible] = useState<boolean>(false);
+
+  const {authData} = useAuth();
+  const handoffKey = useHandoffSession();
+
+  const [selectedTerm, setSelectedTerm] = useState<'yearly' | 'monthly'>(
+    'yearly',
+  ); // State to track selection
 
   return (
     <SafeAreaView
@@ -73,8 +82,18 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
             <View>
               <GradientButton
                 onPress={async () => {
-                  if (API_PAYMENT_URL) {
-                    await Linking.openURL(API_PAYMENT_URL);
+                  if (API_PAYMENT_URL && authData) {
+                    const result = await handoffKey.mutateAsync({
+                      sub: authData?.sub,
+                      session: authData.accessToken,
+                    });
+
+                    // await Linking.openURL(
+                    //   `${API_PAYMENT_URL}/auth/handoff?key=${result.key}`,
+                    // );
+                    await Linking.openURL(
+                      `http://localhost:5173/auth/handoff?key=${result.key}&term=${selectedTerm}`,
+                    );
                   } else {
                     Toast.show({
                       type: 'THNRInfo',
@@ -90,6 +109,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
                 text="Proceed"
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
+                loading={handoffKey.isPending}
               />
               <Button
                 onPress={() => {
@@ -158,14 +178,18 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
           }}>
           {/*terms pickers*/}
           <TouchableOpacity
+            onPress={() => setSelectedTerm('yearly')}
             style={{
               flex: 1,
-              borderWidth: 1.5,
+              borderWidth: selectedTerm === 'yearly' ? 1.5 : 0,
               margin: scale(13),
               paddingHorizontal: scale(18),
               paddingVertical: scale(12),
               borderRadius: 10,
-              borderColor: COLORS.primary1,
+              borderColor:
+                selectedTerm === 'yearly' ? COLORS.primary1 : 'transparent',
+              backgroundColor:
+                selectedTerm === 'yearly' ? COLORS.white : '#F3F4F7',
             }}>
             {/*yearly*/}
             <View>
@@ -209,6 +233,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => setSelectedTerm('monthly')}
             style={{
               flex: 1,
               // borderWidth: 1.5,
@@ -216,8 +241,11 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
               paddingHorizontal: scale(18),
               paddingVertical: scale(12),
               borderRadius: 10,
-              // borderColor: COLORS.primary1,
-              backgroundColor: '#F3F4F7',
+              borderColor:
+                selectedTerm === 'yearly' ? 'transparent' : COLORS.primary1,
+              borderWidth: selectedTerm === 'yearly' ? 0 : 1.5,
+              backgroundColor:
+                selectedTerm === 'yearly' ? '#F3F4F7' : COLORS.white,
             }}>
             {/*monthly*/}
             <View>
