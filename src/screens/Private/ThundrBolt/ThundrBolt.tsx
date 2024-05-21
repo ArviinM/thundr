@@ -88,11 +88,8 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
                       session: authData.accessToken,
                     });
 
-                    // await Linking.openURL(
-                    //   `${API_PAYMENT_URL}/auth/handoff?key=${result.key}`,
-                    // );
                     await Linking.openURL(
-                      `http://localhost:5173/auth/handoff?key=${result.key}&term=${selectedTerm}`,
+                      `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&term=${selectedTerm}`,
                     );
                   } else {
                     Toast.show({
