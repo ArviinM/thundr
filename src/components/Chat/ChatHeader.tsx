@@ -21,6 +21,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import ProfileCard from '../Home/ProfileCard.tsx';
 
 import {Image as ImageExpo} from 'expo-image';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -57,33 +58,37 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
         visible={isVisible}
         onDismiss={() => setIsVisible(false)}
         onRequestClose={() => setIsVisible(false)}>
-        <Animated.View
-          style={[
-            styles.container,
-            {opacity, transform: [{scale: scaleAnim}]},
-          ]}>
-          <View style={[styles.bodyContainer, {marginBottom: 20}]}>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                {
-                  backgroundColor: isMare ? COLORS.secondary2 : COLORS.primary1,
-                },
-              ]}
-              onPress={() => setIsVisible(false)}>
-              <Text style={[styles.buttonText]}>Close</Text>
-            </TouchableOpacity>
-            <ProfileCard
-              user={{
-                sub: '',
-                percent: '',
-                customerData: user.profile,
-              }}
-              possibles={false}
-              isReport={true}
-            />
-          </View>
-        </Animated.View>
+        <GestureHandlerRootView style={{flex: 1}}>
+          <Animated.View
+            style={[
+              styles.container,
+              {opacity, transform: [{scale: scaleAnim}]},
+            ]}>
+            <View style={[styles.bodyContainer, {marginBottom: 20}]}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor: isMare
+                      ? COLORS.secondary2
+                      : COLORS.primary1,
+                  },
+                ]}
+                onPress={() => setIsVisible(false)}>
+                <Text style={[styles.buttonText]}>Close</Text>
+              </TouchableOpacity>
+              <ProfileCard
+                user={{
+                  sub: '',
+                  percent: '',
+                  customerData: user.profile,
+                }}
+                possibles={false}
+                isReport={true}
+              />
+            </View>
+          </Animated.View>
+        </GestureHandlerRootView>
       </Modal>
     );
   };
