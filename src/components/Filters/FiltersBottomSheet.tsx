@@ -33,6 +33,7 @@ import InterestButtonContainer from '../CustomerInterest/InterestButtonContainer
 import {interestOptions, starSignOptions} from '../CustomerInterest/options.ts';
 import SelectableButton from '../CustomerPersonalityType/SelectableButton.tsx';
 import {personalityData} from '../CustomerPersonalityType/personalityData.ts';
+import useSubscribeCheck from '../../store/subscribeStore.ts';
 
 export type Ref = BottomSheetModal;
 interface FiltersBottomSheetModalProps {
@@ -41,7 +42,11 @@ interface FiltersBottomSheetModalProps {
 
 const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
   (props, ref) => {
-    const disabled = true;
+    const isCustomerSubscribed = useSubscribeCheck(
+      state => state.isCustomerSubscribed,
+    );
+
+    console.log({isCustomerSubscribed});
     const [loading, isLoading] = useState<boolean>(false);
     const getCustomerFilters = useGetCustomerFilters({sub: props.sub});
     const customerFilters = useCustomerFilters();
@@ -370,7 +375,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                   <Text
                     style={[
                       styles.containerHeadline,
-                      disabled && {color: COLORS.gray2},
+                      !isCustomerSubscribed && {color: COLORS.gray2},
                     ]}>
                     Advanced Filters
                   </Text>
@@ -379,7 +384,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                       styles.containerSubTitle,
                       {marginHorizontal: scale(16)},
                     ]}>
-                    {disabled
+                    {!isCustomerSubscribed
                       ? 'Available for Thunder Bolt users only.\n' +
                         'More filters, more fun! Sign up now for an even more flexible customization.'
                       : 'More filters, more fun. Gora na!'}
@@ -391,14 +396,14 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                       <Text
                         style={[
                           styles.titleFilterText,
-                          disabled && {color: COLORS.gray2},
+                          !isCustomerSubscribed && {color: COLORS.gray2},
                         ]}>
                         Star Sign
                       </Text>
                       <Text
                         style={[
                           styles.subTitleFilterText,
-                          disabled && {color: COLORS.gray2},
+                          !isCustomerSubscribed && {color: COLORS.gray2},
                         ]}>
                         Choose up to 4
                       </Text>
@@ -410,7 +415,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                           options={starSignOptions}
                           onSelectionChange={handleSelectionChangeStarSign}
                           selectedOptions={selectedStarSign}
-                          isDisabled={disabled}
+                          isDisabled={!isCustomerSubscribed}
                         />
                       </View>
                     </View>
@@ -420,14 +425,14 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                       <Text
                         style={[
                           styles.titleFilterText,
-                          disabled && {color: COLORS.gray2},
+                          !isCustomerSubscribed && {color: COLORS.gray2},
                         ]}>
                         Interest
                       </Text>
                       <Text
                         style={[
                           styles.subTitleFilterText,
-                          disabled && {color: COLORS.gray2},
+                          !isCustomerSubscribed && {color: COLORS.gray2},
                         ]}>
                         Choose up to 4
                       </Text>
@@ -439,7 +444,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                           options={interestOptions}
                           onSelectionChange={handleSelectionChange}
                           selectedOptions={selectedInterests}
-                          isDisabled={true}
+                          isDisabled={!isCustomerSubscribed}
                         />
                       </View>
                     </View>
@@ -449,14 +454,14 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                       <Text
                         style={[
                           styles.titleFilterText,
-                          disabled && {color: COLORS.gray2},
+                          !isCustomerSubscribed && {color: COLORS.gray2},
                         ]}>
                         Personality Type
                       </Text>
                       <Text
                         style={[
                           styles.subTitleFilterText,
-                          disabled && {color: COLORS.gray2},
+                          !isCustomerSubscribed && {color: COLORS.gray2},
                         ]}>
                         Choose up to 2
                       </Text>
@@ -467,7 +472,7 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
                         onPress={handleSelectedPersonality}
                         initialSelections={selectedPersonality}
                         maxSelections={2}
-                        isDisabled={disabled}
+                        isDisabled={!isCustomerSubscribed}
                       />
                     </View>
                   </View>

@@ -32,6 +32,7 @@ import {Image as ExpoImage} from 'expo-image';
 import useCountdownStore from '../../store/countdownStore.ts';
 import {queryClient} from '../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
+import useSubscribeCheck from '../../store/subscribeStore.ts';
 
 const AnimatedImage =
   Platform.OS === 'android'
@@ -79,6 +80,9 @@ const ProfileCard = ({
 
   const selectedPersonality = personalityData.find(
     data => data.title === user.customerData.customerDetails.personalityType,
+  );
+  const isCustomerSubscribed = useSubscribeCheck(
+    state => state.isCustomerSubscribed,
   );
 
   const handleTap = (event: any) => {
@@ -365,7 +369,7 @@ const ProfileCard = ({
           )}
         </View>
       </View>
-      {possibles && user.isBlurred && (
+      {possibles && user.isBlurred && !isCustomerSubscribed && (
         <BlurView
           style={{
             position: 'absolute',
@@ -382,191 +386,190 @@ const ProfileCard = ({
         />
       )}
 
-      {possibles && user.isBlurred && countdownTime && (
-        <View
-          style={{
-            position: 'absolute',
-            top: cardHeight / 6,
-            left: 0,
-            right: 0,
-            justifyContent: 'center',
-            width: '100%', // Take full width horizontally
-            alignItems: 'center',
-            borderRadius: 15,
-            flexDirection: 'row',
-            gap: 10,
-          }}>
+      {possibles &&
+        user.isBlurred &&
+        !isCustomerSubscribed &&
+        countdownTime && (
           <View
             style={{
-              flexDirection: 'column',
+              position: 'absolute',
+              top: cardHeight / 6,
+              left: 0,
+              right: 0,
               justifyContent: 'center',
+              width: '100%', // Take full width horizontally
+              alignItems: 'center',
+              borderRadius: 15,
+              flexDirection: 'row',
+              gap: 10,
             }}>
             <View
               style={{
-                backgroundColor: COLORS.secondary2,
-                width: scale(60),
-                height: scale(30),
-                borderTopStartRadius: 10,
-                borderTopEndRadius: 10,
-              }}
-            />
+                flexDirection: 'column',
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: COLORS.secondary2,
+                  width: scale(60),
+                  height: scale(30),
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}
+              />
+              <View
+                style={{
+                  backgroundColor: '#FFB100',
+                  width: scale(60),
+                  height: scale(30),
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontFamily: 'ClimateCrisis-Regular',
+                  fontSize: scale(26),
+                  color: COLORS.white,
+                }}>
+                {countdownTime.hours}
+              </Text>
+
+              <Text
+                style={{
+                  position: 'absolute',
+                  top: scale(-20),
+                  left: 0,
+                  right: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontSize: scale(10),
+                  fontFamily: 'Montserrat-Bold',
+                  color: COLORS.white,
+                }}>
+                hours
+              </Text>
+            </View>
+
             <View
               style={{
-                backgroundColor: '#FFB100',
-                width: scale(60),
-                height: scale(30),
-                borderBottomStartRadius: 10,
-                borderBottomEndRadius: 10,
-              }}
-            />
-            <Text
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
+                flexDirection: 'column',
                 justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                fontFamily: 'ClimateCrisis-Regular',
-                fontSize: scale(26),
-                color: COLORS.white,
               }}>
-              {countdownTime.hours}
-            </Text>
+              <View
+                style={{
+                  backgroundColor: COLORS.secondary2,
+                  width: scale(60),
+                  height: scale(30),
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}
+              />
+              <View
+                style={{
+                  backgroundColor: '#FFB100',
+                  width: scale(60),
+                  height: scale(30),
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontFamily: 'ClimateCrisis-Regular',
+                  fontSize: scale(26),
+                  color: COLORS.white,
+                }}>
+                {countdownTime.minutes}
+              </Text>
 
-            <Text
+              <Text
+                style={{
+                  position: 'absolute',
+                  top: scale(-20),
+                  left: 0,
+                  right: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontSize: scale(10),
+                  fontFamily: 'Montserrat-Bold',
+                  color: COLORS.white,
+                }}>
+                minutes
+              </Text>
+            </View>
+
+            <View
               style={{
-                position: 'absolute',
-                top: scale(-20),
-                left: 0,
-                right: 0,
+                flexDirection: 'column',
                 justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                fontSize: scale(10),
-                fontFamily: 'Montserrat-Bold',
-                color: COLORS.white,
               }}>
-              hours
-            </Text>
+              <View
+                style={{
+                  backgroundColor: COLORS.secondary2,
+                  width: scale(60),
+                  height: scale(30),
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}
+              />
+              <View
+                style={{
+                  backgroundColor: '#FFB100',
+                  width: scale(60),
+                  height: scale(30),
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontFamily: 'ClimateCrisis-Regular',
+                  fontSize: scale(26),
+                  color: COLORS.white,
+                }}>
+                {countdownTime.seconds}
+              </Text>
+
+              <Text
+                style={{
+                  position: 'absolute',
+                  top: scale(-20),
+                  left: 0,
+                  right: 0,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  fontSize: scale(10),
+                  fontFamily: 'Montserrat-Bold',
+                  color: COLORS.white,
+                }}>
+                seconds
+              </Text>
+            </View>
+
           </View>
-
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                backgroundColor: COLORS.secondary2,
-                width: scale(60),
-                height: scale(30),
-                borderTopStartRadius: 10,
-                borderTopEndRadius: 10,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: '#FFB100',
-                width: scale(60),
-                height: scale(30),
-                borderBottomStartRadius: 10,
-                borderBottomEndRadius: 10,
-              }}
-            />
-            <Text
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                fontFamily: 'ClimateCrisis-Regular',
-                fontSize: scale(26),
-                color: COLORS.white,
-              }}>
-              {countdownTime.minutes}
-            </Text>
-
-            <Text
-              style={{
-                position: 'absolute',
-                top: scale(-20),
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                fontSize: scale(10),
-                fontFamily: 'Montserrat-Bold',
-                color: COLORS.white,
-              }}>
-              minutes
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                backgroundColor: COLORS.secondary2,
-                width: scale(60),
-                height: scale(30),
-                borderTopStartRadius: 10,
-                borderTopEndRadius: 10,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: '#FFB100',
-                width: scale(60),
-                height: scale(30),
-                borderBottomStartRadius: 10,
-                borderBottomEndRadius: 10,
-              }}
-            />
-            <Text
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                fontFamily: 'ClimateCrisis-Regular',
-                fontSize: scale(26),
-                color: COLORS.white,
-              }}>
-              {countdownTime.seconds}
-            </Text>
-
-            <Text
-              style={{
-                position: 'absolute',
-                top: scale(-20),
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                fontSize: scale(10),
-                fontFamily: 'Montserrat-Bold',
-                color: COLORS.white,
-              }}>
-              seconds
-            </Text>
-          </View>
-
-          {/*<Text>*/}
-          {/*  Time until next action: {countdownTime.hours}:*/}
-          {/*  {countdownTime.minutes}:{countdownTime.seconds}*/}
-          {/*</Text>*/}
-        </View>
-      )}
+        )}
       {!isUser && (
         <ReportBottomSheetModal
           ref={bottomSheetRef}
