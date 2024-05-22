@@ -48,9 +48,7 @@ export function useSendChatMessage() {
       queryClient.setQueriesData(
         {queryKey: ['get-chat-message']},
         (oldData: any) => {
-          console.log(JSON.stringify(oldData.pages, null, 2));
           if (oldData.pages) {
-            console.log('i was here');
             return {
               ...oldData,
               pages: [
