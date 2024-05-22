@@ -46,7 +46,6 @@ const FiltersBottomSheetModal = forwardRef<Ref, FiltersBottomSheetModalProps>(
       state => state.isCustomerSubscribed,
     );
 
-    console.log({isCustomerSubscribed});
     const [loading, isLoading] = useState<boolean>(false);
     const getCustomerFilters = useGetCustomerFilters({sub: props.sub});
     const customerFilters = useCustomerFilters();

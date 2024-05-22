@@ -143,6 +143,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
                 ],
               };
             } else {
+              query.refetchQueries({queryKey: ['get-chat-message']});
               return oldData;
             }
           },

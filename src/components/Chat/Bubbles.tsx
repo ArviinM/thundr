@@ -13,6 +13,7 @@ import {COLORS, height, width} from '../../constants/commons.ts';
 import {formatTimestamp, scale} from '../../utils/utils.ts';
 import {BubbleProps} from 'react-native-gifted-chat';
 import {Image} from 'expo-image';
+import CheckIcon from '../../assets/images/CheckIcon.tsx';
 
 const Bubbles = ({
   props,
@@ -195,17 +196,62 @@ const Bubbles = ({
                 ]}>
                 {message.text}
               </Text>
-              <Text
-                style={[
-                  styles.timestamp,
-                  isMessageFromSelf(message)
-                    ? isMare
-                      ? {color: COLORS.white}
-                      : {color: COLORS.white}
-                    : styles.timestamp,
-                ]}>
-                {formatTimestamp(message.createdAt)}
-              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  marginRight: -2,
+                }}>
+                <Text
+                  style={[
+                    styles.timestamp,
+                    isMessageFromSelf(message)
+                      ? isMare
+                        ? {color: COLORS.white}
+                        : {color: COLORS.white}
+                      : styles.timestamp,
+                  ]}>
+                  {formatTimestamp(message.createdAt)}
+                </Text>
+                {isMessageFromSelf(message) && message.received && (
+                  <View
+                    style={{
+                      alignItems: 'flex-end',
+                      justifyContent: 'flex-end',
+                      flexDirection: 'row',
+                      gap: -12,
+                    }}>
+                    <CheckIcon isRead />
+                    <CheckIcon isRead />
+                  </View>
+                )}
+
+                {message.sent &&
+                  isMessageFromSelf(message) &&
+                  !message.received && (
+                    <View
+                      style={{
+                        alignItems: 'flex-end',
+                        justifyContent: 'flex-end',
+                        flexDirection: 'row',
+                        gap: -12,
+                      }}>
+                      <CheckIcon />
+                      <CheckIcon />
+                    </View>
+                  )}
+
+                {message.pending && isMessageFromSelf(message) && (
+                  <View
+                    style={{
+                      alignItems: 'flex-end',
+                      justifyContent: 'flex-end',
+                    }}>
+                    <CheckIcon />
+                  </View>
+                )}
+              </View>
             </View>
           )
         )}

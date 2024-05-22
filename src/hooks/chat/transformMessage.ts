@@ -11,6 +11,8 @@ export function transformChatMessageForGiftedChat(
     attachments: message.attachments,
     isRead: message.isRead,
     chatRoomID: message.chatRoomID,
-    // sent: true,
+    pending: message.status === 'pending',
+    sent: message.status !== 'pending',
+    received: message.isRead === 1,
   };
 }
