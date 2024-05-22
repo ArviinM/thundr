@@ -14,6 +14,7 @@ import {formatTimestamp, scale} from '../../utils/utils.ts';
 import {BubbleProps} from 'react-native-gifted-chat';
 import {Image} from 'expo-image';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
+import {Loading} from '../shared/Loading.tsx';
 
 const Bubbles = ({
   props,
@@ -98,9 +99,11 @@ const Bubbles = ({
   const renderImage = ({
     item: attachments,
     isSelf: isSelf,
+    isPending: isPending,
   }: {
     item: Attachment[];
     isSelf: boolean;
+    isPending: boolean;
   }) => {
     // Check if there are exactly 4 attachments
     if (attachments.length === 4) {
@@ -114,18 +117,33 @@ const Bubbles = ({
             gap: scale(2),
           }}>
           {attachments.map((photo, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => {
-                setSelectedImage(photo);
-                setIsVisible(true);
-              }}>
-              <Image
-                source={{uri: photo}}
-                style={[styles.messageImage]}
-                transition={1000}
-              />
-            </TouchableOpacity>
+            <>
+              {isPending ? (
+                <View
+                  style={{
+                    borderRadius: 10,
+                    width: scale(100),
+                    height: scale(100),
+                    aspectRatio: 1,
+                    backgroundColor: COLORS.gray2,
+                  }}>
+                  <Loading />
+                </View>
+              ) : (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    setSelectedImage(photo);
+                    setIsVisible(true);
+                  }}>
+                  <Image
+                    source={{uri: photo}}
+                    style={[styles.messageImage]}
+                    transition={1000}
+                  />
+                </TouchableOpacity>
+              )}
+            </>
           ))}
         </View>
       );
@@ -139,14 +157,33 @@ const Bubbles = ({
             justifyContent: 'flex-end',
           }}>
           {attachments.map((photo, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => {
-                setSelectedImage(photo);
-                setIsVisible(true); // Trigger animation and modal
-              }}>
-              <Image source={{uri: photo}} style={[styles.messageImage]} />
-            </TouchableOpacity>
+            <>
+              {isPending ? (
+                <View
+                  style={{
+                    borderRadius: 10,
+                    width: scale(100),
+                    height: scale(100),
+                    aspectRatio: 1,
+                    backgroundColor: COLORS.gray2,
+                  }}>
+                  <Loading />
+                </View>
+              ) : (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    setSelectedImage(photo);
+                    setIsVisible(true);
+                  }}>
+                  <Image
+                    source={{uri: photo}}
+                    style={[styles.messageImage]}
+                    transition={1000}
+                  />
+                </TouchableOpacity>
+              )}
+            </>
           ))}
         </View>
       );
@@ -169,6 +206,7 @@ const Bubbles = ({
             {renderImage({
               item: message.attachments,
               isSelf: isMessageFromSelf(message),
+              isPending: message.pending || false,
             })}
           </View>
         ) : (

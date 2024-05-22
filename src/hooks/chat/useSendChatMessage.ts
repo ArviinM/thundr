@@ -2,6 +2,7 @@ import {useMutation} from '@tanstack/react-query';
 import {AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
+  Attachment,
   BaseResponse,
   ChatMessage,
   ChatSendMessageRequest,
@@ -36,7 +37,7 @@ export function useSendChatMessage() {
       let newMessage = transformChatMessageForGiftedChat({
         id: data.id || Date.now(),
         message: data.message,
-        attachments: [],
+        attachments: (data.base64Files as Attachment[]) || [],
         created: new Date().toString(),
         senderSub: data.senderSub,
         targetSub: data.targetSub,
