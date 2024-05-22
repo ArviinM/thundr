@@ -39,6 +39,8 @@ import {
 import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
 import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
+import {useGetCustomerSubscribed} from '../../../hooks/subscribe/useGetCustomerSubscribed.ts';
+import useSubscribeCheck from '../../../store/subscribeStore.ts';
 
 const Home = () => {
   const auth = useAuth();
@@ -63,6 +65,15 @@ const Home = () => {
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Explicit type
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
+
+  const customerSubscribed = useGetCustomerSubscribed({
+    sub: auth.authData?.sub || '',
+    productId: 'THDR-BOLT-001',
+  });
+
+  const setIsCustomerSubscribed = useSubscribeCheck(
+    state => state.setIsCustomerSubscribed,
+  );
 
   const fetchMore = async () => {
     if (matchList.isRefetching) {
@@ -270,6 +281,12 @@ const Home = () => {
       getChatList.refetch();
     }
   }, []);
+
+  useEffect(() => {
+    if (customerSubscribed.data) {
+      setIsCustomerSubscribed(customerSubscribed.data.hasSubscription);
+    }
+  }, [customerSubscribed.data]);
 
   useEffect(() => {
     if (matchList.isRefetching) {

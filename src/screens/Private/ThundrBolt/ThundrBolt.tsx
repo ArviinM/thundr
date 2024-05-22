@@ -44,7 +44,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
 
   const [selectedTerm, setSelectedTerm] = useState<'yearly' | 'monthly'>(
     'yearly',
-  ); // State to track selection
+  );
 
   return (
     <SafeAreaView
@@ -89,7 +89,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
                     });
 
                     await Linking.openURL(
-                      `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&term=${selectedTerm}`,
+                      `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
                     );
                   } else {
                     Toast.show({
@@ -273,15 +273,6 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
           <GradientButton
             onPress={() => {
               isVisible(true);
-              // Toast.show({
-              //   type: 'THNRInfo',
-              //   props: {
-              //     title: 'Wait lang mga mars!',
-              //     subtitle: 'Subscribing to ThundrBolt, coming soon na!',
-              //   },
-              //   position: 'top',
-              //   topOffset: 80,
-              // });
             }}
             text="SUBSCRIBE"
             buttonStyle={styles.buttonStyle}
