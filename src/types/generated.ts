@@ -588,3 +588,34 @@ export type HandoffSessionResponse = {
   key: string;
   session: string;
 };
+
+export type OrderIdResponse = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  sub: string;
+  productId: string;
+  productExtraDays: number;
+  customerSubscriptionId: string | null;
+  status: string;
+  amountCents: number;
+  currency: string;
+  paymentMethodId: string | null;
+};
+
+export type CustomerSubscribedRequest = {
+  sub: string;
+  productId: string;
+};
+
+export type CustomerSubscribedResponse = {
+  hasSubscription: boolean;
+  status:
+    | 'ACTIVE'
+    | 'PENDING_RENEWAL'
+    | 'EXPIRED'
+    | 'PENDING_CANCEL'
+    | 'CANCELLED'
+    | 'PENDING_PAYMENT';
+  latestOrder?: OrderIdResponse;
+};
