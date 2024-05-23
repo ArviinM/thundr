@@ -121,33 +121,22 @@ const RootNavigation = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   console.log(socket?.connected);
-  //   if (socket) {
-  //     console.log('now listening to PUSH NOTIF');
-  //     socket.on('PUSH_NOTIFICATION', event => {
-  //       if (event.data.matchPhoto && event.data.chatRoomUuid) {
-  //         navigationRef.navigate('MatchFound', {
-  //           matchPhoto: event.data.matchPhoto,
-  //           sub: event.data.subId,
-  //           isMare: event.data.matchType?.toLowerCase() === 'mare',
-  //           chatRoomId: event.data.chatRoomUuid,
-  //         });
-  //       }
-  //     });
-  //   }
-  //
-  //   return () => {
-  //     socket?.off('PUSH_NOTIFICATION');
-  //   };
-  // }, [authData]);
-
   useEffect(() => {
     console.log(socket?.connected);
   }, [socket?.connected]);
 
   const config = {
-    screens: {Login: 'sso/:payload'},
+    screens: {
+      Login: 'sso/:payload',
+      HomeDrawer: {
+        screens: {
+          HomeTab: {
+            screens: {HomeStack: {screens: {Home: 'subscribed/:payload'}}},
+          },
+        },
+      },
+      // MatchFound: 'subscribed/:payload',
+    },
   };
 
   const linking = {

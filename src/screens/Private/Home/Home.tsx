@@ -30,7 +30,7 @@ import {useCustomerMatch} from '../../../hooks/match/useCustomerMatch.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {scale} from '../../../utils/utils.ts';
-import {COLORS} from '../../../constants/commons.ts';
+import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {
   getDeviceToken,
   registerDeviceForRemoteMessages,
@@ -41,8 +41,20 @@ import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
 import {useGetCustomerSubscribed} from '../../../hooks/subscribe/useGetCustomerSubscribed.ts';
 import useSubscribeCheck from '../../../store/subscribeStore.ts';
+import {RouteProp} from '@react-navigation/native';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+import GenericModal from '../../../components/shared/GenericModal.tsx';
+import {BoltLogo} from '../../../assets/images/thundrbolt_icons/BoltLogo.tsx';
+import GradientButton from '../../../components/shared/GradientButton.tsx';
 
-const Home = () => {
+type HomeScreenRouteProp = RouteProp<RootNavigationParams, 'Home'>;
+
+type HomeProps = {
+  route?: HomeScreenRouteProp;
+};
+
+const Home = ({route}: HomeProps) => {
+  const {payload} = route?.params || {};
   const auth = useAuth();
   const matchLocation = useCustomerMatchLocation();
   const matchList = useGetMatchList({sub: auth.authData?.sub || ''});
@@ -62,6 +74,7 @@ const Home = () => {
   const registerToken = useRegisterToken();
 
   const [visible, isVisible] = useState(false);
+  const [visible2, isVisible2] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Explicit type
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
@@ -110,6 +123,19 @@ const Home = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (payload) {
+      if (payload === 'true') {
+        customerSubscribed.refetch().then(res => {
+          if (res.data) {
+            setIsCustomerSubscribed(res.data.hasSubscription);
+            isVisible2(true);
+          }
+        });
+      }
+    }
+  }, [payload, route?.params]);
 
   useEffect(() => {
     if (matchList.isPending) {
@@ -318,7 +344,39 @@ const Home = () => {
       style={{flex: 1, backgroundColor: 'white'}}
       edges={['right', 'left']}>
       <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
+
+      <GenericModal
+        isVisible={visible2}
+        content={
+          <View
+            style={{
+              padding: scale(10),
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: scale(10),
+            }}>
+            <BoltLogo />
+            <View>
+              <Text
+                style={{fontFamily: 'Montserrat-Bold', textAlign: 'center'}}>
+                Thank you for subscribing to Thundr Bolt! You now have unlimited
+                swipes, full access to The Possibles, and use advanced filters!
+              </Text>
+            </View>
+            <GradientButton
+              onPress={() => {
+                isVisible2(false);
+              }}
+              text="CLOSE"
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.buttonTextStyle}
+            />
+          </View>
+        }
+      />
+
       <CountdownCooldown isVisible={visible} onClose={() => isVisible(false)} />
+
       <View
         style={{
           flex: 1,
@@ -441,6 +499,21 @@ const styles = StyleSheet.create({
     color: 'gray',
     letterSpacing: -0.4,
     fontSize: scale(12),
+  },
+  buttonStyle: {
+    alignItems: 'center',
+    // maxWidth: width,
+    width: width - 124,
+    height: 50,
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: 12,
+  },
+  buttonTextStyle: {
+    letterSpacing: -0.4,
+    fontFamily: 'Montserrat-Bold',
+    color: COLORS.white,
+    fontSize: SIZES.h5,
   },
 });
 

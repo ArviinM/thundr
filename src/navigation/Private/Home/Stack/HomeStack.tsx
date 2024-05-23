@@ -1,11 +1,9 @@
 import React, {useRef} from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
-import Profile from '../../../../screens/Private/Profile/Profile.tsx';
 
 import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
-import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
 import {Image, TouchableOpacity, View} from 'react-native';
 import {
   DrawerActions,
@@ -108,9 +106,9 @@ export const HomeStack = () => {
               fontWeight: '500',
               fontSize: moderateScale(20),
             },
-            headerLeft: props => (
+            headerLeft: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => navigation.navigate('Home', {payload: null})}
                 style={{width: 30, height: 30}}>
                 <Image
                   source={IMAGES.back}
