@@ -14,7 +14,7 @@ interface ButtonProps {
   loading?: boolean;
   text: string;
   buttonStyle?: ViewStyle;
-  textStyle?: TextStyle;
+  textStyle?: TextStyle | TextStyle[];
   disabled?: boolean;
 }
 

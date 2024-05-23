@@ -23,6 +23,7 @@ import Advocacy from '../../../../screens/Private/Advocacy/Advocacy.tsx';
 import useUnreadStore from '../../../../store/unreadStore.ts';
 import {HomeStack} from '../Stack/HomeStack.tsx';
 import {useGetChatList} from '../../../../hooks/chat/useGetChatList.ts';
+import {AdvocacyStack} from '../Stack/AdvocacyStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -131,10 +132,11 @@ export const HomeTab = () => {
           }}
         />
         <Tab.Screen
-          name="Advocacy"
-          component={Advocacy}
+          name="AdvocacyStack"
+          component={AdvocacyStack}
           options={{
             headerLeft: () => <HomeLeftHeader />,
+            headerShown: false,
             tabBarShowLabel: false,
             tabBarIcon: ({focused}) => <AdvocacyIcon focused={focused} />,
           }}
