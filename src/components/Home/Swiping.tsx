@@ -1,8 +1,14 @@
 import React, {useState} from 'react';
-import {Image, Platform, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 
-import {GestureDetector, Gesture} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   interpolate,
   runOnJS,
@@ -13,29 +19,38 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import {IMAGES} from '../../constants/images.ts';
-import {width} from '../../constants/commons.ts';
+import {COLORS, width} from '../../constants/commons.ts';
 import {CustomerMatchResponse} from '../../types/generated.ts';
 import {MareSwiping} from '../../assets/images/swiping/MareSwiping.tsx';
 import {JowaSwiping} from '../../assets/images/swiping/JowaSwiping.tsx';
+import useSubscribeCheck from '../../store/subscribeStore.ts';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {scale} from '../../utils/utils.ts';
 
 type Swiping = {
   activeIndex: SharedValue<number>;
   mareTranslation: SharedValue<any[]>;
   jowaTranslation: SharedValue<any[]>;
+  skipTranslation?: SharedValue<number[]>;
   index: number;
   onResponse: (a: 'Mare' | 'Jowa', b: CustomerMatchResponse) => void;
+  onSkip?: (a: boolean, b: CustomerMatchResponse) => void;
   user: CustomerMatchResponse[];
   isMare: SharedValue<boolean>;
+  skip?: boolean;
 };
 
 const Swiping = ({
   activeIndex,
   mareTranslation,
   jowaTranslation,
+  skipTranslation,
   index,
   onResponse,
   user,
   isMare,
+  skip = false,
+  onSkip,
 }: Swiping) => {
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
@@ -45,6 +60,8 @@ const Swiping = ({
   const [currentImage, setCurrentImage] = useState('thundrHome');
   const [mareTapped, setMareTapped] = useState(false);
   const [jowaTapped, setJowaTapped] = useState(false);
+
+  const isSubbed = useSubscribeCheck(state => state.isCustomerSubscribed);
 
   const insets = useSafeAreaInsets();
 
@@ -218,6 +235,41 @@ const Swiping = ({
         justifyContent: 'center',
         alignItems: 'center',
       }}>
+      {isSubbed && skip && onSkip && (
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 0,
+            zIndex: 100,
+            backgroundColor: isMare ? COLORS.secondary2 : COLORS.primary1,
+            paddingHorizontal: scale(26),
+            paddingVertical: scale(2),
+            borderRadius: 20,
+          }}
+          onPress={() => {
+            if (skipTranslation) {
+              skipTranslation.modify(value => {
+                'worklet';
+                value[index] = withSpring(-600);
+                return value; // Return the modified value
+              });
+
+              activeIndex.value = withSpring(index + 1);
+              console.log({isMare});
+              runOnJS(onSkip)(isMare.value, user[index]);
+            }
+          }}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Medium',
+              fontSize: scale(13),
+              color: COLORS.white,
+            }}>
+            Next muna, sis!
+          </Text>
+        </TouchableOpacity>
+      )}
+
       <GestureDetector gesture={mareGesture}>
         <Animated.View
           style={[

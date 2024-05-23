@@ -541,6 +541,11 @@ export type PossiblesResponse = {
   count: number;
 };
 
+export type PossiblesSkipRequest = {
+  sub: string;
+  tag: 'MARE' | 'JOWA';
+};
+
 export type NotificationRequest = {
   sub: string;
   beforeId?: number;

@@ -27,6 +27,7 @@ type Card = {
   activeIndex: SharedValue<number>;
   mareTranslation: SharedValue<number[]>;
   jowaTranslation: SharedValue<number[]>;
+  skipTranslation?: SharedValue<number[]>;
   isMare: SharedValue<boolean>;
   possibles?: boolean;
   nextAction?: number;
@@ -40,6 +41,7 @@ const Card = ({
   activeIndex,
   mareTranslation,
   jowaTranslation,
+  skipTranslation,
   isMare,
   possibles = false,
   nextAction = 0,
@@ -58,6 +60,9 @@ const Card = ({
           [index - 1, index, index + 1],
           [0.95, 1, 1],
         ),
+      },
+      {
+        translateY: skipTranslation ? skipTranslation.value[index] : 0,
       },
       {
         translateX: isMare.value

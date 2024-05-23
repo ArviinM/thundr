@@ -17,8 +17,8 @@ import {queryClient} from '../../utils/queryClient.ts';
 import {Loading} from '../shared/Loading.tsx';
 import {usePossiblesMatch} from '../../hooks/possibles/usePossiblesMatch.ts';
 import useCountdownStore from '../../store/countdownStore.ts';
-import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import PossiblesFYIModal from './PossiblesFYIModal.tsx';
+import {usePossiblesSkip} from '../../hooks/possibles/usePossiblesSkip.ts';
 
 const Swipeables = ({isMare}: {isMare: boolean}) => {
   const auth = useAuth();
@@ -30,6 +30,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
   const activeIndex = useSharedValue(0);
   const mareTranslations = useSharedValue<number[]>(new Array(20).fill(0));
   const jowaTranslations = useSharedValue<number[]>(new Array(20).fill(0));
+  const skipTranslations = useSharedValue<number[]>(new Array(20).fill(0));
   const sharedIsMare = useSharedValue<boolean>(false);
 
   const [isLoadingNewData, setIsLoadingNewData] = useState(false);
@@ -41,6 +42,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
   });
 
   const matchPossibles = usePossiblesMatch();
+  const skipUser = usePossiblesSkip();
   const setStartTimer = useCountdownStore(state => state.setStartTimer);
 
   const [visible, isVisible] = useState(false);
@@ -60,6 +62,9 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
   useEffect(() => {
     if (index && customerPossibles.data) {
       if (index > customerPossibles.data.profiles.length - 1) {
+        if (customerPossibles.isLoading) {
+          return;
+        }
         console.log('Fetching Possible Matches 🚀');
 
         setIsLoadingNewData(true); // Start Loading Indicator
@@ -71,6 +76,13 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           activeIndex.value = 0;
         });
 
+        skipTranslations.modify(value => {
+          'worklet';
+          for (let i = 0; i < value.length; i++) {
+            value[i] = 0;
+          }
+          return value;
+        });
         jowaTranslations.modify(value => {
           'worklet';
           for (let i = 0; i < value.length; i++) {
@@ -88,6 +100,43 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
       }
     }
   }, [index]);
+
+  const onSkip = async (
+    isMare: boolean,
+    skippedUser: CustomerMatchResponse,
+  ) => {
+    try {
+      console.log({
+        sub: skippedUser.sub,
+        tag: isMare ? 'MARE' : 'JOWA',
+      });
+      await skipUser.mutateAsync({
+        sub: skippedUser.sub,
+        tag: isMare ? 'MARE' : 'JOWA',
+      });
+    } catch (e) {
+      console.error(e);
+
+      runOnJS(setIndex)(previousValue);
+      activeIndex.value = withSpring(previousValue);
+      skipTranslations.modify(value => {
+        'worklet';
+        value[previousValue] = withSpring(0);
+        return value;
+      });
+      mareTranslations.modify(value => {
+        'worklet';
+        value[previousValue] = withSpring(0);
+        return value;
+      });
+
+      jowaTranslations.modify(value => {
+        'worklet';
+        value[previousValue] = withSpring(0);
+        return value;
+      });
+    }
+  };
 
   const onResponse = async (
     tag: 'Mare' | 'Jowa',
@@ -113,7 +162,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
       console.warn('Error updating swipe match:', error);
       if (error.status === 'POSSIBLES_COOLDOWN_EXCEPTION') {
         isVisible(true);
-        runOnJS(setIndex)(previousValue); // Revert to the previous card
+        runOnJS(setIndex)(previousValue);
         activeIndex.value = withSpring(previousValue);
 
         mareTranslations.modify(value => {
@@ -123,6 +172,11 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
         });
 
         jowaTranslations.modify(value => {
+          'worklet';
+          value[previousValue] = withSpring(0);
+          return value;
+        });
+        skipTranslations.modify(value => {
           'worklet';
           value[previousValue] = withSpring(0);
           return value;
@@ -146,6 +200,14 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
       setIsLoadingNewData(false); // Stop Loading Indicator
       runOnJS(setIndex)(0);
       activeIndex.value = 0;
+
+      skipTranslations.modify(value => {
+        'worklet';
+        for (let i = 0; i < value.length; i++) {
+          value[i] = 0;
+        }
+        return value;
+      });
 
       jowaTranslations.modify(value => {
         'worklet';
@@ -207,8 +269,9 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
         }}>
         {isLoadingNewData ? (
           <Loading />
-        ) : (mareTranslations.value.length && jowaTranslations.value.length) ===
-          0 ? (
+        ) : (mareTranslations.value.length &&
+            jowaTranslations.value.length &&
+            skipTranslations.value.length) === 0 ? (
           <Loading />
         ) : customerPossibles.isLoading ||
           customerPossibles.isRefetching ||
@@ -225,6 +288,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
               activeIndex={activeIndex}
               mareTranslation={mareTranslations}
               jowaTranslation={jowaTranslations}
+              skipTranslation={skipTranslations}
               isMare={sharedIsMare}
               possibles
               nextAction={customerPossibles.data.nextActionTime}
@@ -234,6 +298,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           ))
         )}
       </View>
+
       <View
         style={{
           position: 'absolute',
@@ -248,10 +313,13 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
             activeIndex={activeIndex}
             mareTranslation={mareTranslations}
             jowaTranslation={jowaTranslations}
+            skipTranslation={skipTranslations}
             index={index}
             onResponse={onResponse}
+            onSkip={onSkip}
             user={customerPossibles?.data?.profiles || []}
             isMare={sharedIsMare}
+            skip
           />
         )}
       </View>
