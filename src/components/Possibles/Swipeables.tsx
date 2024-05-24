@@ -106,14 +106,12 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
     skippedUser: CustomerMatchResponse,
   ) => {
     try {
-      console.log({
-        sub: skippedUser.sub,
-        tag: isMareSkip ? 'MARE' : 'JOWA',
-      });
-      await skipUser.mutateAsync({
-        sub: skippedUser.sub,
-        tag: isMareSkip ? 'MARE' : 'JOWA',
-      });
+      if (auth.authData) {
+        await skipUser.mutateAsync({
+          sub: auth.authData.sub,
+          tag: isMareSkip ? 'MARE' : 'JOWA',
+        });
+      }
     } catch (e) {
       console.error(e);
 

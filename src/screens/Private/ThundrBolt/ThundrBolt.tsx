@@ -92,6 +92,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
                       `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
                       // `http://localhost:5173/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
                     );
+                    isVisible(false);
                   } else {
                     Toast.show({
                       type: 'THNRInfo',
@@ -102,6 +103,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
                       position: 'top',
                       topOffset: 80,
                     });
+                    isVisible(false);
                   }
                 }}
                 text="Proceed"
