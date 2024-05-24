@@ -89,8 +89,8 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
                     });
 
                     await Linking.openURL(
-                      // `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
-                      `https://app.thundr.ph/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
+                      `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
+                      // `http://localhost:5173/auth/handoff?key=${result.key}&term=${selectedTerm}&product=THDR-BOLT-001`,
                     );
                     isVisible(false);
                   } else {
