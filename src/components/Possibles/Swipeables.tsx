@@ -102,17 +102,17 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
   }, [index]);
 
   const onSkip = async (
-    isMare: boolean,
+    isMareSkip: boolean,
     skippedUser: CustomerMatchResponse,
   ) => {
     try {
       console.log({
         sub: skippedUser.sub,
-        tag: isMare ? 'MARE' : 'JOWA',
+        tag: isMareSkip ? 'MARE' : 'JOWA',
       });
       await skipUser.mutateAsync({
         sub: skippedUser.sub,
-        tag: isMare ? 'MARE' : 'JOWA',
+        tag: isMareSkip ? 'MARE' : 'JOWA',
       });
     } catch (e) {
       console.error(e);
@@ -320,6 +320,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
             user={customerPossibles?.data?.profiles || []}
             isMare={sharedIsMare}
             skip
+            color={isMare}
           />
         )}
       </View>

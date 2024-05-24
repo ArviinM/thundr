@@ -163,5 +163,9 @@
   "POSSIBLES_COOLDOWN_EXCEPTION": {
     "title": "Take a Break",
     "body": "You're viewing profiles a bit too quickly. Please slow down for a bit."
+  },
+  "USER_NOT_SUBSCRIBED": {
+    "title": "Hi mars!",
+    "body": "You need to subscribe, to get skip a user!"
   }
 }

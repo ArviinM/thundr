@@ -38,6 +38,7 @@ type Swiping = {
   user: CustomerMatchResponse[];
   isMare: SharedValue<boolean>;
   skip?: boolean;
+  color?: boolean;
 };
 
 const Swiping = ({
@@ -51,6 +52,7 @@ const Swiping = ({
   isMare,
   skip = false,
   onSkip,
+  color,
 }: Swiping) => {
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
@@ -226,7 +228,6 @@ const Swiping = ({
       pressed.value = false;
       runOnJS(setIsGestureActive)(false);
     });
-
   return (
     <Animated.View
       style={{
@@ -241,7 +242,7 @@ const Swiping = ({
             position: 'absolute',
             top: 0,
             zIndex: 100,
-            backgroundColor: isMare ? COLORS.secondary2 : COLORS.primary1,
+            backgroundColor: color ? COLORS.secondary2 : COLORS.primary1,
             paddingHorizontal: scale(26),
             paddingVertical: scale(2),
             borderRadius: 20,
