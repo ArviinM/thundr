@@ -51,22 +51,33 @@ const AdvocacyDonate = () => {
               <GradientButton
                 onPress={async () => {
                   if (API_PAYMENT_URL && authData) {
-                    const result = await handoffKey.mutateAsync({
-                      sub: authData?.sub,
-                      session: authData.accessToken,
+                    // const result = await handoffKey.mutateAsync({
+                    //   sub: authData?.sub,
+                    //   session: authData.accessToken,
+                    // });
+
+                    Toast.show({
+                      type: 'THNRInfo',
+                      props: {
+                        title: 'Wait lang mga mars!',
+                        subtitle:
+                          'Donating to our Advocacy is still on the works!',
+                      },
+                      position: 'top',
+                      topOffset: 80,
                     });
 
-                    await Linking.openURL(
-                      `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&product=THDR-ADVC-001`,
-                      // `http://localhost:5173/auth/handoff?key=${result.key}&product=THDR-ADVC-001`,
-                    );
+                    // await Linking.openURL(
+                    //   `${API_PAYMENT_URL}/auth/handoff?key=${result.key}&product=THDR-ADVC-001`,
+                    //   // `http://localhost:5173/auth/handoff?key=${result.key}&product=THDR-ADVC-001`,
+                    // );
                     isVisible(false);
                   } else {
                     Toast.show({
                       type: 'THNRInfo',
                       props: {
                         title: 'Wait lang mga mars!',
-                        subtitle: 'Subscribing to ThundrBolt, coming soon na!',
+                        subtitle: 'Donating to our Advocacy, coming soon na!',
                       },
                       position: 'top',
                       topOffset: 80,
