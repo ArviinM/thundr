@@ -27,6 +27,7 @@ import Button from '../../../components/shared/Button.tsx';
 import {API_PAYMENT_URL} from '@env';
 import {useHandoffSession} from '../../../hooks/auth/useHandoffSession.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
+import useSubscribeCheck from '../../../store/subscribeStore.ts';
 
 type ThundrBoltRouteProp = RouteProp<RootNavigationParams, 'ThundrBoltModal'>;
 
@@ -44,6 +45,10 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
 
   const [selectedTerm, setSelectedTerm] = useState<'yearly' | 'monthly'>(
     'yearly',
+  );
+
+  const isUserSubscribed = useSubscribeCheck(
+    state => state.isCustomerSubscribed,
   );
 
   return (
@@ -275,6 +280,19 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
           {/*Subscribe Button Here*/}
           <GradientButton
             onPress={() => {
+              if (isUserSubscribed) {
+                Toast.show({
+                  type: 'THNRInfo',
+                  props: {
+                    title: 'Hi mars!',
+                    subtitle: 'You are still subscribed! ⚡️',
+                  },
+                  position: 'top',
+                  topOffset: 80,
+                });
+                return;
+              }
+
               isVisible(true);
             }}
             text="SUBSCRIBE"
