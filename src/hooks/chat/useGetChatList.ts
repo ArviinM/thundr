@@ -3,7 +3,6 @@ import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
-  Chat,
   ChatListRequest,
   ChatListResponse,
 } from '../../types/generated.ts';
