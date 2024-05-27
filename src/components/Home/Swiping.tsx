@@ -56,8 +56,8 @@ const Swiping = ({
 }: Swiping) => {
   const translationXMare = useSharedValue(0);
   const translationXJowa = useSharedValue(0);
-  const pressed = useSharedValue(false);
-  const [isGestureActive, setIsGestureActive] = useState(false);
+  const marePressed = useSharedValue(false);
+  const jowaPressed = useSharedValue(false);
 
   const [currentImage, setCurrentImage] = useState('thundrHome');
   const [mareTapped, setMareTapped] = useState(false);
@@ -80,14 +80,17 @@ const Swiping = ({
   });
 
   const mareGesture = Gesture.Pan()
+    .enabled(!jowaPressed.value)
+    .minPointers(1)
+    .maxPointers(1)
     .onBegin(() => {
-      if (!pressed.value && !isGestureActive) {
-        pressed.value = true;
-        runOnJS(setIsGestureActive)(true);
+      if (!jowaPressed.value) {
+        console.log('tapped mare');
+        marePressed.value = true;
       }
     })
     .onChange(event => {
-      if (pressed.value) {
+      if (!jowaPressed.value) {
         translationXMare.value = Math.max(
           -width / 2,
           Math.min(width / 3, event.translationX),
@@ -110,7 +113,7 @@ const Swiping = ({
       }
     })
     .onEnd(event => {
-      if (pressed.value) {
+      if (!jowaPressed.value) {
         const distanceFromCenter = Math.abs(event.translationX);
         const threshold = width / 3;
 
@@ -150,19 +153,21 @@ const Swiping = ({
       }
     })
     .onFinalize(() => {
-      pressed.value = false;
-      runOnJS(setIsGestureActive)(false);
+      marePressed.value = false;
     });
 
   const jowaGesture = Gesture.Pan()
+    .enabled(!marePressed.value)
+    .minPointers(1)
+    .maxPointers(1)
     .onBegin(() => {
-      if (!pressed.value && !isGestureActive) {
-        pressed.value = true;
-        runOnJS(setIsGestureActive)(true);
+      if (!marePressed.value) {
+        console.log('tapped jowa');
+        jowaPressed.value = true;
       }
     })
     .onChange(event => {
-      if (pressed.value) {
+      if (!marePressed.value) {
         translationXJowa.value = Math.max(
           -width / 3,
           Math.min(width / 2, event.translationX),
@@ -186,7 +191,7 @@ const Swiping = ({
     })
     .onEnd(event => {
       console.log(event.translationX);
-      if (pressed.value) {
+      if (!marePressed.value) {
         const distanceFromCenter = Math.abs(event.translationX);
         const threshold = width / 3;
 
@@ -225,8 +230,7 @@ const Swiping = ({
       }
     })
     .onFinalize(() => {
-      pressed.value = false;
-      runOnJS(setIsGestureActive)(false);
+      jowaPressed.value = false;
     });
   return (
     <Animated.View
