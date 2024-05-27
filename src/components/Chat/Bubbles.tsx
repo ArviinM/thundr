@@ -342,6 +342,7 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: scale(14),
     fontFamily: 'Montserrat-Regular',
+    color: COLORS.black,
   },
   timestamp: {
     fontSize: scale(10),
