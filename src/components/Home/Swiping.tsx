@@ -85,8 +85,9 @@ const Swiping = ({
     .maxPointers(1)
     .onBegin(() => {
       if (!jowaPressed.value) {
-        console.log('tapped mare');
         marePressed.value = true;
+        runOnJS(setMareTapped)(true);
+        runOnJS(setCurrentImage)('thundrMareGlow');
       }
     })
     .onChange(event => {
@@ -106,8 +107,6 @@ const Swiping = ({
         );
 
         if (event.translationX) {
-          runOnJS(setMareTapped)(true);
-          runOnJS(setCurrentImage)('thundrMareGlow');
           isMare.value = true;
         }
       }
@@ -154,6 +153,8 @@ const Swiping = ({
     })
     .onFinalize(() => {
       marePressed.value = false;
+      runOnJS(setMareTapped)(false);
+      runOnJS(setCurrentImage)('thundrHome');
     });
 
   const jowaGesture = Gesture.Pan()
@@ -162,8 +163,9 @@ const Swiping = ({
     .maxPointers(1)
     .onBegin(() => {
       if (!marePressed.value) {
-        console.log('tapped jowa');
         jowaPressed.value = true;
+        runOnJS(setJowaTapped)(true);
+        runOnJS(setCurrentImage)('thundrJowaGlow');
       }
     })
     .onChange(event => {
@@ -183,8 +185,6 @@ const Swiping = ({
         );
 
         if (event.translationX) {
-          runOnJS(setJowaTapped)(true);
-          runOnJS(setCurrentImage)('thundrJowaGlow');
           isMare.value = false;
         }
       }
@@ -231,6 +231,8 @@ const Swiping = ({
     })
     .onFinalize(() => {
       jowaPressed.value = false;
+      runOnJS(setJowaTapped)(false);
+      runOnJS(setCurrentImage)('thundrHome');
     });
   return (
     <Animated.View
