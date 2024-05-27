@@ -254,7 +254,7 @@ const Swiping = ({
             borderRadius: 20,
           }}
           onPress={() => {
-            if (skipTranslation && color) {
+            if (skipTranslation) {
               skipTranslation.modify(value => {
                 'worklet';
                 value[index] = withSpring(-600);
@@ -263,7 +263,7 @@ const Swiping = ({
 
               activeIndex.value = withSpring(index + 1);
 
-              runOnJS(onSkip)(color, user[index]);
+              runOnJS(onSkip)(color || false, user[index]);
             }
           }}>
           <Text
