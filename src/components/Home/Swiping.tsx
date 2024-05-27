@@ -241,7 +241,7 @@ const Swiping = ({
           style={{
             position: 'absolute',
             top: 0,
-            zIndex: 100,
+            zIndex: 1000,
             backgroundColor: color ? COLORS.secondary2 : COLORS.primary1,
             paddingHorizontal: scale(26),
             paddingVertical: scale(2),

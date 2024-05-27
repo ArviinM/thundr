@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {
   runOnJS,
   useAnimatedReaction,
@@ -12,8 +12,6 @@ import Card from '../Home/Card.tsx';
 import {CustomerMatchResponse} from '../../types/generated.ts';
 import {useGetCustomerPossibles} from '../../hooks/possibles/useGetCustomerPossibles.ts';
 import {useAuth} from '../../providers/Auth.tsx';
-import {useQueryClient} from '@tanstack/react-query';
-import {queryClient} from '../../utils/queryClient.ts';
 import {Loading} from '../shared/Loading.tsx';
 import {usePossiblesMatch} from '../../hooks/possibles/usePossiblesMatch.ts';
 import useCountdownStore from '../../store/countdownStore.ts';
@@ -22,7 +20,6 @@ import {usePossiblesSkip} from '../../hooks/possibles/usePossiblesSkip.ts';
 
 const Swipeables = ({isMare}: {isMare: boolean}) => {
   const auth = useAuth();
-  const query = useQueryClient(queryClient);
 
   const [index, setIndex] = useState(0);
   const [previousValue, setPreviousValue] = useState(0);
@@ -47,24 +44,13 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
 
   const [visible, isVisible] = useState(false);
 
-  useAnimatedReaction(
-    () => activeIndex.value,
-    (value, prevValue) => {
-      if (Math.floor(value) !== index) {
-        runOnJS(setIndex)(Math.floor(value));
-      }
-      if (prevValue) {
-        runOnJS(setPreviousValue)(Math.floor(prevValue));
-      }
-    },
-  );
+  const fetchMorePossiblesList = async () => {
+    if (customerPossibles.isRefetching) {
+      return;
+    }
 
-  useEffect(() => {
-    if (index && customerPossibles.data) {
+    if (customerPossibles.data) {
       if (index > customerPossibles.data.profiles.length - 1) {
-        if (customerPossibles.isLoading) {
-          return;
-        }
         console.log('Fetching Possible Matches 🚀');
 
         setIsLoadingNewData(true); // Start Loading Indicator
@@ -98,6 +84,24 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           return value;
         });
       }
+    }
+  };
+
+  useAnimatedReaction(
+    () => activeIndex.value,
+    (value, prevValue) => {
+      if (Math.floor(value) !== index) {
+        runOnJS(setIndex)(Math.floor(value));
+      }
+      if (prevValue) {
+        runOnJS(setPreviousValue)(Math.floor(prevValue));
+      }
+    },
+  );
+
+  useEffect(() => {
+    if (index && customerPossibles.data) {
+      fetchMorePossiblesList();
     }
   }, [index]);
 
@@ -303,6 +307,7 @@ const Swipeables = ({isMare}: {isMare: boolean}) => {
           bottom: 0,
           left: 0,
           right: 0,
+          zIndex: 10000,
         }}>
         {customerPossibles.isLoading && !customerPossibles.data ? (
           <Loading />
