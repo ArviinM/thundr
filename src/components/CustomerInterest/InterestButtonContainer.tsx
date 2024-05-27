@@ -35,7 +35,7 @@ const InterestButtonContainer: React.FC<ButtonContainerProps> = ({
       );
       setSelectedOptions(newSelectedOptions);
       onSelectionChange(newSelectedOptions); // Notify parent of change
-    } else if (selectedOptions.length >= 5) {
+    } else if (selectedOptions.length >= 4) {
       return; // Prevent selection if limit is reached
     } else {
       const newSelectedOptions = [...selectedOptions, option];
