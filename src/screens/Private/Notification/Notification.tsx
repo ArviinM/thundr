@@ -14,14 +14,9 @@ import {Loading} from '../../../components/shared/Loading.tsx';
 import {NotificationResponse} from '../../../types/generated.ts';
 import {scale} from '../../../utils/utils.ts';
 import moment from 'moment';
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
-import {useGestureHandler} from '@gorhom/bottom-sheet/lib/typescript/hooks';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import Animated, {runOnJS} from 'react-native-reanimated';
+
+import {RectButton} from 'react-native-gesture-handler';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useReadNotification} from '../../../hooks/notification/useReadNotification.ts';
@@ -29,6 +24,8 @@ import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {TrashIcon} from '../../../assets/images/TrashIcon.tsx';
 import {useDeleteNotification} from '../../../hooks/notification/useDeleteNotification.ts';
+
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const Notification = () => {
   const auth = useAuth();
@@ -39,8 +36,6 @@ const Notification = () => {
   const query = useQueryClient(queryClient);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-
-  const [beforeId, setBeforeId] = useState(0);
 
   const deleteItem = async ({
     sub,
@@ -58,95 +53,92 @@ const Notification = () => {
     });
   };
 
-  const renderItem = ({item}: {item: NotificationResponse}) => {
-    const translateX = useSharedValue(0);
-
-    const panGesture = Gesture.Pan()
-      .onChange(e => {
-        translateX.value = e.translationX;
-      })
-      .onEnd(async e => {
-        try {
-          if (e.translationX < -75) {
-            if (auth.authData) {
-              runOnJS(deleteItem)({
-                sub: auth.authData.sub,
-                notificationId: item.id,
-              });
-              translateX.value = withSpring(e.translationX * 6);
-            }
-          } else {
-            translateX.value = withSpring(0);
-          }
-        } catch (error) {
-          translateX.value = withSpring(0);
-        }
-      });
-
-    const animatedStyle = useAnimatedStyle(() => ({
-      transform: [{translateX: translateX.value}],
-    }));
-
+  const renderRightActions = (
+    progress: any,
+    _dragAnimatedValue: any,
+    item: any,
+  ) => {
     return (
-      <>
-        <GestureDetector gesture={panGesture}>
-          <Animated.View
-            style={[
-              animatedStyle,
-              item.isRead
-                ? [styles.item, {backgroundColor: '#F7F5F5'}]
-                : styles.item,
-            ]}>
-            <TouchableOpacity
-              onPress={async () => {
-                if (!item.isRead && auth.authData) {
-                  await readNotification.mutateAsync({
-                    sub: auth.authData.sub,
-                    notificationId: item.id,
-                  });
-                  await query.invalidateQueries({
-                    queryKey: ['get-customer-notifications'],
-                  });
-                }
-                // TODO: Needs to redirect soon
-                navigation.navigate('Messages', {
-                  chatRoomId: '',
-                  isMare: item.matchType.toLowerCase() === 'mare',
+      <RectButton
+        style={{
+          backgroundColor: COLORS.primary1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: scale(2),
+          width: scale(100),
+          borderRadius: 15,
+        }}
+        onPress={() => {
+          if (auth.authData) {
+            runOnJS(deleteItem)({
+              sub: auth.authData.sub,
+              notificationId: item.id,
+            });
+          }
+        }}>
+        <TrashIcon />
+      </RectButton>
+    );
+  };
+
+  const renderItem = ({item}: {item: NotificationResponse}) => {
+    return (
+      <Swipeable
+        renderRightActions={(progressAnimatedValue, dragAnimatedValue) =>
+          renderRightActions(progressAnimatedValue, dragAnimatedValue, item)
+        }>
+        <Animated.View
+          style={[
+            item.isRead
+              ? [styles.item, {backgroundColor: '#F7F5F5'}]
+              : styles.item,
+          ]}>
+          <TouchableOpacity
+            onPress={async () => {
+              if (!item.isRead && auth.authData) {
+                await readNotification.mutateAsync({
+                  sub: auth.authData.sub,
+                  notificationId: item.id,
                 });
-              }}>
+                await query.invalidateQueries({
+                  queryKey: ['get-customer-notifications'],
+                });
+              }
+              // TODO: Needs to redirect soon
+              navigation.navigate('Messages', {
+                chatRoomId: '',
+                isMare: item.matchType.toLowerCase() === 'mare',
+              });
+            }}>
+            <Text
+              style={[
+                styles.title,
+                item.isRead ? {color: '#D9D6D6'} : {color: COLORS.primary1},
+              ]}>
+              {item.title}
+            </Text>
+            <Text
+              style={[
+                styles.body,
+                item.isRead ? {color: '#bdbaba'} : {color: COLORS.black},
+              ]}>
+              {item.body}
+            </Text>
+            <View
+              style={{position: 'absolute', right: scale(3), top: scale(3)}}>
               <Text
-                style={[
-                  styles.title,
-                  item.isRead ? {color: '#D9D6D6'} : {color: COLORS.primary1},
-                ]}>
-                {item.title}
+                style={{
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: scale(10),
+                  color: COLORS.gray3,
+                }}>
+                {moment(item.sentTime).format('h:mm A')}
               </Text>
-              <Text
-                style={[
-                  styles.body,
-                  item.isRead ? {color: '#bdbaba'} : {color: COLORS.black},
-                ]}>
-                {item.body}
-              </Text>
-              <View
-                style={{position: 'absolute', right: scale(3), top: scale(3)}}>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: scale(10),
-                    color: COLORS.gray3,
-                  }}>
-                  {moment(item.sentTime).format('h:mm A')}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </Animated.View>
-        </GestureDetector>
-        <View style={styles.deleteButton}>
-          <TrashIcon />
-          {/*<Text style={styles.deleteText}>Delete</Text>*/}
-        </View>
-      </>
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+      </Swipeable>
     );
   };
 
@@ -236,5 +228,21 @@ const styles = StyleSheet.create({
   deleteText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  leftAction: {
+    flex: 1,
+    backgroundColor: '#497AFC',
+    justifyContent: 'center',
+  },
+  actionText: {
+    color: 'white',
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    padding: 10,
+  },
+  rightAction: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
   },
 });
