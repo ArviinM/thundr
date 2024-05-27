@@ -18,6 +18,7 @@ interface ButtonProps {
   disabled?: boolean;
   isSSO?: boolean;
   logo?: any;
+  isMatchFound?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -29,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   isSSO = false,
   logo,
+  isMatchFound = false,
 }) => {
   return (
     <TouchableOpacity
@@ -37,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={loading || disabled}>
       {loading && !isSSO ? (
         <ActivityIndicator
-          color={COLORS.white}
+          color={isMatchFound ? COLORS.black : COLORS.white}
           animating={true}
           size={'small'}
         />

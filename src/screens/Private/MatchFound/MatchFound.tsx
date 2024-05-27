@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,7 +17,6 @@ import {
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
-import useChatRoomIdNotifStore from '../../../store/chatRoomIdNotifStore.ts';
 
 const START_DEFAULT = {x: 0, y: 0}; // Updated start position
 const END_DEFAULT = {x: 1, y: 1}; // Updated end position
@@ -40,6 +39,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const insets = useSafeAreaInsets();
   const query = useQueryClient(queryClient);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
     <SafeAreaView
@@ -107,6 +107,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
               }}>
               <Button
                 onPress={async () => {
+                  setIsLoading(true);
                   await query.invalidateQueries({
                     queryKey: ['get-chat-list'],
                   });
@@ -140,10 +141,14 @@ const MatchFound = ({route}: MatchFoundProps) => {
                       ],
                     });
                   }
+                  setIsLoading(false);
                 }}
+                loading={isLoading}
+                disabled={isLoading}
                 text="Chat Now"
                 buttonStyle={styles.button1}
                 textStyle={styles.text1}
+                isMatchFound
               />
               <Button
                 onPress={async () => {
