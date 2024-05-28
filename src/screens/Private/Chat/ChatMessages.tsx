@@ -82,7 +82,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       ) as number[] | undefined;
 
       await sendMessage.mutateAsync({
-        id: messageIds ? messageIds[0] + 10 : 0,
+        id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
         senderSub: user.sub,
         targetSub: user.profile.sub,
         message: message,
@@ -174,7 +174,12 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           }
 
           if (user && imageData) {
+            const messageIds = chatMessage.data?.pages[0].flatMap(
+              page => page._id,
+            ) as number[] | undefined;
+
             await sendMessage.mutateAsync({
+              id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
               senderSub: user.sub,
               targetSub: user.profile.sub,
               message: '',
