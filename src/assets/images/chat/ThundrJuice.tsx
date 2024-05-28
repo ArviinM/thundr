@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, {Defs, LinearGradient, Path, Stop} from 'react-native-svg';
 export const ThundrJuice = (props: {count: number}) => {
   return (
-    <Svg width={56} height={73}>
+    <Svg width={70} height={73}>
       {props.count === 5 && (
         <>
           <Path
