@@ -3,27 +3,27 @@ import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
-  CustomerSubscribedRequest,
-  CustomerSubscribedResponse,
+  CustomerDonationRequest,
+  CustomerDonationResponse,
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 
-export function useGetCustomerSubscribed(props: CustomerSubscribedRequest) {
+export function useGetLatestDonation(props: CustomerDonationRequest) {
   const axiosInstance = useAxiosWithAuth();
 
   return useQuery({
-    queryKey: ['get-customer-subscribed', props],
-    queryFn: async (): Promise<CustomerSubscribedResponse> => {
-      const config: AxiosRequestConfig<CustomerSubscribedRequest> = {
-        params: {sub: props.sub, productId: props.productId},
+    queryKey: ['get-latest-donation', props],
+    queryFn: async (): Promise<CustomerDonationResponse> => {
+      const config: AxiosRequestConfig<CustomerDonationRequest> = {
+        params: {sub: props.sub},
       };
 
-      const response: AxiosResponse<BaseResponse<CustomerSubscribedResponse>> =
-        await axiosInstance.get('/subscribe/has-subscription', config);
+      const response: AxiosResponse<BaseResponse<CustomerDonationResponse>> =
+        await axiosInstance.get('/subscribe/latest-advocacy-donation', config);
 
       if (response.status !== HttpStatusCode.Ok) {
         showErrorToast({
-          name: 'get-customer-subscribed',
+          name: 'get-latest-donation',
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,

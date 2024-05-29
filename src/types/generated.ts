@@ -624,3 +624,12 @@ export type CustomerSubscribedResponse = {
     | 'PENDING_PAYMENT';
   latestOrder?: OrderIdResponse;
 };
+
+export type CustomerDonationRequest = {
+  sub: string;
+};
+
+export type CustomerDonationResponse = {
+  id: string;
+  createdAt: string;
+};

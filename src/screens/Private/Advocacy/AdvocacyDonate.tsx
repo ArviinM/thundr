@@ -14,11 +14,20 @@ import Toast from 'react-native-toast-message';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {useHandoffSession} from '../../../hooks/auth/useHandoffSession.ts';
 import GenericModal from '../../../components/shared/GenericModal.tsx';
+import {useGetLatestDonation} from '../../../hooks/subscribe/useGetLatestDonation.ts';
+import {Loading} from '../../../components/shared/Loading.tsx';
+import moment from 'moment';
 
 const AdvocacyDonate = () => {
   const {authData} = useAuth();
   const handoffKey = useHandoffSession();
   const [visible, isVisible] = useState<boolean>(false);
+
+  const latestDonation = useGetLatestDonation({sub: authData?.sub || ''});
+
+  if (latestDonation.isLoading) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
@@ -124,6 +133,29 @@ const AdvocacyDonate = () => {
             }}>
             <GradientButton
               onPress={async () => {
+                if (latestDonation.data) {
+                  const createdAt = moment(latestDonation.data.createdAt);
+                  const monthsSinceDonation = moment().diff(
+                    createdAt,
+                    'months',
+                  );
+
+                  if (monthsSinceDonation < 1) {
+                    // Check if donation was made less than 1 month ago
+                    const daysRemaining = 30 - moment().diff(createdAt, 'days');
+                    Toast.show({
+                      type: 'THNRInfo',
+                      props: {
+                        title: 'Oops, wait lang!',
+                        subtitle: `You can donate again in ${daysRemaining} days.`,
+                      },
+                      position: 'top',
+                      topOffset: 80,
+                    });
+                    return; // Don't proceed with donation
+                  }
+                }
+
                 if (API_PAYMENT_URL && authData) {
                   isVisible(true);
                 } else {

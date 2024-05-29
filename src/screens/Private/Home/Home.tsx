@@ -133,7 +133,7 @@ const Home = ({route}: HomeProps) => {
         }
       });
     }
-  }, [customerSubscribed, payload, route, setIsCustomerSubscribed]);
+  }, [payload, route?.params]);
 
   useEffect(() => {
     if (matchList.isPending) {
