@@ -126,16 +126,14 @@ const Home = ({route}: HomeProps) => {
 
   useEffect(() => {
     if (payload) {
-      if (payload === 'true') {
-        customerSubscribed.refetch().then(res => {
-          if (res.data) {
-            setIsCustomerSubscribed(res.data.hasSubscription);
-            isVisible2(true);
-          }
-        });
-      }
+      customerSubscribed.refetch().then(res => {
+        if (res.data) {
+          setIsCustomerSubscribed(res.data.hasSubscription);
+          isVisible2(res.data.hasSubscription);
+        }
+      });
     }
-  }, [payload, route?.params]);
+  }, [customerSubscribed, payload, route, setIsCustomerSubscribed]);
 
   useEffect(() => {
     if (matchList.isPending) {
@@ -359,8 +357,12 @@ const Home = ({route}: HomeProps) => {
             <View>
               <Text
                 style={{fontFamily: 'Montserrat-Bold', textAlign: 'center'}}>
-                Thank you for subscribing to Thundr Bolt! You now have unlimited
-                swipes, full access to The Possibles, and use advanced filters!
+                {payload === 'THDR-BOLT-001' &&
+                  'Thank you for subscribing to Thundr Bolt! You now have unlimited\n' +
+                    'swipes, full access to The Possibles, and use advanced filters!'}
+                {payload === 'THDR-ADVC-001' &&
+                  'Thank you for donating!\n' +
+                    'You now have unlimited swipes, full access to The Possibles, and can use advanced filters for 7 days!'}
               </Text>
             </View>
             <GradientButton

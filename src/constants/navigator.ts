@@ -34,7 +34,7 @@ export function navigate<RouteName extends keyof RootNavigationParams>(
 
 export type RootNavigationParams = {
   HomeTab: undefined;
-  Home: {payload?: any};
+  Home: {payload?: string};
   // Registration
   // Mobile Process
   MobileValidation: undefined;
