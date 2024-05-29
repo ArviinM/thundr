@@ -126,6 +126,9 @@ const Home = ({route}: HomeProps) => {
 
   useEffect(() => {
     if (payload) {
+      query.refetchQueries({queryKey: ['get-latest-donation']});
+      query.refetchQueries({queryKey: ['get-customer-subscribed']});
+
       customerSubscribed.refetch().then(res => {
         if (res.data) {
           setIsCustomerSubscribed(res.data.hasSubscription);
