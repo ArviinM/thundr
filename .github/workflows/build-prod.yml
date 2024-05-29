@@ -25,7 +25,7 @@
        needs: Git-Fetch-State
        steps:
          - run: ls
-         - run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
+         #- run: react-native-rename "${{ENV.APP_NAME}}" -b "${{ENV.APP_ID}}"
          - run: echo -en "${{VARS.PROD_ENV}}" >> .env
          - run: echo "BUILD_NUMBER=${{github.run_number}}" >> .env
          - run: more .env
