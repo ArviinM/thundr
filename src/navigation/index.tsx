@@ -12,6 +12,7 @@ import {NotificationData, RemoteData} from '../types/generated.ts';
 import messaging from '@react-native-firebase/messaging';
 import useChatRoomIdNotifStore from '../store/chatRoomIdNotifStore.ts';
 import {socket} from '../utils/socket.ts';
+import {APP_IDENTIFIER} from '@env';
 
 const RootNavigation = () => {
   const {authData, loading} = useAuth();
@@ -140,7 +141,7 @@ const RootNavigation = () => {
   };
 
   const linking = {
-    prefixes: ['ph.thundr.app://'],
+    prefixes: [`${APP_IDENTIFIER}://`],
     config,
   };
 
