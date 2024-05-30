@@ -9,6 +9,7 @@ import {profileCreationStyles} from '../ProfileCreation/styles.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {AngHulingRampa} from '../../../assets/images/advocacy/AngHulingRampa.tsx';
+import {CordilleraImage} from '../../../assets/images/advocacy/CordilleraImage.tsx';
 
 const Advocacy = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -73,6 +74,26 @@ const Advocacy = () => {
             to our elders who paved the way{'\n'}before us.
           </Text>
         </View>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: scale(-70),
+            paddingHorizontal: scale(30),
+            paddingVertical: scale(20),
+          }}>
+          <CordilleraImage />
+          <Text
+            style={{
+              fontFamily: 'Montserrat-Medium',
+              color: '#534D4E',
+              fontSize: scale(12),
+              textAlign: 'center',
+            }}>
+            This advocacy is made in partnership with Cordillera Pride Community
+            Leaders
+          </Text>
+        </View>
         {/*  Footer Button   */}
         <View style={{paddingHorizontal: scale(30), paddingVertical: scale(4)}}>
           <Button
@@ -91,7 +112,7 @@ const Advocacy = () => {
             style={{
               fontFamily: 'Montserrat-Medium',
               color: '#534D4E',
-              fontSize: scale(10),
+              fontSize: scale(12),
               textAlign: 'center',
             }}>
             For updates, check out our website and follow{'\n'}us on our social
