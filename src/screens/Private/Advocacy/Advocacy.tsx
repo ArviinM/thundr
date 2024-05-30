@@ -3,13 +3,12 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../../constants/commons.ts';
 import {scale} from '../../../utils/utils.ts';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {AdvocacyBig} from '../../../assets/images/advocacy/AdvocacyBig.tsx';
-import {BatteryIcon} from '../../../assets/images/advocacy/BatteryIcon.tsx';
+
 import Button from '../../../components/shared/Button.tsx';
 import {profileCreationStyles} from '../ProfileCreation/styles.tsx';
-import LinearGradient from 'react-native-linear-gradient';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {AngHulingRampa} from '../../../assets/images/advocacy/AngHulingRampa.tsx';
 
 const Advocacy = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -34,98 +33,45 @@ const Advocacy = () => {
         </View>
         <View
           style={{
-            padding: scale(30),
+            padding: scale(18),
             backgroundColor: '#FDF0F0',
             alignItems: 'center',
             marginHorizontal: scale(20),
             marginBottom: scale(20),
             borderRadius: 30,
             overflow: 'hidden',
-            gap: scale(30),
+            gap: scale(10),
           }}>
-          {/*  Advocacy View   */}
-          <LinearGradient
-            colors={['#FFC128', '#E83C59']} // Gradient colors
+          {/*  Ang Huling Rampa   */}
+          <AngHulingRampa />
+          <Text
             style={{
-              padding: 6, // Padding to create border thickness
-              borderRadius: 15,
+              fontFamily: 'Montserrat-Bold',
+              color: '#534D4E',
+              fontSize: scale(12),
+              textAlign: 'center',
+              fontStyle: 'italic',
             }}>
-            <View
-              style={{
-                borderRadius: 15,
-              }}>
-              <View style={{backgroundColor: '#FDF0F0', borderRadius: 8}}>
-                <View
-                  style={{
-                    paddingVertical: 16,
-                    flexDirection: 'row',
-                    gap: 20,
-                    overflow: 'hidden',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingHorizontal: 16,
-                  }}>
-                  <AdvocacyBig />
-                  <Text
-                    style={{
-                      fontFamily: 'Montserrat-ExtraBold',
-                      color: COLORS.primary1,
-                      fontSize: scale(17),
-                    }}>
-                    Proceeds go to{'\n'}our beshies in{'\n'}chosen LGBTQIA+
-                    {'\n'}
-                    beneficiaries.
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </LinearGradient>
-          {/*  Battery View   */}
-          <LinearGradient
-            colors={['#FFC128', '#E83C59']} // Gradient colors
+            “In the end, the sun sets alone. And, they are beautiful.”
+          </Text>
+          <Text
             style={{
-              padding: 6, // Padding to create border thickness
-              borderRadius: 15,
+              fontFamily: 'Montserrat-Regular',
+              color: '#534D4E',
+              fontSize: scale(12),
+              textAlign: 'left',
             }}>
-            <View
-              style={{
-                borderRadius: 15,
-              }}>
-              <View style={{backgroundColor: '#FDF0F0', borderRadius: 8}}>
-                <View
-                  style={{
-                    padding: 20,
-                    flexDirection: 'row',
-                    gap: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <BatteryIcon />
-                  <View style={{maxWidth: '70%'}}>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-ExtraBold',
-                        color: COLORS.primary1,
-                        fontSize: scale(26),
-                      }}>
-                      Donation{'\n'}to date
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-Medium',
-                        color: '#534D4E',
-                        fontSize: scale(10),
-                        textAlign: 'left',
-                      }}>
-                      Free users can donate a minimum of 100Php and get a 7-day
-                      trial subscription for your support. Only valid once per
-                      month.
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </LinearGradient>
+            Ang Huling Rampa is Thundr’s advocacy to{'\n'}give passing elder
+            members of the LGBTQIA+{'\n'}community the proper burial they
+            deserve.{'\n'}As the first ever LGBTQIA+ community app in{'\n'}the
+            country, we make it our mission to ensure{'\n'}members face death
+            with heads held high.{'\n'}With the help of your subscription and/or
+            {'\n'}
+            voluntary contribution, we will allot a fund to{'\n'}make their
+            burials reflect the colorful lives they led.{'\n'}
+            {'\n'}Together in Ang Huling Rampa, let’s give final{'\n'}respects
+            to our elders who paved the way{'\n'}before us.
+          </Text>
         </View>
         {/*  Footer Button   */}
         <View style={{paddingHorizontal: scale(30), paddingVertical: scale(4)}}>
