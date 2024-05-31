@@ -15,7 +15,7 @@ import Toast from 'react-native-toast-message';
 import {Loading} from '../../../components/shared/Loading.tsx';
 import ChatHeader from '../../../components/Chat/ChatHeader.tsx';
 import ChatInput from '../../../components/Chat/ChatInput.tsx';
-import {GiftedChat, BubbleProps} from 'react-native-gifted-chat';
+import {GiftedChat, MessageProps} from 'react-native-gifted-chat';
 import {Day} from '../../../components/Chat/Day.tsx';
 import Bubbles from '../../../components/Chat/Bubbles.tsx';
 
@@ -49,7 +49,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const chatMessage = useGetChatMessage({
     sub: user?.sub || '',
     chatRoomID: user?.chatRoomUuid || '',
-    limit: 50,
+    limit: 25,
   });
 
   const sendMessage = useSendChatMessage();
@@ -177,7 +177,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             const messageIds = chatMessage.data?.pages[0].flatMap(
               page => page._id,
             ) as number[] | undefined;
-
+            console.log({messageIds});
             await sendMessage.mutateAsync({
               id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
               senderSub: user.sub,
@@ -245,8 +245,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 isLoadingEarlier={chatMessage.isFetchingNextPage}
                 renderInputToolbar={() => null}
                 renderDay={props => <Day {...props} />}
-                renderBubble={(props: Readonly<BubbleProps<IMessage>>) => (
-                  <Bubbles props={props} user={user} isMare={isMare} />
+                renderMessage={(props: Readonly<MessageProps<IMessage>>) => (
+                  <Bubbles
+                    key={props.key}
+                    props={props}
+                    user={user}
+                    isMare={isMare}
+                  />
                 )}
                 scrollToBottomStyle={{
                   backgroundColor: 'rgba(0,0,0,0)',

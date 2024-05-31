@@ -631,5 +631,17 @@ export type CustomerDonationRequest = {
 
 export type CustomerDonationResponse = {
   id: string;
-  createdAt: string;
+  updatedAt: string;
+};
+
+export type CustomerLatestOrderRequest = {
+  sub: string;
+  product: string;
+};
+
+export type CustomerLatestOrderResponse = {
+  id: string;
+  updatedAt: string;
+  status: 'PENDING' | 'COMPLETED';
+  productId: 'THDR-ADVC-001' | 'THDR-BOLT-001';
 };

@@ -11,7 +11,7 @@ import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {formatTimestamp, scale} from '../../utils/utils.ts';
-import {BubbleProps} from 'react-native-gifted-chat';
+import {MessageProps} from 'react-native-gifted-chat';
 import {Image} from 'expo-image';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
 import {Loading} from '../shared/Loading.tsx';
@@ -21,7 +21,7 @@ const Bubbles = ({
   user,
   isMare,
 }: {
-  props: BubbleProps<IMessage>;
+  props: MessageProps<IMessage>;
   isMare: boolean;
   user: Chat;
 }) => {
@@ -109,6 +109,7 @@ const Bubbles = ({
     if (attachments.length === 4) {
       return (
         <View
+          key={props.key}
           style={{
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -120,6 +121,7 @@ const Bubbles = ({
             <>
               {isPending ? (
                 <View
+                  key={index + Math.random()}
                   style={{
                     borderRadius: 10,
                     width: scale(100),
@@ -127,16 +129,17 @@ const Bubbles = ({
                     aspectRatio: 1,
                     backgroundColor: COLORS.gray2,
                   }}>
-                  <Loading />
+                  <Loading key={index + Math.random()} />
                 </View>
               ) : (
                 <TouchableOpacity
-                  key={index}
+                  key={index + Math.random()}
                   onPress={() => {
                     setSelectedImage(photo);
                     setIsVisible(true);
                   }}>
                   <Image
+                    key={index + Math.random()}
                     source={{uri: photo}}
                     style={[styles.messageImage]}
                     transition={1000}
@@ -150,6 +153,7 @@ const Bubbles = ({
     } else {
       return (
         <View
+          key={Math.random()}
           style={{
             flexDirection: 'row',
             gap: scale(2),
@@ -160,6 +164,7 @@ const Bubbles = ({
             <>
               {isPending ? (
                 <View
+                  key={index + Math.random()}
                   style={{
                     borderRadius: 10,
                     width: scale(100),
@@ -167,16 +172,17 @@ const Bubbles = ({
                     aspectRatio: 1,
                     backgroundColor: COLORS.gray2,
                   }}>
-                  <Loading />
+                  <Loading key={index + Math.random()} />
                 </View>
               ) : (
                 <TouchableOpacity
-                  key={index}
+                  key={index + Math.random()}
                   onPress={() => {
                     setSelectedImage(photo);
                     setIsVisible(true);
                   }}>
                   <Image
+                    key={index + Math.random()}
                     source={{uri: photo}}
                     style={[styles.messageImage]}
                     transition={1000}
@@ -190,13 +196,14 @@ const Bubbles = ({
     }
   };
 
-  const renderItem = ({item: item}: {item: BubbleProps<IMessage>}) => {
+  const renderItem = ({item: item}: {item: MessageProps<IMessage>}) => {
     const message = item.currentMessage;
 
     return (
       <>
         {message && message.attachments && message.attachments.length !== 0 ? (
           <View
+            key={item.key}
             style={[
               styles.messageImageContainer,
               isMessageFromSelf(message)
@@ -212,6 +219,7 @@ const Bubbles = ({
         ) : (
           message && (
             <View
+              key={item.key}
               style={[
                 styles.messageContainer,
                 isMessageFromSelf(message)
@@ -298,10 +306,10 @@ const Bubbles = ({
   };
 
   return (
-    <>
+    <View key={props.currentMessage?._id}>
       {renderItem({item: props})}
       {imageModal()}
-    </>
+    </View>
   );
 };
 

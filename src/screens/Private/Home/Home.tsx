@@ -46,6 +46,8 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 import GenericModal from '../../../components/shared/GenericModal.tsx';
 import {BoltLogo} from '../../../assets/images/thundrbolt_icons/BoltLogo.tsx';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
+import {useGetLatestOrder} from '../../../hooks/subscribe/useGetLatestOrder.ts';
+import moment from 'moment/moment';
 
 type HomeScreenRouteProp = RouteProp<RootNavigationParams, 'Home'>;
 
@@ -77,11 +79,18 @@ const Home = ({route}: HomeProps) => {
   const [visible2, isVisible2] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // Explicit type
 
+  const [message, setMessage] = useState<string>('');
+
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
 
   const customerSubscribed = useGetCustomerSubscribed({
     sub: auth.authData?.sub || '',
     productId: 'THDR-BOLT-001',
+  });
+
+  const latestOrder = useGetLatestOrder({
+    sub: auth.authData?.sub || '',
+    product: 'THDR-BOLT-001',
   });
 
   const setIsCustomerSubscribed = useSubscribeCheck(
@@ -129,12 +138,60 @@ const Home = ({route}: HomeProps) => {
       query.refetchQueries({queryKey: ['get-latest-donation']});
       query.refetchQueries({queryKey: ['get-customer-subscribed']});
 
-      customerSubscribed.refetch().then(res => {
-        if (res.data) {
-          setIsCustomerSubscribed(res.data.hasSubscription);
-          isVisible2(res.data.hasSubscription);
-        }
-      });
+      if (payload === 'THDR-ADVC-001') {
+        console.log('test');
+        latestOrder.refetch().then(res => {
+          if (res.data) {
+            const updatedAt = moment(res.data.updatedAt);
+            const monthsSinceDonation = moment().diff(updatedAt, 'months');
+
+            const isAlreadyPremiumSubscriber = monthsSinceDonation < 1;
+            console.log(isAlreadyPremiumSubscriber);
+
+            if (isAlreadyPremiumSubscriber) {
+              customerSubscribed.refetch().then(subscribed => {
+                if (subscribed.data) {
+                  runOnJS(setMessage)(
+                    'Thank you for donating! We are so grateful you chose to support our cause.',
+                  );
+                  setIsCustomerSubscribed(subscribed.data.hasSubscription);
+                  isVisible2(subscribed.data.hasSubscription);
+                }
+              });
+            }
+
+            return;
+          } else {
+            customerSubscribed.refetch().then(subscribed => {
+              if (subscribed.data) {
+                runOnJS(setMessage)(
+                  'Thank you for donating!\n' +
+                    'You now have unlimited swipes, full access to The Possibles, and can use advanced filters for 7 days!',
+                );
+                setIsCustomerSubscribed(subscribed.data.hasSubscription);
+                isVisible2(subscribed.data.hasSubscription);
+              }
+            });
+          }
+        });
+
+        return;
+      }
+
+      if (payload === 'THDR-BOLT-001') {
+        customerSubscribed.refetch().then(res => {
+          if (res.data) {
+            runOnJS(setMessage)(
+              'Thank you for subscribing to Thundr Bolt! You now have unlimited\n' +
+                'swipes, full access to The Possibles, and use advanced filters!',
+            );
+            setIsCustomerSubscribed(res.data.hasSubscription);
+            isVisible2(res.data.hasSubscription);
+          }
+        });
+
+        return;
+      }
     }
   }, [payload, route?.params]);
 
@@ -360,12 +417,7 @@ const Home = ({route}: HomeProps) => {
             <View>
               <Text
                 style={{fontFamily: 'Montserrat-Bold', textAlign: 'center'}}>
-                {payload === 'THDR-BOLT-001' &&
-                  'Thank you for subscribing to Thundr Bolt! You now have unlimited\n' +
-                    'swipes, full access to The Possibles, and use advanced filters!'}
-                {payload === 'THDR-ADVC-001' &&
-                  'Thank you for donating!\n' +
-                    'You now have unlimited swipes, full access to The Possibles, and can use advanced filters for 7 days!'}
+                {message}
               </Text>
             </View>
             <GradientButton
