@@ -134,7 +134,7 @@ const AdvocacyDonate = () => {
             <GradientButton
               onPress={async () => {
                 if (latestDonation.data) {
-                  const createdAt = moment(latestDonation.data.createdAt);
+``                  const createdAt = moment(latestDonation.data.updatedAt);
                   const monthsSinceDonation = moment().diff(
                     createdAt,
                     'months',
