@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -6,27 +6,47 @@ import {
   Animated,
   TouchableOpacity,
   Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {formatTimestamp, scale} from '../../utils/utils.ts';
-import {MessageProps} from 'react-native-gifted-chat';
+import {isSameUser, MessageProps} from 'react-native-gifted-chat';
 import {Image} from 'expo-image';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
 import {Loading} from '../shared/Loading.tsx';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+
+import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
+import {isSameDay} from './Day.tsx';
+import useChatReplyStore from '../../store/chatReplyStore.ts';
+import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
 
 const Bubbles = ({
   props,
   user,
   isMare,
+  setReplyOnSwipeOpen,
+  onLongPress,
 }: {
   props: MessageProps<IMessage>;
   isMare: boolean;
   user: Chat;
+  setReplyOnSwipeOpen: (message: IMessage) => void;
+  onLongPress: (message: IMessage) => void;
 }) => {
-  const isMessageFromSelf = (message: IMessage) => {
-    return message.user._id === user.sub;
+  const isNextMyMessage =
+    props.currentMessage &&
+    props.nextMessage &&
+    isSameUser(props.currentMessage, props.nextMessage) &&
+    isSameDay(props.currentMessage, props.nextMessage);
+
+  const {replyMessage} = useChatReplyStore();
+
+  const isMessageFromSelf = (message: IMessage | undefined) => {
+    return message && message.user._id === user.sub;
   };
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -139,7 +159,6 @@ const Bubbles = ({
                     setIsVisible(true);
                   }}>
                   <Image
-                    key={index + Math.random()}
                     source={{uri: photo}}
                     style={[styles.messageImage]}
                     transition={1000}
@@ -153,7 +172,7 @@ const Bubbles = ({
     } else {
       return (
         <View
-          key={Math.random()}
+          key={props.key}
           style={{
             flexDirection: 'row',
             gap: scale(2),
@@ -201,115 +220,257 @@ const Bubbles = ({
 
     return (
       <>
-        {message && message.attachments && message.attachments.length !== 0 ? (
+        {message && message.unsent ? (
           <View
             key={item.key}
             style={[
-              styles.messageImageContainer,
+              styles.messageUnsentContainer,
               isMessageFromSelf(message)
                 ? styles.messageRight
                 : styles.messageLeft,
             ]}>
-            {renderImage({
-              item: message.attachments,
-              isSelf: isMessageFromSelf(message),
-              isPending: message.pending || false,
-            })}
+            <TrashIcon small />
+            <Text style={[styles.messageText, {color: COLORS.gray3}]}>
+              Message deleted
+            </Text>
           </View>
-        ) : (
-          message && (
+        ) : message &&
+          message.attachments &&
+          message.attachments.length !== 0 ? (
+          <TouchableWithoutFeedback onLongPress={() => onLongPress(message)}>
             <View
               key={item.key}
               style={[
-                styles.messageContainer,
+                styles.messageImageContainer,
                 isMessageFromSelf(message)
-                  ? isMare
-                    ? [
-                        styles.messageRight,
-                        {backgroundColor: COLORS.secondary2},
-                      ]
-                    : [styles.messageRight, {backgroundColor: COLORS.primary1}]
+                  ? styles.messageRight
                   : styles.messageLeft,
               ]}>
-              <Text
-                style={[
-                  styles.messageText,
-                  isMessageFromSelf(message)
-                    ? isMare
-                      ? {color: COLORS.white}
-                      : {color: COLORS.white}
-                    : styles.messageText,
-                ]}>
-                {message.text}
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  marginRight: -2,
-                }}>
-                <Text
+              {renderImage({
+                item: message.attachments,
+                isSelf: isMessageFromSelf(message) || false,
+                isPending: message.pending || false,
+              })}
+            </View>
+          </TouchableWithoutFeedback>
+        ) : (
+          message && (
+            <>
+              {message.replyingId && (
+                <TouchableWithoutFeedback
+                  onPress={() => console.log('reply was pressed')}>
+                  <View
+                    key={item.key}
+                    style={[
+                      styles.messageReplyContainer,
+                      isMessageFromSelf(message)
+                        ? isMare
+                          ? [styles.messageRight]
+                          : [styles.messageRight]
+                        : styles.messageLeft,
+                    ]}>
+                    <Text style={[styles.messageText, {color: COLORS.gray}]}>
+                      {message.replying?.message}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+              <TouchableWithoutFeedback
+                onLongPress={() => onLongPress(message)}>
+                <View
+                  key={item.key}
                   style={[
-                    styles.timestamp,
+                    styles.messageContainer,
                     isMessageFromSelf(message)
                       ? isMare
-                        ? {color: COLORS.white}
-                        : {color: COLORS.white}
-                      : styles.timestamp,
+                        ? [
+                            styles.messageRight,
+                            {backgroundColor: COLORS.secondary2},
+                          ]
+                        : [
+                            styles.messageRight,
+                            {backgroundColor: COLORS.primary1},
+                          ]
+                      : styles.messageLeft,
                   ]}>
-                  {formatTimestamp(message.createdAt)}
-                </Text>
-                {isMessageFromSelf(message) && message.received && (
+                  <Text
+                    style={[
+                      styles.messageText,
+                      isMessageFromSelf(message)
+                        ? isMare
+                          ? {color: COLORS.white}
+                          : {color: COLORS.white}
+                        : styles.messageText,
+                    ]}>
+                    {message.text}
+                  </Text>
                   <View
                     style={{
-                      alignItems: 'flex-end',
-                      justifyContent: 'flex-end',
                       flexDirection: 'row',
-                      gap: -12,
-                    }}>
-                    <CheckIcon isRead />
-                    <CheckIcon isRead />
-                  </View>
-                )}
-
-                {message.sent &&
-                  isMessageFromSelf(message) &&
-                  !message.received && (
-                    <View
-                      style={{
-                        alignItems: 'flex-end',
-                        justifyContent: 'flex-end',
-                        flexDirection: 'row',
-                        gap: -12,
-                      }}>
-                      <CheckIcon />
-                      <CheckIcon />
-                    </View>
-                  )}
-
-                {message.pending && isMessageFromSelf(message) && (
-                  <View
-                    style={{
-                      alignItems: 'flex-end',
+                      alignItems: 'center',
                       justifyContent: 'flex-end',
+                      marginRight: -2,
                     }}>
-                    <CheckIcon />
+                    <Text
+                      style={[
+                        styles.timestamp,
+                        isMessageFromSelf(message)
+                          ? isMare
+                            ? {color: COLORS.white}
+                            : {color: COLORS.white}
+                          : styles.timestamp,
+                      ]}>
+                      {formatTimestamp(message.createdAt)}
+                    </Text>
+                    {renderMessageSeenSentPending(message)}
                   </View>
-                )}
-              </View>
-            </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </>
           )
         )}
       </>
     );
   };
 
+  const renderMessageSeenSentPending = (message: IMessage) => {
+    return (
+      <>
+        {/*Message Seen, Sent, Sending*/}
+        {isMessageFromSelf(message) && message.received && (
+          <View
+            style={{
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              flexDirection: 'row',
+              gap: -12,
+            }}>
+            <CheckIcon isRead />
+            <CheckIcon isRead />
+          </View>
+        )}
+
+        {message.sent && isMessageFromSelf(message) && !message.received && (
+          <View
+            style={{
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              flexDirection: 'row',
+              gap: -12,
+            }}>
+            <CheckIcon />
+            <CheckIcon />
+          </View>
+        )}
+
+        {message.pending && isMessageFromSelf(message) && (
+          <View
+            style={{
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+            }}>
+            <CheckIcon />
+          </View>
+        )}
+      </>
+    );
+  };
+
+  const renderLeftActions = (progressAnimatedValue: any) => {
+    const size = progressAnimatedValue.interpolate({
+      inputRange: [0, 1, 100],
+      outputRange: [0, 1, 1],
+    });
+    const trans = progressAnimatedValue.interpolate({
+      inputRange: [0, 1, 2],
+      outputRange: [0, 12, 20],
+    });
+
+    return (
+      <>
+        {props.currentMessage &&
+          !isMessageFromSelf(props.currentMessage) &&
+          !props.currentMessage.unsent && (
+            <Animated.View
+              style={[
+                styles.containerReply,
+                {transform: [{scale: size}, {translateX: trans}]},
+                !isNextMyMessage
+                  ? styles.defaultBottomOffset
+                  : styles.bottomOffsetNext,
+                props.position === 'left' && {marginRight: 16},
+              ]}>
+              <View style={styles.replyImageWrapper}>
+                <ReturnArrowIcon />
+              </View>
+            </Animated.View>
+          )}
+      </>
+    );
+  };
+
+  const renderRightActions = (progressAnimatedValue: any) => {
+    const size = progressAnimatedValue.interpolate({
+      inputRange: [0, 1, 100],
+      outputRange: [0, 1, 1],
+    });
+    const trans = progressAnimatedValue.interpolate({
+      inputRange: [0, 1, 2],
+      outputRange: [0, -12, -20],
+    });
+
+    return (
+      <>
+        {props.currentMessage &&
+          isMessageFromSelf(props.currentMessage) &&
+          !props.currentMessage.unsent && (
+            <Animated.View
+              style={[
+                styles.containerReply,
+                {transform: [{scale: size}, {translateX: trans}]},
+                isNextMyMessage
+                  ? styles.defaultBottomOffset
+                  : styles.bottomOffsetNext,
+                props.position === 'right' && styles.leftOffsetValue,
+              ]}>
+              <View style={styles.replyImageWrapper}>
+                <ReturnArrowIcon />
+              </View>
+            </Animated.View>
+          )}
+      </>
+    );
+  };
+
+  const onSwipeOpenAction = () => {
+    if (props.currentMessage) {
+      setReplyOnSwipeOpen({...props.currentMessage});
+    }
+  };
+
+  const swipeableRef = useRef<Swipeable>(null);
+
+  // Clean up the swipeable ref when the reply message changes
+  useEffect(() => {
+    if (replyMessage && swipeableRef.current) {
+      swipeableRef.current.close();
+    }
+  }, [replyMessage]);
+
   return (
-    <View key={props.currentMessage?._id}>
-      {renderItem({item: props})}
-      {imageModal()}
-    </View>
+    <GestureHandlerRootView>
+      <Swipeable
+        ref={swipeableRef}
+        friction={2}
+        leftThreshold={40}
+        rightThreshold={40}
+        renderLeftActions={renderLeftActions}
+        renderRightActions={renderRightActions}
+        onSwipeableOpen={onSwipeOpenAction}>
+        {renderItem({item: props})}
+        {imageModal()}
+      </Swipeable>
+    </GestureHandlerRootView>
   );
 };
 
@@ -323,8 +484,24 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     maxWidth: '80%',
   },
+  messageReplyContainer: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: -15,
+    maxWidth: '85%',
+  },
+  messageUnsentContainer: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 5,
+    maxWidth: '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   messageImageContainer: {
-    // backgroundColor: '#f0f0f0',
     padding: 2,
     borderRadius: 10,
     marginVertical: 5,
@@ -388,5 +565,26 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'Montserrat-Bold',
+  },
+  containerReply: {
+    width: 16,
+  },
+  replyImageWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  replyImage: {
+    width: 20,
+    height: 20,
+  },
+  defaultBottomOffset: {
+    marginBottom: 2,
+  },
+  bottomOffsetNext: {
+    marginBottom: 10,
+  },
+  leftOffsetValue: {
+    marginLeft: 16,
   },
 });

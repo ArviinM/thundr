@@ -410,6 +410,13 @@ export type Chat = {
 // Define a type for the attachment URLs
 export type Attachment = string;
 
+// Chat Reactions
+export type Reaction = {
+  reactionId: string;
+  reactionSub: string;
+  reactionEmoji: string;
+};
+
 // Define a type for a single chat message
 export type ChatMessage = {
   id: number;
@@ -418,9 +425,13 @@ export type ChatMessage = {
   message: string;
   created: string;
   isRead: number;
-  attachments: Attachment[];
+  attachments: Array<Attachment>;
   targetSub: string;
   status?: 'pending' | 'sent' | 'failed';
+  isUnsent: boolean;
+  replyingId?: number;
+  replying?: ChatMessage;
+  reactions?: Array<Reaction>;
 };
 
 export type ChatListRequest = {
@@ -474,8 +485,12 @@ export interface IMessage {
   pending?: boolean;
   quickReplies?: QuickReplies;
   attachments?: string[]; // Array to hold attachment URLs
-  isRead?: number;
-  chatRoomID?: string;
+  isRead: number;
+  chatRoomID: string;
+  unsent: boolean;
+  reactions?: Array<Reaction>;
+  replyingId?: number;
+  replying?: ChatMessage;
 }
 
 // Deactivate

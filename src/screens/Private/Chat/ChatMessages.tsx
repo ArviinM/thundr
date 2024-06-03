@@ -33,6 +33,9 @@ import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
 import {ScrollBottom} from '../../../assets/images/ScrollBottom.tsx';
 import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
 
+import useChatReplyStore from '../../../store/chatReplyStore.ts';
+import {useActionSheet} from '@expo/react-native-action-sheet';
+
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
   'ChatMessages'
@@ -46,6 +49,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const {user, isMare = false} = route?.params || {};
   const query = useQueryClient(queryClient);
 
+  const {showActionSheetWithOptions} = useActionSheet();
+
   const chatMessage = useGetChatMessage({
     sub: user?.sub || '',
     chatRoomID: user?.chatRoomUuid || '',
@@ -56,6 +61,9 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const readMessage = useReadMessage();
 
   const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
+
+  const {replyMessage, setReplyMessage, clearReplyMessage} =
+    useChatReplyStore();
 
   useEffect(() => {
     if (user && chatMessage.isSuccess) {
@@ -177,7 +185,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             const messageIds = chatMessage.data?.pages[0].flatMap(
               page => page._id,
             ) as number[] | undefined;
-            console.log({messageIds});
+
             await sendMessage.mutateAsync({
               id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
               senderSub: user.sub,
@@ -196,13 +204,53 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
+  const onLongPressActions = (message: IMessage) => {
+    const options = [
+      'Copy',
+      'Reply',
+      'Unsend for everyone',
+      'Unsend for you',
+      'Cancel',
+    ];
+    const cancelButtonIndex = 4;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        cancelButtonTintColor: COLORS.primary1,
+        tintColor: COLORS.black,
+      },
+      selectedIndex => {
+        switch (selectedIndex) {
+          case 0: // Copy Text
+            console.log('Copy Text Here');
+            break;
+          case 1: // Reply
+            console.log('Reply');
+            break;
+          case 2: //Unsend for everyone
+            console.log('Unsend for everyone');
+            break;
+          case 3: // unsend for you
+            console.log('Unsend for you');
+            break;
+          case cancelButtonIndex:
+        }
+      },
+    );
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (user) {
         setChatRoom(user.chatRoomUuid);
       }
-      return () => setChatRoom('');
-    }, [user, setChatRoom]),
+      return () => {
+        setChatRoom('');
+        clearReplyMessage();
+      };
+    }, [user, setChatRoom, clearReplyMessage]),
   );
 
   return (
@@ -248,9 +296,11 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 renderMessage={(props: Readonly<MessageProps<IMessage>>) => (
                   <Bubbles
                     key={props.key}
+                    setReplyOnSwipeOpen={setReplyMessage}
                     props={props}
                     user={user}
                     isMare={isMare}
+                    onLongPress={onLongPressActions}
                   />
                 )}
                 scrollToBottomStyle={{
@@ -267,6 +317,9 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 onPressSend={handleSendMessage}
                 onPressImage={() => handleImageUpload(false)}
                 onPressCamera={() => handleImageUpload(true)}
+                user={user}
+                repliedMessage={replyMessage}
+                onClearReply={clearReplyMessage}
               />
             </KeyboardStickyView>
           </View>

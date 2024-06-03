@@ -18,6 +18,7 @@ import RootNavigation from './src/navigation';
 import {asyncStoragePersister, queryClient} from './src/utils/queryClient.ts';
 import messaging from '@react-native-firebase/messaging';
 import {onMessageReceived} from './src/utils/notificationUtils.ts';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 function App(): React.JSX.Element {
   useEffect(() => {
@@ -30,13 +31,15 @@ function App(): React.JSX.Element {
         client={queryClient}
         persistOptions={{persister: asyncStoragePersister}}>
         <AuthProvider>
-          <GestureHandlerRootView style={{flex: 1}}>
-            <BottomSheetModalProvider>
-              <KeyboardProvider>
-                <RootNavigation />
-              </KeyboardProvider>
-            </BottomSheetModalProvider>
-          </GestureHandlerRootView>
+          <ActionSheetProvider>
+            <GestureHandlerRootView style={{flex: 1}}>
+              <BottomSheetModalProvider>
+                <KeyboardProvider>
+                  <RootNavigation />
+                </KeyboardProvider>
+              </BottomSheetModalProvider>
+            </GestureHandlerRootView>
+          </ActionSheetProvider>
         </AuthProvider>
       </PersistQueryClientProvider>
       <Toast config={toastConfig} />
