@@ -29,6 +29,7 @@ import {navigationRef} from '../constants/navigator.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.ts';
 import {useGetStatus} from '../hooks/status/useGetStatus.ts';
+import useSubscribeCheck from '../store/subscribeStore.ts';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -64,6 +65,9 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   );
   const setCustomerDetails = useCustomerDetailsStore(
     state => state.setCustomerDetails,
+  );
+  const setUserSubscription = useSubscribeCheck(
+    state => state.setIsCustomerSubscribed,
   );
 
   useEffect(() => {
@@ -125,6 +129,10 @@ const AuthProvider = ({children}: AuthProviderProps) => {
           targetSub: event.data.targetSub,
           chatRoomID: event.data.chatRoomID,
           isRead: event.data.isRead,
+          isUnsent: event.data.isUnsent,
+          replyingId: event.data.replyingId,
+          reactions: event.data.reactions,
+          replying: event.data.replying,
         });
         query.refetchQueries({queryKey: ['get-chat-list']});
 
@@ -233,9 +241,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       setAuthData(result);
 
       await AsyncStorage.setItem('@AuthData', JSON.stringify(result));
-      // await queryClient.refetchQueries({
-      //   queryKey: ['get-match-list', result.sub],
-      // });
     } catch (error) {
       console.error('Error signing in:', error);
     }
@@ -249,20 +254,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
       setCustomerProfile(null);
       setCustomerDetails(null);
+      setUserSubscription(false);
       disconnectSocket();
 
       // @ts-ignore
       setAuthData(undefined);
-      // reset all cache
-      await queryClient.resetQueries({
-        queryKey: [
-          'get-match-list',
-          'customer-compatibility-questions',
-          'get-chat-list',
-          'get-chat-message',
-        ],
-        type: 'all',
-      });
 
       queryClient.clear();
       await AsyncStorage.removeItem('@AuthData');
