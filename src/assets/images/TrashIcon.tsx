@@ -1,10 +1,15 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
-export const TrashIcon = () => {
+import {COLORS} from '../../constants/commons.ts';
+export const TrashIcon = (small: {small?: boolean}) => {
   return (
-    <Svg width={32} height={30} fill="none">
+    <Svg
+      width={small ? 18 : 32}
+      height={small ? 16 : 30}
+      viewBox={'0 0 32 30'}
+      fill="none">
       <Path
-        stroke="#fff"
+        stroke={small ? COLORS.gray3 : '#fff'}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={3}
