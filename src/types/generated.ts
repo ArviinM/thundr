@@ -662,3 +662,16 @@ export type CustomerLatestOrderResponse = {
   status: 'PENDING' | 'COMPLETED';
   productId: 'THDR-ADVC-001' | 'THDR-BOLT-001';
 };
+
+export type ChatReactionRequest = {
+  sub: string;
+  messageId: number;
+  reaction: string;
+};
+
+export type ChatReactionResponse = {
+  reactionId: string,
+  reactionSub: string,
+  reactionEmoji: string,
+  sub: string | null
+}
