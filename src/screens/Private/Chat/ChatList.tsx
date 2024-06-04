@@ -106,7 +106,7 @@ const ChatList = ({
               source={{uri: item.profile.customerPhoto[0].photoUrl}}
               style={{width: scale(70), height: scale(70), borderRadius: 8}}
               placeholder={item.profile.customerPhoto[0].blurHash}
-              transition={1000}
+              transition={100}
             />
           </View>
           <View style={{justifyContent: 'center', paddingHorizontal: 10}}>

@@ -120,7 +120,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
           <ImageExpo
             source={{uri: user.profile.customerPhoto[0].photoUrl}}
             style={{width: scale(42), height: scale(42), borderRadius: 8}}
-            transition={1000}
+            transition={100}
             placeholder={user.profile.customerPhoto[0].blurHash}
           />
         </TouchableOpacity>

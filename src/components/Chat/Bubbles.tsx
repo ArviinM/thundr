@@ -23,6 +23,7 @@ import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
 import {isSameDay} from './Day.tsx';
 import useChatReplyStore from '../../store/chatReplyStore.ts';
 import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
+import {ReactIcon} from '../../assets/images/chat/ReactIcon.tsx';
 
 const Bubbles = ({
   props,
@@ -30,12 +31,14 @@ const Bubbles = ({
   isMare,
   setReplyOnSwipeOpen,
   onLongPress,
+  onReact,
 }: {
   props: MessageProps<IMessage>;
   isMare: boolean;
   user: Chat;
   setReplyOnSwipeOpen: (message: IMessage) => void;
   onLongPress: (message: IMessage) => void;
+  onReact: (messageId: number) => void;
 }) => {
   const isNextMyMessage =
     props.currentMessage &&
@@ -107,7 +110,7 @@ const Bubbles = ({
               <Image
                 source={{uri: selectedImage}}
                 style={{width: '100%', height: '90%'}}
-                transition={1000}
+                transition={100}
               />
             )}
           </View>
@@ -120,10 +123,12 @@ const Bubbles = ({
     item: attachments,
     isSelf: isSelf,
     isPending: isPending,
+    isReply: isReply,
   }: {
     item: Attachment[];
     isSelf: boolean;
     isPending: boolean;
+    isReply?: boolean;
   }) => {
     // Check if there are exactly 4 attachments
     if (attachments.length === 4) {
@@ -154,14 +159,17 @@ const Bubbles = ({
               ) : (
                 <TouchableOpacity
                   key={index + Math.random()}
+                  disabled={isReply}
                   onPress={() => {
-                    setSelectedImage(photo);
-                    setIsVisible(true);
+                    if (!isReply) {
+                      setSelectedImage(photo);
+                      setIsVisible(true);
+                    }
                   }}>
                   <Image
                     source={{uri: photo}}
                     style={[styles.messageImage]}
-                    transition={1000}
+                    transition={100}
                   />
                 </TouchableOpacity>
               )}
@@ -196,15 +204,18 @@ const Bubbles = ({
               ) : (
                 <TouchableOpacity
                   key={index + Math.random()}
+                  disabled={isReply}
                   onPress={() => {
-                    setSelectedImage(photo);
-                    setIsVisible(true);
+                    if (!isReply) {
+                      setSelectedImage(photo);
+                      setIsVisible(true);
+                    }
                   }}>
                   <Image
                     key={index + Math.random()}
                     source={{uri: photo}}
                     style={[styles.messageImage]}
-                    transition={1000}
+                    transition={100}
                   />
                 </TouchableOpacity>
               )}
@@ -237,95 +248,150 @@ const Bubbles = ({
         ) : message &&
           message.attachments &&
           message.attachments.length !== 0 ? (
-          <TouchableWithoutFeedback onLongPress={() => onLongPress(message)}>
-            <View
-              key={item.key}
-              style={[
-                styles.messageImageContainer,
-                isMessageFromSelf(message)
-                  ? styles.messageRight
-                  : styles.messageLeft,
-              ]}>
-              {renderImage({
-                item: message.attachments,
-                isSelf: isMessageFromSelf(message) || false,
-                isPending: message.pending || false,
-              })}
-            </View>
-          </TouchableWithoutFeedback>
+          <View
+            style={[
+              styles.containerWithReact,
+              isMessageFromSelf(message)
+                ? isMare
+                  ? [styles.messageRight, {marginRight: 0}]
+                  : [styles.messageRight, {marginRight: 0}]
+                : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
+            ]}>
+            <TouchableWithoutFeedback onLongPress={() => onLongPress(message)}>
+              <View
+                key={item.key}
+                style={[
+                  styles.messageImageContainer,
+                  isMessageFromSelf(message)
+                    ? styles.messageRight
+                    : styles.messageLeft,
+                ]}>
+                {renderImage({
+                  item: message.attachments,
+                  isSelf: isMessageFromSelf(message) || false,
+                  isPending: message.pending || false,
+                })}
+              </View>
+            </TouchableWithoutFeedback>
+            {message && (
+              <TouchableOpacity
+                style={{padding: 10}}
+                onPress={() => onReact(message._id as number)}>
+                <ReactIcon isMare={isMare} count={message.reactions?.length} />
+              </TouchableOpacity>
+            )}
+          </View>
         ) : (
           message && (
             <>
-              {message.replyingId && (
+              {message.replyingId && message.replying && (
                 <TouchableWithoutFeedback
                   onPress={() => console.log('reply was pressed')}>
                   <View
                     key={item.key}
                     style={[
-                      styles.messageReplyContainer,
+                      message.replying.attachments &&
+                      message.replying.attachments.length !== 0
+                        ? styles.messageImageReplyContainer
+                        : styles.messageReplyContainer,
                       isMessageFromSelf(message)
                         ? isMare
                           ? [styles.messageRight]
                           : [styles.messageRight]
                         : styles.messageLeft,
                     ]}>
-                    <Text style={[styles.messageText, {color: COLORS.gray}]}>
-                      {message.replying?.text}
-                    </Text>
+                    {message.text &&
+                      message.replying.attachments &&
+                      message.replying.attachments.length === 0 && (
+                        <Text
+                          style={[styles.messageText, {color: COLORS.gray}]}>
+                          {message.replying?.text}
+                        </Text>
+                      )}
+                    {message.replying.attachments &&
+                      renderImage({
+                        item: message.replying.attachments,
+                        isSelf: isMessageFromSelf(message) || false,
+                        isPending: message.replying.pending || false,
+                        isReply: true,
+                      })}
                   </View>
                 </TouchableWithoutFeedback>
               )}
-              <TouchableWithoutFeedback
-                onLongPress={() => onLongPress(message)}>
-                <View
-                  key={item.key}
-                  style={[
-                    styles.messageContainer,
-                    isMessageFromSelf(message)
-                      ? isMare
-                        ? [
-                            styles.messageRight,
-                            {backgroundColor: COLORS.secondary2},
-                          ]
-                        : [
-                            styles.messageRight,
-                            {backgroundColor: COLORS.primary1},
-                          ]
-                      : styles.messageLeft,
-                  ]}>
-                  <Text
+              <View
+                style={[
+                  styles.containerWithReact,
+                  isMessageFromSelf(message)
+                    ? isMare
+                      ? [styles.messageRight, {marginRight: 0}]
+                      : [styles.messageRight, {marginRight: 0}]
+                    : [
+                        styles.messageLeft,
+                        {marginLeft: 0, flexDirection: 'row'},
+                      ],
+                ]}>
+                <TouchableWithoutFeedback
+                  onLongPress={() => onLongPress(message)}>
+                  <View
+                    key={item.key}
                     style={[
-                      styles.messageText,
+                      styles.messageContainer,
                       isMessageFromSelf(message)
                         ? isMare
-                          ? {color: COLORS.white}
-                          : {color: COLORS.white}
-                        : styles.messageText,
+                          ? [
+                              styles.messageRight,
+                              {backgroundColor: COLORS.secondary2},
+                            ]
+                          : [
+                              styles.messageRight,
+                              {backgroundColor: COLORS.primary1},
+                            ]
+                        : styles.messageLeft,
                     ]}>
-                    {message.text}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      marginRight: -2,
-                    }}>
                     <Text
                       style={[
-                        styles.timestamp,
+                        styles.messageText,
                         isMessageFromSelf(message)
                           ? isMare
                             ? {color: COLORS.white}
                             : {color: COLORS.white}
-                          : styles.timestamp,
+                          : styles.messageText,
                       ]}>
-                      {formatTimestamp(message.createdAt)}
+                      {message.text}
                     </Text>
-                    {renderMessageSeenSentPending(message)}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        marginRight: -2,
+                      }}>
+                      <Text
+                        style={[
+                          styles.timestamp,
+                          isMessageFromSelf(message)
+                            ? isMare
+                              ? {color: COLORS.white}
+                              : {color: COLORS.white}
+                            : styles.timestamp,
+                        ]}>
+                        {formatTimestamp(message.createdAt)}
+                      </Text>
+                      {renderMessageSeenSentPending(message)}
+                    </View>
                   </View>
-                </View>
-              </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
+                {message && (
+                  <TouchableOpacity
+                    style={{padding: 10}}
+                    onPress={() => onReact(message._id as number)}>
+                    <ReactIcon
+                      isMare={isMare}
+                      count={message.reactions?.length}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </>
           )
         )}
@@ -477,6 +543,11 @@ const Bubbles = ({
 export default Bubbles;
 
 const styles = StyleSheet.create({
+  containerWithReact: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    gap: 10,
+  },
   messageContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,
@@ -491,12 +562,24 @@ const styles = StyleSheet.create({
     marginBottom: -15,
     maxWidth: '85%',
   },
+  messageImageReplyContainer: {
+    backgroundColor: '#f0f0f0',
+    marginBottom: -20,
+    maxWidth: '58%',
+    padding: 5,
+    borderRadius: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    opacity: 0.3,
+  },
   messageUnsentContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
-    maxWidth: '80%',
+    maxWidth: '58%',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
@@ -505,7 +588,7 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRadius: 10,
     marginVertical: 5,
-    maxWidth: '80%',
+    maxWidth: '58%',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-around',

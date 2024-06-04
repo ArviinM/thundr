@@ -36,6 +36,7 @@ import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
 import useChatReplyStore from '../../../store/chatReplyStore.ts';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useShallow} from 'zustand/react/shallow';
+import {useReactMessage} from '../../../hooks/chat/useReactMessage.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -60,6 +61,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const sendMessage = useSendChatMessage();
   const readMessage = useReadMessage();
+  const reactMessage = useReactMessage();
 
   const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
 
@@ -95,6 +97,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         page => page._id,
       ) as number[] | undefined;
 
+      clearReplyMessage();
+
       await sendMessage.mutateAsync({
         id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
         senderSub: user.sub,
@@ -105,9 +109,20 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         replying: replyMessage,
       });
 
-      clearReplyMessage();
       await query.invalidateQueries({queryKey: ['get-chat-list']});
       // await query.invalidateQueries({queryKey: ['get-chat-message']});
+    }
+  };
+
+  const handleReactMessage = async (messageId: number) => {
+    if (user) {
+      await reactMessage.mutateAsync({
+        sub: user.sub,
+        messageId: messageId,
+        reaction: '❤️',
+      });
+
+      await query.invalidateQueries({queryKey: ['get-chat-list']});
     }
   };
 
@@ -306,7 +321,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 isLoadingEarlier={chatMessage.isFetchingNextPage}
                 renderInputToolbar={() => null}
                 renderDay={props => <Day {...props} />}
-                renderMessage={(props: Readonly<MessageProps<IMessage>>) => (
+                renderBubble={(props: Readonly<MessageProps<IMessage>>) => (
                   <Bubbles
                     key={props.key}
                     setReplyOnSwipeOpen={setReplyMessage}
@@ -314,6 +329,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                     user={user}
                     isMare={isMare}
                     onLongPress={onLongPressActions}
+                    onReact={handleReactMessage}
                   />
                 )}
                 scrollToBottomStyle={{
