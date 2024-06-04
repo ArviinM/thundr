@@ -53,7 +53,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
         <Image
           source={IMAGES.matchThundr}
           style={[StyleSheet.absoluteFill]}
-          transition={1000}
+          transition={100}
         />
         <View style={styles.container}>
           <View
