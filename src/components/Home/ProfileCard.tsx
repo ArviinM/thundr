@@ -174,7 +174,7 @@ const ProfileCard = ({
           <AnimatedImage
             style={[possibles ? cardStyles.possiblesImage : cardStyles.image]}
             placeholder={customerImages.blurHash}
-            transition={1000}
+            transition={100}
             entering={FadeIn}
             exiting={FadeOut}
             key={imageIndex}
@@ -567,7 +567,6 @@ const ProfileCard = ({
                 seconds
               </Text>
             </View>
-
           </View>
         )}
       {!isUser && (

@@ -92,7 +92,7 @@ const PhotoUpload: React.FC<Props> = ({
             marginBottom: isSubPhoto ? 8 : 0,
             borderRadius: 10,
           }}
-          transition={1000}
+          transition={100}
         />
       ) : photoData ? (
         <Image
@@ -103,7 +103,7 @@ const PhotoUpload: React.FC<Props> = ({
             marginBottom: isSubPhoto ? 8 : 0,
             borderRadius: 10,
           }}
-          transition={1000}
+          transition={100}
         />
       ) : (
         <Image
@@ -114,7 +114,7 @@ const PhotoUpload: React.FC<Props> = ({
             marginBottom: isSubPhoto ? 8 : 0,
             borderRadius: 10,
           }}
-          transition={1000}
+          transition={100}
         />
       )}
     </TouchableOpacity>
