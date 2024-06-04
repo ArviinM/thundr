@@ -44,6 +44,10 @@ export function useSendChatMessage() {
         chatRoomID: data.chatRoomID || '',
         isRead: 0,
         status: 'pending',
+        replying: data.replying,
+        replyingId: data.replyingToId,
+        reactions: [],
+        isUnsent: false,
       });
 
       queryClient.setQueriesData(

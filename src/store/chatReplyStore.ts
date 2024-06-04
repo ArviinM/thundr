@@ -4,15 +4,15 @@ import {create} from 'zustand';
 import {IMessage} from '../types/generated.ts';
 
 type ChatReplyStore = {
-  replyMessage: IMessage | null;
-  setReplyMessage: (message: IMessage | null) => void;
+  replyMessage: IMessage | undefined;
+  setReplyMessage: (message: IMessage | undefined) => void;
   clearReplyMessage: () => void;
 };
 
 const useChatReplyStore = create<ChatReplyStore>(set => ({
-  replyMessage: null,
+  replyMessage: undefined,
   setReplyMessage: message => set({replyMessage: message}),
-  clearReplyMessage: () => set({replyMessage: null}),
+  clearReplyMessage: () => set({replyMessage: undefined}),
 }));
 
 export default useChatReplyStore;

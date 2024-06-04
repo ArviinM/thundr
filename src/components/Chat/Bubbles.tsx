@@ -270,7 +270,7 @@ const Bubbles = ({
                         : styles.messageLeft,
                     ]}>
                     <Text style={[styles.messageText, {color: COLORS.gray}]}>
-                      {message.replying?.message}
+                      {message.replying?.text}
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>

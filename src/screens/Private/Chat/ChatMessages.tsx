@@ -35,6 +35,7 @@ import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
 
 import useChatReplyStore from '../../../store/chatReplyStore.ts';
 import {useActionSheet} from '@expo/react-native-action-sheet';
+import {useShallow} from 'zustand/react/shallow';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -62,8 +63,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
 
-  const {replyMessage, setReplyMessage, clearReplyMessage} =
-    useChatReplyStore();
+  const {replyMessage, setReplyMessage, clearReplyMessage} = useChatReplyStore(
+    useShallow(state => ({
+      replyMessage: state.replyMessage,
+      setReplyMessage: state.setReplyMessage,
+      clearReplyMessage: state.clearReplyMessage,
+    })),
+  );
 
   useEffect(() => {
     if (user && chatMessage.isSuccess) {
@@ -95,7 +101,11 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         targetSub: user.profile.sub,
         message: message,
         read: '',
+        replyingToId: replyMessage && (replyMessage._id as number),
+        replying: replyMessage,
       });
+
+      clearReplyMessage();
       await query.invalidateQueries({queryKey: ['get-chat-list']});
       // await query.invalidateQueries({queryKey: ['get-chat-message']});
     }
@@ -193,6 +203,9 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               message: '',
               read: '',
               base64Files: imageData,
+              replyingToId: replyMessage
+                ? (replyMessage._id as number)
+                : undefined,
             });
             // await query.invalidateQueries({queryKey: ['get-chat-message']});
             await query.invalidateQueries({queryKey: ['get-chat-list']});
@@ -318,7 +331,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 onPressImage={() => handleImageUpload(false)}
                 onPressCamera={() => handleImageUpload(true)}
                 user={user}
-                repliedMessage={replyMessage}
+                repliedMessage={replyMessage || null}
                 onClearReply={clearReplyMessage}
               />
             </KeyboardStickyView>

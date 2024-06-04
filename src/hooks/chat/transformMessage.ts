@@ -14,9 +14,16 @@ export function transformChatMessageForGiftedChat(
     pending: message.status === 'pending',
     sent: message.status !== 'pending',
     received: message.isRead === 1,
-    unsent: message.isUnsent,
-    replyingId: message.replyingId,
-    replying: message.replying,
+    unsent: message && message.isUnsent,
+    replyingId: message.replyingId || undefined,
+    replying:
+      typeof message.replying === 'object' &&
+      message.replying !== null &&
+      '_id' in message.replying
+        ? message.replying
+        : typeof message.replying === 'object' && message.replying !== null
+        ? transformChatMessageForGiftedChat(message.replying)
+        : undefined,
     reactions: message.reactions,
   };
 }

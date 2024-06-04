@@ -430,7 +430,7 @@ export type ChatMessage = {
   status?: 'pending' | 'sent' | 'failed';
   isUnsent: boolean;
   replyingId?: number;
-  replying?: ChatMessage;
+  replying?: ChatMessage | IMessage;
   reactions?: Array<Reaction>;
 };
 
@@ -468,6 +468,8 @@ export type ChatSendMessageRequest = {
   targetSub: string;
   base64Files?: Base64Attachments[];
   chatRoomID?: string;
+  replyingToId?: number;
+  replying?: IMessage | undefined;
 };
 
 // Transform Chat Messages for Gifted Chat
@@ -490,7 +492,7 @@ export interface IMessage {
   unsent: boolean;
   reactions?: Array<Reaction>;
   replyingId?: number;
-  replying?: ChatMessage;
+  replying?: IMessage;
 }
 
 // Deactivate
