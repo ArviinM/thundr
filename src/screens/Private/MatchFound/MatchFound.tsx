@@ -108,10 +108,10 @@ const MatchFound = ({route}: MatchFoundProps) => {
               <Button
                 onPress={async () => {
                   setIsLoading(true);
-                  await query.refetchQueries({
+                  await query.invalidateQueries({
                     queryKey: ['get-chat-list'],
                   });
-                  await query.refetchQueries({
+                  await query.invalidateQueries({
                     queryKey: ['get-customer-possibles'],
                   });
 

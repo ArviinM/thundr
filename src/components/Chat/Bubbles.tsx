@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
+  Pressable,
 } from 'react-native';
 import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 
@@ -381,13 +382,14 @@ const Bubbles = ({
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
-                {message && (
+                {message && message.reactions && (
                   <TouchableOpacity
                     style={{padding: 10}}
                     onPress={() => onReact(message._id as number)}>
                     <ReactIcon
+                      key={item.key}
                       isMare={isMare}
-                      count={message.reactions?.length}
+                      count={message.reactions.length}
                     />
                   </TouchableOpacity>
                 )}

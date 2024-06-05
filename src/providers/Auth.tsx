@@ -11,7 +11,9 @@ import {useSignInUser} from '../hooks/useSignInUser.ts';
 import {
   AuthDataRequest,
   AuthDataResponse,
+  IMessage,
   PasswordCreationRequest,
+  Reaction,
 } from '../types/generated.ts';
 import {useAuthStore} from '../store/authStore.ts';
 import {queryClient} from '../utils/queryClient.ts';
@@ -183,6 +185,148 @@ const AuthProvider = ({children}: AuthProviderProps) => {
 
     return () => {
       socket?.off('PUSH_NOTIFICATION');
+    };
+  }, [authData, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      console.log('now listening to reactions create');
+
+      socket.on('REACTION_CREATE', event => {
+        const reaction: Reaction = {
+          reactionId: event.data.reactionId,
+          reactionEmoji: event.data.reactionEmoji || '',
+          reactionSub: event.data.reactionSub || '',
+        };
+
+        queryClient.setQueriesData(
+          {queryKey: ['get-chat-message']},
+          (oldData: any) => {
+            if (
+              oldData.pages &&
+              oldData.pages.some((page: any[]) =>
+                page.some(
+                  message =>
+                    message.chatRoomID === event.data.chatRoomId &&
+                    message._id === event.data.messageId,
+                ),
+              )
+            ) {
+              return {
+                ...oldData,
+                pages: oldData.pages.map((page: any[]) =>
+                  page.map(message =>
+                    message.chatRoomID === event.data.chatRoomId &&
+                    message._id === event.data.messageId
+                      ? {
+                          ...message,
+                          reactions: [...message.reactions, reaction],
+                        } // Add the new react
+                      : message,
+                  ),
+                ),
+              };
+            } else {
+              return oldData; // If the message is not found, return the old data as is.
+            }
+          },
+        );
+      });
+    }
+
+    return () => {
+      socket?.off('REACTION_CREATE');
+    };
+  }, [authData, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      console.log('now listening to reactions delete');
+
+      socket.on('REACTION_DELETE', event => {
+        console.log(JSON.stringify(event, null, 2));
+
+        queryClient.setQueriesData(
+          {queryKey: ['get-chat-message']},
+          (oldData: any) => {
+            if (oldData?.pages) {
+              oldData.pages = oldData.pages.map((page: IMessage[]) => {
+                const messageIndex = page.findIndex(
+                  (msg: IMessage) => msg._id === event.data.messageId,
+                );
+
+                if (messageIndex !== -1) {
+                  // Filter out the reaction to remove
+                  const updatedReactions = (
+                    page[messageIndex].reactions || []
+                  ).filter(
+                    (reaction: Reaction) =>
+                      reaction.reactionId !== event.data.reactionId,
+                  );
+
+                  // Update the message in newData using map to create a new array
+                  return page.map((msg: IMessage, index: number) =>
+                    index === messageIndex
+                      ? {...msg, reactions: updatedReactions}
+                      : msg,
+                  );
+                }
+
+                return page; // Return the page unchanged if no matching message is found
+              });
+              return oldData;
+            } else {
+              return oldData;
+            }
+          },
+        );
+      });
+    }
+
+    return () => {
+      socket?.off('REACTION_DELETE');
+    };
+  }, [authData, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      console.log('now listening to chat delete');
+
+      socket.on('CHAT_DELETE', event => {
+        queryClient.setQueriesData(
+          {queryKey: ['get-chat-message']},
+          (oldData: any) => {
+            if (oldData?.pages) {
+              for (const page of oldData.pages) {
+                const messageIndex = page.findIndex(
+                  (msg: IMessage) => msg._id === event.data.messageId,
+                );
+
+                if (messageIndex !== -1) {
+                  // Update unsent on the original message if it's found
+                  page[messageIndex] = {
+                    ...page[messageIndex],
+                    unsent: true,
+                    sent: false,
+                    pending: false,
+                    received: false,
+                  };
+                  break; // Stop searching once found
+                }
+              }
+              return oldData; // Return the updated oldData
+            } else {
+              return oldData;
+            }
+          },
+        );
+
+        query.refetchQueries({queryKey: ['get-chat-list']});
+      });
+    }
+
+    return () => {
+      socket?.off('CHAT_DELETE');
     };
   }, [authData, socket]);
 

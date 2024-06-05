@@ -37,6 +37,7 @@ import useChatReplyStore from '../../../store/chatReplyStore.ts';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useShallow} from 'zustand/react/shallow';
 import {useReactMessage} from '../../../hooks/chat/useReactMessage.ts';
+import {useUnsendMessage} from '../../../hooks/chat/useUnsendMessage.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -62,6 +63,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const sendMessage = useSendChatMessage();
   const readMessage = useReadMessage();
   const reactMessage = useReactMessage();
+  const unsendMessageAll = useUnsendMessage();
 
   const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
 
@@ -233,14 +235,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   };
 
   const onLongPressActions = (message: IMessage) => {
-    const options = [
-      'Copy',
-      'Reply',
-      'Unsend for everyone',
-      'Unsend for you',
-      'Cancel',
-    ];
-    const cancelButtonIndex = 4;
+    const isOwnMessage = user?.sub === message.user._id;
+
+    const options = isOwnMessage
+      ? ['Copy', 'Reply', 'Unsend for everyone', 'Unsend for you', 'Cancel']
+      : ['Copy', 'Reply', 'Unsend for you', 'Cancel'];
+
+    const cancelButtonIndex = options.length - 1; // Always the last item
 
     showActionSheetWithOptions(
       {
@@ -249,21 +250,27 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         cancelButtonTintColor: COLORS.primary1,
         tintColor: COLORS.black,
       },
-      selectedIndex => {
+      async selectedIndex => {
         switch (selectedIndex) {
           case 0: // Copy Text
-            console.log('Copy Text Here');
+            // ... (logic to copy text)
             break;
           case 1: // Reply
-            console.log('Reply');
+            // ... (logic to set reply)
             break;
-          case 2: //Unsend for everyone
-            console.log('Unsend for everyone');
+          case isOwnMessage ? 2 : -1: // Unsend for everyone (only if own message)
+            if (user) {
+              await unsendMessageAll.mutateAsync({
+                sub: user.sub,
+                messageId: message._id as number,
+              });
+            }
             break;
-          case 3: // unsend for you
-            console.log('Unsend for you');
+          case isOwnMessage ? 3 : 2: // Unsend for you (index adjusted if needed)
+            // ... (logic to unsend for yourself)
             break;
-          case cancelButtonIndex:
+          case cancelButtonIndex: // Cancel
+          // No action needed
         }
       },
     );

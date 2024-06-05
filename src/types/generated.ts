@@ -415,6 +415,7 @@ export type Reaction = {
   reactionId: string;
   reactionSub: string;
   reactionEmoji: string;
+  chatRoomId?: string;
 };
 
 // Define a type for a single chat message
@@ -491,6 +492,7 @@ export interface IMessage {
   chatRoomID: string;
   unsent: boolean;
   reactions?: Array<Reaction>;
+  reactionsCount?: number;
   replyingId?: number;
   replying?: IMessage;
 }
@@ -670,8 +672,13 @@ export type ChatReactionRequest = {
 };
 
 export type ChatReactionResponse = {
-  reactionId: string,
-  reactionSub: string,
-  reactionEmoji: string,
-  sub: string | null
-}
+  reactionId: string;
+  reactionSub: string;
+  reactionEmoji: string;
+  sub: string | null;
+};
+
+export type ChatUnsendMessageRequest = {
+  sub: string;
+  messageId: number;
+};

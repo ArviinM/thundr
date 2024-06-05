@@ -8,4 +8,6 @@ export type Reaction = {
    */
   reactionSub?: string | null;
   reactionEmoji?: string | null;
+
+  chatRoomId?: string;
 };
