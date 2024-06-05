@@ -1,10 +1,11 @@
-import { Chat } from "../ChatService/Chat.js";
-import { NotificationPayload } from "../NotificationService/NotificationPayload.js";
-import { WSStatus } from "../enum/WSStatus.js"
-import { WSKeepaliveAckPayload } from "./WSKeepaliveAckPayload.js";
-import { WSKeepalivePayload } from "./WSKeepalivePayload.js";
+import {Chat} from '../ChatService/Chat.js';
+import {NotificationPayload} from '../NotificationService/NotificationPayload.js';
+import {WSStatus} from '../enum/WSStatus.js';
+import {WSKeepaliveAckPayload} from './WSKeepaliveAckPayload.js';
+import {WSKeepalivePayload} from './WSKeepalivePayload.js';
+import {Reaction} from '../ChatService/Reaction.ts';
+import {Unsend} from '../ChatService/Unsend.ts';
 
- 
 export default class WSMessagePayload<T> {
   public data: T;
   public msgType: WSMessageTypes;
@@ -19,7 +20,7 @@ export default class WSMessagePayload<T> {
   public static builder<T>(): WSMessagePayloadBuilder<T> {
     return new WSMessagePayloadBuilder<T>();
   }
- 
+
   public static fromJson<T>(json: string): WSMessagePayload<T> {
     return fromJson<T>(json);
   }
@@ -31,11 +32,7 @@ export default class WSMessagePayload<T> {
       wsStatus: this.wsStatus,
     });
   }
-
 }
-
-
-
 
 class WSMessagePayloadBuilder<T> {
   private data: T | undefined;
@@ -52,53 +49,61 @@ class WSMessagePayloadBuilder<T> {
     return this;
   }
 
-  public withWsStatus(wsStatus: WSStatus): this{
+  public withWsStatus(wsStatus: WSStatus): this {
     this.wsStatus = wsStatus;
     return this;
   }
 
   public build(): WSMessagePayload<T> {
     if (!this.data || !this.msgType || !this.wsStatus) {
-      throw new Error("All fields must be set before calling build().");
+      throw new Error('All fields must be set before calling build().');
     }
 
     return new WSMessagePayload(this.data, this.msgType, this.wsStatus);
   }
 }
- 
+
 function fromJson<T>(json: string): WSMessagePayload<T> {
   const data = JSON.parse(json);
 
   if (!data.data || !data.msgType || !data.wsStatus) {
-    throw new Error("Invalid WSMessagePayload JSON.");
+    throw new Error('Invalid WSMessagePayload JSON.');
   }
 
   return new WSMessagePayload<T>(data.data, data.msgType, data.wsStatus);
 }
 
- 
 export type WSServerToClientEvent = {
-  "USR_ACTIVE": "USR_ACTIVE",
-  "TYPE_INDICATOR": "TYPE_INDICATOR",
-  "AUTH_RESPONSE": Dispatch<WSMessagePayload<string>>,
-  "KEEPALIVE_ACK": Dispatch<WSKeepaliveAckPayload>,
-  "PUSH_NOTIFICATION": Dispatch<WSMessagePayload<NotificationPayload>>,
-  "CHAT": Dispatch<WSMessagePayload<Chat>>
+  USR_ACTIVE: 'USR_ACTIVE';
+  TYPE_INDICATOR: 'TYPE_INDICATOR';
+  AUTH_RESPONSE: Dispatch<WSMessagePayload<string>>;
+  KEEPALIVE_ACK: Dispatch<WSKeepaliveAckPayload>;
+  PUSH_NOTIFICATION: Dispatch<WSMessagePayload<NotificationPayload>>;
+  CHAT: Dispatch<WSMessagePayload<Chat>>;
+  REACTION_CREATE: Dispatch<WSMessagePayload<Reaction>>;
+  REACTION_DELETE: Dispatch<WSMessagePayload<Reaction>>;
+  CHAT_DELETE: Dispatch<WSMessagePayload<Unsend>>;
 };
 
 export type WSClientToServerEvent = {
-  "USR_ACTIVE": "USR_ACTIVE",
-  "TYPE_INDICATOR": "TYPE_INDICATOR",
-  "AUTH_RESPONSE": "AUTH_RESPONSE",
-  "KEEPALIVE":DispatchCallback<WSMessagePayload<WSKeepalivePayload>, WSMessagePayload<WSKeepaliveAckPayload>>,
-  "PUSH_NOTIFICATION": Dispatch<WSMessagePayload<NotificationPayload>>,
-  "CHAT": Dispatch<WSMessagePayload<Chat>>
+  USR_ACTIVE: 'USR_ACTIVE';
+  TYPE_INDICATOR: 'TYPE_INDICATOR';
+  AUTH_RESPONSE: 'AUTH_RESPONSE';
+  KEEPALIVE: DispatchCallback<
+    WSMessagePayload<WSKeepalivePayload>,
+    WSMessagePayload<WSKeepaliveAckPayload>
+  >;
+  PUSH_NOTIFICATION: Dispatch<WSMessagePayload<NotificationPayload>>;
+  CHAT: Dispatch<WSMessagePayload<Chat>>;
 };
-
-
 
 export type Dispatch<T> = (value: T) => void;
 
-export type DispatchCallback<T, C> = (value: T, callback: ((value: C) => void)) => void;
+export type DispatchCallback<T, C> = (
+  value: T,
+  callback: (value: C) => void,
+) => void;
 
-export type WSMessageTypes = keyof WSClientToServerEvent | keyof WSServerToClientEvent;
+export type WSMessageTypes =
+  | keyof WSClientToServerEvent
+  | keyof WSServerToClientEvent;
