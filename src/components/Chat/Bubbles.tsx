@@ -105,11 +105,13 @@ const Bubbles = ({
     isSelf: isSelf,
     isPending: isPending,
     isReply: isReply,
+    message: message,
   }: {
     item: Attachment[];
     isSelf: boolean;
     isPending: boolean;
     isReply?: boolean;
+    message: IMessage;
   }) => {
     // Check if there are exactly 4 attachments
     if (attachments.length === 4) {
@@ -141,6 +143,7 @@ const Bubbles = ({
                 <TouchableOpacity
                   key={index + Math.random()}
                   disabled={isReply}
+                  onLongPress={() => onLongPress(message)}
                   onPress={() => {
                     if (!isReply) {
                       setSelectedImage(photo);
@@ -186,6 +189,7 @@ const Bubbles = ({
                 <TouchableOpacity
                   key={index + Math.random()}
                   disabled={isReply}
+                  onLongPress={() => onLongPress(message)}
                   onPress={() => {
                     if (!isReply) {
                       setSelectedImage(photo);
@@ -229,22 +233,21 @@ const Bubbles = ({
         ) : message &&
           message.attachments &&
           message.attachments.length !== 0 ? (
-          <TouchableWithoutFeedback onLongPress={() => onLongPress(message)}>
-            <View
-              key={item.key}
-              style={[
-                styles.messageImageContainer,
-                isMessageFromSelf(message)
-                  ? styles.messageRight
-                  : styles.messageLeft,
-              ]}>
-              {renderImage({
-                item: message.attachments,
-                isSelf: isMessageFromSelf(message) || false,
-                isPending: message.pending || false,
-              })}
-            </View>
-          </TouchableWithoutFeedback>
+          <View
+            key={item.key}
+            style={[
+              styles.messageImageContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            {renderImage({
+              item: message.attachments,
+              isSelf: isMessageFromSelf(message) || false,
+              isPending: message.pending || false,
+              message: message,
+            })}
+          </View>
         ) : (
           message && (
             <>

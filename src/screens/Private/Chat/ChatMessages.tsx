@@ -225,10 +225,20 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   };
 
   const onLongPressActions = (message: IMessage) => {
-    const isOwnMessage = user?.sub === message.user._id;
+    if (!user) {
+      return;
+    }
+
+    const isOwnMessage = user.sub === message.user._id;
+    const hasAttachments =
+      message.attachments && message.attachments.length > 0;
 
     const options = isOwnMessage
-      ? ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
+      ? hasAttachments
+        ? ['Unsend for everyone', 'Unsend for you', 'Cancel']
+        : ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
+      : hasAttachments
+      ? ['Unsend for you', 'Cancel']
       : ['Copy', 'Unsend for you', 'Cancel'];
 
     const cancelButtonIndex = options.length - 1; // Always the last item
@@ -242,13 +252,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       },
       async selectedIndex => {
         switch (selectedIndex) {
-          case 0:
-            Clipboard.setString(message.text);
-            break;
-          // case 1: // Reply
-          //   // ... (logic to set reply)
-          //   break;
-          case isOwnMessage ? 1 : -1: // Unsend for everyone (only if own message)
+          case isOwnMessage ? (hasAttachments ? 0 : 1) : -1: // Unsend for everyone (only if own message and no attachments)
             if (user) {
               await unsendMessageAll.mutateAsync({
                 sub: user.sub,
@@ -256,14 +260,18 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               });
             }
             break;
-          case isOwnMessage ? 2 : 1: // Unsend for you (index adjusted if needed)
+          case isOwnMessage ? (hasAttachments ? 1 : 2) : 0: // Unsend for you (index depends on message ownership and attachment presence)
             if (user) {
               await unsendMessageSelf.mutateAsync({
                 sub: user.sub,
                 messageId: message._id as number,
               });
             }
-
+            break;
+          case 0: // Copy (only if the message has no attachments)
+            if (!hasAttachments) {
+              Clipboard.setString(message.text);
+            }
             break;
           case cancelButtonIndex: // Cancel
           // No action needed
