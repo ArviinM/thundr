@@ -38,6 +38,8 @@ import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useShallow} from 'zustand/react/shallow';
 import {useReactMessage} from '../../../hooks/chat/useReactMessage.ts';
 import {useUnsendMessage} from '../../../hooks/chat/useUnsendMessage.ts';
+import {useUnsendSelfMessage} from '../../../hooks/chat/useUnsendSelfMessage.ts';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -62,8 +64,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const sendMessage = useSendChatMessage();
   const readMessage = useReadMessage();
-  const reactMessage = useReactMessage();
   const unsendMessageAll = useUnsendMessage();
+  const unsendMessageSelf = useUnsendSelfMessage();
 
   const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
 
@@ -113,18 +115,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
       await query.invalidateQueries({queryKey: ['get-chat-list']});
       // await query.invalidateQueries({queryKey: ['get-chat-message']});
-    }
-  };
-
-  const handleReactMessage = async (messageId: number) => {
-    if (user) {
-      await reactMessage.mutateAsync({
-        sub: user.sub,
-        messageId: messageId,
-        reaction: '❤️',
-      });
-
-      await query.invalidateQueries({queryKey: ['get-chat-list']});
     }
   };
 
@@ -238,8 +228,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     const isOwnMessage = user?.sub === message.user._id;
 
     const options = isOwnMessage
-      ? ['Copy', 'Reply', 'Unsend for everyone', 'Unsend for you', 'Cancel']
-      : ['Copy', 'Reply', 'Unsend for you', 'Cancel'];
+      ? ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
+      : ['Copy', 'Unsend for you', 'Cancel'];
 
     const cancelButtonIndex = options.length - 1; // Always the last item
 
@@ -252,13 +242,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       },
       async selectedIndex => {
         switch (selectedIndex) {
-          case 0: // Copy Text
-            // ... (logic to copy text)
+          case 0:
+            Clipboard.setString(message.text);
             break;
-          case 1: // Reply
-            // ... (logic to set reply)
-            break;
-          case isOwnMessage ? 2 : -1: // Unsend for everyone (only if own message)
+          // case 1: // Reply
+          //   // ... (logic to set reply)
+          //   break;
+          case isOwnMessage ? 1 : -1: // Unsend for everyone (only if own message)
             if (user) {
               await unsendMessageAll.mutateAsync({
                 sub: user.sub,
@@ -266,8 +256,14 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               });
             }
             break;
-          case isOwnMessage ? 3 : 2: // Unsend for you (index adjusted if needed)
-            // ... (logic to unsend for yourself)
+          case isOwnMessage ? 2 : 1: // Unsend for you (index adjusted if needed)
+            if (user) {
+              await unsendMessageSelf.mutateAsync({
+                sub: user.sub,
+                messageId: message._id as number,
+              });
+            }
+
             break;
           case cancelButtonIndex: // Cancel
           // No action needed
@@ -331,12 +327,10 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 renderBubble={(props: Readonly<MessageProps<IMessage>>) => (
                   <Bubbles
                     key={props.key}
-                    setReplyOnSwipeOpen={setReplyMessage}
                     props={props}
                     user={user}
                     isMare={isMare}
                     onLongPress={onLongPressActions}
-                    onReact={handleReactMessage}
                   />
                 )}
                 scrollToBottomStyle={{
@@ -353,9 +347,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
                 onPressSend={handleSendMessage}
                 onPressImage={() => handleImageUpload(false)}
                 onPressCamera={() => handleImageUpload(true)}
-                user={user}
-                repliedMessage={replyMessage || null}
-                onClearReply={clearReplyMessage}
               />
             </KeyboardStickyView>
           </View>

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,48 +7,28 @@ import {
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
-  Pressable,
 } from 'react-native';
 import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {formatTimestamp, scale} from '../../utils/utils.ts';
-import {isSameUser, MessageProps} from 'react-native-gifted-chat';
+import {MessageProps} from 'react-native-gifted-chat';
 import {Image} from 'expo-image';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
 import {Loading} from '../shared/Loading.tsx';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-
-import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
-import {isSameDay} from './Day.tsx';
-import useChatReplyStore from '../../store/chatReplyStore.ts';
 import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
-import {ReactIcon} from '../../assets/images/chat/ReactIcon.tsx';
 
 const Bubbles = ({
   props,
   user,
   isMare,
-  setReplyOnSwipeOpen,
   onLongPress,
-  onReact,
 }: {
   props: MessageProps<IMessage>;
   isMare: boolean;
   user: Chat;
-  setReplyOnSwipeOpen: (message: IMessage) => void;
   onLongPress: (message: IMessage) => void;
-  onReact: (messageId: number) => void;
 }) => {
-  const isNextMyMessage =
-    props.currentMessage &&
-    props.nextMessage &&
-    isSameUser(props.currentMessage, props.nextMessage) &&
-    isSameDay(props.currentMessage, props.nextMessage);
-
-  const {replyMessage} = useChatReplyStore();
-
   const isMessageFromSelf = (message: IMessage | undefined) => {
     return message && message.user._id === user.sub;
   };
@@ -249,151 +229,76 @@ const Bubbles = ({
         ) : message &&
           message.attachments &&
           message.attachments.length !== 0 ? (
-          <View
-            style={[
-              styles.containerWithReact,
-              isMessageFromSelf(message)
-                ? isMare
-                  ? [styles.messageRight, {marginRight: 0}]
-                  : [styles.messageRight, {marginRight: 0}]
-                : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
-            ]}>
-            <TouchableWithoutFeedback onLongPress={() => onLongPress(message)}>
-              <View
-                key={item.key}
-                style={[
-                  styles.messageImageContainer,
-                  isMessageFromSelf(message)
-                    ? styles.messageRight
-                    : styles.messageLeft,
-                ]}>
-                {renderImage({
-                  item: message.attachments,
-                  isSelf: isMessageFromSelf(message) || false,
-                  isPending: message.pending || false,
-                })}
-              </View>
-            </TouchableWithoutFeedback>
-            {message && (
-              <TouchableOpacity
-                style={{padding: 10}}
-                onPress={() => onReact(message._id as number)}>
-                <ReactIcon isMare={isMare} count={message.reactions?.length} />
-              </TouchableOpacity>
-            )}
-          </View>
+          <TouchableWithoutFeedback onLongPress={() => onLongPress(message)}>
+            <View
+              key={item.key}
+              style={[
+                styles.messageImageContainer,
+                isMessageFromSelf(message)
+                  ? styles.messageRight
+                  : styles.messageLeft,
+              ]}>
+              {renderImage({
+                item: message.attachments,
+                isSelf: isMessageFromSelf(message) || false,
+                isPending: message.pending || false,
+              })}
+            </View>
+          </TouchableWithoutFeedback>
         ) : (
           message && (
             <>
-              {message.replyingId && message.replying && (
-                <TouchableWithoutFeedback
-                  onPress={() => console.log('reply was pressed')}>
-                  <View
-                    key={item.key}
+              <TouchableWithoutFeedback
+                onLongPress={() => onLongPress(message)}>
+                <View
+                  key={item.key}
+                  style={[
+                    styles.messageContainer,
+                    isMessageFromSelf(message)
+                      ? isMare
+                        ? [
+                            styles.messageRight,
+                            {backgroundColor: COLORS.secondary2},
+                          ]
+                        : [
+                            styles.messageRight,
+                            {backgroundColor: COLORS.primary1},
+                          ]
+                      : styles.messageLeft,
+                  ]}>
+                  <Text
                     style={[
-                      message.replying.attachments &&
-                      message.replying.attachments.length !== 0
-                        ? styles.messageImageReplyContainer
-                        : styles.messageReplyContainer,
+                      styles.messageText,
                       isMessageFromSelf(message)
                         ? isMare
-                          ? [styles.messageRight]
-                          : [styles.messageRight]
-                        : styles.messageLeft,
+                          ? {color: COLORS.white}
+                          : {color: COLORS.white}
+                        : styles.messageText,
                     ]}>
-                    {message.text &&
-                      message.replying.attachments &&
-                      message.replying.attachments.length === 0 && (
-                        <Text
-                          style={[styles.messageText, {color: COLORS.gray}]}>
-                          {message.replying?.text}
-                        </Text>
-                      )}
-                    {message.replying.attachments &&
-                      renderImage({
-                        item: message.replying.attachments,
-                        isSelf: isMessageFromSelf(message) || false,
-                        isPending: message.replying.pending || false,
-                        isReply: true,
-                      })}
-                  </View>
-                </TouchableWithoutFeedback>
-              )}
-              <View
-                style={[
-                  styles.containerWithReact,
-                  isMessageFromSelf(message)
-                    ? isMare
-                      ? [styles.messageRight, {marginRight: 0}]
-                      : [styles.messageRight, {marginRight: 0}]
-                    : [
-                        styles.messageLeft,
-                        {marginLeft: 0, flexDirection: 'row'},
-                      ],
-                ]}>
-                <TouchableWithoutFeedback
-                  onLongPress={() => onLongPress(message)}>
+                    {message.text}
+                  </Text>
                   <View
-                    key={item.key}
-                    style={[
-                      styles.messageContainer,
-                      isMessageFromSelf(message)
-                        ? isMare
-                          ? [
-                              styles.messageRight,
-                              {backgroundColor: COLORS.secondary2},
-                            ]
-                          : [
-                              styles.messageRight,
-                              {backgroundColor: COLORS.primary1},
-                            ]
-                        : styles.messageLeft,
-                    ]}>
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      marginRight: -2,
+                    }}>
                     <Text
                       style={[
-                        styles.messageText,
+                        styles.timestamp,
                         isMessageFromSelf(message)
                           ? isMare
                             ? {color: COLORS.white}
                             : {color: COLORS.white}
-                          : styles.messageText,
+                          : styles.timestamp,
                       ]}>
-                      {message.text}
+                      {formatTimestamp(message.createdAt)}
                     </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        marginRight: -2,
-                      }}>
-                      <Text
-                        style={[
-                          styles.timestamp,
-                          isMessageFromSelf(message)
-                            ? isMare
-                              ? {color: COLORS.white}
-                              : {color: COLORS.white}
-                            : styles.timestamp,
-                        ]}>
-                        {formatTimestamp(message.createdAt)}
-                      </Text>
-                      {renderMessageSeenSentPending(message)}
-                    </View>
+                    {renderMessageSeenSentPending(message)}
                   </View>
-                </TouchableWithoutFeedback>
-                {message && message.reactions && (
-                  <TouchableOpacity
-                    style={{padding: 10}}
-                    onPress={() => onReact(message._id as number)}>
-                    <ReactIcon
-                      key={item.key}
-                      isMare={isMare}
-                      count={message.reactions.length}
-                    />
-                  </TouchableOpacity>
-                )}
-              </View>
+                </View>
+              </TouchableWithoutFeedback>
             </>
           )
         )}
@@ -444,101 +349,11 @@ const Bubbles = ({
     );
   };
 
-  const renderLeftActions = (progressAnimatedValue: any) => {
-    const size = progressAnimatedValue.interpolate({
-      inputRange: [0, 1, 100],
-      outputRange: [0, 1, 1],
-    });
-    const trans = progressAnimatedValue.interpolate({
-      inputRange: [0, 1, 2],
-      outputRange: [0, 12, 20],
-    });
-
-    return (
-      <>
-        {props.currentMessage &&
-          !isMessageFromSelf(props.currentMessage) &&
-          !props.currentMessage.unsent && (
-            <Animated.View
-              style={[
-                styles.containerReply,
-                {transform: [{scale: size}, {translateX: trans}]},
-                !isNextMyMessage
-                  ? styles.defaultBottomOffset
-                  : styles.bottomOffsetNext,
-                props.position === 'left' && {marginRight: 16},
-              ]}>
-              <View style={styles.replyImageWrapper}>
-                <ReturnArrowIcon />
-              </View>
-            </Animated.View>
-          )}
-      </>
-    );
-  };
-
-  const renderRightActions = (progressAnimatedValue: any) => {
-    const size = progressAnimatedValue.interpolate({
-      inputRange: [0, 1, 100],
-      outputRange: [0, 1, 1],
-    });
-    const trans = progressAnimatedValue.interpolate({
-      inputRange: [0, 1, 2],
-      outputRange: [0, -12, -20],
-    });
-
-    return (
-      <>
-        {props.currentMessage &&
-          isMessageFromSelf(props.currentMessage) &&
-          !props.currentMessage.unsent && (
-            <Animated.View
-              style={[
-                styles.containerReply,
-                {transform: [{scale: size}, {translateX: trans}]},
-                isNextMyMessage
-                  ? styles.defaultBottomOffset
-                  : styles.bottomOffsetNext,
-                props.position === 'right' && styles.leftOffsetValue,
-              ]}>
-              <View style={styles.replyImageWrapper}>
-                <ReturnArrowIcon />
-              </View>
-            </Animated.View>
-          )}
-      </>
-    );
-  };
-
-  const onSwipeOpenAction = () => {
-    if (props.currentMessage) {
-      setReplyOnSwipeOpen({...props.currentMessage});
-    }
-  };
-
-  const swipeableRef = useRef<Swipeable>(null);
-
-  // Clean up the swipeable ref when the reply message changes
-  useEffect(() => {
-    if (replyMessage && swipeableRef.current) {
-      swipeableRef.current.close();
-    }
-  }, [replyMessage]);
-
   return (
-    <GestureHandlerRootView>
-      <Swipeable
-        ref={swipeableRef}
-        friction={2}
-        leftThreshold={40}
-        rightThreshold={40}
-        renderLeftActions={renderLeftActions}
-        renderRightActions={renderRightActions}
-        onSwipeableOpen={onSwipeOpenAction}>
-        {renderItem({item: props})}
-        {imageModal()}
-      </Swipeable>
-    </GestureHandlerRootView>
+    <>
+      {renderItem({item: props})}
+      {imageModal()}
+    </>
   );
 };
 

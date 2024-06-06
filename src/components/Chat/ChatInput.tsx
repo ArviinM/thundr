@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -11,78 +10,23 @@ import {COLORS} from '../../constants/commons.ts';
 import {SendIcon} from '../../assets/images/chat/SendIcon.tsx';
 import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
 import {CameraIcon} from '../../assets/images/chat/CameraIcon.tsx';
-import {Chat, IMessage} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
-import {ReplyCloseIcon} from '../../assets/images/chat/ReplyCloseIcon.tsx';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
-import {truncateChatPreview} from '../../screens/Private/Chat/chatUtils.ts';
 
 const ChatInput = ({
   isMare,
   onPressSend,
   onPressImage,
   onPressCamera,
-  repliedMessage,
-  onClearReply,
-  user,
 }: {
   isMare: boolean;
   onPressSend: (message: string) => void;
   onPressImage: () => void;
   onPressCamera: () => void;
-  repliedMessage: IMessage | null;
-  onClearReply: () => void;
-  user: Chat;
 }) => {
   const [inputText, setInputText] = useState<string>('');
-  const isMessageFromSelf = (message: IMessage | undefined) => {
-    return message && message.user._id === user.sub;
-  };
-
-  const replyContainerTranslateY = useSharedValue(0); // Initial translation is 0
-
-  const replyContainerStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: withSpring(replyContainerTranslateY.value),
-        },
-      ],
-      opacity: withSpring(repliedMessage ? 1 : 0), // Fade in/out
-      height: 'auto',
-    };
-  });
 
   return (
     <>
-      {repliedMessage && ( // Conditionally render the reply preview
-        <Animated.View style={[styles.replyContainer, replyContainerStyle]}>
-          <View>
-            <Text style={styles.replyUser}>
-              Replying to{' '}
-              {isMessageFromSelf(repliedMessage)
-                ? 'yourself'
-                : user.profile.name}
-            </Text>
-            <Text style={styles.replyMessage}>
-              {repliedMessage.attachments &&
-              repliedMessage.attachments.length > 0
-                ? 'Image 🖼️'
-                : truncateChatPreview(repliedMessage.text, 40)}
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity onPress={onClearReply}>
-              <ReplyCloseIcon />
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      )}
-
       <View style={styles.inputContainer}>
         <View
           style={[
