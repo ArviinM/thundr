@@ -2,7 +2,6 @@ import {useMutation} from '@tanstack/react-query';
 import {AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
-  Attachment,
   BaseResponse,
   ChatMessage,
   ChatSendMessageRequest,
@@ -10,6 +9,7 @@ import {
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 import {transformChatMessageForGiftedChat} from './transformMessage.ts';
 import {queryClient} from '../../utils/queryClient.ts';
+import {checkFileExists} from '../../utils/utils.ts';
 
 export function useSendChatMessage() {
   const axiosInstance = useAxiosWithAuth();
@@ -17,8 +17,47 @@ export function useSendChatMessage() {
   return useMutation({
     mutationKey: ['send-chat-message'],
     mutationFn: async (data: ChatSendMessageRequest): Promise<ChatMessage> => {
+      let formData = new FormData();
+      let newMessage = {
+        id: data.id,
+        senderSub: data.senderSub,
+        targetSub: data.targetSub,
+        message: data.message,
+        read: data.read,
+        replyingToId: data.replyingToId,
+      };
+
+      formData.append('message', JSON.stringify(newMessage));
+
+      if (data.attachments) {
+        for (const mediaItem of data.attachments) {
+          // const index = data.attachments.indexOf(mediaItem);
+          const fileUri = mediaItem.filePath;
+
+          if (await checkFileExists(fileUri)) {
+            formData.append('media', {
+              uri: fileUri,
+              type: mediaItem.fileType,
+              name: mediaItem.fileName,
+            });
+          } else {
+            throw {
+              name: 'send-chat-message',
+              status: 'null',
+              message: 'File does not exist',
+            } as Error;
+          }
+        }
+      }
+
+      console.log(formData);
+
       const response: AxiosResponse<BaseResponse<ChatMessage>> =
-        await axiosInstance.post('/chat/send-message', data);
+        await axiosInstance.post('/chat/send-message', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {
@@ -30,6 +69,8 @@ export function useSendChatMessage() {
         } as Error;
       }
 
+      console.log(response.data);
+
       return response.data.data;
     },
     onError: showErrorToast,
@@ -37,7 +78,12 @@ export function useSendChatMessage() {
       let newMessage = transformChatMessageForGiftedChat({
         id: data.id || Date.now(),
         message: data.message,
-        attachments: (data.base64Files as Attachment[]) || [],
+        attachments:
+          data.attachments && data.attachments.length > 0
+            ? Array.from({length: data.attachments.length}, () => ({
+                fileUrl: '',
+              }))
+            : [],
         created: new Date().toString(),
         senderSub: data.senderSub,
         targetSub: data.targetSub,

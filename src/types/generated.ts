@@ -408,7 +408,14 @@ export type Chat = {
 };
 
 // Define a type for the attachment URLs
-export type Attachment = string;
+// export type Attachment = string;
+
+export type Attachment = {
+  fileUrl: string;
+  blurHash?: string;
+  thumbnailUrl?: string;
+  mimeType?: string;
+};
 
 // Chat Reactions
 export type Reaction = {
@@ -461,13 +468,19 @@ export type Base64Attachments = {
   fileContentBase64?: string | null;
 };
 
+export type FileAttachment = {
+  fileName: string | undefined;
+  fileType: string;
+  filePath: string;
+};
+
 export type ChatSendMessageRequest = {
   id?: number;
   senderSub: string;
   message: string;
   read: string;
   targetSub: string;
-  base64Files?: Base64Attachments[];
+  attachments?: Array<FileAttachment>;
   chatRoomID?: string;
   replyingToId?: number;
   replying?: IMessage | undefined;
@@ -487,7 +500,7 @@ export interface IMessage {
   received?: boolean;
   pending?: boolean;
   quickReplies?: QuickReplies;
-  attachments?: string[]; // Array to hold attachment URLs
+  attachments?: Attachment[]; // Array to hold attachment URLs
   isRead: number;
   chatRoomID: string;
   unsent: boolean;

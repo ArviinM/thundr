@@ -1,5 +1,8 @@
-import {ChatAttachment} from './ChatAttachment.js';
-import {ChatMessage, Reaction} from '../../../src/types/generated.ts';
+import {
+  Attachment,
+  ChatMessage,
+  Reaction,
+} from '../../../src/types/generated.ts';
 
 // TypeScript equivalent of the Chat class
 export interface Chat {
@@ -9,8 +12,7 @@ export interface Chat {
   message: string;
   created: string;
   isRead: number;
-  chatAttachments: ChatAttachment[];
-  attachments?: string[]; // Transient field
+  attachments?: Array<Attachment>; // Transient field
   targetSub: string;
   isUnsent: boolean;
   replyingId?: number;
