@@ -130,7 +130,7 @@ const ChatList = ({
               {item.latestChat
                 ? item.latestChat.message
                   ? truncateChatPreview(item.latestChat.message)
-                  : '[Image] 🌠'
+                  : '[Media] 🌠🎥'
                 : `Say hello to ${item.profile.name.split(' ')[0] || '👻'} 👋`}
             </Text>
           </View>
