@@ -130,7 +130,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     try {
       if (isCamera) {
         let cameraMedia = await ImagePicker.openCamera({
-          mediaType: 'video',
+          mediaType: 'any',
           forceJpg: true,
           cropping: false,
         });
