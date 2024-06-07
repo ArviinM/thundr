@@ -32,6 +32,8 @@ import {useQueryClient} from '@tanstack/react-query';
 import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.ts';
 import {useGetStatus} from '../hooks/status/useGetStatus.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
+import DeviceInfo from 'react-native-device-info';
+import {Alert} from 'react-native';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -77,6 +79,13 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       if (status.data.statusCode === 503) {
         signOut();
         navigationRef.navigate('Maintenance');
+      }
+      if (status.data.version !== DeviceInfo.getVersion()) {
+        signOut();
+        Alert.alert(
+          'NEW VERSION HAS BEEN RELEASED',
+          'Please update your app to have a smooth experience using Thundr! ⚡️',
+        );
       }
     }
   }, [status.data]);

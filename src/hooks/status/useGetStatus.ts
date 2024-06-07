@@ -23,7 +23,11 @@ export function useGetStatus() {
         });
       }
 
-      return {status: response.data.status, statusCode: response.status};
+      return {
+        status: response.data.status,
+        statusCode: response.status,
+        data: response.data,
+      };
     },
   });
 }

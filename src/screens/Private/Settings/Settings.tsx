@@ -47,33 +47,8 @@ const Settings = () => {
     }
   };
 
-  // const [visible, isVisible] = useState(false);
-  // const deactivate = useDeactivateAccount();
-
   return (
     <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
-      {/*<DeactivateModal*/}
-      {/*  isVisible={visible}*/}
-      {/*  title="Sure ka na ba sis?"*/}
-      {/*  content={*/}
-      {/*    <Text style={{fontFamily: 'Montserrat-Regular'}}>*/}
-      {/*      Upon deactivation, you may reactivate your account only for seven*/}
-      {/*      days. Gora siz?*/}
-      {/*    </Text>*/}
-      {/*  }*/}
-      {/*  buttonText="Deactivate"*/}
-      {/*  onClose={async () => {*/}
-      {/*    try {*/}
-      {/*      if (auth.authData) {*/}
-      {/*        await deactivate.mutateAsync({sub: auth.authData.sub});*/}
-      {/*        auth.signOut();*/}
-      {/*      }*/}
-      {/*    } catch (error) {*/}
-      {/*      auth.signOut();*/}
-      {/*      console.error(error);*/}
-      {/*    }*/}
-      {/*  }}*/}
-      {/*/>*/}
       <ScrollView style={styles.scrollViewContainer}>
         <View style={styles.container}>
           <View>
