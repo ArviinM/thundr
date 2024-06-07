@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
-import ImagePicker, {Image} from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
 
 // Components
@@ -23,12 +23,18 @@ import Bubbles from '../../../components/Chat/Bubbles.tsx';
 import {Platform, View} from 'react-native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {COLORS} from '../../../constants/commons.ts';
-import {MAX_IMAGE_SIZE_BYTES, scale} from '../../../utils/utils.ts';
+import {
+  MAX_IMAGE_COUNT,
+  MAX_IMAGE_SIZE_BYTES,
+  MAX_VIDEO_COUNT,
+  MAX_VIDEO_SIZE_BYTES,
+  scale,
+} from '../../../utils/utils.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
 import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
-import {Base64Attachments, IMessage} from '../../../types/generated.ts';
+import {FileAttachment, IMessage} from '../../../types/generated.ts';
 import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
 import {ScrollBottom} from '../../../assets/images/ScrollBottom.tsx';
 import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
@@ -36,10 +42,10 @@ import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
 import useChatReplyStore from '../../../store/chatReplyStore.ts';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useShallow} from 'zustand/react/shallow';
-import {useReactMessage} from '../../../hooks/chat/useReactMessage.ts';
 import {useUnsendMessage} from '../../../hooks/chat/useUnsendMessage.ts';
 import {useUnsendSelfMessage} from '../../../hooks/chat/useUnsendSelfMessage.ts';
 import Clipboard from '@react-native-clipboard/clipboard';
+import useSubscribeCheck from '../../../store/subscribeStore.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -76,6 +82,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       clearReplyMessage: state.clearReplyMessage,
     })),
   );
+
+  const isSubscribe = useSubscribeCheck(state => state.isCustomerSubscribed);
 
   useEffect(() => {
     if (user && chatMessage.isSuccess) {
@@ -120,103 +128,207 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
   const handleImageUpload = async (isCamera?: boolean) => {
     try {
-      let images: Image[];
-
       if (isCamera) {
-        let cameraImage = await ImagePicker.openCamera({
-          mediaType: 'photo',
-          multiple: false,
-          includeBase64: true,
+        let cameraMedia = await ImagePicker.openCamera({
+          mediaType: 'video',
           forceJpg: true,
-          maxFiles: 4,
+          cropping: false,
         });
-        const imageData: Base64Attachments = {
-          fileName: cameraImage.filename,
-          fileContentBase64: cameraImage.data,
+
+        if (!cameraMedia) {
+          return null;
+        }
+
+        const video = cameraMedia.mime.startsWith('video');
+        const image = cameraMedia.mime.startsWith('image');
+
+        if (video && !isSubscribe) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Mars!!',
+              subtitle: 'You need to subscribe to send a video ✨',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Needs subscription');
+        }
+
+        if (video && cameraMedia.size >= MAX_VIDEO_SIZE_BYTES) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang laki!',
+              subtitle: 'Limit upload up to 25mb per video',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Video exceeds maximum size limit');
+        }
+
+        if (image && cameraMedia.size >= MAX_IMAGE_SIZE_BYTES) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang laki!',
+              subtitle: 'Limit upload up to 8mb per photo',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Image exceeds maximum size limit');
+        }
+
+        const formattedMediaData: FileAttachment = {
+          fileName: cameraMedia.filename,
+          filePath: cameraMedia.path,
+          fileType: cameraMedia.mime,
         };
 
-        if (user && cameraImage) {
+        if (user && formattedMediaData) {
+          const messageIds = chatMessage.data?.pages[0].flatMap(
+            page => page._id,
+          ) as number[] | undefined;
+
           await sendMessage.mutateAsync({
+            id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
             senderSub: user.sub,
             targetSub: user.profile.sub,
             message: '',
             read: '',
-            base64Files: [imageData],
+            attachments: [formattedMediaData],
+            replyingToId: replyMessage
+              ? (replyMessage._id as number)
+              : undefined,
           });
+
           await query.invalidateQueries({queryKey: ['get-chat-list']});
-          return;
         }
       } else {
-        images = await ImagePicker.openPicker({
-          mediaType: 'photo',
+        const media = await ImagePicker.openPicker({
+          mediaType: 'any',
           multiple: true,
-          includeBase64: true,
-          forceJpg: true,
           maxFiles: 4,
+          forceJpg: true,
         });
 
-        if (!images || images.length === 0) {
+        if (!media || media.length === 0) {
           return null;
         }
 
-        if (images) {
-          const imageData: Base64Attachments[] = [];
+        const videos = media.filter(item => item.mime.startsWith('video'));
+        const images = media.filter(item => item.mime.startsWith('image'));
 
-          for (const image of images) {
-            if (image.size >= MAX_IMAGE_SIZE_BYTES) {
-              Toast.show({
-                type: 'THNRWarning',
-                props: {
-                  title: 'Hala, ang laki!',
-                  subtitle: 'Limit upload up to 8mb per photo',
-                },
-                position: 'bottom',
-                bottomOffset: 60,
-              });
+        if (videos && !isSubscribe) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Mars!!',
+              subtitle: 'You need to subscribe to send a video ✨',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Needs subscription');
+        }
 
-              throw new Error(
-                'Image exceeds maximum size limit. Please select a smaller image.',
-              );
-            }
+        if (videos.length === MAX_VIDEO_COUNT && images.length > 0) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala sis!',
+              subtitle: 'You can only send a single video.',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Video selection limit exceeded');
+        }
 
-            imageData.push({
-              fileName: image.filename,
-              fileContentBase64: image.data,
-            });
-          }
+        if (videos.length > MAX_VIDEO_COUNT) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang dami!',
+              subtitle: 'Please select a single video.',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Video selection limit exceeded');
+        }
 
-          if (Platform.OS === 'android' && imageData.length >= 5) {
+        if (images.length > MAX_IMAGE_COUNT) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang dami!',
+              subtitle: 'Please select up to 4 images.',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Image selection limit exceeded');
+        }
+
+        for (const video of videos) {
+          if (video.size >= MAX_VIDEO_SIZE_BYTES) {
             Toast.show({
               type: 'THNRWarning',
               props: {
-                title: 'Hala, ang dami!',
-                subtitle: 'Limit of 4 photos per sending.',
+                title: 'Hala, ang laki!',
+                subtitle: 'Limit upload up to 25mb per video',
               },
               position: 'bottom',
               bottomOffset: 60,
             });
-            throw new Error('Image selection exceeds the limit of 5 images.');
+            throw new Error('Video exceeds maximum size limit');
           }
+        }
 
-          if (user && imageData) {
-            const messageIds = chatMessage.data?.pages[0].flatMap(
-              page => page._id,
-            ) as number[] | undefined;
-
-            await sendMessage.mutateAsync({
-              id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
-              senderSub: user.sub,
-              targetSub: user.profile.sub,
-              message: '',
-              read: '',
-              base64Files: imageData,
-              replyingToId: replyMessage
-                ? (replyMessage._id as number)
-                : undefined,
+        for (const image of images) {
+          if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+            Toast.show({
+              type: 'THNRWarning',
+              props: {
+                title: 'Hala, ang laki!',
+                subtitle: 'Limit upload up to 8mb per photo',
+              },
+              position: 'bottom',
+              bottomOffset: 60,
             });
-            // await query.invalidateQueries({queryKey: ['get-chat-message']});
-            await query.invalidateQueries({queryKey: ['get-chat-list']});
+            throw new Error('Image exceeds maximum size limit');
           }
+        }
+
+        const formattedMediaData: FileAttachment[] = [...images, ...videos].map(
+          item => ({
+            fileName: item.filename,
+            filePath: item.path,
+            fileType: item.mime,
+          }),
+        );
+
+        if (user && formattedMediaData) {
+          const messageIds = chatMessage.data?.pages[0].flatMap(
+            page => page._id,
+          ) as number[] | undefined;
+
+          await sendMessage.mutateAsync({
+            id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
+            senderSub: user.sub,
+            targetSub: user.profile.sub,
+            message: '',
+            read: '',
+            attachments: formattedMediaData,
+            replyingToId: replyMessage
+              ? (replyMessage._id as number)
+              : undefined,
+          });
+
+          await query.invalidateQueries({queryKey: ['get-chat-list']});
         }
       }
     } catch (error) {

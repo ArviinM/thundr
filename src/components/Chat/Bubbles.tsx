@@ -11,12 +11,14 @@ import {
 import {Attachment, IMessage, Chat} from '../../types/generated.ts';
 
 import {COLORS, height, width} from '../../constants/commons.ts';
-import {formatTimestamp, scale} from '../../utils/utils.ts';
+import {formatTimestamp, isImageOrVideo, scale} from '../../utils/utils.ts';
 import {MessageProps} from 'react-native-gifted-chat';
 import {Image} from 'expo-image';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
 import {Loading} from '../shared/Loading.tsx';
 import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
+import VideoPlayer from 'react-native-media-console';
+import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
 
 const Bubbles = ({
   props,
@@ -35,9 +37,7 @@ const Bubbles = ({
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [animation] = useState(new Animated.Value(0));
-  const [selectedImage, setSelectedImage] = useState<string>(
-    'https://placehold.co/400',
-  );
+  const [selectedAttachment, setSelectedAttachment] = useState<Attachment>();
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -57,7 +57,8 @@ const Bubbles = ({
     outputRange: [0.95, 1],
   });
 
-  const imageModal = () => {
+  // Will refactor this and create a gallery modals
+  const attachmentModal = () => {
     return (
       <Modal
         transparent
@@ -87,13 +88,28 @@ const Bubbles = ({
             </TouchableOpacity>
 
             {/* Display Selected Image */}
-            {selectedImage && (
-              <Image
-                source={{uri: selectedImage}}
-                style={{width: '100%', height: '90%'}}
-                transition={100}
-              />
-            )}
+            {selectedAttachment &&
+              selectedAttachment.mimeType &&
+              isImageOrVideo(selectedAttachment.mimeType) === 'image' && (
+                <Image
+                  source={{uri: selectedAttachment.fileUrl}}
+                  style={{width: '100%', height: '90%'}}
+                  transition={100}
+                  placeholder={selectedAttachment.blurHash}
+                />
+              )}
+
+            {selectedAttachment &&
+              selectedAttachment.mimeType &&
+              isImageOrVideo(selectedAttachment.mimeType) === 'video' && (
+                <View style={{width: '100%', height: '90%'}}>
+                  <VideoPlayer
+                    source={{uri: selectedAttachment.fileUrl}}
+                    disableBack
+                    disableFullscreen
+                  />
+                </View>
+              )}
           </View>
         </Animated.View>
       </Modal>
@@ -125,7 +141,7 @@ const Bubbles = ({
             justifyContent: isSelf ? 'flex-end' : 'flex-start',
             gap: scale(2),
           }}>
-          {attachments.map((photo, index) => (
+          {attachments.map((attachment, index) => (
             <>
               {isPending ? (
                 <View
@@ -140,22 +156,36 @@ const Bubbles = ({
                   <Loading key={index + Math.random()} />
                 </View>
               ) : (
-                <TouchableOpacity
-                  key={index + Math.random()}
-                  disabled={isReply}
-                  onLongPress={() => onLongPress(message)}
-                  onPress={() => {
-                    if (!isReply) {
-                      setSelectedImage(photo);
-                      setIsVisible(true);
-                    }
-                  }}>
-                  <Image
-                    source={{uri: photo}}
-                    style={[styles.messageImage]}
-                    transition={100}
-                  />
-                </TouchableOpacity>
+                <View>
+                  {attachment.mimeType &&
+                    isImageOrVideo(attachment.mimeType) === 'image' && (
+                      <TouchableOpacity
+                        key={index + Math.random()}
+                        disabled={isReply}
+                        onLongPress={() => onLongPress(message)}
+                        onPress={() => {
+                          if (!isReply) {
+                            setSelectedAttachment(attachment);
+                            setIsVisible(true);
+                          }
+                        }}>
+                        {attachment.blurHash ? (
+                          <Image
+                            source={{uri: attachment.thumbnailUrl}}
+                            style={[styles.messageImage]}
+                            transition={100}
+                            placeholder={attachment.blurHash}
+                          />
+                        ) : (
+                          <Image
+                            source={{uri: attachment.thumbnailUrl}}
+                            style={[styles.messageImage]}
+                            transition={100}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    )}
+                </View>
               )}
             </>
           ))}
@@ -171,7 +201,7 @@ const Bubbles = ({
             alignItems: 'flex-end',
             justifyContent: 'flex-end',
           }}>
-          {attachments.map((photo, index) => (
+          {attachments.map((attachment, index) => (
             <>
               {isPending ? (
                 <View
@@ -186,23 +216,65 @@ const Bubbles = ({
                   <Loading key={index + Math.random()} />
                 </View>
               ) : (
-                <TouchableOpacity
-                  key={index + Math.random()}
-                  disabled={isReply}
-                  onLongPress={() => onLongPress(message)}
-                  onPress={() => {
-                    if (!isReply) {
-                      setSelectedImage(photo);
-                      setIsVisible(true);
-                    }
-                  }}>
-                  <Image
-                    key={index + Math.random()}
-                    source={{uri: photo}}
-                    style={[styles.messageImage]}
-                    transition={100}
-                  />
-                </TouchableOpacity>
+                <View>
+                  {attachment.mimeType &&
+                    isImageOrVideo(attachment.mimeType) === 'image' && (
+                      <TouchableOpacity
+                        key={index + Math.random()}
+                        disabled={isReply}
+                        onLongPress={() => onLongPress(message)}
+                        onPress={() => {
+                          if (!isReply) {
+                            setSelectedAttachment(attachment);
+                            setIsVisible(true);
+                          }
+                        }}>
+                        {attachment.blurHash ? (
+                          <Image
+                            source={{uri: attachment.thumbnailUrl}}
+                            style={[styles.messageImage]}
+                            transition={100}
+                            placeholder={attachment.blurHash}
+                          />
+                        ) : (
+                          <Image
+                            source={{uri: attachment.thumbnailUrl}}
+                            style={[styles.messageImage]}
+                            transition={100}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    )}
+
+                  {attachment.mimeType &&
+                    isImageOrVideo(attachment.mimeType) === 'video' && (
+                      <TouchableOpacity
+                        key={index + Math.random()}
+                        disabled={isReply}
+                        onLongPress={() => onLongPress(message)}
+                        onPress={() => {
+                          if (!isReply) {
+                            setSelectedAttachment(attachment);
+                            setIsVisible(true);
+                          }
+                        }}>
+                        <Image
+                          key={index + Math.random()}
+                          placeholder={attachment.blurHash}
+                          source={{uri: attachment.thumbnailUrl}}
+                          style={[
+                            styles.messageImage,
+                            {
+                              backgroundColor: '#563b3b',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            },
+                          ]}>
+                          <PlayButton />
+                        </Image>
+                      </TouchableOpacity>
+                    )}
+                </View>
               )}
             </>
           ))}
@@ -213,7 +285,6 @@ const Bubbles = ({
 
   const renderItem = ({item: item}: {item: MessageProps<IMessage>}) => {
     const message = item.currentMessage;
-
     return (
       <>
         {message && message.unsent ? (
@@ -230,9 +301,7 @@ const Bubbles = ({
               Message deleted
             </Text>
           </View>
-        ) : message &&
-          message.attachments &&
-          message.attachments.length !== 0 ? (
+        ) : message && message.attachments && message.attachments.length > 0 ? (
           <View
             key={item.key}
             style={[
@@ -355,7 +424,7 @@ const Bubbles = ({
   return (
     <>
       {renderItem({item: props})}
-      {imageModal()}
+      {attachmentModal()}
     </>
   );
 };

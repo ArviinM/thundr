@@ -1,4 +1,5 @@
 import moment from 'moment';
+import * as FileSystem from 'expo-file-system';
 
 type CustomDropDownData = {
   label: string;
@@ -102,7 +103,10 @@ export function convertAbbreviationsToFullWords(
 const guidelineBaseWidth = 375;
 const guidelineBaseHeight = 680;
 
-export const MAX_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
+export const MAX_IMAGE_SIZE_BYTES = 8 * 1024 * 1024; // 8MB
+export const MAX_VIDEO_SIZE_BYTES = 25 * 1024 * 1024; // 25MB
+export const MAX_VIDEO_COUNT = 1;
+export const MAX_IMAGE_COUNT = 4;
 
 import {Dimensions} from 'react-native';
 import {NotificationResponse} from '../types/generated.ts';
@@ -228,4 +232,26 @@ export function transformNotifications(
   });
 
   return sections;
+}
+
+export async function checkFileExists(fileUri: string) {
+  try {
+    const info = await FileSystem.getInfoAsync(fileUri);
+    return info.exists;
+  } catch (error) {
+    console.error('Error checking file existence:', error);
+    return false;
+  }
+}
+
+export function isImageOrVideo(mimeType: string) {
+  if (mimeType.startsWith('image')) {
+    return 'image';
+  }
+
+  if (mimeType.startsWith('video')) {
+    return 'video';
+  }
+
+  return null;
 }

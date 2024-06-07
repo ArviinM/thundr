@@ -2285,6 +2285,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-19.2.2.tgz#e59e21e9e9d047b9c83197a1c569be50156bfda6"
   integrity sha512-oZNamTvYH3rBneJQ+m0PZED5dzyxcEwyjzwszk/jMjJRgzUrIK3TGu65d6txxIFm6LU5MigpjyqyxrHxrT8aCg==
 
+"@react-native-media-console/reanimated@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@react-native-media-console/reanimated/-/reanimated-2.2.4.tgz#8069a9278825d4951c2ef731cbd33138bdb5fc11"
+  integrity sha512-QUDOPb5j1UOITWv1J76QKb3/2aVreihCL3j2Fa4Httcxvo0132aqNIXBBvE5C5dvsU3li8rBLA7dquw8vgGHFg==
+
 "@react-native/assets-registry@0.73.1", "@react-native/assets-registry@~0.73.1":
   version "0.73.1"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.73.1.tgz#e2a6b73b16c183a270f338dc69c36039b3946e85"
@@ -8194,6 +8199,11 @@ react-native-linear-gradient@^2.8.3:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz#9a116649f86d74747304ee13db325e20b21e564f"
   integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
 
+react-native-media-console@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-media-console/-/react-native-media-console-2.2.4.tgz#76a232cdcb645cfdb25bacddee514f360eb4947d"
+  integrity sha512-CpOunVkGkMRg7DoGYlXfGITbSuqvCId7CFcWyDED3CjJ1CCym4dB670GiBNymH/Sh5p1AaW8kvHng7PZ7fYUBQ==
+
 react-native-otp-textinput@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/react-native-otp-textinput/-/react-native-otp-textinput-1.1.5.tgz#63401cac2c63b26230af1b3179952a524bb5214b"
@@ -8226,9 +8236,9 @@ react-native-quick-base64@^2.1.2:
     base64-js "^1.5.1"
 
 react-native-reanimated@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.8.1.tgz#45c13d4bedebef8df3d5a8756f25072de65960d7"
-  integrity sha512-EdM0vr3JEaNtqvstqESaPfOBy0gjYBkr1iEolWJ82Ax7io8y9OVUIphgsLKTB36CtR1XtmBw0RZVj7KArc7ZVA==
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.12.0.tgz#2c768d43971bb19e425c436c892bf68c74b9ccab"
+  integrity sha512-Bwa4jKL/QttnV8pQYiX+1N5a6XgL8yZtMyH+7UbEaW7ZeNCv1Pxp2PmYu/bP3LafCkmS9Yj/hY2adYNKe58g9A==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
     "@babel/plugin-transform-nullish-coalescing-operator" "^7.0.0-0"
@@ -8286,6 +8296,11 @@ react-native-typing-animation@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/react-native-typing-animation/-/react-native-typing-animation-0.1.7.tgz#8f2cf08d9400ae543a110292eb7d71523dda5528"
   integrity sha512-4H3rF9M+I2yAZpYJcY0Mb29TXkn98QK12rrKSY6LZj1BQD9NNmRZuNXzwX4XHapsIz+N/J8M3p27FOQPbfzqeg==
+
+react-native-video@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.1.2.tgz#84580458e0d0ebbf6ca395cc15cd2f76c337bbda"
+  integrity sha512-oKk4hLhcWiL+k5CRgqs+/Bvp23QrHFGx3ylawrF4OWjKRekGeHNCf2mSf7+er66ZmktMtJC0ofBTgEPq4rRG6A==
 
 react-native-webview@^13.8.4:
   version "13.8.4"
