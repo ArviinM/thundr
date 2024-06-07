@@ -80,7 +80,9 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         signOut();
         navigationRef.navigate('Maintenance');
       }
-      if (status.data.version !== DeviceInfo.getVersion()) {
+      if (status.data.current !== DeviceInfo.getVersion()) {
+        console.log(status.data.current);
+        console.log(DeviceInfo.getVersion());
         signOut();
         Alert.alert(
           'NEW VERSION HAS BEEN RELEASED',

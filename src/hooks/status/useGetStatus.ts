@@ -10,8 +10,7 @@ export function useGetStatus() {
   return useQuery({
     queryKey: ['get-status'],
     queryFn: async (): Promise<any> => {
-      const response: AxiosResponse<BaseResponse<any>> =
-        await axiosInstance.get('/status');
+      const response: AxiosResponse<any> = await axiosInstance.get('/status');
 
       if (response.status === HttpStatusCode.ServiceUnavailable) {
         showErrorToast({
@@ -26,7 +25,7 @@ export function useGetStatus() {
       return {
         status: response.data.status,
         statusCode: response.status,
-        data: response.data,
+        current: response.data.current,
       };
     },
   });
