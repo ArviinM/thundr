@@ -81,9 +81,6 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         navigationRef.navigate('Maintenance');
       }
       if (status.data.current !== DeviceInfo.getVersion()) {
-        console.log(status.data.current);
-        console.log(DeviceInfo.getVersion());
-        signOut();
         Alert.alert(
           'NEW VERSION HAS BEEN RELEASED',
           'Please update your app to have a smooth experience using Thundr! ⚡️',
