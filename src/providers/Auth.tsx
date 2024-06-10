@@ -21,7 +21,7 @@ import {usePasswordCreation} from '../hooks/registration/usePasswordCreation.ts'
 import {useRefreshToken} from '../hooks/useRefreshToken.ts';
 import {useRegisterToken} from '../hooks/notification/useRegisterToken.ts';
 import useCustomerProfileStore from '../store/profileStore.ts';
-import useCustomerDetailsStore from '../stoore/detailsStore.ts';
+import useCustomerDetailsStore from '../store/detailsStore.ts';
 import Toast from 'react-native-toast-message';
 
 import {connectSocket, disconnectSocket, socket} from '../utils/socket.ts';
