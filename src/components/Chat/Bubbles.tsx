@@ -258,20 +258,24 @@ const Bubbles = ({
                             setIsVisible(true);
                           }
                         }}>
-                        <Image
-                          key={index + Math.random()}
-                          placeholder={attachment.blurHash}
-                          source={{uri: attachment.thumbnailUrl}}
-                          style={[
-                            styles.messageImage,
-                            {
-                              backgroundColor: '#563b3b',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            },
-                          ]}>
-                          <PlayButton />
-                        </Image>
+                        <View style={styles.videoThumbnailContainer}>
+                          <Image
+                            key={index + Math.random()}
+                            placeholder={attachment.blurHash}
+                            source={{uri: attachment.thumbnailUrl}}
+                            style={[
+                              styles.messageImage,
+                              {
+                                backgroundColor: '#563b3b',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              },
+                            ]}
+                          />
+                          <View style={styles.playButtonOverlay}>
+                            <PlayButton />
+                          </View>
+                        </View>
                       </TouchableOpacity>
                     )}
                 </View>
@@ -558,5 +562,22 @@ const styles = StyleSheet.create({
   },
   leftOffsetValue: {
     marginLeft: 16,
+  },
+  videoThumbnailContainer: {
+    position: 'relative', // Enable absolute positioning for child elements
+    borderRadius: 10,
+    width: scale(100),
+    height: scale(100),
+    aspectRatio: 1,
+    backgroundColor: '#563b3b',
+  },
+  playButtonOverlay: {
+    position: 'absolute', // Position absolutely within the container
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -218,6 +218,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           return null;
         }
 
+        console.log(JSON.stringify(media, null, 2));
+
         const videos = media.filter(item => item.mime.startsWith('video'));
         const images = media.filter(item => item.mime.startsWith('image'));
 
