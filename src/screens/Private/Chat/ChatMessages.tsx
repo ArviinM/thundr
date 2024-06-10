@@ -373,7 +373,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               });
             }
             break;
-          case isOwnMessage ? (hasAttachments ? 1 : 2) : 0: // Unsend for you (index depends on message ownership and attachment presence)
+          case isOwnMessage ? (hasAttachments ? 1 : 2) : 1: // Unsend for you (index depends on message ownership and attachment presence)
+            console.log(message._id);
             if (user) {
               await unsendMessageSelf.mutateAsync({
                 sub: user.sub,

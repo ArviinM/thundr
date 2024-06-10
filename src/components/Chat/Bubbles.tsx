@@ -305,6 +305,22 @@ const Bubbles = ({
               Message deleted
             </Text>
           </View>
+        ) : message &&
+          message.hiddenForSelf &&
+          message.hideForSubs === user.sub ? (
+          <View
+            key={item.key}
+            style={[
+              styles.messageUnsentContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            <TrashIcon small />
+            <Text style={[styles.messageText, {color: COLORS.gray3}]}>
+              Message removed
+            </Text>
+          </View>
         ) : message && message.attachments && message.attachments.length > 0 ? (
           <View
             key={item.key}

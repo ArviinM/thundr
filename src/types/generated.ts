@@ -440,6 +440,8 @@ export type ChatMessage = {
   replyingId?: number;
   replying?: ChatMessage | IMessage;
   reactions?: Array<Reaction>;
+  hideForSubs?: string;
+  hiddenForSelf?: boolean;
 };
 
 export type ChatListRequest = {
@@ -508,6 +510,8 @@ export interface IMessage {
   reactionsCount?: number;
   replyingId?: number;
   replying?: IMessage;
+  hiddenForSelf?: boolean;
+  hideForSubs?: string;
 }
 
 // Deactivate

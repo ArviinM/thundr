@@ -33,7 +33,6 @@ import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.
 import {useGetStatus} from '../hooks/status/useGetStatus.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
 import DeviceInfo from 'react-native-device-info';
-import {Alert} from 'react-native';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -80,10 +79,10 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         signOut();
         navigationRef.navigate('Maintenance');
       }
-      if (status.data.current !== DeviceInfo.getVersion()) {
-        signOut();
-        navigationRef.navigate('VersionUpdate');
-      }
+      // if (status.data.current !== DeviceInfo.getVersion()) {
+      //   signOut();
+      //   navigationRef.navigate('VersionUpdate');
+      // }
     }
   }, [status.data]);
 

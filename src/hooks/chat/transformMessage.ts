@@ -25,5 +25,7 @@ export function transformChatMessageForGiftedChat(
         ? transformChatMessageForGiftedChat(message.replying)
         : undefined,
     reactions: message.reactions,
+    hiddenForSelf: message.hiddenForSelf,
+    hideForSubs: message.hideForSubs,
   };
 }

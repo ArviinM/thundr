@@ -1,8 +1,13 @@
 import {useMutation} from '@tanstack/react-query';
 import {AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
-import {BaseResponse, ChatUnsendMessageRequest} from '../../types/generated.ts';
+import {
+  BaseResponse,
+  ChatUnsendMessageRequest,
+  IMessage,
+} from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
+import {queryClient} from '../../utils/queryClient.ts';
 
 export function useUnsendSelfMessage() {
   const axiosInstance = useAxiosWithAuth();
@@ -25,5 +30,36 @@ export function useUnsendSelfMessage() {
       return response.data.data;
     },
     onError: showErrorToast,
+    onMutate: async (data: ChatUnsendMessageRequest): Promise<any> => {
+      queryClient.setQueriesData(
+        {queryKey: ['get-chat-message']},
+        (oldData: any) => {
+          if (oldData?.pages) {
+            for (const page of oldData.pages) {
+              const messageIndex = page.findIndex(
+                (msg: IMessage) => msg._id === data.messageId,
+              );
+
+              if (messageIndex !== -1) {
+                // Update unsent on the original message if it's found
+                page[messageIndex] = {
+                  ...page[messageIndex],
+                  unsent: false,
+                  sent: false,
+                  pending: false,
+                  received: false,
+                  hiddenForSelf: true,
+                  hideForSubs: data.sub,
+                };
+                break; // Stop searching once found
+              }
+            }
+            return oldData; // Return the updated oldData
+          } else {
+            return oldData;
+          }
+        },
+      );
+    },
   });
 }
