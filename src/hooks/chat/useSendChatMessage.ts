@@ -67,8 +67,6 @@ export function useSendChatMessage() {
         } as Error;
       }
 
-      console.log(response.data);
-
       return response.data.data;
     },
     onError: showErrorToast,
