@@ -357,6 +357,10 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
 
     const cancelButtonIndex = options.length - 1; // Always the last item
 
+    console.log(
+      isOwnMessage ? (hasAttachments ? 1 : 2) : hasAttachments ? 1 : 2,
+    );
+    console.log(options);
     showActionSheetWithOptions(
       {
         options,
@@ -373,7 +377,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               });
             }
             break;
-          case isOwnMessage ? (hasAttachments ? 1 : 2) : 1: // Unsend for you (index depends on message ownership and attachment presence)
+          case isOwnMessage ? (hasAttachments ? 1 : 2) : hasAttachments ? 0 : 1: // Unsend for you (index depends on message ownership and attachment presence)
             console.log(message._id);
             if (user) {
               await unsendMessageSelf.mutateAsync({
