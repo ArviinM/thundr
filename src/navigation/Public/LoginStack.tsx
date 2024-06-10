@@ -18,6 +18,7 @@ import PasswordReset from '../../screens/Public/Login/PasswordReset.tsx';
 import PasswordNewValidation from '../../screens/Public/Login/PasswordNewValidation.tsx';
 import PasswordResetConfirmed from '../../screens/Public/Login/PasswordResetConfirmed.tsx';
 import Maintenance from '../../screens/shared/Maintenance.tsx';
+import VersionUpdate from '../../screens/shared/VersionUpdate.tsx';
 
 export const LoginStack = () => {
   return (
@@ -100,6 +101,11 @@ export const LoginStack = () => {
         <Stack.Screen
           name="Maintenance"
           component={Maintenance}
+          options={{animation: 'fade'}}
+        />
+        <Stack.Screen
+          name="VersionUpdate"
+          component={VersionUpdate}
           options={{animation: 'fade'}}
         />
       </Stack.Group>

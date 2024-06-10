@@ -81,10 +81,8 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         navigationRef.navigate('Maintenance');
       }
       if (status.data.current !== DeviceInfo.getVersion()) {
-        Alert.alert(
-          'NEW VERSION HAS BEEN RELEASED',
-          'Please update your app to have a smooth experience using Thundr! ⚡️',
-        );
+        signOut();
+        navigationRef.navigate('VersionUpdate');
       }
     }
   }, [status.data]);

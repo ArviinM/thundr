@@ -105,6 +105,7 @@ export type RootNavigationParams = {
 
   //maintenance
   Maintenance: undefined;
+  VersionUpdate: undefined;
 
   //advocacy
   Advocacy: undefined;
