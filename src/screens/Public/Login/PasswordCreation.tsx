@@ -94,20 +94,25 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
     confirmPassword: string;
   }) => {
     try {
-      await schema.validate(data);
-      isLoading(true);
+      const isValidPass = await schema.validate(data);
 
-      const passwordData = {
-        phoneNumber: username,
-        email: email,
-        session: session,
-        challengeName: challengeName,
-        password: data.confirmPassword,
-      } as PasswordCreationRequest;
+      if (isValidPass) {
+        isLoading(true);
 
-      await auth.signUp(passwordData);
+        const passwordData = {
+          phoneNumber: username,
+          email: email,
+          session: session,
+          challengeName: challengeName,
+          password: data.confirmPassword,
+        } as PasswordCreationRequest;
 
-      isLoading(false);
+        await auth.signUp(passwordData);
+
+        isLoading(false);
+      } else {
+        throw new Error('Password is not valid');
+      }
     } catch (error) {
       // Handle validation errors
       if (error instanceof yup.ValidationError) {
@@ -247,7 +252,6 @@ const PasswordCreation = ({route}: PasswordCreationProps) => {
               onPress={handleSubmit(onSubmit)}
               text="Next"
               loading={loading}
-              disabled={!isValid}
               buttonStyle={styles.buttonStyle}
               textStyle={styles.buttonTextStyle}
             />
