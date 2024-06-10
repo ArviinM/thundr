@@ -8236,9 +8236,9 @@ react-native-quick-base64@^2.1.2:
     base64-js "^1.5.1"
 
 react-native-reanimated@^3.8.1:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.12.0.tgz#2c768d43971bb19e425c436c892bf68c74b9ccab"
-  integrity sha512-Bwa4jKL/QttnV8pQYiX+1N5a6XgL8yZtMyH+7UbEaW7ZeNCv1Pxp2PmYu/bP3LafCkmS9Yj/hY2adYNKe58g9A==
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.8.1.tgz#45c13d4bedebef8df3d5a8756f25072de65960d7"
+  integrity sha512-EdM0vr3JEaNtqvstqESaPfOBy0gjYBkr1iEolWJ82Ax7io8y9OVUIphgsLKTB36CtR1XtmBw0RZVj7KArc7ZVA==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
     "@babel/plugin-transform-nullish-coalescing-operator" "^7.0.0-0"
@@ -8298,9 +8298,9 @@ react-native-typing-animation@0.1.7:
   integrity sha512-4H3rF9M+I2yAZpYJcY0Mb29TXkn98QK12rrKSY6LZj1BQD9NNmRZuNXzwX4XHapsIz+N/J8M3p27FOQPbfzqeg==
 
 react-native-video@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.1.2.tgz#84580458e0d0ebbf6ca395cc15cd2f76c337bbda"
-  integrity sha512-oKk4hLhcWiL+k5CRgqs+/Bvp23QrHFGx3ylawrF4OWjKRekGeHNCf2mSf7+er66ZmktMtJC0ofBTgEPq4rRG6A==
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.2.0.tgz#4a22dd836ee3992383992cd9fb561d52fc69d2ec"
+  integrity sha512-7TWKGBkKrwR9V+SI6NB9YWWDZbto3fpT/02s8RnrFEac0h5aEJYe6NqTmz3TcFmIRSNepg2UsEvWGKNpWn4sCA==
 
 react-native-webview@^13.8.4:
   version "13.8.4"
