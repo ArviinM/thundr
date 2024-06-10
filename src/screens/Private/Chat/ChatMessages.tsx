@@ -221,7 +221,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         const videos = media.filter(item => item.mime.startsWith('video'));
         const images = media.filter(item => item.mime.startsWith('image'));
 
-        if (videos && !isSubscribe) {
+        if (videos.length > 0 && !isSubscribe) {
           Toast.show({
             type: 'THNRWarning',
             props: {
@@ -360,7 +360,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         options,
         cancelButtonIndex,
         cancelButtonTintColor: COLORS.primary1,
-        tintColor: COLORS.black,
       },
       async selectedIndex => {
         switch (selectedIndex) {
