@@ -512,6 +512,7 @@ export interface IMessage {
   replying?: IMessage;
   hiddenForSelf?: boolean;
   hideForSubs?: string;
+  type?: 'message' | 'image' | 'video' | 'date';
 }
 
 // Deactivate

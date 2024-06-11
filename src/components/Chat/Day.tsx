@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Text,
@@ -9,11 +8,8 @@ import {
   TextStyle,
   TextProps,
 } from 'react-native';
-
-import moment from 'moment';
 import Color from 'react-native-gifted-chat/lib/Color';
 import {IMessage} from 'react-native-gifted-chat/lib/Models';
-import {StylePropType} from 'react-native-gifted-chat/lib/utils';
 import {COLORS} from '../../constants/commons.ts';
 
 const styles = StyleSheet.create({
@@ -44,46 +40,35 @@ export interface DayProps<TMessage extends IMessage = IMessage> {
   inverted?: boolean;
 }
 
-export function isSameDay(
-  currentMessage: IMessage,
-  diffMessage: IMessage | null | undefined,
-) {
-  if (!diffMessage || !diffMessage.createdAt) {
-    return false;
-  }
-
-  const currentCreatedAt = moment(currentMessage.createdAt);
-  const diffCreatedAt = moment(diffMessage.createdAt);
-
-  if (!currentCreatedAt.isValid() || !diffCreatedAt.isValid()) {
-    return false;
-  }
-
-  return currentCreatedAt.isSame(diffCreatedAt, 'day');
-}
+import {format, isSameDay} from 'date-fns';
 
 export function Day<TMessage extends IMessage = IMessage>({
-  // dateFormat = '',
   currentMessage,
   previousMessage,
   containerStyle,
   wrapperStyle,
   textStyle,
 }: DayProps<TMessage>) {
-  if (currentMessage == null || isSameDay(currentMessage, previousMessage)) {
+  if (
+    !currentMessage ||
+    !previousMessage ||
+    isSameDay(currentMessage.createdAt, previousMessage.createdAt)
+  ) {
     return null;
   }
-  const messageDate = moment(currentMessage.createdAt);
-  const today = moment();
-  const yesterday = moment().subtract(1, 'day');
+
+  const messageDate = new Date(currentMessage.createdAt);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1); // Subtract one day
 
   let dayLabel;
-  if (messageDate.isSame(today, 'day')) {
+  if (isSameDay(messageDate, today)) {
     dayLabel = 'Today';
-  } else if (messageDate.isSame(yesterday, 'day')) {
+  } else if (isSameDay(messageDate, yesterday)) {
     dayLabel = 'Yesterday';
   } else {
-    dayLabel = messageDate.format('MMMM DD, dddd');
+    dayLabel = format(messageDate, 'MMMM dd, cccc');
   }
 
   return (
@@ -94,14 +79,3 @@ export function Day<TMessage extends IMessage = IMessage>({
     </View>
   );
 }
-
-Day.propTypes = {
-  currentMessage: PropTypes.object,
-  previousMessage: PropTypes.object,
-  nextMessage: PropTypes.object,
-  inverted: PropTypes.bool,
-  containerStyle: StylePropType,
-  wrapperStyle: StylePropType,
-  textStyle: StylePropType,
-  dateFormat: PropTypes.string,
-};

@@ -1,28 +1,19 @@
-// React Libraries
 import React, {useCallback, useEffect} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
-
-// Other Custom Libraries
-import {
-  KeyboardAvoidingView,
-  KeyboardStickyView,
-} from 'react-native-keyboard-controller';
+import {RootNavigationParams} from '../../../constants/navigator.ts';
+import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
+import {createContext, useContext} from 'react';
+import {Chat, FileAttachment, IMessage} from '../../../types/generated.ts';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {COLORS} from '../../../constants/commons.ts';
+import MessageList from '../../../components/Chat/MessageList.tsx';
+import {Loading} from '../../../components/shared/Loading.tsx';
+import MessageHeader from '../../../components/Chat/MessageHeader.tsx';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryClient} from '../../../utils/queryClient.ts';
+import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
-
-// Components
-import {Loading} from '../../../components/shared/Loading.tsx';
-import ChatHeader from '../../../components/Chat/ChatHeader.tsx';
-import ChatInput from '../../../components/Chat/ChatInput.tsx';
-import {GiftedChat, MessageProps} from 'react-native-gifted-chat';
-import {Day} from '../../../components/Chat/Day.tsx';
-import Bubbles from '../../../components/Chat/Bubbles.tsx';
-
-// Utils
-import {Platform, View} from 'react-native';
-import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {COLORS} from '../../../constants/commons.ts';
 import {
   MAX_IMAGE_COUNT,
   MAX_IMAGE_SIZE_BYTES,
@@ -30,22 +21,20 @@ import {
   MAX_VIDEO_SIZE_BYTES,
   scale,
 } from '../../../utils/utils.ts';
-import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
-import {useSendChatMessage} from '../../../hooks/chat/useSendChatMessage.ts';
-import {queryClient} from '../../../utils/queryClient.ts';
-import {useQueryClient} from '@tanstack/react-query';
-import {FileAttachment, IMessage} from '../../../types/generated.ts';
-import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
-import {ScrollBottom} from '../../../assets/images/ScrollBottom.tsx';
-import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
-
-import useChatReplyStore from '../../../store/chatReplyStore.ts';
-import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useShallow} from 'zustand/react/shallow';
-import {useUnsendMessage} from '../../../hooks/chat/useUnsendMessage.ts';
 import {useUnsendSelfMessage} from '../../../hooks/chat/useUnsendSelfMessage.ts';
-import Clipboard from '@react-native-clipboard/clipboard';
+import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
+import {useUnsendMessage} from '../../../hooks/chat/useUnsendMessage.ts';
 import useSubscribeCheck from '../../../store/subscribeStore.ts';
+import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
+import {boolean} from 'yup';
+import MessageInput from '../../../components/Chat/MessageInput.tsx';
+import {
+  KeyboardAvoidingView,
+  KeyboardStickyView,
+} from 'react-native-keyboard-controller';
+import {Platform, View} from 'react-native';
+import {useShallow} from 'zustand/react/shallow';
+import useChatReplyStore from '../../../store/chatReplyStore.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -56,11 +45,22 @@ type ChatMessagesProps = {
   route?: ChatMessagesScreenRouteProp;
 };
 
+type ChatContext = {
+  handleSendMessage(message: string): void;
+  handleImageUpload(isCamera?: boolean): Promise<void | null>;
+  loading: boolean;
+  loadMoreMessages(): Promise<void>;
+  messages?: IMessage[];
+  isMare: boolean;
+  isRefetching: boolean;
+  user: Chat;
+};
+
+const ChatContext = createContext<ChatContext>({} as ChatContext);
+
 const ChatMessages = ({route}: ChatMessagesProps) => {
   const {user, isMare = false} = route?.params || {};
   const query = useQueryClient(queryClient);
-
-  const {showActionSheetWithOptions} = useActionSheet();
 
   const chatMessage = useGetChatMessage({
     sub: user?.sub || '',
@@ -68,12 +68,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     limit: 25,
   });
 
+  const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
+  const isSubscribe = useSubscribeCheck(state => state.isCustomerSubscribed);
+
   const sendMessage = useSendChatMessage();
   const readMessage = useReadMessage();
   const unsendMessageAll = useUnsendMessage();
   const unsendMessageSelf = useUnsendSelfMessage();
-
-  const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
 
   const {replyMessage, setReplyMessage, clearReplyMessage} = useChatReplyStore(
     useShallow(state => ({
@@ -82,8 +83,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       clearReplyMessage: state.clearReplyMessage,
     })),
   );
-
-  const isSubscribe = useSubscribeCheck(state => state.isCustomerSubscribed);
 
   useEffect(() => {
     if (user && chatMessage.isSuccess) {
@@ -103,28 +102,21 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   }, [chatMessage.data?.pages[0]]);
 
-  const handleSendMessage = async (message: string) => {
-    if (user) {
-      const messageIds = chatMessage.data?.pages[0].flatMap(
-        page => page._id,
-      ) as number[] | undefined;
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        setChatRoom(user.chatRoomUuid);
+      }
+      return () => {
+        setChatRoom('');
+        // clearReplyMessage();
+      };
+    }, [user, setChatRoom]),
+  );
 
-      clearReplyMessage();
-
-      await sendMessage.mutateAsync({
-        id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
-        senderSub: user.sub,
-        targetSub: user.profile.sub,
-        message: message,
-        read: '',
-        replyingToId: replyMessage && (replyMessage._id as number),
-        replying: replyMessage,
-      });
-
-      await query.invalidateQueries({queryKey: ['get-chat-list']});
-      // await query.invalidateQueries({queryKey: ['get-chat-message']});
-    }
-  };
+  if (!user) {
+    return <Loading />;
+  }
 
   const handleImageUpload = async (isCamera?: boolean) => {
     try {
@@ -338,143 +330,135 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
-  const onLongPressActions = (message: IMessage) => {
-    if (!user) {
-      return;
+  // const onLongPressActions = (message: IMessage) => {
+  //   if (!user) {
+  //     return;
+  //   }
+  //
+  //   const isOwnMessage = user.sub === message.user._id;
+  //   const hasAttachments =
+  //     message.attachments && message.attachments.length > 0;
+  //
+  //   const options = isOwnMessage
+  //     ? hasAttachments
+  //       ? ['Unsend for everyone', 'Unsend for you', 'Cancel']
+  //       : ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
+  //     : hasAttachments
+  //     ? ['Unsend for you', 'Cancel']
+  //     : ['Copy', 'Unsend for you', 'Cancel'];
+  //
+  //   const cancelButtonIndex = options.length - 1; // Always the last item
+  //
+  //   showActionSheetWithOptions(
+  //     {
+  //       options,
+  //       cancelButtonIndex,
+  //       cancelButtonTintColor: COLORS.primary1,
+  //     },
+  //     async selectedIndex => {
+  //       switch (selectedIndex) {
+  //         case isOwnMessage ? (hasAttachments ? 0 : 1) : -1: // Unsend for everyone (only if own message and no attachments)
+  //           if (user) {
+  //             await unsendMessageAll.mutateAsync({
+  //               sub: user.sub,
+  //               messageId: message._id as number,
+  //             });
+  //           }
+  //           break;
+  //         case isOwnMessage ? (hasAttachments ? 1 : 2) : hasAttachments ? 0 : 1: // Unsend for you (index depends on message ownership and attachment presence)
+  //           if (user) {
+  //             await unsendMessageSelf.mutateAsync({
+  //               sub: user.sub,
+  //               messageId: message._id as number,
+  //             });
+  //           }
+  //           break;
+  //         case 0: // Copy (only if the message has no attachments)
+  //           if (!hasAttachments) {
+  //             Clipboard.setString(message.text);
+  //           }
+  //           break;
+  //         case cancelButtonIndex: // Cancel
+  //         // No action needed
+  //       }
+  //     },
+  //   );
+  // };
+
+  const handleSendMessage = async (message: string) => {
+    if (user) {
+      const messageIds = chatMessage.data?.pages[0].flatMap(
+        page => page._id,
+      ) as number[] | undefined;
+
+      await sendMessage.mutateAsync({
+        id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
+        senderSub: user.sub,
+        targetSub: user.profile.sub,
+        message: message,
+        read: '',
+        // replyingToId: replyMessage && (replyMessage._id as number),
+        // replying: replyMessage,
+      });
+
+      await query.invalidateQueries({queryKey: ['get-chat-list']});
+      // await query.invalidateQueries({queryKey: ['get-chat-message']});
     }
-
-    const isOwnMessage = user.sub === message.user._id;
-    const hasAttachments =
-      message.attachments && message.attachments.length > 0;
-
-    const options = isOwnMessage
-      ? hasAttachments
-        ? ['Unsend for everyone', 'Unsend for you', 'Cancel']
-        : ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
-      : hasAttachments
-      ? ['Unsend for you', 'Cancel']
-      : ['Copy', 'Unsend for you', 'Cancel'];
-
-    const cancelButtonIndex = options.length - 1; // Always the last item
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        cancelButtonTintColor: COLORS.primary1,
-      },
-      async selectedIndex => {
-        switch (selectedIndex) {
-          case isOwnMessage ? (hasAttachments ? 0 : 1) : -1: // Unsend for everyone (only if own message and no attachments)
-            if (user) {
-              await unsendMessageAll.mutateAsync({
-                sub: user.sub,
-                messageId: message._id as number,
-              });
-            }
-            break;
-          case isOwnMessage ? (hasAttachments ? 1 : 2) : hasAttachments ? 0 : 1: // Unsend for you (index depends on message ownership and attachment presence)
-            if (user) {
-              await unsendMessageSelf.mutateAsync({
-                sub: user.sub,
-                messageId: message._id as number,
-              });
-            }
-            break;
-          case 0: // Copy (only if the message has no attachments)
-            if (!hasAttachments) {
-              Clipboard.setString(message.text);
-            }
-            break;
-          case cancelButtonIndex: // Cancel
-          // No action needed
-        }
-      },
-    );
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (user) {
-        setChatRoom(user.chatRoomUuid);
-      }
-      return () => {
-        setChatRoom('');
-        clearReplyMessage();
-      };
-    }, [user, setChatRoom, clearReplyMessage]),
-  );
+  const loadMoreMessages = async () => {
+    if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
+      return;
+    }
+    await chatMessage.fetchNextPage();
+  };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right', 'top', 'bottom']}
-      style={{flex: 1, backgroundColor: COLORS.white}}>
-      {chatMessage.isLoading ? (
-        <Loading />
-      ) : (
-        chatMessage.isSuccess &&
-        user && (
-          <View style={{flex: 1, backgroundColor: COLORS.white}}>
-            {/*Chat Message Header*/}
-            <ChatHeader user={user} isMare={isMare} />
-            {/*Chat Message Bubbles*/}
-            <KeyboardAvoidingView
-              style={{flex: 1}}
-              behavior={'padding'}
-              keyboardVerticalOffset={
-                Platform.OS === 'ios' ? scale(120) : scale(100)
-              }>
-              <GiftedChat
-                messages={chatMessage.data?.pages.flatMap(page => page) || []}
-                renderAvatar={null}
-                user={{_id: user.sub}}
-                minComposerHeight={0}
-                maxComposerHeight={0}
-                minInputToolbarHeight={0}
-                infiniteScroll
-                loadEarlier
-                onLoadEarlier={async () => {
-                  if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
-                    return;
-                  }
-                  await chatMessage.fetchNextPage();
-                }}
-                scrollToBottom
-                bottomOffset={0}
-                isKeyboardInternallyHandled={false}
-                isLoadingEarlier={chatMessage.isFetchingNextPage}
-                renderInputToolbar={() => null}
-                renderDay={props => <Day {...props} />}
-                renderBubble={(props: Readonly<MessageProps<IMessage>>) => (
-                  <Bubbles
-                    key={props.key}
-                    props={props}
-                    user={user}
-                    isMare={isMare}
-                    onLongPress={onLongPressActions}
-                  />
-                )}
-                scrollToBottomStyle={{
-                  backgroundColor: 'rgba(0,0,0,0)',
-                }}
-                scrollToBottomComponent={() => <ScrollBottom />}
-              />
-            </KeyboardAvoidingView>
-            {/*Chat Text Input*/}
-            <KeyboardStickyView
-              offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
-              <ChatInput
-                isMare={isMare}
-                onPressSend={handleSendMessage}
-                onPressImage={() => handleImageUpload(false)}
-                onPressCamera={() => handleImageUpload(true)}
-              />
-            </KeyboardStickyView>
-          </View>
-        )
-      )}
-    </SafeAreaView>
+    <ChatContext.Provider
+      value={{
+        handleSendMessage,
+        handleImageUpload,
+        loading: chatMessage.isLoading,
+        loadMoreMessages,
+        messages:
+          (chatMessage.isSuccess &&
+            chatMessage.data?.pages.flatMap(page => page)) ||
+          [],
+        isMare,
+        isRefetching: chatMessage.isFetchingNextPage,
+        user: user,
+      }}>
+      <SafeAreaView
+        edges={['left', 'right', 'top', 'bottom']}
+        style={{flex: 1, backgroundColor: COLORS.white}}>
+        <View>
+          <MessageHeader />
+        </View>
+
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          behavior={'padding'}
+          keyboardVerticalOffset={
+            Platform.OS === 'ios' ? scale(50) : scale(40)
+          }>
+          <MessageList />
+        </KeyboardAvoidingView>
+
+        <KeyboardStickyView
+          offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
+          <MessageInput />
+        </KeyboardStickyView>
+      </SafeAreaView>
+    </ChatContext.Provider>
   );
 };
 
-export default ChatMessages;
+function useChatContext() {
+  const context = useContext(ChatContext);
+  if (!context) {
+    throw new Error('useChatContext must be used within a ChatProvider');
+  }
+  return context;
+}
+
+export {ChatMessages, ChatContext, useChatContext};

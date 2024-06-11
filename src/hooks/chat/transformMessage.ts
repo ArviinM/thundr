@@ -3,6 +3,9 @@ import {ChatMessage, IMessage} from '../../types/generated.ts';
 export function transformChatMessageForGiftedChat(
   message: ChatMessage,
 ): IMessage {
+  const isAttachment = message.message === '' && message.attachments.length > 0;
+  const firstAttachment = message.attachments[0]; // Get the first attachment
+
   return {
     _id: message.id,
     text: message.message,
@@ -27,5 +30,13 @@ export function transformChatMessageForGiftedChat(
     reactions: message.reactions,
     hiddenForSelf: message.hiddenForSelf,
     hideForSubs: message.hideForSubs,
+    type:
+      isAttachment && firstAttachment.mimeType
+        ? firstAttachment.mimeType.startsWith('image/')
+          ? 'image'
+          : firstAttachment.mimeType.startsWith('video/')
+          ? 'video'
+          : 'message'
+        : 'message',
   };
 }
