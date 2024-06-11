@@ -26,7 +26,7 @@ import {useReadMessage} from '../../../hooks/chat/useReadMessage.ts';
 import {useUnsendMessage} from '../../../hooks/chat/useUnsendMessage.ts';
 import useSubscribeCheck from '../../../store/subscribeStore.ts';
 import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
-import {boolean} from 'yup';
+
 import MessageInput from '../../../components/Chat/MessageInput.tsx';
 import {
   KeyboardAvoidingView,
