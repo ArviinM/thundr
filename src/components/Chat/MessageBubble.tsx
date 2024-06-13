@@ -6,6 +6,18 @@ import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
 import React from 'react';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
 import MessageReact from './MessageReact.tsx';
+import useChatScrollStore from '../../store/chatScrollStore.ts';
+import {useShallow} from 'zustand/react/shallow';
+import Animated, {
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
+import useChatReplyStore from '../../store/chatReplyStore.ts';
 
 const MessageBubble = ({
   message,
@@ -21,6 +33,20 @@ const MessageBubble = ({
   const isMessageFromSelf = (message: IMessage | undefined) => {
     return message && message.user._id === user.sub;
   };
+
+  const {setIsScroll} = useChatScrollStore(
+    useShallow(state => ({
+      setIsScroll: state.setIsScroll,
+    })),
+  );
+
+  const {replyMessage, setReplyMessage, clearReplyMessage} = useChatReplyStore(
+    useShallow(state => ({
+      replyMessage: state.replyMessage,
+      setReplyMessage: state.setReplyMessage,
+      clearReplyMessage: state.clearReplyMessage,
+    })),
+  );
 
   const renderMessageSeenSentPending = (message: IMessage) => {
     return (
@@ -65,8 +91,92 @@ const MessageBubble = ({
     );
   };
 
+  const replyTranslation = useSharedValue(0);
+  const replyArrowScale = useSharedValue(0);
+
+  const animateReply = useAnimatedStyle(() => {
+    return {
+      transform: [{translateX: replyTranslation.value}],
+    };
+  });
+
+  const isSelf = isMessageFromSelf(message);
+
+  const animateReplyArrow = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {scale: replyArrowScale.value},
+        {translateX: isSelf ? 20 : -20},
+      ],
+    };
+  });
+
+  const replyGesture = Gesture.Pan()
+    .onBegin(() => {
+      runOnJS(setIsScroll)(false);
+    })
+    .onChange(e => {
+      replyTranslation.value = e.translationX;
+
+      if (isSelf) {
+        replyArrowScale.value = Math.max(
+          0,
+          Math.min(1, interpolate(e.translationX, [-30, 0], [1, 0])),
+        );
+      } else {
+        replyArrowScale.value = Math.max(
+          0,
+          Math.min(1, interpolate(e.translationX, [0, 30], [0, 1])), // Invert the interpolation range
+        );
+      }
+    })
+    .onEnd(e => {
+      if (!isSelf && Math.max(e.translationX) >= 50) {
+        runOnJS(setReplyMessage)(message);
+      }
+      if (isSelf && Math.max(e.translationX) <= -50) {
+        runOnJS(setReplyMessage)(message);
+      }
+
+      replyTranslation.value = withSpring(0, {damping: 100, stiffness: 300});
+      replyArrowScale.value = withSpring(0, {damping: 100, stiffness: 300});
+      runOnJS(setIsScroll)(true);
+    })
+    .onFinalize(() => runOnJS(setIsScroll)(true))
+    .maxPointers(1)
+    .minDistance(20);
+
   return (
     <View>
+      {message.replyingId && message.replying && (
+        <Animated.View style={[animateReply]}>
+          <View
+            style={[
+              message.replying.attachments &&
+              message.replying.attachments.length !== 0
+                ? styles.messageImageReplyContainer
+                : styles.messageReplyContainer,
+              isMessageFromSelf(message)
+                ? isMare
+                  ? [styles.messageRight]
+                  : [styles.messageRight]
+                : styles.messageLeft,
+            ]}>
+            {message.text &&
+              message.replying.attachments &&
+              message.replying.attachments.length === 0 && (
+                <Text style={[styles.messageText, {color: COLORS.gray}]}>
+                  {message.replying?.text}
+                </Text>
+              )}
+            {message.replying.attachments &&
+              message.replying.attachments.length > 0 && (
+                <Text>[Media] 🌠🎥</Text>
+              )}
+          </View>
+        </Animated.View>
+      )}
+
       {message && message.unsent ? (
         <View
           // key={item.key}
@@ -101,70 +211,77 @@ const MessageBubble = ({
         message &&
         message.attachments &&
         message.attachments.length === 0 && (
-          <View
-            style={[
-              styles.containerWithReact,
-              isMessageFromSelf(message)
-                ? isMare
-                  ? [styles.messageRight, {marginRight: 0}]
-                  : [styles.messageRight, {marginRight: 0}]
-                : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
-            ]}>
-            <TouchableWithoutFeedback onLongPress={onLongPress}>
-              <View
-                style={[
-                  styles.messageContainer,
-                  isMessageFromSelf(message)
-                    ? isMare
-                      ? [
-                          styles.messageRight,
-                          {backgroundColor: COLORS.secondary2},
-                        ]
-                      : [
-                          styles.messageRight,
-                          {backgroundColor: COLORS.primary1},
-                        ]
-                    : styles.messageLeft,
-                ]}>
-                <Text
+          <GestureDetector gesture={replyGesture}>
+            <Animated.View
+              style={[
+                animateReply,
+                styles.containerWithReact,
+                isMessageFromSelf(message)
+                  ? isMare
+                    ? [styles.messageRight, {marginRight: 0}]
+                    : [styles.messageRight, {marginRight: 0}]
+                  : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
+              ]}>
+              <Animated.View
+                style={[animateReplyArrow, {position: 'absolute'}]}>
+                <ReturnArrowIcon />
+              </Animated.View>
+              <TouchableWithoutFeedback onLongPress={onLongPress}>
+                <View
                   style={[
-                    styles.messageText,
+                    styles.messageContainer,
                     isMessageFromSelf(message)
                       ? isMare
-                        ? {color: COLORS.white}
-                        : {color: COLORS.white}
-                      : styles.messageText,
+                        ? [
+                            styles.messageRight,
+                            {backgroundColor: COLORS.secondary2},
+                          ]
+                        : [
+                            styles.messageRight,
+                            {backgroundColor: COLORS.primary1},
+                          ]
+                      : styles.messageLeft,
                   ]}>
-                  {message.text}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    marginRight: -2,
-                  }}>
                   <Text
                     style={[
-                      styles.timestamp,
+                      styles.messageText,
                       isMessageFromSelf(message)
                         ? isMare
                           ? {color: COLORS.white}
                           : {color: COLORS.white}
-                        : styles.timestamp,
+                        : styles.messageText,
                     ]}>
-                    {formatTimestamp(message.createdAt)}
+                    {message.text}
                   </Text>
-                  {renderMessageSeenSentPending(message)}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      marginRight: -2,
+                    }}>
+                    <Text
+                      style={[
+                        styles.timestamp,
+                        isMessageFromSelf(message)
+                          ? isMare
+                            ? {color: COLORS.white}
+                            : {color: COLORS.white}
+                          : styles.timestamp,
+                      ]}>
+                      {formatTimestamp(message.createdAt)}
+                    </Text>
+                    {renderMessageSeenSentPending(message)}
+                  </View>
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-            <MessageReact
-              messageId={message._id as number}
-              isMare={isMare}
-              initialReactCount={message.reactions?.length || 0}
-            />
-          </View>
+              </TouchableWithoutFeedback>
+              <MessageReact
+                messageId={message._id as number}
+                isMare={isMare}
+                initialReactCount={message.reactions?.length || 0}
+              />
+            </Animated.View>
+          </GestureDetector>
         )
       )}
     </View>

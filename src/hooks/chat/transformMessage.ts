@@ -1,10 +1,12 @@
-import {ChatMessage, IMessage} from '../../types/generated.ts';
+import {ChatMessage, IMessage, Attachment} from '../../types/generated.ts';
 
 export function transformChatMessageForGiftedChat(
   message: ChatMessage,
 ): IMessage {
   const isAttachment = message.message === '' && message.attachments.length > 0;
-  const firstAttachment = message.attachments[0]; // Get the first attachment
+  const firstAttachment = message.attachments
+    ? message.attachments[0]
+    : undefined; // Get the first attachment
 
   return {
     _id: message.id,
@@ -31,7 +33,7 @@ export function transformChatMessageForGiftedChat(
     hiddenForSelf: message.hiddenForSelf,
     hideForSubs: message.hideForSubs,
     type:
-      isAttachment && firstAttachment.mimeType
+      isAttachment && firstAttachment && firstAttachment.mimeType
         ? firstAttachment.mimeType.startsWith('image/')
           ? 'image'
           : firstAttachment.mimeType.startsWith('video/')

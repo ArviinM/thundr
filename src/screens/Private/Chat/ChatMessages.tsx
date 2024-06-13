@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
@@ -400,17 +400,20 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         page => page._id,
       ) as number[] | undefined;
 
+      clearReplyMessage();
+
       await sendMessage.mutateAsync({
         id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
         senderSub: user.sub,
         targetSub: user.profile.sub,
         message: message.trim(),
         read: '',
-        // replyingToId: replyMessage && (replyMessage._id as number),
-        // replying: replyMessage,
+        replyingToId: replyMessage && (replyMessage._id as number),
+        replying: replyMessage,
       });
 
       await query.invalidateQueries({queryKey: ['get-chat-list']});
+
       // await query.invalidateQueries({queryKey: ['get-chat-message']});
     }
   };
@@ -434,6 +437,14 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     await chatMessage.fetchNextPage();
   };
 
+  const memoizedMessages = useMemo(
+    () =>
+      (chatMessage.isSuccess &&
+        chatMessage.data?.pages.flatMap(page => page)) ||
+      [],
+    [chatMessage.isSuccess, chatMessage.data?.pages], // Dependency array for memoization
+  );
+
   return (
     <ChatContext.Provider
       value={{
@@ -442,10 +453,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         handleReactMessage,
         loading: chatMessage.isLoading,
         loadMoreMessages,
-        messages:
-          (chatMessage.isSuccess &&
-            chatMessage.data?.pages.flatMap(page => page)) ||
-          [],
+        messages: memoizedMessages,
         onLongPressActions,
         isMare,
         isRefetching: chatMessage.isFetchingNextPage,
