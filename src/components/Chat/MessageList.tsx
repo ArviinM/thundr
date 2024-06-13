@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {useChatContext} from '../../screens/Private/Chat/ChatMessages.tsx';
 import MessageBubble from './MessageBubble.tsx';
 import {COLORS} from '../../constants/commons.ts';
@@ -8,9 +8,11 @@ import {FlashList} from '@shopify/flash-list';
 import {Day} from './Day.tsx';
 import Color from 'react-native-gifted-chat/lib/Color';
 import MessageBubbleImage from './MessageBubbleImage.tsx';
+import MessageBubbleVideo from './MessageBubbleVideo.tsx';
 
 const MemoizedMessageBubble = React.memo(MessageBubble);
 const MemoizedMessageBubbleImage = React.memo(MessageBubbleImage);
+const MemoizedMessageBubbleVideo = React.memo(MessageBubbleVideo);
 
 const MessageList = () => {
   const chat = useChatContext();
@@ -105,9 +107,12 @@ const MessageList = () => {
                 );
               case 'video':
                 return (
-                  <View>
-                    <Text>Video</Text>
-                  </View>
+                  <MemoizedMessageBubbleVideo
+                    key={message.index}
+                    message={message.item}
+                    user={chat.user}
+                    isMare={chat.isMare}
+                  />
                 );
               default:
                 return null;
