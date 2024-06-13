@@ -7,10 +7,12 @@ import React, {Fragment} from 'react';
 import {Loading} from '../shared/Loading.tsx';
 import {Image} from 'expo-image';
 import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
+import MessageReact from './MessageReact.tsx';
 
 const MessageBubbleVideo = ({
   message,
   user,
+  isMare,
 }: {
   message: IMessage;
   user: Chat;
@@ -53,7 +55,15 @@ const MessageBubbleVideo = ({
       ) : (
         message &&
         message.attachments && (
-          <>
+          <View
+            style={[
+              styles.containerWithReact,
+              isMessageFromSelf(message)
+                ? isMare
+                  ? [styles.messageRight, {marginRight: 0}]
+                  : [styles.messageRight, {marginRight: 0}]
+                : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
+            ]}>
             <TouchableWithoutFeedback>
               <View
                 style={[
@@ -116,7 +126,12 @@ const MessageBubbleVideo = ({
                 )}
               </View>
             </TouchableWithoutFeedback>
-          </>
+            <MessageReact
+              messageId={message._id as number}
+              isMare={isMare}
+              initialReactCount={message.reactions?.length || 0}
+            />
+          </View>
         )
       )}
     </View>
@@ -126,6 +141,11 @@ const MessageBubbleVideo = ({
 export default MessageBubbleVideo;
 
 const styles = StyleSheet.create({
+  containerWithReact: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    gap: 10,
+  },
   messageUnsentContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,

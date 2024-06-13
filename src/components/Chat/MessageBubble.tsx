@@ -14,6 +14,7 @@ import {Loading} from '../shared/Loading.tsx';
 import {Image} from 'expo-image';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
 import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
+import MessageReact from './MessageReact.tsx';
 
 const MessageBubble = ({
   message,
@@ -71,80 +72,6 @@ const MessageBubble = ({
     );
   };
 
-  // const renderImage = ({
-  //   item: attachments,
-  //   isSelf: isSelf,
-  //   isPending: isPending,
-  //   isReply: isReply,
-  // }: {
-  //   item: Attachment[];
-  //   isSelf: boolean;
-  //   isPending: boolean;
-  //   isReply?: boolean;
-  // }) => {
-  //   return attachments.map((attachment, index) => (
-  //     <Fragment key={index}>
-  //       {isPending ? (
-  //         <View
-  //           style={{
-  //             borderRadius: 10,
-  //             width: scale(100),
-  //             height: scale(100),
-  //             aspectRatio: 1,
-  //             backgroundColor: COLORS.gray2,
-  //           }}>
-  //           <Loading />
-  //         </View>
-  //       ) : (
-  //         <View>
-  //           {attachment.mimeType &&
-  //             isImageOrVideo(attachment.mimeType) === 'image' && (
-  //               <TouchableOpacity disabled={isReply}>
-  //                 {attachment.blurHash ? (
-  //                   <Image
-  //                     source={{uri: attachment.thumbnailUrl}}
-  //                     style={[styles.messageImage]}
-  //                     transition={100}
-  //                     placeholder={attachment.blurHash}
-  //                   />
-  //                 ) : (
-  //                   <Image
-  //                     source={{uri: attachment.thumbnailUrl}}
-  //                     style={[styles.messageImage]}
-  //                     transition={100}
-  //                   />
-  //                 )}
-  //               </TouchableOpacity>
-  //             )}
-  //
-  //           {attachment.mimeType &&
-  //             isImageOrVideo(attachment.mimeType) === 'video' && (
-  //               <TouchableOpacity>
-  //                 <View style={styles.videoThumbnailContainer}>
-  //                   <Image
-  //                     placeholder={attachment.blurHash}
-  //                     source={{uri: attachment.thumbnailUrl}}
-  //                     style={[
-  //                       styles.messageImage,
-  //                       {
-  //                         backgroundColor: '#563b3b',
-  //                         alignItems: 'center',
-  //                         justifyContent: 'center',
-  //                       },
-  //                     ]}
-  //                   />
-  //                   <View style={styles.playButtonOverlay}>
-  //                     <PlayButton />
-  //                   </View>
-  //                 </View>
-  //               </TouchableOpacity>
-  //             )}
-  //         </View>
-  //       )}
-  //     </Fragment>
-  //   ));
-  // };
-
   return (
     <View>
       {message && message.unsent ? (
@@ -181,7 +108,15 @@ const MessageBubble = ({
         message &&
         message.attachments &&
         message.attachments.length === 0 && (
-          <>
+          <View
+            style={[
+              styles.containerWithReact,
+              isMessageFromSelf(message)
+                ? isMare
+                  ? [styles.messageRight, {marginRight: 0}]
+                  : [styles.messageRight, {marginRight: 0}]
+                : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
+            ]}>
             <TouchableWithoutFeedback>
               <View
                 style={[
@@ -227,11 +162,16 @@ const MessageBubble = ({
                     ]}>
                     {formatTimestamp(message.createdAt)}
                   </Text>
-                  {/*{renderMessageSeenSentPending(message)}*/}
+                  {renderMessageSeenSentPending(message)}
                 </View>
               </View>
             </TouchableWithoutFeedback>
-          </>
+            <MessageReact
+              messageId={message._id as number}
+              isMare={isMare}
+              initialReactCount={message.reactions?.length || 0}
+            />
+          </View>
         )
       )}
     </View>

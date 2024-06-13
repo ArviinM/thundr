@@ -8,10 +8,12 @@ import {Loading} from '../shared/Loading.tsx';
 import {Image} from 'expo-image';
 
 import Animated, {interpolate} from 'react-native-reanimated';
+import MessageReact from './MessageReact.tsx';
 
 const MessageBubbleImage = ({
   message,
   user,
+  isMare,
 }: {
   message: IMessage;
   user: Chat;
@@ -56,15 +58,17 @@ const MessageBubbleImage = ({
       ) : (
         message &&
         message.attachments && (
-          <>
+          <View
+            style={[
+              styles.containerWithReact,
+              isMessageFromSelf(message)
+                ? isMare
+                  ? [styles.messageRight, {marginRight: 0}]
+                  : [styles.messageRight, {marginRight: 0}]
+                : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
+            ]}>
             <TouchableWithoutFeedback>
-              <View
-                style={[
-                  styles.messageImageContainer,
-                  isMessageFromSelf(message)
-                    ? styles.messageRight
-                    : styles.messageLeft,
-                ]}>
+              <View style={[styles.messageImageContainer]}>
                 {/*  Render Image here   */}
                 {message.attachments && message.attachments.length > 0 && (
                   <>
@@ -236,7 +240,12 @@ const MessageBubbleImage = ({
                 )}
               </View>
             </TouchableWithoutFeedback>
-          </>
+            <MessageReact
+              messageId={message._id as number}
+              isMare={isMare}
+              initialReactCount={message.reactions?.length || 0}
+            />
+          </View>
         )
       )}
     </View>
@@ -246,6 +255,11 @@ const MessageBubbleImage = ({
 export default MessageBubbleImage;
 
 const styles = StyleSheet.create({
+  containerWithReact: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    gap: 7,
+  },
   messageReplyContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,

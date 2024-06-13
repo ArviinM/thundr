@@ -35,6 +35,7 @@ import {
 import {Platform, View} from 'react-native';
 import {useShallow} from 'zustand/react/shallow';
 import useChatReplyStore from '../../../store/chatReplyStore.ts';
+import {useReactMessage} from '../../../hooks/chat/useReactMessage.ts';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -48,6 +49,7 @@ type ChatMessagesProps = {
 type ChatContext = {
   handleSendMessage(message: string): void;
   handleImageUpload(isCamera?: boolean): Promise<void | null>;
+  handleReactMessage(messageId: number): void;
   loading: boolean;
   loadMoreMessages(): Promise<void>;
   messages?: IMessage[];
@@ -75,6 +77,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const readMessage = useReadMessage();
   const unsendMessageAll = useUnsendMessage();
   const unsendMessageSelf = useUnsendSelfMessage();
+  const reactMessage = useReactMessage();
 
   const {replyMessage, setReplyMessage, clearReplyMessage} = useChatReplyStore(
     useShallow(state => ({
@@ -407,6 +410,18 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
+  const handleReactMessage = async (messageId: number) => {
+    if (user) {
+      await reactMessage.mutateAsync({
+        sub: user.sub,
+        messageId: messageId,
+        reaction: '❤️',
+      });
+
+      await query.invalidateQueries({queryKey: ['get-chat-list']});
+    }
+  };
+
   const loadMoreMessages = async () => {
     if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
       return;
@@ -419,6 +434,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       value={{
         handleSendMessage,
         handleImageUpload,
+        handleReactMessage,
         loading: chatMessage.isLoading,
         loadMoreMessages,
         messages:
