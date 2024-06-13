@@ -7,8 +7,10 @@ import {format, isSameDay} from 'date-fns';
 import {FlashList} from '@shopify/flash-list';
 import {Day} from './Day.tsx';
 import Color from 'react-native-gifted-chat/lib/Color';
+import MessageBubbleImage from './MessageBubbleImage.tsx';
 
 const MemoizedMessageBubble = React.memo(MessageBubble);
+const MemoizedMessageBubbleImage = React.memo(MessageBubbleImage);
 
 const MessageList = () => {
   const chat = useChatContext();
@@ -94,7 +96,7 @@ const MessageList = () => {
                 );
               case 'image':
                 return (
-                  <MemoizedMessageBubble
+                  <MemoizedMessageBubbleImage
                     key={message.index}
                     message={message.item}
                     user={chat.user}
@@ -103,12 +105,9 @@ const MessageList = () => {
                 );
               case 'video':
                 return (
-                  <MemoizedMessageBubble
-                    key={message.index}
-                    message={message.item}
-                    user={chat.user}
-                    isMare={chat.isMare}
-                  />
+                  <View>
+                    <Text>Video</Text>
+                  </View>
                 );
               default:
                 return null;

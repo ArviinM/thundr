@@ -71,79 +71,79 @@ const MessageBubble = ({
     );
   };
 
-  const renderImage = ({
-    item: attachments,
-    isSelf: isSelf,
-    isPending: isPending,
-    isReply: isReply,
-  }: {
-    item: Attachment[];
-    isSelf: boolean;
-    isPending: boolean;
-    isReply?: boolean;
-  }) => {
-    return attachments.map((attachment, index) => (
-      <Fragment key={index}>
-        {isPending ? (
-          <View
-            style={{
-              borderRadius: 10,
-              width: scale(100),
-              height: scale(100),
-              aspectRatio: 1,
-              backgroundColor: COLORS.gray2,
-            }}>
-            <Loading />
-          </View>
-        ) : (
-          <View>
-            {attachment.mimeType &&
-              isImageOrVideo(attachment.mimeType) === 'image' && (
-                <TouchableOpacity disabled={isReply}>
-                  {attachment.blurHash ? (
-                    <Image
-                      source={{uri: attachment.thumbnailUrl}}
-                      style={[styles.messageImage]}
-                      transition={100}
-                      placeholder={attachment.blurHash}
-                    />
-                  ) : (
-                    <Image
-                      source={{uri: attachment.thumbnailUrl}}
-                      style={[styles.messageImage]}
-                      transition={100}
-                    />
-                  )}
-                </TouchableOpacity>
-              )}
-
-            {attachment.mimeType &&
-              isImageOrVideo(attachment.mimeType) === 'video' && (
-                <TouchableOpacity>
-                  <View style={styles.videoThumbnailContainer}>
-                    <Image
-                      placeholder={attachment.blurHash}
-                      source={{uri: attachment.thumbnailUrl}}
-                      style={[
-                        styles.messageImage,
-                        {
-                          backgroundColor: '#563b3b',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        },
-                      ]}
-                    />
-                    <View style={styles.playButtonOverlay}>
-                      <PlayButton />
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              )}
-          </View>
-        )}
-      </Fragment>
-    ));
-  };
+  // const renderImage = ({
+  //   item: attachments,
+  //   isSelf: isSelf,
+  //   isPending: isPending,
+  //   isReply: isReply,
+  // }: {
+  //   item: Attachment[];
+  //   isSelf: boolean;
+  //   isPending: boolean;
+  //   isReply?: boolean;
+  // }) => {
+  //   return attachments.map((attachment, index) => (
+  //     <Fragment key={index}>
+  //       {isPending ? (
+  //         <View
+  //           style={{
+  //             borderRadius: 10,
+  //             width: scale(100),
+  //             height: scale(100),
+  //             aspectRatio: 1,
+  //             backgroundColor: COLORS.gray2,
+  //           }}>
+  //           <Loading />
+  //         </View>
+  //       ) : (
+  //         <View>
+  //           {attachment.mimeType &&
+  //             isImageOrVideo(attachment.mimeType) === 'image' && (
+  //               <TouchableOpacity disabled={isReply}>
+  //                 {attachment.blurHash ? (
+  //                   <Image
+  //                     source={{uri: attachment.thumbnailUrl}}
+  //                     style={[styles.messageImage]}
+  //                     transition={100}
+  //                     placeholder={attachment.blurHash}
+  //                   />
+  //                 ) : (
+  //                   <Image
+  //                     source={{uri: attachment.thumbnailUrl}}
+  //                     style={[styles.messageImage]}
+  //                     transition={100}
+  //                   />
+  //                 )}
+  //               </TouchableOpacity>
+  //             )}
+  //
+  //           {attachment.mimeType &&
+  //             isImageOrVideo(attachment.mimeType) === 'video' && (
+  //               <TouchableOpacity>
+  //                 <View style={styles.videoThumbnailContainer}>
+  //                   <Image
+  //                     placeholder={attachment.blurHash}
+  //                     source={{uri: attachment.thumbnailUrl}}
+  //                     style={[
+  //                       styles.messageImage,
+  //                       {
+  //                         backgroundColor: '#563b3b',
+  //                         alignItems: 'center',
+  //                         justifyContent: 'center',
+  //                       },
+  //                     ]}
+  //                   />
+  //                   <View style={styles.playButtonOverlay}>
+  //                     <PlayButton />
+  //                   </View>
+  //                 </View>
+  //               </TouchableOpacity>
+  //             )}
+  //         </View>
+  //       )}
+  //     </Fragment>
+  //   ));
+  // };
 
   return (
     <View>
@@ -177,22 +177,10 @@ const MessageBubble = ({
             Message removed
           </Text>
         </View>
-      ) : message && message.attachments && message.attachments.length > 0 ? (
-        <View
-          style={[
-            styles.messageImageContainer,
-            isMessageFromSelf(message)
-              ? styles.messageRight
-              : styles.messageLeft,
-          ]}>
-          {renderImage({
-            item: message.attachments,
-            isSelf: isMessageFromSelf(message) || false,
-            isPending: message.pending || false,
-          })}
-        </View>
       ) : (
-        message && (
+        message &&
+        message.attachments &&
+        message.attachments.length === 0 && (
           <>
             <TouchableWithoutFeedback>
               <View
@@ -239,7 +227,7 @@ const MessageBubble = ({
                     ]}>
                     {formatTimestamp(message.createdAt)}
                   </Text>
-                  {renderMessageSeenSentPending(message)}
+                  {/*{renderMessageSeenSentPending(message)}*/}
                 </View>
               </View>
             </TouchableWithoutFeedback>

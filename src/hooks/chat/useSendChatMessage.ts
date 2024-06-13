@@ -78,6 +78,11 @@ export function useSendChatMessage() {
           data.attachments && data.attachments.length > 0
             ? Array.from({length: data.attachments.length}, () => ({
                 fileUrl: '',
+                mimeType:
+                  data.attachments &&
+                  data.attachments[0].fileType.startsWith('image/')
+                    ? 'image/jpeg'
+                    : 'video/mp4',
               }))
             : [],
         created: new Date().toString(),
@@ -90,7 +95,10 @@ export function useSendChatMessage() {
         replyingId: data.replyingToId,
         reactions: [],
         isUnsent: false,
+        // type: data.type,
       });
+
+      console.log(JSON.stringify(newMessage, null, 2));
 
       queryClient.setQueriesData(
         {queryKey: ['get-chat-message']},

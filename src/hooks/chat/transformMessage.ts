@@ -36,7 +36,7 @@ export function transformChatMessageForGiftedChat(
           ? 'image'
           : firstAttachment.mimeType.startsWith('video/')
           ? 'video'
-          : 'message'
+          : 'image'
         : 'message',
   };
 }

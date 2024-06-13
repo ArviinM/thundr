@@ -486,6 +486,7 @@ export type ChatSendMessageRequest = {
   chatRoomID?: string;
   replyingToId?: number;
   replying?: IMessage | undefined;
+  type?: 'message' | 'image' | 'video';
 };
 
 // Transform Chat Messages for Gifted Chat
@@ -512,7 +513,7 @@ export interface IMessage {
   replying?: IMessage;
   hiddenForSelf?: boolean;
   hideForSubs?: string;
-  type?: 'message' | 'image' | 'video' | 'date';
+  type?: 'message' | 'image' | 'video';
 }
 
 // Deactivate

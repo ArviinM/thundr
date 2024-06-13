@@ -194,6 +194,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             replyingToId: replyMessage
               ? (replyMessage._id as number)
               : undefined,
+            type: image ? 'image' : 'video',
           });
 
           await query.invalidateQueries({queryKey: ['get-chat-list']});
