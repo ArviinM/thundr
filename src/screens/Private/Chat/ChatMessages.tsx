@@ -36,6 +36,8 @@ import {Platform, View} from 'react-native';
 import {useShallow} from 'zustand/react/shallow';
 import useChatReplyStore from '../../../store/chatReplyStore.ts';
 import {useReactMessage} from '../../../hooks/chat/useReactMessage.ts';
+import {useActionSheet} from '@expo/react-native-action-sheet';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 type ChatMessagesScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -53,6 +55,7 @@ type ChatContext = {
   loading: boolean;
   loadMoreMessages(): Promise<void>;
   messages?: IMessage[];
+  onLongPressActions(message: IMessage): void;
   isMare: boolean;
   isRefetching: boolean;
   user: Chat;
@@ -86,6 +89,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       clearReplyMessage: state.clearReplyMessage,
     })),
   );
+
+  const {showActionSheetWithOptions} = useActionSheet();
 
   useEffect(() => {
     if (user && chatMessage.isSuccess) {
@@ -334,60 +339,60 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
   };
 
-  // const onLongPressActions = (message: IMessage) => {
-  //   if (!user) {
-  //     return;
-  //   }
-  //
-  //   const isOwnMessage = user.sub === message.user._id;
-  //   const hasAttachments =
-  //     message.attachments && message.attachments.length > 0;
-  //
-  //   const options = isOwnMessage
-  //     ? hasAttachments
-  //       ? ['Unsend for everyone', 'Unsend for you', 'Cancel']
-  //       : ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
-  //     : hasAttachments
-  //     ? ['Unsend for you', 'Cancel']
-  //     : ['Copy', 'Unsend for you', 'Cancel'];
-  //
-  //   const cancelButtonIndex = options.length - 1; // Always the last item
-  //
-  //   showActionSheetWithOptions(
-  //     {
-  //       options,
-  //       cancelButtonIndex,
-  //       cancelButtonTintColor: COLORS.primary1,
-  //     },
-  //     async selectedIndex => {
-  //       switch (selectedIndex) {
-  //         case isOwnMessage ? (hasAttachments ? 0 : 1) : -1: // Unsend for everyone (only if own message and no attachments)
-  //           if (user) {
-  //             await unsendMessageAll.mutateAsync({
-  //               sub: user.sub,
-  //               messageId: message._id as number,
-  //             });
-  //           }
-  //           break;
-  //         case isOwnMessage ? (hasAttachments ? 1 : 2) : hasAttachments ? 0 : 1: // Unsend for you (index depends on message ownership and attachment presence)
-  //           if (user) {
-  //             await unsendMessageSelf.mutateAsync({
-  //               sub: user.sub,
-  //               messageId: message._id as number,
-  //             });
-  //           }
-  //           break;
-  //         case 0: // Copy (only if the message has no attachments)
-  //           if (!hasAttachments) {
-  //             Clipboard.setString(message.text);
-  //           }
-  //           break;
-  //         case cancelButtonIndex: // Cancel
-  //         // No action needed
-  //       }
-  //     },
-  //   );
-  // };
+  const onLongPressActions = (message: IMessage) => {
+    if (!user) {
+      return;
+    }
+
+    const isOwnMessage = user.sub === message.user._id;
+    const hasAttachments =
+      message.attachments && message.attachments.length > 0;
+
+    const options = isOwnMessage
+      ? hasAttachments
+        ? ['Unsend for everyone', 'Unsend for you', 'Cancel']
+        : ['Copy', 'Unsend for everyone', 'Unsend for you', 'Cancel']
+      : hasAttachments
+      ? ['Unsend for you', 'Cancel']
+      : ['Copy', 'Unsend for you', 'Cancel'];
+
+    const cancelButtonIndex = options.length - 1; // Always the last item
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        cancelButtonTintColor: COLORS.primary1,
+      },
+      async selectedIndex => {
+        switch (selectedIndex) {
+          case isOwnMessage ? (hasAttachments ? 0 : 1) : -1: // Unsend for everyone (only if own message and no attachments)
+            if (user) {
+              await unsendMessageAll.mutateAsync({
+                sub: user.sub,
+                messageId: message._id as number,
+              });
+            }
+            break;
+          case isOwnMessage ? (hasAttachments ? 1 : 2) : hasAttachments ? 0 : 1: // Unsend for you (index depends on message ownership and attachment presence)
+            if (user) {
+              await unsendMessageSelf.mutateAsync({
+                sub: user.sub,
+                messageId: message._id as number,
+              });
+            }
+            break;
+          case 0: // Copy (only if the message has no attachments)
+            if (!hasAttachments) {
+              Clipboard.setString(message.text);
+            }
+            break;
+          case cancelButtonIndex: // Cancel
+          // No action needed
+        }
+      },
+    );
+  };
 
   const handleSendMessage = async (message: string) => {
     if (user) {
@@ -399,7 +404,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         id: messageIds ? messageIds[0] + Date.now() : Date.now() * 100,
         senderSub: user.sub,
         targetSub: user.profile.sub,
-        message: message,
+        message: message.trim(),
         read: '',
         // replyingToId: replyMessage && (replyMessage._id as number),
         // replying: replyMessage,
@@ -441,6 +446,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           (chatMessage.isSuccess &&
             chatMessage.data?.pages.flatMap(page => page)) ||
           [],
+        onLongPressActions,
         isMare,
         isRefetching: chatMessage.isFetchingNextPage,
         user: user,

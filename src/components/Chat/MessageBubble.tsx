@@ -1,29 +1,22 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import {Attachment, Chat, IMessage} from '../../types/generated.ts';
-import {formatTimestamp, isImageOrVideo, scale} from '../../utils/utils.ts';
+import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {Chat, IMessage} from '../../types/generated.ts';
+import {formatTimestamp, scale} from '../../utils/utils.ts';
 import {COLORS, height, width} from '../../constants/commons.ts';
 import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
-import React, {Fragment} from 'react';
-import {Loading} from '../shared/Loading.tsx';
-import {Image} from 'expo-image';
+import React from 'react';
 import CheckIcon from '../../assets/images/CheckIcon.tsx';
-import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
 import MessageReact from './MessageReact.tsx';
 
 const MessageBubble = ({
   message,
   user,
   isMare,
+  onLongPress,
 }: {
   message: IMessage;
   user: Chat;
   isMare: boolean;
+  onLongPress: () => void;
 }) => {
   const isMessageFromSelf = (message: IMessage | undefined) => {
     return message && message.user._id === user.sub;
@@ -117,7 +110,7 @@ const MessageBubble = ({
                   : [styles.messageRight, {marginRight: 0}]
                 : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
             ]}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onLongPress={onLongPress}>
               <View
                 style={[
                   styles.messageContainer,
@@ -264,28 +257,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bodyContainer: {
-    // backgroundColor: COLORS.white,
-    // padding: 10,
     borderRadius: 20,
     margin: 20,
     width: width / 1.07,
     height: height / 1.67,
-  },
-  button: {
-    position: 'absolute',
-    top: scale(-46),
-    right: 0,
-    zIndex: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
-    color: 'black',
-    fontWeight: 'bold',
-    fontFamily: 'Montserrat-Bold',
   },
   containerReply: {
     width: 16,
@@ -309,7 +284,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   videoThumbnailContainer: {
-    position: 'relative', // Enable absolute positioning for child elements
+    position: 'relative',
     borderRadius: 10,
     width: scale(100),
     height: scale(100),
@@ -317,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#563b3b',
   },
   playButtonOverlay: {
-    position: 'absolute', // Position absolutely within the container
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,

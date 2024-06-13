@@ -14,10 +14,12 @@ const MessageBubbleImage = ({
   message,
   user,
   isMare,
+  onLongPress,
 }: {
   message: IMessage;
   user: Chat;
   isMare: boolean;
+  onLongPress: () => void;
 }) => {
   const isMessageFromSelf = (message: IMessage | undefined) => {
     return message && message.user._id === user.sub;
@@ -67,7 +69,7 @@ const MessageBubbleImage = ({
                   : [styles.messageRight, {marginRight: 0}]
                 : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
             ]}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onLongPress={onLongPress}>
               <View style={[styles.messageImageContainer]}>
                 {/*  Render Image here   */}
                 {message.attachments && message.attachments.length > 0 && (

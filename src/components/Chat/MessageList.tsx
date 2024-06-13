@@ -54,7 +54,7 @@ const MessageList = () => {
                     <ActivityIndicator size="small" color="gray" />
                   </View>
                 )}
-                {chat.messages && (
+                {chat.messages && chat.messages.length > 0 && (
                   <View
                     style={{
                       alignItems: 'center',
@@ -70,7 +70,7 @@ const MessageList = () => {
                         // fontWeight: '600',
                       }}>
                       {format(
-                        chat.messages[chat.messages?.length - 1].createdAt,
+                        chat.messages[chat.messages.length - 1].createdAt,
                         'MMMM dd, cccc',
                       )}
                     </Text>
@@ -94,6 +94,7 @@ const MessageList = () => {
                     message={message.item}
                     user={chat.user}
                     isMare={chat.isMare}
+                    onLongPress={() => chat.onLongPressActions(message.item)}
                   />
                 );
               case 'image':
@@ -103,6 +104,7 @@ const MessageList = () => {
                     message={message.item}
                     user={chat.user}
                     isMare={chat.isMare}
+                    onLongPress={() => chat.onLongPressActions(message.item)}
                   />
                 );
               case 'video':
@@ -112,6 +114,7 @@ const MessageList = () => {
                     message={message.item}
                     user={chat.user}
                     isMare={chat.isMare}
+                    onLongPress={() => chat.onLongPressActions(message.item)}
                   />
                 );
               default:
