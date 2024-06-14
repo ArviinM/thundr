@@ -40,11 +40,9 @@ const MessageBubble = ({
     })),
   );
 
-  const {replyMessage, setReplyMessage, clearReplyMessage} = useChatReplyStore(
+  const {setReplyMessage} = useChatReplyStore(
     useShallow(state => ({
-      replyMessage: state.replyMessage,
       setReplyMessage: state.setReplyMessage,
-      clearReplyMessage: state.clearReplyMessage,
     })),
   );
 
@@ -152,10 +150,7 @@ const MessageBubble = ({
         <Animated.View style={[animateReply]}>
           <View
             style={[
-              message.replying.attachments &&
-              message.replying.attachments.length !== 0
-                ? styles.messageImageReplyContainer
-                : styles.messageReplyContainer,
+              styles.messageReplyContainer,
               isMessageFromSelf(message)
                 ? isMare
                   ? [styles.messageRight]
@@ -171,7 +166,9 @@ const MessageBubble = ({
               )}
             {message.replying.attachments &&
               message.replying.attachments.length > 0 && (
-                <Text>[Media] 🌠🎥</Text>
+                <Text style={[styles.messageText, {color: COLORS.gray}]}>
+                  [Media] 🌠🎥
+                </Text>
               )}
           </View>
         </Animated.View>

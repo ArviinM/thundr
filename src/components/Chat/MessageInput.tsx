@@ -97,6 +97,7 @@ const MessageInput = () => {
             textAlignVertical="center"
             placeholderTextColor={'#ffffff'}
             maxLength={255}
+            selectionColor={chat.isMare ? COLORS.primary1 : COLORS.secondary2}
           />
           <TouchableOpacity
             onPress={() => chat.handleImageUpload(true)}

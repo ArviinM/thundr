@@ -117,7 +117,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       }
       return () => {
         setChatRoom('');
-        // clearReplyMessage();
+        clearReplyMessage();
       };
     }, [user, setChatRoom]),
   );
