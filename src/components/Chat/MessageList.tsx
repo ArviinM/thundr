@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {useChatContext} from '../../screens/Private/Chat/ChatMessages.tsx';
 import MessageBubble from './MessageBubble.tsx';
@@ -12,6 +12,7 @@ import MessageBubbleVideo from './MessageBubbleVideo.tsx';
 import {IMessage} from '../../types/generated.ts';
 import useChatScrollStore from '../../store/chatScrollStore.ts';
 import {useShallow} from 'zustand/react/shallow';
+import useChatReplyStore from '../../store/chatReplyStore.ts';
 
 const MemoizedMessageBubble = React.memo(MessageBubble);
 const MemoizedMessageBubbleImage = React.memo(MessageBubbleImage);
@@ -20,9 +21,20 @@ const MemoizedMessageBubbleVideo = React.memo(MessageBubbleVideo);
 const MessageList = () => {
   const chat = useChatContext();
 
+  const [scrollToIndex, setScrollToIndex] = useState<number | null>(null);
+
   const {isScroll} = useChatScrollStore(
     useShallow(state => ({
       isScroll: state.isScroll,
+    })),
+  );
+
+  const flashListRef = useRef<FlashList<IMessage>>(null);
+
+  const {replyToIndex, setReplyToIndex} = useChatReplyStore(
+    useShallow(state => ({
+      replyToIndex: state.replyToIndex,
+      setReplyToIndex: state.setReplyToIndex,
     })),
   );
 
@@ -44,7 +56,7 @@ const MessageList = () => {
   };
 
   const renderItem = useCallback(
-    (message: {item: IMessage; index: React.Key | null | undefined}) => {
+    (message: {item: IMessage; index: any | null | undefined}) => {
       switch (message.item.type) {
         case 'message':
           return (
@@ -118,6 +130,45 @@ const MessageList = () => {
     );
   };
 
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const onScroll = useCallback(() => {
+    if (!replyToIndex) {
+      return;
+    }
+
+    // Clear previous timeout if it exists
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    // Set up a new debounced timeout
+    debounceTimer.current = setTimeout(() => {
+      setReplyToIndex(undefined);
+      setScrollToIndex(null);
+      debounceTimer.current = null;
+    }, 800);
+  }, [replyToIndex]);
+
+  useEffect(() => {
+    if (replyToIndex && flashListRef.current && chat.messages) {
+      const index = chat.messages.findIndex(msg => msg._id === replyToIndex);
+      if (index !== -1) {
+        setScrollToIndex(index);
+      }
+    }
+  }, [replyToIndex]);
+
+  useEffect(() => {
+    if (scrollToIndex !== null && flashListRef.current) {
+      flashListRef.current.scrollToIndex({
+        animated: true,
+        index: scrollToIndex,
+        viewPosition: 0.5, // Center the message
+      });
+    }
+  }, [scrollToIndex]);
+
   return (
     <>
       {chat.loading ? (
@@ -137,6 +188,8 @@ const MessageList = () => {
           }}
           onEndReached={chat.loadMoreMessages}
           onEndReachedThreshold={0.1}
+          onScroll={onScroll}
+          ref={flashListRef}
           renderItem={renderItem}
           scrollEnabled={isScroll}
         />

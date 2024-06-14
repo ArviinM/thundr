@@ -41,10 +41,10 @@ const MessageBubbleVideo = ({
       setIsScroll: state.setIsScroll,
     })),
   );
-
-  const {setReplyMessage} = useChatReplyStore(
+  const {replyToIndex, setReplyMessage} = useChatReplyStore(
     useShallow(state => ({
       setReplyMessage: state.setReplyMessage,
+      replyToIndex: state.replyToIndex,
     })),
   );
 
@@ -104,7 +104,11 @@ const MessageBubbleVideo = ({
     .minDistance(20);
 
   return (
-    <View>
+    <Animated.View
+      style={{
+        backgroundColor:
+          replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
+      }}>
       {message && message.unsent ? (
         <View
           style={[
@@ -139,7 +143,7 @@ const MessageBubbleVideo = ({
           <GestureDetector gesture={replyGesture}>
             <Animated.View
               style={[
-                  animateReply,
+                animateReply,
                 styles.containerWithReact,
                 isMessageFromSelf(message)
                   ? isMare
@@ -222,7 +226,7 @@ const MessageBubbleVideo = ({
           </GestureDetector>
         )
       )}
-    </View>
+    </Animated.View>
   );
 };
 

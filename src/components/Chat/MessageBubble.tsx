@@ -40,9 +40,11 @@ const MessageBubble = ({
     })),
   );
 
-  const {setReplyMessage} = useChatReplyStore(
+  const {replyToIndex, setReplyMessage, setReplyToIndex} = useChatReplyStore(
     useShallow(state => ({
       setReplyMessage: state.setReplyMessage,
+      setReplyToIndex: state.setReplyToIndex,
+      replyToIndex: state.replyToIndex,
     })),
   );
 
@@ -145,32 +147,41 @@ const MessageBubble = ({
     .minDistance(20);
 
   return (
-    <View>
+    <Animated.View
+      style={{
+        backgroundColor:
+          replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
+      }}>
       {message.replyingId && message.replying && (
         <Animated.View style={[animateReply]}>
-          <View
-            style={[
-              styles.messageReplyContainer,
-              isMessageFromSelf(message)
-                ? isMare
-                  ? [styles.messageRight]
-                  : [styles.messageRight]
-                : styles.messageLeft,
-            ]}>
-            {message.text &&
-              message.replying.attachments &&
-              message.replying.attachments.length === 0 && (
-                <Text style={[styles.messageText, {color: COLORS.gray}]}>
-                  {message.replying?.text}
-                </Text>
-              )}
-            {message.replying.attachments &&
-              message.replying.attachments.length > 0 && (
-                <Text style={[styles.messageText, {color: COLORS.gray}]}>
-                  [Media] 🌠🎥
-                </Text>
-              )}
-          </View>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setReplyToIndex(message.replyingId);
+            }}>
+            <View
+              style={[
+                styles.messageReplyContainer,
+                isMessageFromSelf(message)
+                  ? isMare
+                    ? [styles.messageRight]
+                    : [styles.messageRight]
+                  : styles.messageLeft,
+              ]}>
+              {message.text &&
+                message.replying.attachments &&
+                message.replying.attachments.length === 0 && (
+                  <Text style={[styles.messageText, {color: COLORS.gray}]}>
+                    {message.replying?.text}
+                  </Text>
+                )}
+              {message.replying.attachments &&
+                message.replying.attachments.length > 0 && (
+                  <Text style={[styles.messageText, {color: COLORS.gray}]}>
+                    [Media] 🌠🎥
+                  </Text>
+                )}
+            </View>
+          </TouchableWithoutFeedback>
         </Animated.View>
       )}
 
@@ -281,7 +292,7 @@ const MessageBubble = ({
           </GestureDetector>
         )
       )}
-    </View>
+    </Animated.View>
   );
 };
 

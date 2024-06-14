@@ -42,9 +42,10 @@ const MessageBubbleImage = ({
     })),
   );
 
-  const {setReplyMessage} = useChatReplyStore(
+  const {replyToIndex, setReplyMessage} = useChatReplyStore(
     useShallow(state => ({
       setReplyMessage: state.setReplyMessage,
+      replyToIndex: state.replyToIndex,
     })),
   );
 
@@ -104,7 +105,11 @@ const MessageBubbleImage = ({
     .minDistance(20);
 
   return (
-    <View>
+    <Animated.View
+      style={{
+        backgroundColor:
+          replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
+      }}>
       {message && message.unsent ? (
         <View
           // key={item.key}
@@ -335,7 +340,7 @@ const MessageBubbleImage = ({
           </GestureDetector>
         )
       )}
-    </View>
+    </Animated.View>
   );
 };
 
