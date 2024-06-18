@@ -17,8 +17,8 @@ import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
 import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
 import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
-import ChatMessages from '../../screens/Private/Chat/ChatMessages.tsx';
 import ThundrBolt from '../../screens/Private/ThundrBolt/ThundrBolt.tsx';
+import {ChatMessages} from '../../screens/Private/Chat/ChatMessages.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();

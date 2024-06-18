@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Chat} from '../../types/generated.ts';
 import {IMAGES} from '../../constants/images.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
@@ -22,8 +21,11 @@ import ProfileCard from '../Home/ProfileCard.tsx';
 
 import {Image as ImageExpo} from 'expo-image';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useChatContext} from '../../screens/Private/Chat/ChatMessages.tsx';
 
-const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
+const MessageHeader = () => {
+  const chat = useChatContext();
+
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -69,7 +71,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
                 style={[
                   styles.button,
                   {
-                    backgroundColor: isMare
+                    backgroundColor: chat.isMare
                       ? COLORS.secondary2
                       : COLORS.primary1,
                   },
@@ -81,7 +83,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
                 user={{
                   sub: '',
                   percent: '',
-                  customerData: user.profile,
+                  customerData: chat.user.profile,
                 }}
                 possibles={false}
                 isReport={true}
@@ -106,7 +108,7 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
       }}>
       <View>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Messages', {isMare: isMare})}
+          onPress={() => navigation.navigate('Messages', {isMare: chat.isMare})}
           style={styles.backButton}>
           <Image
             source={IMAGES.back}
@@ -118,22 +120,22 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
       <View style={{flexDirection: 'row', gap: 10}}>
         <TouchableOpacity onPress={() => setIsVisible(true)}>
           <ImageExpo
-            source={{uri: user.profile.customerPhoto[0].photoUrl}}
+            source={{uri: chat.user.profile.customerPhoto[0].photoUrl}}
             style={{width: scale(42), height: scale(42), borderRadius: 8}}
             transition={100}
-            placeholder={user.profile.customerPhoto[0].blurHash}
+            placeholder={chat.user.profile.customerPhoto[0].blurHash}
           />
         </TouchableOpacity>
         <View style={{justifyContent: 'center'}}>
           <Text
             style={{
               fontFamily: 'Montserrat-ExtraBold',
-              color: isMare ? COLORS.secondary2 : COLORS.primary1,
+              color: chat.isMare ? COLORS.secondary2 : COLORS.primary1,
               letterSpacing: -0.4,
               fontSize: scale(16),
             }}>
-            {user.profile.name.split(' ')[0] || '👻'},{' '}
-            {calculateAge(user.profile.birthday)}
+            {chat.user.profile.name.split(' ')[0] || '👻'},{' '}
+            {calculateAge(chat.user.profile.birthday)}
           </Text>
           <Text
             style={{
@@ -151,14 +153,14 @@ const ChatHeader = ({user, isMare}: {user: Chat; isMare: boolean}) => {
         <TouchableOpacity
           onPress={handlePresentModalPress}
           style={styles.backButton}>
-          <ChatReportIcons isMare={isMare} />
+          <ChatReportIcons isMare={chat.isMare} />
         </TouchableOpacity>
       </View>
       <ReportBottomSheetModal
         ref={bottomSheetRef}
-        sub={user.target}
+        sub={chat.user.target}
         category={'CHAT'}
-        name={user.profile.name}
+        name={chat.user.profile.name}
       />
       {profileCardModal()}
     </View>
@@ -201,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatHeader;
+export default MessageHeader;
