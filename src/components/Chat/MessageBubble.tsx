@@ -152,7 +152,7 @@ const MessageBubble = ({
         backgroundColor:
           replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
       }}>
-      {message.replyingId && message.replying && (
+      {message.replyingId && !message.unsent && message.replying && (
         <Animated.View style={[animateReply]}>
           <TouchableWithoutFeedback
             onPress={() => {

@@ -3,7 +3,7 @@ import {Chat, IMessage} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
 import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Loading} from '../shared/Loading.tsx';
 import {Image} from 'expo-image';
 
@@ -20,6 +20,7 @@ import useChatScrollStore from '../../store/chatScrollStore.ts';
 import {useShallow} from 'zustand/react/shallow';
 import useChatReplyStore from '../../store/chatReplyStore.ts';
 import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
+import MemoizedMessageGallery from './MessageGallery/MessageGallery.tsx';
 
 const MemoizedImage = React.memo(Image);
 
@@ -34,6 +35,8 @@ const MessageBubbleImage = ({
   isMare: boolean;
   onLongPress: () => void;
 }) => {
+  const [visible, setVisible] = useState<boolean>(false);
+
   const isMessageFromSelf = (message: IMessage | undefined) => {
     return message && message.user._id === user.sub;
   };
@@ -107,88 +110,154 @@ const MessageBubbleImage = ({
     .minDistance(20);
 
   return (
-    <Animated.View
-      style={{
-        backgroundColor:
-          replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
-      }}>
-      {message && message.unsent ? (
-        <View
-          // key={item.key}
-          style={[
-            styles.messageUnsentContainer,
-            isMessageFromSelf(message)
-              ? styles.messageRight
-              : styles.messageLeft,
-          ]}>
-          <TrashIcon small />
-          <Text style={[styles.messageText, {color: COLORS.gray3}]}>
-            Message deleted
-          </Text>
-        </View>
-      ) : message &&
-        message.hiddenForSelf &&
-        message.hideForSubs === user.sub ? (
-        <View
-          // key={item.key}
-          style={[
-            styles.messageUnsentContainer,
-            isMessageFromSelf(message)
-              ? styles.messageRight
-              : styles.messageLeft,
-          ]}>
-          <TrashIcon small />
-          <Text style={[styles.messageText, {color: COLORS.gray3}]}>
-            Message removed
-          </Text>
-        </View>
-      ) : (
-        message &&
-        message.attachments && (
-          <GestureDetector gesture={replyGesture}>
-            <Animated.View
-              style={[
-                animateReply,
-                styles.containerWithReact,
-                isMessageFromSelf(message)
-                  ? isMare
-                    ? [styles.messageRight, {marginRight: 0}]
-                    : [styles.messageRight, {marginRight: 0}]
-                  : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
-              ]}>
+    <>
+      <Animated.View
+        style={{
+          backgroundColor:
+            replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
+        }}>
+        {message && message.unsent ? (
+          <View
+            // key={item.key}
+            style={[
+              styles.messageUnsentContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            <TrashIcon small />
+            <Text style={[styles.messageText, {color: COLORS.gray3}]}>
+              Message deleted
+            </Text>
+          </View>
+        ) : message &&
+          message.hiddenForSelf &&
+          message.hideForSubs === user.sub ? (
+          <View
+            // key={item.key}
+            style={[
+              styles.messageUnsentContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            <TrashIcon small />
+            <Text style={[styles.messageText, {color: COLORS.gray3}]}>
+              Message removed
+            </Text>
+          </View>
+        ) : (
+          message &&
+          message.attachments && (
+            <GestureDetector gesture={replyGesture}>
               <Animated.View
-                style={[animateReplyArrow, {position: 'absolute'}]}>
-                <ReturnArrowIcon />
-              </Animated.View>
-              <TouchableWithoutFeedback onLongPress={onLongPress}>
-                <View style={[styles.messageImageContainer]}>
-                  {/*  Render Image here   */}
-                  {message.attachments && message.attachments.length > 0 && (
-                    <>
-                      {message.attachments.map((attachment, index) => {
-                        const numOfAttachments =
-                          message.attachments && message.attachments.length;
+                style={[
+                  animateReply,
+                  styles.containerWithReact,
+                  isMessageFromSelf(message)
+                    ? isMare
+                      ? [styles.messageRight, {marginRight: 0}]
+                      : [styles.messageRight, {marginRight: 0}]
+                    : [
+                        styles.messageLeft,
+                        {marginLeft: 0, flexDirection: 'row'},
+                      ],
+                ]}>
+                <Animated.View
+                  style={[animateReplyArrow, {position: 'absolute'}]}>
+                  <ReturnArrowIcon />
+                </Animated.View>
+                <TouchableWithoutFeedback
+                  onPress={() => setVisible(true)}
+                  onLongPress={onLongPress}>
+                  <View style={[styles.messageImageContainer]}>
+                    {/*  Render Image here   */}
+                    {message.attachments && message.attachments.length > 0 && (
+                      <>
+                        {message.attachments.map((attachment, index) => {
+                          const numOfAttachments =
+                            message.attachments && message.attachments.length;
 
-                        // Adjusted Interpolation Ranges
-                        const inputRange = [1, 0, 2];
-                        const translateXOutputRange = [
-                          index % 2 === 0 ? 25 : -25, // Alternate signs
-                          0,
-                          index % 2 === 0 ? -25 : 25, // Alternate signs
-                        ];
-                        const translateYOutputRange = [3, 0, 3];
-                        const rotateOutputRange = [
-                          index % 2 === 0 ? 10 : -10, // Alternate signs
-                          0,
-                          index % 2 === 0 ? -10 : 10, // Alternate signs
-                        ];
-                        const scaleOutputRange = [0.45, 1, 0.85];
-                        const opacityOutputRange = [0.7, 1, 0.5];
+                          // Adjusted Interpolation Ranges
+                          const inputRange = [1, 0, 2];
+                          const translateXOutputRange = [
+                            index % 2 === 0 ? 25 : -25, // Alternate signs
+                            0,
+                            index % 2 === 0 ? -25 : 25, // Alternate signs
+                          ];
+                          const translateYOutputRange = [3, 0, 3];
+                          const rotateOutputRange = [
+                            index % 2 === 0 ? 10 : -10, // Alternate signs
+                            0,
+                            index % 2 === 0 ? -10 : 10, // Alternate signs
+                          ];
+                          const scaleOutputRange = [0.45, 1, 0.85];
+                          const opacityOutputRange = [0.7, 1, 0.5];
 
-                        if (message.pending) {
+                          if (message.pending) {
+                            return (
+                              <View
+                                key={`message-loading-image-${index}/${message._id}`}
+                                style={[
+                                  {
+                                    position: 'absolute',
+                                    borderRadius: 10,
+                                    right: scale(9),
+                                    top: scale(9),
+                                    width: scale(100),
+                                    height: scale(100),
+                                    elevation: 3,
+                                    backgroundColor: COLORS.gray2,
+                                    transform: [
+                                      {
+                                        translateX: interpolate(
+                                          index,
+                                          inputRange,
+                                          translateXOutputRange,
+                                        ),
+                                      },
+                                      {
+                                        translateY: interpolate(
+                                          index,
+                                          inputRange,
+                                          translateYOutputRange,
+                                        ),
+                                      },
+                                      {
+                                        rotate: `${interpolate(
+                                          index,
+                                          inputRange,
+                                          rotateOutputRange,
+                                        )}deg`,
+                                      },
+                                      {
+                                        scale: interpolate(
+                                          index,
+                                          inputRange,
+                                          scaleOutputRange,
+                                        ),
+                                      },
+                                    ],
+                                    opacity: interpolate(
+                                      index,
+                                      inputRange,
+                                      opacityOutputRange,
+                                    ),
+                                    zIndex: (numOfAttachments || 0) - index,
+                                  },
+                                ]}>
+                                <Loading />
+                              </View>
+                            );
+                          }
+
+                          if (!attachment.mimeType || !message.sent) {
+                            return null;
+                          }
+
                           return (
-                            <View
-                              key={`message-loading-image-${index}/${message._id}`}
+                            <Animated.View
+                              key={`message-gallery-image-${index}/${message._id}`}
                               style={[
                                 {
                                   position: 'absolute',
@@ -198,7 +267,9 @@ const MessageBubbleImage = ({
                                   width: scale(100),
                                   height: scale(100),
                                   elevation: 3,
-                                  backgroundColor: COLORS.gray2,
+                                  aspectRatio: 1,
+                                  // borderWidth: 1,
+                                  // shadowOffset: {width: 10, height: 10},
                                   transform: [
                                     {
                                       translateX: interpolate(
@@ -236,113 +307,62 @@ const MessageBubbleImage = ({
                                   ),
                                   zIndex: (numOfAttachments || 0) - index,
                                 },
+                                // animatedImageStyles,
                               ]}>
-                              <Loading />
-                            </View>
+                              {attachment.mimeType && message.sent && (
+                                <View>
+                                  {attachment.blurHash ? (
+                                    <MemoizedImage
+                                      source={{uri: attachment.thumbnailUrl}}
+                                      style={[styles.messageImage]}
+                                      transition={100}
+                                      placeholder={attachment.blurHash}
+                                    />
+                                  ) : (
+                                    <MemoizedImage
+                                      source={{uri: attachment.thumbnailUrl}}
+                                      style={[styles.messageImage]}
+                                      transition={100}>
+                                      <Text
+                                        style={{
+                                          fontSize: scale(20),
+                                          fontFamily: 'Montserrat-Regular',
+                                          color: 'white',
+                                        }}>
+                                        {index}
+                                      </Text>
+                                    </MemoizedImage>
+                                  )}
+                                </View>
+                              )}
+                            </Animated.View>
                           );
-                        }
-
-                        if (!attachment.mimeType || !message.sent) {
-                          return null;
-                        }
-
-                        return (
-                          <Animated.View
-                            key={`message-gallery-image-${index}/${message._id}`}
-                            style={[
-                              {
-                                position: 'absolute',
-                                borderRadius: 10,
-                                right: scale(9),
-                                top: scale(9),
-                                width: scale(100),
-                                height: scale(100),
-                                elevation: 3,
-                                aspectRatio: 1,
-                                // borderWidth: 1,
-                                // shadowOffset: {width: 10, height: 10},
-                                transform: [
-                                  {
-                                    translateX: interpolate(
-                                      index,
-                                      inputRange,
-                                      translateXOutputRange,
-                                    ),
-                                  },
-                                  {
-                                    translateY: interpolate(
-                                      index,
-                                      inputRange,
-                                      translateYOutputRange,
-                                    ),
-                                  },
-                                  {
-                                    rotate: `${interpolate(
-                                      index,
-                                      inputRange,
-                                      rotateOutputRange,
-                                    )}deg`,
-                                  },
-                                  {
-                                    scale: interpolate(
-                                      index,
-                                      inputRange,
-                                      scaleOutputRange,
-                                    ),
-                                  },
-                                ],
-                                opacity: interpolate(
-                                  index,
-                                  inputRange,
-                                  opacityOutputRange,
-                                ),
-                                zIndex: (numOfAttachments || 0) - index,
-                              },
-                              // animatedImageStyles,
-                            ]}>
-                            {attachment.mimeType && message.sent && (
-                              <View>
-                                {attachment.blurHash ? (
-                                  <MemoizedImage
-                                    source={{uri: attachment.thumbnailUrl}}
-                                    style={[styles.messageImage]}
-                                    transition={100}
-                                    placeholder={attachment.blurHash}
-                                  />
-                                ) : (
-                                  <MemoizedImage
-                                    source={{uri: attachment.thumbnailUrl}}
-                                    style={[styles.messageImage]}
-                                    transition={100}>
-                                    <Text
-                                      style={{
-                                        fontSize: scale(20),
-                                        fontFamily: 'Montserrat-Regular',
-                                        color: 'white',
-                                      }}>
-                                      {index}
-                                    </Text>
-                                  </MemoizedImage>
-                                )}
-                              </View>
-                            )}
-                          </Animated.View>
-                        );
-                      })}
-                    </>
-                  )}
-                </View>
-              </TouchableWithoutFeedback>
-              <MessageReact
-                messageId={message._id as number}
-                isMare={isMare}
-                initialReactCount={message.reactions?.length || 0}
-              />
-            </Animated.View>
-          </GestureDetector>
-        )
-      )}
-    </Animated.View>
+                        })}
+                      </>
+                    )}
+                  </View>
+                </TouchableWithoutFeedback>
+                <MessageReact
+                  messageId={message._id as number}
+                  isMare={isMare}
+                  initialReactCount={message.reactions?.length || 0}
+                />
+              </Animated.View>
+            </GestureDetector>
+          )
+        )}
+      </Animated.View>
+      <MemoizedMessageGallery
+        isVisible={visible}
+        setVisible={setVisible}
+        attachments={message.attachments || []}
+        messageType={message.type}
+        createdAt={message.createdAt}
+        isMare
+        user={user}
+        onLongPress={onLongPress}
+      />
+    </>
   );
 };
 
