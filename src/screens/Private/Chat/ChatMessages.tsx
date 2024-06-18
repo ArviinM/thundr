@@ -437,13 +437,13 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     await chatMessage.fetchNextPage();
   };
 
-  const memoizedMessages = useMemo(
-    () =>
-      (chatMessage.isSuccess &&
-        chatMessage.data?.pages.flatMap(page => page)) ||
-      [],
-    [chatMessage.isSuccess, chatMessage.data?.pages], // Dependency array for memoization
-  );
+  // const memoizedMessages = useMemo(
+  //   () =>
+  //     (chatMessage.isSuccess &&
+  //       chatMessage.data?.pages.flatMap(page => page)) ||
+  //     [],
+  //   [chatMessage.isSuccess, chatMessage.data?.pages], // Dependency array for memoization
+  // );
 
   return (
     <ChatContext.Provider
@@ -453,7 +453,10 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         handleReactMessage,
         loading: chatMessage.isLoading,
         loadMoreMessages,
-        messages: memoizedMessages,
+        messages:
+          (chatMessage.isSuccess &&
+            chatMessage.data?.pages.flatMap(page => page)) ||
+          [],
         onLongPressActions,
         isMare,
         isRefetching: chatMessage.isFetchingNextPage,
