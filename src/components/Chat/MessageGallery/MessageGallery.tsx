@@ -20,6 +20,8 @@ import {format} from 'date-fns';
 import {scale} from '../../../utils/utils.ts';
 import {ChatCloseIcon} from '../../../assets/images/ChatCloseIcon.tsx';
 import {MoreIcon} from '../../../assets/images/MoreIcon.tsx';
+import VideoPlayer from 'react-native-media-console';
+import {height, width} from '../../../constants/commons.ts';
 
 interface MessageGalleryProps {
   attachments: Attachment[];
@@ -89,16 +91,30 @@ const MessageGallery: React.FC<MessageGalleryProps> = ({
     index: any | null | undefined;
   }) => {
     return (
-      <ImageItem
-        imageSrc={{uri: message.item.fileUrl}}
-        onRequestClose={() => {
-          setVisible(false);
-          setCurrentPage(0);
-        }}
-        blurHash={message.item.blurHash}
-        onTap={onTap}
-        onZoom={onZoom}
-      />
+      <>
+        {messageType === 'image' && (
+          <ImageItem
+            imageSrc={{uri: message.item.fileUrl}}
+            onRequestClose={() => {
+              setVisible(false);
+              setCurrentPage(0);
+            }}
+            blurHash={message.item.blurHash}
+            onTap={onTap}
+            onZoom={onZoom}
+          />
+        )}
+        {messageType === 'video' && (
+          <View style={{width, height}}>
+            <VideoPlayer
+              source={{uri: attachments[0].fileUrl}}
+              disableFullscreen
+              disableBack
+              disableOverlay
+            />
+          </View>
+        )}
+      </>
     );
   };
 

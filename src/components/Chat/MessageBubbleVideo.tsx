@@ -3,7 +3,7 @@ import {Chat, IMessage} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
 import {TrashIcon} from '../../assets/images/TrashIcon.tsx';
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Loading} from '../shared/Loading.tsx';
 import {Image} from 'expo-image';
 import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
@@ -20,6 +20,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
+import MemoizedMessageGallery from './MessageGallery/MessageGallery.tsx';
 
 const MessageBubbleVideo = ({
   message,
@@ -32,6 +33,8 @@ const MessageBubbleVideo = ({
   isMare: boolean;
   onLongPress: () => void;
 }) => {
+  const [visible, setVisible] = useState<boolean>(false);
+
   const isMessageFromSelf = (message: IMessage | undefined) => {
     return message && message.user._id === user.sub;
   };
@@ -104,129 +107,146 @@ const MessageBubbleVideo = ({
     .minDistance(20);
 
   return (
-    <Animated.View
-      style={{
-        backgroundColor:
-          replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
-      }}>
-      {message && message.unsent ? (
-        <View
-          style={[
-            styles.messageUnsentContainer,
-            isMessageFromSelf(message)
-              ? styles.messageRight
-              : styles.messageLeft,
-          ]}>
-          <TrashIcon small />
-          <Text style={[styles.messageText, {color: COLORS.gray3}]}>
-            Message deleted
-          </Text>
-        </View>
-      ) : message &&
-        message.hiddenForSelf &&
-        message.hideForSubs === user.sub ? (
-        <View
-          style={[
-            styles.messageUnsentContainer,
-            isMessageFromSelf(message)
-              ? styles.messageRight
-              : styles.messageLeft,
-          ]}>
-          <TrashIcon small />
-          <Text style={[styles.messageText, {color: COLORS.gray3}]}>
-            Message removed
-          </Text>
-        </View>
-      ) : (
-        message &&
-        message.attachments && (
-          <GestureDetector gesture={replyGesture}>
-            <Animated.View
-              style={[
-                animateReply,
-                styles.containerWithReact,
-                isMessageFromSelf(message)
-                  ? isMare
-                    ? [styles.messageRight, {marginRight: 0}]
-                    : [styles.messageRight, {marginRight: 0}]
-                  : [styles.messageLeft, {marginLeft: 0, flexDirection: 'row'}],
-              ]}>
+    <>
+      <Animated.View
+        style={{
+          backgroundColor:
+            replyToIndex === message._id ? 'rgba(255,201,0,0.1)' : COLORS.white,
+        }}>
+        {message && message.unsent ? (
+          <View
+            style={[
+              styles.messageUnsentContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            <TrashIcon small />
+            <Text style={[styles.messageText, {color: COLORS.gray3}]}>
+              Message deleted
+            </Text>
+          </View>
+        ) : message &&
+          message.hiddenForSelf &&
+          message.hideForSubs === user.sub ? (
+          <View
+            style={[
+              styles.messageUnsentContainer,
+              isMessageFromSelf(message)
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}>
+            <TrashIcon small />
+            <Text style={[styles.messageText, {color: COLORS.gray3}]}>
+              Message removed
+            </Text>
+          </View>
+        ) : (
+          message &&
+          message.attachments && (
+            <GestureDetector gesture={replyGesture}>
               <Animated.View
-                style={[animateReplyArrow, {position: 'absolute'}]}>
-                <ReturnArrowIcon />
-              </Animated.View>
-              <TouchableWithoutFeedback onLongPress={onLongPress}>
-                <View
-                  style={[
-                    styles.messageImageContainer,
-                    isMessageFromSelf(message)
-                      ? styles.messageRight
-                      : styles.messageLeft,
-                  ]}>
-                  {/*  Render Image here   */}
-                  {message.attachments && message.attachments.length > 0 && (
-                    <>
-                      {message.attachments.map((attachment, index) => {
-                        if (message.pending) {
+                style={[
+                  animateReply,
+                  styles.containerWithReact,
+                  isMessageFromSelf(message)
+                    ? isMare
+                      ? [styles.messageRight, {marginRight: 0}]
+                      : [styles.messageRight, {marginRight: 0}]
+                    : [
+                        styles.messageLeft,
+                        {marginLeft: 0, flexDirection: 'row'},
+                      ],
+                ]}>
+                <Animated.View
+                  style={[animateReplyArrow, {position: 'absolute'}]}>
+                  <ReturnArrowIcon />
+                </Animated.View>
+                <TouchableWithoutFeedback
+                  onPress={() => setVisible(true)}
+                  onLongPress={onLongPress}>
+                  <View
+                    style={[
+                      styles.messageImageContainer,
+                      isMessageFromSelf(message)
+                        ? styles.messageRight
+                        : styles.messageLeft,
+                    ]}>
+                    {/*  Render Image here   */}
+                    {message.attachments && message.attachments.length > 0 && (
+                      <>
+                        {message.attachments.map((attachment, index) => {
+                          if (message.pending) {
+                            return (
+                              <View
+                                key={index}
+                                style={{
+                                  borderRadius: 10,
+                                  width: scale(100),
+                                  height: scale(100),
+                                  aspectRatio: 1,
+                                  backgroundColor: COLORS.gray2,
+                                }}>
+                                <Loading />
+                              </View>
+                            );
+                          }
+
+                          if (!attachment.mimeType || !message.sent) {
+                            return null;
+                          }
+
                           return (
-                            <View
-                              key={index}
-                              style={{
-                                borderRadius: 10,
-                                width: scale(100),
-                                height: scale(100),
-                                aspectRatio: 1,
-                                backgroundColor: COLORS.gray2,
-                              }}>
-                              <Loading />
-                            </View>
-                          );
-                        }
-
-                        if (!attachment.mimeType || !message.sent) {
-                          return null;
-                        }
-
-                        return (
-                          <View key={index} style={[]}>
-                            {attachment.mimeType && message.sent && (
-                              <View>
-                                <View style={styles.videoThumbnailContainer}>
-                                  <Image
-                                    placeholder={attachment.blurHash}
-                                    source={{uri: attachment.thumbnailUrl}}
-                                    style={[
-                                      styles.messageImage,
-                                      {
-                                        backgroundColor: '#563b3b',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                      },
-                                    ]}
-                                  />
-                                  <View style={styles.playButtonOverlay}>
-                                    <PlayButton />
+                            <View key={index} style={[]}>
+                              {attachment.mimeType && message.sent && (
+                                <View>
+                                  <View style={styles.videoThumbnailContainer}>
+                                    <Image
+                                      placeholder={attachment.blurHash}
+                                      source={{uri: attachment.thumbnailUrl}}
+                                      style={[
+                                        styles.messageImage,
+                                        {
+                                          backgroundColor: '#563b3b',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                        },
+                                      ]}
+                                    />
+                                    <View style={styles.playButtonOverlay}>
+                                      <PlayButton />
+                                    </View>
                                   </View>
                                 </View>
-                              </View>
-                            )}
-                          </View>
-                        );
-                      })}
-                    </>
-                  )}
-                </View>
-              </TouchableWithoutFeedback>
-              <MessageReact
-                messageId={message._id as number}
-                isMare={isMare}
-                initialReactCount={message.reactions?.length || 0}
-              />
-            </Animated.View>
-          </GestureDetector>
-        )
-      )}
-    </Animated.View>
+                              )}
+                            </View>
+                          );
+                        })}
+                      </>
+                    )}
+                  </View>
+                </TouchableWithoutFeedback>
+                <MessageReact
+                  messageId={message._id as number}
+                  isMare={isMare}
+                  initialReactCount={message.reactions?.length || 0}
+                />
+              </Animated.View>
+            </GestureDetector>
+          )
+        )}
+      </Animated.View>
+      <MemoizedMessageGallery
+        isVisible={visible}
+        setVisible={setVisible}
+        attachments={message.attachments || []}
+        messageType={message.type}
+        createdAt={message.createdAt}
+        isMare
+        user={user}
+        onLongPress={onLongPress}
+      />
+    </>
   );
 };
 
