@@ -6,7 +6,7 @@
        branches:
          - production-build
    env:
-     BUILD_NAME: 2.2.1
+     BUILD_NAME: 2.3.0
      BUILD_NUMBER: ${{github.run_number}}
      APP_NAME: Thundr
      APP_ID: ph.thundr.app
