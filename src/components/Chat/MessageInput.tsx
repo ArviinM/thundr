@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -53,6 +53,16 @@ const MessageInput = () => {
       height: 'auto',
     };
   });
+
+  const inputRef = useRef<TextInput>(null); // Ref to access the TextInput
+
+  useEffect(() => {
+    // Automatically focus the TextInput when it's rendered
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <View>
       {replyMessage && ( // Conditionally render the reply preview
@@ -89,6 +99,8 @@ const MessageInput = () => {
             },
           ]}>
           <TextInput
+            ref={inputRef}
+            keyboardAppearance={'light'}
             style={styles.textInput}
             multiline={true}
             onChangeText={text => setInputText(text)}

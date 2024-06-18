@@ -122,6 +122,14 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }, [user, setChatRoom]),
   );
 
+  const memoizedMessages = useMemo(
+    () =>
+      (chatMessage.isSuccess &&
+        chatMessage.data?.pages.flatMap(page => page)) ||
+      [],
+    [chatMessage.isSuccess, chatMessage.data?.pages], // Dependency array for memoization
+  );
+
   if (!user) {
     return <Loading />;
   }
@@ -436,14 +444,6 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
     }
     await chatMessage.fetchNextPage();
   };
-
-  const memoizedMessages = useMemo(
-    () =>
-      (chatMessage.isSuccess &&
-        chatMessage.data?.pages.flatMap(page => page)) ||
-      [],
-    [chatMessage.isSuccess, chatMessage.data?.pages], // Dependency array for memoization
-  );
 
   return (
     <ChatContext.Provider
