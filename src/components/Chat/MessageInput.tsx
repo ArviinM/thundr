@@ -62,7 +62,7 @@ const MessageInput = () => {
               Replying to{' '}
               {isMessageFromSelf(replyMessage)
                 ? 'yourself'
-                : chat.user.profile.name}
+                : chat.user.profile.name.split(' ')[0]}
             </Text>
             <Text style={styles.replyMessage}>
               {replyMessage.attachments && replyMessage.attachments.length > 0
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderTopWidth: 0.6,
     borderTopColor: 'rgba(14,14,14,0.24)',
+    zIndex: 10000,
   },
   replyUser: {
     fontFamily: 'Montserrat-Regular',
