@@ -200,13 +200,6 @@ const MessageGallery: React.FC<MessageGalleryProps> = ({
           showsHorizontalScrollIndicator={false}
           onScroll={onScroll}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setVisible(false);
-            setCurrentPage(0);
-          }}>
-          <Text style={{fontSize: 20, padding: 20}}>Close</Text>
-        </TouchableOpacity>
       </SafeAreaView>
     </Modal>
   );
