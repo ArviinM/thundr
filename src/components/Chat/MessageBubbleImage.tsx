@@ -21,6 +21,8 @@ import {useShallow} from 'zustand/react/shallow';
 import useChatReplyStore from '../../store/chatReplyStore.ts';
 import {ReturnArrowIcon} from '../../assets/images/chat/ReturnArrowIcon.tsx';
 
+const MemoizedImage = React.memo(Image);
+
 const MessageBubbleImage = ({
   message,
   user,
@@ -186,7 +188,7 @@ const MessageBubbleImage = ({
                         if (message.pending) {
                           return (
                             <View
-                              key={index}
+                              key={`message-loading-image-${index}/${message._id}`}
                               style={[
                                 {
                                   position: 'absolute',
@@ -246,7 +248,7 @@ const MessageBubbleImage = ({
 
                         return (
                           <Animated.View
-                            key={index}
+                            key={`message-gallery-image-${index}/${message._id}`}
                             style={[
                               {
                                 position: 'absolute',
@@ -301,14 +303,14 @@ const MessageBubbleImage = ({
                             {attachment.mimeType && message.sent && (
                               <View>
                                 {attachment.blurHash ? (
-                                  <Image
+                                  <MemoizedImage
                                     source={{uri: attachment.thumbnailUrl}}
                                     style={[styles.messageImage]}
                                     transition={100}
                                     placeholder={attachment.blurHash}
                                   />
                                 ) : (
-                                  <Image
+                                  <MemoizedImage
                                     source={{uri: attachment.thumbnailUrl}}
                                     style={[styles.messageImage]}
                                     transition={100}>
@@ -320,7 +322,7 @@ const MessageBubbleImage = ({
                                       }}>
                                       {index}
                                     </Text>
-                                  </Image>
+                                  </MemoizedImage>
                                 )}
                               </View>
                             )}

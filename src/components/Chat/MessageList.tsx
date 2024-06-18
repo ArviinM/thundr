@@ -61,7 +61,7 @@ const MessageList = () => {
         case 'message':
           return (
             <MemoizedMessageBubble
-              key={message.index}
+              key={`message-item-${message.index}/${message.item._id}`}
               message={message.item}
               user={chat.user}
               isMare={chat.isMare}
@@ -71,7 +71,7 @@ const MessageList = () => {
         case 'image':
           return (
             <MemoizedMessageBubbleImage
-              key={message.index}
+              key={`message-image-item-${message.index}/${message.item._id}`}
               message={message.item}
               user={chat.user}
               isMare={chat.isMare}
@@ -81,7 +81,7 @@ const MessageList = () => {
         case 'video':
           return (
             <MemoizedMessageBubbleVideo
-              key={message.index}
+              key={`message-video-item-${message.index}/${message.item._id}`}
               message={message.item}
               user={chat.user}
               isMare={chat.isMare}
