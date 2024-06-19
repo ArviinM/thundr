@@ -183,7 +183,9 @@ const MessageGallery: React.FC<MessageGalleryProps> = ({
             <TouchableOpacity
               onPress={() => {
                 setVisible(false);
-                onLongPress();
+                setTimeout(() => {
+                  onLongPress();
+                }, 400);
               }}
               style={{
                 alignItems: 'center',
