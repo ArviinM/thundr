@@ -181,7 +181,10 @@ const MessageGallery: React.FC<MessageGalleryProps> = ({
               </Text>
             </View>
             <TouchableOpacity
-              onPress={onLongPress}
+              onPress={() => {
+                setVisible(false);
+                onLongPress();
+              }}
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
