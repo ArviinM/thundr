@@ -58,10 +58,10 @@ const MessageInput = () => {
 
   useEffect(() => {
     // Automatically focus the TextInput when it's rendered
-    if (inputRef.current) {
+    if (inputRef.current && replyMessage) {
       inputRef.current.focus();
     }
-  }, []);
+  }, [replyMessage]);
 
   return (
     <View>

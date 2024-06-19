@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
@@ -28,10 +28,7 @@ import useSubscribeCheck from '../../../store/subscribeStore.ts';
 import useChatRoomIDStore from '../../../store/chatRoomIdStore.ts';
 
 import MessageInput from '../../../components/Chat/MessageInput.tsx';
-import {
-  KeyboardAvoidingView,
-  KeyboardStickyView,
-} from 'react-native-keyboard-controller';
+import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import {Platform, View} from 'react-native';
 import {useShallow} from 'zustand/react/shallow';
 import useChatReplyStore from '../../../store/chatReplyStore.ts';
@@ -82,10 +79,9 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const unsendMessageSelf = useUnsendSelfMessage();
   const reactMessage = useReactMessage();
 
-  const {replyMessage, setReplyMessage, clearReplyMessage} = useChatReplyStore(
+  const {replyMessage, clearReplyMessage} = useChatReplyStore(
     useShallow(state => ({
       replyMessage: state.replyMessage,
-      setReplyMessage: state.setReplyMessage,
       clearReplyMessage: state.clearReplyMessage,
     })),
   );
@@ -473,15 +469,11 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           style={{flex: 1}}
           behavior={'padding'}
           keyboardVerticalOffset={
-            Platform.OS === 'ios' ? scale(50) : scale(40)
+            Platform.OS === 'ios' ? scale(10) : scale(20)
           }>
           <MessageList />
-        </KeyboardAvoidingView>
-
-        <KeyboardStickyView
-          offset={{closed: 0, opened: Platform.OS === 'ios' ? 20 : -16}}>
           <MessageInput />
-        </KeyboardStickyView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </ChatContext.Provider>
   );
