@@ -79,7 +79,7 @@ const ProfileCard = ({
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
 
   const selectedPersonality = personalityData.find(
-    data => data.title === user.customerData.customerDetails.personalityType,
+    data => data.title === user.customerData?.customerDetails?.personalityType,
   );
   const isCustomerSubscribed = useSubscribeCheck(
     state => state.isCustomerSubscribed,
@@ -190,9 +190,13 @@ const ProfileCard = ({
               <Text style={cardStyles.name}>
                 {firstName}, {calculateAge(user.customerData.birthday)}
               </Text>
-              <Text style={cardStyles.work}>
-                {user.customerData.customerDetails.work}
-              </Text>
+
+              {user.customerData.customerDetails && (
+                <Text style={cardStyles.work}>
+                  {user.customerData.customerDetails.work}
+                </Text>
+              )}
+
               {user.percent && (
                 <Text style={cardStyles.compatibilityScore}>
                   Compatibility Score {user.percent}
@@ -203,172 +207,176 @@ const ProfileCard = ({
         </View>
       </GestureDetector>
 
-      <View style={cardStyles.belowSection}>
-        <View style={cardStyles.container}>
-          {user.customerData.customerDetails.bio && (
-            <View>
-              <Text style={cardStyles.title}>About Me</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.bio}
-              </Text>
-            </View>
-          )}
+      {user.customerData.customerDetails && (
+        <View style={cardStyles.belowSection}>
+          <View style={cardStyles.container}>
+            {user.customerData.customerDetails.bio && (
+              <View>
+                <Text style={cardStyles.title}>About Me</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.bio}
+                </Text>
+              </View>
+            )}
 
-          {user.customerData.gender && (
-            <View>
-              <Text style={cardStyles.subtitle}>Gender</Text>
-              <Text style={cardStyles.body}>{user.customerData.gender}</Text>
-            </View>
-          )}
+            {user.customerData.gender && (
+              <View>
+                <Text style={cardStyles.subtitle}>Gender</Text>
+                <Text style={cardStyles.body}>{user.customerData.gender}</Text>
+              </View>
+            )}
 
-          {user.customerData.birthday && (
-            <View>
-              <Text style={cardStyles.subtitle}>Birthday</Text>
-              <Text style={cardStyles.body}>
-                {moment(user.customerData.birthday).format('MMMM DD, YYYY')}
-              </Text>
-            </View>
-          )}
-        </View>
-        {/*Background*/}
-        <View style={cardStyles.container}>
-          <Text style={cardStyles.title}>Background</Text>
-
-          {user.customerData.customerDetails.work && (
-            <View>
-              <Text style={cardStyles.subtitle}>Work</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.work}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.education && (
-            <View>
-              <Text style={cardStyles.subtitle}>Education</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.education}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.location && (
-            <View>
-              <Text style={cardStyles.subtitle}>Location</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.location}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.height && (
-            <View>
-              <Text style={cardStyles.subtitle}>Height</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.height}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.religion && (
-            <View>
-              <Text style={cardStyles.subtitle}>Religion</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.religion}
-              </Text>
-            </View>
-          )}
-        </View>
-        {/*Interests*/}
-        <View style={cardStyles.container}>
-          <Text style={cardStyles.title}>Interests</Text>
-          {user.customerData.customerDetails.hobbies && (
-            <Text style={cardStyles.body}>
-              {user.customerData.customerDetails.hobbies.split(',').join(', ')}
-            </Text>
-          )}
-
-          {user.customerData.customerDetails.starSign && (
-            <View>
-              <Text style={cardStyles.subtitle}>Star Sign</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.starSign}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.politics && (
-            <View>
-              <Text style={cardStyles.subtitle}>Politics</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.politics}
-              </Text>
-            </View>
-          )}
-        </View>
-        {/*Lifestyle*/}
-        <View style={cardStyles.container}>
-          <Text style={cardStyles.title}>Lifestyle</Text>
-          {user.customerData.customerDetails.drinking && (
-            <View>
-              <Text style={cardStyles.subtitle}>Drinking</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.drinking}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.smoking && (
-            <View>
-              <Text style={cardStyles.subtitle}>Smoking</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.smoking}
-              </Text>
-            </View>
-          )}
-
-          {user.customerData.customerDetails.pet && (
-            <View>
-              <Text style={cardStyles.subtitle}>Pet</Text>
-              <Text style={cardStyles.body}>
-                {user.customerData.customerDetails.pet}
-              </Text>
-            </View>
-          )}
-        </View>
-        <View style={cardStyles.container}>
-          <Text style={cardStyles.title}>Personality Type</Text>
-          <View style={cardStyles.personalityTypeContainer}>
-            {selectedPersonality && (
-              <SelectableButton
-                buttonData={[selectedPersonality]}
-                initialSelections={[selectedPersonality.title]}
-                onPress={() => {}}
-              />
+            {user.customerData.birthday && (
+              <View>
+                <Text style={cardStyles.subtitle}>Birthday</Text>
+                <Text style={cardStyles.body}>
+                  {moment(user.customerData.birthday).format('MMMM DD, YYYY')}
+                </Text>
+              </View>
             )}
           </View>
-          {!isReport && (
-            <View style={cardStyles.reportContainer}>
-              <TouchableOpacity
-                style={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  marginVertical: 6,
-                  borderRadius: 20,
-                }}
-                onPress={handlePresentModalPress}>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Medium',
-                    fontSize: moderateScale(14),
-                  }}>
-                  Report
+          {/*Background*/}
+          <View style={cardStyles.container}>
+            <Text style={cardStyles.title}>Background</Text>
+
+            {user.customerData.customerDetails.work && (
+              <View>
+                <Text style={cardStyles.subtitle}>Work</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.work}
                 </Text>
-              </TouchableOpacity>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.education && (
+              <View>
+                <Text style={cardStyles.subtitle}>Education</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.education}
+                </Text>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.location && (
+              <View>
+                <Text style={cardStyles.subtitle}>Location</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.location}
+                </Text>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.height && (
+              <View>
+                <Text style={cardStyles.subtitle}>Height</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.height}
+                </Text>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.religion && (
+              <View>
+                <Text style={cardStyles.subtitle}>Religion</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.religion}
+                </Text>
+              </View>
+            )}
+          </View>
+          {/*Interests*/}
+          <View style={cardStyles.container}>
+            <Text style={cardStyles.title}>Interests</Text>
+            {user.customerData.customerDetails.hobbies && (
+              <Text style={cardStyles.body}>
+                {user.customerData.customerDetails.hobbies
+                  .split(',')
+                  .join(', ')}
+              </Text>
+            )}
+
+            {user.customerData.customerDetails.starSign && (
+              <View>
+                <Text style={cardStyles.subtitle}>Star Sign</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.starSign}
+                </Text>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.politics && (
+              <View>
+                <Text style={cardStyles.subtitle}>Politics</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.politics}
+                </Text>
+              </View>
+            )}
+          </View>
+          {/*Lifestyle*/}
+          <View style={cardStyles.container}>
+            <Text style={cardStyles.title}>Lifestyle</Text>
+            {user.customerData.customerDetails.drinking && (
+              <View>
+                <Text style={cardStyles.subtitle}>Drinking</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.drinking}
+                </Text>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.smoking && (
+              <View>
+                <Text style={cardStyles.subtitle}>Smoking</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.smoking}
+                </Text>
+              </View>
+            )}
+
+            {user.customerData.customerDetails.pet && (
+              <View>
+                <Text style={cardStyles.subtitle}>Pet</Text>
+                <Text style={cardStyles.body}>
+                  {user.customerData.customerDetails.pet}
+                </Text>
+              </View>
+            )}
+          </View>
+          <View style={cardStyles.container}>
+            <Text style={cardStyles.title}>Personality Type</Text>
+            <View style={cardStyles.personalityTypeContainer}>
+              {selectedPersonality && (
+                <SelectableButton
+                  buttonData={[selectedPersonality]}
+                  initialSelections={[selectedPersonality.title]}
+                  onPress={() => {}}
+                />
+              )}
             </View>
-          )}
+            {!isReport && (
+              <View style={cardStyles.reportContainer}>
+                <TouchableOpacity
+                  style={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                    marginVertical: 6,
+                    borderRadius: 20,
+                  }}
+                  onPress={handlePresentModalPress}>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Medium',
+                      fontSize: moderateScale(14),
+                    }}>
+                    Report
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      )}
       {possibles && user.isBlurred && !isCustomerSubscribed && (
         <BlurView
           style={{
