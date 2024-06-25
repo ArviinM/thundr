@@ -167,6 +167,7 @@ const AuthProvider = ({children}: AuthProviderProps) => {
                     messageFound = true;
                     return {
                       ...message,
+                      _id: event.data.id,
                       pending: false,
                       sent: true,
                       attachments: event.data.attachments,
