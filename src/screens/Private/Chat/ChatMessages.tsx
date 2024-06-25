@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {useGetChatMessage} from '../../../hooks/chat/useGetChatMessage.ts';
@@ -73,6 +73,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   const setChatRoom = useChatRoomIDStore(state => state.setChatRoom);
   const isSubscribe = useSubscribeCheck(state => state.isCustomerSubscribed);
 
+  const [firstMessageId, setFirstMessageId] = useState<number | null>(null);
+
   const sendMessage = useSendChatMessage();
   const readMessage = useReadMessage();
   const unsendMessageAll = useUnsendMessage();
@@ -100,7 +102,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       if (messageIdsToRead?.length !== 0) {
         readMessage.mutateAsync(messageIdsToRead).then(() => {
           query.invalidateQueries({queryKey: ['get-chat-list']});
-          query.invalidateQueries({queryKey: ['get-chat-message']});
+          // query.invalidateQueries({queryKey: ['get-chat-message']});
         });
       }
     }
@@ -117,6 +119,12 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
       };
     }, [user, setChatRoom]),
   );
+
+  useEffect(() => {
+    if (chatMessage.data?.pages[0][0]?._id) {
+      setFirstMessageId(chatMessage.data.pages[0][0]._id as number);
+    }
+  }, [chatMessage.data]);
 
   if (!user) {
     return <Loading />;
@@ -199,6 +207,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
               ? (replyMessage._id as number)
               : undefined,
             type: image ? 'image' : 'video',
+            chatRoomID: user.chatRoomUuid,
           });
 
           await query.invalidateQueries({queryKey: ['get-chat-list']});
@@ -325,6 +334,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
             replyingToId: replyMessage
               ? (replyMessage._id as number)
               : undefined,
+            chatRoomID: user.chatRoomUuid,
           });
 
           await query.invalidateQueries({queryKey: ['get-chat-list']});
@@ -406,9 +416,8 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
         read: '',
         replyingToId: replyMessage && (replyMessage._id as number),
         replying: replyMessage,
+        chatRoomID: user.chatRoomUuid,
       });
-
-      await query.invalidateQueries({queryKey: ['get-chat-list']});
 
       // await query.invalidateQueries({queryKey: ['get-chat-message']});
     }
@@ -427,9 +436,22 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
   };
 
   const loadMoreMessages = async () => {
-    if (chatMessage.isLoading || chatMessage.isFetchingNextPage) {
+    if (
+      chatMessage.isLoading ||
+      chatMessage.isFetchingNextPage ||
+      !chatMessage.hasNextPage
+    ) {
       return;
     }
+
+    const currentFirstMessageId = chatMessage.data?.pages[0][0]?._id;
+
+    if (currentFirstMessageId !== firstMessageId) {
+      // New first message, don't fetch yet
+      setFirstMessageId(currentFirstMessageId as number);
+      return;
+    }
+
     await chatMessage.fetchNextPage();
   };
 

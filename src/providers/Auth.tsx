@@ -144,30 +144,54 @@ const AuthProvider = ({children}: AuthProviderProps) => {
           reactions: event.data.reactions,
           replying: event.data.replying,
         });
-        query.refetchQueries({queryKey: ['get-chat-list']});
+        // query.refetchQueries({queryKey: ['get-chat-list']});
 
         query.setQueriesData(
           {queryKey: ['get-chat-message']},
           (oldData: any) => {
-            if (
-              oldData.pages &&
-              oldData.pages[0][0].chatRoomID === event.data.chatRoomID
-            ) {
-              return {
-                ...oldData,
-                pages: [
-                  [newMessage, ...oldData.pages[0]],
-                  ...oldData.pages.slice(1),
-                ],
-              };
-            } else {
-              query.refetchQueries({queryKey: ['get-chat-message']});
-              return oldData;
+            if (oldData.pages) {
+              let messageFound = false;
+
+              const updatedPages = oldData.pages.map((page: any[]) =>
+                page.map(message => {
+                  if (
+                    message.pending &&
+                    // Check for matching text OR the presence of attachments in both
+                    ((message.text === event.data.message &&
+                      message.chatRoomID === event.data.chatRoomID) ||
+                      (event.data.attachments &&
+                        event.data.attachments.length > 0 &&
+                        message.attachments &&
+                        message.attachments.length > 0))
+                  ) {
+                    messageFound = true;
+                    return {
+                      ...message,
+                      pending: false,
+                      sent: true,
+                      attachments: event.data.attachments,
+                    };
+                  }
+                  return message;
+                }),
+              );
+
+              if (!messageFound) {
+                return {
+                  ...oldData,
+                  pages: [
+                    [newMessage, ...updatedPages[0]],
+                    ...updatedPages.slice(1),
+                  ],
+                };
+              } else {
+                return {...oldData, pages: updatedPages};
+              }
             }
           },
         );
 
-        query.refetchQueries({queryKey: ['get-chat-list']});
+        query.invalidateQueries({queryKey: ['get-chat-list']});
       });
     }
 
