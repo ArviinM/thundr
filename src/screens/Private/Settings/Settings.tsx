@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  initialWindowMetrics,
+  SafeAreaView,
+} from 'react-native-safe-area-context';
 import {
   ScrollView,
   StyleSheet,
@@ -20,6 +23,7 @@ import {RootNavigationParams} from '../../../constants/navigator.ts';
 import DeviceInfo from 'react-native-device-info';
 import DeactivateModal from '../../../components/shared/DeactivateModal.tsx';
 import {useDeactivateAccount} from '../../../hooks/deactivate/useDeactivateAccount.ts';
+import Toast from 'react-native-toast-message';
 
 const Settings = () => {
   const auth = useAuth();
@@ -28,6 +32,8 @@ const Settings = () => {
 
   const [inAppNotification, setInAppNotification] = useState(true);
   const [emailNotification, setEmailNotification] = useState(false);
+
+  const statusBarHeight = initialWindowMetrics?.insets.top || 20;
 
   if (userProfile.isLoading && auth.loading) {
     return <Loading />;
@@ -74,7 +80,20 @@ const Settings = () => {
             <ForwardIcon />
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.rowStyle]}>
+          <TouchableOpacity
+            style={[styles.rowStyle]}
+            onPress={() => {
+              return Toast.show({
+                type: 'THNRInfo',
+                props: {
+                  title: 'Hi mars!',
+                  subtitle:
+                    "We're still working hard to finish this feature! We'll update you as soon as we can.",
+                },
+                position: 'top',
+                topOffset: statusBarHeight,
+              });
+            }}>
             <Text
               style={{
                 fontFamily: 'Montserrat-SemiBold',
