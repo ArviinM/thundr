@@ -26,6 +26,7 @@ export function useGetStatus() {
         status: response.data.status,
         statusCode: response.status,
         current: response.data.current,
+        isUpdate: response.data.isUpdate,
       };
     },
   });
