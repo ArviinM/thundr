@@ -13,6 +13,13 @@ export const starSign = [
   'Pisces',
 ];
 
+export const pronouns = [
+  'He/him/his',
+  'She/her/hers',
+  'They/them/theirs',
+  'Prefer not to say',
+];
+
 export const education = [
   'Highschool',
   'Bachelor',
@@ -67,6 +74,7 @@ const convertToArrayOfObjects = (
 
 // Convert all arrays to array of objects
 export const starSignOptions = convertToArrayOfObjects(starSign);
+export const pronounsOptions = convertToArrayOfObjects(pronouns);
 export const educationOptions = convertToArrayOfObjects(education);
 export const drinkingAndSmokingOptions =
   convertToArrayOfObjects(drinkingAndSmoking);

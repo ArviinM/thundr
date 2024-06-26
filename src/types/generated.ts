@@ -229,6 +229,7 @@ export type CustomerDetailsRequest = {
   pet?: string;
   politics?: string;
   personalityType?: string;
+  pronouns?: string;
 };
 
 export type CustomerDetailsResponse = {
@@ -247,6 +248,7 @@ export type CustomerDetailsResponse = {
   pet: string;
   politics: string;
   personalityType: string;
+  pronouns: string;
 };
 
 // Match Details
@@ -293,6 +295,7 @@ export type CustomerDetails = {
   politics: string;
   personalityType: string;
   hobbies: string;
+  pronouns?: string;
 };
 
 // Define interface for customer photo

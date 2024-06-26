@@ -30,6 +30,18 @@ export function showErrorToast(error: any) {
     return;
   }
 
+  if (error.status === 'GENERIC_SUCCESS') {
+    return Toast.show({
+      type: 'THNRError',
+      props: {
+        // title: translatedError.title || '',
+        subtitle: error.message,
+      },
+      position: 'top',
+      topOffset: statusBarHeight / 1.8,
+    });
+  }
+
   Toast.show({
     type: 'THNRError',
     props: {

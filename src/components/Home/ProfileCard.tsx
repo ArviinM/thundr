@@ -194,6 +194,10 @@ const ProfileCard = ({
               {user.customerData.customerDetails && (
                 <Text style={cardStyles.work}>
                   {user.customerData.customerDetails.work}
+                  {user.customerData.customerDetails.pronouns &&
+                    user.customerData.customerDetails.pronouns !==
+                      'Prefer not to say' &&
+                    `, ${user.customerData.customerDetails.pronouns}`}
                 </Text>
               )}
 

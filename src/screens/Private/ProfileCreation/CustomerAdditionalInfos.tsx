@@ -27,6 +27,7 @@ import {
   inchesOptions,
   petsOptions,
   politicsOptions,
+  pronounsOptions,
   religionOptions,
   starSignOptions,
 } from '../../../utils/dropdownOptions.ts';
@@ -53,6 +54,7 @@ const CustomerAdditionalInfos = () => {
     religion: yup.string(),
     pet: yup.string(),
     politics: yup.string(),
+    pronouns: yup.string(),
   });
 
   const {
@@ -73,6 +75,7 @@ const CustomerAdditionalInfos = () => {
     religion?: string;
     pet?: string;
     politics?: string;
+    pronouns?: string;
   }) => {
     try {
       await schema.validate(data);
@@ -103,6 +106,9 @@ const CustomerAdditionalInfos = () => {
       }
       if (data.politics) {
         updatedData.politics = data.politics;
+      }
+      if (data.pronouns) {
+        updatedData.pronouns = data.pronouns;
       }
 
       updateCustomerDetails(updatedData);
@@ -232,6 +238,50 @@ const CustomerAdditionalInfos = () => {
                         )}
                         name="starSign"
                       />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                  gap: 6,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                  }}>
+                  <View
+                    style={[
+                      profileCreationStyles.flex,
+                      {flexDirection: 'column', gap: 3},
+                    ]}>
+                    <Text style={profileCreationStyles.dropdownTitle}>
+                      Pronouns
+                    </Text>
+                    <View style={profileCreationStyles.dropdownContainer2}>
+                      <View style={profileCreationStyles.dropdownSection}>
+                        <Controller
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({field: {onChange, value}}) => (
+                            <CustomDropdown
+                              data={pronounsOptions}
+                              placeholder="He/him/his"
+                              value={value}
+                              onChange={item => {
+                                onChange(item.value);
+                              }}
+                            />
+                          )}
+                          name="pronouns"
+                        />
+                      </View>
                     </View>
                   </View>
                 </View>
