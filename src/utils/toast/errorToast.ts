@@ -38,7 +38,7 @@ export function showErrorToast(error: any) {
         subtitle: error.message,
       },
       position: 'top',
-      topOffset: statusBarHeight / 1.8,
+      topOffset: statusBarHeight,
     });
   }
 
@@ -49,6 +49,6 @@ export function showErrorToast(error: any) {
       subtitle: translatedError.body || error.message,
     },
     position: 'top',
-    topOffset: statusBarHeight / 1.8,
+    topOffset: statusBarHeight,
   });
 }
