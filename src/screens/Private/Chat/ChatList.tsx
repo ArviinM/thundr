@@ -4,6 +4,7 @@ import {
   FlatList,
   ListRenderItem,
   RefreshControl,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -20,6 +21,7 @@ import {useAuth} from '../../../providers/Auth.tsx';
 import {ThundrJuice} from '../../../assets/images/chat/ThundrJuice.tsx';
 import {Image} from 'expo-image';
 import {truncateChatPreview} from './chatUtils.ts';
+import {differenceInMinutes, fromUnixTime, subHours} from 'date-fns';
 
 const ChatList = ({
   isMare,
@@ -84,6 +86,21 @@ const ChatList = ({
         thundrJuice = <ThundrJuice count={0} />;
     }
 
+    const lastActivityDate = subHours(item.profile.lastActivity, 8);
+    const now = new Date();
+    const minutesSinceLastActivity = differenceInMinutes(now, lastActivityDate);
+    let activityIndicatorColor;
+
+    console.log(item.profile.name, minutesSinceLastActivity);
+
+    if (minutesSinceLastActivity <= 3) {
+      activityIndicatorColor = '#44D600';
+    } else if (minutesSinceLastActivity <= 8) {
+      activityIndicatorColor = COLORS.secondary2;
+    } else {
+      activityIndicatorColor = null;
+    }
+
     return (
       <TouchableOpacity
         key={index}
@@ -108,6 +125,15 @@ const ChatList = ({
               placeholder={item.profile.customerPhoto[0].blurHash}
               transition={100}
             />
+            {/*Activity Indicator*/}
+            {activityIndicatorColor && (
+              <View
+                style={[
+                  styles.indicator,
+                  {backgroundColor: activityIndicatorColor},
+                ]}
+              />
+            )}
           </View>
           <View style={{justifyContent: 'center', paddingHorizontal: 10}}>
             <Text
@@ -199,5 +225,16 @@ const ChatList = ({
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    width: scale(14),
+    height: scale(14),
+    borderRadius: scale(200),
+    position: 'absolute',
+    bottom: scale(-2),
+    right: scale(-4), // Adjust positioning as needed
+  },
+});
 
 export default ChatList;

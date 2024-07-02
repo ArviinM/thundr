@@ -321,6 +321,7 @@ export type CustomerData = {
   customerPhoto: CustomerPhoto[];
   withCustomerPhoto: boolean;
   activated: boolean;
+  lastActivity: number;
 };
 
 export type CustomerProfileRequest = {
