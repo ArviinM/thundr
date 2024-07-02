@@ -73,15 +73,8 @@ type EditProfileProps = {
 const EditProfile = ({route}: EditProfileProps) => {
   const inset = useSafeAreaInsets();
 
-  const {
-    sub,
-    customerPhoto,
-    customerDetails,
-    name,
-    hometown,
-    gender,
-    birthday,
-  } = route?.params || {};
+  const {sub, customerPhoto, customerDetails, name, gender, birthday} =
+    route?.params || {};
 
   const {mutateAsync} = useUploadProfilePhoto();
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();

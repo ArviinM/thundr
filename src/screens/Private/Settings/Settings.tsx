@@ -4,13 +4,14 @@ import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
 import {
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS} from '../../../constants/commons.ts';
+import {COLORS, SIZES, width} from '../../../constants/commons.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {Loading} from '../../../components/shared/Loading.tsx';
 import {useGetCustomerProfile} from '../../../hooks/profile/useGetCustomerProfile.ts';
@@ -21,9 +22,13 @@ import {ForwardIcon} from '../../../assets/images/ForwardIcon.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import DeviceInfo from 'react-native-device-info';
-import DeactivateModal from '../../../components/shared/DeactivateModal.tsx';
-import {useDeactivateAccount} from '../../../hooks/deactivate/useDeactivateAccount.ts';
 import Toast from 'react-native-toast-message';
+import GenericModal from '../../../components/shared/GenericModal.tsx';
+import GradientButton from '../../../components/shared/GradientButton.tsx';
+import {API_PAYMENT_URL} from '@env';
+import Button from '../../../components/shared/Button.tsx';
+import {useHandoffSession} from '../../../hooks/auth/useHandoffSession.ts';
+import useSubscribeCheck from '../../../store/subscribeStore.ts';
 
 const Settings = () => {
   const auth = useAuth();
@@ -32,6 +37,12 @@ const Settings = () => {
 
   const [inAppNotification, setInAppNotification] = useState(true);
   const [emailNotification, setEmailNotification] = useState(false);
+  const [visible, isVisible] = useState<boolean>(false);
+
+  const {authData} = useAuth();
+  const handoffKey = useHandoffSession();
+
+  const isSubscribe = useSubscribeCheck(state => state.isCustomerSubscribed);
 
   const statusBarHeight = initialWindowMetrics?.insets.top || 20;
 
@@ -55,6 +66,61 @@ const Settings = () => {
 
   return (
     <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
+      <GenericModal
+        isVisible={visible}
+        content={
+          <View style={{flexDirection: 'column', gap: 10}}>
+            <Text
+              style={{
+                fontFamily: 'ClimateCrisis-Regular',
+                fontSize: scale(20),
+                textAlign: 'center',
+                color: COLORS.primary1,
+              }}>
+              Hi, Mars!
+            </Text>
+            <Text
+              style={{
+                fontFamily: 'Montserrat-Medium',
+                fontSize: scale(12),
+                textAlign: 'center',
+                color: COLORS.black,
+              }}>
+              You're about to leave the app to manage your subscriptions to our
+              website.
+            </Text>
+            <View>
+              <GradientButton
+                onPress={async () => {
+                  if (API_PAYMENT_URL && authData) {
+                    const result = await handoffKey.mutateAsync({
+                      sub: authData?.sub,
+                      session: authData.accessToken,
+                    });
+
+                    await Linking.openURL(
+                      `${API_PAYMENT_URL}/auth/handoff?key=${result.key}`,
+                    );
+                    isVisible(false);
+                  }
+                }}
+                text="Proceed"
+                buttonStyle={styles.buttonStyle}
+                textStyle={styles.buttonTextStyle}
+                loading={handoffKey.isPending}
+              />
+              <Button
+                onPress={() => {
+                  isVisible(false);
+                }}
+                text="Cancel"
+                buttonStyle={styles.buttonStyle2}
+                textStyle={styles.buttonTextStyle2}
+              />
+            </View>
+          </View>
+        }
+      />
       <ScrollView style={styles.scrollViewContainer}>
         <View style={styles.container}>
           <View>
@@ -83,16 +149,20 @@ const Settings = () => {
           <TouchableOpacity
             style={[styles.rowStyle]}
             onPress={() => {
-              return Toast.show({
-                type: 'THNRInfo',
-                props: {
-                  title: 'Hi mars!',
-                  subtitle:
-                    "We're still working hard to finish this feature! We'll update you as soon as we can.",
-                },
-                position: 'top',
-                topOffset: statusBarHeight,
-              });
+              if (!isSubscribe) {
+                return Toast.show({
+                  type: 'THNRInfo',
+                  props: {
+                    title: 'Hi mars!',
+                    subtitle:
+                      'You can only manage your subscriptions if you are subscribed! 🫶',
+                  },
+                  position: 'top',
+                  topOffset: statusBarHeight,
+                });
+              } else {
+                isVisible(true);
+              }
             }}>
             <Text
               style={{
@@ -274,5 +344,36 @@ const styles = StyleSheet.create({
     paddingVertical: scale(20),
     borderBottomWidth: 0.2,
     borderBottomColor: COLORS.gray2,
+  },
+  buttonStyle: {
+    alignItems: 'center',
+    // maxWidth: width,
+    width: width - 64,
+    height: 50,
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: 12,
+  },
+  buttonTextStyle: {
+    letterSpacing: -0.4,
+    fontFamily: 'Montserrat-Bold',
+    color: COLORS.white,
+    fontSize: SIZES.h5,
+  },
+  buttonStyle2: {
+    alignItems: 'center',
+    // maxWidth: width,
+    width: width - 64,
+    height: 50,
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: 12,
+    backgroundColor: COLORS.gray2,
+  },
+  buttonTextStyle2: {
+    letterSpacing: -0.4,
+    fontFamily: 'Montserrat-Bold',
+    color: COLORS.gray4,
+    fontSize: SIZES.h5,
   },
 });
