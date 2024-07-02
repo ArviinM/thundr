@@ -107,7 +107,7 @@ const ProfileCard = ({
   useEffect(() => {
     if (user.isBlurred && isStartTimer && nextAction) {
       const now = Date.now();
-      const twelveHoursInMs = 12 * 60 * 60 * 1000;
+      const threeHoursInMs = 3 * 60 * 60 * 1000;
 
       const intervalId = setInterval(() => {
         if (!isStartTimer && !isCountdownTimer) {
@@ -121,7 +121,7 @@ const ProfileCard = ({
         }
 
         if (!isCountdownTimer && isStartTimer) {
-          newCountdown = calculateCountdown(now + twelveHoursInMs);
+          newCountdown = calculateCountdown(now + threeHoursInMs);
         }
 
         setCountdownTime(newCountdown);
