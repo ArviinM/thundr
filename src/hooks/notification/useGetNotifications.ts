@@ -14,7 +14,7 @@ export function useGetNotifications(props: NotificationRequest) {
 
   return useInfiniteQuery({
     queryKey: ['get-customer-notifications', props],
-    refetchInterval: 10000,
+    // refetchInterval: 10000,
     initialPageParam: undefined,
     getNextPageParam: (lastPage: Section[]) => {
       if (lastPage.length !== 0) {

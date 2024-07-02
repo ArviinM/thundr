@@ -716,3 +716,7 @@ export type Position = {
 };
 
 export type ImageSource = {uri: string; alt?: string};
+
+export type GenericCustomerRequest = {
+  sub: string;
+};

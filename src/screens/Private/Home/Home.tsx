@@ -48,6 +48,7 @@ import {BoltLogo} from '../../../assets/images/thundrbolt_icons/BoltLogo.tsx';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import {useGetLatestOrder} from '../../../hooks/subscribe/useGetLatestOrder.ts';
 import moment from 'moment/moment';
+import {useGetNotificationCount} from '../../../hooks/notification/useGetNotificationCount.ts';
 
 type HomeScreenRouteProp = RouteProp<RootNavigationParams, 'Home'>;
 
@@ -82,6 +83,9 @@ const Home = ({route}: HomeProps) => {
   const [message, setMessage] = useState<string>('');
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
+  const unreadNotification = useGetNotificationCount({
+    sub: auth.authData?.sub || '',
+  });
 
   const customerSubscribed = useGetCustomerSubscribed({
     sub: auth.authData?.sub || '',
@@ -363,6 +367,12 @@ const Home = ({route}: HomeProps) => {
   useEffect(() => {
     if (getChatList.isPending) {
       getChatList.refetch();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (unreadNotification.isPending) {
+      unreadNotification.refetch();
     }
   }, []);
 

@@ -104,6 +104,9 @@ const Notification = () => {
                 await query.invalidateQueries({
                   queryKey: ['get-customer-notifications'],
                 });
+                await query.invalidateQueries({
+                  queryKey: ['get-notification-count'],
+                });
               }
               // TODO: Needs to redirect soon
               navigation.navigate('Messages', {

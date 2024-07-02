@@ -4,7 +4,7 @@ import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
 import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {Image, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   DrawerActions,
   NavigationProp,
@@ -16,12 +16,18 @@ import Notification from '../../../../screens/Private/Notification/Notification.
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import FiltersBottomSheetModal from '../../../../components/Filters/FiltersBottomSheet.tsx';
 import {useAuth} from '../../../../providers/Auth.tsx';
+import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 export const HomeStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const auth = useAuth();
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
+
+  const unreadNotifCount = useNotificationCountStore(
+    state => state.unreadCount,
+  );
+
   function HomeLeftHeader() {
     return (
       <View
@@ -65,6 +71,13 @@ export const HomeStack = () => {
             source={IMAGES.bell}
             style={{height: scale(36), width: scale(36)}}
           />
+          {unreadNotifCount > 0 && (
+            <View style={styles.indicator}>
+              <Text style={styles.indicatorText}>
+                {unreadNotifCount.toString()}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={handlePresentModalPress}>
           <Image
@@ -108,7 +121,7 @@ export const HomeStack = () => {
             },
             headerLeft: () => (
               <TouchableOpacity
-                onPress={() => navigation.navigate('Home', {payload: null})}
+                onPress={() => navigation.navigate('Home', {payload: ''})}
                 style={{width: 30, height: 30}}>
                 <Image
                   source={IMAGES.back}
@@ -127,3 +140,22 @@ export const HomeStack = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    backgroundColor: COLORS.primary1,
+    width: 16,
+    height: 16,
+    borderRadius: 8, // Updated from 10 for a softer circle
+    position: 'absolute',
+    // top: scale(18),
+    right: scale(1),
+    justifyContent: 'center', // Center the text horizontally
+    alignItems: 'center', // Center the text vertically
+  },
+  indicatorText: {
+    color: 'white', // Ensure good contrast
+    fontSize: scale(10), // Adjust font size for readability
+    fontWeight: 'bold', // Consider bold for emphasis
+  },
+});
