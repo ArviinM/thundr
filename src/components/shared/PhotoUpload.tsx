@@ -7,10 +7,11 @@ import {
 } from 'react-native';
 import ImagePicker, {Image as ImageType} from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
-import {MAX_IMAGE_SIZE_BYTES} from '../../utils/utils.ts';
+import {MAX_IMAGE_SIZE_BYTES, scale} from '../../utils/utils.ts';
 import {IMAGES} from '../../constants/images.ts';
 import {CustomerPhoto} from '../../types/generated.ts';
 import {Image} from 'expo-image';
+import {MinusIcon} from '../../assets/images/profile_icons/MinusIcon.tsx';
 
 interface Props {
   photoData?: CustomerPhoto | null;
@@ -84,27 +85,39 @@ const PhotoUpload: React.FC<Props> = ({
           <ActivityIndicator size="small" color="black" />
         </View>
       ) : imageData ? (
-        <Image
-          source={{uri: `data:${imageData.mime};base64,${imageData.data}`}}
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-            marginBottom: isSubPhoto ? 8 : 0,
-            borderRadius: 10,
-          }}
-          transition={100}
-        />
+        <>
+          <Image
+            source={{uri: `data:${imageData.mime};base64,${imageData.data}`}}
+            style={{
+              width: imageWidth,
+              height: imageHeight,
+              marginBottom: isSubPhoto ? 8 : 0,
+              borderRadius: 10,
+            }}
+            transition={100}
+          />
+          <View>
+            <MinusIcon />
+          </View>
+        </>
       ) : photoData ? (
-        <Image
-          source={{uri: photoData.photoUrl}}
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-            marginBottom: isSubPhoto ? 8 : 0,
-            borderRadius: 10,
-          }}
-          transition={100}
-        />
+        <>
+          <Image
+            source={{uri: photoData.photoUrl}}
+            style={{
+              width: imageWidth,
+              height: imageHeight,
+              marginBottom: isSubPhoto ? 8 : 0,
+              borderRadius: 10,
+            }}
+            transition={100}
+          />
+          <TouchableOpacity
+            style={{position: 'absolute', right: scale(-10), top: scale(-3)}}
+            onPress={() => console.log('clicked')}>
+            <MinusIcon />
+          </TouchableOpacity>
+        </>
       ) : (
         <Image
           source={IMAGES.addPhoto}

@@ -62,7 +62,7 @@ export const IMAGES: Record<any, any> = {
   editIcon: require('../assets/images/profile_icons/edit_icon.png'),
   checkIcon: require('../assets/images/profile_icons/check_icon.png'),
   checkIconDisabled: require('../assets/images/profile_icons/check_icon_disabled.png'),
-  minusIcon: require('../assets/images/profile_icons/minus_icon.png'),
+  // minusIcon: require('../assets/images/profile_icons/minus_icon.png'),
 
   //password assets
   passwordReset: require('../assets/images/password_reset.png'),
