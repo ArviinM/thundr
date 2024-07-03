@@ -4,7 +4,7 @@ import {moderateScale} from '../utils/utils.ts';
 export const {width, height} = Dimensions.get('window');
 
 export const COLORS = {
-  white: '#FEFAF8',
+  white: '#FFFFFF',
   white2: '#F8F8F8',
   gray: '#A29597',
   gray2: '#D9D9D9',

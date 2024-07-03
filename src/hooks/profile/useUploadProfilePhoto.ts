@@ -26,7 +26,7 @@ export function useUploadProfilePhoto() {
         } as Error;
       }
 
-      return response.data;
+      return response.data.data;
     },
     onError: showErrorToast,
   });

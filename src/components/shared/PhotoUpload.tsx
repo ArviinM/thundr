@@ -19,10 +19,10 @@ interface Props {
     image: ImageType,
     isPrimary?: boolean,
     photoId?: number,
-  ) => Promise<void>;
+  ) => Promise<any>;
   imageWidth: number;
   imageHeight: number;
-  onPhotoRemove: (id: number) => void;
+  onPhotoRemove: (id: number) => Promise<void>;
   isSubPhoto?: boolean;
 }
 
@@ -38,6 +38,7 @@ const PhotoUpload: React.FC<Props> = ({
   const [imageData, setImageData] = useState<ImageType | null>(null);
   const [showAddPhoto, setShowAddPhoto] = useState<boolean>(false);
 
+  const [photoId, setPhotoId] = useState<number | null>(null);
   const handlePhotoUpload = async () => {
     try {
       const image = await ImagePicker.openPicker({
@@ -60,7 +61,7 @@ const PhotoUpload: React.FC<Props> = ({
       setImageData(image);
       setIsUploading(true);
 
-      await onPhotoUpload(image);
+      const result: CustomerPhoto = await onPhotoUpload(image);
 
       Toast.show({
         type: 'THNRSuccess',
@@ -69,6 +70,7 @@ const PhotoUpload: React.FC<Props> = ({
         topOffset: 80,
       });
 
+      setPhotoId(result.id);
       setIsUploading(false);
     } catch (e) {
       console.error(e);
@@ -110,7 +112,7 @@ const PhotoUpload: React.FC<Props> = ({
             ]}>
             <ActivityIndicator size="small" color="black" />
           </View>
-        ) : imageData ? (
+        ) : imageData && photoId ? (
           <>
             <Image
               source={{uri: `data:${imageData.mime};base64,${imageData.data}`}}
@@ -122,11 +124,11 @@ const PhotoUpload: React.FC<Props> = ({
               }}
               transition={100}
             />
-            {/*<TouchableOpacity*/}
-            {/*  style={{position: 'absolute', right: scale(-10), top: scale(-3)}}*/}
-            {/*  onPress={() => handleRemovePhoto(photoData?.id)}>*/}
-            {/*  <MinusIcon />*/}
-            {/*</TouchableOpacity>*/}
+            <TouchableOpacity
+              style={{position: 'absolute', right: scale(-10), top: scale(-3)}}
+              onPress={() => handleRemovePhoto(photoId)}>
+              <MinusIcon />
+            </TouchableOpacity>
           </>
         ) : photoData ? (
           <>

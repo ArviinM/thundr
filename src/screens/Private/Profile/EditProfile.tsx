@@ -134,8 +134,10 @@ const EditProfile = ({route}: EditProfileProps) => {
         formData.append('oldPhotoId', oldPhotoId);
       }
 
-      await mutateAsync(formData);
+      const result = await mutateAsync(formData);
       await query.refetchQueries({queryKey: ['get-customer-profile']});
+
+      return result;
     }
   };
 
