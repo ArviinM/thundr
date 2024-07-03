@@ -721,3 +721,8 @@ export type ImageSource = {uri: string; alt?: string};
 export type GenericCustomerRequest = {
   sub: string;
 };
+
+export type CustomerDeleteProfilePhotoRequest = {
+  sub: string;
+  id: number;
+};

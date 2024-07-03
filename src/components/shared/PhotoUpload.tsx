@@ -22,7 +22,8 @@ interface Props {
   ) => Promise<void>;
   imageWidth: number;
   imageHeight: number;
-  isSubPhoto?: boolean; // Add a prop to determine if it's a sub photo
+  onPhotoRemove: (id: number) => void;
+  isSubPhoto?: boolean;
 }
 
 const PhotoUpload: React.FC<Props> = ({
@@ -31,9 +32,11 @@ const PhotoUpload: React.FC<Props> = ({
   imageWidth,
   imageHeight,
   isSubPhoto,
+  onPhotoRemove,
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [imageData, setImageData] = useState<ImageType | null>(null);
+  const [showAddPhoto, setShowAddPhoto] = useState<boolean>(false);
 
   const handlePhotoUpload = async () => {
     try {
@@ -74,36 +77,78 @@ const PhotoUpload: React.FC<Props> = ({
     }
   };
 
+  const handleRemovePhoto = async (id: number) => {
+    try {
+      setIsUploading(true);
+
+      await onPhotoRemove(id);
+
+      Toast.show({
+        type: 'THNRSuccess',
+        props: {title: 'Photo Remove Success! ✅'},
+        position: 'top',
+        topOffset: 80,
+      });
+
+      setIsUploading(false);
+      setShowAddPhoto(true);
+    } catch (e) {
+      console.error(e);
+      setIsUploading(false);
+      throw e;
+    }
+  };
+
   return (
     <TouchableOpacity onPress={handlePhotoUpload}>
-      {isUploading ? (
-        <View
-          style={[
-            styles.uploadingImage,
-            {width: imageWidth, height: imageHeight},
-          ]}>
-          <ActivityIndicator size="small" color="black" />
-        </View>
-      ) : imageData ? (
-        <>
-          <Image
-            source={{uri: `data:${imageData.mime};base64,${imageData.data}`}}
-            style={{
-              width: imageWidth,
-              height: imageHeight,
-              marginBottom: isSubPhoto ? 8 : 0,
-              borderRadius: 10,
-            }}
-            transition={100}
-          />
-          <View>
-            <MinusIcon />
+      {!showAddPhoto ? (
+        isUploading ? (
+          <View
+            style={[
+              styles.uploadingImage,
+              {width: imageWidth, height: imageHeight},
+            ]}>
+            <ActivityIndicator size="small" color="black" />
           </View>
-        </>
-      ) : photoData ? (
-        <>
+        ) : imageData ? (
+          <>
+            <Image
+              source={{uri: `data:${imageData.mime};base64,${imageData.data}`}}
+              style={{
+                width: imageWidth,
+                height: imageHeight,
+                marginBottom: isSubPhoto ? 8 : 0,
+                borderRadius: 10,
+              }}
+              transition={100}
+            />
+            {/*<TouchableOpacity*/}
+            {/*  style={{position: 'absolute', right: scale(-10), top: scale(-3)}}*/}
+            {/*  onPress={() => handleRemovePhoto(photoData?.id)}>*/}
+            {/*  <MinusIcon />*/}
+            {/*</TouchableOpacity>*/}
+          </>
+        ) : photoData ? (
+          <>
+            <Image
+              source={{uri: photoData.photoUrl}}
+              style={{
+                width: imageWidth,
+                height: imageHeight,
+                marginBottom: isSubPhoto ? 8 : 0,
+                borderRadius: 10,
+              }}
+              transition={100}
+            />
+            <TouchableOpacity
+              style={{position: 'absolute', right: scale(-10), top: scale(-3)}}
+              onPress={() => handleRemovePhoto(photoData?.id)}>
+              <MinusIcon />
+            </TouchableOpacity>
+          </>
+        ) : (
           <Image
-            source={{uri: photoData.photoUrl}}
+            source={IMAGES.addPhoto}
             style={{
               width: imageWidth,
               height: imageHeight,
@@ -112,12 +157,7 @@ const PhotoUpload: React.FC<Props> = ({
             }}
             transition={100}
           />
-          <TouchableOpacity
-            style={{position: 'absolute', right: scale(-10), top: scale(-3)}}
-            onPress={() => console.log('clicked')}>
-            <MinusIcon />
-          </TouchableOpacity>
-        </>
+        )
       ) : (
         <Image
           source={IMAGES.addPhoto}

@@ -60,6 +60,7 @@ import {
   KeyboardAwareScrollView,
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
+import {useRemoveProfilePhoto} from '../../../hooks/profile/useRemoveProfilePhoto.ts';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -77,6 +78,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     route?.params || {};
 
   const {mutateAsync} = useUploadProfilePhoto();
+  const removePhoto = useRemoveProfilePhoto();
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const query = useQueryClient(queryClient);
   const currentCustomerInterest = customerDetails?.hobbies || '';
@@ -133,6 +135,13 @@ const EditProfile = ({route}: EditProfileProps) => {
       }
 
       await mutateAsync(formData);
+      await query.refetchQueries({queryKey: ['get-customer-profile']});
+    }
+  };
+
+  const handleRemovePhoto = async (id: number) => {
+    if (sub && id) {
+      await removePhoto.mutateAsync({sub: sub, id: id});
       await query.refetchQueries({queryKey: ['get-customer-profile']});
     }
   };
@@ -310,6 +319,7 @@ const EditProfile = ({route}: EditProfileProps) => {
                   }
                   imageWidth={scale(140)}
                   imageHeight={scale(200)}
+                  onPhotoRemove={handleRemovePhoto}
                 />
               ) : (
                 <PhotoUpload
@@ -317,6 +327,7 @@ const EditProfile = ({route}: EditProfileProps) => {
                   onPhotoUpload={image => handlePhotoUpload(image, true)}
                   imageWidth={scale(140)}
                   imageHeight={verticalScale(170)}
+                  onPhotoRemove={handleRemovePhoto}
                 />
               )}
             </View>
@@ -335,6 +346,7 @@ const EditProfile = ({route}: EditProfileProps) => {
                   imageWidth={scale(90)}
                   imageHeight={scale(90)}
                   isSubPhoto
+                  onPhotoRemove={handleRemovePhoto}
                 />
               ))}
             </View>
