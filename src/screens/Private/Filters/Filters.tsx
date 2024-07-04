@@ -40,6 +40,12 @@ import {
   politics as politicsOptions,
   religion as religionOptions,
 } from '../../../utils/dropdownOptions.ts';
+import {ChevronRight} from '../../../assets/images/ChevronRight.tsx';
+import {PoliticsIcon} from '../../../assets/images/PoliticsIcon.tsx';
+import {PersonalityTypeIcon} from '../../../assets/images/PersonalityTypeIcon.tsx';
+import {StarSignIcon} from '../../../assets/images/StarSignIcon.tsx';
+import {InterestIcon} from '../../../assets/images/InterestIcon.tsx';
+import {ReligionIcon} from '../../../assets/images/ReligionIcon.tsx';
 
 const Filters = () => {
   const auth = useAuth();
@@ -532,8 +538,16 @@ const Filters = () => {
                   style={styles.selectContainer}
                   onPress={() => handleOpenBottomSheet('interest')}
                   disabled={!isCustomerSubscribed}>
-                  <View>
-                    <View>{/*Icon*/}</View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                      maxWidth: '90%',
+                    }}>
+                    <View>
+                      <InterestIcon />
+                    </View>
 
                     <Text style={styles.selectText}>
                       {selectedInterests.length > 0
@@ -541,7 +555,9 @@ const Filters = () => {
                         : 'Select Interest'}
                     </Text>
                   </View>
-                  <View>{/*Chevron Right*/}</View>
+                  <View>
+                    <ChevronRight />
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={styles.filterContainer}>
@@ -559,15 +575,24 @@ const Filters = () => {
                   style={styles.selectContainer}
                   onPress={() => handleOpenBottomSheet('starSign')}
                   disabled={!isCustomerSubscribed}>
-                  <View>
-                    <View>{/*Icon*/}</View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                    }}>
+                    <View>
+                      <StarSignIcon />
+                    </View>
                     <Text style={styles.selectText}>
                       {selectedStarSign.length > 0
                         ? selectedStarSign.join(', ') // Join with comma and space
                         : 'Select Star Sign'}
                     </Text>
                   </View>
-                  <View>{/*Chevron Right*/}</View>
+                  <View>
+                    <ChevronRight />
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={styles.filterContainer}>
@@ -585,15 +610,24 @@ const Filters = () => {
                   style={styles.selectContainer}
                   onPress={() => handleOpenBottomSheet('religion')}
                   disabled={!isCustomerSubscribed}>
-                  <View>
-                    <View>{/*Icon*/}</View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                    }}>
+                    <View>
+                      <ReligionIcon />
+                    </View>
                     <Text style={styles.selectText}>
                       {selectedReligion.length > 0
                         ? selectedReligion.join(', ') // Join with comma and space
                         : 'Select Religion'}
                     </Text>
                   </View>
-                  <View>{/*Chevron Right*/}</View>
+                  <View>
+                    <ChevronRight />
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={styles.filterContainer}>
@@ -611,15 +645,24 @@ const Filters = () => {
                   style={styles.selectContainer}
                   onPress={() => handleOpenBottomSheet('politics')}
                   disabled={!isCustomerSubscribed}>
-                  <View>
-                    <View>{/*Icon*/}</View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                    }}>
+                    <View>
+                      <PoliticsIcon />
+                    </View>
                     <Text style={styles.selectText}>
                       {selectedPolitics.length > 0
                         ? selectedPolitics.join(', ') // Join with comma and space
                         : 'Select Politics'}
                     </Text>
                   </View>
-                  <View>{/*Chevron Right*/}</View>
+                  <View>
+                    <ChevronRight />
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={styles.filterContainer}>
@@ -637,15 +680,24 @@ const Filters = () => {
                   style={styles.selectContainer}
                   onPress={() => handleOpenBottomSheet('personalityType')}
                   disabled={!isCustomerSubscribed}>
-                  <View>
-                    <View>{/*Icon*/}</View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 6,
+                    }}>
+                    <View>
+                      <PersonalityTypeIcon />
+                    </View>
                     <Text style={styles.selectText}>
                       {selectedPersonality.length > 0
                         ? selectedPersonality.join(', ') // Join with comma and space
                         : 'Select Personality Type'}
                     </Text>
                   </View>
-                  <View>{/*Chevron Right*/}</View>
+                  <View>
+                    <ChevronRight />
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -755,6 +807,7 @@ const styles = StyleSheet.create({
   selectText: {
     fontFamily: 'Montserrat-Regular',
     fontSize: scale(13),
+    color: '#534D4E',
   },
   bottomSheetBackground: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
