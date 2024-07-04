@@ -141,6 +141,7 @@ const PhotoUpload: React.FC<Props> = ({
                 borderRadius: 10,
               }}
               transition={100}
+              placeholder={photoData.blurHash}
             />
             <TouchableOpacity
               style={{position: 'absolute', right: scale(-10), top: scale(-3)}}

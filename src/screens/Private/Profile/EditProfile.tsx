@@ -61,6 +61,9 @@ import {
   KeyboardStickyView,
 } from 'react-native-keyboard-controller';
 import {useRemoveProfilePhoto} from '../../../hooks/profile/useRemoveProfilePhoto.ts';
+import {useGetCustomerProfile} from '../../../hooks/profile/useGetCustomerProfile.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
+import {Loading} from '../../../components/shared/Loading.tsx';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -74,8 +77,12 @@ type EditProfileProps = {
 const EditProfile = ({route}: EditProfileProps) => {
   const inset = useSafeAreaInsets();
 
-  const {sub, customerPhoto, customerDetails, name, gender, birthday} =
-    route?.params || {};
+  const {sub, customerDetails, name, gender, birthday} = route?.params || {};
+
+  const auth = useAuth();
+  const customerProfile = useGetCustomerProfile({
+    sub: auth.authData?.sub || '',
+  });
 
   const {mutateAsync} = useUploadProfilePhoto();
   const removePhoto = useRemoveProfilePhoto();
@@ -145,6 +152,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     if (sub && id) {
       await removePhoto.mutateAsync({sub: sub, id: id});
       await query.refetchQueries({queryKey: ['get-customer-profile']});
+      await customerProfile.refetch();
     }
   };
 
@@ -311,48 +319,65 @@ const EditProfile = ({route}: EditProfileProps) => {
       edges={['right', 'left']}>
       <KeyboardAwareScrollView style={{flex: 1, backgroundColor: COLORS.white}}>
         <View>
-          <View style={styles.container}>
-            <View>
-              {customerPhoto && customerPhoto[0] ? (
-                <PhotoUpload
-                  photoData={customerPhoto[0]}
-                  onPhotoUpload={image =>
-                    handlePhotoUpload(image, true, customerPhoto[0]?.id)
-                  }
-                  imageWidth={scale(140)}
-                  imageHeight={scale(200)}
-                  onPhotoRemove={handleRemovePhoto}
-                />
-              ) : (
-                <PhotoUpload
-                  photoData={null}
-                  onPhotoUpload={image => handlePhotoUpload(image, true)}
-                  imageWidth={scale(140)}
-                  imageHeight={verticalScale(170)}
-                  onPhotoRemove={handleRemovePhoto}
-                />
-              )}
+          {customerProfile.isLoading || customerProfile.isRefetching ? (
+            <View style={{height: scale(200), padding: 16}}>
+              <Loading />
             </View>
-            <View style={styles.subPhotosContainer}>
-              {[...Array(4)].map((_, index) => (
-                <PhotoUpload
-                  key={index}
-                  photoData={customerPhoto && customerPhoto[index + 1]}
-                  onPhotoUpload={image =>
-                    handlePhotoUpload(
-                      image,
-                      false,
-                      customerPhoto?.[index + 1]?.id,
-                    )
-                  }
-                  imageWidth={scale(90)}
-                  imageHeight={scale(90)}
-                  isSubPhoto
-                  onPhotoRemove={handleRemovePhoto}
-                />
-              ))}
+          ) : (
+            <View style={styles.container}>
+              <View>
+                {customerProfile.data &&
+                customerProfile.data.customerPhoto &&
+                customerProfile.data.customerPhoto[0] ? (
+                  <PhotoUpload
+                    photoData={customerProfile.data.customerPhoto[0]}
+                    onPhotoUpload={image =>
+                      handlePhotoUpload(
+                        image,
+                        true,
+                        customerProfile.data.customerPhoto[0]?.id,
+                      )
+                    }
+                    imageWidth={scale(140)}
+                    imageHeight={scale(200)}
+                    onPhotoRemove={handleRemovePhoto}
+                  />
+                ) : (
+                  <PhotoUpload
+                    photoData={null}
+                    onPhotoUpload={image => handlePhotoUpload(image, true)}
+                    imageWidth={scale(140)}
+                    imageHeight={verticalScale(170)}
+                    onPhotoRemove={handleRemovePhoto}
+                  />
+                )}
+              </View>
+              <View style={styles.subPhotosContainer}>
+                {[...Array(4)].map((_, index) => (
+                  <PhotoUpload
+                    key={index}
+                    photoData={
+                      customerProfile.data &&
+                      customerProfile.data.customerPhoto &&
+                      customerProfile.data.customerPhoto[index + 1]
+                    }
+                    onPhotoUpload={image =>
+                      handlePhotoUpload(
+                        image,
+                        false,
+                        customerProfile.data &&
+                          customerProfile.data.customerPhoto?.[index + 1]?.id,
+                      )
+                    }
+                    imageWidth={scale(96)}
+                    imageHeight={scale(96)}
+                    isSubPhoto
+                    onPhotoRemove={handleRemovePhoto}
+                  />
+                ))}
+              </View>
             </View>
-          </View>
+          )}
 
           <View style={styles.mainContainer}>
             <View style={styles.inputContainer}>
