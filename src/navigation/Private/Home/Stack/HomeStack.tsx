@@ -17,6 +17,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import FiltersBottomSheetModal from '../../../../components/Filters/FiltersBottomSheet.tsx';
 import {useAuth} from '../../../../providers/Auth.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
+import Filters from '../../../../screens/Private/Filters/Filters.tsx';
 export const HomeStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
@@ -79,7 +80,7 @@ export const HomeStack = () => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePresentModalPress}>
+        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
           <Image
             source={IMAGES.filter}
             style={{height: scale(36), width: scale(36)}}
@@ -132,11 +133,34 @@ export const HomeStack = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="Filters"
+          component={Filters}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: COLORS.white,
+            },
+            headerTintColor: COLORS.primary1,
+            headerTitleStyle: {
+              fontFamily: 'ClimateCrisis-Regular',
+              fontWeight: '500',
+              fontSize: moderateScale(20),
+            },
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Home', {payload: ''})}
+                style={{width: 30, height: 30}}>
+                <Image
+                  source={IMAGES.back}
+                  style={{width: 20, height: 20}}
+                  resizeMode={'contain'}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Stack.Navigator>
-
-      {auth.authData && (
-        <FiltersBottomSheetModal ref={bottomSheetRef} sub={auth.authData.sub} />
-      )}
     </>
   );
 };

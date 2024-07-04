@@ -553,6 +553,8 @@ export type GetCustomerFiltersResponse = {
   gender: string;
   hobbies: string;
   starSign: string;
+  religion: string;
+  politics: string;
   personalityType: string;
   updateDate: string;
 };
@@ -565,6 +567,8 @@ export type CustomerFilter = {
   gender?: string;
   hobbies?: string;
   starSign?: string;
+  religion?: string;
+  politics?: string;
   personalityType?: string;
   updateDate: string;
 };
