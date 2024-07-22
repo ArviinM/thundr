@@ -10,6 +10,7 @@ import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx'
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
 import VerifyProfileInstructions from '../../../../screens/Private/FaceVerification/VerifyProfileInstructions.tsx';
 import TakeAPhoto from '../../../../screens/Private/FaceVerification/TakeAPhoto.tsx';
+import ReviewPhoto from '../../../../screens/Private/FaceVerification/ReviewPhoto.tsx';
 export const FaceVerificationStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
@@ -54,7 +55,7 @@ export const FaceVerificationStack = () => {
           headerTintColor: COLORS.white,
         }}
       />
-      <Stack.Screen name="ReviewPhoto" component={WorkingInProgress} />
+      <Stack.Screen name="ReviewPhoto" component={ReviewPhoto} />
     </Stack.Navigator>
   );
 };

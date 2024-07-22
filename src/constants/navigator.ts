@@ -115,4 +115,5 @@ export type RootNavigationParams = {
   //Face Verification
   FaceVerificationStack: undefined;
   TakeAPhoto: undefined;
+  ReviewPhoto: {photoPath: string};
 };

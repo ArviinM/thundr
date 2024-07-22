@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
@@ -25,6 +25,7 @@ const TakeAPhoto = () => {
   const {hasPermission, requestPermission} = useCameraPermission();
   const device = useCameraDevice('front');
   const camera = useRef<Camera>(null);
+  const [disabled, setDisabled] = useState(false);
 
   if (!hasPermission) {
     requestPermission();
@@ -76,13 +77,16 @@ const TakeAPhoto = () => {
   const handleCapture = async () => {
     try {
       if (camera.current) {
+        setDisabled(true);
         const photo = await camera.current.takePhoto({
           flash: 'off', // Disable flash
         });
-        console.log(photo);
+        navigation.navigate('ReviewPhoto', {photoPath: photo.path});
+        setDisabled(false);
       }
     } catch (error) {
       console.error('Error taking photo:', error);
+      setDisabled(false);
     }
   };
 
@@ -113,8 +117,10 @@ const TakeAPhoto = () => {
           {/* Centered Capture Button */}
           <View style={styles.captureButtonContainer}>
             <TouchableOpacity
+              disabled={disabled}
               onPress={async () => {
                 /* Handle capture logic here */
+                setDisabled(true);
                 await handleCapture();
               }}>
               <CaptureButton />
