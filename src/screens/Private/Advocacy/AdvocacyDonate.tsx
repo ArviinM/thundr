@@ -83,7 +83,7 @@ const AdvocacyDonate = () => {
                     isVisible(false);
                   }
                 }}
-                text="Proceed"
+                text="PROCEED"
                 buttonStyle={styles.buttonStyle}
                 textStyle={styles.buttonTextStyle}
                 loading={handoffKey.isPending}
@@ -92,7 +92,7 @@ const AdvocacyDonate = () => {
                 onPress={() => {
                   isVisible(false);
                 }}
-                text="Cancel"
+                text="CANCEL"
                 buttonStyle={styles.buttonStyle2}
                 textStyle={styles.buttonTextStyle2}
               />
@@ -188,7 +188,7 @@ export default AdvocacyDonate;
 
 const styles = StyleSheet.create({
   viewMain: {
-    backgroundColor: COLORS.white,
+    backgroundColor: '#fff',
     flex: 1,
     overflow: 'hidden',
     alignItems: 'center',
@@ -204,7 +204,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   buttonTextStyle: {
-    letterSpacing: -0.4,
     fontFamily: 'Montserrat-Bold',
     color: COLORS.white,
     fontSize: SIZES.h5,
@@ -217,10 +216,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
     marginTop: 12,
-    backgroundColor: COLORS.gray2,
+    color: COLORS.white2,
   },
   buttonTextStyle2: {
-    letterSpacing: -0.4,
     fontFamily: 'Montserrat-Bold',
     color: COLORS.gray4,
     fontSize: SIZES.h5,
