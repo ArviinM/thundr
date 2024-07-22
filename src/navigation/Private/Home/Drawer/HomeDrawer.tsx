@@ -68,7 +68,7 @@ export const HomeDrawer = () => {
         component={ThundrBolt}
         options={{title: 'Thundr Bolt'}}
       />
-      <Drawer.Screen name={'ThundrMachi'} component={WorkingInProgress} />
+      {/*<Drawer.Screen name={'ThundrMachi'} component={WorkingInProgress} />*/}
       <Drawer.Screen
         name={'SettingsStack'}
         component={SettingsStack}

@@ -72,6 +72,15 @@ const DrawerContent = () => {
           />
         </View>
         <DrawerItem
+          label="Profile"
+          onPress={() => {
+            handleDrawerItemClick('Profile');
+            navigation.navigate('ProfileStack');
+          }}
+          icon={'thundrBoltDrawer'}
+          isSelected={isSelected === 'Profile'}
+        />
+        <DrawerItem
           label="Thundr Bolt"
           onPress={() => {
             handleDrawerItemClick('Thundr Bolt');
@@ -80,15 +89,15 @@ const DrawerContent = () => {
           icon={'thundrBoltDrawer'}
           isSelected={isSelected === 'Thundr Bolt'}
         />
-        <DrawerItem
-          label="Thundr Machi"
-          onPress={() => {
-            handleDrawerItemClick('Thundr Machi');
-            navigation.navigate('ThundrMachi');
-          }}
-          icon={'thundrMachiDrawer'}
-          isSelected={isSelected === 'Thundr Machi'}
-        />
+        {/*<DrawerItem*/}
+        {/*  label="Thundr Machi"*/}
+        {/*  onPress={() => {*/}
+        {/*    handleDrawerItemClick('Thundr Machi');*/}
+        {/*    navigation.navigate('ThundrMachi');*/}
+        {/*  }}*/}
+        {/*  icon={'thundrMachiDrawer'}*/}
+        {/*  isSelected={isSelected === 'Thundr Machi'}*/}
+        {/*/>*/}
         <DrawerItem
           label="Settings"
           onPress={() => {
