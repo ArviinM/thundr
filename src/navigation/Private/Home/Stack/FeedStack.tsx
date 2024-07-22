@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
@@ -15,7 +15,8 @@ import Home from '../../../../screens/Private/Home/Home.tsx';
 import Notification from '../../../../screens/Private/Notification/Notification.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 import Filters from '../../../../screens/Private/Filters/Filters.tsx';
-export const HomeStack = () => {
+import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
+export const FeedStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const unreadNotifCount = useNotificationCountStore(
@@ -73,12 +74,12 @@ export const HomeStack = () => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
-          <Image
-            source={IMAGES.filter}
-            style={{height: scale(36), width: scale(36)}}
-          />
-        </TouchableOpacity>
+        {/*<TouchableOpacity onPress={() => navigation.navigate('Filters')}>*/}
+        {/*  <Image*/}
+        {/*    source={IMAGES.filter}*/}
+        {/*    style={{height: scale(36), width: scale(36)}}*/}
+        {/*  />*/}
+        {/*</TouchableOpacity>*/}
       </View>
     );
   }
@@ -87,8 +88,8 @@ export const HomeStack = () => {
     <>
       <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="Feed"
+          component={WorkingInProgress}
           options={{
             headerLeft: () => <HomeLeftHeader />,
             headerTitle: () => <Header />,

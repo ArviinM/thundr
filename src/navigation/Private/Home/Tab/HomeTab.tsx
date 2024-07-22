@@ -6,7 +6,6 @@ import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {ProfileStack} from '../Stack/ProfileStack.tsx';
 import {
   DrawerActions,
   NavigationProp,
@@ -19,7 +18,6 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAuth} from '../../../../providers/Auth.tsx';
 import FiltersBottomSheetModal from '../../../../components/Filters/FiltersBottomSheet.tsx';
 import {AdvocacyIcon} from '../../../../assets/images/tab_icons/AdvocacyIcon.tsx';
-import Advocacy from '../../../../screens/Private/Advocacy/Advocacy.tsx';
 import useUnreadStore from '../../../../store/unreadStore.ts';
 import {HomeStack} from '../Stack/HomeStack.tsx';
 import {useGetChatList} from '../../../../hooks/chat/useGetChatList.ts';
@@ -27,7 +25,8 @@ import {AdvocacyStack} from '../Stack/AdvocacyStack.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {FeedIcon} from '../../../../assets/images/tab_icons/FeedIcon.tsx';
 import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
-import {PossiblesIcon} from "../../../../assets/images/tab_icons/PossiblesIcon.tsx";
+import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
+import {FeedStack} from '../Stack/FeedStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -102,7 +101,7 @@ export const HomeTab = () => {
   return (
     <>
       <Tab.Navigator
-        initialRouteName={'HomeStack'}
+        initialRouteName={'FeedStack'}
         screenOptions={{
           headerTitleAlign: 'center',
           headerStyle: {
@@ -121,7 +120,7 @@ export const HomeTab = () => {
         }}>
         <Tab.Screen
           name="FeedStack"
-          component={WorkingInProgress}
+          component={FeedStack}
           options={{
             headerLeft: () => <HomeLeftHeader />,
             headerShown: false,
@@ -143,7 +142,7 @@ export const HomeTab = () => {
             tabBarShowLabel: true,
             tabBarLabel: 'Possibles',
             tabBarActiveTintColor: COLORS.primary1,
-              tabBarIcon: ({focused}) => <PossiblesIcon focused={focused} />,
+            tabBarIcon: ({focused}) => <PossiblesIcon focused={focused} />,
           }}
         />
 

@@ -111,4 +111,7 @@ export type RootNavigationParams = {
   //advocacy
   Advocacy: undefined;
   AdvocacyDonate: undefined;
+
+  //Face Verification
+  FaceVerificationStack: undefined;
 };
