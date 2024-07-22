@@ -65,7 +65,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This app requires to access your music usage.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan Barcodes</string>
+	<string>This app needs camera access to use for your chat messaging, and face verification.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app requires to access your location to track your current location for filters in finding your match.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
