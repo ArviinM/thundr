@@ -19,7 +19,7 @@ export function useUploadFaceVerification() {
       const fileUri = data.photoPath;
 
       formData.append('sub', data.sub);
-      console.log(`file://${fileUri}`);
+
       if (
         await checkFileExists(
           Platform.OS === 'ios' ? fileUri : `file://${fileUri}`,
@@ -38,16 +38,12 @@ export function useUploadFaceVerification() {
         } as Error;
       }
 
-      console.log(JSON.stringify(formData, null, 2));
-
       const response: AxiosResponse<BaseResponse<string>> =
         await axiosInstance.post('/face-verification/verify', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-
-      console.log(JSON.stringify(response, null, 2));
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {
