@@ -322,6 +322,7 @@ export type CustomerData = {
   withCustomerPhoto: boolean;
   activated: boolean;
   lastActivity: number;
+  faceVerificationState: FacialVerificationState;
 };
 
 export type CustomerProfileRequest = {
