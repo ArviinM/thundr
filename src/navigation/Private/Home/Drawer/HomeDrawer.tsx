@@ -15,6 +15,7 @@ import {IMAGES} from '../../../../constants/images.ts';
 import Settings from '../../../../screens/Private/Settings/Settings.tsx';
 import {SettingsStack} from '../Stack/SettingsStack.tsx';
 import ThundrBolt from '../../../../screens/Private/ThundrBolt/ThundrBolt.tsx';
+import {ProfileStack} from '../Stack/ProfileStack.tsx';
 
 export const HomeDrawer = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -68,10 +69,15 @@ export const HomeDrawer = () => {
         component={ThundrBolt}
         options={{title: 'Thundr Bolt'}}
       />
-      <Drawer.Screen name={'ThundrMachi'} component={WorkingInProgress} />
+      {/*<Drawer.Screen name={'ThundrMachi'} component={WorkingInProgress} />*/}
       <Drawer.Screen
         name={'SettingsStack'}
         component={SettingsStack}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name={'ProfileStack'}
+        component={ProfileStack}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>

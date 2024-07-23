@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
@@ -15,7 +15,8 @@ import Home from '../../../../screens/Private/Home/Home.tsx';
 import Notification from '../../../../screens/Private/Notification/Notification.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 import Filters from '../../../../screens/Private/Filters/Filters.tsx';
-export const HomeStack = () => {
+import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
+export const FeedStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   const unreadNotifCount = useNotificationCountStore(
@@ -73,87 +74,88 @@ export const HomeStack = () => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
-          <Image
-            source={IMAGES.filter}
-            style={{height: scale(36), width: scale(36)}}
-          />
-        </TouchableOpacity>
+        {/*<TouchableOpacity onPress={() => navigation.navigate('Filters')}>*/}
+        {/*  <Image*/}
+        {/*    source={IMAGES.filter}*/}
+        {/*    style={{height: scale(36), width: scale(36)}}*/}
+        {/*  />*/}
+        {/*</TouchableOpacity>*/}
       </View>
     );
   }
 
   return (
-    <Stack.Navigator
-      screenOptions={{headerTitleAlign: 'center', gestureEnabled: false}}>
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{
-          headerLeft: () => <HomeLeftHeader />,
-          headerTitle: () => <Header />,
-          headerRight: () => <HomeRightHeader />,
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Notification"
-        component={Notification}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-          headerTintColor: COLORS.primary1,
-          headerTitleStyle: {
-            fontFamily: 'ClimateCrisis-Regular',
-            fontWeight: '500',
-            fontSize: moderateScale(20),
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Home', {payload: ''})}
-              style={{width: 30, height: 30}}>
-              <Image
-                source={IMAGES.back}
-                style={{width: 20, height: 20}}
-                resizeMode={'contain'}
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="Filters"
-        component={Filters}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-          headerTintColor: COLORS.primary1,
-          headerTitleStyle: {
-            fontFamily: 'ClimateCrisis-Regular',
-            fontWeight: '500',
-            fontSize: moderateScale(20),
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Home', {payload: ''})}
-              style={{width: 30, height: 30}}>
-              <Image
-                source={IMAGES.back}
-                style={{width: 20, height: 20}}
-                resizeMode={'contain'}
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-    </Stack.Navigator>
+    <>
+      <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
+        <Stack.Screen
+          name="Feed"
+          component={WorkingInProgress}
+          options={{
+            headerLeft: () => <HomeLeftHeader />,
+            headerTitle: () => <Header />,
+            headerRight: () => <HomeRightHeader />,
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: COLORS.white,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Notification"
+          component={Notification}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: COLORS.white,
+            },
+            headerTintColor: COLORS.primary1,
+            headerTitleStyle: {
+              fontFamily: 'ClimateCrisis-Regular',
+              fontWeight: '500',
+              fontSize: moderateScale(20),
+            },
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Home', {payload: ''})}
+                style={{width: 30, height: 30}}>
+                <Image
+                  source={IMAGES.back}
+                  style={{width: 20, height: 20}}
+                  resizeMode={'contain'}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="Filters"
+          component={Filters}
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: COLORS.white,
+            },
+            headerTintColor: COLORS.primary1,
+            headerTitleStyle: {
+              fontFamily: 'ClimateCrisis-Regular',
+              fontWeight: '500',
+              fontSize: moderateScale(20),
+            },
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Home', {payload: ''})}
+                style={{width: 30, height: 30}}>
+                <Image
+                  source={IMAGES.back}
+                  style={{width: 20, height: 20}}
+                  resizeMode={'contain'}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+      </Stack.Navigator>
+    </>
   );
 };
 

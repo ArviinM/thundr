@@ -19,6 +19,8 @@ import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
 import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
 import ThundrBolt from '../../screens/Private/ThundrBolt/ThundrBolt.tsx';
 import {ChatMessages} from '../../screens/Private/Chat/ChatMessages.tsx';
+import WorkingInProgress from '../../screens/shared/WorkingInProgress.tsx';
+import {FaceVerificationStack} from './Home/Stack/FaceVerificationStack.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -105,8 +107,14 @@ export const AuthenticatedStack = () => {
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}
         />
+
+        {/*  Stack Screen for Face Verification  */}
+        <Stack.Screen
+          name="FaceVerificationStack"
+          options={{headerShown: false}}
+          component={FaceVerificationStack}
+        />
       </Stack.Group>
-      {/*<Stack.Group />*/}
     </Stack.Navigator>
   );
 };

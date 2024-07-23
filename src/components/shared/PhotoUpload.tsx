@@ -22,7 +22,7 @@ interface Props {
   ) => Promise<any>;
   imageWidth: number;
   imageHeight: number;
-  onPhotoRemove: (id: number) => Promise<void>;
+  onPhotoRemove?: (id: number) => Promise<void>;
   isSubPhoto?: boolean;
 }
 
@@ -81,19 +81,21 @@ const PhotoUpload: React.FC<Props> = ({
 
   const handleRemovePhoto = async (id: number) => {
     try {
-      setIsUploading(true);
+      if (onPhotoRemove) {
+        setIsUploading(true);
 
-      await onPhotoRemove(id);
+        await onPhotoRemove(id);
 
-      Toast.show({
-        type: 'THNRSuccess',
-        props: {title: 'Photo Remove Success! ✅'},
-        position: 'top',
-        topOffset: 80,
-      });
+        Toast.show({
+          type: 'THNRSuccess',
+          props: {title: 'Photo Remove Success! ✅'},
+          position: 'top',
+          topOffset: 80,
+        });
 
-      setIsUploading(false);
-      setShowAddPhoto(true);
+        setIsUploading(false);
+        setShowAddPhoto(true);
+      }
     } catch (e) {
       console.error(e);
       setIsUploading(false);
@@ -124,11 +126,17 @@ const PhotoUpload: React.FC<Props> = ({
               }}
               transition={100}
             />
-            <TouchableOpacity
-              style={{position: 'absolute', right: scale(-10), top: scale(-3)}}
-              onPress={() => handleRemovePhoto(photoId)}>
-              <MinusIcon />
-            </TouchableOpacity>
+            {onPhotoRemove && (
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  right: scale(-10),
+                  top: scale(-3),
+                }}
+                onPress={() => handleRemovePhoto(photoId)}>
+                <MinusIcon />
+              </TouchableOpacity>
+            )}
           </>
         ) : photoData ? (
           <>
@@ -143,11 +151,17 @@ const PhotoUpload: React.FC<Props> = ({
               transition={100}
               placeholder={photoData.blurHash}
             />
-            <TouchableOpacity
-              style={{position: 'absolute', right: scale(-10), top: scale(-3)}}
-              onPress={() => handleRemovePhoto(photoData?.id)}>
-              <MinusIcon />
-            </TouchableOpacity>
+            {onPhotoRemove && (
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  right: scale(-10),
+                  top: scale(-3),
+                }}
+                onPress={() => handleRemovePhoto(photoData?.id)}>
+                <MinusIcon />
+              </TouchableOpacity>
+            )}
           </>
         ) : (
           <Image

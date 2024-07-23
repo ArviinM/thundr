@@ -340,7 +340,6 @@ const EditProfile = ({route}: EditProfileProps) => {
                     }
                     imageWidth={scale(140)}
                     imageHeight={scale(200)}
-                    onPhotoRemove={handleRemovePhoto}
                   />
                 ) : (
                   <PhotoUpload

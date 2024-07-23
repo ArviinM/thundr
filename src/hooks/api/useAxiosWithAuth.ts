@@ -1,7 +1,7 @@
 import axios, {AxiosInstance} from 'axios';
 import {useAuthStore} from '../../store/authStore.ts';
 import {API_BASE_URL} from '@env';
-const AXIOS_TIMEOUT = 100000;
+const AXIOS_TIMEOUT = 6000000;
 
 function getCurrentAccessToken() {
   return useAuthStore.getState().authData?.accessToken;

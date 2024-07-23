@@ -730,3 +730,9 @@ export type CustomerDeleteProfilePhotoRequest = {
   sub: string;
   id: number;
 };
+
+export type FacialVerificationState =
+  | 'UNVERIFIED'
+  | 'PENDING'
+  | 'VERIFIED'
+  | 'VERIFY_FAIL';

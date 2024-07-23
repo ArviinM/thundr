@@ -6,7 +6,6 @@ import {IMAGES} from '../../../../constants/images.ts';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {ProfileStack} from '../Stack/ProfileStack.tsx';
 import {
   DrawerActions,
   NavigationProp,
@@ -19,11 +18,15 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAuth} from '../../../../providers/Auth.tsx';
 import FiltersBottomSheetModal from '../../../../components/Filters/FiltersBottomSheet.tsx';
 import {AdvocacyIcon} from '../../../../assets/images/tab_icons/AdvocacyIcon.tsx';
-import Advocacy from '../../../../screens/Private/Advocacy/Advocacy.tsx';
 import useUnreadStore from '../../../../store/unreadStore.ts';
 import {HomeStack} from '../Stack/HomeStack.tsx';
 import {useGetChatList} from '../../../../hooks/chat/useGetChatList.ts';
 import {AdvocacyStack} from '../Stack/AdvocacyStack.tsx';
+import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
+import {FeedIcon} from '../../../../assets/images/tab_icons/FeedIcon.tsx';
+import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
+import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
+import {FeedStack} from '../Stack/FeedStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -98,7 +101,7 @@ export const HomeTab = () => {
   return (
     <>
       <Tab.Navigator
-        initialRouteName={'HomeStack'}
+        initialRouteName={'FeedStack'}
         screenOptions={{
           headerTitleAlign: 'center',
           headerStyle: {
@@ -116,39 +119,15 @@ export const HomeTab = () => {
           },
         }}>
         <Tab.Screen
-          name="ProfileStack"
-          component={ProfileStack}
+          name="FeedStack"
+          component={FeedStack}
           options={{
             headerLeft: () => <HomeLeftHeader />,
             headerShown: false,
-            tabBarShowLabel: false,
-            tabBarIcon: ({focused}) => (
-              <Image
-                source={focused ? IMAGES.profileOn : IMAGES.profileOff}
-                style={{height: scale(28), width: scale(28)}}
-                resizeMode="contain"
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="AdvocacyStack"
-          component={AdvocacyStack}
-          options={{
-            headerLeft: () => <HomeLeftHeader />,
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarIcon: ({focused}) => <AdvocacyIcon focused={focused} />,
-          }}
-        />
-
-        <Tab.Screen
-          name="HomeStack"
-          component={HomeStack}
-          options={{
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarIcon: ({focused}) => <LightningIcon focused={focused} />,
+            tabBarShowLabel: true,
+            tabBarLabel: 'Feed',
+            tabBarActiveTintColor: COLORS.primary1,
+            tabBarIcon: ({focused}) => <FeedIcon focused={focused} />,
           }}
         />
 
@@ -160,14 +139,35 @@ export const HomeTab = () => {
             headerTintColor: COLORS.white2,
             headerTransparent: true,
             headerLeft: () => <HomeLeftHeader isTint />,
-            tabBarShowLabel: false,
-            tabBarIcon: ({focused}) => (
-              <Image
-                source={focused ? IMAGES.possiblesOn : IMAGES.possiblesOff}
-                style={{height: scale(30), width: scale(30)}}
-                resizeMode="contain"
-              />
-            ),
+            tabBarShowLabel: true,
+            tabBarLabel: 'Possibles',
+            tabBarActiveTintColor: COLORS.primary1,
+            tabBarIcon: ({focused}) => <PossiblesIcon focused={focused} />,
+          }}
+        />
+
+        <Tab.Screen
+          name="HomeStack"
+          component={HomeStack}
+          options={{
+            headerShown: false,
+            tabBarShowLabel: true,
+            tabBarLabel: 'Dating',
+            tabBarActiveTintColor: COLORS.primary1,
+            tabBarIcon: ({focused}) => <LightningIcon focused={focused} />,
+          }}
+        />
+
+        <Tab.Screen
+          name="AdvocacyStack"
+          component={AdvocacyStack}
+          options={{
+            headerLeft: () => <HomeLeftHeader />,
+            headerShown: false,
+            tabBarShowLabel: true,
+            tabBarLabel: 'Advocacy',
+            tabBarActiveTintColor: COLORS.primary1,
+            tabBarIcon: ({focused}) => <AdvocacyIcon focused={focused} />,
           }}
         />
 
@@ -176,14 +176,12 @@ export const HomeTab = () => {
           component={ChatTop}
           options={{
             headerLeft: () => <HomeLeftHeader />,
-            tabBarShowLabel: false,
+            tabBarShowLabel: true,
+            tabBarLabel: 'Chat',
+            tabBarActiveTintColor: COLORS.primary1,
             tabBarIcon: ({focused}) => (
               <>
-                <Image
-                  source={focused ? IMAGES.chatOn : IMAGES.chatOff}
-                  style={{height: scale(30), width: scale(30)}}
-                  resizeMode="contain"
-                />
+                <ChatIcon focused={focused} />
                 {isUnread && (
                   <View style={styles.indicator}>
                     <Text style={styles.indicatorText}>
@@ -210,7 +208,7 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 8, // Updated from 10 for a softer circle
     position: 'absolute',
-    top: scale(18),
+    top: scale(10),
     right: scale(18),
     justifyContent: 'center', // Center the text horizontally
     alignItems: 'center', // Center the text vertically
