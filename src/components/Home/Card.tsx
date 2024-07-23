@@ -158,19 +158,19 @@ export const cardStyles = StyleSheet.create({
     fontSize: moderateScale(24),
     color: COLORS.white,
     fontFamily: 'Montserrat-ExtraBold',
-    letterSpacing: -0.6,
+    // letterSpacing: -0.6,
   },
   work: {
     fontSize: moderateScale(16),
     color: COLORS.white,
     fontFamily: 'Montserrat-Medium',
-    letterSpacing: -0.6,
+    // letterSpacing: -0.6,
   },
   compatibilityScore: {
     fontSize: moderateScale(13),
     color: COLORS.white,
     fontFamily: 'Montserrat-Regular',
-    letterSpacing: -0.6,
+    // letterSpacing: -0.6,
   },
   belowSection: {
     padding: 6,

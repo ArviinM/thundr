@@ -33,6 +33,7 @@ import useCountdownStore from '../../store/countdownStore.ts';
 import {queryClient} from '../../utils/queryClient.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import useSubscribeCheck from '../../store/subscribeStore.ts';
+import {VerificationBadge} from '../../assets/images/VerificationBadge.tsx';
 
 const AnimatedImage =
   Platform.OS === 'android'
@@ -187,9 +188,26 @@ const ProfileCard = ({
             />
 
             <View style={cardStyles.overlay}>
-              <Text style={cardStyles.name}>
-                {firstName}, {calculateAge(user.customerData.birthday)}
-              </Text>
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  marginLeft:
+                    user.customerData.faceVerificationState === 'VERIFIED'
+                      ? scale(13)
+                      : 0,
+                }}>
+                <Text style={cardStyles.name}>
+                  {firstName}, {calculateAge(user.customerData.birthday)}
+                  {user.customerData.faceVerificationState === 'VERIFIED'
+                    ? ' '
+                    : ''}
+                </Text>
+                {user.customerData.faceVerificationState === 'VERIFIED' && (
+                  <VerificationBadge />
+                )}
+              </View>
 
               {user.customerData.customerDetails && (
                 <Text style={cardStyles.work}>
