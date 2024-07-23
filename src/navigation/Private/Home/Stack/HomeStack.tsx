@@ -84,77 +84,76 @@ export const HomeStack = () => {
   }
 
   return (
-    <>
-      <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerLeft: () => <HomeLeftHeader />,
-            headerTitle: () => <Header />,
-            headerRight: () => <HomeRightHeader />,
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: COLORS.white,
-            },
-          }}
-        />
-        <Stack.Screen
-          name="Notification"
-          component={Notification}
-          options={{
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: COLORS.white,
-            },
-            headerTintColor: COLORS.primary1,
-            headerTitleStyle: {
-              fontFamily: 'ClimateCrisis-Regular',
-              fontWeight: '500',
-              fontSize: moderateScale(20),
-            },
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Home', {payload: ''})}
-                style={{width: 30, height: 30}}>
-                <Image
-                  source={IMAGES.back}
-                  style={{width: 20, height: 20}}
-                  resizeMode={'contain'}
-                />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="Filters"
-          component={Filters}
-          options={{
-            headerShown: true,
-            headerStyle: {
-              backgroundColor: COLORS.white,
-            },
-            headerTintColor: COLORS.primary1,
-            headerTitleStyle: {
-              fontFamily: 'ClimateCrisis-Regular',
-              fontWeight: '500',
-              fontSize: moderateScale(20),
-            },
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Home', {payload: ''})}
-                style={{width: 30, height: 30}}>
-                <Image
-                  source={IMAGES.back}
-                  style={{width: 20, height: 20}}
-                  resizeMode={'contain'}
-                />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-      </Stack.Navigator>
-    </>
+    <Stack.Navigator
+      screenOptions={{headerTitleAlign: 'center', gestureEnabled: false}}>
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerLeft: () => <HomeLeftHeader />,
+          headerTitle: () => <Header />,
+          headerRight: () => <HomeRightHeader />,
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+          headerTintColor: COLORS.primary1,
+          headerTitleStyle: {
+            fontFamily: 'ClimateCrisis-Regular',
+            fontWeight: '500',
+            fontSize: moderateScale(20),
+          },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Home', {payload: ''})}
+              style={{width: 30, height: 30}}>
+              <Image
+                source={IMAGES.back}
+                style={{width: 20, height: 20}}
+                resizeMode={'contain'}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Filters"
+        component={Filters}
+        options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+          headerTintColor: COLORS.primary1,
+          headerTitleStyle: {
+            fontFamily: 'ClimateCrisis-Regular',
+            fontWeight: '500',
+            fontSize: moderateScale(20),
+          },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Home', {payload: ''})}
+              style={{width: 30, height: 30}}>
+              <Image
+                source={IMAGES.back}
+                style={{width: 20, height: 20}}
+                resizeMode={'contain'}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </Stack.Navigator>
   );
 };
 
