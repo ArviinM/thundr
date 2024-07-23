@@ -21,6 +21,7 @@ import Button from '../../../components/shared/Button.tsx';
 import {ChevronRightSmall} from '../../../assets/images/ChevronRightSmall.tsx';
 import {useUploadFaceVerification} from '../../../hooks/faceverification/useUploadFaceVerification.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
+import {VerificationBadge} from '../../../assets/images/VerificationBadge.tsx';
 
 type ReviewPhotoScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -61,12 +62,21 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
             gap: scale(8),
             justifyContent: 'center',
           }}>
-          <Image
-            source={
-              'https://thundr-assets-dev.s3.ap-southeast-1.amazonaws.com/images/FaceVerificationReference.jpg'
-            }
-            style={styles.mainImage}
-          />
+          <View
+            style={[
+              // styles.imageContainer,
+              {width: scale(157), height: scale(194)},
+            ]}>
+            <Image
+              source={{
+                uri: 'https://thundr-assets-dev.s3.ap-southeast-1.amazonaws.com/images/FaceVerificationReference.jpg',
+              }}
+              style={styles.mainImage}
+            />
+            <View style={styles.badgeContainer}>
+              <VerificationBadge />
+            </View>
+          </View>
           <Image
             source={
               Platform.OS === 'ios' ? photoPath : {uri: 'file://' + photoPath}
@@ -236,5 +246,11 @@ const styles = StyleSheet.create({
     width: scale(157),
     height: scale(194),
     borderRadius: 20,
+  },
+  badgeContainer: {
+    // New style for badge positioning
+    position: 'absolute',
+    bottom: scale(8), // Adjust as needed
+    right: scale(8), // Adjust as needed
   },
 });

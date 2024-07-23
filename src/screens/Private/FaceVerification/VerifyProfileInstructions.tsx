@@ -15,6 +15,7 @@ import {scale} from '../../../utils/utils.ts';
 import {ChevronLeftSmall} from '../../../assets/images/ChevronLeftSmall.tsx';
 import {ChevronRightSmall} from '../../../assets/images/ChevronRightSmall.tsx';
 import {Image} from 'expo-image';
+import {VerificationBadge} from '../../../assets/images/VerificationBadge.tsx';
 
 const VerifyProfileInstructions = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -24,14 +25,24 @@ const VerifyProfileInstructions = () => {
       style={{flex: 1, backgroundColor: COLORS.white}}
       edges={['right', 'left']}>
       <ScrollView style={{paddingHorizontal: scale(36)}}>
-        <View style={{marginTop: scale(20), alignItems: 'center'}}>
-          <Image
-            source={
-              'https://thundr-assets-dev.s3.ap-southeast-1.amazonaws.com/images/FaceVerificationReference.jpg'
-            }
-            style={styles.mainImage}
-          />
+        <View style={{alignItems: 'center'}}>
+          <View
+            style={[
+              styles.imageContainer,
+              {width: scale(157), height: scale(194)},
+            ]}>
+            <Image
+              source={{
+                uri: 'https://thundr-assets-dev.s3.ap-southeast-1.amazonaws.com/images/FaceVerificationReference.jpg',
+              }}
+              style={styles.mainImage}
+            />
+            <View style={styles.badgeContainer}>
+              <VerificationBadge />
+            </View>
+          </View>
         </View>
+
         <View style={{flexDirection: 'column', gap: 4, marginTop: scale(10)}}>
           <Text
             style={{
@@ -190,9 +201,20 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: SIZES.h5,
   },
+  imageContainer: {
+    // Updated container style
+    marginTop: scale(20),
+    alignItems: 'center',
+  },
   mainImage: {
     width: scale(157),
     height: scale(194),
     borderRadius: 20,
+  },
+  badgeContainer: {
+    // New style for badge positioning
+    position: 'absolute',
+    bottom: scale(8), // Adjust as needed
+    right: scale(8), // Adjust as needed
   },
 });
