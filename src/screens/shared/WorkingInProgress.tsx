@@ -8,11 +8,17 @@ import Button from '../../components/shared/Button.tsx';
 import GenericModal from '../../components/shared/GenericModal.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
+import {useGetFacialVerificationState} from '../../hooks/faceverification/useGetFacialVerificationState.ts';
+import {useAuth} from '../../providers/Auth.tsx';
 
 const WorkingInProgress = () => {
   //Temporary
   const [visible, isVisible] = useState<boolean>(true);
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  const {authData} = useAuth();
+
+  const {data} = useGetFacialVerificationState({sub: authData?.sub || ''});
 
   return (
     <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
@@ -82,6 +88,7 @@ const WorkingInProgress = () => {
           }}>
           Oops! Wait lang, mars. {'\n'} This feature will be available soon
         </Text>
+        <Text>Status: {data}</Text>
         <Button onPress={() => isVisible(true)} text={'Open to Verify'} />
       </View>
     </SafeAreaView>
