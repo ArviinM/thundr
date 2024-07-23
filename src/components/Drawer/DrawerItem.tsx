@@ -27,8 +27,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     switch (icon) {
       case 'thundrHomeDrawer':
         return IMAGES.thundrHomeDrawer;
-      case 'profile':
-        return IMAGES.profileOff;
+      case 'profileDrawer':
+        return IMAGES.profileDrawer;
       case 'thundrBoltDrawer':
         return IMAGES.thundrBoltDrawer;
       // case 'thundrMachiDrawer':

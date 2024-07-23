@@ -77,7 +77,7 @@ const DrawerContent = () => {
             handleDrawerItemClick('Profile');
             navigation.navigate('ProfileStack');
           }}
-          icon={'thundrBoltDrawer'}
+          icon={'profileDrawer'}
           isSelected={isSelected === 'Profile'}
         />
         <DrawerItem
