@@ -167,5 +167,37 @@
   "USER_NOT_SUBSCRIBED": {
     "title": "Hi mars!",
     "body": "You need to subscribe, to get skip a user!"
+  },
+  "S3_UPLOAD_FAIL": {
+    "title": "Upload Failed",
+    "body": "There was an issue uploading your file. Please try again or contact support."
+  },
+  "SMILE_CHECK_FAILED": {
+    "title": "Smile Check Failed",
+    "body": "We couldn't verify your smile. Please try again, making sure your face is clearly visible and you're smiling."
+  },
+  "SMILE_CHECK_NO_FACES_FOUND": {
+    "title": "No Face Detected",
+    "body": "We couldn't find a face in your photo. Please try again with a clear photo of your face."
+  },
+  "SMILE_CHECK_HAS_MULTIPLE_FACES": {
+    "title": "Too Many Faces",
+    "body": "We detected multiple faces in your photo. Please try again with a photo of only your face."
+  },
+  "PROFILE_DOES_NOT_HAVE_THREE_PHOTOS": {
+    "title": "Not Enough Photos",
+    "body": "You need to upload at least three photos to complete your profile."
+  },
+  "PROFILE_PHOTOS_DOES_NOT_MATCH": {
+    "title": "Photos Don't Match",
+    "body": "Your profile photos don't appear to match. Please upload photos that accurately represent you."
+  },
+  "VERIFICATION_IN_PROGRESS_ERROR": {
+    "title": "Verification in Progress",
+    "body": "Your profile is currently being verified. Please check back later."
+  },
+  "NONE_OR_INVALID_FILES": {
+    "title": "Invalid Files",
+    "body": "The files you uploaded are either invalid or missing. Please try again with valid image files."
   }
 }

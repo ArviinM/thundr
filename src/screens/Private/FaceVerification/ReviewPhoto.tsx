@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   NavigationProp,
@@ -19,6 +19,8 @@ import {scale} from '../../../utils/utils.ts';
 import {COLORS, SIZES} from '../../../constants/commons.ts';
 import Button from '../../../components/shared/Button.tsx';
 import {ChevronRightSmall} from '../../../assets/images/ChevronRightSmall.tsx';
+import {useUploadFaceVerification} from '../../../hooks/faceverification/useUploadFaceVerification.ts';
+import {useAuth} from '../../../providers/Auth.tsx';
 
 type ReviewPhotoScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -32,6 +34,10 @@ type ReviewPhotoProps = {
 const ReviewPhoto = ({route}: ReviewPhotoProps) => {
   const {photoPath} = route?.params || {};
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const {authData} = useAuth();
+
+  const [loading, setLoading] = useState(false);
+  const uploadPhotoVerify = useUploadFaceVerification();
 
   if (!photoPath) {
     return (
@@ -105,10 +111,25 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
             marginVertical: scale(30),
           }}>
           <Button
-            onPress={() => console.log('Will add integration next step')}
+            onPress={async () => {
+              try {
+                if (authData) {
+                  setLoading(true);
+                  await uploadPhotoVerify.mutateAsync({
+                    sub: authData.sub,
+                    photoPath: photoPath,
+                  });
+                  navigation.navigate('FeedStack');
+                }
+              } catch (e) {
+                console.error(e);
+                setLoading(false);
+              }
+            }}
             text={'AGREE & SUBMIT'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.buttonTextStyle}
+            loading={loading}
           />
           <Button
             onPress={() => navigation.navigate('TakeAPhoto')}
