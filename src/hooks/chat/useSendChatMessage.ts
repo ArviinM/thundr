@@ -33,7 +33,6 @@ export function useSendChatMessage() {
         for (const mediaItem of data.attachments) {
           // const index = data.attachments.indexOf(mediaItem);
           const fileUri = mediaItem.filePath;
-          console.log(mediaItem);
           if (await checkFileExists(fileUri)) {
             formData.append('media', {
               uri: fileUri,
