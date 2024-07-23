@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   Animated,
   Modal,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -40,6 +41,7 @@ const GenericModal: React.FC<GenericModalProps> = ({isVisible, content}) => {
 
   return (
     <Modal transparent animationType="fade" visible={isVisible}>
+      <StatusBar backgroundColor={'rgba(74, 0, 18, 0.43)'} animated />
       <Animated.View
         style={[styles.container, {opacity, transform: [{scale}]}]}>
         <View style={styles.bodyContainer}>
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'rgba(74, 0, 18, 0.43)',
-    borderRadius: 16,
     justifyContent: 'center',
   },
   bodyContainer: {
