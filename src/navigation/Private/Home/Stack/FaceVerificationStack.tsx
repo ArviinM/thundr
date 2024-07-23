@@ -3,14 +3,14 @@ import React from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {moderateScale} from '../../../../utils/utils.ts';
+import {TouchableOpacity} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
 import VerifyProfileInstructions from '../../../../screens/Private/FaceVerification/VerifyProfileInstructions.tsx';
 import TakeAPhoto from '../../../../screens/Private/FaceVerification/TakeAPhoto.tsx';
 import ReviewPhoto from '../../../../screens/Private/FaceVerification/ReviewPhoto.tsx';
+import {ChevronLeftSmallWhite} from '../../../../assets/images/ChevronLeftSmallWhite.tsx';
 export const FaceVerificationStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
@@ -20,6 +20,16 @@ export const FaceVerificationStack = () => {
         onPress={() => navigation.goBack()}
         hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
         <ChevronLeftSmall />
+      </TouchableOpacity>
+    );
+  }
+
+  function HomeLeftHeaderWhite() {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        <ChevronLeftSmallWhite />
       </TouchableOpacity>
     );
   }
@@ -50,12 +60,22 @@ export const FaceVerificationStack = () => {
         component={TakeAPhoto}
         options={{
           headerTitle: 'Take a Photo',
-          headerLeft: () => <HomeLeftHeader />,
+          headerLeft: () => <HomeLeftHeaderWhite />,
           headerTransparent: true,
           headerTintColor: COLORS.white,
         }}
       />
-      <Stack.Screen name="ReviewPhoto" component={ReviewPhoto} />
+      <Stack.Screen
+        name="ReviewPhoto"
+        component={ReviewPhoto}
+        options={{
+          headerTitle: 'Verify Profile',
+          headerLeft: () => <HomeLeftHeader />,
+          headerStyle: {
+            backgroundColor: COLORS.white,
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 };

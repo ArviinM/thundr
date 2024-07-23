@@ -126,7 +126,13 @@ const VerifyProfileInstructions = () => {
               height: 40,
               borderBottomWidth: 1,
               borderBottomColor: COLORS.black3,
-            }}>
+            }}
+            onPress={() =>
+              navigation.navigate('Terms', {
+                uri: 'https://thundr.ph/privacy-policy/',
+                isAuthenticated: true,
+              })
+            }>
             <Text
               style={{
                 fontFamily: 'Montserrat-Medium',
@@ -145,7 +151,13 @@ const VerifyProfileInstructions = () => {
               height: 40,
               borderBottomWidth: 1,
               borderBottomColor: COLORS.black3,
-            }}>
+            }}
+            onPress={() =>
+              navigation.navigate('Terms', {
+                uri: 'https://thundr.ph/#support',
+                isAuthenticated: true,
+              })
+            }>
             <Text
               style={{
                 fontFamily: 'Montserrat-Medium',

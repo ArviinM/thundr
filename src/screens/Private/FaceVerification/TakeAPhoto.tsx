@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
@@ -7,15 +7,9 @@ import {
   useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Button from '../../../components/shared/Button.tsx';
-import {COLORS, width} from '../../../constants/commons.ts';
+import {COLORS} from '../../../constants/commons.ts';
 import {CaptureButton} from '../../../assets/images/CaptureButton.tsx';
 import {scale} from '../../../utils/utils.ts';
 import {Image} from 'expo-image';
