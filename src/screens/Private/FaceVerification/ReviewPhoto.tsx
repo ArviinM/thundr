@@ -137,8 +137,8 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
                   await query.invalidateQueries({
                     queryKey: ['get-facial-verification-state'],
                   });
-                  await query.refetchQueries({
-                    queryKey: ['get-customer-profile', authData.sub],
+                  await query.invalidateQueries({
+                    queryKey: ['get-customer-profile'],
                   });
 
                   navigation.navigate('FeedStack');
