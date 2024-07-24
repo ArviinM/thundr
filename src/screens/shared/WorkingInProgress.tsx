@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
     marginTop: 12,
-    color: COLORS.white2,
+    backgroundColor: COLORS.white2,
   },
   buttonTextStyle2: {
     fontFamily: 'Montserrat-SemiBold',
