@@ -22,6 +22,8 @@ import {ChevronRightSmall} from '../../../assets/images/ChevronRightSmall.tsx';
 import {useUploadFaceVerification} from '../../../hooks/faceverification/useUploadFaceVerification.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {VerificationBadge} from '../../../assets/images/VerificationBadge.tsx';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryClient} from '../../../utils/queryClient.ts';
 
 type ReviewPhotoScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -39,6 +41,8 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
 
   const [loading, setLoading] = useState(false);
   const uploadPhotoVerify = useUploadFaceVerification();
+
+  const query = useQueryClient(queryClient);
 
   if (!photoPath) {
     return (
@@ -129,6 +133,14 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
                     sub: authData.sub,
                     photoPath: photoPath,
                   });
+
+                  await query.invalidateQueries({
+                    queryKey: ['get-facial-verification-state'],
+                  });
+                  await query.refetchQueries({
+                    queryKey: ['get-customer-profile', authData.sub],
+                  });
+
                   navigation.navigate('FeedStack');
                 }
               } catch (e) {
