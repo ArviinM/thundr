@@ -9,7 +9,7 @@ import Animated, {
 
 import {COLORS} from '../../constants/commons.ts';
 
-import {moderateScale} from '../../utils/utils.ts';
+import {moderateScale, scale} from '../../utils/utils.ts';
 
 import {CustomerMatchResponse} from '../../types/generated.ts';
 import ProfileCard from './ProfileCard.tsx';
@@ -159,6 +159,7 @@ export const cardStyles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: 'Montserrat-ExtraBold',
     // letterSpacing: -0.6,
+    lineHeight: scale(30),
   },
   work: {
     fontSize: moderateScale(16),

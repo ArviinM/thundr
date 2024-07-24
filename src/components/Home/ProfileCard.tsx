@@ -191,21 +191,26 @@ const ProfileCard = ({
               <View
                 style={{
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-end',
                   flexDirection: 'row',
                   marginLeft:
                     user.customerData.faceVerificationState === 'VERIFIED'
                       ? scale(13)
                       : 0,
                 }}>
-                <Text style={cardStyles.name}>
-                  {firstName}, {calculateAge(user.customerData.birthday)}
-                  {user.customerData.faceVerificationState === 'VERIFIED'
-                    ? ' '
-                    : ''}
-                </Text>
+                <View>
+                  <Text style={cardStyles.name}>
+                    {firstName}, {calculateAge(user.customerData.birthday)}
+                    {user.customerData.faceVerificationState === 'VERIFIED'
+                      ? ' '
+                      : ''}
+                  </Text>
+                </View>
+
                 {user.customerData.faceVerificationState === 'VERIFIED' && (
-                  <VerificationBadge />
+                  <View>
+                    <VerificationBadge />
+                  </View>
                 )}
               </View>
 
