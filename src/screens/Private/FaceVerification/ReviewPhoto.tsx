@@ -154,6 +154,7 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
             loading={loading}
           />
           <Button
+            disabled={loading}
             onPress={() => navigation.navigate('TakeAPhoto')}
             text={'RETAKE MY PHOTO'}
             buttonStyle={[
@@ -183,6 +184,7 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
             Learn more about how we use, and protect your personal data.
           </Text>
           <TouchableOpacity
+            disabled={loading}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -208,6 +210,7 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
             <ChevronRightSmall />
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={loading}
             style={{
               flexDirection: 'row',
               alignItems: 'center',

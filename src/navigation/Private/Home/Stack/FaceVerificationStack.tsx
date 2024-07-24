@@ -70,7 +70,8 @@ export const FaceVerificationStack = () => {
         component={ReviewPhoto}
         options={{
           headerTitle: 'Verify Profile',
-          headerLeft: () => <HomeLeftHeader />,
+          headerBackVisible: false,
+          // headerLeft: () => <HomeLeftHeader />,
           headerStyle: {
             backgroundColor: COLORS.white,
           },
