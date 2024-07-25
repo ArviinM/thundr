@@ -218,6 +218,7 @@ const ChatMessages = ({route}: ChatMessagesProps) => {
           multiple: true,
           maxFiles: 4,
           forceJpg: true,
+          compressImageQuality: Platform.OS === 'ios' ? 0.7 : 0.8,
         });
 
         if (!media || media.length === 0) {

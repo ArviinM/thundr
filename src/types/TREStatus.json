@@ -199,5 +199,9 @@
   "NONE_OR_INVALID_FILES": {
     "title": "Invalid Files",
     "body": "The files you uploaded are either invalid or missing. Please try again with valid image files."
+  },
+  "NEW_PRIMARY_PHOTO_DOES_NOT_MATCH": {
+  "title": "New Main Photo Doesn't Match for Verification",
+  "body": "As a verified user, it's important that your new photo clearly shows your face. This helps us confirm it's still you and keep your account secure."
   }
 }

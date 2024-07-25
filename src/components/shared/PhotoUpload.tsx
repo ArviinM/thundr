@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   ActivityIndicator,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -44,6 +45,8 @@ const PhotoUpload: React.FC<Props> = ({
       const image = await ImagePicker.openPicker({
         mediaType: 'photo',
         includeBase64: true,
+        forceJpg: true,
+        compressImageQuality: Platform.OS === 'ios' ? 0.7 : 0.8,
       });
 
       if (image.size >= MAX_IMAGE_SIZE_BYTES) {
