@@ -27,6 +27,8 @@ import {FeedIcon} from '../../../../assets/images/tab_icons/FeedIcon.tsx';
 import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
 import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
 import {FeedStack} from '../Stack/FeedStack.tsx';
+import {CommunityTop} from '../Top/CommunityTop.tsx';
+import {CommunityProvider} from '../../../../providers/Community.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -64,12 +66,6 @@ export const HomeTab = () => {
             style={{height: scale(36), width: scale(36)}}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handlePresentModalPress}>
-          <Image
-            source={IMAGES.filter}
-            style={{height: scale(36), width: scale(36)}}
-          />
-        </TouchableOpacity>
       </View>
     );
   }
@@ -99,9 +95,9 @@ export const HomeTab = () => {
   }
 
   return (
-    <>
+    <CommunityProvider>
       <Tab.Navigator
-        initialRouteName={'FeedStack'}
+        initialRouteName={'CommunityTop'}
         screenOptions={{
           headerTitleAlign: 'center',
           headerStyle: {
@@ -119,13 +115,15 @@ export const HomeTab = () => {
           },
         }}>
         <Tab.Screen
-          name="FeedStack"
-          component={FeedStack}
+          name="CommunityTop"
+          component={CommunityTop}
           options={{
             headerLeft: () => <HomeLeftHeader />,
-            headerShown: false,
+            headerTitle: () => <Header />,
+            headerRight: () => <HomeRightHeader />,
+            headerShown: true,
             tabBarShowLabel: true,
-            tabBarLabel: 'Feed',
+            tabBarLabel: 'Thundr',
             tabBarActiveTintColor: COLORS.primary1,
             tabBarIcon: ({focused}) => <FeedIcon focused={focused} />,
           }}
@@ -197,7 +195,7 @@ export const HomeTab = () => {
       {auth.authData && (
         <FiltersBottomSheetModal ref={bottomSheetRef} sub={auth.authData.sub} />
       )}
-    </>
+    </CommunityProvider>
   );
 };
 

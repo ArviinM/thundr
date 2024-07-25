@@ -30,7 +30,7 @@ export function useGetCustomerProfile(props: CustomerProfileRequest) {
           statusCode: response.status,
         });
       }
-
+      console.log(response.data.data);
       return response.data.data;
     },
   });

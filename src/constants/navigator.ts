@@ -112,6 +112,9 @@ export type RootNavigationParams = {
   Advocacy: undefined;
   AdvocacyDonate: undefined;
 
+  // Community Tab
+  CommunityTop: undefined;
+
   //Feed Stack
   FeedStack: undefined;
 
