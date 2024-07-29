@@ -476,3 +476,107 @@ export const MockData: MockDataItem[] = [
     },
   },
 ];
+
+export interface FeedItem {
+  id: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
+  content: string;
+  media: ImageMock[]; // Array of media items
+  timestamp: Date;
+  likes: number;
+  comments: number;
+  repost: number;
+}
+
+// Specific media types (can be customized for other platforms)
+type ImageMock = {
+  url: string;
+  altText: string;
+};
+
+export const FeedMockData: FeedItem[] = [
+  {
+    id: '1',
+    author: {
+      name: 'Michelina',
+      avatar:
+        'https://images.unsplash.com/photo-1557053910-d9eadeed1c58?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    content: 'A quiet gaze to your eyes. #NewProfilePic',
+    media: [
+      {
+        url: 'https://images.unsplash.com/photo-1557053910-d9eadeed1c58?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        altText: 'Sunset at the beach',
+      },
+    ],
+    timestamp: new Date(),
+    likes: 120,
+    comments: 35,
+    repost: 10,
+  },
+
+  {
+    id: '2',
+    author: {
+      name: 'Marga',
+      avatar:
+        'https://images.unsplash.com/photo-1688760116404-21ff7c246952?q=80&w=3548&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Replace with a suitable avatar URL
+    },
+    content: 'Just finished a great workout! Feeling energized. ',
+    media: [
+      {
+        url: 'https://plus.unsplash.com/premium_photo-1663036985264-d604698b8e53?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        altText: 'A Portrait',
+      },
+    ],
+    timestamp: new Date(),
+    likes: 85,
+    comments: 22,
+    repost: 5,
+  },
+  {
+    id: '3',
+    author: {
+      name: 'Sofia',
+      avatar:
+        'https://images.unsplash.com/photo-1635620201960-a1cb77e51359?q=80&w=3764&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    content: 'Excited for the weekend! Any plans? I am going to the gym',
+    media: [],
+    timestamp: new Date(),
+    likes: 130,
+    comments: 42,
+    repost: 12,
+  },
+  {
+    id: '4',
+    author: {
+      name: 'David',
+      avatar:
+        'https://images.unsplash.com/photo-1715304557073-30383025595d?q=80&w=3840&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    content: 'Enjoying a delicious cup of coffee this morning.',
+    media: [],
+    timestamp: new Date(),
+    likes: 63,
+    comments: 15,
+    repost: 2,
+  },
+  {
+    id: '5',
+    author: {
+      name: 'Olivia',
+      avatar:
+        'https://images.unsplash.com/photo-1592598285030-6a57af53b3d0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    content: "Can't wait for the concert tonight! #music ",
+    media: [],
+    timestamp: new Date(),
+    likes: 98,
+    comments: 31,
+    repost: 8,
+  },
+];

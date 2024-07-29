@@ -3,7 +3,7 @@ import React from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale} from '../../../../utils/utils.ts';
+import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {TouchableOpacity} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
@@ -53,6 +53,10 @@ export const FaceVerificationStack = () => {
           headerStyle: {
             backgroundColor: COLORS.white,
           },
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: scale(14),
+          },
         }}
       />
       <Stack.Screen
@@ -63,6 +67,10 @@ export const FaceVerificationStack = () => {
           headerLeft: () => <HomeLeftHeaderWhite />,
           headerTransparent: true,
           headerTintColor: COLORS.white,
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: scale(14),
+          },
         }}
       />
       <Stack.Screen
@@ -74,6 +82,10 @@ export const FaceVerificationStack = () => {
           // headerLeft: () => <HomeLeftHeader />,
           headerStyle: {
             backgroundColor: COLORS.white,
+          },
+          headerTitleStyle: {
+            fontFamily: 'Montserrat-Bold',
+            fontSize: scale(14),
           },
         }}
       />

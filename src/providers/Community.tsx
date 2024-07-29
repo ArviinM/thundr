@@ -1,4 +1,9 @@
 import React, {createContext, useContext, ReactNode} from 'react';
+import {navigationRef} from '../constants/navigator.ts';
+import {useAuth} from './Auth.tsx';
+import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
+import {CustomerData} from '../types/generated.ts';
+import {Loading} from '../components/shared/Loading.tsx';
 
 type CommunityContextData = {
   // authData?: AuthDataResponse;
@@ -8,6 +13,8 @@ type CommunityContextData = {
   // signUp(data: PasswordCreationRequest): Promise<void>;
   // signInSSO(data: AuthDataResponse): Promise<void>;
   // loadStorageData(): Promise<void>;
+  profileData?: CustomerData;
+  loading: boolean;
 };
 
 const CommunityContext = createContext<CommunityContextData>(
@@ -18,8 +25,20 @@ interface CommunityProviderProps {
   children: ReactNode;
 }
 const CommunityProvider = ({children}: CommunityProviderProps) => {
+  const auth = useAuth();
+
+  const customerProfile = useGetCustomerProfile({
+    sub: auth.authData?.sub || '',
+  });
+
   return (
-    <CommunityContext.Provider value={{}}>{children}</CommunityContext.Provider>
+    <CommunityContext.Provider
+      value={{
+        profileData: customerProfile.data,
+        loading: customerProfile.isLoading,
+      }}>
+      {children}
+    </CommunityContext.Provider>
   );
 };
 

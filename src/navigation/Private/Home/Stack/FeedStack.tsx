@@ -16,6 +16,7 @@ import Notification from '../../../../screens/Private/Notification/Notification.
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 import Filters from '../../../../screens/Private/Filters/Filters.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
+import Feed from '../../../../screens/Private/Community/Feed.tsx';
 export const FeedStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
@@ -89,7 +90,7 @@ export const FeedStack = () => {
       <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
         <Stack.Screen
           name="Feed"
-          component={WorkingInProgress}
+          component={Feed}
           options={{
             headerShown: false,
             headerStyle: {

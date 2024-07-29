@@ -737,3 +737,44 @@ export type FacialVerificationState =
   | 'PENDING'
   | 'VERIFIED'
   | 'VERIFY_FAIL';
+
+export type PostRequest = {
+  sub: string;
+  content: string;
+  inCommunity: number;
+  privacySettings?: PrivacySettings;
+  referencedPost?: bigint;
+  repostType?: RepostType;
+};
+
+export type PrivacySettings = 'PUBLIC' | 'MATCHES';
+export type RepostType = 'QUOTE' | 'REPOST';
+export type AttachmentType = 'PHOTO' | 'VIDEO' | 'WEB_EMBED' | 'GIF';
+
+export type FeedResponse = {
+  snowflakeId: string;
+  createdAt: string; // Consider using Date type for timestamps
+  updatedAt: string; // Consider using Date type for timestamps
+  referencedCommunnityId: number;
+  sub: string;
+  privacySettings: PrivacySettings;
+  content: string;
+
+  // Reposts
+  referencedPostId: bigint; // bigint is for very large integers
+  referencedPost?: FeedResponse; // Optional for lazy loading
+  referenceType: RepostType;
+
+  attachments: Attachment[];
+  deleted: boolean;
+
+  // Customer (User?) Info
+  customerPhoto: string; // This seems related to the user, not the post
+  customerPhotoBlurHash?: string; // Also user-related?
+  customerName: string; // Definitely user-related
+
+  // Stats Section  (Consider if you want this directly on the PostResponse)
+  // commentCount?: number;
+  // likeCount?: number;
+  // repostCount?: number;
+};

@@ -2,7 +2,6 @@ import React from 'react';
 import {Top} from '../../../../constants/navigator.ts';
 import {FeedStack} from '../Stack/FeedStack.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
-import {CommunityProvider} from '../../../../providers/Community.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
 
 export const CommunityTop = () => {
