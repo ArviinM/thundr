@@ -261,6 +261,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.black,
+    color: COLORS.black,
   },
   bodyContainer: {},
   textBody: {
@@ -299,6 +300,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: COLORS.black,
+    color: COLORS.black,
   },
   showPasswordIcon: {
     position: 'absolute',
