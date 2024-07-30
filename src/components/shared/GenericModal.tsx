@@ -40,8 +40,11 @@ const GenericModal: React.FC<GenericModalProps> = ({isVisible, content}) => {
   });
 
   return (
-    <Modal transparent animationType="fade" visible={isVisible}>
-      <StatusBar backgroundColor={'rgba(74, 0, 18, 0.43)'} animated />
+    <Modal
+      transparent
+      animationType="fade"
+      visible={isVisible}
+      statusBarTranslucent>
       <Animated.View
         style={[styles.container, {opacity, transform: [{scale}]}]}>
         <View style={styles.bodyContainer}>

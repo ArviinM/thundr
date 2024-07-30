@@ -21,7 +21,7 @@ const WorkingInProgress = () => {
   const {data} = useGetFacialVerificationState({sub: authData?.sub || ''});
 
   return (
-    <SafeAreaView style={{flex: 1}} edges={['right', 'left']}>
+    <View style={{flex: 1}}>
       <GenericModal
         isVisible={visible}
         content={
@@ -91,7 +91,7 @@ const WorkingInProgress = () => {
         <Text>Status: {data}</Text>
         <Button onPress={() => isVisible(true)} text={'Open to Verify'} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

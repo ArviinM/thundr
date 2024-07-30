@@ -19,31 +19,45 @@ import {asyncStoragePersister, queryClient} from './src/utils/queryClient.ts';
 import messaging from '@react-native-firebase/messaging';
 import {onMessageReceived} from './src/utils/notificationUtils.ts';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+import {StatusBar} from 'react-native';
+import * as NavigationBar from 'expo-navigation-bar';
 
 function App(): React.JSX.Element {
   useEffect(() => {
+    NavigationBar.setBackgroundColorAsync('rgba(0,0,0,0.00)');
+    NavigationBar.setPositionAsync('absolute');
+    NavigationBar.setBehaviorAsync('inset-swipe');
     return messaging().onMessage(onMessageReceived as any);
   }, []);
 
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{persister: asyncStoragePersister}}>
-        <AuthProvider>
-          <ActionSheetProvider>
-            <GestureHandlerRootView style={{flex: 1}}>
-              <BottomSheetModalProvider>
-                <KeyboardProvider>
-                  <RootNavigation />
-                </KeyboardProvider>
-              </BottomSheetModalProvider>
-            </GestureHandlerRootView>
-          </ActionSheetProvider>
-        </AuthProvider>
-      </PersistQueryClientProvider>
-      <Toast config={toastConfig} />
-    </SafeAreaProvider>
+    <>
+      <StatusBar
+        backgroundColor={'#00000000'}
+        translucent
+        barStyle={'dark-content'}
+      />
+      <SafeAreaProvider>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{persister: asyncStoragePersister}}>
+          <AuthProvider>
+            <ActionSheetProvider>
+              <GestureHandlerRootView style={{flex: 1}}>
+                <BottomSheetModalProvider>
+                  <KeyboardProvider
+                    statusBarTranslucent
+                    navigationBarTranslucent>
+                    <RootNavigation />
+                  </KeyboardProvider>
+                </BottomSheetModalProvider>
+              </GestureHandlerRootView>
+            </ActionSheetProvider>
+          </AuthProvider>
+        </PersistQueryClientProvider>
+        <Toast config={toastConfig} />
+      </SafeAreaProvider>
+    </>
   );
 }
 

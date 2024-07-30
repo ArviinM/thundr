@@ -89,8 +89,9 @@ export const AuthenticatedStack = () => {
         <Stack.Group
           screenOptions={{
             headerShown: false,
-            statusBarColor: COLORS.white,
+            statusBarColor: '#00000000',
             statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
+            statusBarTranslucent: true,
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}>
           <Stack.Screen
@@ -140,8 +141,15 @@ export const AuthenticatedStack = () => {
           />
         </Stack.Group>
 
-        <Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            headerShown: false,
+            statusBarColor: '#00000000',
+            statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
+            statusBarTranslucent: true,
+          }}>
           {/*  For Post Creation  */}
+
           <Stack.Screen
             name="CreatePost"
             component={CreatePost}

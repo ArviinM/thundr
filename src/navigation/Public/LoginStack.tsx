@@ -29,14 +29,9 @@ export const LoginStack = () => {
         headerShown: false,
         statusBarTranslucent: true,
         statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
-        navigationBarColor: COLORS.white,
       }}>
       <Stack.Group screenOptions={{statusBarColor: COLORS.primary1}}>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{navigationBarColor: COLORS.primary2}}
-        />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
