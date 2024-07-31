@@ -1,17 +1,9 @@
 import * as React from 'react';
-import {
-  Animated,
-  Modal,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {Animated, Modal, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
-import LottieView from 'lottie-react-native';
 import {scale} from '../../utils/utils.ts';
+import {useEffect} from 'react';
+import * as NavigationBar from 'expo-navigation-bar';
 
 interface GenericModalProps {
   isVisible: boolean;
@@ -21,12 +13,18 @@ interface GenericModalProps {
 const GenericModal: React.FC<GenericModalProps> = ({isVisible, content}) => {
   const [animation] = React.useState(new Animated.Value(0));
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(animation, {
       toValue: isVisible ? 1 : 0,
       duration: 200,
       useNativeDriver: false,
     }).start();
+
+    NavigationBar.setBackgroundColorAsync(
+      isVisible ? 'rgba(74, 0, 18, 0.43)' : 'rgba(0,0,0,0.00)',
+    );
+    NavigationBar.setPositionAsync('absolute');
+    NavigationBar.setBehaviorAsync('inset-swipe');
   }, [animation, isVisible]);
 
   const opacity = animation.interpolate({
