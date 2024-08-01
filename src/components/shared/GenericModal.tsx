@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, Modal, StyleSheet, View} from 'react-native';
+import {Animated, Modal, Platform, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants/commons.ts';
 import {scale} from '../../utils/utils.ts';
 import {useEffect} from 'react';
@@ -20,11 +20,13 @@ const GenericModal: React.FC<GenericModalProps> = ({isVisible, content}) => {
       useNativeDriver: false,
     }).start();
 
-    NavigationBar.setBackgroundColorAsync(
-      isVisible ? 'rgba(74, 0, 18, 0.43)' : 'rgba(0,0,0,0.00)',
-    );
-    NavigationBar.setPositionAsync('absolute');
-    NavigationBar.setBehaviorAsync('inset-swipe');
+    if (Platform.OS !== 'ios') {
+      NavigationBar.setBackgroundColorAsync(
+        isVisible ? 'rgba(74, 0, 18, 0.43)' : 'rgba(0,0,0,0.00)',
+      );
+      NavigationBar.setPositionAsync('absolute');
+      NavigationBar.setBehaviorAsync('inset-swipe');
+    }
   }, [animation, isVisible]);
 
   const opacity = animation.interpolate({

@@ -19,14 +19,16 @@ import {asyncStoragePersister, queryClient} from './src/utils/queryClient.ts';
 import messaging from '@react-native-firebase/messaging';
 import {onMessageReceived} from './src/utils/notificationUtils.ts';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-import {StatusBar} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
 
 function App(): React.JSX.Element {
   useEffect(() => {
-    NavigationBar.setBackgroundColorAsync('rgba(0,0,0,0.00)');
-    NavigationBar.setPositionAsync('absolute');
-    NavigationBar.setBehaviorAsync('inset-swipe');
+    if (Platform.OS !== 'ios') {
+      NavigationBar.setBackgroundColorAsync('rgba(0,0,0,0.00)');
+      NavigationBar.setPositionAsync('absolute');
+      NavigationBar.setBehaviorAsync('inset-swipe');
+    }
     return messaging().onMessage(onMessageReceived as any);
   }, []);
 
