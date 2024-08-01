@@ -132,13 +132,6 @@ export const AuthenticatedStack = () => {
                 Platform.OS === 'android' ? 'fade' : undefined,
             }}
           />
-
-          {/*  Stack Screen for Face Verification  */}
-          <Stack.Screen
-            name="FaceVerificationStack"
-            options={{headerShown: false}}
-            component={FaceVerificationStack}
-          />
         </Stack.Group>
 
         <Stack.Group
@@ -146,10 +139,8 @@ export const AuthenticatedStack = () => {
             headerShown: false,
             statusBarColor: '#00000000',
             statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
-            statusBarTranslucent: true,
           }}>
           {/*  For Post Creation  */}
-
           <Stack.Screen
             name="CreatePost"
             component={CreatePost}
@@ -167,6 +158,12 @@ export const AuthenticatedStack = () => {
               headerTitleAlign: 'center',
               headerShadowVisible: false,
             }}
+          />
+          {/*  Stack Screen for Face Verification  */}
+          <Stack.Screen
+            name="FaceVerificationStack"
+            options={{headerShown: false}}
+            component={FaceVerificationStack}
           />
         </Stack.Group>
       </Stack.Navigator>
