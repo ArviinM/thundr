@@ -7,6 +7,7 @@ import {
   PostRequest,
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
+import {checkFileExists} from '../../utils/utils.ts';
 
 export function useCreatePost() {
   const axiosInstance = useAxiosWithAuth();
@@ -20,13 +21,36 @@ export function useCreatePost() {
       formData.append('content', data.content);
       formData.append('inCommunity', data.inCommunity.toString());
 
+      if (data.media.length > 0) {
+        // formData.append('media', data.media);
+        for (const mediaItem of data.media) {
+          // const index = data.attachments.indexOf(mediaItem);
+          const fileUri = mediaItem.filePath;
+          if (await checkFileExists(fileUri)) {
+            formData.append('media', {
+              uri: fileUri,
+              type: mediaItem.fileType,
+              name: fileUri.split('/').pop(),
+            });
+          } else {
+            throw {
+              name: 'create-post-media',
+              status: 'null',
+              message: 'File does not exist',
+            } as Error;
+          }
+        }
+      }
+
+      console.log(formData);
+
       const response: AxiosResponse<BaseResponse<FeedResponse>> =
         await axiosInstance.post('/community/create-post', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-      console.log(response.data);
+      console.log(response.data.data);
       if (response.status !== HttpStatusCode.Ok) {
         throw {
           name: 'create-post',

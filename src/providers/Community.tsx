@@ -1,20 +1,14 @@
 import React, {createContext, useContext, ReactNode} from 'react';
-import {navigationRef} from '../constants/navigator.ts';
 import {useAuth} from './Auth.tsx';
 import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
-import {CustomerData} from '../types/generated.ts';
-import {Loading} from '../components/shared/Loading.tsx';
+import {CustomerData, PostRequest} from '../types/generated.ts';
+import {useCreatePost} from '../hooks/community/useCreatePost.ts';
+import {UseMutationResult} from '@tanstack/react-query';
 
 type CommunityContextData = {
-  // authData?: AuthDataResponse;
-  // loading: boolean;
-  // signIn(data: AuthDataRequest): Promise<void>;
-  // signOut(): void;
-  // signUp(data: PasswordCreationRequest): Promise<void>;
-  // signInSSO(data: AuthDataResponse): Promise<void>;
-  // loadStorageData(): Promise<void>;
   profileData?: CustomerData;
   loading: boolean;
+  createPost: UseMutationResult<any, any, PostRequest, unknown>;
 };
 
 const CommunityContext = createContext<CommunityContextData>(
@@ -31,11 +25,14 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     sub: auth.authData?.sub || '',
   });
 
+  const createPost = useCreatePost();
+
   return (
     <CommunityContext.Provider
       value={{
         profileData: customerProfile.data,
         loading: customerProfile.isLoading,
+        createPost: createPost,
       }}>
       {children}
     </CommunityContext.Provider>

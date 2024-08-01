@@ -745,6 +745,7 @@ export type PostRequest = {
   privacySettings?: PrivacySettings;
   referencedPost?: bigint;
   repostType?: RepostType;
+  media: FileAttachment[];
 };
 
 export type PrivacySettings = 'PUBLIC' | 'MATCHES';
