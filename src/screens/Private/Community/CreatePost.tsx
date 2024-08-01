@@ -32,6 +32,7 @@ const CreatePost = () => {
   const {profileData, createPost} = useCommunity();
   const insets = useSafeAreaInsets();
   const query = useQueryClient(queryClient);
+  const [postLoading, setPostLoading] = useState<boolean>(false);
 
   const inputRef = useRef<TextInput>(null); // Ref to access the TextInput
   useEffect(() => {
@@ -54,8 +55,8 @@ const CreatePost = () => {
     let formattedMediaData: FileAttachment[] = [];
 
     if (profileData) {
+      setPostLoading(true);
       if (selectedMedia) {
-        console.log({selectedMedia});
         formattedMediaData = selectedMedia.map(item => ({
           fileName: '',
           filePath: item.path,
@@ -80,6 +81,7 @@ const CreatePost = () => {
       });
       await query.invalidateQueries({queryKey: ['get-all-post']});
       navigation.navigate('FeedStack');
+      setPostLoading(false);
     }
   };
 
@@ -303,7 +305,8 @@ const CreatePost = () => {
                 fontSize: scale(12),
                 color: COLORS.white,
               }}
-              disabled={!isValid}
+              disabled={!isValid || postLoading}
+              loading={postLoading}
             />
           </View>
         </View>

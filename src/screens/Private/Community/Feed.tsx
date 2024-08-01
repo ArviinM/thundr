@@ -7,11 +7,11 @@ import {Loading} from '../../../components/shared/Loading.tsx';
 import {FlashList} from '@shopify/flash-list';
 import {useGetAllPost} from '../../../hooks/community/useGetAllPost.ts';
 import {FeedResponse} from '../../../types/generated.ts';
-import Post from '../../../components/Community/Post.tsx';
+import PostItem from '../../../components/Community/PostItem.tsx';
 
 /**
  * Feed component displays a list of posts from the community.
- * It fetches the posts using the useGetAllPost hook and renders each post using the Post component.
+ * It fetches the posts using the useGetAllPost hook and renders each post using the PostItem component.
  * If the posts are still loading, it displays a loading spinner.
  */
 const Feed = () => {
@@ -21,11 +21,11 @@ const Feed = () => {
   // Fetch the posts using the useGetAllPost hook
   const community = useGetAllPost();
 
-  // Render each post using the Post component
+  // Render each post using the PostItem component
   const renderItem = useCallback(
     ({item, index}: {item: FeedResponse; index: any | null | undefined}) => {
       return (
-        <Post
+        <PostItem
           key={`feed-post-${item.snowflakeId}-${item.sub}-${index}`}
           post={item}
         />
@@ -49,7 +49,7 @@ const Feed = () => {
       <FlashList
         renderItem={renderItem}
         data={community.data}
-        estimatedItemSize={300}
+        estimatedItemSize={286}
         ListHeaderComponent={<CreatePostBar />}
       />
     </SafeAreaView>
