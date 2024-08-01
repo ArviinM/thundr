@@ -82,16 +82,23 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
           </Text>
         </View>
         {/* Content Images */}
-        {post.attachments &&
-          post.attachments.length > 0 &&
-          post.attachments.map((e, index) => (
-            <PostAttachment
-              key={`post-item-attachment-${e.attachmentType}-${e.referencedPostId}`}
-              item={e}
-              index={index}
-              totalAttachments={post.attachments.length}
-            />
-          ))}
+        {post.attachments && post.attachments.length > 0 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: scale(2),
+            }}>
+            {post.attachments.map((e, index) => (
+              <PostAttachment
+                key={`post-item-attachment-${e.attachmentType}-${e.id}`}
+                item={e}
+                index={index}
+                totalAttachments={post.attachments.length}
+              />
+            ))}
+          </View>
+        )}
         {/* reference post tab */}
         {post.referencedPost && (
           <View
@@ -114,7 +121,6 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
                 cachePolicy={'memory-disk'}
               />
             </View>
-
             <View style={{flex: 1, gap: scale(6)}}>
               {/* Name and Time Bar */}
               <View
@@ -157,7 +163,6 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
                 </Text>
               </View>
             </View>
-            {/*  Test  */}
           </View>
         )}
         {/* PostItem Actions */}
