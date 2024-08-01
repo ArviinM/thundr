@@ -752,6 +752,23 @@ export type PrivacySettings = 'PUBLIC' | 'MATCHES';
 export type RepostType = 'QUOTE' | 'REPOST';
 export type AttachmentType = 'PHOTO' | 'VIDEO' | 'WEB_EMBED' | 'GIF';
 
+export type PostAttachmenType = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  referencedPostId: string;
+  attachmentType: AttachmentType;
+  attachmentImage: string;
+  attachmentThumbnail: string;
+  attachmentBlurhash: string;
+  attachmentUrl: string | null;
+  attachmentDomain: string | null;
+  attachmentTitle: string | null;
+  attachmentDescription: string | null;
+  attachmentWidth: number;
+  attachmentHeight: number;
+};
+
 export type FeedResponse = {
   snowflakeId: string;
   createdAt: string; // Consider using Date type for timestamps
@@ -766,7 +783,7 @@ export type FeedResponse = {
   referencedPost?: FeedResponse; // Optional for lazy loading
   referenceType: RepostType;
 
-  attachments: Attachment[];
+  attachments: PostAttachmenType[];
   deleted: boolean;
 
   // Customer (User?) Info
@@ -775,7 +792,7 @@ export type FeedResponse = {
   customerName: string; // Definitely user-related
 
   // Stats Section  (Consider if you want this directly on the PostResponse)
-  // commentCount?: number;
-  // likeCount?: number;
-  // repostCount?: number;
+  // commentCount?: number; // not yet done
+  likeCount?: number;
+  repostCount?: number;
 };

@@ -115,7 +115,7 @@ export type RootNavigationParams = {
   // Community Tab
   CommunityTop: undefined;
 
-  //Post Creation
+  //PostItem Creation
   CreatePost: undefined;
 
   //Feed Stack
