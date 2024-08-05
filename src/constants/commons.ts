@@ -20,6 +20,7 @@ export const COLORS = {
   secondary1: '#F05570',
   secondary2: '#FFBD28',
   inverted: '#a7e330',
+  blue: '#3069e3',
 };
 
 export const SIZES = {

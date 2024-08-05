@@ -86,8 +86,6 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
               styles.image,
               {width: 'auto', height: 'auto'},
               imageAspectRatio !== undefined && {aspectRatio: imageAspectRatio},
-              // index === 0 && totalAttachments === 2 && styles.leftImage, // Conditional style
-              // index === 1 && totalAttachments === 2 && styles.rightImage, // Conditional style
             ]}
             contentFit={'cover'}
             cachePolicy={'memory-disk'}
@@ -133,42 +131,16 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
     }
   };
 
-  return (
-    <View
-      style={[
-        styles.attachmentContainer,
-        totalAttachments === 1 && {width: '100%'},
-        totalAttachments === 2 && {width: '49%'},
-        totalAttachments === 3 && index === 0 && {width: '100%'},
-        totalAttachments === 3 && index > 0 && {width: '49%'},
-        totalAttachments === 4 && {width: '49%'},
-      ]}>
-      {renderAttachment()}
-    </View>
-    // <View
-    //   style={
-    //     {
-    //       // margin: 10,
-    //       // borderWidth: 1,
-    //       // borderColor: 'lightgray',
-    //       // padding: 10,
-    //     }
-    //   }>
-    //   {/*<Text style={{fontWeight: 'bold', color: COLORS.black}}>*/}
-    //   {/*  w: {item.attachmentWidth} x h: {item.attachmentHeight} |{' '}*/}
-    //   {/*  {item.attachmentDescription}*/}
-    //   {/*</Text>*/}
-    //   {renderAttachment()}
-    // </View>
-  );
+  return <View style={[styles.attachmentContainer]}>{renderAttachment()}</View>;
 };
 
 export default PostAttachment;
 
 const styles = StyleSheet.create({
   attachmentContainer: {
+    flex: 1,
     overflow: 'hidden',
-    borderRadius: 12,
+    borderRadius: 4,
   },
   image: {
     width: '100%',
