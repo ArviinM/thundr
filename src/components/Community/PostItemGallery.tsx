@@ -1,30 +1,50 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {StyleSheet, View, Platform, Modal} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  Platform,
+  Modal,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
 import Animated, {useAnimatedStyle, withSpring} from 'react-native-reanimated';
-import {Edge, SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import PagerView from 'react-native-pager-view';
-import {ImageSource} from '../../types/generated.ts';
-import {COLORS} from '../../constants/commons.ts';
+import {PostAttachment} from '../../types/generated.ts';
+import {COLORS, height, width} from '../../constants/commons.ts';
 import PostImageItemIOS from './PostImageItem/PostImageItemIOS.tsx';
 import PostImageItemAndroid from './PostImageItem/PostImageItemAndroid.tsx';
+import VideoPlayer from 'react-native-media-console';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {scale} from '../../utils/utils.ts';
+import {Image} from 'expo-image';
+import {formatDistanceToNow} from 'date-fns/formatDistanceToNow';
+import {CloseIconWhite} from '../../assets/images/CloseIconWhite.tsx';
 
 type Props = {
-  images: ImageSource[];
+  attachments: PostAttachment[];
   initialImageIndex: number;
   isVisible: boolean;
   setVisible: (visible: boolean) => void;
   backgroundColor?: string;
+  customerProfile: {
+    customerName: string;
+    customerPhoto: string;
+    createdAt: string;
+    customerPhotoBlurHash?: string;
+  };
 };
 
 const DEFAULT_BG_COLOR = '#000';
 
 function ImageViewing({
-  images,
+  attachments,
   initialImageIndex,
   setVisible,
   isVisible,
   backgroundColor = DEFAULT_BG_COLOR,
+  customerProfile,
 }: Props) {
   const [isScaled, setIsScaled] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -61,13 +81,6 @@ function ImageViewing({
     }
   }, []);
 
-  const edges = useMemo(() => {
-    if (Platform.OS === 'android') {
-      return ['top', 'bottom', 'left', 'right'] satisfies Edge[];
-    }
-    return ['left', 'right'] satisfies Edge[]; // iOS, so no top/bottom safe area
-  }, []);
-
   if (!isVisible) {
     return null;
   }
@@ -76,65 +89,169 @@ function ImageViewing({
     <Modal
       visible={isVisible}
       animationType={'slide'}
-      hardwareAccelerated
-      transparent>
-      <SafeAreaView style={{flex: 1}} edges={edges}>
-        <View style={[styles.container, {backgroundColor}]}>
-          <Animated.View style={[styles.header, animatedHeaderStyle]}>
-            {/*{typeof HeaderComponent !== 'undefined' ? (*/}
-            {/*  React.createElement(HeaderComponent, {*/}
-            {/*    imageIndex,*/}
-            {/*  })*/}
-            {/*) : (*/}
-            {/*  <ImageDefaultHeader onRequestClose={onRequestClose} />*/}
-            {/*)}*/}
-          </Animated.View>
-          <PagerView
-            scrollEnabled={!isScaled}
-            initialPage={initialImageIndex}
-            onPageSelected={e => {
-              setImageIndex(e.nativeEvent.position);
-              setIsScaled(false);
-            }}
-            onPageScrollStateChanged={e => {
-              setIsDragging(e.nativeEvent.pageScrollState !== 'idle');
-            }}
-            overdrag={true}
-            style={styles.pager}
-            useNext={false}>
-            {images.map(imageSrc => (
-              <View key={imageSrc.uri}>
-                {Platform.OS === 'ios' ? (
-                  <PostImageItemIOS
-                    onTap={onTap}
-                    onZoom={onZoom}
-                    imageSrc={imageSrc}
-                    onRequestClose={() => setVisible(false)}
-                    isScrollViewBeingDragged={isDragging}
-                    showControls={showControls}
-                  />
-                ) : (
-                  <PostImageItemAndroid
-                    onTap={onTap}
-                    onZoom={onZoom}
-                    imageSrc={imageSrc}
-                    onRequestClose={() => setVisible(false)}
-                    isScrollViewBeingDragged={isDragging}
-                    showControls={showControls}
-                  />
-                )}
+      statusBarTranslucent
+      transparent
+      hardwareAccelerated>
+      <GestureHandlerRootView style={{width: '100%', height: '100%'}}>
+        <SafeAreaView style={{flex: 1}} edges={['left', 'right']}>
+          <View style={[styles.container, {backgroundColor}]}>
+            <Animated.View style={[styles.header, animatedHeaderStyle]}>
+              <TouchableOpacity
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'flex-end',
+                  paddingHorizontal: scale(26),
+                  paddingTop: scale(46),
+                }}
+                hitSlop={20}
+                onPress={() => setVisible(false)}>
+                <CloseIconWhite />
+              </TouchableOpacity>
+            </Animated.View>
+            <PagerView
+              scrollEnabled={!isScaled}
+              initialPage={initialImageIndex}
+              onPageSelected={e => {
+                setImageIndex(e.nativeEvent.position);
+                setIsScaled(false);
+              }}
+              onPageScrollStateChanged={e => {
+                setIsDragging(e.nativeEvent.pageScrollState !== 'idle');
+              }}
+              pageMargin={0}
+              overdrag={true}
+              style={styles.pager}>
+              {attachments.map(attachment => (
+                <View key={`${attachment.attachmentType}-${attachment.id}`}>
+                  {attachment.attachmentType === 'PHOTO' &&
+                    Platform.OS === 'ios' && (
+                      <PostImageItemIOS
+                        onTap={onTap}
+                        onZoom={onZoom}
+                        imageSrc={{uri: attachment.attachmentImage}}
+                        onRequestClose={() => setVisible(false)}
+                        isScrollViewBeingDragged={isDragging}
+                        showControls={showControls}
+                      />
+                    )}
+
+                  {attachment.attachmentType === 'PHOTO' &&
+                    Platform.OS === 'android' && (
+                      <PostImageItemAndroid
+                        onTap={onTap}
+                        onZoom={onZoom}
+                        imageSrc={{uri: attachment.attachmentImage}}
+                        onRequestClose={() => setVisible(false)}
+                        isScrollViewBeingDragged={isDragging}
+                        showControls={showControls}
+                      />
+                    )}
+
+                  {attachment.attachmentType === 'VIDEO' && (
+                    <View style={{width, height}}>
+                      <VideoPlayer
+                        source={{uri: attachment.attachmentImage}}
+                        disableFullscreen
+                        disableBack
+                        disableOverlay
+                        paused
+                      />
+                    </View>
+                  )}
+                </View>
+              ))}
+            </PagerView>
+            <Animated.View style={[styles.footer, animatedFooterStyle]}>
+              <View
+                style={{
+                  paddingHorizontal: scale(20),
+                  paddingBottom: scale(36),
+                  paddingTop: scale(10),
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: scale(2),
+                  }}>
+                  <View>
+                    <Image
+                      source={{uri: customerProfile.customerPhoto}}
+                      style={{
+                        height: scale(40),
+                        width: scale(40),
+                        borderRadius: 50,
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{
+                        color: COLORS.white3,
+                        fontSize: scale(13),
+                        fontFamily: 'Montserrat-Medium',
+                      }}>
+                      {customerProfile.customerName}
+                    </Text>
+                    <Text
+                      style={{
+                        color: COLORS.white3,
+                        fontSize: scale(9),
+                        fontFamily: 'Montserrat-Medium',
+                      }}>
+                      {formatDistanceToNow(
+                        new Date(customerProfile.createdAt),
+                        {
+                          addSuffix: true,
+                        },
+                      )}
+                    </Text>
+                  </View>
+                </View>
+                <View style={{flexDirection: 'row', gap: scale(6)}}>
+                  <TouchableOpacity
+                    style={{
+                      borderWidth: 1,
+                      borderColor: COLORS.white3,
+                      paddingHorizontal: scale(10),
+                      paddingVertical: scale(8),
+                      borderRadius: scale(20),
+                    }}
+                    hitSlop={20}>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-Regular',
+                        color: COLORS.white3,
+                      }}>
+                      Save
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      borderWidth: 1,
+                      borderColor: COLORS.white3,
+                      paddingHorizontal: scale(10),
+                      paddingVertical: scale(8),
+                      borderRadius: scale(20),
+                    }}
+                    hitSlop={20}>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-Regular',
+                        color: COLORS.white3,
+                      }}>
+                      Share
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            ))}
-          </PagerView>
-          {/*{typeof FooterComponent !== 'undefined' && (*/}
-          {/*  <Animated.View style={[styles.footer, animatedFooterStyle]}>*/}
-          {/*    {React.createElement(FooterComponent, {*/}
-          {/*      imageIndex,*/}
-          {/*    })}*/}
-          {/*  </Animated.View>*/}
-          {/*)}*/}
-        </View>
-      </SafeAreaView>
+            </Animated.View>
+          </View>
+        </SafeAreaView>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
@@ -152,7 +269,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
   pager: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   header: {
     position: 'absolute',
@@ -160,13 +278,13 @@ const styles = StyleSheet.create({
     zIndex: 1,
     top: 0,
     pointerEvents: 'box-none',
-    backgroundColor: COLORS.white,
   },
   footer: {
     position: 'absolute',
     width: '100%',
     zIndex: 1,
     bottom: 0,
+    backgroundColor: 'rgba(42,41,41,0.32)',
   },
 });
 

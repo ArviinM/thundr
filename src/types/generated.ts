@@ -752,7 +752,7 @@ export type PrivacySettings = 'PUBLIC' | 'MATCHES';
 export type RepostType = 'QUOTE' | 'REPOST';
 export type AttachmentType = 'PHOTO' | 'VIDEO' | 'WEB_EMBED' | 'GIF';
 
-export type PostAttachmenType = {
+export type PostAttachment = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -784,7 +784,7 @@ export type FeedResponse = {
   referencedPost?: FeedResponse; // Optional for lazy loading
   referenceType: RepostType;
 
-  attachments: PostAttachmenType[];
+  attachments: PostAttachment[];
   deleted: boolean;
 
   // Customer (User?) Info

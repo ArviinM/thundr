@@ -27,7 +27,7 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
 
-  const openImageViewer = (index: number) => {
+  const openMediaViewer = (index: number) => {
     setInitialImageIndex(index);
     setIsImageViewerVisible(true);
   };
@@ -102,7 +102,7 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
                   key={`post-item-attachment-${attachment.attachmentType}-${attachment.id}`}
                   onPress={() =>
                     attachment.attachmentType !== 'WEB_EMBED' &&
-                    openImageViewer(index)
+                    openMediaViewer(index)
                   }
                   style={[
                     {
@@ -202,10 +202,16 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
         </View>
       </View>
       <EnhancedImageViewing
-        images={post.attachments.map(att => ({uri: att.attachmentImage}))}
+        attachments={post.attachments}
         initialImageIndex={initialImageIndex}
         isVisible={isImageViewerVisible}
         setVisible={setIsImageViewerVisible}
+        customerProfile={{
+          customerName: post.customerName,
+          customerPhoto: post.customerPhoto,
+          customerPhotoBlurHash: post.customerPhotoBlurHash,
+          createdAt: post.createdAt,
+        }}
       />
     </>
   );

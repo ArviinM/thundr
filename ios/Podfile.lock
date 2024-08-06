@@ -1080,7 +1080,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-pager-view (6.3.3):
+  - react-native-pager-view (6.2.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1701,7 +1701,7 @@ SPEC CHECKSUMS:
   react-native-blur: 73561b0608a43d76f2874738aee8e3909c11d083
   react-native-geolocation: fff5fb51dd294e845aa203c2e747958421425087
   react-native-keyboard-controller: f9633273f608756bbe5bfbd040f8de0d3e545067
-  react-native-pager-view: ce73434826e4dca60108c3b3a30d83792ff28b0c
+  react-native-pager-view: 3796df305c59c352a26811ead0f6ea78acac1886
   react-native-quick-base64: fe6a518db3c0ceb4097a8c9b28a26d0768e91695
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-stroke-text: 0add13c67de1ee187508de324970dbf3a727af5a

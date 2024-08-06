@@ -26,6 +26,7 @@ import {
   readTransform,
   TransformMatrix,
 } from '../../Chat/MessageGallery/utils/transform.ts';
+import {height} from '../../../constants/commons.ts';
 
 const windowDim = Dimensions.get('window');
 const screenDim = Dimensions.get('screen');
@@ -256,7 +257,6 @@ const ImageItem = ({
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
     .onEnd(e => {
-      console.log(e);
       if (!imageDimensions) {
         return;
       }
@@ -341,7 +341,7 @@ const ImageItem = ({
           accessibilityLabel={imageSrc.alt}
           accessibilityHint=""
           onLoad={() => setIsLoaded(true)}
-          cachePolicy="memory"
+          cachePolicy="memory-disk"
         />
       </GestureDetector>
     </Animated.View>
@@ -351,11 +351,15 @@ const ImageItem = ({
 const styles = StyleSheet.create({
   container: {
     width: SCREEN.width,
-    height: SCREEN.height,
+    height: screenDim.height,
     overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   loading: {
     position: 'absolute',
