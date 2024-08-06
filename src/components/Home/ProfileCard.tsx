@@ -103,7 +103,7 @@ const ProfileCard = ({
     }
   };
 
-  const tapGesture = Gesture.Tap().onEnd(handleTap);
+  const tapGesture = Gesture.Tap().onEnd(handleTap).runOnJS(true);
 
   useEffect(() => {
     if (user.isBlurred && isStartTimer && nextAction) {
@@ -136,15 +136,15 @@ const ProfileCard = ({
     }
   }, [nextAction, user.isBlurred, isStartTimer]);
 
-  const sortedCustomerImages = user.customerData?.customerPhoto.sort((a, b) => {
-    if (a.primary) {
-      return -1;
-    } // Primary photo comes first
-    if (b.primary) {
-      return 1;
-    }
-    return 0; // Maintain original order for non-primary photos
-  });
+  // const sortedCustomerImages = user.customerData?.customerPhoto.sort((a, b) => {
+  //   if (a.primary) {
+  //     return -1;
+  //   } // Primary photo comes first
+  //   if (b.primary) {
+  //     return 1;
+  //   }
+  //   return 0; // Maintain original order for non-primary photos
+  // });
 
   return (
     <ScrollView>
@@ -169,7 +169,7 @@ const ProfileCard = ({
               : cardStyles.imageContainer,
           ]}>
           <View style={cardStyles.stepIndicatorContainer}>
-            {sortedCustomerImages.map((step, index) => (
+            {user.customerData?.customerPhoto.map((step, index) => (
               <View
                 key={index}
                 style={[
