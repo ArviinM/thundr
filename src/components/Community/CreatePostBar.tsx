@@ -1,10 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {
-  DrawerActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import {useCommunity} from '../../providers/Community.tsx';
 import {Image} from 'expo-image';
@@ -12,11 +8,10 @@ import {scale} from '../../utils/utils.ts';
 import Button from '../shared/Button.tsx';
 import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
 import {COLORS} from '../../constants/commons.ts';
-import {Loading} from '../shared/Loading.tsx';
 
 const CreatePostBar = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const {profileData, loading} = useCommunity();
+  const {profileData} = useCommunity();
 
   const sortedCustomerImages = profileData?.customerPhoto.sort((a, b) => {
     if (a.primary) {
@@ -32,13 +27,11 @@ const CreatePostBar = () => {
     <View
       style={{
         flexDirection: 'row',
-        // borderWidth: 1,
         paddingHorizontal: scale(10),
         paddingVertical: scale(16),
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingBottom: scale(6),
-        // gap: scale(6),
       }}>
       <TouchableOpacity onPress={() => navigation.navigate('ProfileStack')}>
         {/*  Profile Image  */}
