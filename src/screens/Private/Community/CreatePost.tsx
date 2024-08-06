@@ -238,10 +238,11 @@ const CreatePost = () => {
                       textAlignVertical: 'top',
                       color: COLORS.black2,
                       verticalAlign: 'top',
+                      height: scale(167),
                     }}
                     keyboardAppearance={'light'}
                     textAlignVertical="top"
-                    maxLength={255}
+                    maxLength={500}
                     selectionColor={COLORS.primary1}
                     multiline={true}
                     onBlur={onBlur}
