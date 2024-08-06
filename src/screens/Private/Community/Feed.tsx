@@ -8,6 +8,7 @@ import {FlashList} from '@shopify/flash-list';
 import {useGetAllPost} from '../../../hooks/community/useGetAllPost.ts';
 import {FeedResponse} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
+import {Pressable} from 'react-native-gesture-handler';
 
 /**
  * Feed component displays a list of posts from the community.

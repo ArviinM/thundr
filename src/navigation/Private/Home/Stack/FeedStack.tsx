@@ -21,17 +21,15 @@ export const FeedStack = () => {
   // const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
   return (
-    <>
-      <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
-        <Stack.Screen
-          name="Feed"
-          component={LazyFeed}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </>
+    <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
+      <Stack.Screen
+        name="Feed"
+        component={LazyFeed}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack.Navigator>
   );
 };
 
