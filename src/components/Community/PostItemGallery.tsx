@@ -104,15 +104,6 @@ function ImageViewing({
             useNext={false}>
             {images.map(imageSrc => (
               <View key={imageSrc.uri}>
-                {/*<ImageItem*/}
-                {/*  onTap={onTap}*/}
-                {/*  onZoom={onZoom}*/}
-                {/*  imageSrc={imageSrc}*/}
-                {/*  onRequestClose={onRequestClose}*/}
-                {/*  isScrollViewBeingDragged={isDragging}*/}
-                {/*  showControls={showControls}*/}
-                {/*/>*/}
-
                 {Platform.OS === 'ios' ? (
                   <PostImageItemIOS
                     onTap={onTap}

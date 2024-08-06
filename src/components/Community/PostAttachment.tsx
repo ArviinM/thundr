@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {PostAttachmenType} from '../../types/generated.ts';
 import {Image} from 'expo-image';
+import {COLORS} from '../../constants/commons.ts';
+import {processDomain} from './communityUtils.ts';
+import {scale} from '../../utils/utils.ts';
+import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
 
 interface PostAttachmentProps {
   // Use an interface to define props
@@ -97,35 +101,95 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
         );
       case 'VIDEO':
         return (
-          <Text>Video Player (Not implemented)</Text>
-          // <View
-          //   style={[
-          //     styles.videoThumbnailContainer,
-          //     {width: 'auto', height: imageHeight},
-          //   ]}>
-          //   <Image
-          //     placeholder={item.attachmentBlurhash}
-          //     source={{uri: item.attachmentThumbnail}}
-          //     style={[
-          //       styles.image,
-          //       {width: 'auto', height: imageHeight},
-          //       index === 0 && totalAttachments === 2 && styles.leftImage, // Conditional style
-          //       index === 1 && totalAttachments === 2 && styles.rightImage, // Conditional style
-          //     ]}
-          //     contentFit={'cover'}
-          //     cachePolicy={'memory-disk'}
-          //     transition={167}
-          //     onError={handleImageLoadError}
-          //     priority={'low'}
-          //   />
-          //   <View style={styles.playButtonOverlay}>
-          //     <PlayButton />
-          //   </View>
-          // </View>
+          <View
+            style={[
+              styles.videoThumbnailContainer,
+              {width: 'auto', height: 'auto'},
+            ]}>
+            <Image
+              source={{uri: item.attachmentThumbnail}}
+              style={[
+                styles.image,
+                {width: 'auto', height: 'auto'},
+                imageAspectRatio !== undefined && {
+                  aspectRatio: imageAspectRatio,
+                },
+              ]}
+              contentFit={'cover'}
+              cachePolicy={'memory-disk'}
+              placeholder={item.attachmentBlurhash}
+              transition={167}
+              onError={handleImageLoadError}
+              priority={'high'}
+            />
+            <View style={styles.playButtonOverlay}>
+              <PlayButton />
+            </View>
+          </View>
         );
       case 'WEB_EMBED':
-        // Render a webview component (e.g., react-native-webview)
-        return <Text>Web Embed (Not implemented)</Text>;
+        return (
+          <View
+            style={[
+              {backgroundColor: COLORS.white3},
+              !item.attachmentEmbedHasImage && {
+                flexDirection: 'row',
+                alignItems: 'center',
+              },
+            ]}>
+            <View
+              style={[
+                !item.attachmentEmbedHasImage && {
+                  alignItems: 'center',
+                  margin: scale(6),
+                },
+              ]}>
+              <Image
+                source={{uri: item.attachmentThumbnail}}
+                style={[
+                  {aspectRatio: 16 / 9},
+                  !item.attachmentEmbedHasImage && {
+                    aspectRatio: 4 / 3,
+                    height: scale(50),
+                    borderRadius: 5,
+                  },
+                ]}
+                contentFit={'cover'}
+                cachePolicy={'memory-disk'}
+                placeholder={item.attachmentBlurhash}
+                transition={167}
+                onError={handleImageLoadError}
+                priority={'high'}
+              />
+            </View>
+            <View style={[{padding: scale(8), flex: 1}]}>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: scale(9),
+                  color: COLORS.black4,
+                }}>
+                {processDomain(item.attachmentDomain)?.toUpperCase()}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: scale(11),
+                  color: COLORS.black,
+                }}>
+                {item.attachmentTitle}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Regular',
+                  fontSize: scale(9),
+                  color: COLORS.black,
+                }}>
+                {item.attachmentDescription}
+              </Text>
+            </View>
+          </View>
+        );
       default:
         return null;
     }

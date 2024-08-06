@@ -767,6 +767,7 @@ export type PostAttachmenType = {
   attachmentDescription: string | null;
   attachmentWidth: number;
   attachmentHeight: number;
+  attachmentEmbedHasImage: number | null;
 };
 
 export type FeedResponse = {
