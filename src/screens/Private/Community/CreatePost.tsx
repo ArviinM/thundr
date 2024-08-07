@@ -42,8 +42,13 @@ const CreatePost = ({route}: CreatePostParams) => {
   const query = useQueryClient(queryClient);
   const inputRef = useRef<TextInput>(null);
 
-  const {profileData, createPost} = useCommunity();
+  const {profileData, createPost, replyPost} = useCommunity();
   const [postLoading, setPostLoading] = useState<boolean>(false);
+  const [videoThumbnails, setVideoThumbnails] = useState<
+    Record<string, string>
+  >({});
+
+  const [selectedMedia, setSelectedMedia] = useState<any[]>([]);
 
   const postDetails = route?.params.postDetails;
   const isComment = route?.params.isComment;
@@ -61,22 +66,35 @@ const CreatePost = ({route}: CreatePostParams) => {
   const onSubmit = async (data: {postContent: string}) => {
     let formattedMediaData: FileAttachment[] = [];
 
+    if (selectedMedia) {
+      formattedMediaData = selectedMedia.map(item => ({
+        fileName: '',
+        filePath: item.path,
+        fileType: item.mime,
+      }));
+    }
+
     if (profileData) {
       setPostLoading(true);
-      if (selectedMedia) {
-        formattedMediaData = selectedMedia.map(item => ({
-          fileName: '',
-          filePath: item.path,
-          fileType: item.mime,
-        }));
+
+      if (!isComment) {
+        await createPost.mutateAsync({
+          sub: profileData.sub,
+          content: data.postContent,
+          inCommunity: 1,
+          media: formattedMediaData,
+        });
       }
 
-      await createPost.mutateAsync({
-        sub: profileData.sub,
-        content: data.postContent,
-        inCommunity: 1,
-        media: formattedMediaData,
-      });
+      if (isComment && postDetails) {
+        await replyPost.mutateAsync({
+          sub: profileData.sub,
+          content: data.postContent,
+          media: formattedMediaData,
+          parentPostId: postDetails.snowflakeId,
+          topLevelPostId: postDetails.snowflakeId,
+        });
+      }
 
       Toast.show({
         type: 'THNRSuccess',
@@ -91,12 +109,6 @@ const CreatePost = ({route}: CreatePostParams) => {
       setPostLoading(false);
     }
   };
-
-  const [videoThumbnails, setVideoThumbnails] = useState<
-    Record<string, string>
-  >({});
-
-  const [selectedMedia, setSelectedMedia] = useState<any[]>([]);
 
   const openMediaPicker = async () => {
     try {
@@ -210,7 +222,7 @@ const CreatePost = ({route}: CreatePostParams) => {
         }}>
         {postDetails && (
           <View>
-            <PostItem post={postDetails} isFromPost isAddComment />
+            <PostItem post={postDetails} isFromPost isAddComment={isComment} />
           </View>
         )}
         <View
@@ -240,7 +252,9 @@ const CreatePost = ({route}: CreatePostParams) => {
                   fontSize: scale(12),
                   color: COLORS.black2,
                 }}>
-                {profileData?.name}
+                {!isComment
+                  ? profileData?.name
+                  : `Replying to ${profileData?.name}`}
               </Text>
             </View>
             <View>{/*  Dropdown here WIP  */}</View>
@@ -314,7 +328,7 @@ const CreatePost = ({route}: CreatePostParams) => {
           <View>
             <GradientButton
               onPress={handleSubmit(onSubmit)}
-              text={'Post'}
+              text={!isComment ? 'Post' : 'Reply'}
               buttonStyle={{
                 paddingHorizontal: scale(20),
                 paddingVertical: scale(5),
