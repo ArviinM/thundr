@@ -10,7 +10,7 @@ import PostAttachment from './PostAttachment.tsx';
 import HighlightedText from './HighlightedText.tsx';
 import EnhancedImageViewing from './PostItemGallery.tsx';
 import {calculateAspectRatio, calculateWidth} from './communityUtils.ts';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import PostReferencePost from './PostReferencePost.tsx';
 import {useCommunity} from '../../providers/Community.tsx';
@@ -19,6 +19,10 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 import ReusableBottomSheetModal from '../shared/ReusableBottomSheetModal.tsx';
 import Button from '../shared/Button.tsx';
+import Clipboard from '@react-native-clipboard/clipboard';
+import {API_PAYMENT_URL} from '@env';
+import Toast from 'react-native-toast-message';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface PostItemProps {
   post: FeedResponse;
@@ -33,6 +37,8 @@ const PostItem = ({
 }: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
+
+  const insets = useSafeAreaInsets();
 
   const openMediaViewer = (index: number) => {
     setInitialImageIndex(index);
@@ -58,6 +64,24 @@ const PostItem = ({
   const handleOpenRepostOptions = useCallback(() => {
     repostOptionsBSheet.current?.present();
   }, []);
+
+  const copyToClipboard = () => {
+    const textToCopy = `${API_PAYMENT_URL}/app/post/${BigInt(
+      post.snowflakeId,
+    ).toString(36)}`;
+    Clipboard.setString(textToCopy);
+    moreOptionsBSheet.current?.dismiss();
+
+    Toast.show({
+      type: 'THNRSuccess',
+      props: {
+        title: 'Link Copied',
+        subtitle: 'Share this with your kumares!',
+      },
+      position: 'top',
+      topOffset: insets.top,
+    });
+  };
 
   return (
     <>
@@ -257,7 +281,7 @@ const PostItem = ({
       <ReusableBottomSheetModal ref={moreOptionsBSheet} snapPoints={['25%']}>
         <View style={{gap: scale(10)}}>
           <Button
-            onPress={() => console.log('Share Post')}
+            onPress={copyToClipboard}
             text={'Share Post'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
