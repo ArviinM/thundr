@@ -40,7 +40,7 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
     navigation.navigate('CreatePost', {
       isComment,
       referenceId,
-      screenTitle: isComment ? 'Add Comment' : 'Create Post',
+      screenTitle: isComment ? 'Add Reply' : 'Create Post',
       postDetails: postDetails,
       isOpenGallery,
     });
