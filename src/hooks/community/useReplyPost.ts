@@ -14,7 +14,7 @@ export function useReplyPost() {
 
   return useMutation({
     mutationKey: ['reply-post'],
-    mutationFn: async (data: ReplyRequest): Promise<any> => {
+    mutationFn: async (data: ReplyRequest): Promise<FeedResponse> => {
       let formData = new FormData();
 
       formData.append('sub', data.sub);

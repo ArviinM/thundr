@@ -2,19 +2,23 @@ import {useQuery} from '@tanstack/react-query';
 import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
 import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
-import {BaseResponse, GetReplyRequest} from '../../types/generated.ts';
+import {
+  BaseResponse,
+  FeedResponse,
+  GetReplyRequest,
+} from '../../types/generated.ts';
 
 export function useGetReplies(props: GetReplyRequest) {
   const axiosInstance = useAxiosWithAuth();
 
   return useQuery({
     queryKey: ['get-post-replies', props.sub],
-    queryFn: async (): Promise<any> => {
+    queryFn: async (): Promise<FeedResponse[]> => {
       const config: AxiosRequestConfig<GetReplyRequest> = {
         params: {sub: props.sub},
       };
 
-      const response: AxiosResponse<BaseResponse<any>> =
+      const response: AxiosResponse<BaseResponse<FeedResponse[]>> =
         await axiosInstance.get(
           `/community/get-replies/${props.snowflakeId}`,
           config,

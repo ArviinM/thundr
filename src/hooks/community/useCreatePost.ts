@@ -14,7 +14,7 @@ export function useCreatePost() {
 
   return useMutation({
     mutationKey: ['create-post'],
-    mutationFn: async (data: PostRequest): Promise<any> => {
+    mutationFn: async (data: PostRequest): Promise<FeedResponse> => {
       let formData = new FormData();
 
       formData.append('sub', data.sub);
