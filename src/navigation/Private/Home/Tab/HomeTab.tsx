@@ -24,7 +24,6 @@ import {FeedIcon} from '../../../../assets/images/tab_icons/FeedIcon.tsx';
 import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
 import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
 import {CommunityTop} from '../Top/CommunityTop.tsx';
-import {CommunityProvider} from '../../../../providers/Community.tsx';
 import {BlurView} from 'expo-blur';
 
 export const HomeTab = () => {

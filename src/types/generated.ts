@@ -804,3 +804,13 @@ export type CreatePostParams = {
   referenceId?: string;
   screenTitle?: string;
 };
+
+// Reply to a Post
+export type ReplyRequest = {
+  sub: string;
+  content: string;
+  privacySettings?: PrivacySettings;
+  inCommunity?: string;
+  parentPostId: string;
+  media: FileAttachment[];
+};

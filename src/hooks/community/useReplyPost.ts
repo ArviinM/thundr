@@ -4,22 +4,21 @@ import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
   FeedResponse,
-  PostRequest,
+  ReplyRequest,
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 import {checkFileExists} from '../../utils/utils.ts';
 
-export function useCreatePost() {
+export function useReplyPost() {
   const axiosInstance = useAxiosWithAuth();
 
   return useMutation({
-    mutationKey: ['create-post'],
-    mutationFn: async (data: PostRequest): Promise<any> => {
+    mutationKey: ['reply-post'],
+    mutationFn: async (data: ReplyRequest): Promise<any> => {
       let formData = new FormData();
 
       formData.append('sub', data.sub);
       formData.append('content', data.content);
-      formData.append('inCommunity', data.inCommunity.toString());
 
       if (data.media.length > 0) {
         // formData.append('media', data.media);
@@ -34,7 +33,7 @@ export function useCreatePost() {
             });
           } else {
             throw {
-              name: 'create-post-media',
+              name: 'reply-post-media',
               status: 'null',
               message: 'File does not exist',
             } as Error;
@@ -43,7 +42,7 @@ export function useCreatePost() {
       }
 
       const response: AxiosResponse<BaseResponse<FeedResponse>> =
-        await axiosInstance.post('/community/create-post', formData, {
+        await axiosInstance.post('/community/create-reply', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -51,7 +50,7 @@ export function useCreatePost() {
 
       if (response.status !== HttpStatusCode.Ok) {
         throw {
-          name: 'create-post',
+          name: 'create-reply',
           status: response.data.status,
           message: response.data.message,
           data: response.data.data,
