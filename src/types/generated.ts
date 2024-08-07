@@ -815,3 +815,8 @@ export type ReplyRequest = {
   topLevelPostId: string;
   media: FileAttachment[];
 };
+
+export type GetReplyRequest = {
+  sub: string;
+  snowflakeId: string;
+};
