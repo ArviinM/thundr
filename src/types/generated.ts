@@ -797,3 +797,10 @@ export type FeedResponse = {
   likeCount?: number;
   repostCount?: number;
 };
+
+// Define the params for the CreatePost route
+export type CreatePostParams = {
+  isComment?: boolean;
+  referenceId?: string;
+  screenTitle?: string;
+};

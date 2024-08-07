@@ -9,10 +9,9 @@ import {
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
-import {COLORS, SIZES, width} from '../../../constants/commons.ts';
+import {COLORS, SIZES} from '../../../constants/commons.ts';
 import Button from '../../../components/shared/Button.tsx';
 import {scale} from '../../../utils/utils.ts';
-import {ChevronLeftSmall} from '../../../assets/images/ChevronLeftSmall.tsx';
 import {ChevronRightSmall} from '../../../assets/images/ChevronRightSmall.tsx';
 import {Image} from 'expo-image';
 import {VerificationBadge} from '../../../assets/images/VerificationBadge.tsx';

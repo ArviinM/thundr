@@ -11,7 +11,11 @@ import {KeyboardStickyView} from 'react-native-keyboard-controller';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Controller, useForm} from 'react-hook-form';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 import Toast from 'react-native-toast-message';
 import {useQueryClient} from '@tanstack/react-query';
@@ -22,25 +26,27 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {CloseIconWhite} from '../../../assets/images/CloseIconWhite.tsx';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import {FileAttachment} from '../../../types/generated.ts';
+import PostItem from '../../../components/Community/PostItem.tsx';
 
 const postSchema = yup.object({
   postContent: yup.string().required('Please share something'),
 });
 
-const CreatePost = () => {
+type CreatePostParams = {
+  route?: RouteProp<RootNavigationParams, 'CreatePost'>;
+};
+
+const CreatePost = ({route}: CreatePostParams) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const {profileData, createPost} = useCommunity();
   const insets = useSafeAreaInsets();
   const query = useQueryClient(queryClient);
+  const inputRef = useRef<TextInput>(null);
+
+  const {profileData, createPost} = useCommunity();
   const [postLoading, setPostLoading] = useState<boolean>(false);
 
-  const inputRef = useRef<TextInput>(null); // Ref to access the TextInput
-  useEffect(() => {
-    // Automatically focus the TextInput when it's rendered
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  const postDetails = route?.params.postDetails;
+  const isComment = route?.params.isComment;
 
   const {
     control,
@@ -90,28 +96,6 @@ const CreatePost = () => {
   >({});
 
   const [selectedMedia, setSelectedMedia] = useState<any[]>([]);
-
-  useEffect(() => {
-    const generateThumbnails = async () => {
-      const thumbnails: Record<string, string> = {};
-      for (const item of selectedMedia) {
-        if (item.mime && item.mime.startsWith('video/')) {
-          try {
-            const {uri} = await VideoThumbnails.getThumbnailAsync(
-              item.path,
-              {time: 1000}, // Get thumbnail at 1 second
-            );
-            thumbnails[item.path] = uri;
-          } catch (error) {
-            console.error('Error generating thumbnail:', error);
-          }
-        }
-      }
-      setVideoThumbnails(thumbnails);
-    };
-
-    generateThumbnails();
-  }, [selectedMedia]);
 
   const openMediaPicker = async () => {
     try {
@@ -177,27 +161,56 @@ const CreatePost = () => {
     [selectedMedia, videoThumbnails],
   );
 
+  useEffect(() => {
+    const generateThumbnails = async () => {
+      const thumbnails: Record<string, string> = {};
+      for (const item of selectedMedia) {
+        if (item.mime && item.mime.startsWith('video/')) {
+          try {
+            const {uri} = await VideoThumbnails.getThumbnailAsync(
+              item.path,
+              {time: 1000}, // Get thumbnail at 1 second
+            );
+            thumbnails[item.path] = uri;
+          } catch (error) {
+            console.error('Error generating thumbnail:', error);
+          }
+        }
+      }
+      setVideoThumbnails(thumbnails);
+    };
+
+    generateThumbnails();
+  }, [selectedMedia]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: '#f4f4f4',
         paddingBottom: insets.bottom,
-        // paddingLeft: insets.left,
-        // paddingRight: insets.right,
       }}>
       <ScrollView
         style={{
           flex: 1,
           backgroundColor: COLORS.white,
-          // paddingBottom: scale(400),
-          // borderWidth: 1,
         }}>
+        {postDetails && (
+          <View>
+            <PostItem post={postDetails} isFromPost isAddComment />
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
-            paddingHorizontal: scale(14),
-            paddingVertical: scale(8),
+            paddingHorizontal: scale(18),
+            paddingVertical: isComment ? 0 : scale(8),
             gap: scale(8),
             flex: 1,
             backgroundColor: '#ffffff',

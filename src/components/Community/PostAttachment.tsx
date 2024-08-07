@@ -1,23 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {PostAttachmenType} from '../../types/generated.ts';
 import {Image} from 'expo-image';
 import {COLORS} from '../../constants/commons.ts';
 import {processDomain} from './communityUtils.ts';
 import {scale} from '../../utils/utils.ts';
 import {PlayButton} from '../../assets/images/chat/PlayButton.tsx';
+import {PostAttachment as PostAttachmentType} from '../../types/generated.ts';
 
 interface PostAttachmentProps {
   // Use an interface to define props
-  item: PostAttachmenType;
+  item: PostAttachmentType;
   index: number;
   totalAttachments: number;
+  isAddComment?: boolean;
 }
 
 const PostAttachment: React.FC<PostAttachmentProps> = ({
   item,
   index,
   totalAttachments,
+  isAddComment = false,
 }) => {
   const [hasError, setHasError] = useState(false);
   const [imageAspectRatio, setImageAspectRatio] = useState<number | undefined>(
@@ -89,7 +91,9 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
             style={[
               styles.image,
               {width: 'auto', height: 'auto'},
-              imageAspectRatio !== undefined && {aspectRatio: imageAspectRatio},
+              imageAspectRatio !== undefined && {
+                aspectRatio: isAddComment ? 1 : imageAspectRatio,
+              },
             ]}
             contentFit={'cover'}
             cachePolicy={'memory-disk'}
@@ -112,7 +116,7 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
                 styles.image,
                 {width: 'auto', height: 'auto'},
                 imageAspectRatio !== undefined && {
-                  aspectRatio: imageAspectRatio,
+                  aspectRatio: isAddComment ? 1 : imageAspectRatio,
                 },
               ]}
               contentFit={'cover'}

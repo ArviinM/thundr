@@ -10,20 +10,21 @@ import PostAttachment from './PostAttachment.tsx';
 import HighlightedText from './HighlightedText.tsx';
 import EnhancedImageViewing from './PostItemGallery.tsx';
 import {calculateAspectRatio, calculateWidth} from './communityUtils.ts';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootNavigationParams} from '../../constants/navigator.ts';
+import PostReferencePost from './PostReferencePost.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
+  isFromPost?: boolean;
+  isAddComment?: boolean;
 }
 
-/**
- * Component to display a single post.
- *
- * @param {PostItemProps} props - The props for the component.
- * @param {FeedResponse} props.post - The post data to display.
- * @returns {JSX.Element} - The rendered post component.
- */
-
-const PostItem = ({post}: PostItemProps): JSX.Element => {
+const PostItem = ({
+  post,
+  isFromPost = false,
+  isAddComment = false,
+}: PostItemProps): JSX.Element => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
 
@@ -32,9 +33,19 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
     setIsImageViewerVisible(true);
   };
 
+  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
   return (
     <>
-      <TouchableOpacity activeOpacity={0.8}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        disabled={isFromPost}
+        onPress={() =>
+          navigation.navigate('Post', {
+            snowflakeId: post.snowflakeId,
+            postDetails: post,
+          })
+        }>
         <View
           style={{
             flexDirection: 'row',
@@ -43,8 +54,8 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
             flex: 1,
             gap: scale(6),
           }}>
-          {/* Profile Image */}
-          <View>
+          <View style={{alignItems: 'center'}}>
+            {/* Profile Image */}
             <Image
               source={post.customerPhoto}
               style={{
@@ -54,6 +65,15 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
               }}
               transition={167}
             />
+            {isAddComment && (
+              <View
+                style={{
+                  width: 1,
+                  height: '100%',
+                  backgroundColor: COLORS.black4,
+                }}
+              />
+            )}
           </View>
           <View style={{flex: 1, gap: scale(6)}}>
             {/* Name and Time Bar */}
@@ -93,111 +113,59 @@ const PostItem = ({post}: PostItemProps): JSX.Element => {
                   {
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    gap: scale(2),
-                    borderRadius: 12,
+                    gap: scale(isAddComment ? 1 : 2),
+                    borderRadius: isAddComment ? 0 : 12,
                     overflow: 'hidden',
                   },
                 ]}>
                 {post.attachments.map((attachment, index) => (
                   <TouchableOpacity
                     key={`post-item-attachment-${attachment.attachmentType}-${attachment.id}`}
+                    disabled={isAddComment}
                     activeOpacity={0.8}
                     onPress={() =>
                       attachment.attachmentType !== 'WEB_EMBED' &&
                       openMediaViewer(index)
                     }
                     style={[
-                      {
-                        width: calculateWidth(post.attachments.length, index),
-                        borderColor: COLORS.black4,
-                      },
-                      attachment.attachmentType !== 'WEB_EMBED' && {
-                        aspectRatio: calculateAspectRatio(
+                      !isAddComment && {
+                        width: `${calculateWidth(
                           post.attachments.length,
                           index,
-                          attachment.attachmentWidth,
-                          attachment.attachmentHeight,
-                        ),
+                        )}%`,
+                        borderColor: COLORS.black4,
                       },
+
+                      attachment.attachmentType !== 'WEB_EMBED' &&
+                        isAddComment && {
+                          width: scale(70),
+                          height: scale(70),
+                          aspectRatio: 1,
+                        },
+
+                      attachment.attachmentType !== 'WEB_EMBED' &&
+                        !isAddComment && {
+                          aspectRatio: calculateAspectRatio(
+                            post.attachments.length,
+                            index,
+                            attachment.attachmentWidth,
+                            attachment.attachmentHeight,
+                          ),
+                        },
                     ]}>
                     <PostAttachment
                       item={attachment}
                       index={index}
                       totalAttachments={post.attachments.length}
+                      isAddComment={isAddComment}
                     />
                   </TouchableOpacity>
                 ))}
               </View>
             )}
-            {/* reference post tab */}
+            {/* Post Reference Post or "QUOTE REPOST"  */}
             {post.referencedPost && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  paddingHorizontal: scale(6),
-                  paddingVertical: scale(8),
-                  borderWidth: 1,
-                  borderColor: '#CECECE',
-                  backgroundColor: '#f4f4f4',
-                  borderRadius: 12,
-                  flex: 1,
-                  gap: scale(6),
-                }}>
-                <View>
-                  {/*  Customer Photo  */}
-                  <Image
-                    source={{uri: post.referencedPost.customerPhoto}}
-                    style={{
-                      height: scale(20),
-                      width: scale(20),
-                      borderRadius: 50,
-                    }}
-                    cachePolicy={'memory-disk'}
-                  />
-                </View>
-                <View style={{flex: 1, gap: scale(6)}}>
-                  {/* Name and Time Bar */}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: scale(6),
-                    }}>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-Bold',
-                        fontSize: scale(13),
-                        color: COLORS.black,
-                      }}>
-                      {post.referencedPost.customerName}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-Light',
-                        fontSize: scale(9),
-                        color: COLORS.black2,
-                      }}>
-                      {formatDistanceToNow(
-                        new Date(post.referencedPost.createdAt),
-                        {
-                          addSuffix: true,
-                        },
-                      )}
-                    </Text>
-                  </View>
-                  {/*Content PostItem*/}
-                  <View>
-                    <Text
-                      style={{
-                        fontFamily: 'Montserrat-Medium',
-                        fontSize: scale(13),
-                        color: COLORS.black,
-                      }}>
-                      {post.referencedPost.content}
-                    </Text>
-                  </View>
-                </View>
-              </View>
+              <PostReferencePost referencePost={post.referencedPost} />
             )}
             {/* PostItem Actions */}
             <PostActionsBar likes={0} comments={0} repost={0} />

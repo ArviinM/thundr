@@ -8,13 +8,7 @@ import {FlashList} from '@shopify/flash-list';
 import {useGetAllPost} from '../../../hooks/community/useGetAllPost.ts';
 import {FeedResponse} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
-import {Pressable} from 'react-native-gesture-handler';
 
-/**
- * Feed component displays a list of posts from the community.
- * It fetches the posts using the useGetAllPost hook and renders each post using the PostItem component.
- * If the posts are still loading, it displays a loading spinner.
- */
 const Feed = () => {
   // Get the loading state from the useCommunity hook
   const {loading} = useCommunity();
@@ -51,7 +45,7 @@ const Feed = () => {
         renderItem={renderItem}
         data={community.data}
         estimatedItemSize={286}
-        ListHeaderComponent={<CreatePostBar />}
+        ListHeaderComponent={<CreatePostBar actionTitle={'Share a post'} />}
       />
     </SafeAreaView>
   );

@@ -8,25 +8,27 @@ export const processDomain = (domain: string | null): string | null => {
   return domain;
 };
 
-export const calculateWidth = (totalAttachments: number, index: number) => {
+export const calculateWidth = (
+  totalAttachments: number,
+  index: number,
+): number => {
   if (totalAttachments === 1) {
-    return '100%';
+    return 100;
   }
   if (totalAttachments === 2) {
-    return '49.66%';
+    return 49.66;
   }
   if (totalAttachments === 3 && index === 0) {
-    return '100%';
+    return 100;
   }
   if (totalAttachments === 3 && index > 0) {
-    return '49.66%';
+    return 49.66;
   }
   if (totalAttachments === 4) {
-    return '49.66%';
+    return 49.66;
   }
-  return '100%'; // Default case
+  return 100; // Default case
 };
-
 export const calculateAspectRatio = (
   totalAttachments: number,
   index: number,

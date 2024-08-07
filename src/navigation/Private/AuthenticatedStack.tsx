@@ -19,13 +19,13 @@ import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
 import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
 import ThundrBolt from '../../screens/Private/ThundrBolt/ThundrBolt.tsx';
 import {ChatMessages} from '../../screens/Private/Chat/ChatMessages.tsx';
-import WorkingInProgress from '../../screens/shared/WorkingInProgress.tsx';
 import {FaceVerificationStack} from './Home/Stack/FaceVerificationStack.tsx';
 import {ChevronLeftSmall} from '../../assets/images/ChevronLeftSmall.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {scale} from '../../utils/utils.ts';
 import {CommunityProvider} from '../../providers/Community.tsx';
 import CreatePost from '../../screens/Private/Community/CreatePost.tsx';
+import Post from '../../screens/Private/Community/Post.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -143,8 +143,32 @@ export const AuthenticatedStack = () => {
           <Stack.Screen
             name="CreatePost"
             component={CreatePost}
+            options={({route}: any) => ({
+              headerTitle: route.params?.screenTitle || 'Create Post',
+              headerLeft: () => <HomeLeftHeader />,
+              headerStyle: {
+                backgroundColor: COLORS.white,
+              },
+              headerTitleStyle: {
+                fontFamily: 'Montserrat-Bold',
+                fontSize: scale(14),
+              },
+              headerShown: true,
+              headerTitleAlign: 'center',
+              headerShadowVisible: false,
+            })}
+          />
+          {/*  Stack Screen for Face Verification  */}
+          <Stack.Screen
+            name="FaceVerificationStack"
+            component={FaceVerificationStack}
+          />
+
+          <Stack.Screen
+            name="Post"
+            component={Post}
             options={{
-              headerTitle: 'Create Post',
+              headerTitle: 'Post',
               headerLeft: () => <HomeLeftHeader />,
               headerStyle: {
                 backgroundColor: COLORS.white,
@@ -157,12 +181,6 @@ export const AuthenticatedStack = () => {
               headerTitleAlign: 'center',
               headerShadowVisible: false,
             }}
-          />
-          {/*  Stack Screen for Face Verification  */}
-          <Stack.Screen
-            name="FaceVerificationStack"
-            options={{headerShown: false}}
-            component={FaceVerificationStack}
           />
         </Stack.Group>
       </Stack.Navigator>

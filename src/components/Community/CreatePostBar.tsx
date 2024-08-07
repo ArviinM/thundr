@@ -1,27 +1,49 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootNavigationParams} from '../../constants/navigator.ts';
 import {useCommunity} from '../../providers/Community.tsx';
 import {Image} from 'expo-image';
 import {scale} from '../../utils/utils.ts';
 import Button from '../shared/Button.tsx';
 import {ImagesIcon} from '../../assets/images/chat/ImagesIcon.tsx';
 import {COLORS} from '../../constants/commons.ts';
+import {RootNavigationParams} from '../../constants/navigator.ts';
+import {FeedResponse} from '../../types/generated.ts';
 
-const CreatePostBar = () => {
+interface CreatePostCommentBarProps {
+  actionTitle: string;
+  isComment?: boolean;
+  referenceId?: string;
+  postDetails?: FeedResponse;
+}
+
+const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
+  actionTitle,
+  isComment = false,
+  referenceId,
+  postDetails,
+}) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const {profileData} = useCommunity();
 
   const sortedCustomerImages = profileData?.customerPhoto.sort((a, b) => {
     if (a.primary) {
       return -1;
-    } // Primary photo comes first
+    }
     if (b.primary) {
       return 1;
     }
-    return 0; // Maintain original order for non-primary photos
+    return 0;
   });
+
+  const handlePress = () => {
+    navigation.navigate('CreatePost', {
+      isComment,
+      referenceId,
+      screenTitle: isComment ? 'Add Comment' : 'Create Post',
+      postDetails: postDetails,
+    });
+  };
 
   return (
     <View
@@ -34,7 +56,6 @@ const CreatePostBar = () => {
         paddingBottom: scale(6),
       }}>
       <TouchableOpacity onPress={() => navigation.navigate('ProfileStack')}>
-        {/*  Profile Image  */}
         {sortedCustomerImages && (
           <Image
             source={sortedCustomerImages[0].photoUrl}
@@ -44,10 +65,9 @@ const CreatePostBar = () => {
           />
         )}
       </TouchableOpacity>
-      {/*   Button  */}
       <Button
-        onPress={() => navigation.navigate('CreatePost')}
-        text={'Share a post'}
+        onPress={handlePress}
+        text={actionTitle}
         buttonStyle={{
           width: scale(260),
           height: scale(35),
@@ -67,11 +87,10 @@ const CreatePostBar = () => {
         }}
       />
       <View>
-        {/*  Image Gallery Button  */}
         <ImagesIcon color={COLORS.black} />
       </View>
     </View>
   );
 };
 
-export default CreatePostBar;
+export default CreatePostCommentBar;
