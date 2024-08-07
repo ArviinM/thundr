@@ -812,5 +812,6 @@ export type ReplyRequest = {
   privacySettings?: PrivacySettings;
   inCommunity?: string;
   parentPostId: string;
+  topLevelPostId: string;
   media: FileAttachment[];
 };
