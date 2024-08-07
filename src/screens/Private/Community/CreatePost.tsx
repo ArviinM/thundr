@@ -91,8 +91,10 @@ const CreatePost = ({route}: CreatePostParams) => {
           sub: profileData.sub,
           content: data.postContent,
           media: formattedMediaData,
+          inCommunity: 1,
           parentPostId: postDetails.snowflakeId,
           topLevelPostId: postDetails.snowflakeId,
+          privacySettings: 'PUBLIC',
         });
       }
 
@@ -104,7 +106,7 @@ const CreatePost = ({route}: CreatePostParams) => {
         position: 'top',
         topOffset: insets.top,
       });
-      await query.invalidateQueries({queryKey: ['get-all-post']});
+      await query.invalidateQueries({queryKey: ['get-latest-posts']});
       navigation.navigate('FeedStack');
       setPostLoading(false);
     }

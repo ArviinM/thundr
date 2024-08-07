@@ -5,19 +5,21 @@ import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
 import {TouchableOpacity} from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
 import VerifyProfileInstructions from '../../../../screens/Private/FaceVerification/VerifyProfileInstructions.tsx';
 import TakeAPhoto from '../../../../screens/Private/FaceVerification/TakeAPhoto.tsx';
 import ReviewPhoto from '../../../../screens/Private/FaceVerification/ReviewPhoto.tsx';
 import {ChevronLeftSmallWhite} from '../../../../assets/images/ChevronLeftSmallWhite.tsx';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 export const FaceVerificationStack = () => {
-  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
 
   function HomeLeftHeader() {
     return (
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={() => navigation.pop()}
         hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
         <ChevronLeftSmall />
       </TouchableOpacity>

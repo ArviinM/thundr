@@ -793,7 +793,7 @@ export type FeedResponse = {
   customerName: string; // Definitely user-related
 
   // Stats Section  (Consider if you want this directly on the PostResponse)
-  // commentCount?: number; // not yet done
+  commentCount?: number;
   likeCount?: number;
   repostCount?: number;
 };
@@ -809,8 +809,8 @@ export type CreatePostParams = {
 export type ReplyRequest = {
   sub: string;
   content: string;
-  privacySettings?: PrivacySettings;
-  inCommunity?: string;
+  privacySettings: PrivacySettings;
+  inCommunity: number;
   parentPostId: string;
   topLevelPostId: string;
   media: FileAttachment[];
@@ -819,4 +819,10 @@ export type ReplyRequest = {
 export type GetReplyRequest = {
   sub: string;
   snowflakeId: string;
+  beforeId?: string;
+};
+
+export type GetFeedRequest = {
+  sub: string;
+  beforeId?: string;
 };

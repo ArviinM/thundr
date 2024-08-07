@@ -14,6 +14,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import PostReferencePost from './PostReferencePost.tsx';
 import {useCommunity} from '../../providers/Community.tsx';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface PostItemProps {
   post: FeedResponse;
@@ -25,7 +26,7 @@ const PostItem = ({
   post,
   isFromPost = false,
   isAddComment = false,
-}: PostItemProps): JSX.Element => {
+}: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
 
@@ -34,7 +35,8 @@ const PostItem = ({
     setIsImageViewerVisible(true);
   };
 
-  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
   const {isUserVerified, showModal} = useCommunity();
 
   return (
@@ -44,7 +46,7 @@ const PostItem = ({
         disabled={isFromPost}
         onPress={() => {
           if (isUserVerified) {
-            navigation.navigate('Post', {
+            navigation.push('Post', {
               snowflakeId: post.snowflakeId,
               postDetails: post,
             });
@@ -182,7 +184,11 @@ const PostItem = ({
             )}
             {/* PostItem Actions */}
             {!isAddComment && (
-              <PostActionsBar likes={0} comments={0} repost={0} />
+              <PostActionsBar
+                likes={post.likeCount}
+                comments={post.commentCount}
+                repost={post.repostCount}
+              />
             )}
           </View>
         </View>
