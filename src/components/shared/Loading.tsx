@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
-import {COLORS} from '../../constants/commons.ts';
 // TODO: Temporary Loading Screen
 export const Loading = () => {
   return (

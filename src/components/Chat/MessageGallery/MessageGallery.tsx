@@ -68,12 +68,12 @@ const MessageGallery: React.FC<MessageGalleryProps> = ({
     ],
   }));
 
-  const edges = useMemo(() => {
-    if (Platform.OS === 'android') {
-      return ['top', 'bottom', 'left', 'right'] satisfies Edge[];
-    }
-    return ['left', 'right'] satisfies Edge[]; // iOS, so no top/bottom safe area
-  }, []);
+  // const edges = useMemo(() => {
+  //   if (Platform.OS === 'android') {
+  //     return ['top', 'bottom', 'left', 'right'] satisfies Edge[];
+  //   }
+  //   return ['left', 'right'] satisfies Edge[]; // iOS, so no top/bottom safe area
+  // }, []);
 
   const onTap = useCallback(() => {
     setShowControls(show => !show);
@@ -143,8 +143,7 @@ const MessageGallery: React.FC<MessageGalleryProps> = ({
         style={{
           flex: 1,
           backgroundColor: 'rgba(255,255,255,0.94)',
-        }}
-        edges={edges}>
+        }}>
         <Animated.View
           style={[
             styles.header,

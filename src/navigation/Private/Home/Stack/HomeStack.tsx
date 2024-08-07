@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {lazy, Suspense, useRef} from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
@@ -11,10 +11,19 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {IMAGES} from '../../../../constants/images.ts';
-import Home from '../../../../screens/Private/Home/Home.tsx';
 import Notification from '../../../../screens/Private/Notification/Notification.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 import Filters from '../../../../screens/Private/Filters/Filters.tsx';
+import {Loading} from '../../../../components/shared/Loading.tsx';
+
+// @ts-ignore
+const Home = lazy(() => import('../../../../screens/Private/Home/Home.tsx'));
+const LazyHome = () => (
+  <Suspense fallback={<Loading />}>
+    <Home />
+  </Suspense>
+);
+
 export const HomeStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
@@ -88,7 +97,7 @@ export const HomeStack = () => {
       screenOptions={{headerTitleAlign: 'center', gestureEnabled: false}}>
       <Stack.Screen
         name="Home"
-        component={Home}
+        component={LazyHome}
         options={{
           headerLeft: () => <HomeLeftHeader />,
           headerTitle: () => <Header />,

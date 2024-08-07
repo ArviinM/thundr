@@ -7,12 +7,15 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {
   Chat,
   CompatibilityQuestionsRequest,
+  CreatePostParams,
   CustomerData,
   EmailValidationResponse,
   EmailVerificationResponse,
+  FeedResponse,
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
+import {PostParams} from '../screens/Private/Community/Post.tsx';
 
 export const Stack = createNativeStackNavigator();
 export const Tab = createBottomTabNavigator();
@@ -112,6 +115,18 @@ export type RootNavigationParams = {
   Advocacy: undefined;
   AdvocacyDonate: undefined;
 
+  // Community Tab
+  CommunityTop: undefined;
+
+  //PostItem Creation
+  CreatePost: {
+    isComment: boolean;
+    referenceId?: string;
+    screenTitle: string;
+    postDetails?: FeedResponse;
+    isOpenGallery?: boolean;
+  };
+
   //Feed Stack
   FeedStack: undefined;
 
@@ -119,4 +134,7 @@ export type RootNavigationParams = {
   FaceVerificationStack: undefined;
   TakeAPhoto: undefined;
   ReviewPhoto: {photoPath: string};
+
+  //Post View
+  Post: PostParams;
 };

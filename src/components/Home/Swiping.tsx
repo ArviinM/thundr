@@ -80,6 +80,7 @@ const Swiping = ({
   });
 
   const mareGesture = Gesture.Pan()
+    .runOnJS(true)
     .enabled(!jowaPressed.value)
     .minPointers(1)
     .maxPointers(1)
@@ -158,6 +159,7 @@ const Swiping = ({
     });
 
   const jowaGesture = Gesture.Pan()
+    .runOnJS(true)
     .enabled(!marePressed.value)
     .minPointers(1)
     .maxPointers(1)

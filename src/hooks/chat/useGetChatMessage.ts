@@ -9,7 +9,6 @@ import {
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';
 import {transformChatMessageForGiftedChat} from './transformMessage.ts';
-// import {IMessage} from 'react-native-gifted-chat';
 
 export function useGetChatMessage(props: ChatMessageRequest) {
   const axiosInstance = useAxiosWithAuth();

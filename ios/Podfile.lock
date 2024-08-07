@@ -28,6 +28,8 @@ PODS:
     - React-NativeModulesApple
     - React-RCTAppDelegate
     - ReactCommon/turbomodule/core
+  - ExpoVideoThumbnails (7.9.0):
+    - ExpoModulesCore
   - FBLazyVector (0.73.6)
   - FBReactNativeSpec (0.73.6):
     - RCT-Folly (= 2022.05.16.00)
@@ -1078,7 +1080,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-pager-view (6.3.0):
+  - react-native-pager-view (6.2.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1294,7 +1296,7 @@ PODS:
     - RNFBApp
   - RNFlashList (1.6.4):
     - React-Core
-  - RNGestureHandler (2.16.0):
+  - RNGestureHandler (2.18.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1314,7 +1316,7 @@ PODS:
     - React-Core
   - RNPermissions (4.1.5):
     - React-Core
-  - RNReanimated (3.8.1):
+  - RNReanimated (3.14.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1358,6 +1360,7 @@ DEPENDENCIES:
   - ExpoImage (from `../node_modules/expo-image/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoVideoThumbnails (from `../node_modules/expo-video-thumbnails/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Firebase
@@ -1489,6 +1492,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoVideoThumbnails:
+    :path: "../node_modules/expo-video-thumbnails/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -1647,6 +1652,7 @@ SPEC CHECKSUMS:
   ExpoImage: 8cf2d51de3d03b7e984e9b0ba8f19c0c22057001
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoModulesCore: 370096473359f5f6aade0871400d063333747719
+  ExpoVideoThumbnails: 9b6c0dada0b3240dd3527e0dc688711e17842c88
   FBLazyVector: f64d1e2ea739b4d8f7e4740cde18089cd97fe864
   FBReactNativeSpec: 9f2b8b243131565335437dba74923a8d3015e780
   Firebase: 91fefd38712feb9186ea8996af6cbdef41473442
@@ -1695,7 +1701,7 @@ SPEC CHECKSUMS:
   react-native-blur: 73561b0608a43d76f2874738aee8e3909c11d083
   react-native-geolocation: fff5fb51dd294e845aa203c2e747958421425087
   react-native-keyboard-controller: f9633273f608756bbe5bfbd040f8de0d3e545067
-  react-native-pager-view: 571ecf3212955c0f81314163d690af153d67f527
+  react-native-pager-view: 3796df305c59c352a26811ead0f6ea78acac1886
   react-native-quick-base64: fe6a518db3c0ceb4097a8c9b28a26d0768e91695
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-stroke-text: 0add13c67de1ee187508de324970dbf3a727af5a
@@ -1729,11 +1735,11 @@ SPEC CHECKSUMS:
   RNFBApp: 91311b27bc9a33e23b76a62825afd1635501018a
   RNFBMessaging: e86747e8bba79cb464f3f1f22aaae19f38ee7397
   RNFlashList: b521ebdd7f9352673817f1d98e8bdc0c8cf8545b
-  RNGestureHandler: 0c8b0283d2aff561162b2f55c604d2f1f8e2c4ea
+  RNGestureHandler: 9a413b04f827e0169f0f9f97a845c266da61f87c
   RNImageCropPicker: 601604515fd6fbba318147b0a56aed0be9379415
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNPermissions: 6265c45ed75c1b793e421f56b0efae1e648fc64f
-  RNReanimated: de95bb2cf26ccfa2b6fdf7e1a57158fb5c9d9515
+  RNReanimated: bdad5bb985369b2661a63f9e928faf78443bf37f
   RNScreens: 97a2a32820e632c5978d75250afa397ed9053910
   RNSVG: cb24fb322de8c1ebf59904e7aca0447bb8dbed5a
   SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9

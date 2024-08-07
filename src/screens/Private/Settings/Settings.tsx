@@ -140,6 +140,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Change Password
             </Text>
@@ -168,6 +169,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Manage Subscriptions
             </Text>
@@ -180,6 +182,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Deactivate Account
             </Text>
@@ -198,6 +201,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               In-app notification
             </Text>
@@ -211,6 +215,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Email notification
             </Text>
@@ -231,6 +236,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Terms & Conditions
             </Text>
@@ -243,6 +249,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Privacy Policy
             </Text>
@@ -260,6 +267,7 @@ const Settings = () => {
               style={{
                 fontFamily: 'Montserrat-SemiBold',
                 fontSize: scale(14),
+                color: COLORS.black,
               }}>
               Contact Us
             </Text>

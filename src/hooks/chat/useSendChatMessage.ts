@@ -94,10 +94,7 @@ export function useSendChatMessage() {
         replyingId: data.replyingToId,
         reactions: [],
         isUnsent: false,
-        // type: data.type,
       });
-
-      console.log(JSON.stringify(newMessage, null, 2));
 
       queryClient.setQueriesData(
         {queryKey: ['get-chat-message']},

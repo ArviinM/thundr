@@ -141,7 +141,7 @@ const ReviewPhoto = ({route}: ReviewPhotoProps) => {
                     queryKey: ['get-customer-profile'],
                   });
 
-                  navigation.navigate('FeedStack');
+                  navigation.navigate('CommunityTop');
                 }
               } catch (e) {
                 console.error(e);
