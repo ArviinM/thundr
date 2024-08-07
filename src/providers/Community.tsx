@@ -7,17 +7,15 @@ import React, {
 } from 'react';
 import {useAuth} from './Auth.tsx';
 import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
-import {
-  CustomerData,
-  FacialVerificationState,
-  PostRequest,
-} from '../types/generated.ts';
+import {CustomerData, PostRequest, ReplyRequest} from '../types/generated.ts';
 import {useCreatePost} from '../hooks/community/useCreatePost.ts';
 import {UseMutationResult} from '@tanstack/react-query';
 import {useGetFacialVerificationState} from '../hooks/faceverification/useGetFacialVerificationState.ts';
+import {useReplyPost} from '../hooks/community/useReplyPost.ts';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
+  replyPost: UseMutationResult<any, any, ReplyRequest, unknown>;
   profileData?: CustomerData;
   showModal: () => void;
   hideModal: () => void;
@@ -45,6 +43,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   });
 
   const createPost = useCreatePost();
+  const replyPost = useReplyPost();
 
   const showModal = () => {
     setModalVisible(true);
@@ -64,6 +63,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     <CommunityContext.Provider
       value={{
         createPost: createPost,
+        replyPost: replyPost,
         showModal,
         hideModal,
         loading: customerProfile.isLoading,
