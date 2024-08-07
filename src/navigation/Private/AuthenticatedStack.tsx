@@ -26,6 +26,7 @@ import {scale} from '../../utils/utils.ts';
 import {CommunityProvider} from '../../providers/Community.tsx';
 import CreatePost from '../../screens/Private/Community/CreatePost.tsx';
 import Post from '../../screens/Private/Community/Post.tsx';
+import FaceVerificationModal from '../../screens/Private/FaceVerification/FaceVerificationModal.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -184,6 +185,7 @@ export const AuthenticatedStack = () => {
           />
         </Stack.Group>
       </Stack.Navigator>
+      <FaceVerificationModal />
     </CommunityProvider>
   );
 };

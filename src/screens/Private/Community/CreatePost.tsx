@@ -47,6 +47,7 @@ const CreatePost = ({route}: CreatePostParams) => {
 
   const postDetails = route?.params.postDetails;
   const isComment = route?.params.isComment;
+  const isOpenGallery = route?.params.isOpenGallery;
 
   const {
     control,
@@ -189,6 +190,12 @@ const CreatePost = ({route}: CreatePostParams) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isOpenGallery) {
+      setTimeout(() => openMediaPicker(), 100);
+    }
+  }, [isOpenGallery]);
+
   return (
     <View
       style={{
@@ -251,7 +258,6 @@ const CreatePost = ({route}: CreatePostParams) => {
                       textAlignVertical: 'top',
                       color: COLORS.black2,
                       verticalAlign: 'top',
-                      height: scale(167),
                     }}
                     keyboardAppearance={'light'}
                     textAlignVertical="top"

@@ -13,6 +13,7 @@ import {calculateAspectRatio, calculateWidth} from './communityUtils.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import PostReferencePost from './PostReferencePost.tsx';
+import {useCommunity} from '../../providers/Community.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
@@ -34,18 +35,25 @@ const PostItem = ({
   };
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const {isUserVerified, showModal} = useCommunity();
 
   return (
     <>
       <TouchableOpacity
         activeOpacity={0.8}
         disabled={isFromPost}
-        onPress={() =>
-          navigation.navigate('Post', {
-            snowflakeId: post.snowflakeId,
-            postDetails: post,
-          })
-        }>
+        onPress={() => {
+          if (isUserVerified) {
+            navigation.navigate('Post', {
+              snowflakeId: post.snowflakeId,
+              postDetails: post,
+            });
+          }
+
+          if (!isUserVerified) {
+            showModal();
+          }
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -123,10 +131,15 @@ const PostItem = ({
                     key={`post-item-attachment-${attachment.attachmentType}-${attachment.id}`}
                     disabled={isAddComment}
                     activeOpacity={0.8}
-                    onPress={() =>
+                    onPress={() => {
                       attachment.attachmentType !== 'WEB_EMBED' &&
-                      openMediaViewer(index)
-                    }
+                        isUserVerified &&
+                        openMediaViewer(index);
+
+                      if (!isUserVerified) {
+                        showModal();
+                      }
+                    }}
                     style={[
                       !isAddComment && {
                         width: `${calculateWidth(

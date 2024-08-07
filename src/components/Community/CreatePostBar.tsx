@@ -36,12 +36,13 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
     return 0;
   });
 
-  const handlePress = () => {
+  const handlePress = (isOpenGallery?: boolean) => {
     navigation.navigate('CreatePost', {
       isComment,
       referenceId,
       screenTitle: isComment ? 'Add Comment' : 'Create Post',
       postDetails: postDetails,
+      isOpenGallery,
     });
   };
 
@@ -66,7 +67,7 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
         )}
       </TouchableOpacity>
       <Button
-        onPress={handlePress}
+        onPress={() => handlePress(false)}
         text={actionTitle}
         buttonStyle={{
           width: scale(260),
@@ -86,9 +87,9 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
           color: COLORS.black,
         }}
       />
-      <View>
+      <TouchableOpacity activeOpacity={0.6} onPress={() => handlePress(true)}>
         <ImagesIcon color={COLORS.black} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
