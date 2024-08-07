@@ -20,7 +20,6 @@ export function useReplyPost() {
       formData.append('sub', data.sub);
       formData.append('content', data.content);
       formData.append('inCommunity', data.inCommunity.toString());
-      formData.append('content', data.content);
       formData.append('parentPostId', data.parentPostId);
       formData.append('topLevelPostId', data.topLevelPostId);
       formData.append('privacySettings', data.privacySettings);

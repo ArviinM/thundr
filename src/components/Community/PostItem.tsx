@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FeedResponse} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
@@ -15,6 +15,10 @@ import {RootNavigationParams} from '../../constants/navigator.ts';
 import PostReferencePost from './PostReferencePost.tsx';
 import {useCommunity} from '../../providers/Community.tsx';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
+import ReusableBottomSheetModal from '../shared/ReusableBottomSheetModal.tsx';
+import Button from '../shared/Button.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
@@ -38,6 +42,22 @@ const PostItem = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
   const {isUserVerified, showModal} = useCommunity();
+
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const handleOpenReportBSheet = () => {
+    moreOptionsBSheet.current?.dismiss();
+    bottomSheetRef.current?.present();
+  };
+
+  const moreOptionsBSheet = useRef<BottomSheetModal>(null);
+  const handlOpenMoreOptions = useCallback(() => {
+    moreOptionsBSheet.current?.present();
+  }, []);
+
+  const repostOptionsBSheet = useRef<BottomSheetModal>(null);
+  const handleOpenRepostOptions = useCallback(() => {
+    repostOptionsBSheet.current?.present();
+  }, []);
 
   return (
     <>
@@ -188,6 +208,11 @@ const PostItem = ({
                 likes={post.likeCount}
                 comments={post.commentCount}
                 repost={post.repostCount}
+                isReposted={post.isReposted}
+                isLiked={post.isLiked}
+                postId={post.snowflakeId}
+                handleMoreOptions={handlOpenMoreOptions}
+                handleRepostOptions={handleOpenRepostOptions}
               />
             )}
           </View>
@@ -205,8 +230,77 @@ const PostItem = ({
           createdAt: post.createdAt,
         }}
       />
+
+      <ReusableBottomSheetModal ref={repostOptionsBSheet} snapPoints={['25%']}>
+        <View style={{gap: scale(10)}}>
+          <Button
+            onPress={() => console.log('Quote Repost')}
+            text={'Quote Repost'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+          <Button
+            onPress={() => console.log('Repost')}
+            text={'Repost'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+          <Button
+            onPress={() => repostOptionsBSheet.current?.dismiss()}
+            text={'Cancel'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+        </View>
+      </ReusableBottomSheetModal>
+
+      <ReusableBottomSheetModal ref={moreOptionsBSheet} snapPoints={['25%']}>
+        <View style={{gap: scale(10)}}>
+          <Button
+            onPress={() => console.log('Share Post')}
+            text={'Share Post'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+          <Button
+            onPress={handleOpenReportBSheet}
+            text={'Report Post'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+          <Button
+            onPress={() => moreOptionsBSheet.current?.dismiss()}
+            text={'Cancel'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+        </View>
+      </ReusableBottomSheetModal>
+
+      <ReportBottomSheetModal
+        ref={bottomSheetRef}
+        sub={post.sub}
+        category={'FEED'}
+        name={post.customerName}
+      />
     </>
   );
 };
 
 export default PostItem;
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    borderWidth: 1,
+    borderRadius: scale(16),
+    borderColor: COLORS.gray5,
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(8),
+    backgroundColor: '#f5f5f5',
+  },
+  textStyle: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: scale(13),
+    color: COLORS.black,
+  },
+});

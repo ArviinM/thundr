@@ -31,6 +31,7 @@ const Post: React.FC<PostProps> = ({route}) => {
   const getReplies = useGetReplies({
     sub: authData?.sub || '',
     snowflakeId: route?.params?.snowflakeId || '',
+    beforeId: undefined,
   });
 
   const renderItem = useCallback(

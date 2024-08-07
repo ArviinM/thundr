@@ -12,10 +12,12 @@ import {useCreatePost} from '../hooks/community/useCreatePost.ts';
 import {UseMutationResult} from '@tanstack/react-query';
 import {useGetFacialVerificationState} from '../hooks/faceverification/useGetFacialVerificationState.ts';
 import {useReplyPost} from '../hooks/community/useReplyPost.ts';
+import {useLikePost} from '../hooks/community/useLikePost.ts';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
   replyPost: UseMutationResult<any, any, ReplyRequest, unknown>;
+  likeThePost: (likeThePost: string) => Promise<void>;
   profileData?: CustomerData;
   showModal: () => void;
   hideModal: () => void;
@@ -44,6 +46,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
 
   const createPost = useCreatePost();
   const replyPost = useReplyPost();
+  const likePost = useLikePost();
 
   const showModal = () => {
     setModalVisible(true);
@@ -51,6 +54,13 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
 
   const hideModal = () => {
     setModalVisible(false);
+  };
+
+  const likeThePost = async (postId: string) => {
+    if (auth.authData) {
+      await likePost.mutateAsync({sub: auth.authData.sub, postId: postId});
+      console.log('post liked ata');
+    }
   };
 
   useEffect(() => {
@@ -64,6 +74,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
       value={{
         createPost: createPost,
         replyPost: replyPost,
+        likeThePost,
         showModal,
         hideModal,
         loading: customerProfile.isLoading,

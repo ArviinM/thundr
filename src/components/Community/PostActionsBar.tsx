@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
 import {LightningIcon} from '../../assets/images/tab_icons/LightningIcon.tsx';
@@ -7,18 +7,31 @@ import {Like} from '../../assets/images/community/Like.tsx';
 import {Comment} from '../../assets/images/community/Comment.tsx';
 import {Repost} from '../../assets/images/community/Repost.tsx';
 import {Report} from '../../assets/images/community/ReportIcon.tsx';
+import {useCommunity} from '../../providers/Community.tsx';
 
 interface PostActionsProps {
   likes?: number;
   comments?: number;
   repost?: number;
+  isLiked?: boolean;
+  isReposted?: boolean;
+  postId: string;
+  handleMoreOptions?: () => void;
+  handleRepostOptions?: () => void;
 }
 
 const PostActionsBar = ({
   likes = 0,
   comments = 0,
   repost = 0,
+  isLiked = false,
+  isReposted = false,
+  postId,
+  handleMoreOptions,
+  handleRepostOptions,
 }: PostActionsProps) => {
+  const {likeThePost} = useCommunity();
+
   return (
     <View
       style={{
@@ -29,28 +42,36 @@ const PostActionsBar = ({
       <View style={{flexDirection: 'row', gap: scale(13), marginTop: scale(3)}}>
         <TouchableOpacity
           style={styles.elemActions}
-          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-          <Like focused={true} />
+          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
+          onPress={async () => {
+            if (postId !== undefined) {
+              await likeThePost(postId);
+            }
+          }}>
+          <Like focused={isLiked} />
           <Text style={styles.text}>{likes}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.elemActions}
           hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-          <TouchableOpacity>
+          <View>
             <Comment />
-          </TouchableOpacity>
+          </View>
           <Text style={styles.text}>{comments}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.elemActions}
-          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-          <TouchableOpacity>
-            <Repost />
-          </TouchableOpacity>
+          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
+          onPress={handleRepostOptions}>
+          <View>
+            <Repost focused={isReposted} />
+          </View>
           <Text style={styles.text}> {repost}</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
+      <TouchableOpacity
+        hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
+        onPress={handleMoreOptions}>
         <Report />
         {/*<Text style={styles.text}></Text>*/}
       </TouchableOpacity>

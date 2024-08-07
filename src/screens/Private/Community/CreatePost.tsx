@@ -107,7 +107,7 @@ const CreatePost = ({route}: CreatePostParams) => {
         topOffset: insets.top,
       });
       await query.invalidateQueries({queryKey: ['get-latest-posts']});
-      navigation.navigate('FeedStack');
+      navigation.goBack();
       setPostLoading(false);
     }
   };

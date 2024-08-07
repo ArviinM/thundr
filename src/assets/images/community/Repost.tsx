@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
-export const Repost = () => {
+import {COLORS} from '../../../constants/commons.ts';
+export const Repost = (props: {focused: boolean}) => {
   return (
     <Svg width={13} height={16} fill="none">
       <Path
-        stroke="#000"
+        stroke={props.focused ? COLORS.inverted : '#000'}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeOpacity={0.66}

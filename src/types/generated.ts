@@ -796,6 +796,12 @@ export type FeedResponse = {
   commentCount?: number;
   likeCount?: number;
   repostCount?: number;
+
+  isLiked?: boolean;
+  isReposted?: boolean;
+  topLevelPostId: bigint | null;
+  parentPostId: bigint | null;
+  topLevelReplies: FeedResponse[] | null;
 };
 
 // Define the params for the CreatePost route
@@ -826,3 +832,8 @@ export type GetFeedRequest = {
   sub: string;
   beforeId?: string;
 };
+
+export type LikePost = {
+  sub: string;
+  postId: string
+}
