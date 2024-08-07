@@ -181,7 +181,9 @@ const PostItem = ({
               <PostReferencePost referencePost={post.referencedPost} />
             )}
             {/* PostItem Actions */}
-            <PostActionsBar likes={0} comments={0} repost={0} />
+            {!isAddComment && (
+              <PostActionsBar likes={0} comments={0} repost={0} />
+            )}
           </View>
         </View>
       </TouchableOpacity>
