@@ -24,7 +24,7 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
   postDetails,
 }) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
-  const {profileData} = useCommunity();
+  const {profileData, isUserVerified, showModal} = useCommunity();
 
   const sortedCustomerImages = profileData?.customerPhoto.sort((a, b) => {
     if (a.primary) {
@@ -67,7 +67,13 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
         )}
       </TouchableOpacity>
       <Button
-        onPress={() => handlePress(false)}
+        onPress={() => {
+          if (isUserVerified) {
+            handlePress(false);
+          } else {
+            showModal();
+          }
+        }}
         text={actionTitle}
         buttonStyle={{
           width: scale(260),
@@ -87,7 +93,15 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
           color: COLORS.black,
         }}
       />
-      <TouchableOpacity activeOpacity={0.6} onPress={() => handlePress(true)}>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        onPress={() => {
+          if (isUserVerified) {
+            handlePress(true);
+          } else {
+            showModal();
+          }
+        }}>
         <ImagesIcon color={COLORS.black} />
       </TouchableOpacity>
     </View>
