@@ -10,8 +10,8 @@ export function useLikePost() {
 
   return useMutation({
     mutationKey: ['like-post'],
-    mutationFn: async (data: LikePost): Promise<string> => {
-      const response: AxiosResponse<BaseResponse<string>> =
+    mutationFn: async (data: LikePost): Promise<boolean> => {
+      const response: AxiosResponse<BaseResponse<boolean>> =
         await axiosInstance.post('/community/like', data);
 
       if (response.status !== HttpStatusCode.Ok) {
@@ -39,10 +39,10 @@ export function useLikePost() {
             if (post.snowflakeId === data.postId) {
               return {
                 ...post,
-                isLiked: !post.isLiked,
-                likeCount: post.isLiked
-                  ? (post.likeCount || 1) - 1
-                  : (post.likeCount || 0) + 1,
+                isLiked: data.isLiked,
+                likeCount: data.isLiked
+                  ? (post.likeCount || 0) + 1
+                  : Math.max((post.likeCount || 0) - 1, 0),
               };
             }
             return post;
@@ -57,5 +57,33 @@ export function useLikePost() {
         },
       );
     },
+    // onSuccess: (isLiked: boolean, variables: LikePost) => {
+    //   queryClient.setQueriesData(
+    //     {queryKey: ['get-latest-posts']},
+    //     (oldData: any) => {
+    //       if (!oldData || !oldData.pages) {
+    //         return oldData;
+    //       }
+    //
+    //       const updatePost = (post: FeedResponse) => {
+    //         if (post.snowflakeId === variables.postId) {
+    //           return {
+    //             ...post,
+    //             isLiked: isLiked,
+    //             likeCount: post.likeCount,
+    //           };
+    //         }
+    //         return post;
+    //       };
+    //
+    //       return {
+    //         ...oldData,
+    //         pages: oldData.pages.map((page: FeedResponse[]) =>
+    //           page.map(updatePost),
+    //         ),
+    //       };
+    //     },
+    //   );
+    // },
   });
 }
