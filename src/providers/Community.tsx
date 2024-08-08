@@ -7,12 +7,7 @@ import React, {
 } from 'react';
 import {useAuth} from './Auth.tsx';
 import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
-import {
-  CustomerData,
-  DeletePostRequest,
-  PostRequest,
-  ReplyRequest,
-} from '../types/generated.ts';
+import {CustomerData, PostRequest, ReplyRequest} from '../types/generated.ts';
 import {useCreatePost} from '../hooks/community/useCreatePost.ts';
 import {UseMutationResult, useQueryClient} from '@tanstack/react-query';
 import {useGetFacialVerificationState} from '../hooks/faceverification/useGetFacialVerificationState.ts';
