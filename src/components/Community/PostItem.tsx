@@ -366,7 +366,9 @@ const PostItem = ({
 
       <ReusableBottomSheetModal
         ref={moreOptionsBSheet}
-        snapPoints={['30%', '50%']}>
+        snapPoints={
+          post.sub !== authData?.sub ? ['25%', '50%'] : ['30%', '50%']
+        }>
         <View style={{gap: scale(10)}}>
           <Button
             onPress={copyToClipboard}
@@ -380,12 +382,14 @@ const PostItem = ({
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
           />
-          <Button
-            onPress={() => handleDeletePost(post.snowflakeId)}
-            text={'Delete Post'}
-            buttonStyle={styles.buttonStyle}
-            textStyle={styles.textStyle}
-          />
+          {post.sub === authData?.sub && (
+            <Button
+              onPress={() => handleDeletePost(post.snowflakeId)}
+              text={'Delete Post'}
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.textStyle}
+            />
+          )}
           <Button
             onPress={() => moreOptionsBSheet.current?.dismiss()}
             text={'Cancel'}
