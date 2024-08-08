@@ -831,6 +831,7 @@ export type GetReplyRequest = {
 export type GetFeedRequest = {
   sub: string;
   beforeId?: string;
+  limit?: number;
 };
 
 export type LikePost = {
@@ -842,4 +843,16 @@ export type LikePost = {
 export type GetPostRequest = {
   sub: string;
   postId: string;
+};
+
+export type DeletePostRequest = {
+  sub: string;
+  postId: string;
+};
+
+export type RepostRequest = {
+  sub: string;
+  postId: string;
+  isReposted: boolean;
+  community: number;
 };

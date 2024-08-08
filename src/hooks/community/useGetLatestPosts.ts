@@ -25,6 +25,7 @@ export function useGetLatestPosts(props: GetFeedRequest) {
         params: {
           sub: props.sub,
           beforeId: pageParam,
+          limit: props.limit,
         },
       };
 

@@ -23,21 +23,25 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {API_PAYMENT_URL} from '@env';
 import Toast from 'react-native-toast-message';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Repost} from '../../assets/images/community/Repost.tsx';
+import {useAuth} from '../../providers/Auth.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
   isFromPost?: boolean;
   isAddComment?: boolean;
+  isRepostedPost?: boolean;
 }
 
 const PostItem = ({
   post,
   isFromPost = false,
   isAddComment = false,
+  isRepostedPost = false,
 }: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
 
   const openMediaViewer = (index: number) => {
@@ -47,7 +51,9 @@ const PostItem = ({
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
-  const {isUserVerified, showModal} = useCommunity();
+  const {isUserVerified, showModal, handleDeletePost, handleRepost} =
+    useCommunity();
+  const {authData} = useAuth();
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const handleOpenReportBSheet = () => {
@@ -121,6 +127,26 @@ const PostItem = ({
             showModal();
           }
         }}>
+        {isRepostedPost && (
+          <View
+            style={{
+              paddingHorizontal: scale(60),
+              marginBottom: -scale(7),
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: scale(6),
+            }}>
+            <Repost focused={false} />
+            <Text
+              style={{
+                fontSize: scale(9),
+                fontFamily: 'Montserrat-Medium',
+                color: COLORS.black,
+              }}>
+              {post.isReposted ? 'You' : post.customerName} reposted
+            </Text>
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -179,7 +205,7 @@ const PostItem = ({
             </View>
             {/*Content PostItem*/}
             <View>
-              <HighlightedText text={post.content} />
+              {post.content && <HighlightedText text={post.content} />}
             </View>
             {/* Content Images */}
             {post.attachments && post.attachments.length > 0 && (
@@ -277,7 +303,9 @@ const PostItem = ({
         }}
       />
 
-      <ReusableBottomSheetModal ref={repostOptionsBSheet} snapPoints={['25%']}>
+      <ReusableBottomSheetModal
+        ref={repostOptionsBSheet}
+        snapPoints={['25%', '50%']}>
         <View style={{gap: scale(10)}}>
           <Button
             onPress={() => {
@@ -295,10 +323,26 @@ const PostItem = ({
             textStyle={styles.textStyle}
           />
           <Button
-            onPress={() => console.log('Repost')}
-            text={'Repost'}
+            onPress={async () => {
+              setLoading(true);
+              await handleRepost(post.snowflakeId, 1, !post.isReposted ?? true);
+              repostOptionsBSheet.current?.dismiss();
+              Toast.show({
+                type: 'THNRSuccess',
+                props: {
+                  subtitle: `Successfully ${
+                    !post.isReposted ? 'Undo Repost' : 'Repost'
+                  }!`,
+                },
+                position: 'top',
+                topOffset: insets.top,
+              });
+              setLoading(false);
+            }}
+            text={post.isReposted ? 'Undo Repost' : 'Repost'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
+            loading={loading}
           />
           <Button
             onPress={() => repostOptionsBSheet.current?.dismiss()}
@@ -309,7 +353,9 @@ const PostItem = ({
         </View>
       </ReusableBottomSheetModal>
 
-      <ReusableBottomSheetModal ref={moreOptionsBSheet} snapPoints={['25%']}>
+      <ReusableBottomSheetModal
+        ref={moreOptionsBSheet}
+        snapPoints={['30%', '50%']}>
         <View style={{gap: scale(10)}}>
           <Button
             onPress={copyToClipboard}
@@ -324,7 +370,7 @@ const PostItem = ({
             textStyle={styles.textStyle}
           />
           <Button
-            onPress={() => console.log('Delete Post')}
+            onPress={() => handleDeletePost(post.snowflakeId)}
             text={'Delete Post'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
