@@ -44,6 +44,7 @@ const PostItem = ({
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
 
   const {authData} = useAuth();
@@ -384,10 +385,15 @@ const PostItem = ({
           />
           {post.sub === authData?.sub && (
             <Button
-              onPress={() => handleDeletePost(post.snowflakeId)}
+              onPress={async () => {
+                setDeleteLoading(true);
+                await handleDeletePost(post.snowflakeId);
+                setDeleteLoading(false);
+              }}
               text={'Delete Post'}
               buttonStyle={styles.buttonStyle}
               textStyle={styles.textStyle}
+              loading={deleteLoading}
             />
           )}
           <Button
