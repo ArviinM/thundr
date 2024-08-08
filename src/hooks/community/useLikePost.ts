@@ -28,6 +28,51 @@ export function useLikePost() {
     },
     onError: showErrorToast,
     onMutate: (data: LikePost) => {
+      // Update get-latest-posts query
+      queryClient.setQueriesData(
+        {queryKey: ['get-latest-posts']},
+        (oldData: any) => {
+          if (!oldData || !oldData.pages) {
+            return oldData;
+          }
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: FeedResponse[]) =>
+              page.map(post =>
+                post.snowflakeId === data.postId
+                  ? {
+                      ...post,
+                      isLiked: data.isLiked,
+                      likeCount: data.isLiked
+                        ? (post.likeCount || 0) + 1
+                        : Math.max((post.likeCount || 0) - 1, 0),
+                    }
+                  : post,
+              ),
+            ),
+          };
+        },
+      );
+      // Update get-post query
+      queryClient.setQueryData(
+        ['get-post', data.postId],
+        (oldData: FeedResponse | undefined) => {
+          if (!oldData) {
+            return oldData;
+          }
+
+          return {
+            ...oldData,
+            isLiked: data.isLiked,
+            likeCount: data.isLiked
+              ? (oldData.likeCount || 0) + 1
+              : Math.max((oldData.likeCount || 0) - 1, 0),
+          };
+        },
+      );
+    },
+    onSuccess: (isLiked: boolean, variables: LikePost) => {
       queryClient.setQueriesData(
         {queryKey: ['get-latest-posts']},
         (oldData: any) => {
@@ -36,13 +81,10 @@ export function useLikePost() {
           }
 
           const updatePost = (post: FeedResponse) => {
-            if (post.snowflakeId === data.postId) {
+            if (post.snowflakeId === variables.postId) {
               return {
                 ...post,
-                isLiked: data.isLiked,
-                likeCount: data.isLiked
-                  ? (post.likeCount || 0) + 1
-                  : Math.max((post.likeCount || 0) - 1, 0),
+                likeCount: post.likeCount,
               };
             }
             return post;
@@ -56,34 +98,21 @@ export function useLikePost() {
           };
         },
       );
+
+      // // Update get-post query
+      // queryClient.setQueriesData(
+      //   {queryKey: ['get-post', variables.postId]},
+      //   (oldData: FeedResponse | undefined) => {
+      //     if (!oldData) {
+      //       return oldData;
+      //     }
+      //
+      //     return {
+      //       ...oldData,
+      //       likeCount: oldData.likeCount,
+      //     };
+      //   },
+      // );
     },
-    // onSuccess: (isLiked: boolean, variables: LikePost) => {
-    //   queryClient.setQueriesData(
-    //     {queryKey: ['get-latest-posts']},
-    //     (oldData: any) => {
-    //       if (!oldData || !oldData.pages) {
-    //         return oldData;
-    //       }
-    //
-    //       const updatePost = (post: FeedResponse) => {
-    //         if (post.snowflakeId === variables.postId) {
-    //           return {
-    //             ...post,
-    //             isLiked: isLiked,
-    //             likeCount: post.likeCount,
-    //           };
-    //         }
-    //         return post;
-    //       };
-    //
-    //       return {
-    //         ...oldData,
-    //         pages: oldData.pages.map((page: FeedResponse[]) =>
-    //           page.map(updatePost),
-    //         ),
-    //       };
-    //     },
-    //   );
-    // },
   });
 }

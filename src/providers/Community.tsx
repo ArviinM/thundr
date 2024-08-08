@@ -17,7 +17,7 @@ import {useLikePost} from '../hooks/community/useLikePost.ts';
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
   replyPost: UseMutationResult<any, any, ReplyRequest, unknown>;
-  likeThePost: (likeThePost: string) => Promise<void>;
+  likeThePost: (likeThePost: string, isLiked: boolean) => Promise<void>;
   profileData?: CustomerData;
   showModal: () => void;
   hideModal: () => void;
@@ -56,18 +56,23 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     setModalVisible(false);
   };
 
-  const likeThePost = async (postId: string) => {
+  const likeThePost = async (postId: string, isLiked: boolean) => {
     if (auth.authData) {
-      await likePost.mutateAsync({sub: auth.authData.sub, postId: postId});
-      console.log('post liked ata');
+      console.log({postId: postId, isLiked: isLiked});
+      await likePost.mutateAsync({
+        sub: auth.authData.sub,
+        postId: postId,
+        isLiked: isLiked,
+      });
     }
   };
 
-  useEffect(() => {
-    if (facialVerificationState.data !== 'VERIFIED') {
-      showModal();
-    }
-  }, [facialVerificationState.data]);
+  // useEffect(() => {
+  //   if (facialVerificationState.isLoading) {
+  //     console.log('test', facialVerificationState.data);
+  //     showModal();
+  //   }
+  // }, [facialVerificationState.data, facialVerificationState.isLoading]);
 
   return (
     <CommunityContext.Provider

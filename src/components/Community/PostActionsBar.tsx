@@ -30,7 +30,7 @@ const PostActionsBar = ({
   handleMoreOptions,
   handleRepostOptions,
 }: PostActionsProps) => {
-  const {likeThePost} = useCommunity();
+  const {likeThePost, isUserVerified, showModal} = useCommunity();
 
   return (
     <View
@@ -44,8 +44,12 @@ const PostActionsBar = ({
           style={styles.elemActions}
           hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
           onPress={async () => {
-            if (postId !== undefined) {
-              await likeThePost(postId);
+            if (!isUserVerified) {
+              showModal();
+            }
+
+            if (postId !== undefined && isUserVerified) {
+              await likeThePost(postId, !isLiked);
             }
           }}>
           <Like focused={isLiked} />

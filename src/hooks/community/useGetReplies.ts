@@ -1,26 +1,26 @@
 import {useInfiniteQuery} from '@tanstack/react-query';
 import {AxiosRequestConfig, AxiosResponse, HttpStatusCode} from 'axios';
-import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
+import {useAxiosWithAuth} from '../api/useAxiosWithAuth';
 import {
   BaseResponse,
   FeedResponse,
   GetReplyRequest,
-} from '../../types/generated.ts';
-import {showErrorToast} from '../../utils/toast/errorToast.ts';
+} from '../../types/generated';
+import {showErrorToast} from '../../utils/toast/errorToast';
 
-export function useGetReplies(props: GetReplyRequest) {
+export function useGetReplies(props: Omit<GetReplyRequest, 'beforeId'>) {
   const axiosInstance = useAxiosWithAuth();
 
   return useInfiniteQuery({
     queryKey: ['get-replies', props],
-    initialPageParam: props.beforeId,
+    initialPageParam: undefined,
     getNextPageParam: (lastPage: FeedResponse[]) => {
-      if (lastPage.length !== 0) {
-        return lastPage[lastPage.length - 1].snowflakeId;
+      if (lastPage.length === 0) {
+        return undefined;
       }
-      return undefined;
+      return lastPage[lastPage.length - 1].snowflakeId;
     },
-    queryFn: async ({pageParam = null}): Promise<FeedResponse[]> => {
+    queryFn: async ({pageParam}): Promise<FeedResponse[]> => {
       const config: AxiosRequestConfig<GetReplyRequest> = {
         params: {
           sub: props.sub,

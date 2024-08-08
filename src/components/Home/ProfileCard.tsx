@@ -87,6 +87,7 @@ const ProfileCard = ({
   );
 
   const handleTap = (event: any) => {
+    'worklet';
     const isFirstScreen = imageIndex === 0;
     const isLastScreen =
       imageIndex === user.customerData.customerPhoto.length - 1;
@@ -103,7 +104,7 @@ const ProfileCard = ({
     }
   };
 
-  const tapGesture = Gesture.Tap().onEnd(handleTap).runOnJS(true);
+  const tapGesture = Gesture.Tap().onEnd(handleTap);
 
   useEffect(() => {
     if (user.isBlurred && isStartTimer && nextAction) {

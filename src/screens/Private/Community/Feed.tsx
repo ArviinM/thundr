@@ -90,13 +90,11 @@ const Feed = () => {
         keyExtractor={keyExtractor}
         onEndReached={loadMorePosts}
         onEndReachedThreshold={0.1}
-        maintainVisibleContentPosition={{
-          autoscrollToTopThreshold: 10,
-          minIndexForVisible: 1,
-        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        overScrollMode={'always'}
+        alwaysBounceVertical
       />
     </SafeAreaView>
   );

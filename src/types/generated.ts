@@ -835,5 +835,11 @@ export type GetFeedRequest = {
 
 export type LikePost = {
   sub: string;
-  postId: string
-}
+  postId: string;
+  isLiked: boolean;
+};
+
+export type GetPostRequest = {
+  sub: string;
+  postId: string;
+};

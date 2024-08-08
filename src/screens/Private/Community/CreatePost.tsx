@@ -98,6 +98,8 @@ const CreatePost = ({route}: CreatePostParams) => {
         });
       }
 
+      await query.invalidateQueries({queryKey: ['get-latest-posts']});
+
       Toast.show({
         type: 'THNRSuccess',
         props: {
@@ -106,7 +108,6 @@ const CreatePost = ({route}: CreatePostParams) => {
         position: 'top',
         topOffset: insets.top,
       });
-      await query.invalidateQueries({queryKey: ['get-latest-posts']});
       navigation.goBack();
       setPostLoading(false);
     }

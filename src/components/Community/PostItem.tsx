@@ -57,13 +57,25 @@ const PostItem = ({
 
   const moreOptionsBSheet = useRef<BottomSheetModal>(null);
   const handlOpenMoreOptions = useCallback(() => {
-    moreOptionsBSheet.current?.present();
-  }, []);
+    if (!isUserVerified) {
+      showModal();
+    }
+
+    if (isUserVerified) {
+      moreOptionsBSheet.current?.present();
+    }
+  }, [isUserVerified, showModal]);
 
   const repostOptionsBSheet = useRef<BottomSheetModal>(null);
   const handleOpenRepostOptions = useCallback(() => {
-    repostOptionsBSheet.current?.present();
-  }, []);
+    if (!isUserVerified) {
+      showModal();
+    }
+
+    if (isUserVerified) {
+      repostOptionsBSheet.current?.present();
+    }
+  }, [isUserVerified, showModal]);
 
   const copyToClipboard = () => {
     const textToCopy = `${API_PAYMENT_URL}/app/post/${BigInt(

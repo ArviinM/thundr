@@ -31,8 +31,6 @@ export function useGetLatestPosts(props: GetFeedRequest) {
       const response: AxiosResponse<BaseResponse<FeedResponse[]>> =
         await axiosInstance.get('/community/get-latest-posts', config);
 
-      console.log(2, response.data.data.length);
-
       if (response.status !== HttpStatusCode.Ok) {
         showErrorToast({
           name: 'get-latest-posts',
