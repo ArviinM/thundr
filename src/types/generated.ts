@@ -743,7 +743,7 @@ export type PostRequest = {
   content: string;
   inCommunity: number;
   privacySettings?: PrivacySettings;
-  referencedPost?: bigint;
+  referencedPost?: string;
   repostType?: RepostType;
   media: FileAttachment[];
 };
@@ -799,8 +799,8 @@ export type FeedResponse = {
 
   isLiked?: boolean;
   isReposted?: boolean;
-  topLevelPostId: bigint | null;
-  parentPostId: bigint | null;
+  topLevelPostId: string | null;
+  parentPostId: string | null;
   topLevelReplies: FeedResponse[] | null;
 };
 

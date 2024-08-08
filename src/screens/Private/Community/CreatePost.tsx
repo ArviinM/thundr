@@ -25,7 +25,7 @@ import {FlashList} from '@shopify/flash-list';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CloseIconWhite} from '../../../assets/images/CloseIconWhite.tsx';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import {FileAttachment} from '../../../types/generated.ts';
+import {FileAttachment, RepostType} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
 
 const postSchema = yup.object({
@@ -53,6 +53,7 @@ const CreatePost = ({route}: CreatePostParams) => {
   const postDetails = route?.params.postDetails;
   const isComment = route?.params.isComment;
   const isOpenGallery = route?.params.isOpenGallery;
+  const isQuoteRepost = route?.params.isQuoteRepost;
 
   const {
     control,
@@ -77,12 +78,23 @@ const CreatePost = ({route}: CreatePostParams) => {
     if (profileData) {
       setPostLoading(true);
 
-      if (!isComment) {
+      if (!isComment && !isQuoteRepost) {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
           inCommunity: 1,
           media: formattedMediaData,
+        });
+      }
+
+      if (!isComment && isQuoteRepost) {
+        await createPost.mutateAsync({
+          sub: profileData.sub,
+          content: data.postContent,
+          inCommunity: 1,
+          media: formattedMediaData,
+          referencedPost: postDetails?.snowflakeId,
+          repostType: 'QUOTE',
         });
       }
 
@@ -93,8 +105,12 @@ const CreatePost = ({route}: CreatePostParams) => {
           media: formattedMediaData,
           inCommunity: 1,
           parentPostId: postDetails.snowflakeId,
-          topLevelPostId: postDetails.snowflakeId,
+          topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
           privacySettings: 'PUBLIC',
+        });
+
+        await query.invalidateQueries({
+          queryKey: ['get-replies', postDetails.snowflakeId],
         });
       }
 

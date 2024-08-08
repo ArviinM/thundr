@@ -18,6 +18,7 @@ interface PostActionsProps {
   postId: string;
   handleMoreOptions?: () => void;
   handleRepostOptions?: () => void;
+  handleComment?: () => void;
 }
 
 const PostActionsBar = ({
@@ -29,6 +30,7 @@ const PostActionsBar = ({
   postId,
   handleMoreOptions,
   handleRepostOptions,
+  handleComment,
 }: PostActionsProps) => {
   const {likeThePost, isUserVerified, showModal} = useCommunity();
 
@@ -57,7 +59,8 @@ const PostActionsBar = ({
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.elemActions}
-          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
+          hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
+          onPress={handleComment}>
           <View>
             <Comment />
           </View>

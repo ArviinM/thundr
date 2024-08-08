@@ -15,7 +15,6 @@ import {
   MobileValidationResponse,
   MobileVerificationResponse,
 } from '../types/generated.ts';
-import {PostParams} from '../screens/Private/Community/Post.tsx';
 
 export const Stack = createNativeStackNavigator();
 export const Tab = createBottomTabNavigator();
@@ -121,6 +120,7 @@ export type RootNavigationParams = {
   //PostItem Creation
   CreatePost: {
     isComment: boolean;
+    isQuoteRepost?: boolean;
     referenceId?: string;
     screenTitle: string;
     postDetails?: FeedResponse;
@@ -136,5 +136,5 @@ export type RootNavigationParams = {
   ReviewPhoto: {photoPath: string};
 
   //Post View
-  Post: PostParams;
+  Post: {snowflakeId: string; postDetails: FeedResponse};
 };

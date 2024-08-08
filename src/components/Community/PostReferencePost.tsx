@@ -1,18 +1,24 @@
 import React from 'react';
 import {scale} from '../../utils/utils.ts';
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {Image} from 'expo-image';
 import {COLORS} from '../../constants/commons.ts';
 import {formatDistanceToNow} from 'date-fns/formatDistanceToNow';
 import {FeedResponse} from '../../types/generated.ts';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootNavigationParams} from '../../constants/navigator.ts';
 
 interface PostReferencePostProps {
   referencePost: FeedResponse;
 }
 
 const PostReferencePost = ({referencePost}: PostReferencePostProps) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={0.8}
       style={{
         flexDirection: 'row',
         paddingHorizontal: scale(6),
@@ -23,7 +29,13 @@ const PostReferencePost = ({referencePost}: PostReferencePostProps) => {
         borderRadius: 12,
         flex: 1,
         gap: scale(6),
-      }}>
+      }}
+      onPress={() =>
+        navigation.push('Post', {
+          snowflakeId: referencePost.snowflakeId,
+          postDetails: referencePost,
+        })
+      }>
       <View>
         {/*  Customer Photo  */}
         <Image
@@ -75,7 +87,7 @@ const PostReferencePost = ({referencePost}: PostReferencePostProps) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

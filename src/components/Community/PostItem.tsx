@@ -95,6 +95,15 @@ const PostItem = ({
     });
   };
 
+  const handleComment = () => {
+    navigation.navigate('CreatePost', {
+      isComment: true,
+      referenceId: post.snowflakeId,
+      screenTitle: 'Add Reply',
+      postDetails: post,
+    });
+  };
+
   return (
     <>
       <TouchableOpacity
@@ -249,6 +258,7 @@ const PostItem = ({
                 postId={post.snowflakeId}
                 handleMoreOptions={handlOpenMoreOptions}
                 handleRepostOptions={handleOpenRepostOptions}
+                handleComment={handleComment}
               />
             )}
           </View>
@@ -270,7 +280,16 @@ const PostItem = ({
       <ReusableBottomSheetModal ref={repostOptionsBSheet} snapPoints={['25%']}>
         <View style={{gap: scale(10)}}>
           <Button
-            onPress={() => console.log('Quote Repost')}
+            onPress={() => {
+              repostOptionsBSheet.current?.dismiss();
+              navigation.navigate('CreatePost', {
+                isComment: false,
+                isQuoteRepost: true,
+                referenceId: post.snowflakeId,
+                screenTitle: 'Quote Post',
+                postDetails: post,
+              });
+            }}
             text={'Quote Repost'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
@@ -301,6 +320,12 @@ const PostItem = ({
           <Button
             onPress={handleOpenReportBSheet}
             text={'Report Post'}
+            buttonStyle={styles.buttonStyle}
+            textStyle={styles.textStyle}
+          />
+          <Button
+            onPress={() => console.log('Delete Post')}
+            text={'Delete Post'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
           />

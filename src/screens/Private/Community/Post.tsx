@@ -15,7 +15,7 @@ import {scale} from '../../../utils/utils';
 import {Loading} from '../../../components/shared/Loading.tsx';
 import {useGetPost} from '../../../hooks/community/useGetPost.ts';
 
-type PostProps = {
+export type PostProps = {
   route?: RouteProp<RootNavigationParams, 'Post'>;
 };
 

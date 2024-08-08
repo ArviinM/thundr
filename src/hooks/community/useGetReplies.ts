@@ -12,7 +12,7 @@ export function useGetReplies(props: Omit<GetReplyRequest, 'beforeId'>) {
   const axiosInstance = useAxiosWithAuth();
 
   return useInfiniteQuery({
-    queryKey: ['get-replies', props],
+    queryKey: ['get-replies', props.snowflakeId],
     initialPageParam: undefined,
     getNextPageParam: (lastPage: FeedResponse[]) => {
       if (lastPage.length === 0) {

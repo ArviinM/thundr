@@ -21,6 +21,13 @@ export function useCreatePost() {
       formData.append('content', data.content);
       formData.append('inCommunity', data.inCommunity.toString());
 
+      if (data.referencedPost) {
+        formData.append('referencedPost', data.referencedPost);
+      }
+      if (data.repostType) {
+        formData.append('repostType', data.repostType);
+      }
+
       if (data.media.length > 0) {
         // formData.append('media', data.media);
         for (const mediaItem of data.media) {
