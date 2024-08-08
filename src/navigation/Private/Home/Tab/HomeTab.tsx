@@ -113,7 +113,7 @@ export const HomeTab = () => {
         options={{
           headerLeft: () => <HomeLeftHeader />,
           headerTitle: () => <Header />,
-          headerRight: () => <HomeRightHeader />,
+          // headerRight: () => <HomeRightHeader />,
           headerShown: true,
           tabBarShowLabel: true,
           tabBarLabel: 'Community',
