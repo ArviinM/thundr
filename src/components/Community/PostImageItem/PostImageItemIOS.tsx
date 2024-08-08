@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {Image} from 'expo-image';
 import Animated, {
   interpolate,
@@ -137,7 +137,18 @@ const ImageItem = ({
         maximumZoomScale={maxZoomScale}
         contentContainerStyle={styles.imageScrollContainer}
         onScroll={scrollHandler}>
-        {(!loaded || !imageDimensions) && <Loading />}
+        {(!loaded || !imageDimensions) && (
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+            }}>
+            <Loading />
+          </View>
+        )}
         <AnimatedImage
           contentFit="contain"
           source={{uri: imageSrc.uri}}
