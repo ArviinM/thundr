@@ -112,10 +112,26 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   };
 
   useEffect(() => {
-    if (facialVerificationState.isLoading) {
-      showModal();
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    if (facialVerificationState.isSuccess) {
+      if (facialVerificationState.data === 'VERIFIED') {
+        setModalVisible(false);
+      } else if (facialVerificationState.data === 'UNVERIFIED') {
+        setModalVisible(true);
+      }
+    } else {
+      timer = setTimeout(() => {
+        setModalVisible(true);
+      }, 5000); // Show the modal after 5 seconds if the data hasn't loaded
     }
-  }, [facialVerificationState.data, facialVerificationState.isLoading]);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [facialVerificationState.data, facialVerificationState.isSuccess]);
 
   return (
     <CommunityContext.Provider
