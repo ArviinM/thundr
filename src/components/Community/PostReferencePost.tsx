@@ -8,6 +8,7 @@ import {FeedResponse} from '../../types/generated.ts';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootNavigationParams} from '../../constants/navigator.ts';
+import {useCommunity} from '../../providers/Community.tsx';
 
 interface PostReferencePostProps {
   referencePost: FeedResponse;
@@ -16,6 +17,7 @@ interface PostReferencePostProps {
 const PostReferencePost = ({referencePost}: PostReferencePostProps) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const {isUserVerified, showModal} = useCommunity();
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -30,12 +32,18 @@ const PostReferencePost = ({referencePost}: PostReferencePostProps) => {
         flex: 1,
         gap: scale(6),
       }}
-      onPress={() =>
-        navigation.push('Post', {
-          snowflakeId: referencePost.snowflakeId,
-          postDetails: referencePost,
-        })
-      }>
+      onPress={() => {
+        if (!isUserVerified) {
+          showModal();
+        }
+
+        if (isUserVerified) {
+          navigation.push('Post', {
+            snowflakeId: referencePost.snowflakeId,
+            postDetails: referencePost,
+          });
+        }
+      }}>
       <View>
         {/*  Customer Photo  */}
         <Image

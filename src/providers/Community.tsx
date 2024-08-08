@@ -7,12 +7,7 @@ import React, {
 } from 'react';
 import {useAuth} from './Auth.tsx';
 import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
-import {
-  CustomerData,
-  DeletePostRequest,
-  PostRequest,
-  ReplyRequest,
-} from '../types/generated.ts';
+import {CustomerData, PostRequest, ReplyRequest} from '../types/generated.ts';
 import {useCreatePost} from '../hooks/community/useCreatePost.ts';
 import {UseMutationResult, useQueryClient} from '@tanstack/react-query';
 import {useGetFacialVerificationState} from '../hooks/faceverification/useGetFacialVerificationState.ts';
@@ -112,10 +107,26 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   };
 
   useEffect(() => {
-    if (facialVerificationState.isLoading) {
-      showModal();
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    if (facialVerificationState.isSuccess) {
+      if (facialVerificationState.data === 'VERIFIED') {
+        setModalVisible(false);
+      } else if (facialVerificationState.data === 'UNVERIFIED') {
+        setModalVisible(true);
+      }
+    } else {
+      timer = setTimeout(() => {
+        setModalVisible(true);
+      }, 5000); // Show the modal after 5 seconds if the data hasn't loaded
     }
-  }, [facialVerificationState.data, facialVerificationState.isLoading]);
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [facialVerificationState.data, facialVerificationState.isSuccess]);
 
   return (
     <CommunityContext.Provider
