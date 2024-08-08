@@ -7,17 +7,31 @@ import React, {
 } from 'react';
 import {useAuth} from './Auth.tsx';
 import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
-import {CustomerData, PostRequest, ReplyRequest} from '../types/generated.ts';
+import {
+  CustomerData,
+  DeletePostRequest,
+  PostRequest,
+  ReplyRequest,
+} from '../types/generated.ts';
 import {useCreatePost} from '../hooks/community/useCreatePost.ts';
-import {UseMutationResult} from '@tanstack/react-query';
+import {UseMutationResult, useQueryClient} from '@tanstack/react-query';
 import {useGetFacialVerificationState} from '../hooks/faceverification/useGetFacialVerificationState.ts';
 import {useReplyPost} from '../hooks/community/useReplyPost.ts';
 import {useLikePost} from '../hooks/community/useLikePost.ts';
+import {useDeletePost} from '../hooks/community/useDeletePost.ts';
+import {queryClient} from '../utils/queryClient.ts';
+import {useCreateRepost} from '../hooks/community/useCreateRepost.ts';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
   replyPost: UseMutationResult<any, any, ReplyRequest, unknown>;
-  likeThePost: (likeThePost: string) => Promise<void>;
+  handleDeletePost: (postId: string) => Promise<void>;
+  likeThePost: (likeThePost: string, isLiked: boolean) => Promise<void>;
+  handleRepost: (
+    postId: string,
+    community: number,
+    isReposted: boolean,
+  ) => Promise<void>;
   profileData?: CustomerData;
   showModal: () => void;
   hideModal: () => void;
@@ -35,6 +49,7 @@ interface CommunityProviderProps {
 }
 const CommunityProvider = ({children}: CommunityProviderProps) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const query = useQueryClient(queryClient);
   const auth = useAuth();
 
   const customerProfile = useGetCustomerProfile({
@@ -47,6 +62,8 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   const createPost = useCreatePost();
   const replyPost = useReplyPost();
   const likePost = useLikePost();
+  const deletePost = useDeletePost();
+  const repost = useCreateRepost();
 
   const showModal = () => {
     setModalVisible(true);
@@ -56,24 +73,57 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     setModalVisible(false);
   };
 
-  const likeThePost = async (postId: string) => {
+  const likeThePost = async (postId: string, isLiked: boolean) => {
     if (auth.authData) {
-      await likePost.mutateAsync({sub: auth.authData.sub, postId: postId});
-      console.log('post liked ata');
+      await likePost.mutateAsync({
+        sub: auth.authData.sub,
+        postId: postId,
+        isLiked: isLiked,
+      });
+    }
+  };
+
+  const handleDeletePost = async (postId: string) => {
+    if (auth.authData) {
+      await deletePost.mutateAsync({
+        sub: auth.authData.sub,
+        postId: postId,
+      });
+    }
+
+    await query.invalidateQueries({queryKey: ['get-latest-posts']});
+  };
+
+  const handleRepost = async (
+    postId: string,
+    community: number,
+    isReposted: boolean,
+  ) => {
+    if (auth.authData) {
+      await repost.mutateAsync({
+        sub: auth.authData.sub,
+        postId: postId,
+        community: community,
+        isReposted: isReposted,
+      });
+
+      await query.invalidateQueries({queryKey: ['get-latest-posts']});
     }
   };
 
   useEffect(() => {
-    if (facialVerificationState.data !== 'VERIFIED') {
+    if (facialVerificationState.isLoading) {
       showModal();
     }
-  }, [facialVerificationState.data]);
+  }, [facialVerificationState.data, facialVerificationState.isLoading]);
 
   return (
     <CommunityContext.Provider
       value={{
         createPost: createPost,
         replyPost: replyPost,
+        handleRepost,
+        handleDeletePost,
         likeThePost,
         showModal,
         hideModal,

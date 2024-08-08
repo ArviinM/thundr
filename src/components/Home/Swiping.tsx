@@ -80,7 +80,6 @@ const Swiping = ({
   });
 
   const mareGesture = Gesture.Pan()
-    .runOnJS(true)
     .enabled(!jowaPressed.value)
     .minPointers(1)
     .maxPointers(1)
@@ -159,7 +158,6 @@ const Swiping = ({
     });
 
   const jowaGesture = Gesture.Pan()
-    .runOnJS(true)
     .enabled(!marePressed.value)
     .minPointers(1)
     .maxPointers(1)
@@ -192,7 +190,6 @@ const Swiping = ({
       }
     })
     .onEnd(event => {
-      console.log(event.translationX);
       if (!marePressed.value) {
         const distanceFromCenter = Math.abs(event.translationX);
         const threshold = width / 3;

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 import {COLORS} from '../../../constants/commons.ts';
 import CreatePostBar from '../../../components/Community/CreatePostBar.tsx';
 import {useCommunity} from '../../../providers/Community.tsx';
@@ -21,6 +21,7 @@ const Feed = () => {
   const community = useGetLatestPosts({
     sub: authData?.sub || '',
     beforeId: undefined,
+    limit: 10,
   });
 
   const keyExtractor = (item: FeedResponse) =>
@@ -29,10 +30,22 @@ const Feed = () => {
   const renderItem = useCallback(
     ({item, index}: {item: FeedResponse; index: any | null | undefined}) => {
       return (
-        <PostItem
-          key={`feed-post-${item.snowflakeId}-${item.sub}-${index}`}
-          post={item}
-        />
+        <>
+          {item.referenceType !== 'REPOST' && (
+            <PostItem
+              key={`feed-post-${item.snowflakeId}-${item.sub}-${index}`}
+              post={item}
+            />
+          )}
+          {item.referenceType === 'REPOST' && item.referencedPost && (
+            <PostItem
+              key={`feed-repost-${item.snowflakeId}-${item.sub}-${index}`}
+              post={item.referencedPost}
+              isRepostedPost
+              postSub={item.sub}
+            />
+          )}
+        </>
       );
     },
     [],
@@ -90,13 +103,11 @@ const Feed = () => {
         keyExtractor={keyExtractor}
         onEndReached={loadMorePosts}
         onEndReachedThreshold={0.1}
-        maintainVisibleContentPosition={{
-          autoscrollToTopThreshold: 10,
-          minIndexForVisible: 1,
-        }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        overScrollMode={'always'}
+        alwaysBounceVertical
       />
     </SafeAreaView>
   );

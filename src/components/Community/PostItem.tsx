@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FeedResponse} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
@@ -23,22 +23,31 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {API_PAYMENT_URL} from '@env';
 import Toast from 'react-native-toast-message';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Repost} from '../../assets/images/community/Repost.tsx';
+import {useAuth} from '../../providers/Auth.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
   isFromPost?: boolean;
   isAddComment?: boolean;
+  isRepostedPost?: boolean;
+  postSub?: string;
 }
 
 const PostItem = ({
   post,
   isFromPost = false,
   isAddComment = false,
+  isRepostedPost = false,
+  postSub,
 }: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
-
+  const [loading, setLoading] = useState<boolean>(false);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
+
+  const {authData} = useAuth();
 
   const openMediaViewer = (index: number) => {
     setInitialImageIndex(index);
@@ -47,7 +56,8 @@ const PostItem = ({
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
-  const {isUserVerified, showModal} = useCommunity();
+  const {isUserVerified, showModal, handleDeletePost, handleRepost} =
+    useCommunity();
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const handleOpenReportBSheet = () => {
@@ -57,13 +67,25 @@ const PostItem = ({
 
   const moreOptionsBSheet = useRef<BottomSheetModal>(null);
   const handlOpenMoreOptions = useCallback(() => {
-    moreOptionsBSheet.current?.present();
-  }, []);
+    if (!isUserVerified) {
+      showModal();
+    }
+
+    if (isUserVerified) {
+      moreOptionsBSheet.current?.present();
+    }
+  }, [isUserVerified, showModal]);
 
   const repostOptionsBSheet = useRef<BottomSheetModal>(null);
   const handleOpenRepostOptions = useCallback(() => {
-    repostOptionsBSheet.current?.present();
-  }, []);
+    if (!isUserVerified) {
+      showModal();
+    }
+
+    if (isUserVerified) {
+      repostOptionsBSheet.current?.present();
+    }
+  }, [isUserVerified, showModal]);
 
   const copyToClipboard = () => {
     const textToCopy = `${API_PAYMENT_URL}/app/post/${BigInt(
@@ -80,6 +102,15 @@ const PostItem = ({
       },
       position: 'top',
       topOffset: insets.top,
+    });
+  };
+
+  const handleComment = () => {
+    navigation.navigate('CreatePost', {
+      isComment: true,
+      referenceId: post.snowflakeId,
+      screenTitle: 'Add Reply',
+      postDetails: post,
     });
   };
 
@@ -100,6 +131,26 @@ const PostItem = ({
             showModal();
           }
         }}>
+        {isRepostedPost && (
+          <View
+            style={{
+              paddingHorizontal: scale(60),
+              marginBottom: -scale(7),
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: scale(6),
+            }}>
+            <Repost focused={false} />
+            <Text
+              style={{
+                fontSize: scale(9),
+                fontFamily: 'Montserrat-Medium',
+                color: COLORS.black,
+              }}>
+              {authData?.sub === postSub ? 'You' : post.customerName} reposted
+            </Text>
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -158,7 +209,7 @@ const PostItem = ({
             </View>
             {/*Content PostItem*/}
             <View>
-              <HighlightedText text={post.content} />
+              {post.content && <HighlightedText text={post.content} />}
             </View>
             {/* Content Images */}
             {post.attachments && post.attachments.length > 0 && (
@@ -181,6 +232,14 @@ const PostItem = ({
                       attachment.attachmentType !== 'WEB_EMBED' &&
                         isUserVerified &&
                         openMediaViewer(index);
+
+                      if (attachment.attachmentType === 'WEB_EMBED') {
+                        if (attachment.attachmentUrl) {
+                          Linking.openURL(attachment.attachmentUrl).catch(err =>
+                            console.error('An error occurred', err),
+                          );
+                        }
+                      }
 
                       if (!isUserVerified) {
                         showModal();
@@ -237,6 +296,7 @@ const PostItem = ({
                 postId={post.snowflakeId}
                 handleMoreOptions={handlOpenMoreOptions}
                 handleRepostOptions={handleOpenRepostOptions}
+                handleComment={handleComment}
               />
             )}
           </View>
@@ -255,19 +315,46 @@ const PostItem = ({
         }}
       />
 
-      <ReusableBottomSheetModal ref={repostOptionsBSheet} snapPoints={['25%']}>
+      <ReusableBottomSheetModal
+        ref={repostOptionsBSheet}
+        snapPoints={['25%', '50%']}>
         <View style={{gap: scale(10)}}>
           <Button
-            onPress={() => console.log('Quote Repost')}
+            onPress={() => {
+              repostOptionsBSheet.current?.dismiss();
+              navigation.navigate('CreatePost', {
+                isComment: false,
+                isQuoteRepost: true,
+                referenceId: post.snowflakeId,
+                screenTitle: 'Quote Post',
+                postDetails: post,
+              });
+            }}
             text={'Quote Repost'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
           />
           <Button
-            onPress={() => console.log('Repost')}
-            text={'Repost'}
+            onPress={async () => {
+              setLoading(true);
+              await handleRepost(post.snowflakeId, 1, !post.isReposted ?? true);
+              repostOptionsBSheet.current?.dismiss();
+              Toast.show({
+                type: 'THNRSuccess',
+                props: {
+                  subtitle: `Successfully ${
+                    !post.isReposted ? 'Undo Repost' : 'Repost'
+                  }!`,
+                },
+                position: 'top',
+                topOffset: insets.top,
+              });
+              setLoading(false);
+            }}
+            text={post.isReposted ? 'Undo Repost' : 'Repost'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
+            loading={loading}
           />
           <Button
             onPress={() => repostOptionsBSheet.current?.dismiss()}
@@ -278,7 +365,11 @@ const PostItem = ({
         </View>
       </ReusableBottomSheetModal>
 
-      <ReusableBottomSheetModal ref={moreOptionsBSheet} snapPoints={['25%']}>
+      <ReusableBottomSheetModal
+        ref={moreOptionsBSheet}
+        snapPoints={
+          post.sub !== authData?.sub ? ['25%', '50%'] : ['30%', '50%']
+        }>
         <View style={{gap: scale(10)}}>
           <Button
             onPress={copyToClipboard}
@@ -292,6 +383,19 @@ const PostItem = ({
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
           />
+          {post.sub === authData?.sub && (
+            <Button
+              onPress={async () => {
+                setDeleteLoading(true);
+                await handleDeletePost(post.snowflakeId);
+                setDeleteLoading(false);
+              }}
+              text={'Delete Post'}
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.textStyle}
+              loading={deleteLoading}
+            />
+          )}
           <Button
             onPress={() => moreOptionsBSheet.current?.dismiss()}
             text={'Cancel'}

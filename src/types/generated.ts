@@ -743,7 +743,7 @@ export type PostRequest = {
   content: string;
   inCommunity: number;
   privacySettings?: PrivacySettings;
-  referencedPost?: bigint;
+  referencedPost?: string;
   repostType?: RepostType;
   media: FileAttachment[];
 };
@@ -799,8 +799,8 @@ export type FeedResponse = {
 
   isLiked?: boolean;
   isReposted?: boolean;
-  topLevelPostId: bigint | null;
-  parentPostId: bigint | null;
+  topLevelPostId: string | null;
+  parentPostId: string | null;
   topLevelReplies: FeedResponse[] | null;
 };
 
@@ -831,9 +831,28 @@ export type GetReplyRequest = {
 export type GetFeedRequest = {
   sub: string;
   beforeId?: string;
+  limit?: number;
 };
 
 export type LikePost = {
   sub: string;
-  postId: string
-}
+  postId: string;
+  isLiked: boolean;
+};
+
+export type GetPostRequest = {
+  sub: string;
+  postId: string;
+};
+
+export type DeletePostRequest = {
+  sub: string;
+  postId: string;
+};
+
+export type RepostRequest = {
+  sub: string;
+  postId: string;
+  isReposted: boolean;
+  community: number;
+};

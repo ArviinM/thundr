@@ -1,45 +1,42 @@
-import React, {useCallback, useState, useEffect} from 'react';
-import {ScrollView, Text, View, RefreshControl} from 'react-native';
+import React, {useCallback, useState, useMemo} from 'react';
+import {View, Text, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {COLORS} from '../../../constants/commons.ts';
 import {RouteProp} from '@react-navigation/native';
-import {FeedResponse, IMessage} from '../../../types/generated.ts';
-import ErrorView from '../../../components/shared/ErrorView.tsx';
-import PostItem from '../../../components/Community/PostItem.tsx';
-import {scale} from '../../../utils/utils.ts';
-import CreatePostBar from '../../../components/Community/CreatePostBar.tsx';
-import {RootNavigationParams} from '../../../constants/navigator.ts';
 import {FlashList} from '@shopify/flash-list';
-import {useAuth} from '../../../providers/Auth.tsx';
-import {useGetReplies} from '../../../hooks/community/useGetReplies.ts';
+import {COLORS} from '../../../constants/commons';
+import {FeedResponse} from '../../../types/generated';
+import {RootNavigationParams} from '../../../constants/navigator';
+import {useAuth} from '../../../providers/Auth';
+import {useGetReplies} from '../../../hooks/community/useGetReplies';
+import ErrorView from '../../../components/shared/ErrorView';
+import PostItem from '../../../components/Community/PostItem';
+import CreatePostBar from '../../../components/Community/CreatePostBar';
+import {scale} from '../../../utils/utils';
 import {Loading} from '../../../components/shared/Loading.tsx';
+import {useGetPost} from '../../../hooks/community/useGetPost.ts';
 
-export type PostParams = {
-  snowflakeId?: string;
-  postDetails?: FeedResponse;
-};
-
-type PostProps = {
+export type PostProps = {
   route?: RouteProp<RootNavigationParams, 'Post'>;
 };
 
 const Post: React.FC<PostProps> = ({route}) => {
   const {authData} = useAuth();
   const [refreshing, setRefreshing] = useState(false);
-  const [firstReplyId, setFirstReplyId] = useState<string | null>(null);
+
+  const {snowflakeId, postDetails} = route?.params || {};
+
+  const getMainPost = useGetPost({
+    sub: authData?.sub || '',
+    postId: postDetails.snowflakeId,
+  });
 
   const getReplies = useGetReplies({
     sub: authData?.sub || '',
-    snowflakeId: route?.params?.snowflakeId || '',
-    beforeId: undefined,
+    snowflakeId: snowflakeId || '',
   });
 
   const renderItem = useCallback(
-    (feed: {item: FeedResponse; index: any | null | undefined}) => (
-      <View>
-        <PostItem post={feed.item} />
-      </View>
-    ),
+    ({item}: {item: FeedResponse}) => <PostItem post={item} />,
     [],
   );
 
@@ -54,36 +51,42 @@ const Post: React.FC<PostProps> = ({route}) => {
     }
   }, [getReplies]);
 
-  const loadMoreReplies = async () => {
-    if (
-      getReplies.isLoading ||
-      getReplies.isFetchingNextPage ||
-      !getReplies.hasNextPage
-    ) {
-      return;
+  const loadMoreReplies = useCallback(() => {
+    if (getReplies.hasNextPage && !getReplies.isFetchingNextPage) {
+      getReplies.fetchNextPage();
     }
+  }, [getReplies]);
 
-    const currentFirstReplyId = getReplies.data?.pages[0][0]?.snowflakeId;
-
-    if (currentFirstReplyId !== firstReplyId) {
-      setFirstReplyId(currentFirstReplyId as string);
-      return;
+  const ListHeaderComponent = useMemo(() => {
+    if (!postDetails || !getMainPost.data) {
+      return null;
     }
+    return (
+      <>
+        <PostItem post={getMainPost.data} isFromPost />
+        <View
+          style={{
+            paddingHorizontal: scale(16),
+            paddingVertical: scale(10),
+            borderTopWidth: 0.2,
+            borderTopColor: COLORS.black4,
+          }}>
+          <Text
+            style={{
+              fontFamily: 'Montserrat-SemiBold',
+              fontSize: scale(10),
+              color: COLORS.black4,
+            }}>
+            Replies
+          </Text>
+        </View>
+      </>
+    );
+  }, [getMainPost.data, postDetails]);
 
-    await getReplies.fetchNextPage();
-  };
-
-  useEffect(() => {
-    if (getReplies.data?.pages[0][0]?.snowflakeId) {
-      setFirstReplyId(getReplies.data.pages[0][0].snowflakeId as string);
-    }
-  }, [getReplies.data]);
-
-  if (!route?.params?.snowflakeId || !route?.params?.postDetails) {
+  if (!snowflakeId || !postDetails) {
     return <ErrorView message="Unable to load post. Missing required data." />;
   }
-
-  const {postDetails, snowflakeId} = route.params;
 
   if (getReplies.isLoading) {
     return <Loading />;
@@ -94,29 +97,7 @@ const Post: React.FC<PostProps> = ({route}) => {
       style={{flex: 1, backgroundColor: COLORS.white}}
       edges={['left', 'right']}>
       <FlashList
-        ListHeaderComponent={() => (
-          <>
-            <View style={{flex: 1}}>
-              <PostItem post={postDetails} isFromPost />
-            </View>
-            <View
-              style={{
-                paddingHorizontal: scale(16),
-                paddingVertical: scale(10),
-                borderTopWidth: 0.2,
-                borderTopColor: COLORS.black4,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'Montserrat-SemiBold',
-                  fontSize: scale(10),
-                  color: COLORS.black4,
-                }}>
-                Replies
-              </Text>
-            </View>
-          </>
-        )}
+        ListHeaderComponent={ListHeaderComponent}
         estimatedItemSize={100}
         data={getReplies.data?.pages.flatMap(page => page) || []}
         renderItem={renderItem}
@@ -142,4 +123,4 @@ const Post: React.FC<PostProps> = ({route}) => {
   );
 };
 
-export default Post;
+export default React.memo(Post);

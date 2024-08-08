@@ -140,6 +140,9 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
                 flexDirection: 'row',
                 alignItems: 'center',
               },
+              isAddComment && {
+                width: scale(250),
+              },
             ]}>
             <View
               style={[

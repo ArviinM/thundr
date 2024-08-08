@@ -5,7 +5,7 @@ export const Repost = (props: {focused: boolean}) => {
   return (
     <Svg width={13} height={16} fill="none">
       <Path
-        stroke={props.focused ? COLORS.inverted : '#000'}
+        stroke={props.focused ? '#7aa624' : '#000'}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeOpacity={0.66}
