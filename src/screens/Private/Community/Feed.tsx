@@ -42,6 +42,7 @@ const Feed = () => {
               key={`feed-repost-${item.snowflakeId}-${item.sub}-${index}`}
               post={item.referencedPost}
               isRepostedPost
+              postSub={item.sub}
             />
           )}
         </>

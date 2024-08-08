@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FeedResponse} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
 import {COLORS} from '../../constants/commons.ts';
@@ -31,6 +31,7 @@ interface PostItemProps {
   isFromPost?: boolean;
   isAddComment?: boolean;
   isRepostedPost?: boolean;
+  postSub?: string;
 }
 
 const PostItem = ({
@@ -38,11 +39,14 @@ const PostItem = ({
   isFromPost = false,
   isAddComment = false,
   isRepostedPost = false,
+  postSub,
 }: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
+
+  const {authData} = useAuth();
 
   const openMediaViewer = (index: number) => {
     setInitialImageIndex(index);
@@ -53,7 +57,6 @@ const PostItem = ({
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
   const {isUserVerified, showModal, handleDeletePost, handleRepost} =
     useCommunity();
-  const {authData} = useAuth();
 
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const handleOpenReportBSheet = () => {
@@ -143,7 +146,7 @@ const PostItem = ({
                 fontFamily: 'Montserrat-Medium',
                 color: COLORS.black,
               }}>
-              {post.isReposted ? 'You' : post.customerName} reposted
+              {authData?.sub === postSub ? 'You' : post.customerName} reposted
             </Text>
           </View>
         )}
@@ -228,6 +231,14 @@ const PostItem = ({
                       attachment.attachmentType !== 'WEB_EMBED' &&
                         isUserVerified &&
                         openMediaViewer(index);
+
+                      if (attachment.attachmentType === 'WEB_EMBED') {
+                        if (attachment.attachmentUrl) {
+                          Linking.openURL(attachment.attachmentUrl).catch(err =>
+                            console.error('An error occurred', err),
+                          );
+                        }
+                      }
 
                       if (!isUserVerified) {
                         showModal();
