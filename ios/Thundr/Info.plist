@@ -78,6 +78,8 @@
 	<string>This app requires to access your photo library to pick your desired image in choosing your profile pictures.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This app collects usage data to help us understand how people use it and make it better for everyone.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>This app required to access your photo library usage to save the photo.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ClimateCrisis-Regular.ttf</string>

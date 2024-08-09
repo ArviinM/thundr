@@ -39,17 +39,30 @@ export function useLikePost() {
           return {
             ...oldData,
             pages: oldData.pages.map((page: FeedResponse[]) =>
-              page.map(post =>
-                post.snowflakeId === data.postId
-                  ? {
-                      ...post,
+              page.map(post => {
+                if (post.snowflakeId === data.postId) {
+                  return {
+                    ...post,
+                    isLiked: data.isLiked,
+                    likeCount: data.isLiked
+                      ? (post.likeCount || 0) + 1
+                      : Math.max((post.likeCount || 0) - 1, 0),
+                  };
+                }
+                if (post.referencedPost?.snowflakeId === data.postId) {
+                  return {
+                    ...post,
+                    referencedPost: {
+                      ...post.referencedPost,
                       isLiked: data.isLiked,
                       likeCount: data.isLiked
-                        ? (post.likeCount || 0) + 1
-                        : Math.max((post.likeCount || 0) - 1, 0),
-                    }
-                  : post,
-              ),
+                        ? (post.referencedPost.likeCount || 0) + 1
+                        : Math.max((post.referencedPost.likeCount || 0) - 1, 0),
+                    },
+                  };
+                }
+                return post;
+              }),
             ),
           };
         },
@@ -71,6 +84,45 @@ export function useLikePost() {
           };
         },
       );
+
+      queryClient.setQueriesData(
+        {queryKey: ['get-replies']},
+        (oldData: any) => {
+          if (!oldData || !oldData.pages) {
+            return oldData;
+          }
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: FeedResponse[]) =>
+              page.map(post => {
+                if (post.snowflakeId === data.postId) {
+                  return {
+                    ...post,
+                    isLiked: data.isLiked,
+                    likeCount: data.isLiked
+                      ? (post.likeCount || 0) + 1
+                      : Math.max((post.likeCount || 0) - 1, 0),
+                  };
+                }
+                if (post.referencedPost?.snowflakeId === data.postId) {
+                  return {
+                    ...post,
+                    referencedPost: {
+                      ...post.referencedPost,
+                      isLiked: data.isLiked,
+                      likeCount: data.isLiked
+                        ? (post.referencedPost.likeCount || 0) + 1
+                        : Math.max((post.referencedPost.likeCount || 0) - 1, 0),
+                    },
+                  };
+                }
+                return post;
+              }),
+            ),
+          };
+        },
+      );
     },
     onSuccess: (isLiked: boolean, variables: LikePost) => {
       queryClient.setQueriesData(
@@ -87,6 +139,15 @@ export function useLikePost() {
                 likeCount: post.likeCount,
               };
             }
+            if (post.referencedPost?.snowflakeId === variables.postId) {
+              return {
+                ...post,
+                referencedPost: {
+                  ...post.referencedPost,
+                  likeCount: post.referencedPost.likeCount,
+                },
+              };
+            }
             return post;
           };
 
@@ -99,7 +160,7 @@ export function useLikePost() {
         },
       );
 
-      // // Update get-post query
+      // Update get-post query
       queryClient.setQueriesData(
         {queryKey: ['get-post', variables.postId]},
         (oldData: FeedResponse | undefined) => {
@@ -110,6 +171,41 @@ export function useLikePost() {
           return {
             ...oldData,
             likeCount: oldData.likeCount,
+          };
+        },
+      );
+
+      queryClient.setQueriesData(
+        {queryKey: ['get-replies']},
+        (oldData: any) => {
+          if (!oldData || !oldData.pages) {
+            return oldData;
+          }
+
+          const updatePost = (post: FeedResponse) => {
+            if (post.snowflakeId === variables.postId) {
+              return {
+                ...post,
+                likeCount: post.likeCount,
+              };
+            }
+            if (post.referencedPost?.snowflakeId === variables.postId) {
+              return {
+                ...post,
+                referencedPost: {
+                  ...post.referencedPost,
+                  likeCount: post.referencedPost.likeCount,
+                },
+              };
+            }
+            return post;
+          };
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: FeedResponse[]) =>
+              page.map(updatePost),
+            ),
           };
         },
       );
