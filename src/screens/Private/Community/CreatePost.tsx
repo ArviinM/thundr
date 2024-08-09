@@ -4,7 +4,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {useCommunity} from '../../../providers/Community.tsx';
 import {Image} from 'expo-image';
-import {scale} from '../../../utils/utils.ts';
+import {
+  MAX_IMAGE_COUNT,
+  MAX_IMAGE_SIZE_BYTES,
+  MAX_VIDEO_COUNT,
+  MAX_VIDEO_SIZE_BYTES,
+  scale,
+} from '../../../utils/utils.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
 import {ImagesIcon} from '../../../assets/images/chat/ImagesIcon.tsx';
 import {KeyboardStickyView} from 'react-native-keyboard-controller';
@@ -140,6 +146,82 @@ const CreatePost = ({route}: CreatePostParams) => {
         maxFiles: 4,
       });
 
+      if (!newMedia || newMedia.length === 0) {
+        return null;
+      }
+
+      const videos = newMedia.filter(item => item.mime.startsWith('video'));
+      const images = newMedia.filter(item => item.mime.startsWith('image'));
+
+      if (videos.length === MAX_VIDEO_COUNT && images.length > 0) {
+        Toast.show({
+          type: 'THNRWarning',
+          props: {
+            title: 'Hala sis!',
+            subtitle: 'You can only send a single video.',
+          },
+          position: 'bottom',
+          bottomOffset: 60,
+        });
+        throw new Error('Video selection limit exceeded');
+      }
+
+      if (videos.length > MAX_VIDEO_COUNT) {
+        Toast.show({
+          type: 'THNRWarning',
+          props: {
+            title: 'Hala, ang dami!',
+            subtitle: 'Please select a single video.',
+          },
+          position: 'bottom',
+          bottomOffset: 60,
+        });
+        throw new Error('Video selection limit exceeded');
+      }
+
+      if (images.length > MAX_IMAGE_COUNT) {
+        Toast.show({
+          type: 'THNRWarning',
+          props: {
+            title: 'Hala, ang dami!',
+            subtitle: 'Please select up to 4 images.',
+          },
+          position: 'bottom',
+          bottomOffset: 60,
+        });
+        throw new Error('Image selection limit exceeded');
+      }
+
+      for (const video of videos) {
+        if (video.size >= MAX_VIDEO_SIZE_BYTES) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang laki!',
+              subtitle: 'Limit upload up to 25mb per video',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Video exceeds maximum size limit');
+        }
+      }
+
+      for (const image of images) {
+        if (image.size >= MAX_IMAGE_SIZE_BYTES) {
+          Toast.show({
+            type: 'THNRWarning',
+            props: {
+              title: 'Hala, ang laki!',
+              subtitle: 'Limit upload up to 8mb per photo',
+            },
+            position: 'bottom',
+            bottomOffset: 60,
+          });
+          throw new Error('Image exceeds maximum size limit');
+        }
+      }
+
       // Filter out already selected media
       const filteredMedia = newMedia.filter(
         newItem =>
@@ -225,7 +307,7 @@ const CreatePost = ({route}: CreatePostParams) => {
     if (isOpenGallery) {
       setTimeout(() => openMediaPicker(), 100);
     }
-  }, [isOpenGallery]);
+  }, [isOpenGallery, openMediaPicker]);
 
   return (
     <View
