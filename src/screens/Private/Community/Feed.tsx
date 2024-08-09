@@ -39,7 +39,7 @@ const Feed = () => {
           )}
           {item.referenceType === 'REPOST' && item.referencedPost && (
             <PostItem
-              key={`feed-repost-${item.snowflakeId}-${item.sub}-${index}`}
+              key={`feed-repost-${item.snowflakeId}-${item.sub}-${index}-${item.customerName}`}
               post={item.referencedPost}
               isRepostedPost
               postSub={item.sub}

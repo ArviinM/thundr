@@ -26,16 +26,6 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const {profileData, isUserVerified, showModal} = useCommunity();
 
-  const sortedCustomerImages = profileData?.customerPhoto.sort((a, b) => {
-    if (a.primary) {
-      return -1;
-    }
-    if (b.primary) {
-      return 1;
-    }
-    return 0;
-  });
-
   const handlePress = (isOpenGallery?: boolean) => {
     navigation.navigate('CreatePost', {
       isComment,
@@ -57,9 +47,9 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
         paddingBottom: scale(6),
       }}>
       <TouchableOpacity onPress={() => navigation.navigate('ProfileStack')}>
-        {sortedCustomerImages && (
+        {profileData && (
           <Image
-            source={sortedCustomerImages[0].photoUrl}
+            source={profileData?.customerPhoto[0].photoUrl}
             placeholder={profileData?.customerPhoto[0].blurHash}
             style={{width: scale(40), height: scale(40), borderRadius: 30}}
             transition={100}

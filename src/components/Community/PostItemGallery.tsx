@@ -6,6 +6,7 @@ import {
   Modal,
   Text,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import Animated, {useAnimatedStyle, withSpring} from 'react-native-reanimated';
@@ -21,6 +22,7 @@ import {scale} from '../../utils/utils.ts';
 import {Image} from 'expo-image';
 import {formatDistanceToNow} from 'date-fns/formatDistanceToNow';
 import {CloseIconWhite} from '../../assets/images/CloseIconWhite.tsx';
+import {saveImage} from '../../utils/saveImage.ts';
 
 type Props = {
   attachments: PostAttachment[];
@@ -84,6 +86,16 @@ function ImageViewing({
   if (!isVisible) {
     return null;
   }
+
+  const handleSave = async () => {
+    const currentAttachment = attachments[imageIndex];
+    if (currentAttachment.attachmentType === 'PHOTO') {
+      await saveImage(currentAttachment.attachmentImage);
+      Alert.alert('Image saved!');
+    } else {
+      Alert.alert('Cannot save', 'Saving videos is not supported yet.');
+    }
+  };
 
   return (
     <Modal
@@ -220,7 +232,8 @@ function ImageViewing({
                       paddingVertical: scale(8),
                       borderRadius: scale(20),
                     }}
-                    hitSlop={20}>
+                    hitSlop={20}
+                    onPress={handleSave}>
                     <Text
                       style={{
                         fontFamily: 'Montserrat-Regular',
