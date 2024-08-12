@@ -34,6 +34,7 @@ import {useGetStatus} from '../hooks/status/useGetStatus.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
 import DeviceInfo from 'react-native-device-info';
 import {AppState} from 'react-native';
+import {atob} from 'react-native-quick-base64';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
