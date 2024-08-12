@@ -63,10 +63,10 @@ const Filters = () => {
   const customerFilters = useCustomerFilters();
 
   const [minValue, setMinValue] = useState<number>(
-    (Number(getCustomerFilters.data?.ageMin) - 35) | 0,
+    (Number(getCustomerFilters.data?.ageMin) - 18) | 0,
   );
   const [maxValue, setMaxValue] = useState<number>(
-    (Number(getCustomerFilters.data?.ageMax) - 35) | 45,
+    (Number(getCustomerFilters.data?.ageMax) - 18) | 45,
   );
 
   const [proximityValue, setProximityValue] = useState<number[]>([
@@ -186,8 +186,8 @@ const Filters = () => {
           sub: auth.authData.sub,
           updateDate: Date.now().toString(),
           proximity: proximityValue.toString(),
-          ageMax: (maxValue + 35).toString(),
-          ageMin: (minValue + 35).toString(),
+          ageMax: (maxValue + 18).toString(),
+          ageMin: (minValue + 18).toString(),
           gender: convertAbbreviationsToFullWords(selectedLetters),
           hobbies: selectedInterests.toString() || '',
           starSign: selectedStarSign.toString() || '',
@@ -223,8 +223,8 @@ const Filters = () => {
 
   useEffect(() => {
     if (getCustomerFilters.isSuccess) {
-      setMinValue(Number(getCustomerFilters.data?.ageMin) - 35 || 0);
-      setMaxValue(Number(getCustomerFilters.data?.ageMax) - 35 || 45);
+      setMinValue(Number(getCustomerFilters.data?.ageMin) - 18 || 0);
+      setMaxValue(Number(getCustomerFilters.data?.ageMax) - 18 || 45);
       setProximityValue([Number(getCustomerFilters.data?.proximity || 250)]);
       setSelectedLetters(
         convertFullWordsToAbbreviations(getCustomerFilters.data?.gender || ''),
@@ -381,7 +381,7 @@ const Filters = () => {
                 <View style={styles.titleContainer}>
                   <Text style={styles.titleFilterText}>Age Range</Text>
                   <Text style={styles.subTitleFilterText}>
-                    {minValue + 35}-{maxValue + 35}
+                    {minValue + 18}-{maxValue + 18}
                   </Text>
                 </View>
                 <View
