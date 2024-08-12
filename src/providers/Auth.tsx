@@ -33,6 +33,7 @@ import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.
 import {useGetStatus} from '../hooks/status/useGetStatus.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
 import DeviceInfo from 'react-native-device-info';
+import {AppState} from 'react-native';
 
 type AuthContextData = {
   authData?: AuthDataResponse;
@@ -362,6 +363,59 @@ const AuthProvider = ({children}: AuthProviderProps) => {
       socket?.off('CHAT_DELETE');
     };
   }, [authData, socket]);
+
+  // New useEffect for AppState listener
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        // App has come to the foreground
+        checkAndRefreshToken();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [authData]);
+
+  const checkAndRefreshToken = async () => {
+    if (authData && isTokenExpired(authData.accessToken)) {
+      try {
+        const result = await refreshTokenCustomer.mutateAsync({
+          refreshToken: authData.refreshToken,
+          sub: authData.sub,
+          username: authData.username,
+        });
+        // Update authData with new tokens
+        const updatedAuthData = {...authData, ...result};
+        setAuthData(updatedAuthData);
+        await AsyncStorage.setItem(
+          '@AuthData',
+          JSON.stringify(updatedAuthData),
+        );
+      } catch (error) {
+        console.error('Failed to refresh token:', error);
+        // Handle refresh failure (e.g., force logout)
+        await signOut();
+      }
+    }
+  };
+
+  const isTokenExpired = (token: string): boolean => {
+    if (!token) {
+      return true;
+    }
+
+    try {
+      const [, payload] = token.split('.');
+      const decodedPayload = JSON.parse(atob(payload));
+      const expirationTime = decodedPayload.exp * 1000; // Convert to milliseconds
+      return Date.now() >= expirationTime;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return true; // Assume expired if there's an error
+    }
+  };
 
   async function loadStorageData(): Promise<void> {
     try {
