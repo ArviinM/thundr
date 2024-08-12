@@ -48,9 +48,6 @@ import {queryClient} from '../../../utils/queryClient.ts';
 import {
   convertAbbreviationToWord,
   convertWordToAbbreviation,
-  generateDayData,
-  generateMonthData,
-  generateYearData,
   minDate,
   moderateScale,
   parseFeetAndInches,
@@ -199,7 +196,7 @@ const EditProfile = ({route}: EditProfileProps) => {
   const {
     control,
     handleSubmit,
-    formState: {errors, isValid},
+    formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -459,10 +456,10 @@ const EditProfile = ({route}: EditProfileProps) => {
                           letter={letter}
                           selectedLetters={[selectedLetter || '']}
                           allowSingleSelection
-                          onChange={(letter: string, isSelected: boolean) => {
+                          onChange={(l: string, isSelected: boolean) => {
                             if (isSelected) {
-                              onChange(letter);
-                              setSelectedLetter(letter);
+                              onChange(l);
+                              setSelectedLetter(l);
                               setForceUpdate(forceUpdate + 1); // Trigger re-render
                             }
                           }}

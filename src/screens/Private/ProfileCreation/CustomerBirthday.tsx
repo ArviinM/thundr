@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 
 import {NavigationProp, useNavigation} from '@react-navigation/native';
@@ -13,7 +12,6 @@ import StepProgressBar from '../../../components/shared/StepProgressBar.tsx';
 import {IMAGES} from '../../../constants/images.ts';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 
-import {yupResolver} from '@hookform/resolvers/yup';
 import {
   KeyboardAwareScrollView,
   KeyboardStickyView,

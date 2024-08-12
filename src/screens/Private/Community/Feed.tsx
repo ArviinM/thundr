@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 import {COLORS} from '../../../constants/commons.ts';
 import CreatePostBar from '../../../components/Community/CreatePostBar.tsx';
 import {useCommunity} from '../../../providers/Community.tsx';
