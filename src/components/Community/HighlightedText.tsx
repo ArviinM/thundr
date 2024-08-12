@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, Linking, View, StyleSheet} from 'react-native';
-import {COLORS} from '../../constants/commons.ts';
-import {scale} from '../../utils/utils.ts';
+import {COLORS} from '../../constants/commons';
+import {scale} from '../../utils/utils';
 
 interface HighlightedTextProps {
   text: string;
@@ -47,14 +47,16 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
       }
       if (part.startsWith('http')) {
         return (
-          <TouchableOpacity key={index} onPress={() => handleLinkPress(part)}>
-            <Text style={styles.link}>{part}</Text>
-          </TouchableOpacity>
+          <Text key={index} style={styles.text}>
+            <Text style={styles.link} onPress={() => handleLinkPress(part)}>
+              {part}
+            </Text>
+          </Text>
         );
       } else if (part.startsWith('#')) {
         return (
-          <Text key={index} style={styles.hashtag}>
-            {part}
+          <Text key={index} style={styles.text}>
+            <Text style={styles.hashtag}>{part}</Text>
           </Text>
         );
       }
@@ -84,28 +86,32 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start', // Align items to the top to avoid extra padding
   },
   text: {
     fontFamily: 'Montserrat-Medium',
     fontSize: scale(13),
     color: COLORS.black,
+    lineHeight: scale(18), // Ensure consistent line height
   },
   link: {
     color: COLORS.blue,
     textDecorationLine: 'underline',
     fontFamily: 'Montserrat-Medium',
     fontSize: scale(13),
+    lineHeight: scale(18),
   },
   hashtag: {
     color: COLORS.primary1,
     fontFamily: 'Montserrat-Medium',
     fontSize: scale(13),
+    lineHeight: scale(18),
   },
   seeMoreLess: {
     color: COLORS.primary1,
     fontFamily: 'Montserrat-Medium',
     fontSize: scale(13),
+    marginTop: scale(5), // Add a little margin to separate the See More/Less text
   },
 });
 
