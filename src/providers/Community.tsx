@@ -16,6 +16,8 @@ import {useLikePost} from '../hooks/community/useLikePost.ts';
 import {useDeletePost} from '../hooks/community/useDeletePost.ts';
 import {queryClient} from '../utils/queryClient.ts';
 import {useCreateRepost} from '../hooks/community/useCreateRepost.ts';
+import useSubscribeCheck from '../store/subscribeStore.ts';
+import {useGetCustomerSubscribed} from '../hooks/subscribe/useGetCustomerSubscribed.ts';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
@@ -53,6 +55,14 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   const facialVerificationState = useGetFacialVerificationState({
     sub: auth.authData?.sub || '',
   });
+
+  const customerSubscribed = useGetCustomerSubscribed({
+    sub: auth.authData?.sub || '',
+    productId: 'THDR-BOLT-001',
+  });
+  const setIsCustomerSubscribed = useSubscribeCheck(
+    state => state.setIsCustomerSubscribed,
+  );
 
   const createPost = useCreatePost();
   const replyPost = useReplyPost();
@@ -135,6 +145,12 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     facialVerificationState.data,
     facialVerificationState.isSuccess,
   ]);
+
+  useEffect(() => {
+    if (customerSubscribed.data) {
+      setIsCustomerSubscribed(customerSubscribed.data.hasSubscription);
+    }
+  }, [customerSubscribed.data, setIsCustomerSubscribed]);
 
   return (
     <CommunityContext.Provider
