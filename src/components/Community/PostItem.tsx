@@ -180,7 +180,7 @@ const PostItem = ({
               />
             )}
           </View>
-          <View style={{flex: 1, gap: scale(6)}}>
+          <View style={{flex: 1, gap: scale(3)}}>
             {/* Name and Time Bar */}
             <View
               style={{
@@ -221,6 +221,7 @@ const PostItem = ({
                     gap: scale(isAddComment ? 1 : 2),
                     borderRadius: isAddComment ? 0 : 12,
                     overflow: 'hidden',
+                    paddingVertical: scale(3),
                   },
                 ]}>
                 {post.attachments.map((attachment, index) => (

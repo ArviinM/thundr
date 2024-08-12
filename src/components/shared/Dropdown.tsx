@@ -14,6 +14,7 @@ type CustomDropdownProps = {
   placeholder: string;
   onChange?: (item: CustomDropDownData) => void;
   value?: string;
+  isDisabled?: boolean;
 };
 
 export const CustomDropdown = ({
@@ -21,9 +22,11 @@ export const CustomDropdown = ({
   placeholder,
   onChange,
   value,
+  isDisabled = false,
 }: CustomDropdownProps) => {
   return (
     <Dropdown
+      disable={isDisabled}
       style={styles.dropdown}
       placeholderStyle={styles.placeHolderStyle}
       data={data}

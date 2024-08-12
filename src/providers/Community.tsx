@@ -107,6 +107,10 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   };
 
   useEffect(() => {
+    if (auth.authData?.forProfileCreation) {
+      return;
+    }
+
     let timer: ReturnType<typeof setTimeout> | null = null;
 
     if (facialVerificationState.isSuccess) {
@@ -126,7 +130,11 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
         clearTimeout(timer);
       }
     };
-  }, [facialVerificationState.data, facialVerificationState.isSuccess]);
+  }, [
+    auth.authData?.forProfileCreation,
+    facialVerificationState.data,
+    facialVerificationState.isSuccess,
+  ]);
 
   return (
     <CommunityContext.Provider

@@ -1077,6 +1077,8 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - react-native-date-picker (5.0.4):
+    - React-Core
   - react-native-geolocation (3.2.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1401,6 +1403,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -1557,6 +1560,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-blur:
     :path: "../node_modules/@react-native-community/blur"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-keyboard-controller:
@@ -1708,6 +1713,7 @@ SPEC CHECKSUMS:
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: d81d930c1b7f4db284e1d721fe7fdc99230ca108
   react-native-blur: 73561b0608a43d76f2874738aee8e3909c11d083
+  react-native-date-picker: 6891317e850deae5b53d51355226e07a495aba61
   react-native-geolocation: fff5fb51dd294e845aa203c2e747958421425087
   react-native-keyboard-controller: f9633273f608756bbe5bfbd040f8de0d3e545067
   react-native-pager-view: 3796df305c59c352a26811ead0f6ea78acac1886

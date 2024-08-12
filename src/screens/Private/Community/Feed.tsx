@@ -10,6 +10,7 @@ import PostItem from '../../../components/Community/PostItem.tsx';
 import {useGetLatestPosts} from '../../../hooks/community/useGetLatestPosts.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 const Feed = () => {
   const [firstSnowflakeId, setFirstSnowflakeId] = useState<string | null>(null);
@@ -17,6 +18,7 @@ const Feed = () => {
 
   const {loading} = useCommunity();
   const {authData} = useAuth();
+  const tabBarHeight = useBottomTabBarHeight();
 
   const community = useGetLatestPosts({
     sub: authData?.sub || '',
@@ -100,6 +102,7 @@ const Feed = () => {
         data={community.data?.pages.flatMap(page => page) || []}
         estimatedItemSize={286}
         ListHeaderComponent={<CreatePostBar actionTitle={'Share a post'} />}
+        ListFooterComponent={<View style={{paddingBottom: tabBarHeight}} />}
         keyExtractor={keyExtractor}
         onEndReached={loadMorePosts}
         onEndReachedThreshold={0.1}
