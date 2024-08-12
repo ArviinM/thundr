@@ -254,7 +254,7 @@ export function isImageOrVideo(mimeType: string) {
 
 const today = new Date();
 export const minDate = new Date(
-  today.getFullYear() - 20,
+  today.getFullYear() - 18,
   today.getMonth(),
   today.getDate(),
 );
