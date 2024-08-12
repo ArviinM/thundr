@@ -112,7 +112,7 @@ const CustomerBirthday = () => {
               </View>
               <View style={profileCreationStyles.bodyContainer}>
                 <Text style={profileCreationStyles.textBody}>
-                  Oh bongga. Welcome to Thundr! ⚡️{'\n'}Make sure, you are 20
+                  Oh bongga. Welcome to Thundr! ⚡️{'\n'}Make sure, you are 18
                   years old and above to join the community.
                 </Text>
               </View>
