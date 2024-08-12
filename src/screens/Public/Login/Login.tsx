@@ -91,7 +91,7 @@ const Login = ({route}: LoginProps) => {
           </View>
           <View style={styles.bottomContainer}>
             <Text style={styles.termsText}>
-              By tapping ‘Sign in’ you agree to our{' '}
+              By continuing you agree to our{' '}
               <Text
                 style={styles.termsLink}
                 onPress={() => handleTermsPress(true)}>
