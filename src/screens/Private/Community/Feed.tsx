@@ -11,6 +11,7 @@ import {useGetLatestPosts} from '../../../hooks/community/useGetLatestPosts.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {useScrollToTop} from '@react-navigation/native';
 
 const Feed = () => {
   const [firstSnowflakeId, setFirstSnowflakeId] = useState<string | null>(null);
@@ -19,6 +20,9 @@ const Feed = () => {
   const {loading} = useCommunity();
   const {authData} = useAuth();
   const tabBarHeight = useBottomTabBarHeight();
+  const scrollRef = React.useRef(null);
+
+  useScrollToTop(scrollRef);
 
   const community = useGetLatestPosts({
     sub: authData?.sub || '',
@@ -98,6 +102,7 @@ const Feed = () => {
       style={{flex: 1, backgroundColor: COLORS.white}}
       edges={['right', 'left']}>
       <FlashList
+        ref={scrollRef}
         renderItem={renderItem}
         data={community.data?.pages.flatMap(page => page) || []}
         estimatedItemSize={286}
