@@ -74,7 +74,7 @@ export const profileCreationStyles = StyleSheet.create({
     marginTop: 100,
     marginBottom: 50,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around',
     gap: 6,
   },
   dropdownSection: {

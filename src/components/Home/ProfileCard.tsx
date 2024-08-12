@@ -268,7 +268,7 @@ const ProfileCard = ({
               <View>
                 <Text style={cardStyles.subtitle}>Birthday</Text>
                 <Text style={cardStyles.body}>
-                  {moment(user.customerData.birthday).format('MMMM DD, YYYY')}
+                  {moment(user.customerData.birthday).format('MMMM DD')}
                 </Text>
               </View>
             )}

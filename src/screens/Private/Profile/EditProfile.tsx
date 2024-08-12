@@ -1,6 +1,12 @@
 import React, {useEffect, useState} from 'react';
 
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Image as ImageType} from 'react-native-image-crop-picker';
@@ -45,6 +51,7 @@ import {
   generateDayData,
   generateMonthData,
   generateYearData,
+  minDate,
   moderateScale,
   parseFeetAndInches,
   scale,
@@ -64,6 +71,8 @@ import {useRemoveProfilePhoto} from '../../../hooks/profile/useRemoveProfilePhot
 import {useGetCustomerProfile} from '../../../hooks/profile/useGetCustomerProfile.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {Loading} from '../../../components/shared/Loading.tsx';
+import DatePicker from 'react-native-date-picker';
+import {format} from 'date-fns';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -158,9 +167,7 @@ const EditProfile = ({route}: EditProfileProps) => {
 
   const schema = yup.object().shape({
     name: yup.string().required('Mars, we need your name!'),
-    month: yup.string().required('Nako mars, we need your birth month po!'),
-    day: yup.string().required('Nako mars, we need your birth day po!'),
-    year: yup.string().required('Nako mars, we need your birth year po!'),
+    birthday: yup.string().required('Nako mars, we need your birth day po!'),
     bio: yup.string().required('Mars, we need your bio!'),
     work: yup.string().required('Mars, any work will do!'),
     location: yup.string().required('Nako mars! We need your location po!'),
@@ -180,15 +187,14 @@ const EditProfile = ({route}: EditProfileProps) => {
   });
 
   const {feet, inches} = parseFeetAndInches(customerDetails?.height);
-  const [year, month, day] = birthday ? birthday.split('-') : ['', '', ''];
-  const monthData = generateMonthData();
-  const dayData = generateDayData();
-  const yearData = generateYearData();
   const letters = ['L', 'G', 'B', 'T', 'Q', 'I', 'A', '+'];
   const [selectedLetter, setSelectedLetter] = useState<string>(
     convertWordToAbbreviation(gender || ''),
   );
   const [forceUpdate, setForceUpdate] = useState(0); // State for re-render
+
+  const [date, setDate] = useState(new Date(birthday as string));
+  const [open, setOpen] = useState(false);
 
   const {
     control,
@@ -198,9 +204,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     resolver: yupResolver(schema),
     defaultValues: {
       name: name,
-      year: year,
-      month: month,
-      day: day,
+      birthday: birthday,
       selectedLetter: convertWordToAbbreviation(gender || ''),
       bio: customerDetails?.bio || '',
       work: customerDetails?.work || '',
@@ -223,9 +227,7 @@ const EditProfile = ({route}: EditProfileProps) => {
     work: string;
     location: string;
     name: string;
-    year: string;
-    month: string;
-    day: string;
+    birthday: string;
     selectedLetter: string;
     feet?: string;
     inches?: string;
@@ -293,7 +295,7 @@ const EditProfile = ({route}: EditProfileProps) => {
           name: data.name,
           gender: convertAbbreviationToWord(selectedLetter),
           hometown: 'None',
-          birthday: `${data.year}-${data.month}-${data.day}`,
+          birthday: format(date, 'yyyy-MM-dd'),
         });
       }
 
@@ -314,437 +316,339 @@ const EditProfile = ({route}: EditProfileProps) => {
   };
 
   return (
-    <SafeAreaView
-      style={{flex: 1, backgroundColor: 'white'}}
-      edges={['right', 'left']}>
-      <KeyboardAwareScrollView style={{flex: 1, backgroundColor: COLORS.white}}>
-        <View>
-          {customerProfile.isLoading || customerProfile.isRefetching ? (
-            <View style={{height: scale(200), padding: 16}}>
-              <Loading />
-            </View>
-          ) : (
-            <View style={styles.container}>
-              <View>
-                {customerProfile.data &&
-                customerProfile.data.customerPhoto &&
-                customerProfile.data.customerPhoto[0] ? (
-                  <PhotoUpload
-                    photoData={customerProfile.data.customerPhoto[0]}
-                    onPhotoUpload={image =>
-                      handlePhotoUpload(
-                        image,
-                        true,
-                        customerProfile.data.customerPhoto[0]?.id,
-                      )
-                    }
-                    imageWidth={scale(140)}
-                    imageHeight={scale(200)}
-                  />
-                ) : (
-                  <PhotoUpload
-                    photoData={null}
-                    onPhotoUpload={image => handlePhotoUpload(image, true)}
-                    imageWidth={scale(140)}
-                    imageHeight={verticalScale(170)}
-                    onPhotoRemove={handleRemovePhoto}
-                  />
-                )}
+    <>
+      <SafeAreaView
+        style={{flex: 1, backgroundColor: 'white'}}
+        edges={['right', 'left']}>
+        <KeyboardAwareScrollView
+          style={{flex: 1, backgroundColor: COLORS.white}}>
+          <View>
+            {customerProfile.isLoading || customerProfile.isRefetching ? (
+              <View style={{height: scale(200), padding: 16}}>
+                <Loading />
               </View>
-              <View style={styles.subPhotosContainer}>
-                {[...Array(4)].map((_, index) => (
-                  <PhotoUpload
-                    key={index}
-                    photoData={
-                      customerProfile.data &&
-                      customerProfile.data.customerPhoto &&
-                      customerProfile.data.customerPhoto[index + 1]
-                    }
-                    onPhotoUpload={image =>
-                      handlePhotoUpload(
-                        image,
-                        false,
+            ) : (
+              <View style={styles.container}>
+                <View>
+                  {customerProfile.data &&
+                  customerProfile.data.customerPhoto &&
+                  customerProfile.data.customerPhoto[0] ? (
+                    <PhotoUpload
+                      photoData={customerProfile.data.customerPhoto[0]}
+                      onPhotoUpload={image =>
+                        handlePhotoUpload(
+                          image,
+                          true,
+                          customerProfile.data.customerPhoto[0]?.id,
+                        )
+                      }
+                      imageWidth={scale(140)}
+                      imageHeight={scale(200)}
+                    />
+                  ) : (
+                    <PhotoUpload
+                      photoData={null}
+                      onPhotoUpload={image => handlePhotoUpload(image, true)}
+                      imageWidth={scale(140)}
+                      imageHeight={verticalScale(170)}
+                      onPhotoRemove={handleRemovePhoto}
+                    />
+                  )}
+                </View>
+                <View style={styles.subPhotosContainer}>
+                  {[...Array(4)].map((_, index) => (
+                    <PhotoUpload
+                      key={index}
+                      photoData={
                         customerProfile.data &&
-                          customerProfile.data.customerPhoto?.[index + 1]?.id,
-                      )
-                    }
-                    imageWidth={scale(96)}
-                    imageHeight={scale(96)}
-                    isSubPhoto
-                    onPhotoRemove={handleRemovePhoto}
-                  />
-                ))}
-              </View>
-            </View>
-          )}
-
-          <View style={styles.mainContainer}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTextStyle}>Name</Text>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({field: {onChange, onBlur, value}}) => (
-                  <TextInput
-                    // ref={textInputRef}
-                    style={[profileCreationStyles.textInputBioWork]}
-                    keyboardType="default"
-                    placeholder="Name"
-                    placeholderTextColor={COLORS.gray3}
-                    inputMode={'text'}
-                    autoComplete={'name'}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                    selectionColor={COLORS.primary1}
-                    maxLength={255}
-                  />
-                )}
-                name="name"
-              />
-              {errors.name && (
-                <Text style={profileCreationStyles.errorText}>
-                  {errors.name.message}
-                </Text>
-              )}
-            </View>
-
-            <View style={{paddingVertical: 10}}>
-              <Text style={styles.inputTextStyle}>Birthday</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  gap: 6,
-                }}>
-                <View style={profileCreationStyles.dropdownSection}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <CustomDropdown
-                        data={monthData}
-                        placeholder="MM"
-                        value={value}
-                        onChange={item => {
-                          onChange(item.value);
-                        }}
-                      />
-                    )}
-                    name="month"
-                  />
-                  {errors.month && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.month.message}
-                    </Text>
-                  )}
-                </View>
-                <View style={profileCreationStyles.dropdownSection}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <CustomDropdown
-                        data={dayData}
-                        placeholder="DD"
-                        value={value}
-                        onChange={item => {
-                          onChange(item.value);
-                        }}
-                      />
-                    )}
-                    name="day"
-                  />
-                  {errors.day && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.day.message}
-                    </Text>
-                  )}
-                </View>
-                <View style={profileCreationStyles.dropdownSection}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true,
-                    }}
-                    render={({field: {onChange, value}}) => (
-                      <CustomDropdown
-                        data={yearData}
-                        placeholder="YYYY"
-                        value={value}
-                        onChange={item => {
-                          onChange(item.value);
-                        }}
-                      />
-                    )}
-                    name="year"
-                  />
-                  {errors.year && (
-                    <Text style={profileCreationStyles.errorText}>
-                      {errors.year.message}
-                    </Text>
-                  )}
+                        customerProfile.data.customerPhoto &&
+                        customerProfile.data.customerPhoto[index + 1]
+                      }
+                      onPhotoUpload={image =>
+                        handlePhotoUpload(
+                          image,
+                          false,
+                          customerProfile.data &&
+                            customerProfile.data.customerPhoto?.[index + 1]?.id,
+                        )
+                      }
+                      imageWidth={scale(96)}
+                      imageHeight={scale(96)}
+                      isSubPhoto
+                      onPhotoRemove={handleRemovePhoto}
+                    />
+                  ))}
                 </View>
               </View>
-            </View>
+            )}
 
-            <View style={{paddingVertical: 10}}>
-              <Text style={styles.inputTextStyle}>Gender</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  justifyContent: 'space-around',
-                }}>
-                {letters.map((letter, index) => (
-                  <Controller
-                    key={index}
-                    control={control}
-                    name="selectedLetter" // Use a single name
-                    render={({field: {onChange}}) => (
-                      <LetterGradientButton
-                        key={forceUpdate}
-                        letter={letter}
-                        selectedLetters={[selectedLetter || '']}
-                        allowSingleSelection
-                        onChange={(letter: string, isSelected: boolean) => {
-                          if (isSelected) {
-                            onChange(letter);
-                            setSelectedLetter(letter);
-                            setForceUpdate(forceUpdate + 1); // Trigger re-render
-                          }
-                        }}
-                      />
-                    )}
-                  />
-                ))}
-                {errors.selectedLetter && (
+            <View style={styles.mainContainer}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTextStyle}>Name</Text>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      // ref={textInputRef}
+                      style={[profileCreationStyles.textInputBioWork]}
+                      keyboardType="default"
+                      placeholder="Name"
+                      placeholderTextColor={COLORS.gray3}
+                      inputMode={'text'}
+                      autoComplete={'name'}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      selectionColor={COLORS.primary1}
+                      maxLength={255}
+                    />
+                  )}
+                  name="name"
+                />
+                {errors.name && (
                   <Text style={profileCreationStyles.errorText}>
-                    {errors.selectedLetter.message}
+                    {errors.name.message}
                   </Text>
                 )}
               </View>
-            </View>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTextStyle}>About Me</Text>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({field: {onChange, onBlur, value}}) => (
-                  <TextInput
-                    style={[profileCreationStyles.textInputBio]}
-                    keyboardType="default"
-                    placeholder="Enter more about you"
-                    placeholderTextColor={COLORS.gray3}
-                    inputMode={'text'}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                    selectionColor={COLORS.primary1}
-                    multiline={true}
-                    maxLength={255}
-                    textAlignVertical={'top'}
-                  />
-                )}
-                name="bio"
-              />
-              {errors.bio && (
-                <Text style={profileCreationStyles.errorText}>
-                  {errors.bio.message}
-                </Text>
-              )}
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTextStyle}>Work</Text>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({field: {onChange, onBlur, value}}) => (
-                  <TextInput
-                    // ref={textInputRef}
-                    style={[profileCreationStyles.textInputBioWork]}
-                    keyboardType="default"
-                    placeholder="Add your work"
-                    placeholderTextColor={COLORS.gray3}
-                    inputMode={'text'}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                    selectionColor={COLORS.primary1}
-                    maxLength={255}
-                  />
-                )}
-                name="work"
-              />
-              {errors.work && (
-                <Text style={profileCreationStyles.errorText}>
-                  {errors.work.message}
-                </Text>
-              )}
-            </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputTextStyle}>Location</Text>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({field: {onChange, onBlur, value}}) => (
-                  <TextInput
-                    // ref={textInputRef}
-                    style={[profileCreationStyles.textInputBioWork]}
-                    keyboardType="default"
-                    placeholder="Location"
-                    placeholderTextColor={COLORS.gray3}
-                    inputMode={'text'}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    autoCapitalize="none"
-                    selectionColor={COLORS.primary1}
-                    maxLength={255}
-                  />
-                )}
-                name="location"
-              />
-              {errors.location && (
-                <Text style={profileCreationStyles.errorText}>
-                  {errors.location.message}
-                </Text>
-              )}
-            </View>
-            <View>
-              <Text style={styles.inputTextStyle}>My Interest</Text>
-              <View>
-                <InterestButtonContainer
-                  options={interestOptions}
-                  onSelectionChange={handleSelectionChange}
-                  selectedOptions={selectedInterests}
+              <View style={{paddingVertical: 10}}>
+                <Text style={styles.inputTextStyle}>Birthday</Text>
+                <TouchableOpacity
+                  onPress={() => setOpen(true)}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    gap: 6,
+                    borderWidth: 1,
+                    paddingVertical: scale(13),
+                    paddingHorizontal: scale(14),
+                    borderRadius: scale(22),
+                  }}>
+                  <Text
+                    style={{
+                      textAlign: 'left',
+                      fontSize: scale(14),
+                      fontFamily: 'Montserrat-SemiBold',
+                    }}>
+                    {format(date, 'MMMM dd, yyyy')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={{paddingVertical: 10}}>
+                <Text style={styles.inputTextStyle}>Gender</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-around',
+                  }}>
+                  {letters.map((letter, index) => (
+                    <Controller
+                      key={index}
+                      control={control}
+                      name="selectedLetter" // Use a single name
+                      render={({field: {onChange}}) => (
+                        <LetterGradientButton
+                          key={forceUpdate}
+                          letter={letter}
+                          selectedLetters={[selectedLetter || '']}
+                          allowSingleSelection
+                          onChange={(letter: string, isSelected: boolean) => {
+                            if (isSelected) {
+                              onChange(letter);
+                              setSelectedLetter(letter);
+                              setForceUpdate(forceUpdate + 1); // Trigger re-render
+                            }
+                          }}
+                        />
+                      )}
+                    />
+                  ))}
+                  {errors.selectedLetter && (
+                    <Text style={profileCreationStyles.errorText}>
+                      {errors.selectedLetter.message}
+                    </Text>
+                  )}
+                </View>
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTextStyle}>About Me</Text>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      style={[profileCreationStyles.textInputBio]}
+                      keyboardType="default"
+                      placeholder="Enter more about you"
+                      placeholderTextColor={COLORS.gray3}
+                      inputMode={'text'}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      selectionColor={COLORS.primary1}
+                      multiline={true}
+                      maxLength={255}
+                      textAlignVertical={'top'}
+                    />
+                  )}
+                  name="bio"
                 />
+                {errors.bio && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.bio.message}
+                  </Text>
+                )}
               </View>
-            </View>
-            <View style={styles.bodyDropdownContainer}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                  gap: 6,
-                }}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTextStyle}>Work</Text>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      // ref={textInputRef}
+                      style={[profileCreationStyles.textInputBioWork]}
+                      keyboardType="default"
+                      placeholder="Add your work"
+                      placeholderTextColor={COLORS.gray3}
+                      inputMode={'text'}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      selectionColor={COLORS.primary1}
+                      maxLength={255}
+                    />
+                  )}
+                  name="work"
+                />
+                {errors.work && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.work.message}
+                  </Text>
+                )}
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputTextStyle}>Location</Text>
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <TextInput
+                      // ref={textInputRef}
+                      style={[profileCreationStyles.textInputBioWork]}
+                      keyboardType="default"
+                      placeholder="Location"
+                      placeholderTextColor={COLORS.gray3}
+                      inputMode={'text'}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      autoCapitalize="none"
+                      selectionColor={COLORS.primary1}
+                      maxLength={255}
+                    />
+                  )}
+                  name="location"
+                />
+                {errors.location && (
+                  <Text style={profileCreationStyles.errorText}>
+                    {errors.location.message}
+                  </Text>
+                )}
+              </View>
+              <View>
+                <Text style={styles.inputTextStyle}>My Interest</Text>
+                <View>
+                  <InterestButtonContainer
+                    options={interestOptions}
+                    onSelectionChange={handleSelectionChange}
+                    selectedOptions={selectedInterests}
+                  />
+                </View>
+              </View>
+              <View style={styles.bodyDropdownContainer}>
                 <View
                   style={{
                     flexDirection: 'row',
+                    justifyContent: 'space-evenly',
                     flex: 1,
+                    gap: 6,
                   }}>
                   <View
-                    style={[
-                      profileCreationStyles.flex,
-                      {flexDirection: 'column', gap: 3},
-                    ]}>
-                    <Text style={styles.inputTextStyle}>Height</Text>
-                    <View style={profileCreationStyles.dropdownContainer2}>
-                      <View style={profileCreationStyles.dropdownSection}>
-                        <Controller
-                          control={control}
-                          rules={{
-                            required: true,
-                          }}
-                          render={({field: {onChange, value}}) => (
-                            <CustomDropdown
-                              data={feetOptions}
-                              placeholder="5'"
-                              value={value}
-                              onChange={item => {
-                                onChange(item.value);
-                              }}
-                            />
-                          )}
-                          name="feet"
-                        />
-                      </View>
-                      <View style={profileCreationStyles.dropdownSection}>
-                        <Controller
-                          control={control}
-                          rules={{
-                            required: true,
-                          }}
-                          render={({field: {onChange, value}}) => (
-                            <CustomDropdown
-                              data={inchesOptions}
-                              placeholder="11'"
-                              value={value}
-                              onChange={item => {
-                                onChange(item.value);
-                              }}
-                            />
-                          )}
-                          name="inches"
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  style={[
-                    profileCreationStyles.flex,
-                    {flexDirection: 'column', gap: 3},
-                  ]}>
-                  <Text style={styles.inputTextStyle}>Star Sign</Text>
-                  <View style={profileCreationStyles.dropdownContainer2}>
-                    <View style={profileCreationStyles.dropdownSection}>
-                      <Controller
-                        control={control}
-                        rules={{
-                          required: true,
-                        }}
-                        render={({field: {onChange, value}}) => (
-                          <CustomDropdown
-                            data={starSignOptions}
-                            placeholder="Sagitarrius"
-                            value={value}
-                            onChange={item => {
-                              onChange(item.value);
+                    style={{
+                      flexDirection: 'row',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={[
+                        profileCreationStyles.flex,
+                        {flexDirection: 'column', gap: 3},
+                      ]}>
+                      <Text style={styles.inputTextStyle}>Height</Text>
+                      <View style={profileCreationStyles.dropdownContainer2}>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
                             }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={feetOptions}
+                                placeholder="5'"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="feet"
                           />
-                        )}
-                        name="starSign"
-                      />
+                        </View>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
+                            }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={inchesOptions}
+                                placeholder="11'"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="inches"
+                          />
+                        </View>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                  gap: 6,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                  }}>
                   <View
                     style={[
                       profileCreationStyles.flex,
                       {flexDirection: 'column', gap: 3},
                     ]}>
-                    <Text style={styles.inputTextStyle}>Pronouns</Text>
+                    <Text style={styles.inputTextStyle}>Star Sign</Text>
                     <View style={profileCreationStyles.dropdownContainer2}>
                       <View style={profileCreationStyles.dropdownSection}>
                         <Controller
@@ -754,81 +658,151 @@ const EditProfile = ({route}: EditProfileProps) => {
                           }}
                           render={({field: {onChange, value}}) => (
                             <CustomDropdown
-                              data={pronounsOptions}
-                              placeholder="He/him/his"
+                              data={starSignOptions}
+                              placeholder="Sagitarrius"
                               value={value}
                               onChange={item => {
                                 onChange(item.value);
                               }}
                             />
                           )}
-                          name="pronouns"
+                          name="starSign"
                         />
                       </View>
                     </View>
                   </View>
                 </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                  gap: 6,
-                }}>
                 <View
                   style={{
                     flexDirection: 'row',
+                    justifyContent: 'space-evenly',
                     flex: 1,
+                    gap: 6,
                   }}>
                   <View
-                    style={[
-                      profileCreationStyles.flex,
-                      {flexDirection: 'column', gap: 3},
-                    ]}>
-                    <Text style={styles.inputTextStyle}>Education</Text>
-                    <View style={profileCreationStyles.dropdownContainer2}>
-                      <View style={profileCreationStyles.dropdownSection}>
-                        <Controller
-                          control={control}
-                          rules={{
-                            required: true,
-                          }}
-                          render={({field: {onChange, value}}) => (
-                            <CustomDropdown
-                              data={educationOptions}
-                              placeholder="Doctorate"
-                              value={value}
-                              onChange={item => {
-                                onChange(item.value);
-                              }}
-                            />
-                          )}
-                          name="education"
-                        />
+                    style={{
+                      flexDirection: 'row',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={[
+                        profileCreationStyles.flex,
+                        {flexDirection: 'column', gap: 3},
+                      ]}>
+                      <Text style={styles.inputTextStyle}>Pronouns</Text>
+                      <View style={profileCreationStyles.dropdownContainer2}>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
+                            }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={pronounsOptions}
+                                placeholder="He/him/his"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="pronouns"
+                          />
+                        </View>
                       </View>
                     </View>
                   </View>
                 </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                  gap: 6,
-                }}>
                 <View
                   style={{
                     flexDirection: 'row',
+                    justifyContent: 'space-evenly',
                     flex: 1,
+                    gap: 6,
                   }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={[
+                        profileCreationStyles.flex,
+                        {flexDirection: 'column', gap: 3},
+                      ]}>
+                      <Text style={styles.inputTextStyle}>Education</Text>
+                      <View style={profileCreationStyles.dropdownContainer2}>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
+                            }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={educationOptions}
+                                placeholder="Doctorate"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="education"
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    flex: 1,
+                    gap: 6,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={[
+                        profileCreationStyles.flex,
+                        {flexDirection: 'column', gap: 3},
+                      ]}>
+                      <Text style={styles.inputTextStyle}>Drinking</Text>
+                      <View style={profileCreationStyles.dropdownContainer2}>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
+                            }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={drinkingAndSmokingOptions}
+                                placeholder="Ocassional"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="drinking"
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                   <View
                     style={[
                       profileCreationStyles.flex,
                       {flexDirection: 'column', gap: 3},
                     ]}>
-                    <Text style={styles.inputTextStyle}>Drinking</Text>
+                    <Text style={styles.inputTextStyle}>Smoking</Text>
                     <View style={profileCreationStyles.dropdownContainer2}>
                       <View style={profileCreationStyles.dropdownSection}>
                         <Controller
@@ -846,59 +820,101 @@ const EditProfile = ({route}: EditProfileProps) => {
                               }}
                             />
                           )}
-                          name="drinking"
+                          name="smoking"
                         />
                       </View>
                     </View>
                   </View>
                 </View>
                 <View
-                  style={[
-                    profileCreationStyles.flex,
-                    {flexDirection: 'column', gap: 3},
-                  ]}>
-                  <Text style={styles.inputTextStyle}>Smoking</Text>
-                  <View style={profileCreationStyles.dropdownContainer2}>
-                    <View style={profileCreationStyles.dropdownSection}>
-                      <Controller
-                        control={control}
-                        rules={{
-                          required: true,
-                        }}
-                        render={({field: {onChange, value}}) => (
-                          <CustomDropdown
-                            data={drinkingAndSmokingOptions}
-                            placeholder="Ocassional"
-                            value={value}
-                            onChange={item => {
-                              onChange(item.value);
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    flex: 1,
+                    gap: 6,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={[
+                        profileCreationStyles.flex,
+                        {flexDirection: 'column', gap: 3},
+                      ]}>
+                      <Text style={styles.inputTextStyle}>Religion</Text>
+                      <View style={profileCreationStyles.dropdownContainer2}>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
                             }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={religionOptions}
+                                placeholder="Christian"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="religion"
                           />
-                        )}
-                        name="smoking"
-                      />
+                        </View>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                  gap: 6,
-                }}>
                 <View
                   style={{
                     flexDirection: 'row',
+                    justifyContent: 'space-evenly',
                     flex: 1,
+                    gap: 6,
                   }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flex: 1,
+                    }}>
+                    <View
+                      style={[
+                        profileCreationStyles.flex,
+                        {flexDirection: 'column', gap: 3},
+                      ]}>
+                      <Text style={styles.inputTextStyle}>Pet</Text>
+                      <View style={profileCreationStyles.dropdownContainer2}>
+                        <View style={profileCreationStyles.dropdownSection}>
+                          <Controller
+                            control={control}
+                            rules={{
+                              required: true,
+                            }}
+                            render={({field: {onChange, value}}) => (
+                              <CustomDropdown
+                                data={petsOptions}
+                                placeholder="Dog"
+                                value={value}
+                                onChange={item => {
+                                  onChange(item.value);
+                                }}
+                              />
+                            )}
+                            name="pet"
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                   <View
                     style={[
                       profileCreationStyles.flex,
                       {flexDirection: 'column', gap: 3},
                     ]}>
-                    <Text style={styles.inputTextStyle}>Religion</Text>
+                    <Text style={styles.inputTextStyle}>Politics</Text>
                     <View style={profileCreationStyles.dropdownContainer2}>
                       <View style={profileCreationStyles.dropdownSection}>
                         <Controller
@@ -908,113 +924,55 @@ const EditProfile = ({route}: EditProfileProps) => {
                           }}
                           render={({field: {onChange, value}}) => (
                             <CustomDropdown
-                              data={religionOptions}
-                              placeholder="Christian"
+                              data={politicsOptions}
+                              placeholder="Conservative"
                               value={value}
                               onChange={item => {
                                 onChange(item.value);
                               }}
                             />
                           )}
-                          name="religion"
+                          name="politics"
                         />
                       </View>
                     </View>
                   </View>
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                  gap: 6,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                  }}>
-                  <View
-                    style={[
-                      profileCreationStyles.flex,
-                      {flexDirection: 'column', gap: 3},
-                    ]}>
-                    <Text style={styles.inputTextStyle}>Pet</Text>
-                    <View style={profileCreationStyles.dropdownContainer2}>
-                      <View style={profileCreationStyles.dropdownSection}>
-                        <Controller
-                          control={control}
-                          rules={{
-                            required: true,
-                          }}
-                          render={({field: {onChange, value}}) => (
-                            <CustomDropdown
-                              data={petsOptions}
-                              placeholder="Dog"
-                              value={value}
-                              onChange={item => {
-                                onChange(item.value);
-                              }}
-                            />
-                          )}
-                          name="pet"
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  style={[
-                    profileCreationStyles.flex,
-                    {flexDirection: 'column', gap: 3},
-                  ]}>
-                  <Text style={styles.inputTextStyle}>Politics</Text>
-                  <View style={profileCreationStyles.dropdownContainer2}>
-                    <View style={profileCreationStyles.dropdownSection}>
-                      <Controller
-                        control={control}
-                        rules={{
-                          required: true,
-                        }}
-                        render={({field: {onChange, value}}) => (
-                          <CustomDropdown
-                            data={politicsOptions}
-                            placeholder="Conservative"
-                            value={value}
-                            onChange={item => {
-                              onChange(item.value);
-                            }}
-                          />
-                        )}
-                        name="politics"
-                      />
-                    </View>
-                  </View>
-                </View>
+              <View style={{gap: 10, marginBottom: 100}}>
+                <Text style={styles.inputTextStyle}>Personality Type</Text>
+                <SelectableButton
+                  buttonData={personalityData}
+                  onPress={handleSelectedPersonality}
+                  initialSelections={selectedPersonality}
+                />
               </View>
-            </View>
-            <View style={{gap: 10, marginBottom: 100}}>
-              <Text style={styles.inputTextStyle}>Personality Type</Text>
-              <SelectableButton
-                buttonData={personalityData}
-                onPress={handleSelectedPersonality}
-                initialSelections={selectedPersonality}
-              />
             </View>
           </View>
-        </View>
-      </KeyboardAwareScrollView>
-      <KeyboardStickyView offset={{closed: 0, opened: scale(100)}}>
-        <View style={styles.fabContainer}>
-          <CircleButton
-            onPress={handleSubmit(onSubmit)}
-            isCheck
-            loading={loading}
-          />
-        </View>
-      </KeyboardStickyView>
-    </SafeAreaView>
+        </KeyboardAwareScrollView>
+        <KeyboardStickyView offset={{closed: 0, opened: scale(100)}}>
+          <View style={styles.fabContainer}>
+            <CircleButton
+              onPress={handleSubmit(onSubmit)}
+              isCheck
+              loading={loading}
+            />
+          </View>
+        </KeyboardStickyView>
+      </SafeAreaView>
+      <DatePicker
+        modal
+        mode="date"
+        date={date}
+        open={open}
+        maximumDate={minDate}
+        onConfirm={d => {
+          setOpen(false);
+          setDate(d);
+        }}
+        onCancel={() => setOpen(false)}
+      />
+    </>
   );
 };
 

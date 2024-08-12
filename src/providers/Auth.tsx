@@ -32,7 +32,6 @@ import {useQueryClient} from '@tanstack/react-query';
 import {transformChatMessageForGiftedChat} from '../hooks/chat/transformMessage.ts';
 import {useGetStatus} from '../hooks/status/useGetStatus.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
-import DeviceInfo from 'react-native-device-info';
 import {AppState} from 'react-native';
 import {atob} from 'react-native-quick-base64';
 
@@ -81,13 +80,13 @@ const AuthProvider = ({children}: AuthProviderProps) => {
         signOut();
         navigationRef.navigate('Maintenance');
       }
-      if (
-        status.data.current !== DeviceInfo.getVersion() &&
-        status.data.isUpdate === true
-      ) {
-        signOut();
-        navigationRef.navigate('VersionUpdate');
-      }
+      // if (
+      //   status.data.current !== DeviceInfo.getVersion() &&
+      //   status.data.isUpdate === true
+      // ) {
+      //   signOut();
+      //   navigationRef.navigate('VersionUpdate');
+      // }
     }
   }, [status.data]);
 

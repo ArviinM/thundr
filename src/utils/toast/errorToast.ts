@@ -25,7 +25,8 @@ export function showErrorToast(error: any) {
 
   if (
     error.status === 'MAX_SWIPES' ||
-    error.status === 'POSSIBLES_COOLDOWN_EXCEPTION'
+    error.status === 'POSSIBLES_COOLDOWN_EXCEPTION' ||
+    error.status === 'USER_NOT_FOUND'
   ) {
     return;
   }
