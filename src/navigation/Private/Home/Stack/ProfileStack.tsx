@@ -4,35 +4,34 @@ import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 import Profile from '../../../../screens/Private/Profile/Profile.tsx';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale, scale} from '../../../../utils/utils.ts';
+import {moderateScale} from '../../../../utils/utils.ts';
 import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
-import {Image, TouchableOpacity, View} from 'react-native';
-import {
-  DrawerActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
-import {IMAGES} from '../../../../constants/images.ts';
+import {TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {SettingsIcon} from '../../../../assets/images/SettingsIcon.tsx';
 export const ProfileStack = () => {
-  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
 
-  function HomeLeftHeader() {
+  function HomeLeftHeaderSmall() {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: scale(-4),
-        }}>
-        {/* Center icons vertically */}
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
-          <Image
-            source={IMAGES.menu}
-            style={{height: scale(24), width: scale(24)}}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        <ChevronLeftSmall />
+      </TouchableOpacity>
+    );
+  }
+
+  function HomeRightHeader() {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('SettingsStack')}
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        <SettingsIcon />
+      </TouchableOpacity>
     );
   }
 
@@ -42,7 +41,8 @@ export const ProfileStack = () => {
         name="Profile"
         component={Profile}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
+          headerLeft: () => <HomeLeftHeaderSmall />,
+          headerRight: () => <HomeRightHeader />,
           headerShown: true,
           headerStyle: {
             backgroundColor: COLORS.white,
@@ -53,6 +53,7 @@ export const ProfileStack = () => {
             fontWeight: '500',
             fontSize: moderateScale(20),
           },
+          headerShadowVisible: false,
         }}
       />
       <Stack.Screen
@@ -70,33 +71,14 @@ export const ProfileStack = () => {
             fontWeight: '500',
             fontSize: moderateScale(20),
           },
-          headerLeft: props => (
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-              <Image
-                source={IMAGES.back}
-                style={{width: 20, height: 20}}
-                resizeMode={'contain'}
-              />
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Profile')}
+              hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+              <ChevronLeftSmall />
             </TouchableOpacity>
           ),
-          // headerRight: props => (
-          //   <TouchableOpacity
-          //     onPress={handleEditProfileSave}
-          //     style={{
-          //       paddingVertical: 6,
-          //       paddingHorizontal: 16,
-          //       backgroundColor: COLORS.primary1,
-          //       borderRadius: 30,
-          //     }}>
-          //     <Text
-          //       style={{
-          //         fontFamily: 'Montserrat-SemiBold',
-          //         color: COLORS.white,
-          //       }}>
-          //       Save
-          //     </Text>
-          //   </TouchableOpacity>
-          // ),
+          headerShadowVisible: false,
         }}
       />
     </Stack.Navigator>

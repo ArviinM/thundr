@@ -27,7 +27,7 @@ import {CommunityProvider} from '../../providers/Community.tsx';
 import CreatePost from '../../screens/Private/Community/CreatePost.tsx';
 import Post from '../../screens/Private/Community/Post.tsx';
 import FaceVerificationModal from '../../screens/Private/FaceVerification/FaceVerificationModal.tsx';
-import Notification from '../../screens/Private/Notification/Notification.tsx';
+import {HomeTab} from './Home/Tab/HomeTab.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -36,7 +36,7 @@ export const AuthenticatedStack = () => {
   if (auth.authData?.forProfileCreation) {
     initialRouteName = 'CustomerName';
   } else {
-    initialRouteName = 'HomeDrawer';
+    initialRouteName = 'HomeTab';
   }
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
@@ -97,8 +97,8 @@ export const AuthenticatedStack = () => {
             statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}>
           <Stack.Screen
-            name="HomeDrawer"
-            component={HomeDrawer}
+            name="HomeTab"
+            component={HomeTab}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -171,25 +171,6 @@ export const AuthenticatedStack = () => {
             component={Post}
             options={{
               headerTitle: 'Post',
-              headerLeft: () => <HomeLeftHeader />,
-              headerStyle: {
-                backgroundColor: COLORS.white,
-              },
-              headerTitleStyle: {
-                fontFamily: 'Montserrat-Bold',
-                fontSize: scale(14),
-              },
-              headerShown: true,
-              headerTitleAlign: 'center',
-              headerShadowVisible: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="Notification"
-            component={Notification}
-            options={{
-              headerTitle: 'Notifications',
               headerLeft: () => <HomeLeftHeader />,
               headerStyle: {
                 backgroundColor: COLORS.white,

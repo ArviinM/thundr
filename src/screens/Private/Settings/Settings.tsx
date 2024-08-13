@@ -29,6 +29,7 @@ import {API_PAYMENT_URL} from '@env';
 import Button from '../../../components/shared/Button.tsx';
 import {useHandoffSession} from '../../../hooks/auth/useHandoffSession.ts';
 import useSubscribeCheck from '../../../store/subscribeStore.ts';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 const Settings = () => {
   const auth = useAuth();
@@ -38,13 +39,15 @@ const Settings = () => {
   const [inAppNotification, setInAppNotification] = useState(true);
   const [emailNotification, setEmailNotification] = useState(false);
   const [visible, isVisible] = useState<boolean>(false);
+  const [loading, isLoading] = useState(false);
 
-  const {authData} = useAuth();
+  const {authData, signOut} = useAuth();
   const handoffKey = useHandoffSession();
 
   const isSubscribe = useSubscribeCheck(state => state.isCustomerSubscribed);
 
   const statusBarHeight = initialWindowMetrics?.insets.top || 20;
+  const tabBarHeight = useBottomTabBarHeight();
 
   if (userProfile.isLoading && auth.loading) {
     return <Loading />;
@@ -276,9 +279,32 @@ const Settings = () => {
         </View>
         <View
           style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: scale(10),
+          }}>
+          <Button
+            onPress={() => {
+              isLoading(true);
+              signOut();
+            }}
+            text="Log out"
+            buttonStyle={{
+              backgroundColor: '#ebebeb',
+              paddingVertical: scale(12),
+              paddingHorizontal: scale(120),
+              borderRadius: 40,
+            }}
+            textStyle={{fontFamily: 'Montserrat-Medium', fontSize: scale(14)}}
+            loading={loading}
+          />
+        </View>
+        <View
+          style={{
             justifyContent: 'center',
             alignContent: 'center',
-            marginTop: 30,
+            paddingTop: scale(10),
+            paddingBottom: tabBarHeight + 20,
           }}>
           <Text
             style={{

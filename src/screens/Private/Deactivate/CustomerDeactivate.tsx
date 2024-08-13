@@ -21,6 +21,7 @@ import Button from '../../../components/shared/Button.tsx';
 import {useDeactivateAccount} from '../../../hooks/deactivate/useDeactivateAccount.ts';
 import DeactivateModal from '../../../components/shared/DeactivateModal.tsx';
 import {useCustomerSurvey} from '../../../hooks/deactivate/useCustomerSurvey.ts';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 interface RadioButtonProps {
   value: string;
@@ -156,6 +157,8 @@ const CustomerDeactivate = () => {
   const deactivate = useDeactivateAccount();
   const customerSurvey = useCustomerSurvey();
 
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
@@ -287,7 +290,7 @@ const CustomerDeactivate = () => {
           </View>
         </View>
       </KeyboardAwareScrollView>
-      <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+      <KeyboardStickyView offset={{closed: -tabBarHeight + 30, opened: 0}}>
         <View style={profileCreationStyles.buttonContainer}>
           <Button
             onPress={() => isVisible(true)}

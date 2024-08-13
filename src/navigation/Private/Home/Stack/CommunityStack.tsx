@@ -1,34 +1,22 @@
-import React, {lazy, Suspense, useRef} from 'react';
-
+import React from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
-
-import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {
-  DrawerActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
-import {IMAGES} from '../../../../constants/images.ts';
 import Notification from '../../../../screens/Private/Notification/Notification.tsx';
-import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
-import Filters from '../../../../screens/Private/Filters/Filters.tsx';
-import {Loading} from '../../../../components/shared/Loading.tsx';
+import {COLORS} from '../../../../constants/commons.ts';
+import {scale} from '../../../../utils/utils.ts';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
+import {useNavigation} from '@react-navigation/native';
+import {CommunityTop} from '../Top/CommunityTop.tsx';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HeaderThundrLogo} from '../../../../assets/images/HeaderThundrLogo.tsx';
+import {ProfileStack} from './ProfileStack.tsx';
+import {SearchIcon} from '../../../../assets/images/header_icons/SearchIcon.tsx';
+import {ProfileIcon} from '../../../../assets/images/header_icons/ProfileIcon.tsx';
 import {BellIcon} from '../../../../assets/images/header_icons/BellIcon.tsx';
+import {SettingsStack} from './SettingsStack.tsx';
+import {HeaderThundrLogo} from '../../../../assets/images/HeaderThundrLogo.tsx';
+import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 
-// @ts-ignore
-const Home = lazy(() => import('../../../../screens/Private/Home/Home.tsx'));
-const LazyHome = () => (
-  <Suspense fallback={<Loading />}>
-    <Home />
-  </Suspense>
-);
-
-export const HomeStack = () => {
+export const CommunityStack = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
 
@@ -39,8 +27,7 @@ export const HomeStack = () => {
   function HomeLeftHeaderSmall() {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home', {payload: ''})}
-        // onPress={() => navigation.goBack()}
+        onPress={() => navigation.goBack()}
         hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
@@ -57,11 +44,15 @@ export const HomeStack = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginHorizontal: scale(-4),
+          marginHorizontal: 12,
           alignItems: 'center',
+          gap: scale(6),
         }}>
         {/* Center icons vertically */}
-        <TouchableOpacity onPress={() => navigation.push('HomeNotification')}>
+        {/*<TouchableOpacity onPress={() => navigation.push('ProfileStack')}>*/}
+        {/*  <SearchIcon />*/}
+        {/*</TouchableOpacity>*/}
+        <TouchableOpacity onPress={() => navigation.push('Notification')}>
           <BellIcon />
           {unreadNotifCount > 0 && (
             <View style={styles.indicator}>
@@ -71,33 +62,30 @@ export const HomeStack = () => {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Filters')}>
-          <Image
-            source={IMAGES.filter}
-            style={{height: scale(36), width: scale(36)}}
-          />
+        <TouchableOpacity
+          onPress={() => navigation.push('ProfileStack')}
+          hitSlop={20}>
+          <ProfileIcon />
         </TouchableOpacity>
       </View>
     );
   }
 
   return (
-    <Stack.Navigator
-      screenOptions={{headerTitleAlign: 'center', gestureEnabled: false}}>
+    <Stack.Navigator initialRouteName={'CommunityTop'}>
       <Stack.Screen
-        name="Home"
-        component={LazyHome}
+        name="CommunityTop"
+        component={CommunityTop}
         options={{
-          headerTitle: () => <Header />,
+          headerLeft: () => <Header />,
+          headerTitle: () => <View />,
           headerRight: () => <HomeRightHeader />,
           headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
+          headerShadowVisible: false,
         }}
       />
       <Stack.Screen
-        name="HomeNotification"
+        name="Notification"
         component={Notification}
         options={{
           headerTitle: 'Notifications',
@@ -114,33 +102,15 @@ export const HomeStack = () => {
           headerShadowVisible: false,
         }}
       />
-
       <Stack.Screen
-        name="Filters"
-        component={Filters}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-          headerTintColor: COLORS.primary1,
-          headerTitleStyle: {
-            fontFamily: 'ClimateCrisis-Regular',
-            fontWeight: '500',
-            fontSize: moderateScale(20),
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Home', {payload: ''})}
-              style={{width: 30, height: 30}}>
-              <Image
-                source={IMAGES.back}
-                style={{width: 20, height: 20}}
-                resizeMode={'contain'}
-              />
-            </TouchableOpacity>
-          ),
-        }}
+        name="ProfileStack"
+        component={ProfileStack}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SettingsStack"
+        component={SettingsStack}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

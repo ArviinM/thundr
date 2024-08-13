@@ -104,6 +104,7 @@ export type RootNavigationParams = {
 
   //notif
   Notification: undefined;
+  HomeNotification: undefined;
   Filters: undefined;
 
   //maintenance

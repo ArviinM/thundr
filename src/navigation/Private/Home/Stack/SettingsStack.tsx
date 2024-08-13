@@ -18,25 +18,17 @@ import Terms from '../../../../screens/Public/Login/Terms.tsx';
 import PasswordNewValidation from '../../../../screens/Public/Login/PasswordNewValidation.tsx';
 import PasswordResetConfirmed from '../../../../screens/Public/Login/PasswordResetConfirmed.tsx';
 import CustomerDeactivate from '../../../../screens/Private/Deactivate/CustomerDeactivate.tsx';
+import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
 export const SettingsStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
-  function HomeLeftHeader() {
+  function HomeLeftHeaderSmall() {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: -8,
-        }}>
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
-          <Image
-            source={IMAGES.menu}
-            style={{height: scale(24), width: scale(24)}}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        <ChevronLeftSmall />
+      </TouchableOpacity>
     );
   }
 
@@ -46,7 +38,7 @@ export const SettingsStack = () => {
         name="Settings"
         component={Settings}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
+          headerLeft: () => <HomeLeftHeaderSmall />,
           headerShown: true,
           headerStyle: {
             backgroundColor: COLORS.white,

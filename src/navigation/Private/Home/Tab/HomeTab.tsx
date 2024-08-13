@@ -26,6 +26,7 @@ import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.t
 import {CommunityTop} from '../Top/CommunityTop.tsx';
 import {BlurView} from 'expo-blur';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {CommunityStack} from '../Stack/CommunityStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
@@ -37,62 +38,62 @@ export const HomeTab = () => {
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
 
-  function Header() {
-    return (
-      <Image
-        source={IMAGES.headerLogo}
-        resizeMode={'contain'}
-        style={{width: scale(130), height: scale(20)}}
-      />
-    );
-  }
+  // function Header() {
+  //   return (
+  //     <Image
+  //       source={IMAGES.headerLogo}
+  //       resizeMode={'contain'}
+  //       style={{width: scale(130), height: scale(20)}}
+  //     />
+  //   );
+  // }
+  //
+  // function HomeRightHeader() {
+  //   return (
+  //     <View
+  //       style={{
+  //         flexDirection: 'row',
+  //         justifyContent: 'space-between',
+  //         marginHorizontal: 12,
+  //       }}>
+  //       {/* Center icons vertically */}
+  //       <TouchableOpacity onPress={() => navigation.push('Notification')}>
+  //         <Image
+  //           source={IMAGES.bell}
+  //           style={{height: scale(36), width: scale(36)}}
+  //         />
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
-  function HomeRightHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: 12,
-        }}>
-        {/* Center icons vertically */}
-        <TouchableOpacity onPress={() => navigation.push('Notification')}>
-          <Image
-            source={IMAGES.bell}
-            style={{height: scale(36), width: scale(36)}}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  function HomeLeftHeader({isTint}: {isTint?: boolean}) {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: 12,
-        }}>
-        {/* Center icons vertically */}
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
-          <Image
-            source={IMAGES.menu}
-            style={{
-              height: scale(24),
-              width: scale(24),
-              tintColor: isTint ? COLORS.white2 : undefined,
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  // function HomeLeftHeader({isTint}: {isTint?: boolean}) {
+  //   return (
+  //     <View
+  //       style={{
+  //         flexDirection: 'row',
+  //         justifyContent: 'space-between',
+  //         marginHorizontal: 12,
+  //       }}>
+  //       {/* Center icons vertically */}
+  //       <TouchableOpacity
+  //         onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
+  //         <Image
+  //           source={IMAGES.menu}
+  //           style={{
+  //             height: scale(24),
+  //             width: scale(24),
+  //             tintColor: isTint ? COLORS.white2 : undefined,
+  //           }}
+  //         />
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
   return (
     <Tab.Navigator
-      initialRouteName={'CommunityTop'}
+      initialRouteName={'CommunityStack'}
       screenOptions={{
         headerTitleAlign: 'center',
         headerStyle: {
@@ -110,13 +111,10 @@ export const HomeTab = () => {
         },
       }}>
       <Tab.Screen
-        name="CommunityTop"
-        component={CommunityTop}
+        name="CommunityStack"
+        component={CommunityStack}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
-          headerTitle: () => <Header />,
-          headerRight: () => <HomeRightHeader />,
-          headerShown: true,
+          headerShown: false,
           tabBarShowLabel: true,
           tabBarLabel: 'Community',
           tabBarActiveTintColor: COLORS.primary1,
@@ -145,7 +143,6 @@ export const HomeTab = () => {
           headerTitleAlign: 'center',
           headerTintColor: COLORS.white2,
           headerTransparent: true,
-          headerLeft: () => <HomeLeftHeader isTint />,
           tabBarShowLabel: true,
           tabBarLabel: 'Possibles',
           tabBarActiveTintColor: COLORS.primary1,
@@ -169,7 +166,6 @@ export const HomeTab = () => {
         name="AdvocacyStack"
         component={AdvocacyStack}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
           headerShown: false,
           tabBarShowLabel: true,
           tabBarLabel: 'Advocacy',
@@ -182,7 +178,6 @@ export const HomeTab = () => {
         name="Messages"
         component={ChatTop}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
           tabBarShowLabel: true,
           tabBarLabel: 'Chat',
           tabBarActiveTintColor: COLORS.primary1,
