@@ -108,33 +108,7 @@ export const HomeStack = () => {
           },
         }}
       />
-      <Stack.Screen
-        name="Notification"
-        component={Notification}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: COLORS.white,
-          },
-          headerTintColor: COLORS.primary1,
-          headerTitleStyle: {
-            fontFamily: 'ClimateCrisis-Regular',
-            fontWeight: '500',
-            fontSize: moderateScale(20),
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Home', {payload: ''})}
-              style={{width: 30, height: 30}}>
-              <Image
-                source={IMAGES.back}
-                style={{width: 20, height: 20}}
-                resizeMode={'contain'}
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
+
       <Stack.Screen
         name="Filters"
         component={Filters}

@@ -4,7 +4,7 @@ import {RootNavigationParams, Stack} from '../../constants/navigator.ts';
 
 import CustomerName from '../../screens/Private/ProfileCreation/CustomerName.tsx';
 import {COLORS} from '../../constants/commons.ts';
-import {Platform, TouchableOpacity} from 'react-native';
+import {Image, Platform, TouchableOpacity} from 'react-native';
 import CustomerBirthday from '../../screens/Private/ProfileCreation/CustomerBirthday.tsx';
 import CustomerGender from '../../screens/Private/ProfileCreation/CustomerGender.tsx';
 import CustomerRequestAccess from '../../screens/Private/ProfileCreation/CustomerRequestAccess.tsx';
@@ -27,6 +27,7 @@ import {CommunityProvider} from '../../providers/Community.tsx';
 import CreatePost from '../../screens/Private/Community/CreatePost.tsx';
 import Post from '../../screens/Private/Community/Post.tsx';
 import FaceVerificationModal from '../../screens/Private/FaceVerification/FaceVerificationModal.tsx';
+import Notification from '../../screens/Private/Notification/Notification.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -170,6 +171,25 @@ export const AuthenticatedStack = () => {
             component={Post}
             options={{
               headerTitle: 'Post',
+              headerLeft: () => <HomeLeftHeader />,
+              headerStyle: {
+                backgroundColor: COLORS.white,
+              },
+              headerTitleStyle: {
+                fontFamily: 'Montserrat-Bold',
+                fontSize: scale(14),
+              },
+              headerShown: true,
+              headerTitleAlign: 'center',
+              headerShadowVisible: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
+            options={{
+              headerTitle: 'Notifications',
               headerLeft: () => <HomeLeftHeader />,
               headerStyle: {
                 backgroundColor: COLORS.white,

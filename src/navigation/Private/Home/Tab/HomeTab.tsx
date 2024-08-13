@@ -25,10 +25,12 @@ import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
 import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
 import {CommunityTop} from '../Top/CommunityTop.tsx';
 import {BlurView} from 'expo-blur';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
 
   const auth = useAuth();
   const isUnread = useUnreadStore(state => state.isUnreads);
@@ -54,7 +56,7 @@ export const HomeTab = () => {
           marginHorizontal: 12,
         }}>
         {/* Center icons vertically */}
-        <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+        <TouchableOpacity onPress={() => navigation.push('Notification')}>
           <Image
             source={IMAGES.bell}
             style={{height: scale(36), width: scale(36)}}
@@ -113,7 +115,7 @@ export const HomeTab = () => {
         options={{
           headerLeft: () => <HomeLeftHeader />,
           headerTitle: () => <Header />,
-          // headerRight: () => <HomeRightHeader />,
+          headerRight: () => <HomeRightHeader />,
           headerShown: true,
           tabBarShowLabel: true,
           tabBarLabel: 'Community',

@@ -25,7 +25,7 @@ import {queryClient} from '../../../utils/queryClient.ts';
 import {TrashIcon} from '../../../assets/images/TrashIcon.tsx';
 import {useDeleteNotification} from '../../../hooks/notification/useDeleteNotification.ts';
 
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 const Notification = () => {
   const auth = useAuth();
@@ -91,7 +91,7 @@ const Notification = () => {
         <Animated.View
           style={[
             item.isRead
-              ? [styles.item, {backgroundColor: '#F7F5F5'}]
+              ? [styles.item, {backgroundColor: '#f8f8f8'}]
               : styles.item,
           ]}>
           <TouchableOpacity
@@ -153,7 +153,7 @@ const Notification = () => {
 
   return (
     <SafeAreaView
-      edges={['left', 'right', 'bottom']}
+      edges={['left', 'right']}
       style={{flex: 1, backgroundColor: COLORS.white}}>
       <View
         style={{

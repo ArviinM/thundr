@@ -38,7 +38,7 @@ export const CommunityTop = () => {
         name={'Matches'}
         component={WorkingInProgress}
         options={{
-          tabBarLabel: 'Your Matches',
+          tabBarLabel: 'Matches',
         }}
       />
     </Top.Navigator>
