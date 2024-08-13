@@ -19,6 +19,14 @@ import {useCreateRepost} from '../hooks/community/useCreateRepost.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
 import {useGetCustomerSubscribed} from '../hooks/subscribe/useGetCustomerSubscribed.ts';
 import {useGetNotificationCount} from '../hooks/notification/useGetNotificationCount.ts';
+import {requestNotifications} from 'react-native-permissions';
+import {
+  getDeviceToken,
+  registerDeviceForRemoteMessages,
+  unregisterDeviceForRemoteMessages,
+} from '../utils/notificationUtils.ts';
+import {useRegisterToken} from '../hooks/notification/useRegisterToken.ts';
+import {Platform} from 'react-native';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
@@ -74,6 +82,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   const likePost = useLikePost();
   const deletePost = useDeletePost();
   const repost = useCreateRepost();
+  const registerToken = useRegisterToken();
 
   const showModal = () => {
     setModalVisible(true);
@@ -121,6 +130,42 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     }
   };
 
+  const requestNotificationPermission = async () => {
+    const notificationResult = await requestNotifications(['alert', 'sound']);
+
+    if (Platform.OS === 'ios') {
+      if (notificationResult.status === 'granted') {
+        const fcm = await getDeviceToken();
+
+        if (auth.authData?.sub && fcm) {
+          await registerToken.mutateAsync({
+            subId: auth.authData.sub,
+            token: fcm,
+          });
+        }
+      } else {
+        await unregisterDeviceForRemoteMessages();
+        console.log('user notification is not blocked');
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      if (notificationResult.status === 'granted') {
+        await registerDeviceForRemoteMessages();
+        const fcm = await getDeviceToken();
+
+        if (auth.authData?.sub && fcm) {
+          await registerToken.mutateAsync({
+            subId: auth.authData.sub,
+            token: fcm,
+          });
+        }
+      } else {
+        console.log('user notification is not blocked');
+      }
+    }
+  };
+
   useEffect(() => {
     if (auth.authData?.forProfileCreation) {
       return;
@@ -161,6 +206,10 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     if (unreadNotification.isPending) {
       unreadNotification.refetch();
     }
+  }, []);
+
+  useEffect(() => {
+    requestNotificationPermission();
   }, []);
 
   return (
