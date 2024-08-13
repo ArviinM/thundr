@@ -18,6 +18,7 @@ import {queryClient} from '../utils/queryClient.ts';
 import {useCreateRepost} from '../hooks/community/useCreateRepost.ts';
 import useSubscribeCheck from '../store/subscribeStore.ts';
 import {useGetCustomerSubscribed} from '../hooks/subscribe/useGetCustomerSubscribed.ts';
+import {useGetNotificationCount} from '../hooks/notification/useGetNotificationCount.ts';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
@@ -60,6 +61,10 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     sub: auth.authData?.sub || '',
     productId: 'THDR-BOLT-001',
   });
+  const unreadNotification = useGetNotificationCount({
+    sub: auth.authData?.sub || '',
+  });
+
   const setIsCustomerSubscribed = useSubscribeCheck(
     state => state.setIsCustomerSubscribed,
   );
@@ -151,6 +156,12 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
       setIsCustomerSubscribed(customerSubscribed.data.hasSubscription);
     }
   }, [customerSubscribed.data, setIsCustomerSubscribed]);
+
+  useEffect(() => {
+    if (unreadNotification.isPending) {
+      unreadNotification.refetch();
+    }
+  }, []);
 
   return (
     <CommunityContext.Provider

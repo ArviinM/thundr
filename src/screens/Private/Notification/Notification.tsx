@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
+  RefreshControl,
   SectionList,
   StyleSheet,
   Text,
@@ -36,6 +37,13 @@ const Notification = () => {
   const query = useQueryClient(queryClient);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    notification.refetch().then(() => setRefreshing(false));
+  }, [notification]);
 
   const deleteItem = async ({
     sub,
@@ -175,6 +183,9 @@ const Notification = () => {
               renderSectionHeader={renderSectionHeader}
               stickySectionHeadersEnabled={false}
               style={{backgroundColor: COLORS.white}}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           )
         )}
