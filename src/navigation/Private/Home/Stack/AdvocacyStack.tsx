@@ -18,33 +18,12 @@ import AdvocacyDonate from '../../../../screens/Private/Advocacy/AdvocacyDonate.
 export const AdvocacyStack = () => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
 
-  function HomeLeftHeader() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: scale(-4),
-        }}>
-        {/* Center icons vertically */}
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
-          <Image
-            source={IMAGES.menu}
-            style={{height: scale(24), width: scale(24)}}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
       <Stack.Screen
         name="Advocacy"
         component={Advocacy}
         options={{
-          headerLeft: () => <HomeLeftHeader />,
           headerShown: true,
           headerStyle: {
             backgroundColor: COLORS.white,

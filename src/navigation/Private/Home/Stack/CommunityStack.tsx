@@ -46,13 +46,15 @@ export const CommunityStack = () => {
           justifyContent: 'space-between',
           marginHorizontal: 12,
           alignItems: 'center',
-          gap: scale(6),
+          gap: scale(10),
         }}>
         {/* Center icons vertically */}
         {/*<TouchableOpacity onPress={() => navigation.push('ProfileStack')}>*/}
         {/*  <SearchIcon />*/}
         {/*</TouchableOpacity>*/}
-        <TouchableOpacity onPress={() => navigation.push('Notification')}>
+        <TouchableOpacity
+          onPress={() => navigation.push('Notification')}
+          hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
           <BellIcon />
           {unreadNotifCount > 0 && (
             <View style={styles.indicator}>
@@ -64,7 +66,7 @@ export const CommunityStack = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.push('ProfileStack')}
-          hitSlop={20}>
+          hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
           <ProfileIcon />
         </TouchableOpacity>
       </View>
@@ -119,8 +121,8 @@ export const CommunityStack = () => {
 const styles = StyleSheet.create({
   indicator: {
     backgroundColor: COLORS.primary1,
-    width: 16,
-    height: 16,
+    width: scale(12),
+    height: scale(12),
     borderRadius: 8, // Updated from 10 for a softer circle
     position: 'absolute',
     // top: scale(18),
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
   },
   indicatorText: {
     color: 'white', // Ensure good contrast
-    fontSize: scale(10), // Adjust font size for readability
+    fontSize: scale(7), // Adjust font size for readability
     fontWeight: 'bold', // Consider bold for emphasis
   },
 });

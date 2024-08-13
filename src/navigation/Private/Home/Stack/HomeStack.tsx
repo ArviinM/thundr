@@ -149,8 +149,8 @@ export const HomeStack = () => {
 const styles = StyleSheet.create({
   indicator: {
     backgroundColor: COLORS.primary1,
-    width: 16,
-    height: 16,
+    width: scale(12),
+    height: scale(12),
     borderRadius: 8, // Updated from 10 for a softer circle
     position: 'absolute',
     // top: scale(18),
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   indicatorText: {
     color: 'white', // Ensure good contrast
-    fontSize: scale(10), // Adjust font size for readability
+    fontSize: scale(7), // Adjust font size for readability
     fontWeight: 'bold', // Consider bold for emphasis
   },
 });
