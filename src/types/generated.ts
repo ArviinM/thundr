@@ -337,13 +337,33 @@ export type CustomerFCMTokenRequest = {
 
 // Notification Data
 
+enum ChannelType {
+  GENERIC = 'GENERIC',
+  MATCH = 'MATCH',
+  CHAT = 'CHAT',
+  MATCHED_CHAT = 'MATCHED_CHAT',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  LIKE = 'LIKE',
+  COMMENT = 'COMMENT',
+  REPOST = 'REPOST',
+  QUOTE = 'QUOTE',
+  COMMUNITY_ACCEPTED = 'COMMUNITY_ACCEPTED',
+  COMMUNITY_REJECTED = 'COMMUNITY_REJECTED',
+  NEW_POST = 'NEW_POST',
+  FACE_VERIFICATION_OK = 'FACE_VERIFICATION_OK',
+  FACE_VERIFICATION_FAIL = 'FACE_VERIFICATION_FAIL',
+}
+
 export type RemoteData = {
   sentTime: string;
   matchType: string;
-  channelType: string;
+  channelType: ChannelType;
   targetSub: string;
   matchPhoto?: string;
   chatRoomUuid: string;
+  extraProps?: {
+    targetSnowflake?: string;
+  };
 };
 
 export type NotificationData = {

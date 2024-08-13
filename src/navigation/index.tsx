@@ -49,6 +49,19 @@ const RootNavigation = () => {
               ],
             });
           }
+          // if (notificationData.channelType === 'LIKE') {
+          //   navigationRef.reset({
+          //     index: 0, // Reset to the first screen in the stack
+          //     routes: [
+          //       {
+          //         name: 'Post',
+          //         params: {
+          //           postDetails
+          //         },
+          //       },
+          //     ],
+          //   });
+          // }
         }
       }
     });

@@ -70,6 +70,7 @@ import {useAuth} from '../../../providers/Auth.tsx';
 import {Loading} from '../../../components/shared/Loading.tsx';
 import DatePicker from 'react-native-date-picker';
 import {format} from 'date-fns';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 type EditProfileScreenRouteProp = RouteProp<
   RootNavigationParams,
@@ -100,6 +101,8 @@ const EditProfile = ({route}: EditProfileProps) => {
   const currentFilteredPersonality = customerDetails?.personalityType || '';
   const filteredPersonalityArray = currentFilteredPersonality.split(',');
   const [selectedPersonality, setSelectedPersonality] = useState<string[]>([]);
+
+  const tabBarHeight = useBottomTabBarHeight();
 
   const [loading, isLoading] = useState(false);
 
@@ -948,7 +951,7 @@ const EditProfile = ({route}: EditProfileProps) => {
           </View>
         </KeyboardAwareScrollView>
         <KeyboardStickyView offset={{closed: 0, opened: scale(100)}}>
-          <View style={styles.fabContainer}>
+          <View style={[styles.fabContainer, {bottom: tabBarHeight + 20}]}>
             <CircleButton
               onPress={handleSubmit(onSubmit)}
               isCheck
@@ -976,10 +979,9 @@ const EditProfile = ({route}: EditProfileProps) => {
 const styles = StyleSheet.create({
   fabContainer: {
     position: 'absolute',
-    bottom: 16, // Adjust the distance from the bottom as needed
-    right: 16, // Adjust the distance from the right as needed
-    width: 60,
-    height: 60,
+    right: scale(16), // Adjust the distance from the right as needed
+    width: scale(50),
+    height: scale(50),
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
