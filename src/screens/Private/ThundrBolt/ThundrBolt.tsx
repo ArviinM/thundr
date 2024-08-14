@@ -170,7 +170,7 @@ const ThundrBolt = ({route}: ThundrBoltProps) => {
           </Text>
         </View>
         {/* Gestures Here Swipe */}
-        <View style={{paddingBottom: 60, flex: 1}}>
+        <View style={{paddingBottom: 0, flex: 1}}>
           <FeatureLists />
         </View>
       </ScrollView>

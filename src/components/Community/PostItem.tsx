@@ -350,7 +350,7 @@ const PostItem = ({
                 type: 'THNRSuccess',
                 props: {
                   subtitle: `Successfully ${
-                    !post.isReposted ? 'Undo Repost' : 'Repost'
+                    post.isReposted ? 'Undo Repost' : 'Repost'
                   }!`,
                 },
                 position: 'top',

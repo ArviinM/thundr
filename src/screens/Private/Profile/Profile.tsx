@@ -1,10 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl, Text, TouchableOpacity, View} from 'react-native';
-import {COLORS} from '../../../constants/commons.ts';
+import {
+  Animated,
+  Modal,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {COLORS, width} from '../../../constants/commons.ts';
 import {useCommunity} from '../../../providers/Community.tsx';
 import {Loading} from '../../../components/shared/Loading.tsx';
 import {FlashList} from '@shopify/flash-list';
-import {FeedResponse} from '../../../types/generated.ts';
+import {CustomerData, FeedResponse} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,6 +28,10 @@ import {truncateChatPreview} from '../Chat/chatUtils.ts';
 import {PencilIcon} from '../../../assets/images/PencilIcon.tsx';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
+import LinearGradient from 'react-native-linear-gradient';
+import Button from '../../../components/shared/Button.tsx';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import ProfileCard from '../../../components/Home/ProfileCard.tsx';
 
 const Profile = () => {
   const [firstSnowflakeId, setFirstSnowflakeId] = useState<string | null>(null);
@@ -111,6 +123,73 @@ const Profile = () => {
     return <Loading />;
   }
 
+  const [animation] = React.useState(new Animated.Value(0));
+
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    Animated.timing(animation, {
+      toValue: isVisible ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [animation, isVisible]);
+
+  const opacity = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const scaleAnim = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.95, 1],
+  });
+
+  const profileCardModal = (customer: CustomerData) => {
+    return (
+      <Modal
+        statusBarTranslucent
+        transparent
+        animationType="fade"
+        visible={isVisible}
+        onDismiss={() => setIsVisible(false)}
+        onRequestClose={() => setIsVisible(false)}>
+        <GestureHandlerRootView style={{flex: 1}}>
+          <Animated.View
+            style={[
+              styles.container,
+              {opacity, transform: [{scale: scaleAnim}]},
+            ]}>
+            <View style={[styles.bodyContainer, {marginBottom: 20}]}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor: COLORS.secondary2,
+                  },
+                ]}
+                onPress={() => setIsVisible(false)}>
+                <Text
+                  style={[styles.buttonText, {fontFamily: 'Montserrat-Bold'}]}>
+                  Close
+                </Text>
+              </TouchableOpacity>
+              <ProfileCard
+                user={{
+                  sub: '',
+                  percent: '',
+                  customerData: customer,
+                }}
+                possibles={false}
+                isReport={true}
+              />
+            </View>
+          </Animated.View>
+        </GestureHandlerRootView>
+      </Modal>
+    );
+  };
+
   const ProfileHeader = () => {
     return (
       <View
@@ -177,7 +256,12 @@ const Profile = () => {
                     36,
                   )}
                 </Text>
-                <View style={{paddingVertical: scale(6)}}>
+                <View
+                  style={{
+                    paddingVertical: scale(6),
+                    flexDirection: 'row',
+                    gap: scale(6),
+                  }}>
                   <TouchableOpacity
                     onPress={() =>
                       navigation.push('EditProfile', customerProfile.data)
@@ -198,14 +282,37 @@ const Profile = () => {
                       style={{
                         color: COLORS.white,
                         fontFamily: 'Montserrat-Medium',
+                        fontSize: scale(12),
                       }}>
                       Edit profile
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setIsVisible(true)}
+                    style={{
+                      backgroundColor: COLORS.secondary2,
+                      width: scale(100),
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                      gap: scale(6),
+                      paddingHorizontal: scale(10),
+                      paddingVertical: scale(2),
+                      borderRadius: scale(7),
+                    }}>
+                    <Text
+                      style={{
+                        color: COLORS.white,
+                        fontFamily: 'Montserrat-Medium',
+                        fontSize: scale(12),
+                      }}>
+                      View profile
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
-            <View>
+            <View style={{paddingVertical: scale(10)}}>
               <Text
                 style={{
                   fontFamily: 'Montserrat-Bold',
@@ -214,6 +321,52 @@ const Profile = () => {
                 Posts
               </Text>
             </View>
+            <LinearGradient
+              colors={['#E53053', '#FBB138']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
+              style={{
+                paddingVertical: scale(16),
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 16,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'ClimateCrisis-Regular',
+                  fontSize: scale(18),
+                  color: COLORS.white,
+                }}>
+                THUNDR BOLT
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Medium',
+                  fontSize: scale(13),
+                  color: COLORS.white,
+                  alignSelf: 'center',
+                }}>
+                Paid subscription para sa mga kabog.{'\n'}Unlock exclusive
+                access to all features
+              </Text>
+              <Button
+                onPress={() =>
+                  navigation.push('ThundrBoltModal', {isModal: false})
+                }
+                text="SUBSCRIBE"
+                buttonStyle={{
+                  backgroundColor: COLORS.white,
+                  paddingHorizontal: scale(30),
+                  paddingVertical: scale(8),
+                  marginTop: scale(10),
+                  borderRadius: 20,
+                }}
+                textStyle={{
+                  fontFamily: 'Montserrat-Bold',
+                  fontSize: scale(12),
+                }}
+              />
+            </LinearGradient>
           </View>
         )}
       </View>
@@ -244,8 +397,43 @@ const Profile = () => {
           alwaysBounceVertical
         />
       )}
+      {customerProfile.data && profileCardModal(customerProfile.data)}
     </SafeAreaView>
   );
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+  backButton: {alignItems: 'flex-start'},
+  backImage: {alignSelf: 'flex-start', width: 26, height: 26, aspectRatio: 1},
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  bodyContainer: {
+    backgroundColor: COLORS.white,
+    padding: 10,
+    borderRadius: 20,
+    margin: 20,
+    width: width / 1.07,
+    height: '66%',
+  },
+  button: {
+    position: 'absolute',
+    top: scale(-46),
+    right: 0,
+    zIndex: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: scale(13),
+    color: COLORS.black,
+  },
+});

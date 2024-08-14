@@ -131,6 +131,10 @@ export const AuthenticatedStack = () => {
               },
               cardStyleInterpolator:
                 CardStyleInterpolators.forModalPresentationIOS,
+              headerShown: true,
+              headerTitle: '',
+              headerLeft: () => <HomeLeftHeader />,
+              headerShadowVisible: false,
             }}
           />
         </Stack.Group>

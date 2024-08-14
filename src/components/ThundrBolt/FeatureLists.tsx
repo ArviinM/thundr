@@ -89,8 +89,8 @@ const FeatureLists = () => {
   };
 
   const swipes = Gesture.Simultaneous(
-    Gesture.Fling().direction(Directions.LEFT).onEnd(onContinue),
-    Gesture.Fling().direction(Directions.RIGHT).onEnd(onBack),
+    Gesture.Fling().direction(Directions.LEFT).onEnd(onContinue).runOnJS(true),
+    Gesture.Fling().direction(Directions.RIGHT).onEnd(onBack).runOnJS(true),
   );
 
   return (
