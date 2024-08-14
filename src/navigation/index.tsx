@@ -49,19 +49,15 @@ const RootNavigation = () => {
               ],
             });
           }
-          // if (notificationData.channelType === 'LIKE') {
-          //   navigationRef.reset({
-          //     index: 0, // Reset to the first screen in the stack
-          //     routes: [
-          //       {
-          //         name: 'Post',
-          //         params: {
-          //           postDetails
-          //         },
-          //       },
-          //     ],
-          //   });
-          // }
+          if (notificationData.extraProps) {
+            const postProps: {snowflakeId: string} = JSON.parse(
+              notificationData.extraProps,
+            );
+
+            navigationRef.navigate('Post', {
+              snowflakeId: postProps.snowflakeId,
+            });
+          }
         }
       }
     });
@@ -94,6 +90,15 @@ const RootNavigation = () => {
                 ],
               });
             }
+            if (notificationData.extraProps) {
+              const postProps: {snowflakeId: string} = JSON.parse(
+                notificationData.extraProps,
+              );
+
+              navigationRef.navigate('Post', {
+                snowflakeId: postProps.snowflakeId,
+              });
+            }
           }
         }
       });
@@ -109,7 +114,6 @@ const RootNavigation = () => {
         case EventType.PRESS:
           const notificationData: NotificationData =
             detail.notification as NotificationData;
-          console.log(notificationData.data);
           if (notificationData.data.channelType === 'MATCH') {
             navigationRef.navigate('MatchFound', {
               sub: '',
@@ -131,6 +135,15 @@ const RootNavigation = () => {
                   },
                 },
               ],
+            });
+          }
+          if (notificationData.data.extraProps) {
+            const postProps: {snowflakeId: string} = JSON.parse(
+              notificationData.data.extraProps,
+            );
+
+            navigationRef.navigate('Post', {
+              snowflakeId: postProps.snowflakeId,
             });
           }
           break;
@@ -176,8 +189,8 @@ const RootNavigation = () => {
     <NavigationContainer
       ref={navigationRef}
       linking={linking}
-      onReady={() => {
-        BootSplash.hide({fade: true});
+      onReady={async () => {
+        await BootSplash.hide({fade: true});
 
         if (navigationRef.isReady()) {
           routeNameRef.current = navigationRef.getCurrentRoute()?.name;

@@ -27,6 +27,7 @@ import {TrashIcon} from '../../../assets/images/TrashIcon.tsx';
 import {useDeleteNotification} from '../../../hooks/notification/useDeleteNotification.ts';
 
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const Notification = () => {
   const auth = useAuth();
@@ -36,7 +37,7 @@ const Notification = () => {
 
   const query = useQueryClient(queryClient);
 
-  const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -116,11 +117,28 @@ const Notification = () => {
                   queryKey: ['get-notification-count'],
                 });
               }
-              // TODO: Needs to redirect soon
-              navigation.navigate('Messages', {
-                chatRoomId: '',
-                isMare: item.matchType.toLowerCase() === 'mare',
-              });
+
+              if (item.channelType === 'CHAT') {
+                navigation.navigate('Messages', {
+                  chatRoomId: '',
+                  isMare: item.matchType.toLowerCase() === 'mare',
+                });
+              }
+
+              if (item.extraProps) {
+                const postProps: {snowflakeId: string} = JSON.parse(
+                  item.extraProps,
+                );
+
+                navigation.push('Post', {
+                  snowflakeId: postProps.snowflakeId,
+                });
+              }
+
+              // if(item.channelType === 'LIKE') {
+              //   navigation.navigate('Post', { snowflakeId:
+              //   });
+              // }
             }}>
             <Text
               style={[

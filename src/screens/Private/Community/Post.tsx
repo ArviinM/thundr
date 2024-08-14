@@ -27,7 +27,7 @@ const Post: React.FC<PostProps> = ({route}) => {
 
   const getMainPost = useGetPost({
     sub: authData?.sub || '',
-    postId: postDetails.snowflakeId,
+    postId: snowflakeId || '',
   });
 
   const getReplies = useGetReplies({
@@ -44,6 +44,7 @@ const Post: React.FC<PostProps> = ({route}) => {
     setRefreshing(true);
     try {
       await getReplies.refetch();
+      await getMainPost.refetch();
     } catch (error) {
       console.error('Error refreshing replies:', error);
     } finally {
@@ -58,7 +59,7 @@ const Post: React.FC<PostProps> = ({route}) => {
   }, [getReplies]);
 
   const ListHeaderComponent = useMemo(() => {
-    if (!postDetails || !getMainPost.data) {
+    if (!getMainPost.data) {
       return null;
     }
     return (
@@ -84,12 +85,16 @@ const Post: React.FC<PostProps> = ({route}) => {
     );
   }, [getMainPost.data, postDetails]);
 
-  if (!snowflakeId || !postDetails) {
-    return <ErrorView message="Unable to load post. Missing required data." />;
+  if (!snowflakeId) {
+    return <ErrorView message="Unable to load post." />;
   }
 
-  if (getReplies.isLoading) {
+  if (getReplies.isLoading || getMainPost.isLoading) {
     return <Loading />;
+  }
+
+  if (getReplies.isError || getMainPost.isError) {
+    return <ErrorView message="There's an error loading the post." />;
   }
 
   return (
@@ -116,7 +121,7 @@ const Post: React.FC<PostProps> = ({route}) => {
           actionTitle={'Write a reply...'}
           isComment
           referenceId={snowflakeId}
-          postDetails={postDetails}
+          postDetails={getMainPost.data}
         />
       </View>
     </SafeAreaView>

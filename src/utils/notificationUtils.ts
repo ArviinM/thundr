@@ -41,10 +41,6 @@ async function onDisplayNotification(message: NotificationData) {
   const authData = useAuthStore.getState().authData;
 
   if (authData && notificationData.data.channelType === 'MATCH') {
-    // const chatRoom = useChatRoomIdNotifStore.getState().setChatRoom;
-    //
-    // chatRoom(notificationData.data.chatRoomUuid);
-
     navigationRef.navigate('MatchFound', {
       sub: '',
       isMare: notificationData.data.matchType.toLowerCase() === 'mare',
@@ -55,13 +51,13 @@ async function onDisplayNotification(message: NotificationData) {
 
   const chatRoom = useChatRoomIDStore.getState().chatRoom;
 
-  if (chatRoom !== message.data.chatRoomUuid) {
+  if (chatRoom !== notificationData.data.chatRoomUuid) {
     await notifee.displayNotification({
-      title: message.notification.title,
-      body: message.notification.body,
-      data: message.data,
+      title: notificationData.notification.title,
+      body: notificationData.notification.body,
+      data: notificationData.data,
       android: {
-        channelId: 'Thundr',
+        channelId: 'default_channel',
         pressAction: {
           id: 'default',
         },

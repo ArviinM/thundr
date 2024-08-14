@@ -137,5 +137,5 @@ export type RootNavigationParams = {
   ReviewPhoto: {photoPath: string};
 
   //Post View
-  Post: {snowflakeId: string; postDetails: FeedResponse};
+  Post: {snowflakeId: string; postDetails?: FeedResponse};
 };

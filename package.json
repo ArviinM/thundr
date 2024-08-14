@@ -23,6 +23,7 @@
     "@react-native-firebase/analytics": "^19.2.2",
     "@react-native-firebase/app": "^19.2.2",
     "@react-native-firebase/messaging": "^19.2.2",
+    "@react-native-masked-view/masked-view": "^0.3.1",
     "@react-native-media-console/reanimated": "^2.2.4",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/drawer": "^6.6.15",

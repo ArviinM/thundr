@@ -25,6 +25,7 @@ import Toast from 'react-native-toast-message';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Repost} from '../../assets/images/community/Repost.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
+import GradientText from '../shared/GradientText.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
@@ -188,14 +189,19 @@ const PostItem = ({
                 alignItems: 'center',
                 gap: scale(6),
               }}>
-              <Text
-                style={{
-                  fontFamily: 'Montserrat-Bold',
-                  fontSize: scale(13),
-                  color: COLORS.black,
-                }}>
-                {post.customerName}
-              </Text>
+              {post.accountType === 'CORPORATE' && (
+                <GradientText text={post.customerName} />
+              )}
+              {post.accountType !== 'CORPORATE' && (
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Bold',
+                    fontSize: scale(13),
+                    color: COLORS.black,
+                  }}>
+                  {post.customerName}
+                </Text>
+              )}
               <Text
                 style={{
                   fontFamily: 'Montserrat-Light',

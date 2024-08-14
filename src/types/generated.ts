@@ -361,9 +361,7 @@ export type RemoteData = {
   targetSub: string;
   matchPhoto?: string;
   chatRoomUuid: string;
-  extraProps?: {
-    targetSnowflake?: string;
-  };
+  extraProps?: string;
 };
 
 export type NotificationData = {
@@ -632,7 +630,7 @@ export type NotificationResponse = {
   subId: string;
   title: string;
   body: string;
-  channelType: string;
+  channelType: ChannelType;
   sentTime: string;
   matchType: string;
   notificationMethod: string;
@@ -640,6 +638,7 @@ export type NotificationResponse = {
   targetSub: string;
   matchPhoto: string | null;
   isRead: boolean;
+  extraProps: string;
 };
 
 export type ReportCustomerRequest = {
@@ -822,6 +821,9 @@ export type FeedResponse = {
   topLevelPostId: string | null;
   parentPostId: string | null;
   topLevelReplies: FeedResponse[] | null;
+
+  // Account Type
+  accountType: ('CUSTOMER' | 'FORUM_ADMIN' | 'CORPORATE') | null;
 };
 
 // Define the params for the CreatePost route
