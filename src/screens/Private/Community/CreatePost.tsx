@@ -31,7 +31,7 @@ import {FlashList} from '@shopify/flash-list';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CloseIconWhite} from '../../../assets/images/CloseIconWhite.tsx';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import {FileAttachment, RepostType} from '../../../types/generated.ts';
+import {FileAttachment} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
 
 const postSchema = yup.object({
@@ -307,7 +307,7 @@ const CreatePost = ({route}: CreatePostParams) => {
     if (isOpenGallery) {
       setTimeout(() => openMediaPicker(), 100);
     }
-  }, [isOpenGallery, openMediaPicker]);
+  }, [isOpenGallery]);
 
   return (
     <View
