@@ -110,6 +110,7 @@ export const MAX_IMAGE_COUNT = 4;
 
 import {Dimensions} from 'react-native';
 import {NotificationResponse} from '../types/generated.ts';
+import {TransitionSpec} from '@react-navigation/stack/lib/typescript/src/types';
 
 const {width, height} = Dimensions.get('window');
 
@@ -258,3 +259,15 @@ export const minDate = new Date(
   today.getMonth(),
   today.getDate(),
 );
+
+export const animationConfig: TransitionSpec = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};

@@ -4,7 +4,7 @@ import {RootNavigationParams, Stack} from '../../constants/navigator.ts';
 
 import CustomerName from '../../screens/Private/ProfileCreation/CustomerName.tsx';
 import {COLORS} from '../../constants/commons.ts';
-import {Image, Platform, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import CustomerBirthday from '../../screens/Private/ProfileCreation/CustomerBirthday.tsx';
 import CustomerGender from '../../screens/Private/ProfileCreation/CustomerGender.tsx';
 import CustomerRequestAccess from '../../screens/Private/ProfileCreation/CustomerRequestAccess.tsx';
@@ -16,18 +16,18 @@ import CustomerPhotoBio from '../../screens/Private/ProfileCreation/CustomerPhot
 import Onboarding from '../../screens/Private/ProfileCreation/Onboarding.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
 import MatchFound from '../../screens/Private/MatchFound/MatchFound.tsx';
-import {HomeDrawer} from './Home/Drawer/HomeDrawer.tsx';
 import ThundrBolt from '../../screens/Private/ThundrBolt/ThundrBolt.tsx';
 import {ChatMessages} from '../../screens/Private/Chat/ChatMessages.tsx';
 import {FaceVerificationStack} from './Home/Stack/FaceVerificationStack.tsx';
 import {ChevronLeftSmall} from '../../assets/images/ChevronLeftSmall.tsx';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {scale} from '../../utils/utils.ts';
+import {animationConfig, scale} from '../../utils/utils.ts';
 import {CommunityProvider} from '../../providers/Community.tsx';
 import CreatePost from '../../screens/Private/Community/CreatePost.tsx';
 import Post from '../../screens/Private/Community/Post.tsx';
 import FaceVerificationModal from '../../screens/Private/FaceVerification/FaceVerificationModal.tsx';
 import {HomeTab} from './Home/Tab/HomeTab.tsx';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -45,7 +45,8 @@ export const AuthenticatedStack = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
     );
@@ -53,13 +54,19 @@ export const AuthenticatedStack = () => {
 
   return (
     <CommunityProvider>
-      <Stack.Navigator initialRouteName={initialRouteName}>
+      <Stack.Navigator
+        initialRouteName={initialRouteName}
+        screenOptions={{
+          transitionSpec: {
+            open: animationConfig,
+            close: animationConfig,
+          },
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}>
         {/*  Stack for Profile Creation*/}
         <Stack.Group
           screenOptions={{
             headerShown: false,
-            statusBarColor: 'white',
-            statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}>
           <Stack.Screen name="CustomerName" component={CustomerName} />
           <Stack.Screen name="CustomerBirthday" component={CustomerBirthday} />
@@ -91,10 +98,6 @@ export const AuthenticatedStack = () => {
         <Stack.Group
           screenOptions={{
             headerShown: false,
-            statusBarColor: '#00000000',
-            statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
-            statusBarTranslucent: true,
-            statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
           }}>
           <Stack.Screen
             name="HomeTab"
@@ -105,32 +108,29 @@ export const AuthenticatedStack = () => {
             name="MatchFound"
             component={MatchFound}
             options={{
-              statusBarTranslucent: true,
-              animation: 'slide_from_bottom',
-              statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
-              statusBarAnimation:
-                Platform.OS === 'android' ? 'fade' : undefined,
+              transitionSpec: {
+                open: animationConfig,
+                close: animationConfig,
+              },
+              cardStyleInterpolator:
+                CardStyleInterpolators.forModalPresentationIOS,
             }}
           />
           <Stack.Screen
             name="ChatMessages"
             component={ChatMessages}
-            options={{
-              animation: 'slide_from_right',
-              statusBarAnimation:
-                Platform.OS === 'android' ? 'fade' : undefined,
-            }}
+            options={{}}
           />
           <Stack.Screen
             name="ThundrBoltModal"
             component={ThundrBolt}
             options={{
-              statusBarColor: COLORS.primary1,
-              statusBarTranslucent: true,
-              animation: 'slide_from_bottom',
-              statusBarStyle: Platform.OS === 'android' ? 'light' : undefined,
-              statusBarAnimation:
-                Platform.OS === 'android' ? 'fade' : undefined,
+              transitionSpec: {
+                open: animationConfig,
+                close: animationConfig,
+              },
+              cardStyleInterpolator:
+                CardStyleInterpolators.forModalPresentationIOS,
             }}
           />
         </Stack.Group>
@@ -138,8 +138,6 @@ export const AuthenticatedStack = () => {
         <Stack.Group
           screenOptions={{
             headerShown: false,
-            statusBarColor: '#00000000',
-            statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
           }}>
           {/*  For Post Creation  */}
           <Stack.Screen
@@ -158,6 +156,12 @@ export const AuthenticatedStack = () => {
               headerShown: true,
               headerTitleAlign: 'center',
               headerShadowVisible: false,
+              transitionSpec: {
+                open: animationConfig,
+                close: animationConfig,
+              },
+              cardStyleInterpolator:
+                CardStyleInterpolators.forRevealFromBottomAndroid,
             })}
           />
           {/*  Stack Screen for Face Verification  */}
@@ -182,6 +186,12 @@ export const AuthenticatedStack = () => {
               headerShown: true,
               headerTitleAlign: 'center',
               headerShadowVisible: false,
+              transitionSpec: {
+                open: animationConfig,
+                close: animationConfig,
+              },
+              cardStyleInterpolator:
+                CardStyleInterpolators.forRevealFromBottomAndroid,
             }}
           />
         </Stack.Group>

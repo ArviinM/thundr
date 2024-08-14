@@ -1,12 +1,10 @@
 import React from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
-import Profile from '../../../../screens/Private/Profile/Profile.tsx';
 
 import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
-import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
-import {Image, Platform, TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity} from 'react-native';
 import {
   DrawerActions,
   NavigationProp,
@@ -26,7 +24,8 @@ export const SettingsStack = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
     );
@@ -55,10 +54,7 @@ export const SettingsStack = () => {
         screenOptions={{
           presentation: 'modal',
           headerShown: false,
-          statusBarColor: COLORS.white,
-          statusBarStyle: 'dark',
           gestureEnabled: true,
-          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="Terms" component={Terms} />
       </Stack.Group>
@@ -67,7 +63,6 @@ export const SettingsStack = () => {
         component={PasswordNewValidation}
         options={{
           headerTitle: '',
-          animation: 'slide_from_right',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Image
@@ -85,7 +80,6 @@ export const SettingsStack = () => {
         component={PasswordResetConfirmed}
         options={{
           headerTitle: '',
-          animation: 'slide_from_right',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Image
@@ -103,7 +97,6 @@ export const SettingsStack = () => {
         component={CustomerDeactivate}
         options={{
           headerTitle: '',
-          animation: 'slide_from_right',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
               <Image

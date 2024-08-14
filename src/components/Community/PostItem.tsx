@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import PostReferencePost from './PostReferencePost.tsx';
 import {useCommunity} from '../../providers/Community.tsx';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import ReportBottomSheetModal from '../Report/ReportBottomSheet.tsx';
 import ReusableBottomSheetModal from '../shared/ReusableBottomSheetModal.tsx';
@@ -54,8 +54,7 @@ const PostItem = ({
     setIsImageViewerVisible(true);
   };
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
   const {isUserVerified, showModal, handleDeletePost, handleRepost} =
     useCommunity();
 

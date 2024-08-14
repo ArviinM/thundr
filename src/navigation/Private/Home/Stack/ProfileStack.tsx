@@ -3,12 +3,19 @@ import React, {lazy, Suspense} from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale} from '../../../../utils/utils.ts';
+import {
+  animationConfig,
+  moderateScale,
+  scale,
+} from '../../../../utils/utils.ts';
 import EditProfile from '../../../../screens/Private/Profile/EditProfile.tsx';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import {SettingsIcon} from '../../../../assets/images/SettingsIcon.tsx';
 import {Loading} from '../../../../components/shared/Loading.tsx';
 
@@ -24,14 +31,14 @@ const LazyProfile = () => (
 );
 
 export const ProfileStack = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   function HomeLeftHeaderSmall() {
     return (
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
     );
@@ -41,14 +48,23 @@ export const ProfileStack = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('SettingsStack')}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <SettingsIcon />
       </TouchableOpacity>
     );
   }
 
   return (
-    <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: 'center',
+        transitionSpec: {
+          open: animationConfig,
+          close: animationConfig,
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen
         name="Profile"
         component={LazyProfile}

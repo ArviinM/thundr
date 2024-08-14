@@ -19,6 +19,8 @@ import PasswordNewValidation from '../../screens/Public/Login/PasswordNewValidat
 import PasswordResetConfirmed from '../../screens/Public/Login/PasswordResetConfirmed.tsx';
 import Maintenance from '../../screens/shared/Maintenance.tsx';
 import VersionUpdate from '../../screens/shared/VersionUpdate.tsx';
+import {animationConfig} from '../../utils/utils.ts';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 
 export const LoginStack = () => {
   return (
@@ -27,91 +29,54 @@ export const LoginStack = () => {
       screenOptions={{
         gestureEnabled: false,
         headerShown: false,
-        statusBarTranslucent: true,
-        statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
+        transitionSpec: {
+          open: animationConfig,
+          close: animationConfig,
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      <Stack.Group screenOptions={{statusBarColor: COLORS.primary1}}>
+      <Stack.Group>
         <Stack.Screen name="Login" component={Login} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
           // presentation: 'm',
           headerShown: false,
-          statusBarColor: COLORS.white,
-          // statusBarStyle: 'dark',
-          statusBarStyle: Platform.OS === 'android' ? 'dark' : undefined,
-          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="LoginValidation" component={LoginValidation} />
         <Stack.Screen
           name="ForgetPasswordValidation"
           component={ForgetPasswordValidation}
-          options={{animation: 'fade'}}
         />
         <Stack.Screen
           name="ForgetPasswordVerification"
           component={ForgetPasswordVerification}
-          options={{animation: 'fade'}}
         />
-        <Stack.Screen
-          name="PasswordReset"
-          component={PasswordReset}
-          options={{animation: 'fade'}}
-        />
+        <Stack.Screen name="PasswordReset" component={PasswordReset} />
         <Stack.Screen
           name="PasswordNewValidation"
           component={PasswordNewValidation}
-          options={{animation: 'fade'}}
         />
         <Stack.Screen
           name="PasswordResetConfirmed"
           component={PasswordResetConfirmed}
-          options={{animation: 'fade'}}
         />
-        <Stack.Screen
-          name="MobileValidation"
-          component={MobileValidation}
-          options={{animation: 'slide_from_right'}}
-        />
+        <Stack.Screen name="MobileValidation" component={MobileValidation} />
         <Stack.Screen
           name="MobileVerification"
           component={MobileVerification}
-          options={{animation: 'fade'}}
         />
-        <Stack.Screen
-          name="EmailValidation"
-          component={EmailValidation}
-          options={{animation: 'fade'}}
-        />
-        <Stack.Screen
-          name="EmailVerification"
-          component={EmailVerification}
-          options={{animation: 'fade'}}
-        />
-        <Stack.Screen
-          name="PasswordCreation"
-          component={PasswordCreation}
-          options={{animation: 'fade'}}
-        />
-        <Stack.Screen
-          name="Maintenance"
-          component={Maintenance}
-          options={{animation: 'fade'}}
-        />
-        <Stack.Screen
-          name="VersionUpdate"
-          component={VersionUpdate}
-          options={{animation: 'fade'}}
-        />
+        <Stack.Screen name="EmailValidation" component={EmailValidation} />
+        <Stack.Screen name="EmailVerification" component={EmailVerification} />
+        <Stack.Screen name="PasswordCreation" component={PasswordCreation} />
+        <Stack.Screen name="Maintenance" component={Maintenance} />
+        <Stack.Screen name="VersionUpdate" component={VersionUpdate} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
           presentation: 'modal',
           headerShown: false,
-          statusBarColor: COLORS.white,
-          statusBarStyle: 'dark',
           gestureEnabled: true,
-          statusBarAnimation: Platform.OS === 'android' ? 'fade' : undefined,
         }}>
         <Stack.Screen name="Terms" component={Terms} />
       </Stack.Group>

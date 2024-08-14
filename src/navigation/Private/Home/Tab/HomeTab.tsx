@@ -25,13 +25,12 @@ import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
 import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
 import {CommunityTop} from '../Top/CommunityTop.tsx';
 import {BlurView} from 'expo-blur';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {CommunityStack} from '../Stack/CommunityStack.tsx';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   const auth = useAuth();
   const isUnread = useUnreadStore(state => state.isUnreads);

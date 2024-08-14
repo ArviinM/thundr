@@ -1,12 +1,15 @@
 import React, {lazy, Suspense} from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 import {COLORS} from '../../../../constants/commons.ts';
-import {scale} from '../../../../utils/utils.ts';
+import {animationConfig, scale} from '../../../../utils/utils.ts';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
 import {useNavigation} from '@react-navigation/native';
 import {CommunityTop} from '../Top/CommunityTop.tsx';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import {ProfileStack} from './ProfileStack.tsx';
 import {ProfileIcon} from '../../../../assets/images/header_icons/ProfileIcon.tsx';
 import {BellIcon} from '../../../../assets/images/header_icons/BellIcon.tsx';
@@ -26,8 +29,7 @@ const LazyNotification = () => (
 );
 
 export const CommunityStack = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   const unreadNotifCount = useNotificationCountStore(
     state => state.unreadCount,
@@ -37,7 +39,8 @@ export const CommunityStack = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
     );
@@ -83,16 +86,25 @@ export const CommunityStack = () => {
   }
 
   return (
-    <Stack.Navigator initialRouteName={'CommunityTop'}>
+    <Stack.Navigator
+      initialRouteName={'CommunityTop'}
+      screenOptions={{
+        transitionSpec: {
+          open: animationConfig,
+          close: animationConfig,
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen
         name="CommunityTop"
         component={CommunityTop}
         options={{
-          headerLeft: () => <Header />,
-          headerTitle: () => <View />,
+          // headerLeft: () => <Header />,
+          headerTitle: () => <Header />,
           headerRight: () => <HomeRightHeader />,
           headerShown: true,
           headerShadowVisible: false,
+          headerTitleAlign: 'left',
         }}
       />
       <Stack.Screen

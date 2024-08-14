@@ -3,7 +3,11 @@ import React from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale, scale} from '../../../../utils/utils.ts';
+import {
+  animationConfig,
+  moderateScale,
+  scale,
+} from '../../../../utils/utils.ts';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
@@ -11,16 +15,19 @@ import VerifyProfileInstructions from '../../../../screens/Private/FaceVerificat
 import TakeAPhoto from '../../../../screens/Private/FaceVerification/TakeAPhoto.tsx';
 import ReviewPhoto from '../../../../screens/Private/FaceVerification/ReviewPhoto.tsx';
 import {ChevronLeftSmallWhite} from '../../../../assets/images/ChevronLeftSmallWhite.tsx';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 export const FaceVerificationStack = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   function HomeLeftHeader() {
     return (
       <TouchableOpacity
         onPress={() => navigation.pop()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
     );
@@ -30,7 +37,8 @@ export const FaceVerificationStack = () => {
     return (
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmallWhite />
       </TouchableOpacity>
     );
@@ -45,6 +53,12 @@ export const FaceVerificationStack = () => {
           fontFamily: 'Montserrat-Bold',
           fontSize: moderateScale(16),
         },
+
+        transitionSpec: {
+          open: animationConfig,
+          close: animationConfig,
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Stack.Screen
         name="VerifyProfile"
@@ -80,7 +94,7 @@ export const FaceVerificationStack = () => {
         component={ReviewPhoto}
         options={{
           headerTitle: 'Verify Profile',
-          headerBackVisible: false,
+          headerBackTitleVisible: false,
           // headerLeft: () => <HomeLeftHeader />,
           headerStyle: {
             backgroundColor: COLORS.white,

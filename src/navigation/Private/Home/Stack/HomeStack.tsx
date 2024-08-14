@@ -1,22 +1,25 @@
-import React, {lazy, Suspense, useRef} from 'react';
+import React, {lazy, Suspense} from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
 
 import {COLORS} from '../../../../constants/commons.ts';
-import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
-  DrawerActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
+  animationConfig,
+  moderateScale,
+  scale,
+} from '../../../../utils/utils.ts';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {IMAGES} from '../../../../constants/images.ts';
 import Notification from '../../../../screens/Private/Notification/Notification.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 import Filters from '../../../../screens/Private/Filters/Filters.tsx';
 import {Loading} from '../../../../components/shared/Loading.tsx';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  CardStyleInterpolators,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import {HeaderThundrLogo} from '../../../../assets/images/HeaderThundrLogo.tsx';
 import {BellIcon} from '../../../../assets/images/header_icons/BellIcon.tsx';
 
@@ -29,8 +32,7 @@ const LazyHome = () => (
 );
 
 export const HomeStack = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   const unreadNotifCount = useNotificationCountStore(
     state => state.unreadCount,
@@ -41,7 +43,8 @@ export const HomeStack = () => {
       <TouchableOpacity
         onPress={() => navigation.navigate('Home', {payload: ''})}
         // onPress={() => navigation.goBack()}
-        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+        hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+        style={{paddingHorizontal: scale(20)}}>
         <ChevronLeftSmall />
       </TouchableOpacity>
     );
@@ -59,6 +62,7 @@ export const HomeStack = () => {
           justifyContent: 'space-between',
           marginHorizontal: scale(-4),
           alignItems: 'center',
+          paddingHorizontal: scale(20),
         }}>
         {/* Center icons vertically */}
         <TouchableOpacity onPress={() => navigation.push('HomeNotification')}>
@@ -83,7 +87,15 @@ export const HomeStack = () => {
 
   return (
     <Stack.Navigator
-      screenOptions={{headerTitleAlign: 'center', gestureEnabled: false}}>
+      screenOptions={{
+        headerTitleAlign: 'center',
+        gestureEnabled: false,
+        transitionSpec: {
+          open: animationConfig,
+          close: animationConfig,
+        },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}>
       <Stack.Screen
         name="Home"
         component={LazyHome}

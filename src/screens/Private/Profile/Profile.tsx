@@ -18,7 +18,7 @@ import {calculateAge} from '../../../components/Home/utils.ts';
 import {VerificationBadge} from '../../../assets/images/VerificationBadge.tsx';
 import {truncateChatPreview} from '../Chat/chatUtils.ts';
 import {PencilIcon} from '../../../assets/images/PencilIcon.tsx';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParams} from '../../../constants/navigator.ts';
 
 const Profile = () => {
@@ -30,8 +30,7 @@ const Profile = () => {
   const tabBarHeight = useBottomTabBarHeight();
   const scrollRef = React.useRef(null);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   useScrollToTop(scrollRef);
 

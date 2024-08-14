@@ -6,7 +6,7 @@ import {COLORS} from '../../constants/commons.ts';
 import {formatDistanceToNow} from 'date-fns/formatDistanceToNow';
 import {FeedResponse} from '../../types/generated.ts';
 import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParams} from '../../constants/navigator.ts';
 import {useCommunity} from '../../providers/Community.tsx';
 
@@ -15,8 +15,7 @@ interface PostReferencePostProps {
 }
 
 const PostReferencePost = ({referencePost}: PostReferencePostProps) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
+  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
   const {isUserVerified, showModal} = useCommunity();
   return (
     <TouchableOpacity

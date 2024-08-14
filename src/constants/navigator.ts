@@ -1,4 +1,4 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -16,7 +16,7 @@ import {
   MobileVerificationResponse,
 } from '../types/generated.ts';
 
-export const Stack = createNativeStackNavigator();
+export const Stack = createStackNavigator();
 export const Tab = createBottomTabNavigator();
 export const Drawer = createDrawerNavigator();
 export const Top = createMaterialTopTabNavigator();
