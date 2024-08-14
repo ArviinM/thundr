@@ -141,17 +141,7 @@ export const HomeStack = () => {
             fontWeight: '500',
             fontSize: moderateScale(20),
           },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Home', {payload: ''})}
-              style={{width: 30, height: 30}}>
-              <Image
-                source={IMAGES.back}
-                style={{width: 20, height: 20}}
-                resizeMode={'contain'}
-              />
-            </TouchableOpacity>
-          ),
+          headerLeft: () => <HomeLeftHeaderSmall />,
         }}
       />
     </Stack.Navigator>
