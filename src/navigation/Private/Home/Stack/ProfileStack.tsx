@@ -102,7 +102,8 @@ export const ProfileStack = () => {
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.navigate('Profile')}
-              hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
+              hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}
+              style={{paddingHorizontal: scale(20)}}>
               <ChevronLeftSmall />
             </TouchableOpacity>
           ),
