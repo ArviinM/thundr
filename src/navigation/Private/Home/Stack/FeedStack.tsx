@@ -3,6 +3,7 @@ import React, {lazy, Suspense} from 'react';
 import {Stack} from '../../../../constants/navigator.ts';
 
 import {Loading} from '../../../../components/shared/Loading.tsx';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 const Feed = lazy(
   // @ts-ignore
   () => import('../../../../screens/Private/Community/Feed.tsx'),
@@ -21,6 +22,7 @@ export const FeedStack = () => {
         component={LazyFeed}
         options={{
           headerShown: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
     </Stack.Navigator>

@@ -164,8 +164,7 @@ export const AuthenticatedStack = () => {
                 open: animationConfig,
                 close: animationConfig,
               },
-              cardStyleInterpolator:
-                CardStyleInterpolators.forRevealFromBottomAndroid,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             })}
           />
           {/*  Stack Screen for Face Verification  */}
@@ -194,8 +193,7 @@ export const AuthenticatedStack = () => {
                 open: animationConfig,
                 close: animationConfig,
               },
-              cardStyleInterpolator:
-                CardStyleInterpolators.forRevealFromBottomAndroid,
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
           />
         </Stack.Group>

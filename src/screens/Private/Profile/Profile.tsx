@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Animated,
   Modal,
@@ -37,10 +37,13 @@ const Profile = () => {
   const [firstSnowflakeId, setFirstSnowflakeId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [animation] = useState(new Animated.Value(0));
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
   const {loading} = useCommunity();
   const {authData} = useAuth();
   const tabBarHeight = useBottomTabBarHeight();
-  const scrollRef = React.useRef(null);
+  const scrollRef = useRef(null);
 
   const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
@@ -119,21 +122,17 @@ const Profile = () => {
     }
   }, [myPosts.data]);
 
-  if (loading || myPosts.isLoading || customerProfile.isLoading) {
-    return <Loading />;
-  }
-
-  const [animation] = React.useState(new Animated.Value(0));
-
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(animation, {
       toValue: isVisible ? 1 : 0,
       duration: 200,
       useNativeDriver: false,
     }).start();
   }, [animation, isVisible]);
+
+  if (loading || myPosts.isLoading || customerProfile.isLoading) {
+    return <Loading />;
+  }
 
   const opacity = animation.interpolate({
     inputRange: [0, 1],
