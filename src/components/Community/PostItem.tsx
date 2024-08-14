@@ -168,6 +168,7 @@ const PostItem = ({
                 height: scale(40),
                 borderRadius: 30,
               }}
+              placeholder={post.customerPhotoBlurHash}
               transition={167}
             />
             {isAddComment && (

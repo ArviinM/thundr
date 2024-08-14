@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
-import Profile from '../../../../screens/Private/Profile/Profile.tsx';
 
 import {COLORS} from '../../../../constants/commons.ts';
 import {moderateScale} from '../../../../utils/utils.ts';
@@ -11,6 +10,19 @@ import {useNavigation} from '@react-navigation/native';
 import {ChevronLeftSmall} from '../../../../assets/images/ChevronLeftSmall.tsx';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SettingsIcon} from '../../../../assets/images/SettingsIcon.tsx';
+import {Loading} from '../../../../components/shared/Loading.tsx';
+
+const Profile = lazy(
+  // @ts-ignore
+  () => import('../../../../screens/Private/Profile/Profile.tsx'),
+);
+
+const LazyProfile = () => (
+  <Suspense fallback={<Loading />}>
+    <Profile />
+  </Suspense>
+);
+
 export const ProfileStack = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootNavigationParams>>();
@@ -39,7 +51,7 @@ export const ProfileStack = () => {
     <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
       <Stack.Screen
         name="Profile"
-        component={Profile}
+        component={LazyProfile}
         options={{
           headerLeft: () => <HomeLeftHeaderSmall />,
           headerRight: () => <HomeRightHeader />,

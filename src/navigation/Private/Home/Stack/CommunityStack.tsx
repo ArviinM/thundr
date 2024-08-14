@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import {RootNavigationParams, Stack} from '../../../../constants/navigator.ts';
-import Notification from '../../../../screens/Private/Notification/Notification.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
 import {scale} from '../../../../utils/utils.ts';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
@@ -9,12 +8,22 @@ import {useNavigation} from '@react-navigation/native';
 import {CommunityTop} from '../Top/CommunityTop.tsx';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ProfileStack} from './ProfileStack.tsx';
-import {SearchIcon} from '../../../../assets/images/header_icons/SearchIcon.tsx';
 import {ProfileIcon} from '../../../../assets/images/header_icons/ProfileIcon.tsx';
 import {BellIcon} from '../../../../assets/images/header_icons/BellIcon.tsx';
 import {SettingsStack} from './SettingsStack.tsx';
 import {HeaderThundrLogo} from '../../../../assets/images/HeaderThundrLogo.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
+import {Loading} from '../../../../components/shared/Loading.tsx';
+
+const Notification = lazy(
+  // @ts-ignore
+  () => import('../../../../screens/Private/Notification/Notification.tsx'),
+);
+const LazyNotification = () => (
+  <Suspense fallback={<Loading />}>
+    <Notification />
+  </Suspense>
+);
 
 export const CommunityStack = () => {
   const navigation =
@@ -88,7 +97,7 @@ export const CommunityStack = () => {
       />
       <Stack.Screen
         name="Notification"
-        component={Notification}
+        component={LazyNotification}
         options={{
           headerTitle: 'Notifications',
           headerLeft: () => <HomeLeftHeaderSmall />,
