@@ -28,16 +28,17 @@ const PostAttachment: React.FC<PostAttachmentProps> = ({
 
   useEffect(() => {
     const aspectRatio = item.attachmentWidth / item.attachmentHeight;
-    const isPortrait = aspectRatio < 1;
-    const isLandscape = aspectRatio > 1;
 
     if (totalAttachments === 1) {
-      if (isPortrait) {
-        setImageAspectRatio(4 / 5); // or any desired aspect ratio for single images
-      } else if (isLandscape) {
-        setImageAspectRatio(16 / 9);
-      } else {
+      if (Math.abs(aspectRatio - 1) < 0.01) {
+        // Square
         setImageAspectRatio(1);
+      } else if (aspectRatio > 1) {
+        // Landscape
+        setImageAspectRatio(Math.min(aspectRatio, 16 / 9));
+      } else {
+        // Portrait
+        setImageAspectRatio(Math.max(aspectRatio, 3 / 4));
       }
     }
 

@@ -52,7 +52,7 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
             source={profileData?.customerPhoto[0].photoUrl}
             placeholder={profileData?.customerPhoto[0].blurHash}
             style={{width: scale(40), height: scale(40), borderRadius: 30}}
-            transition={100}
+            transition={167}
           />
         )}
       </TouchableOpacity>

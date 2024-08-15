@@ -21,6 +21,8 @@ import {onMessageReceived} from './src/utils/notificationUtils.ts';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import {Platform, StatusBar} from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
+import {enableFreeze} from 'react-native-screens';
+enableFreeze(true);
 
 function App(): React.JSX.Element {
   useEffect(() => {

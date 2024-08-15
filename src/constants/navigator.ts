@@ -7,7 +7,6 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {
   Chat,
   CompatibilityQuestionsRequest,
-  CreatePostParams,
   CustomerData,
   EmailValidationResponse,
   EmailVerificationResponse,

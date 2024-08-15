@@ -123,7 +123,6 @@ const PostItem = ({
           if (isUserVerified) {
             navigation.push('Post', {
               snowflakeId: post.snowflakeId,
-              postDetails: post,
             });
           }
 
@@ -227,7 +226,7 @@ const PostItem = ({
                     gap: scale(isAddComment ? 1 : 2),
                     borderRadius: isAddComment ? 0 : 12,
                     overflow: 'hidden',
-                    paddingVertical: scale(3),
+                    marginVertical: scale(3),
                   },
                 ]}>
                 {post.attachments.map((attachment, index) => (

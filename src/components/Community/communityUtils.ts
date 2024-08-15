@@ -36,16 +36,17 @@ export const calculateAspectRatio = (
   attachmentHeight: number,
 ) => {
   const aspectRatio = attachmentWidth / attachmentHeight;
-  const isPortrait = aspectRatio < 1;
-  const isLandscape = aspectRatio > 1;
 
   if (totalAttachments === 1) {
-    if (isPortrait) {
-      return 4 / 5; // or any desired aspect ratio for single images
-    } else if (isLandscape) {
-      return 16 / 9;
-    } else {
+    if (Math.abs(aspectRatio - 1) < 0.01) {
+      // Square
       return 1;
+    } else if (aspectRatio > 1) {
+      // Landscape
+      return Math.min(aspectRatio, 16 / 9);
+    } else {
+      // Portrait
+      return Math.max(aspectRatio, 3 / 4);
     }
   }
 

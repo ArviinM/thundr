@@ -19,6 +19,7 @@ export const CommunityTop = () => {
         },
         tabBarActiveTintColor: COLORS.primary1,
         tabBarInactiveTintColor: COLORS.black4,
+        lazy: true,
       }}>
       <Top.Screen
         name={'FeedStack'}

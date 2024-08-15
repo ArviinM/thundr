@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {StyleSheet, Text, View} from 'react-native';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {IMAGES} from '../../../constants/images.ts';
 import {moderateScale, scale, verticalScale} from '../../../utils/utils.ts';
@@ -45,6 +45,7 @@ const MatchFound = ({route}: MatchFoundProps) => {
     <SafeAreaView
       style={{flex: 1, backgroundColor: COLORS.primary1}}
       edges={['right', 'left']}>
+      <StatusBar translucent backgroundColor="transparent" />
       <LinearGradient
         colors={isMare ? MARE_GRADIENT_COLORS : JOWA_GRADIENT_COLORS}
         start={START_DEFAULT}

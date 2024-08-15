@@ -23,7 +23,7 @@ const Post: React.FC<PostProps> = ({route}) => {
   const {authData} = useAuth();
   const [refreshing, setRefreshing] = useState(false);
 
-  const {snowflakeId, postDetails} = route?.params || {};
+  const {snowflakeId} = route?.params || {};
 
   const getMainPost = useGetPost({
     sub: authData?.sub || '',
@@ -36,7 +36,9 @@ const Post: React.FC<PostProps> = ({route}) => {
   });
 
   const renderItem = useCallback(
-    ({item}: {item: FeedResponse}) => <PostItem post={item} />,
+    ({item}: {item: FeedResponse}) => (
+      <PostItem key={`view-post-${item.snowflakeId}-${item.sub}`} post={item} />
+    ),
     [],
   );
 
@@ -50,7 +52,7 @@ const Post: React.FC<PostProps> = ({route}) => {
     } finally {
       setRefreshing(false);
     }
-  }, [getReplies]);
+  }, [getMainPost, getReplies]);
 
   const loadMoreReplies = useCallback(() => {
     if (getReplies.hasNextPage && !getReplies.isFetchingNextPage) {
@@ -83,14 +85,10 @@ const Post: React.FC<PostProps> = ({route}) => {
         </View>
       </>
     );
-  }, [getMainPost.data, postDetails]);
+  }, [getMainPost.data]);
 
   if (!snowflakeId) {
     return <ErrorView message="Unable to load post." />;
-  }
-
-  if (getReplies.isLoading || getMainPost.isLoading) {
-    return <Loading />;
   }
 
   if (getReplies.isError || getMainPost.isError) {
@@ -101,31 +99,37 @@ const Post: React.FC<PostProps> = ({route}) => {
     <SafeAreaView
       style={{flex: 1, backgroundColor: COLORS.white}}
       edges={['left', 'right']}>
-      <FlashList
-        ListHeaderComponent={ListHeaderComponent}
-        estimatedItemSize={100}
-        data={getReplies.data?.pages.flatMap(page => page) || []}
-        renderItem={renderItem}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        onEndReached={loadMoreReplies}
-        onEndReachedThreshold={0.1}
-        maintainVisibleContentPosition={{
-          autoscrollToTopThreshold: 10,
-          minIndexForVisible: 1,
-        }}
-      />
-      <View style={{paddingBottom: scale(36)}}>
-        <CreatePostBar
-          actionTitle={'Write a reply...'}
-          isComment
-          referenceId={snowflakeId}
-          postDetails={getMainPost.data}
-        />
-      </View>
+      {getReplies.isLoading || getMainPost.isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <FlashList
+            ListHeaderComponent={ListHeaderComponent}
+            estimatedItemSize={100}
+            data={getReplies.data?.pages.flatMap(page => page) || []}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            onEndReached={loadMoreReplies}
+            onEndReachedThreshold={0.1}
+            maintainVisibleContentPosition={{
+              autoscrollToTopThreshold: 10,
+              minIndexForVisible: 1,
+            }}
+          />
+          <View style={{paddingBottom: scale(36)}}>
+            <CreatePostBar
+              actionTitle={'Write a reply...'}
+              isComment
+              referenceId={snowflakeId}
+              postDetails={getMainPost.data}
+            />
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 };
 
-export default React.memo(Post);
+export default Post;

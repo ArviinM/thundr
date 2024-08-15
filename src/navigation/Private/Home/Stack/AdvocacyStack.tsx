@@ -55,7 +55,7 @@ export const AdvocacyStack = () => {
             <TouchableOpacity onPress={() => navigation.navigate('Advocacy')}>
               <Image
                 source={IMAGES.back}
-                style={{width: 20, height: 20}}
+                style={{width: 20, height: 20, paddingHorizontal: scale(20)}}
                 resizeMode={'contain'}
               />
             </TouchableOpacity>

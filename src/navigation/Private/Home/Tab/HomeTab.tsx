@@ -1,16 +1,9 @@
 import React from 'react';
-import {RootNavigationParams, Tab} from '../../../../constants/navigator.ts';
+import {Tab} from '../../../../constants/navigator.ts';
 import {COLORS} from '../../../../constants/commons.ts';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {IMAGES} from '../../../../constants/images.ts';
-
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {moderateScale, scale} from '../../../../utils/utils.ts';
-import {
-  DrawerActions,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
 import {ChatTop} from '../Top/ChatTop.tsx';
 import Possibles from '../../../../screens/Private/Possibles/Possibles.tsx';
 import {LightningIcon} from '../../../../assets/images/tab_icons/LightningIcon.tsx';
@@ -23,72 +16,31 @@ import {AdvocacyStack} from '../Stack/AdvocacyStack.tsx';
 import {FeedIcon} from '../../../../assets/images/tab_icons/FeedIcon.tsx';
 import {ChatIcon} from '../../../../assets/images/tab_icons/ChatIcon.tsx';
 import {PossiblesIcon} from '../../../../assets/images/tab_icons/PossiblesIcon.tsx';
-import {CommunityTop} from '../Top/CommunityTop.tsx';
-import {BlurView} from 'expo-blur';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {CommunityStack} from '../Stack/CommunityStack.tsx';
+import {BlurView} from 'expo-blur';
 
 export const HomeTab = () => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
 
   const auth = useAuth();
   const isUnread = useUnreadStore(state => state.isUnreads);
 
   const getChatList = useGetChatList({sub: auth.authData?.sub || ''});
 
-  // function Header() {
-  //   return (
-  //     <Image
-  //       source={IMAGES.headerLogo}
-  //       resizeMode={'contain'}
-  //       style={{width: scale(130), height: scale(20)}}
-  //     />
-  //   );
-  // }
-  //
-  // function HomeRightHeader() {
-  //   return (
-  //     <View
-  //       style={{
-  //         flexDirection: 'row',
-  //         justifyContent: 'space-between',
-  //         marginHorizontal: 12,
-  //       }}>
-  //       {/* Center icons vertically */}
-  //       <TouchableOpacity onPress={() => navigation.push('Notification')}>
-  //         <Image
-  //           source={IMAGES.bell}
-  //           style={{height: scale(36), width: scale(36)}}
-  //         />
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
+  const renderTabBarBackground = () => {
+    if (Platform.OS === 'android') {
+      return null;
+    }
 
-  // function HomeLeftHeader({isTint}: {isTint?: boolean}) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flexDirection: 'row',
-  //         justifyContent: 'space-between',
-  //         marginHorizontal: 12,
-  //       }}>
-  //       {/* Center icons vertically */}
-  //       <TouchableOpacity
-  //         onPress={() => navigation.dispatch(DrawerActions.openDrawer)}>
-  //         <Image
-  //           source={IMAGES.menu}
-  //           style={{
-  //             height: scale(24),
-  //             width: scale(24),
-  //             tintColor: isTint ? COLORS.white2 : undefined,
-  //           }}
-  //         />
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
+    return (
+      <BlurView
+        style={[StyleSheet.absoluteFill, {overflow: 'hidden'}]}
+        experimentalBlurMethod="dimezisBlurView"
+        intensity={75}
+        tint="extraLight"
+      />
+    );
+  };
 
   return (
     <Tab.Navigator
@@ -108,6 +60,7 @@ export const HomeTab = () => {
           height: insets.bottom + 70,
           backgroundColor: COLORS.white,
         },
+        lazy: true,
       }}>
       <Tab.Screen
         name="CommunityStack"
@@ -115,23 +68,15 @@ export const HomeTab = () => {
         options={{
           headerShown: false,
           tabBarShowLabel: true,
-          tabBarLabel: 'Community',
+          tabBarLabel: 'Home',
           tabBarActiveTintColor: COLORS.primary1,
           tabBarIcon: ({focused}) => <FeedIcon focused={focused} />,
           tabBarStyle: {
             height: insets.bottom + 70,
-            // backgroundColor: COLORS.white,
+            backgroundColor: 'rgba(255,255,255,0.94)',
             position: 'absolute',
           },
-          tabBarBackground: () => (
-            <BlurView
-              // intensity={80}
-              style={[StyleSheet.absoluteFill, {overflow: 'hidden'}]}
-              experimentalBlurMethod="dimezisBlurView"
-              intensity={75}
-              tint="extraLight"
-            />
-          ),
+          tabBarBackground: renderTabBarBackground,
         }}
       />
 

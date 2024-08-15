@@ -105,8 +105,8 @@ const Feed = () => {
         ref={scrollRef}
         renderItem={renderItem}
         data={community.data?.pages.flatMap(page => page) || []}
-        estimatedItemSize={286}
-        ListHeaderComponent={<CreatePostBar actionTitle={'Share a post'} />}
+        estimatedItemSize={500}
+        ListHeaderComponent={<CreatePostBar actionTitle={"What's the tea?"} />}
         ListFooterComponent={<View style={{paddingBottom: tabBarHeight}} />}
         keyExtractor={keyExtractor}
         onEndReached={loadMorePosts}

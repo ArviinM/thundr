@@ -365,7 +365,7 @@ const CreatePost = ({route}: CreatePostParams) => {
                 render={({field: {onChange, onBlur, value}}) => (
                   <TextInput
                     ref={inputRef}
-                    placeholder={'Share something here'}
+                    placeholder={"What's the tea?"}
                     placeholderTextColor={COLORS.black4}
                     style={{
                       fontFamily: 'Montserrat-Medium',

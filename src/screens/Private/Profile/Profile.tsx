@@ -32,6 +32,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Button from '../../../components/shared/Button.tsx';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import ProfileCard from '../../../components/Home/ProfileCard.tsx';
+import useSubscribeCheck from '../../../store/subscribeStore.ts';
 
 const Profile = () => {
   const [firstSnowflakeId, setFirstSnowflakeId] = useState<string | null>(null);
@@ -46,6 +47,9 @@ const Profile = () => {
   const scrollRef = useRef(null);
 
   const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
+  const isCustomerSubscribed = useSubscribeCheck(
+    state => state.isCustomerSubscribed,
+  );
 
   useScrollToTop(scrollRef);
 
@@ -235,15 +239,18 @@ const Profile = () => {
                       'VERIFIED' && <VerificationBadge />}
                   </View>
                 </View>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Regular',
-                    fontSize: scale(11),
-                    color: COLORS.black,
-                  }}>
-                  {customerProfile.data.customerDetails.work},{' '}
-                  {customerProfile.data.customerDetails.pronouns}
-                </Text>
+                {customerProfile.data.customerDetails.work && (
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Regular',
+                      fontSize: scale(11),
+                      color: COLORS.black,
+                    }}>
+                    {customerProfile.data.customerDetails.work},{' '}
+                    {customerProfile.data.customerDetails.pronouns}
+                  </Text>
+                )}
+
                 <Text
                   style={{
                     fontFamily: 'Montserrat-Medium',
@@ -320,52 +327,55 @@ const Profile = () => {
                 Posts
               </Text>
             </View>
-            <LinearGradient
-              colors={['#E53053', '#FBB138']}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 1}}
-              style={{
-                paddingVertical: scale(16),
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 16,
-              }}>
-              <Text
+            {/*ThundrBolt*/}
+            {!isCustomerSubscribed && (
+              <LinearGradient
+                colors={['#E53053', '#FBB138']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
                 style={{
-                  fontFamily: 'ClimateCrisis-Regular',
-                  fontSize: scale(18),
-                  color: COLORS.white,
+                  paddingVertical: scale(16),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 16,
                 }}>
-                THUNDR BOLT
-              </Text>
-              <Text
-                style={{
-                  fontFamily: 'Montserrat-Medium',
-                  fontSize: scale(13),
-                  color: COLORS.white,
-                  alignSelf: 'center',
-                }}>
-                Paid subscription para sa mga kabog.{'\n'}Unlock exclusive
-                access to all features
-              </Text>
-              <Button
-                onPress={() =>
-                  navigation.push('ThundrBoltModal', {isModal: false})
-                }
-                text="SUBSCRIBE"
-                buttonStyle={{
-                  backgroundColor: COLORS.white,
-                  paddingHorizontal: scale(30),
-                  paddingVertical: scale(8),
-                  marginTop: scale(10),
-                  borderRadius: 20,
-                }}
-                textStyle={{
-                  fontFamily: 'Montserrat-Bold',
-                  fontSize: scale(12),
-                }}
-              />
-            </LinearGradient>
+                <Text
+                  style={{
+                    fontFamily: 'ClimateCrisis-Regular',
+                    fontSize: scale(18),
+                    color: COLORS.white,
+                  }}>
+                  THUNDR BOLT
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Medium',
+                    fontSize: scale(13),
+                    color: COLORS.white,
+                    alignSelf: 'center',
+                  }}>
+                  Paid subscription para sa mga kabog.{'\n'}Unlock exclusive
+                  access to all features
+                </Text>
+                <Button
+                  onPress={() =>
+                    navigation.push('ThundrBoltModal', {isModal: false})
+                  }
+                  text="SUBSCRIBE"
+                  buttonStyle={{
+                    backgroundColor: COLORS.white,
+                    paddingHorizontal: scale(30),
+                    paddingVertical: scale(8),
+                    marginTop: scale(10),
+                    borderRadius: 20,
+                  }}
+                  textStyle={{
+                    fontFamily: 'Montserrat-Bold',
+                    fontSize: scale(12),
+                  }}
+                />
+              </LinearGradient>
+            )}
           </View>
         )}
       </View>
