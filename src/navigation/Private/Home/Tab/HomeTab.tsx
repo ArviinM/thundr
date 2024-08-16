@@ -71,11 +71,15 @@ export const HomeTab = () => {
           tabBarLabel: 'Home',
           tabBarActiveTintColor: COLORS.primary1,
           tabBarIcon: ({focused}) => <FeedIcon focused={focused} />,
-          tabBarStyle: {
-            height: insets.bottom + 70,
-            backgroundColor: 'rgba(255,255,255,0.94)',
-            position: 'absolute',
-          },
+          tabBarStyle: [
+            {
+              height: insets.bottom + 70,
+              position: 'absolute',
+            },
+            Platform.OS === 'android' && {
+              backgroundColor: 'rgba(255,255,255,0.94)',
+            },
+          ],
           tabBarBackground: renderTabBarBackground,
         }}
       />
