@@ -364,7 +364,7 @@ const PostItem = ({
           />
           <Button
             onPress={() => repostOptionsBSheet.current?.dismiss()}
-            text={'Cancel'}
+            text={'Close'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
           />
@@ -404,7 +404,7 @@ const PostItem = ({
           )}
           <Button
             onPress={() => moreOptionsBSheet.current?.dismiss()}
-            text={'Cancel'}
+            text={'Close'}
             buttonStyle={styles.buttonStyle}
             textStyle={styles.textStyle}
           />
