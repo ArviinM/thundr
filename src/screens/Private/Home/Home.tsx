@@ -296,21 +296,6 @@ const Home = ({route}: HomeProps) => {
       } else {
         console.log('Location permission denied on iOS');
       }
-
-      const notificationResult = await requestNotifications(['alert', 'sound']);
-      if (notificationResult.status === 'granted') {
-        const fcm = await getDeviceToken();
-
-        if (auth.authData?.sub && fcm) {
-          await registerToken.mutateAsync({
-            subId: auth.authData.sub,
-            token: fcm,
-          });
-        }
-      } else {
-        await unregisterDeviceForRemoteMessages();
-        console.log('user notification is not blocked');
-      }
     }
 
     if (Platform.OS === 'android') {
@@ -341,21 +326,6 @@ const Home = ({route}: HomeProps) => {
         }
       } else {
         console.log('Location permission denied on Android');
-      }
-
-      const notificationResult = await requestNotifications(['alert', 'sound']);
-      if (notificationResult.status === 'granted') {
-        await registerDeviceForRemoteMessages();
-        const fcm = await getDeviceToken();
-
-        if (auth.authData?.sub && fcm) {
-          await registerToken.mutateAsync({
-            subId: auth.authData.sub,
-            token: fcm,
-          });
-        }
-      } else {
-        console.log('user notification is not blocked');
       }
     }
   };
