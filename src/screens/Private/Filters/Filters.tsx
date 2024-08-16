@@ -58,7 +58,7 @@ const Filters = () => {
 
   const [loading, isLoading] = useState<boolean>(false);
   const getCustomerFilters = useGetCustomerFilters({
-    sub: auth.authData?.sub || [],
+    sub: auth.authData?.sub || '',
   });
   const customerFilters = useCustomerFilters();
 
@@ -66,7 +66,7 @@ const Filters = () => {
     (Number(getCustomerFilters.data?.ageMin) - 18) | 0,
   );
   const [maxValue, setMaxValue] = useState<number>(
-    (Number(getCustomerFilters.data?.ageMax) - 18) | 45,
+    (Number(getCustomerFilters.data?.ageMax) - 18) | 62,
   );
 
   const [proximityValue, setProximityValue] = useState<number[]>([
@@ -224,7 +224,7 @@ const Filters = () => {
   useEffect(() => {
     if (getCustomerFilters.isSuccess) {
       setMinValue(Number(getCustomerFilters.data?.ageMin) - 18 || 0);
-      setMaxValue(Number(getCustomerFilters.data?.ageMax) - 18 || 45);
+      setMaxValue(Number(getCustomerFilters.data?.ageMax) - 18 || 62);
       setProximityValue([Number(getCustomerFilters.data?.proximity || 250)]);
       setSelectedLetters(
         convertFullWordsToAbbreviations(getCustomerFilters.data?.gender || ''),
@@ -396,7 +396,7 @@ const Filters = () => {
                     onValuesChange={ageSliderChange}
                     sliderLength={width / 1.27}
                     min={0}
-                    max={45}
+                    max={62}
                     step={1}
                     snapped
                     containerStyle={{
