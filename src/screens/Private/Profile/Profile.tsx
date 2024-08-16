@@ -33,6 +33,8 @@ import Button from '../../../components/shared/Button.tsx';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import ProfileCard from '../../../components/Home/ProfileCard.tsx';
 import useSubscribeCheck from '../../../store/subscribeStore.ts';
+import {ThundrBoltBackground} from '../../../assets/images/thundrbolt_icons/ThundrBoltBackground.tsx';
+import {ThundrBoltCircleIcon} from '../../../assets/images/thundrbolt_icons/ThundrBoltCircleIcon.tsx';
 
 const Profile = () => {
   const [firstSnowflakeId, setFirstSnowflakeId] = useState<string | null>(null);
@@ -329,52 +331,80 @@ const Profile = () => {
             </View>
             {/*ThundrBolt*/}
             {!isCustomerSubscribed && (
-              <LinearGradient
-                colors={['#E53053', '#FBB138']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
+              <View
                 style={{
-                  paddingVertical: scale(16),
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  // borderWidth: 1,
                   borderRadius: 16,
+                  overflow: 'hidden',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  width: '97%',
+                  // position: 'relative',
                 }}>
-                <Text
+                <ThundrBoltBackground />
+                <View
                   style={{
-                    fontFamily: 'ClimateCrisis-Regular',
-                    fontSize: scale(18),
-                    color: COLORS.white,
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    gap: scale(20),
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.23,
+                    shadowRadius: 2.62,
+
+                    elevation: 4,
                   }}>
-                  THUNDR BOLT
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: 'Montserrat-Medium',
-                    fontSize: scale(13),
-                    color: COLORS.white,
-                    alignSelf: 'center',
-                  }}>
-                  Paid subscription para sa mga kabog.{'\n'}Unlock exclusive
-                  access to all features
-                </Text>
-                <Button
-                  onPress={() =>
-                    navigation.push('ThundrBoltModal', {isModal: false})
-                  }
-                  text="SUBSCRIBE"
-                  buttonStyle={{
-                    backgroundColor: COLORS.white,
-                    paddingHorizontal: scale(30),
-                    paddingVertical: scale(8),
-                    marginTop: scale(10),
-                    borderRadius: 20,
-                  }}
-                  textStyle={{
-                    fontFamily: 'Montserrat-Bold',
-                    fontSize: scale(12),
-                  }}
-                />
-              </LinearGradient>
+                  <ThundrBoltCircleIcon />
+                  <View style={{gap: scale(6)}}>
+                    <Text
+                      style={{
+                        fontFamily: 'ClimateCrisis-Regular',
+                        fontSize: scale(18),
+                        color: COLORS.white,
+                      }}>
+                      Thundr Bolt
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-Bold',
+                        fontSize: scale(9),
+                        color: COLORS.white,
+                      }}>
+                      Paid subscription para sa mga kabog.{'\n'}Unlock exclusive
+                      access to all features
+                    </Text>
+                    <Button
+                      onPress={() =>
+                        navigation.push('ThundrBoltModal', {isModal: false})
+                      }
+                      text="SUBSCRIBE"
+                      buttonStyle={{
+                        backgroundColor: COLORS.black,
+                        width: scale(100),
+                        paddingHorizontal: scale(10),
+                        paddingVertical: scale(2),
+                        // marginTop: scale(10),
+                        alignItems: 'center',
+                        borderRadius: 20,
+                      }}
+                      textStyle={{
+                        fontFamily: 'Montserrat-Bold',
+                        fontSize: scale(12),
+                        color: COLORS.white,
+                      }}
+                    />
+                  </View>
+                </View>
+              </View>
             )}
           </View>
         )}
