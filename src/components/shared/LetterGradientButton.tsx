@@ -36,7 +36,8 @@ const LetterGradientButton = ({
   return (
     <TouchableOpacity
       onPress={handlePress}
-      disabled={selectedLetters.length >= 4 && !isSelected}>
+      disabled={selectedLetters.length >= 4 && !isSelected}
+      style={{alignItems: 'center', justifyContent: 'center'}}>
       <LinearGradient
         colors={!isSelected ? ['#CCCCCC', '#CCCCCC'] : ['#EF9D47', '#E33051']}
         start={{x: 1, y: 1}}
@@ -53,12 +54,14 @@ export default LetterGradientButton;
 const styles = StyleSheet.create({
   text: {
     fontFamily: 'ClimateCrisis-Regular',
-    fontSize: moderateScale(48),
+    fontSize: scale(46),
     color: COLORS.white,
+    lineHeight: 0,
+    marginTop: scale(-3),
   },
   buttons: {
-    width: scale(78),
-    height: moderateScale(78),
+    width: scale(80),
+    height: scale(80),
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 16,
