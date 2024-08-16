@@ -11,12 +11,13 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import {ProfileStack} from './ProfileStack.tsx';
-import {ProfileIcon} from '../../../../assets/images/header_icons/ProfileIcon.tsx';
 import {BellIcon} from '../../../../assets/images/header_icons/BellIcon.tsx';
 import {SettingsStack} from './SettingsStack.tsx';
 import {HeaderThundrLogo} from '../../../../assets/images/HeaderThundrLogo.tsx';
 import useNotificationCountStore from '../../../../store/notificationCountStore.ts';
 import {Loading} from '../../../../components/shared/Loading.tsx';
+import {Image} from 'expo-image';
+import {useCommunity} from '../../../../providers/Community.tsx';
 
 const Notification = lazy(
   // @ts-ignore
@@ -30,6 +31,7 @@ const LazyNotification = () => (
 
 export const CommunityStack = () => {
   const navigation = useNavigation<StackNavigationProp<RootNavigationParams>>();
+  const {profileData} = useCommunity();
 
   const unreadNotifCount = useNotificationCountStore(
     state => state.unreadCount,
@@ -79,7 +81,15 @@ export const CommunityStack = () => {
         <TouchableOpacity
           onPress={() => navigation.push('ProfileStack')}
           hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
-          <ProfileIcon />
+          {/*<ProfileIcon />*/}
+          {profileData && (
+            <Image
+              source={profileData?.customerPhoto[0].photoUrl}
+              placeholder={profileData?.customerPhoto[0].blurHash}
+              style={{width: scale(26), height: scale(26), borderRadius: 30}}
+              transition={167}
+            />
+          )}
         </TouchableOpacity>
       </View>
     );
