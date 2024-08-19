@@ -89,7 +89,7 @@ const Onboarding = () => {
 
   const endOnboarding = async () => {
     await auth.loadStorageData();
-    navigation.navigate('HomeDrawer');
+    navigation.navigate('HomeTab');
   };
 
   const swipes = Gesture.Simultaneous(

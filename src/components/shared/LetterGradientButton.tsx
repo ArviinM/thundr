@@ -43,7 +43,15 @@ const LetterGradientButton = ({
         start={{x: 1, y: 1}}
         end={{x: 0, y: 0.2}}
         style={styles.buttons}>
-        <Text style={styles.text}>{letter}</Text>
+        <Text
+          style={{
+            fontFamily: 'ClimateCrisis-Regular',
+            fontSize: scale(46),
+            color: COLORS.white,
+            marginTop: scale(-10),
+          }}>
+          {letter}
+        </Text>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -52,13 +60,6 @@ const LetterGradientButton = ({
 export default LetterGradientButton;
 
 const styles = StyleSheet.create({
-  text: {
-    fontFamily: 'ClimateCrisis-Regular',
-    fontSize: scale(46),
-    color: COLORS.white,
-    lineHeight: 0,
-    marginTop: scale(-3),
-  },
   buttons: {
     width: scale(80),
     height: scale(80),

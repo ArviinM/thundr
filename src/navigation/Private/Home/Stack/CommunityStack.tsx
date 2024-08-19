@@ -18,6 +18,7 @@ import useNotificationCountStore from '../../../../store/notificationCountStore.
 import {Loading} from '../../../../components/shared/Loading.tsx';
 import {Image} from 'expo-image';
 import {useCommunity} from '../../../../providers/Community.tsx';
+import {ProfileIcon} from '../../../../assets/images/header_icons/ProfileIcon.tsx';
 
 const Notification = lazy(
   // @ts-ignore
@@ -81,14 +82,15 @@ export const CommunityStack = () => {
         <TouchableOpacity
           onPress={() => navigation.push('ProfileStack')}
           hitSlop={{top: 20, left: 20, right: 20, bottom: 20}}>
-          {/*<ProfileIcon />*/}
-          {profileData && (
+          {profileData?.customerPhoto ? (
             <Image
               source={profileData?.customerPhoto[0].photoUrl}
               placeholder={profileData?.customerPhoto[0].blurHash}
               style={{width: scale(26), height: scale(26), borderRadius: 30}}
               transition={167}
             />
+          ) : (
+            <ProfileIcon />
           )}
         </TouchableOpacity>
       </View>

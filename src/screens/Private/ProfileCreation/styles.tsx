@@ -193,8 +193,9 @@ export const profileCreationStyles = StyleSheet.create({
   letterChoice: {
     paddingHorizontal: 20,
     fontFamily: 'ClimateCrisis-Regular',
-    fontSize: 32,
+    fontSize: scale(30),
     color: COLORS.secondary1,
+    marginTop: scale(-8),
   },
   answerText: {
     color: COLORS.gray3,

@@ -209,6 +209,10 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
   }, []);
 
   useEffect(() => {
+    if (auth.authData?.forProfileCreation) {
+      return;
+    }
+
     requestNotificationPermission();
   }, []);
 

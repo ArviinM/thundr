@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
@@ -26,117 +26,98 @@ import {profileCreationStyles} from './styles.tsx';
 
 import {
   PERMISSIONS,
+  PermissionStatus,
   request,
   requestNotifications,
 } from 'react-native-permissions';
 import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
 import {useAuth} from '../../../providers/Auth.tsx';
-import {queryClient} from '../../../utils/queryClient.ts';
-import {useQueryClient} from '@tanstack/react-query';
 import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
 import {useCustomerMatchLocation} from '../../../hooks/match/useCustomerMatchLocation.ts';
 
 const CustomerRequestAccess = () => {
-  const queryClient1 = useQueryClient(queryClient);
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const matchLocation = useCustomerMatchLocation();
-
-  const [loading, isLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const auth = useAuth();
-  const onSubmit = () => {
-    try {
-      isLoading(true);
 
-      isLoading(false);
-    } catch (error) {
-      console.error(error);
+  const handleError = (error: Error, context: string) => {
+    console.error(`Error in ${context}:`, error);
+    Alert.alert(
+      'Error',
+      `An error occurred while ${context}. Please try again.`,
+    );
+    setLoading(false);
+  };
+
+  const updateMatchLocation = async (position: GeolocationResponse) => {
+    if (!auth.authData?.sub) {
+      throw new Error('User not authenticated');
+    }
+    await matchLocation.mutateAsync({
+      sub: auth.authData.sub,
+      latitude: position.coords.latitude.toString(),
+      longitude: position.coords.longitude.toString(),
+    });
+  };
+
+  const handleLocationPermissionResult = async (result: PermissionStatus) => {
+    if (result === 'granted' || result === 'limited') {
+      try {
+        const position = (await getCurrentLocation()) as GeolocationResponse;
+        await updateMatchLocation(position);
+      } catch (error) {
+        handleError(error as Error, 'accessing location');
+      }
+    } else {
+      console.log(`Location permission ${result} on ${Platform.OS}`);
+      Alert.alert(
+        'Location Access Required',
+        'Please enable location access in your device settings to use this feature.',
+      );
     }
   };
 
   const requestLocationPermission = async () => {
-    // iOS Part:
-    if (Platform.OS === 'ios') {
-      // TODO: Add to Login Page
-      // const result2 = await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
-      // if (result2 === 'granted') {
-      //   getCurrentLocation();
-      // } else if (result2 === 'blocked') {
-      //   getCurrentLocation();
-      // } else {
-      //   console.log('Notification permission denied on iOS');
-      // }
-
-      //TODO: Save match location to server - will work on it in Sprint 2
-      const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
-      if (result === 'granted') {
-        const position = (await getCurrentLocation()) as GeolocationResponse;
-        if (auth.authData?.sub) {
-          await matchLocation.mutateAsync({
-            sub: auth.authData.sub,
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString(),
-          });
+    setLoading(true);
+    try {
+      if (Platform.OS === 'ios') {
+        const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
+        await handleLocationPermissionResult(result);
+      } else if (Platform.OS === 'android') {
+        const fineResult = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        );
+        const coarseResult = await request(
+          PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+        );
+        if (fineResult === 'granted' || coarseResult === 'granted') {
+          await handleLocationPermissionResult('granted');
+        } else {
+          handleLocationPermissionResult('denied');
         }
-      } else if (result === 'blocked') {
-        const position = (await getCurrentLocation()) as GeolocationResponse;
-        if (auth.authData?.sub) {
-          await matchLocation.mutateAsync({
-            sub: auth.authData.sub,
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString(),
-          });
-        }
-      } else {
-        console.log('Location permission denied on iOS');
       }
 
       const notificationResult = await requestNotifications(['alert', 'sound']);
       if (notificationResult.status === 'granted') {
-        console.log('user allowed notification');
+        console.log('User allowed notifications');
       } else {
-        console.log('user notification is not blocked');
-      }
-    }
-
-    if (Platform.OS === 'android') {
-      const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-      const result2 = await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
-
-      if (result === 'granted') {
-        const position = (await getCurrentLocation()) as GeolocationResponse;
-        if (auth.authData?.sub) {
-          await matchLocation.mutateAsync({
-            sub: auth.authData.sub,
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString(),
-          });
-        }
-      } else {
-        console.log('Location permission denied on Android');
+        console.log('User notification permission is not granted');
+        Alert.alert(
+          'Notification Access',
+          'Notifications are not enabled. You may miss important updates.',
+        );
       }
 
-      if (result2 === 'granted') {
-        const position = (await getCurrentLocation()) as GeolocationResponse;
-        if (auth.authData?.sub) {
-          await matchLocation.mutateAsync({
-            sub: auth.authData.sub,
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString(),
-          });
-        }
+      if (auth.authData?.sub) {
+        navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
       } else {
-        console.log('Location permission denied on Android');
+        throw new Error('User not authenticated');
       }
-
-      const notificationResult = await requestNotifications(['alert', 'sound']);
-      if (notificationResult.status === 'granted') {
-        console.log('user allowed notification');
-      } else {
-        console.log('user notification is not blocked');
-      }
-    }
-    if (auth.authData?.sub) {
-      navigation.navigate('CompatibilityQuestions', {sub: auth.authData.sub});
+    } catch (error) {
+      handleError(error as Error, 'requesting permissions');
+    } finally {
+      setLoading(false);
     }
   };
 
