@@ -189,7 +189,7 @@ const LoginValidation = () => {
         </View>
       </KeyboardAwareScrollView>
       {/* sticky footer container*/}
-      <KeyboardStickyView offset={{closed: -20, opened: 0}}>
+      <KeyboardStickyView offset={{closed: -20, opened: -20}}>
         <View style={styles.buttonContainer}>
           <GradientButton
             onPress={handleSubmit(onSubmit)}
