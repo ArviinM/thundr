@@ -1,7 +1,13 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {COLORS} from '../../../constants/commons.ts';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useCommunity} from '../../../providers/Community.tsx';
 import {Image} from 'expo-image';
 import {
@@ -9,6 +15,7 @@ import {
   MAX_IMAGE_SIZE_BYTES,
   MAX_VIDEO_COUNT,
   MAX_VIDEO_SIZE_BYTES,
+  MockDropdownData,
   scale,
 } from '../../../utils/utils.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
@@ -33,6 +40,7 @@ import {CloseIconWhite} from '../../../assets/images/CloseIconWhite.tsx';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import {FileAttachment} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
+import {Dropdown} from 'react-native-element-dropdown';
 
 const postSchema = yup.object({
   postContent: yup.string().required('Please share something'),
@@ -53,6 +61,8 @@ const CreatePost = ({route}: CreatePostParams) => {
   const [videoThumbnails, setVideoThumbnails] = useState<
     Record<string, string>
   >({});
+
+  const [communityPost, setCommunityPost] = useState<string | null>(null);
 
   const [selectedMedia, setSelectedMedia] = useState<any[]>([]);
 
@@ -358,7 +368,38 @@ const CreatePost = ({route}: CreatePostParams) => {
                   : `Replying to ${profileData?.name}`}
               </Text>
             </View>
-            <View>{/*  Dropdown here WIP  */}</View>
+            <View>
+              <Dropdown
+                data={MockDropdownData}
+                labelField="label"
+                valueField="value"
+                onChange={item => setCommunityPost(item.value)}
+                placeholder="Select item"
+                searchPlaceholder="Search..."
+                value={communityPost}
+                search
+                maxHeight={300}
+                style={styles.dropdown}
+                itemTextStyle={{
+                  fontFamily: 'Montserrat-Medium',
+                  color: '#070707',
+                  fontSize: scale(13),
+                }}
+                selectedTextStyle={{
+                  fontFamily: 'Montserrat-Medium',
+                  color: '#070707',
+                  fontSize: scale(13),
+                }}
+                inputSearchStyle={{
+                  fontFamily: 'Montserrat-Regular',
+                  color: 'rgba(7,7,7,0.7)',
+                  borderRadius: scale(8),
+                  fontSize: scale(13),
+                }}
+                itemContainerStyle={{borderRadius: scale(8)}}
+                containerStyle={{borderRadius: scale(12)}}
+              />
+            </View>
             <View>
               <Controller
                 control={control}
@@ -451,3 +492,25 @@ const CreatePost = ({route}: CreatePostParams) => {
 };
 
 export default CreatePost;
+
+const styles = StyleSheet.create({
+  dropdown: {
+    marginVertical: scale(4),
+    height: scale(33),
+    width: scale(260),
+    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    borderColor: 'rgba(0, 0, 0, 0.17)',
+    borderWidth: 1,
+    borderRadius: scale(12),
+    padding: scale(11),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+});
