@@ -3,6 +3,7 @@ import {Top} from '../../../../constants/navigator.ts';
 import {FeedStack} from '../Stack/FeedStack.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
+import Matches from '../../../../screens/Private/Community/Matches.tsx';
 
 export const CommunityTop = () => {
   return (
@@ -37,7 +38,7 @@ export const CommunityTop = () => {
       />
       <Top.Screen
         name={'Matches'}
-        component={WorkingInProgress}
+        component={Matches}
         options={{
           tabBarLabel: 'Matches',
         }}
