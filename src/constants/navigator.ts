@@ -13,6 +13,7 @@ import {
   FeedResponse,
   MobileValidationResponse,
   MobileVerificationResponse,
+  PrivacySettings,
 } from '../types/generated.ts';
 
 export const Stack = createStackNavigator();
@@ -125,6 +126,7 @@ export type RootNavigationParams = {
     screenTitle: string;
     postDetails?: FeedResponse;
     isOpenGallery?: boolean;
+    privacySettings?: PrivacySettings;
   };
 
   //Feed Stack

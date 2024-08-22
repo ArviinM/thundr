@@ -41,6 +41,7 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import {FileAttachment} from '../../../types/generated.ts';
 import PostItem from '../../../components/Community/PostItem.tsx';
 import {Dropdown} from 'react-native-element-dropdown';
+import {useGetUserCommunities} from '../../../hooks/community/useGetUserCommunities.ts';
 
 const postSchema = yup.object({
   postContent: yup.string().required('Please share something'),
@@ -62,14 +63,21 @@ const CreatePost = ({route}: CreatePostParams) => {
     Record<string, string>
   >({});
 
-  const [communityPost, setCommunityPost] = useState<string | null>(null);
-
   const [selectedMedia, setSelectedMedia] = useState<any[]>([]);
 
   const postDetails = route?.params.postDetails;
   const isComment = route?.params.isComment;
   const isOpenGallery = route?.params.isOpenGallery;
   const isQuoteRepost = route?.params.isQuoteRepost;
+  const privacySettings = route?.params.privacySettings;
+
+  const [communityPost, setCommunityPost] = useState<string>(
+    privacySettings === 'PUBLIC' ? 'Feed' : 'Matches',
+  );
+
+  const userCommunities = useGetUserCommunities({
+    sub: profileData?.sub || '',
+  });
 
   const {
     control,
@@ -98,7 +106,8 @@ const CreatePost = ({route}: CreatePostParams) => {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
-          inCommunity: 1,
+          inCommunity: '1',
+          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
           media: formattedMediaData,
         });
       }
@@ -107,7 +116,8 @@ const CreatePost = ({route}: CreatePostParams) => {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
-          inCommunity: 1,
+          inCommunity: '1',
+          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
           media: formattedMediaData,
           referencedPost: postDetails?.snowflakeId,
           repostType: 'QUOTE',
@@ -119,10 +129,10 @@ const CreatePost = ({route}: CreatePostParams) => {
           sub: profileData.sub,
           content: data.postContent,
           media: formattedMediaData,
-          inCommunity: 1,
+          inCommunity: '1',
+          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
           parentPostId: postDetails.snowflakeId,
           topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
-          privacySettings: 'PUBLIC',
         });
 
         await query.invalidateQueries({
@@ -368,38 +378,40 @@ const CreatePost = ({route}: CreatePostParams) => {
                   : `Replying to ${profileData?.name}`}
               </Text>
             </View>
-            <View>
-              <Dropdown
-                data={MockDropdownData}
-                labelField="label"
-                valueField="value"
-                onChange={item => setCommunityPost(item.value)}
-                placeholder="Select item"
-                searchPlaceholder="Search..."
-                value={communityPost}
-                search
-                maxHeight={300}
-                style={styles.dropdown}
-                itemTextStyle={{
-                  fontFamily: 'Montserrat-Medium',
-                  color: '#070707',
-                  fontSize: scale(13),
-                }}
-                selectedTextStyle={{
-                  fontFamily: 'Montserrat-Medium',
-                  color: '#070707',
-                  fontSize: scale(13),
-                }}
-                inputSearchStyle={{
-                  fontFamily: 'Montserrat-Regular',
-                  color: 'rgba(7,7,7,0.7)',
-                  borderRadius: scale(8),
-                  fontSize: scale(13),
-                }}
-                itemContainerStyle={{borderRadius: scale(8)}}
-                containerStyle={{borderRadius: scale(12)}}
-              />
-            </View>
+            {!isComment && userCommunities.data && (
+              <View>
+                <Dropdown
+                  data={userCommunities.data}
+                  labelField="label"
+                  valueField="label"
+                  onChange={item => setCommunityPost(item.value)}
+                  placeholder="Choose where to post"
+                  searchPlaceholder="Search..."
+                  value={communityPost}
+                  search
+                  maxHeight={300}
+                  style={styles.dropdown}
+                  itemTextStyle={{
+                    fontFamily: 'Montserrat-Medium',
+                    color: '#070707',
+                    fontSize: scale(13),
+                  }}
+                  selectedTextStyle={{
+                    fontFamily: 'Montserrat-Medium',
+                    color: '#070707',
+                    fontSize: scale(13),
+                  }}
+                  inputSearchStyle={{
+                    fontFamily: 'Montserrat-Regular',
+                    color: 'rgba(7,7,7,0.7)',
+                    borderRadius: scale(8),
+                    fontSize: scale(13),
+                  }}
+                  itemContainerStyle={{borderRadius: scale(8)}}
+                  containerStyle={{borderRadius: scale(12)}}
+                />
+              </View>
+            )}
             <View>
               <Controller
                 control={control}

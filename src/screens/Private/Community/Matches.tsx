@@ -106,7 +106,9 @@ const Matches = () => {
         renderItem={renderItem}
         data={matchesPosts.data?.pages.flatMap(page => page) || []}
         estimatedItemSize={500}
-        ListHeaderComponent={<CreatePostBar actionTitle={"What's the tea?"} />}
+        ListHeaderComponent={
+          <CreatePostBar actionTitle={"What's the tea?"} isMatchesTab />
+        }
         ListFooterComponent={<View style={{paddingBottom: tabBarHeight}} />}
         keyExtractor={keyExtractor}
         onEndReached={loadMorePosts}

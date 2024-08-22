@@ -15,6 +15,7 @@ interface CreatePostCommentBarProps {
   isComment?: boolean;
   referenceId?: string;
   postDetails?: FeedResponse;
+  isMatchesTab?: boolean;
 }
 
 const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
@@ -22,6 +23,7 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
   isComment = false,
   referenceId,
   postDetails,
+  isMatchesTab = false,
 }) => {
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
   const {profileData, isUserVerified, showModal} = useCommunity();
@@ -33,6 +35,7 @@ const CreatePostCommentBar: React.FC<CreatePostCommentBarProps> = ({
       screenTitle: isComment ? 'Add Reply' : 'Create Post',
       postDetails: postDetails,
       isOpenGallery,
+      privacySettings: isMatchesTab ? 'MATCHES' : 'PUBLIC',
     });
   };
 

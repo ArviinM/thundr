@@ -196,7 +196,12 @@ const PostItem = ({
                   style={{
                     fontFamily: 'Montserrat-Bold',
                     fontSize: scale(13),
-                    color: COLORS.black,
+                    color:
+                      typeof post.matchTag === 'undefined'
+                        ? COLORS.black
+                        : post.matchTag === 'MARE'
+                        ? COLORS.secondary2
+                        : COLORS.primary1,
                   }}>
                   {post.customerName}
                 </Text>

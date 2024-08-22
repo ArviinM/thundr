@@ -760,7 +760,7 @@ export type FacialVerificationState =
 export type PostRequest = {
   sub: string;
   content: string;
-  inCommunity: number;
+  inCommunity?: string;
   privacySettings?: PrivacySettings;
   referencedPost?: string;
   repostType?: RepostType;
@@ -824,6 +824,7 @@ export type FeedResponse = {
 
   // Account Type
   accountType: ('CUSTOMER' | 'FORUM_ADMIN' | 'CORPORATE') | null;
+  matchTag?: 'MARE' | 'JOWA';
 };
 
 // Define the params for the CreatePost route
@@ -838,7 +839,7 @@ export type ReplyRequest = {
   sub: string;
   content: string;
   privacySettings: PrivacySettings;
-  inCommunity: number;
+  inCommunity?: string;
   parentPostId: string;
   topLevelPostId: string;
   media: FileAttachment[];
@@ -877,4 +878,11 @@ export type RepostRequest = {
   postId: string;
   isReposted: boolean;
   community: number;
+};
+
+export type CommunityResponse = {
+  customerEnabled: boolean;
+  communityIcon: string;
+  id: number;
+  name: string;
 };

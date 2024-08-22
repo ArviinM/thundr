@@ -19,7 +19,8 @@ export function useCreatePost() {
 
       formData.append('sub', data.sub);
       formData.append('content', data.content);
-      formData.append('inCommunity', data.inCommunity.toString());
+      formData.append('inCommunity', data.inCommunity);
+      formData.append('privacySettings', data.privacySettings);
 
       if (data.referencedPost) {
         formData.append('referencedPost', data.referencedPost);
