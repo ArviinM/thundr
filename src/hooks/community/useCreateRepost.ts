@@ -4,7 +4,6 @@ import {useAxiosWithAuth} from '../api/useAxiosWithAuth.ts';
 import {
   BaseResponse,
   FeedResponse,
-  LikePost,
   RepostRequest,
 } from '../../types/generated.ts';
 import {showErrorToast} from '../../utils/toast/errorToast.ts';

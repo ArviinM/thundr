@@ -29,13 +29,13 @@ export const CommunityTop = () => {
           tabBarLabel: 'Feed',
         }}
       />
-      <Top.Screen
-        name={'Community'}
-        component={WorkingInProgress} //Community Stack
-        options={{
-          tabBarLabel: 'Community',
-        }}
-      />
+      {/*<Top.Screen*/}
+      {/*  name={'Community'}*/}
+      {/*  component={WorkingInProgress} //Community Stack*/}
+      {/*  options={{*/}
+      {/*    tabBarLabel: 'Community',*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Top.Screen
         name={'Matches'}
         component={Matches}

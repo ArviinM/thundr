@@ -1,10 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 
-import {
-  initialWindowMetrics,
-  SafeAreaProvider,
-} from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {PersistQueryClientProvider} from '@tanstack/react-query-persist-client';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {KeyboardProvider} from 'react-native-keyboard-controller';

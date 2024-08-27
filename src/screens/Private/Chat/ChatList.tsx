@@ -91,8 +91,6 @@ const ChatList = ({
     const minutesSinceLastActivity = differenceInMinutes(now, lastActivityDate);
     let activityIndicatorColor;
 
-    console.log(item.profile.name, minutesSinceLastActivity);
-
     if (minutesSinceLastActivity <= 3) {
       activityIndicatorColor = '#44D600';
     } else if (minutesSinceLastActivity <= 8) {
