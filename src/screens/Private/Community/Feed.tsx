@@ -49,6 +49,7 @@ const Feed = () => {
               post={item.referencedPost}
               isRepostedPost
               postSub={item.sub}
+              originalPoster={item.customerName}
             />
           )}
         </>

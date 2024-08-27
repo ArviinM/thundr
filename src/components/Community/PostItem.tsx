@@ -33,6 +33,8 @@ interface PostItemProps {
   isAddComment?: boolean;
   isRepostedPost?: boolean;
   postSub?: string;
+  originalPoster?: string;
+  isMatchesTab?: boolean;
 }
 
 const PostItem = ({
@@ -41,6 +43,8 @@ const PostItem = ({
   isAddComment = false,
   isRepostedPost = false,
   postSub,
+  originalPoster,
+  isMatchesTab = false,
 }: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
@@ -106,11 +110,13 @@ const PostItem = ({
   };
 
   const handleComment = () => {
+    console.log('handling comment', {isMatchesTab});
     navigation.navigate('CreatePost', {
       isComment: true,
       referenceId: post.snowflakeId,
       screenTitle: 'Add Reply',
       postDetails: post,
+      privacySettings: isMatchesTab ? 'MATCHES' : 'PUBLIC',
     });
   };
 
@@ -146,7 +152,7 @@ const PostItem = ({
                 fontFamily: 'Montserrat-Medium',
                 color: COLORS.black,
               }}>
-              {authData?.sub === postSub ? 'You' : post.customerName} reposted
+              {authData?.sub === postSub ? 'You' : originalPoster} reposted
             </Text>
           </View>
         )}
@@ -348,7 +354,12 @@ const PostItem = ({
           <Button
             onPress={async () => {
               setLoading(true);
-              await handleRepost(post.snowflakeId, 1, !post.isReposted ?? true);
+              await handleRepost(
+                post.snowflakeId,
+                1,
+                !post.isReposted ?? true,
+                isMatchesTab,
+              );
               repostOptionsBSheet.current?.dismiss();
               Toast.show({
                 type: 'THNRSuccess',

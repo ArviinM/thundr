@@ -135,12 +135,23 @@ const CreatePost = ({route}: CreatePostParams) => {
           topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
         });
 
+        console.log({
+          sub: profileData.sub,
+          content: data.postContent,
+          media: formattedMediaData,
+          inCommunity: '1',
+          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
+          parentPostId: postDetails.snowflakeId,
+          topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
+        });
+
         await query.invalidateQueries({
           queryKey: ['get-replies', postDetails.snowflakeId],
         });
       }
 
       await query.invalidateQueries({queryKey: ['get-latest-posts']});
+      await query.invalidateQueries({queryKey: ['get-matches-post']});
 
       Toast.show({
         type: 'THNRSuccess',

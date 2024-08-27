@@ -37,6 +37,7 @@ type CommunityContextData = {
     postId: string,
     community: number,
     isReposted: boolean,
+    isMatchesTab: boolean,
   ) => Promise<void>;
   profileData?: CustomerData;
   showModal: () => void;
@@ -117,6 +118,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
     postId: string,
     community: number,
     isReposted: boolean,
+    isMatchesTab: boolean,
   ) => {
     if (auth.authData) {
       await repost.mutateAsync({
@@ -124,6 +126,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
         postId: postId,
         community: community,
         isReposted: isReposted,
+        privacySettings: isMatchesTab ? 'MATCHES' : 'PUBLIC',
       });
 
       await query.invalidateQueries({queryKey: ['get-latest-posts']});

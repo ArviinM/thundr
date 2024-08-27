@@ -54,9 +54,9 @@ const Post: React.FC<PostProps> = ({route}) => {
     }
   }, [getMainPost, getReplies]);
 
-  const loadMoreReplies = useCallback(() => {
+  const loadMoreReplies = useCallback(async () => {
     if (getReplies.hasNextPage && !getReplies.isFetchingNextPage) {
-      getReplies.fetchNextPage();
+      await getReplies.fetchNextPage();
     }
   }, [getReplies]);
 
@@ -66,7 +66,11 @@ const Post: React.FC<PostProps> = ({route}) => {
     }
     return (
       <>
-        <PostItem post={getMainPost.data} isFromPost />
+        <PostItem
+          post={getMainPost.data}
+          isFromPost
+          isMatchesTab={getMainPost.data?.privacySettings === 'MATCHES'}
+        />
         <View
           style={{
             paddingHorizontal: scale(16),
@@ -124,6 +128,7 @@ const Post: React.FC<PostProps> = ({route}) => {
               isComment
               referenceId={snowflakeId}
               postDetails={getMainPost.data}
+              isMatchesTab={getMainPost.data?.privacySettings === 'MATCHES'}
             />
           </View>
         </>

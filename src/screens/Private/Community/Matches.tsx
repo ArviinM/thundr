@@ -41,6 +41,7 @@ const Matches = () => {
             <PostItem
               key={`feed-post-${item.snowflakeId}-${item.sub}-${index}`}
               post={item}
+              isMatchesTab={true}
             />
           )}
           {item.referenceType === 'REPOST' && item.referencedPost && (
@@ -49,6 +50,8 @@ const Matches = () => {
               post={item.referencedPost}
               isRepostedPost
               postSub={item.sub}
+              originalPoster={item.customerName}
+              isMatchesTab={true}
             />
           )}
         </>

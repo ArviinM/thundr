@@ -878,6 +878,7 @@ export type RepostRequest = {
   postId: string;
   isReposted: boolean;
   community: number;
+  privacySettings: PrivacySettings;
 };
 
 export type CommunityResponse = {
