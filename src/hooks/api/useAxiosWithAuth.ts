@@ -17,7 +17,7 @@ const refreshToken = async (
   data: AuthRefreshTokenRequest,
 ): Promise<AuthRefreshTokenResponse | null> => {
   try {
-    const response = await axios.post('/auth/refresh', data);
+    const response = await axios.post(`${API_BASE_URL}/auth/refresh`, data);
     return response.data.data;
   } catch (error) {
     console.error('An error occurred in refreshing the token', error);
