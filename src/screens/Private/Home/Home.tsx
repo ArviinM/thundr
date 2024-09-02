@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Platform, StatusBar, StyleSheet, Text, View} from 'react-native';
-
 import {useEffect, useState} from 'react';
 import {
   runOnJS,
@@ -12,12 +11,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import {GeolocationResponse} from '@react-native-community/geolocation/js/NativeRNCGeolocation.ts';
-
 import Card, {cardHeight, cardWidth} from '../../../components/Home/Card.tsx';
 import Swiping from '../../../components/Home/Swiping.tsx';
 import {useAuth} from '../../../providers/Auth.tsx';
 import {Loading} from '../../../components/shared/Loading.tsx';
-
 import {getCurrentLocation} from '../../../utils/getCurrentLocation.ts';
 import {useCustomerMatchLocation} from '../../../hooks/match/useCustomerMatchLocation.ts';
 import {useGetMatchList} from '../../../hooks/match/useGetMatchList.ts';
@@ -27,7 +24,6 @@ import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
 import {scale} from '../../../utils/utils.ts';
 import {COLORS, SIZES, width} from '../../../constants/commons.ts';
-import {useRegisterToken} from '../../../hooks/notification/useRegisterToken.ts';
 import CountdownCooldown from '../../../components/Home/CountdownCooldown.tsx';
 import {useGetChatList} from '../../../hooks/chat/useGetChatList.ts';
 import {useGetCustomerSubscribed} from '../../../hooks/subscribe/useGetCustomerSubscribed.ts';
