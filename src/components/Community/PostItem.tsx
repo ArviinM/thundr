@@ -120,6 +120,17 @@ const PostItem = ({
     });
   };
 
+  const handleEditPost = () => {
+    console.log('handling edit post');
+    moreOptionsBSheet.current?.dismiss();
+    navigation.navigate('CreatePost', {
+      isEditPost: true,
+      referenceId: post.snowflakeId,
+      screenTitle: 'Edit Post',
+      postDetails: post,
+    });
+  };
+
   return (
     <>
       <TouchableOpacity
@@ -390,9 +401,17 @@ const PostItem = ({
       <ReusableBottomSheetModal
         ref={moreOptionsBSheet}
         snapPoints={
-          post.sub !== authData?.sub ? ['25%', '50%'] : ['30%', '50%']
+          post.sub !== authData?.sub ? ['25%', '50%'] : ['36%', '50%']
         }>
         <View style={{gap: scale(10)}}>
+          {post.sub === authData?.sub && (
+            <Button
+              onPress={handleEditPost}
+              text={'Edit Post'}
+              buttonStyle={styles.buttonStyle}
+              textStyle={styles.textStyle}
+            />
+          )}
           <Button
             onPress={copyToClipboard}
             text={'Share Post'}

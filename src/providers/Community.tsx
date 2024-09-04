@@ -7,7 +7,12 @@ import React, {
 } from 'react';
 import {useAuth} from './Auth.tsx';
 import {useGetCustomerProfile} from '../hooks/profile/useGetCustomerProfile.ts';
-import {CustomerData, PostRequest, ReplyRequest} from '../types/generated.ts';
+import {
+  CustomerData,
+  EditPostRequest,
+  PostRequest,
+  ReplyRequest,
+} from '../types/generated.ts';
 import {useCreatePost} from '../hooks/community/useCreatePost.ts';
 import {UseMutationResult, useQueryClient} from '@tanstack/react-query';
 import {useGetFacialVerificationState} from '../hooks/faceverification/useGetFacialVerificationState.ts';
@@ -27,10 +32,12 @@ import {
 } from '../utils/notificationUtils.ts';
 import {useRegisterToken} from '../hooks/notification/useRegisterToken.ts';
 import {Platform} from 'react-native';
+import {useEditPost} from '../hooks/community/useEditPost.ts';
 
 type CommunityContextData = {
   createPost: UseMutationResult<any, any, PostRequest, unknown>;
   replyPost: UseMutationResult<any, any, ReplyRequest, unknown>;
+  editPost: UseMutationResult<any, any, EditPostRequest, unknown>;
   handleDeletePost: (postId: string) => Promise<void>;
   likeThePost: (likeThePost: string, isLiked: boolean) => Promise<void>;
   handleRepost: (
@@ -80,6 +87,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
 
   const createPost = useCreatePost();
   const replyPost = useReplyPost();
+  const editPost = useEditPost();
   const likePost = useLikePost();
   const deletePost = useDeletePost();
   const repost = useCreateRepost();
@@ -224,6 +232,7 @@ const CommunityProvider = ({children}: CommunityProviderProps) => {
       value={{
         createPost: createPost,
         replyPost: replyPost,
+        editPost: editPost,
         handleRepost,
         handleDeletePost,
         likeThePost,

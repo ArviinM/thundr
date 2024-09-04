@@ -887,3 +887,9 @@ export type CommunityResponse = {
   id: number;
   name: string;
 };
+
+export type EditPostRequest = {
+  sub: string;
+  postId: string;
+  newContent: string;
+};

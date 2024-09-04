@@ -15,7 +15,6 @@ import {
   MAX_IMAGE_SIZE_BYTES,
   MAX_VIDEO_COUNT,
   MAX_VIDEO_SIZE_BYTES,
-  MockDropdownData,
   scale,
 } from '../../../utils/utils.ts';
 import GradientButton from '../../../components/shared/GradientButton.tsx';
@@ -57,7 +56,7 @@ const CreatePost = ({route}: CreatePostParams) => {
   const query = useQueryClient(queryClient);
   const inputRef = useRef<TextInput>(null);
 
-  const {profileData, createPost, replyPost} = useCommunity();
+  const {profileData, createPost, replyPost, editPost} = useCommunity();
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [videoThumbnails, setVideoThumbnails] = useState<
     Record<string, string>
@@ -70,6 +69,7 @@ const CreatePost = ({route}: CreatePostParams) => {
   const isOpenGallery = route?.params.isOpenGallery;
   const isQuoteRepost = route?.params.isQuoteRepost;
   const privacySettings = route?.params.privacySettings;
+  const isEditPost = route?.params.isEditPost;
 
   const [communityPost, setCommunityPost] = useState<string>(
     privacySettings === 'PUBLIC' ? 'Feed' : 'Matches',
@@ -84,7 +84,9 @@ const CreatePost = ({route}: CreatePostParams) => {
     handleSubmit,
     formState: {errors, isValid},
   } = useForm({
-    defaultValues: {postContent: ''},
+    defaultValues: {
+      postContent: isEditPost ? (postDetails && postDetails.content) ?? '' : '',
+    },
     resolver: yupResolver(postSchema),
   });
 
@@ -102,7 +104,23 @@ const CreatePost = ({route}: CreatePostParams) => {
     if (profileData) {
       setPostLoading(true);
 
-      if (!isComment && !isQuoteRepost) {
+      if (isEditPost && postDetails) {
+        await editPost.mutateAsync({
+          sub: profileData.sub,
+          newContent: data.postContent,
+          postId: postDetails.snowflakeId,
+        });
+
+        await query.invalidateQueries({
+          queryKey: ['get-replies'],
+        });
+
+        await query.invalidateQueries({
+          queryKey: ['get-post'],
+        });
+      }
+
+      if (!isComment && !isQuoteRepost && !isEditPost) {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
@@ -112,7 +130,7 @@ const CreatePost = ({route}: CreatePostParams) => {
         });
       }
 
-      if (!isComment && isQuoteRepost) {
+      if (!isComment && isQuoteRepost && !isEditPost) {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
@@ -124,18 +142,8 @@ const CreatePost = ({route}: CreatePostParams) => {
         });
       }
 
-      if (isComment && postDetails) {
+      if (isComment && postDetails && !isEditPost) {
         await replyPost.mutateAsync({
-          sub: profileData.sub,
-          content: data.postContent,
-          media: formattedMediaData,
-          inCommunity: '1',
-          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
-          parentPostId: postDetails.snowflakeId,
-          topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
-        });
-
-        console.log({
           sub: profileData.sub,
           content: data.postContent,
           media: formattedMediaData,
@@ -352,7 +360,7 @@ const CreatePost = ({route}: CreatePostParams) => {
           flex: 1,
           backgroundColor: COLORS.white,
         }}>
-        {postDetails && (
+        {!isEditPost && postDetails && (
           <View>
             <PostItem post={postDetails} isFromPost isAddComment={isComment} />
           </View>
@@ -389,7 +397,7 @@ const CreatePost = ({route}: CreatePostParams) => {
                   : `Replying to ${profileData?.name}`}
               </Text>
             </View>
-            {!isComment && userCommunities.data && (
+            {!isComment && !isEditPost && userCommunities.data && (
               <View>
                 <Dropdown
                   data={userCommunities.data}

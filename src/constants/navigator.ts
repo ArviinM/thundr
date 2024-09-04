@@ -120,13 +120,14 @@ export type RootNavigationParams = {
 
   //PostItem Creation
   CreatePost: {
-    isComment: boolean;
+    screenTitle: string;
+    isComment?: boolean;
     isQuoteRepost?: boolean;
     referenceId?: string;
-    screenTitle: string;
     postDetails?: FeedResponse;
     isOpenGallery?: boolean;
     privacySettings?: PrivacySettings;
+    isEditPost?: boolean;
   };
 
   //Feed Stack
