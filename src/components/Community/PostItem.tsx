@@ -1,8 +1,15 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {FeedResponse} from '../../types/generated.ts';
 import {scale} from '../../utils/utils.ts';
-import {COLORS} from '../../constants/commons.ts';
+import {COLORS, SIZES, width} from '../../constants/commons.ts';
 import {formatDistanceToNow} from 'date-fns/formatDistanceToNow';
 import {Image} from 'expo-image';
 import PostActionsBar from './PostActionsBar.tsx';
@@ -26,6 +33,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Repost} from '../../assets/images/community/Repost.tsx';
 import {useAuth} from '../../providers/Auth.tsx';
 import GradientText from '../shared/GradientText.tsx';
+import GenericModal from '../shared/GenericModal.tsx';
+import {useGetEditHistory} from '../../hooks/community/useEditHistory.ts';
+import {Loading} from '../shared/Loading.tsx';
 
 interface PostItemProps {
   post: FeedResponse;
@@ -50,9 +60,14 @@ const PostItem = ({
   const [initialImageIndex, setInitialImageIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+  const [visible, isVisible] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
 
   const {authData} = useAuth();
+  const editHistory = useGetEditHistory({
+    sub: authData?.sub || '',
+    postId: post.snowflakeId,
+  });
 
   const openMediaViewer = (index: number) => {
     setInitialImageIndex(index);
@@ -133,6 +148,109 @@ const PostItem = ({
 
   return (
     <>
+      <GenericModal
+        isVisible={visible}
+        content={
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: scale(350),
+            }}>
+            {editHistory.isLoading && <Loading />}
+            {editHistory.data && editHistory.data.length > 0 && (
+              <>
+                <Text
+                  style={{
+                    fontSize: scale(14),
+                    textAlign: 'center',
+                    color: COLORS.primary1,
+                    fontFamily: 'Montserrat-Bold',
+                  }}>
+                  Edit History
+                </Text>
+
+                {/*Versions*/}
+                <ScrollView
+                  style={{
+                    paddingVertical: scale(10),
+                  }}>
+                  {/*Current Version*/}
+                  <View
+                    style={{
+                      backgroundColor: '#F3F4F6',
+                      width: width - 120,
+                      paddingVertical: scale(12),
+                      paddingHorizontal: scale(10),
+                      gap: scale(6),
+                      borderRadius: 10,
+                      marginVertical: scale(8),
+                    }}>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-SemiBold',
+                        fontSize: scale(13),
+                        color: COLORS.black,
+                      }}>
+                      Current Version
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: 'Montserrat-Regular',
+                        fontSize: scale(13),
+                        color: COLORS.black,
+                      }}>
+                      {post.content}
+                    </Text>
+                  </View>
+                  {/*Revision Version*/}
+                  {editHistory.data.length > 0 &&
+                    editHistory.data.map(item => (
+                      <View
+                        key={`${item.id}-edit-history`}
+                        style={{
+                          backgroundColor: '#F3F4F6',
+                          width: width - 120,
+                          paddingVertical: scale(12),
+                          paddingHorizontal: scale(10),
+                          gap: scale(6),
+                          borderRadius: 10,
+                          marginVertical: scale(8),
+                        }}>
+                        <Text
+                          style={{
+                            fontFamily: 'Montserrat-SemiBold',
+                            fontSize: scale(13),
+                            color: COLORS.black,
+                          }}>
+                          Revision at{' '}
+                          {new Date(item.createdAt).toLocaleString()}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: 'Montserrat-Regular',
+                            fontSize: scale(13),
+                            color: COLORS.black,
+                          }}>
+                          {item.originalContent}
+                        </Text>
+                      </View>
+                    ))}
+                </ScrollView>
+
+                <Button
+                  onPress={() => {
+                    isVisible(false);
+                  }}
+                  text="Close"
+                  buttonStyle={styles.buttonStyle2}
+                  textStyle={styles.buttonTextStyle2}
+                />
+              </>
+            )}
+          </View>
+        }
+      />
       <TouchableOpacity
         activeOpacity={0.8}
         disabled={isFromPost}
@@ -234,6 +352,24 @@ const PostItem = ({
                 })}
               </Text>
             </View>
+            {/*Content Edit Post Viewer*/}
+            {post.edited === 1 && (
+              <TouchableOpacity
+                style={{justifyContent: 'center', alignItems: 'flex-start'}}
+                onPress={() => isVisible(true)}>
+                <Text
+                  style={{
+                    fontFamily: 'Montserrat-Regular',
+                    fontSize: scale(10),
+                    color: COLORS.primary1,
+                  }}>
+                  Edited{' '}
+                  {formatDistanceToNow(new Date(post.updatedAt), {
+                    addSuffix: true,
+                  })}
+                </Text>
+              </TouchableOpacity>
+            )}
             {/*Content PostItem*/}
             <View>
               {post.content && <HighlightedText text={post.content} />}
@@ -339,7 +475,7 @@ const PostItem = ({
           customerName: post.customerName,
           customerPhoto: post.customerPhoto,
           customerPhotoBlurHash: post.customerPhotoBlurHash,
-          createdAt: post.createdAt,
+          createdAt: post.updatedAt,
         }}
       />
 
@@ -471,5 +607,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     fontSize: scale(13),
     color: COLORS.black,
+  },
+  buttonStyle2: {
+    alignItems: 'center',
+    // maxWidth: width,
+    width: width - 120,
+    height: 50,
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginTop: 12,
+    color: COLORS.white2,
+    borderWidth: 1,
+    borderColor: COLORS.gray4,
+  },
+  buttonTextStyle2: {
+    fontFamily: 'Montserrat-Bold',
+    color: COLORS.gray4,
+    fontSize: SIZES.h5,
   },
 });

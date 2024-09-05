@@ -805,6 +805,7 @@ export type FeedResponse = {
 
   attachments: PostAttachment[];
   deleted: boolean;
+  edited: number;
 
   // Customer (User?) Info
   customerPhoto: string; // This seems related to the user, not the post
@@ -892,4 +893,13 @@ export type EditPostRequest = {
   sub: string;
   postId: string;
   newContent: string;
+};
+
+export type GetEditHistoryResponse = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  referencedPostId: string;
+  originalContent: string;
+  originalPostUpdateTime: string;
 };
