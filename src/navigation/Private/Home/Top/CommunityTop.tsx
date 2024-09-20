@@ -4,6 +4,7 @@ import {FeedStack} from '../Stack/FeedStack.tsx';
 import WorkingInProgress from '../../../../screens/shared/WorkingInProgress.tsx';
 import {COLORS} from '../../../../constants/commons.ts';
 import Matches from '../../../../screens/Private/Community/Matches.tsx';
+import CommunityLists from '../../../../screens/Private/Community/CommunityLists.tsx';
 
 export const CommunityTop = () => {
   return (
@@ -29,13 +30,13 @@ export const CommunityTop = () => {
           tabBarLabel: 'Feed',
         }}
       />
-      {/*<Top.Screen*/}
-      {/*  name={'Community'}*/}
-      {/*  component={WorkingInProgress} //Community Stack*/}
-      {/*  options={{*/}
-      {/*    tabBarLabel: 'Community',*/}
-      {/*  }}*/}
-      {/*/>*/}
+      <Top.Screen
+        name={'Community'}
+        component={CommunityLists}
+        options={{
+          tabBarLabel: 'Community',
+        }}
+      />
       <Top.Screen
         name={'Matches'}
         component={Matches}
