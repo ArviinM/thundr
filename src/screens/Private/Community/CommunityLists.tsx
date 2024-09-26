@@ -33,8 +33,6 @@ const CommunityLists: React.FC<CommunityListProps> = ({navigation}) => {
     sub: authData?.sub || '',
   });
 
-  console.log('------ user commnity forums', getUserCommunityForums.data);
-
   const joinCommunity = useJoinCommunity();
   const query = useQueryClient(queryClient);
 
