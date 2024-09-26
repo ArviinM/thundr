@@ -70,6 +70,7 @@ const CreatePost = ({route}: CreatePostParams) => {
   const isQuoteRepost = route?.params.isQuoteRepost;
   const privacySettings = route?.params.privacySettings;
   const isEditPost = route?.params.isEditPost;
+  const communityTitle = route?.params.communityTitle;
 
   const [communityPost, setCommunityPost] = useState<string>(
     privacySettings === 'PUBLIC' ? 'Feed' : 'Matches',
@@ -124,7 +125,7 @@ const CreatePost = ({route}: CreatePostParams) => {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
-          inCommunity: '1',
+          inCommunity: communityTitle?.toString() || '1',
           privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
           media: formattedMediaData,
         });
@@ -134,7 +135,7 @@ const CreatePost = ({route}: CreatePostParams) => {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
-          inCommunity: '1',
+          inCommunity: communityTitle?.toString() || '1',
           privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
           media: formattedMediaData,
           referencedPost: postDetails?.snowflakeId,
@@ -147,7 +148,7 @@ const CreatePost = ({route}: CreatePostParams) => {
           sub: profileData.sub,
           content: data.postContent,
           media: formattedMediaData,
-          inCommunity: '1',
+          inCommunity: communityTitle?.toString() || '1',
           privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
           parentPostId: postDetails.snowflakeId,
           topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
@@ -402,11 +403,11 @@ const CreatePost = ({route}: CreatePostParams) => {
                 <Dropdown
                   data={userCommunities.data}
                   labelField="label"
-                  valueField="label"
+                  valueField="value"
                   onChange={item => setCommunityPost(item.value)}
                   placeholder="Choose where to post"
                   searchPlaceholder="Search..."
-                  value={communityPost}
+                  value={communityTitle?.toString()}
                   search
                   maxHeight={300}
                   style={styles.dropdown}

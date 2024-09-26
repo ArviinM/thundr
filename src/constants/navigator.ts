@@ -11,10 +11,12 @@ import {
   EmailValidationResponse,
   EmailVerificationResponse,
   FeedResponse,
+  GetUserCommunityForumsResponse,
   MobileValidationResponse,
   MobileVerificationResponse,
   PrivacySettings,
 } from '../types/generated.ts';
+import CommunityDynamicForum from '../screens/Private/Community/CommunityDynamicForum.tsx';
 
 export const Stack = createStackNavigator();
 export const Tab = createBottomTabNavigator();
@@ -128,6 +130,7 @@ export type RootNavigationParams = {
     isOpenGallery?: boolean;
     privacySettings?: PrivacySettings;
     isEditPost?: boolean;
+    communityTitle?: number;
   };
 
   //Feed Stack
@@ -139,5 +142,6 @@ export type RootNavigationParams = {
   ReviewPhoto: {photoPath: string};
 
   //Post View
-  Post: {snowflakeId: string; postDetails?: FeedResponse};
+  Post: {snowflakeId: string; postDetails?: FeedResponse; isJoined?: boolean};
+  CommunityDynamicForum: {communityData?: GetUserCommunityForumsResponse};
 };

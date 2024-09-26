@@ -19,6 +19,7 @@ interface PostActionsProps {
   handleMoreOptions?: () => void;
   handleRepostOptions?: () => void;
   handleComment?: () => void;
+  disabled?: boolean;
 }
 
 const PostActionsBar = ({
@@ -31,6 +32,7 @@ const PostActionsBar = ({
   handleMoreOptions,
   handleRepostOptions,
   handleComment,
+  disabled = false,
 }: PostActionsProps) => {
   const {likeThePost, isUserVerified, showModal} = useCommunity();
 
@@ -43,6 +45,7 @@ const PostActionsBar = ({
       }}>
       <View style={{flexDirection: 'row', gap: scale(13), marginTop: scale(3)}}>
         <TouchableOpacity
+          disabled={disabled}
           style={styles.elemActions}
           hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
           onPress={async () => {
@@ -58,6 +61,7 @@ const PostActionsBar = ({
           <Text style={styles.text}>{likes}</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          disabled={disabled}
           style={styles.elemActions}
           hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
           onPress={handleComment}>
@@ -67,6 +71,7 @@ const PostActionsBar = ({
           <Text style={styles.text}>{comments}</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          disabled={disabled}
           style={styles.elemActions}
           hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}
           onPress={handleRepostOptions}>

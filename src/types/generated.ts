@@ -856,12 +856,19 @@ export type GetFeedRequest = {
   sub: string;
   beforeId?: string;
   limit?: number;
+  communityId?: number;
 };
 
 export type LikePost = {
   sub: string;
   postId: string;
   isLiked: boolean;
+};
+
+export type CommunityJoinLeaveRequest = {
+  sub: string;
+  communityId: number;
+  joinState: boolean;
 };
 
 export type GetPostRequest = {
@@ -902,4 +909,17 @@ export type GetEditHistoryResponse = {
   referencedPostId: string;
   originalContent: string;
   originalPostUpdateTime: string;
+};
+
+export type GetUserCommunityForumsResponse = {
+  id: number;
+  name: string;
+  communityEnabled: boolean;
+  headerImage: string;
+  headerImageBlurhash: string;
+  communityIcon: string;
+  communityIconBlurhash: string;
+  brandingColors: string;
+  isJoined: boolean;
+  memberCount: number;
 };

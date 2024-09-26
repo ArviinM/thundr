@@ -107,7 +107,9 @@ const Feed = () => {
         renderItem={renderItem}
         data={community.data?.pages.flatMap(page => page) || []}
         estimatedItemSize={500}
-        ListHeaderComponent={<CreatePostBar actionTitle={"What's the tea?"} />}
+        ListHeaderComponent={
+          <CreatePostBar actionTitle={"What's the tea?"} communityTitle={1} />
+        }
         ListFooterComponent={<View style={{paddingBottom: tabBarHeight}} />}
         keyExtractor={keyExtractor}
         onEndReached={loadMorePosts}

@@ -45,6 +45,7 @@ interface PostItemProps {
   postSub?: string;
   originalPoster?: string;
   isMatchesTab?: boolean;
+  isJoined?: boolean;
 }
 
 const PostItem = ({
@@ -55,6 +56,7 @@ const PostItem = ({
   postSub,
   originalPoster,
   isMatchesTab = false,
+  isJoined = true,
 }: PostItemProps) => {
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
@@ -258,6 +260,7 @@ const PostItem = ({
           if (isUserVerified) {
             navigation.push('Post', {
               snowflakeId: post.snowflakeId,
+              isJoined: isJoined,
             });
           }
 
@@ -461,6 +464,7 @@ const PostItem = ({
                 handleMoreOptions={handlOpenMoreOptions}
                 handleRepostOptions={handleOpenRepostOptions}
                 handleComment={handleComment}
+                disabled={!isJoined}
               />
             )}
           </View>
@@ -492,6 +496,7 @@ const PostItem = ({
                 referenceId: post.snowflakeId,
                 screenTitle: 'Quote Post',
                 postDetails: post,
+                communityTitle: post.referencedCommunnityId,
               });
             }}
             text={'Quote Repost'}
@@ -503,7 +508,7 @@ const PostItem = ({
               setLoading(true);
               await handleRepost(
                 post.snowflakeId,
-                1,
+                post.referencedCommunnityId,
                 !post.isReposted ?? true,
                 isMatchesTab,
               );

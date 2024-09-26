@@ -28,6 +28,7 @@ import Post from '../../screens/Private/Community/Post.tsx';
 import FaceVerificationModal from '../../screens/Private/FaceVerification/FaceVerificationModal.tsx';
 import {HomeTab} from './Home/Tab/HomeTab.tsx';
 import {CardStyleInterpolators} from '@react-navigation/stack';
+import CommunityDynamicForum from '../../screens/Private/Community/CommunityDynamicForum.tsx';
 
 export const AuthenticatedStack = () => {
   const auth = useAuth();
@@ -143,6 +144,30 @@ export const AuthenticatedStack = () => {
           screenOptions={{
             headerShown: false,
           }}>
+          <Stack.Screen
+            name="CommunityDynamicForum"
+            component={CommunityDynamicForum as any}
+            options={{
+              headerTransparent: true,
+              headerTitle: '',
+              headerLeft: () => <HomeLeftHeader />,
+              headerStyle: {
+                backgroundColor: COLORS.white,
+              },
+              headerTitleStyle: {
+                fontFamily: 'Montserrat-Bold',
+                fontSize: scale(14),
+              },
+              headerShown: true,
+              headerTitleAlign: 'center',
+              headerShadowVisible: false,
+              transitionSpec: {
+                open: animationConfig,
+                close: animationConfig,
+              },
+              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            }}
+          />
           {/*  For Post Creation  */}
           <Stack.Screen
             name="CreatePost"

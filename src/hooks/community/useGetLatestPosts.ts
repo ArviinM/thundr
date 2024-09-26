@@ -26,6 +26,7 @@ export function useGetLatestPosts(props: GetFeedRequest) {
           sub: props.sub,
           beforeId: pageParam,
           limit: props.limit,
+          communityId: props.communityId,
         },
       };
 

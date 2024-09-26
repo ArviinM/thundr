@@ -23,7 +23,7 @@ const Post: React.FC<PostProps> = ({route}) => {
   const {authData} = useAuth();
   const [refreshing, setRefreshing] = useState(false);
 
-  const {snowflakeId} = route?.params || {};
+  const {snowflakeId, isJoined} = route?.params || {};
 
   const getMainPost = useGetPost({
     sub: authData?.sub || '',
@@ -37,11 +37,14 @@ const Post: React.FC<PostProps> = ({route}) => {
 
   const renderItem = useCallback(
     ({item}: {item: FeedResponse}) => (
-      <PostItem key={`view-post-${item.snowflakeId}-${item.sub}`} post={item} />
+      <PostItem
+        key={`view-post-${item.snowflakeId}-${item.sub}`}
+        post={item}
+        isJoined={isJoined}
+      />
     ),
-    [],
+    [isJoined],
   );
-
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
@@ -70,6 +73,7 @@ const Post: React.FC<PostProps> = ({route}) => {
           post={getMainPost.data}
           isFromPost
           isMatchesTab={getMainPost.data?.privacySettings === 'MATCHES'}
+          isJoined={isJoined}
         />
         <View
           style={{
@@ -122,15 +126,27 @@ const Post: React.FC<PostProps> = ({route}) => {
               minIndexForVisible: 1,
             }}
           />
-          <View style={{paddingBottom: scale(36)}}>
-            <CreatePostBar
-              actionTitle={'Write a reply...'}
-              isComment
-              referenceId={snowflakeId}
-              postDetails={getMainPost.data}
-              isMatchesTab={getMainPost.data?.privacySettings === 'MATCHES'}
-            />
-          </View>
+          {isJoined ? (
+            <View style={{paddingBottom: scale(36)}}>
+              <CreatePostBar
+                actionTitle={'Write a reply...'}
+                isComment
+                referenceId={snowflakeId}
+                postDetails={getMainPost.data}
+                isMatchesTab={getMainPost.data?.privacySettings === 'MATCHES'}
+              />
+            </View>
+          ) : (
+            <View style={{paddingBottom: scale(36), alignItems: 'center'}}>
+              <Text
+                style={{
+                  fontFamily: 'Montserrat-Bold',
+                  color: COLORS.primary1,
+                }}>
+                Join the Community to reply! ⚡️
+              </Text>
+            </View>
+          )}
         </>
       )}
     </SafeAreaView>

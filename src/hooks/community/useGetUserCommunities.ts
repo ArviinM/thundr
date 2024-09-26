@@ -12,7 +12,7 @@ export function useGetUserCommunities(props: GenericCustomerRequest) {
   const axiosInstance = useAxiosWithAuth();
 
   return useQuery({
-    queryKey: ['get-user-communities'],
+    queryKey: ['get-user-communities-dropdown'],
     queryFn: async (): Promise<Array<{label: string; value: string}>> => {
       const response: AxiosResponse<BaseResponse<CommunityResponse[]>> =
         await axiosInstance.get(
@@ -21,7 +21,7 @@ export function useGetUserCommunities(props: GenericCustomerRequest) {
 
       if (response.status !== HttpStatusCode.Ok) {
         showErrorToast({
-          name: 'get-user-communities',
+          name: 'get-user-communities-dropdown',
           status: response.data.status,
           message: response.data.message,
           data: response.data,
@@ -30,10 +30,12 @@ export function useGetUserCommunities(props: GenericCustomerRequest) {
       }
 
       // Transform the data to the desired format
-      return response.data.data.map(community => ({
-        label: community.name,
-        value: community.id.toString(),
-      }));
+      return response.data.data.map(community => {
+        if (community.name === 'Matches') {
+          return {label: community.name, value: (1.3).toString()};
+        }
+        return {label: community.name, value: community.id.toString()};
+      });
     },
   });
 }
