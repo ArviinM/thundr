@@ -318,6 +318,17 @@ const CommunityDynamicForum: React.FC<CommunityDynamicForumProps> = ({
               renderItem={renderItem}
               data={community.data?.pages.flatMap(page => page) || []}
               estimatedItemSize={103}
+              ListEmptyComponent={
+                <View style={{paddingBottom: scale(36), alignItems: 'center'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Montserrat-Bold',
+                      color: COLORS.primary1,
+                    }}>
+                    Join the Community to reply! ⚡️
+                  </Text>
+                </View>
+              }
               ListHeaderComponent={
                 routeData?.communityData?.isJoined ? (
                   <CreatePostBar
