@@ -72,9 +72,16 @@ const CreatePost = ({route}: CreatePostParams) => {
   const isEditPost = route?.params.isEditPost;
   const communityTitle = route?.params.communityTitle;
 
-  const [communityPost, setCommunityPost] = useState<string>(
-    privacySettings === 'PUBLIC' ? 'Feed' : 'Matches',
-  );
+  const [communityPost, setCommunityPost] = useState<{
+    label: string;
+    value: string;
+  }>({
+    label: privacySettings === 'PUBLIC' ? 'Feed' : 'Matches',
+    value:
+      communityTitle?.toString() === '1.3'
+        ? '1'
+        : communityTitle?.toString() || '1',
+  });
 
   const userCommunities = useGetUserCommunities({
     sub: profileData?.sub || '',
@@ -125,8 +132,14 @@ const CreatePost = ({route}: CreatePostParams) => {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
-          inCommunity: communityTitle?.toString() || '1',
-          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
+          inCommunity:
+            communityPost.value === '1.3' ? '1' : communityPost.value,
+          privacySettings:
+            communityPost.label === 'Feed'
+              ? 'PUBLIC'
+              : communityPost.label === 'Matches'
+              ? 'MATCHES'
+              : 'PUBLIC',
           media: formattedMediaData,
         });
       }
@@ -135,8 +148,14 @@ const CreatePost = ({route}: CreatePostParams) => {
         await createPost.mutateAsync({
           sub: profileData.sub,
           content: data.postContent,
-          inCommunity: communityTitle?.toString() || '1',
-          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
+          inCommunity:
+            communityPost.value === '1.3' ? '1' : communityPost.value,
+          privacySettings:
+            communityPost.label === 'Feed'
+              ? 'PUBLIC'
+              : communityPost.label === 'Matches'
+              ? 'MATCHES'
+              : 'PUBLIC',
           media: formattedMediaData,
           referencedPost: postDetails?.snowflakeId,
           repostType: 'QUOTE',
@@ -148,8 +167,14 @@ const CreatePost = ({route}: CreatePostParams) => {
           sub: profileData.sub,
           content: data.postContent,
           media: formattedMediaData,
-          inCommunity: communityTitle?.toString() || '1',
-          privacySettings: communityPost === 'Feed' ? 'PUBLIC' : 'MATCHES',
+          inCommunity:
+            communityPost.value === '1.3' ? '1' : communityPost.value,
+          privacySettings:
+            communityPost.label === 'Feed'
+              ? 'PUBLIC'
+              : communityPost.label === 'Matches'
+              ? 'MATCHES'
+              : 'PUBLIC',
           parentPostId: postDetails.snowflakeId,
           topLevelPostId: postDetails.topLevelPostId || postDetails.snowflakeId,
         });
@@ -404,10 +429,10 @@ const CreatePost = ({route}: CreatePostParams) => {
                   data={userCommunities.data}
                   labelField="label"
                   valueField="value"
-                  onChange={item => setCommunityPost(item.value)}
+                  onChange={item => setCommunityPost(item)}
                   placeholder="Choose where to post"
                   searchPlaceholder="Search..."
-                  value={communityTitle?.toString()}
+                  value={communityPost.value}
                   search
                   maxHeight={300}
                   style={styles.dropdown}

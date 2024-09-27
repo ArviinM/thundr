@@ -32,7 +32,7 @@ export function useGetUserCommunities(props: GenericCustomerRequest) {
       // Transform the data to the desired format
       return response.data.data.map(community => {
         if (community.name === 'Matches') {
-          return {label: community.name, value: (1.3).toString()};
+          return {label: community.name, value: '1.3'};
         }
         return {label: community.name, value: community.id.toString()};
       });
