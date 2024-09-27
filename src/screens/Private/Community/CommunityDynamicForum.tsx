@@ -28,6 +28,7 @@ import {useJoinCommunity} from '../../../hooks/community/useJoinCommunity.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {useQueryClient} from '@tanstack/react-query';
 import {queryClient} from '../../../utils/queryClient.ts';
+import CommunityInfo from '../../../components/Community/CommunityInfo.tsx';
 
 export type CommunityDynamicForumProps = StackScreenProps<
   RootNavigationParams,
@@ -340,7 +341,9 @@ const CommunityDynamicForum: React.FC<CommunityDynamicForumProps> = ({
           </View>
         ) : (
           <View style={styles.aboutContainer}>
-            <Text>About</Text>
+            <CommunityInfo
+              communityName={routeData.communityData?.name || 'community'}
+            />
           </View>
         )}
       </>
