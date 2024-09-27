@@ -26,6 +26,8 @@ import CreatePostBar from '../../../components/Community/CreatePostBar.tsx';
 import {FlashList} from '@shopify/flash-list';
 import {useJoinCommunity} from '../../../hooks/community/useJoinCommunity.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useQueryClient} from '@tanstack/react-query';
+import {queryClient} from '../../../utils/queryClient.ts';
 
 export type CommunityDynamicForumProps = StackScreenProps<
   RootNavigationParams,
@@ -70,6 +72,7 @@ const DynamicHeader = ({
   const joinCommunity = useJoinCommunity();
   const {authData} = useAuth();
   const navigation = useNavigation<NavigationProp<RootNavigationParams>>();
+  const query = useQueryClient(queryClient);
 
   return (
     <Animated.View
@@ -129,6 +132,13 @@ const DynamicHeader = ({
                 joinState: !headerData?.isJoined,
               });
               navigation.goBack();
+
+              await query.invalidateQueries({
+                queryKey: ['get-user-communities'],
+              });
+              await query.invalidateQueries({
+                queryKey: ['get-available-communities'],
+              });
             }}
             style={{
               paddingHorizontal: scale(10),
@@ -299,6 +309,7 @@ const CommunityDynamicForum: React.FC<CommunityDynamicForumProps> = ({
           <View style={{flex: 1}}>
             <FlashList
               // ref={scrollRef}
+              // scrollEventThrottle={10}
               onScroll={Animated.event(
                 [{nativeEvent: {contentOffset: {y: scrollOffsetY}}}],
                 {useNativeDriver: false},
